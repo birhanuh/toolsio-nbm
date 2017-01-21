@@ -10,7 +10,8 @@ define([
     routes: {
       '*actions': 'defaultAction',
       'messages': 'showMessageAboutMongo', // All urls will trigger this route
-      'about': 'showAbout' 
+      'about': 'showAbout',
+      'projects': 'showProjects' 
     }
   });
 
@@ -22,6 +23,10 @@ define([
     console.log("MainRouter / initialize");
 
 		router.on('route:defaultAction', function (actions) {
+        console.log("default route");        
+		});
+
+    router.on('route:showProjects', function () {
 
         var mainView = new MainView();
         mainView.render();
@@ -29,9 +34,9 @@ define([
         var projectView = new ProjectView();
         projectView.render();
 
-        console.log("default route");
+        console.log("Project route");
         
-		});
+    });
 
     router.on('route:showMessageAboutMongo', function () {
 

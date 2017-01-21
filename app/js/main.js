@@ -4,6 +4,7 @@ require.config({
   paths: {
     // Major libraries
     jquery: 'libs/jquery/jquery-min',
+    bootstrap: 'libs/bootstrap/bootstrap-min',
     underscore: 'libs/underscore/underscore-min', // https://github.com/amdjs
     backbone: 'libs/backbone/backbone-min', // https://github.com/amdjs
 
@@ -20,7 +21,7 @@ require.config({
 // Let's kick off the application
 
 require([
-  'router/MainRouter'
+  'MainRouter'
 ], function(MainRouter){
   
   MainRouter.initialize();
