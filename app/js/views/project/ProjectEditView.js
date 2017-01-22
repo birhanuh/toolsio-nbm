@@ -19,17 +19,17 @@ define([
     postProject: function() {
       var that = this;
 
-      console.log("posting message from ProjectEditView")
+      console.log("posting project from ProjectEditView")
 
       var projectModel = new ProjectModel();
       
       projectModel.save( { name: $('.name-input').val(), date: $('.date-input').val(), 
         description: $('.description-input').val() }, {
         
-        success: function () {
-          console.log("ProjectEditView succes " + projectModel.get('name') )
+        success: function (response) {
+          console.log('Successfully saved project with _id: ' +response.toJSON()._id);
           
-          that.trigger('postProject');
+          // that.trigger('postProject');
         },
         error: function () {
           console.log("ProjectEditView error on save");

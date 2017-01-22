@@ -2,39 +2,42 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'views/MainView', 
+  'views/DashboardView', 
   'views/project/ProjectView'
-], function ($, _, Backbone, MainView, ProjectView) {
+], function ($, _, Backbone, DashboardView, ProjectView) {
   
-  var MainRouter = Backbone.Router.extend({
+  var Router = Backbone.Router.extend({
     routes: {
-      '*actions': 'defaultAction',
       'messages': 'showMessageAboutMongo', // All urls will trigger this route
       'about': 'showAbout',
-      'projects': 'showProjects' 
+      '/projects': 'showProjects',
+
+      // Default 
+      '*actions': 'defaultAction',
     }
   });
 
   var initialize = function(){
 		
     //var vent = _.extend({}, Backbone.Events);
-    var router = new MainRouter();
+    var router = new Router();
 
-    console.log("MainRouter / initialize");
+    console.log("Router / initialize");
 
 		router.on('route:defaultAction', function (actions) {
-        console.log("default route");        
+
+      var dashboardView = new DashboardView();
+      dashboardView.render();
+      
+      console.log("default route");        
 		});
 
     router.on('route:showProjects', function () {
 
-        var mainView = new MainView();
-        mainView.render();
+      var projectView = new ProjectView();
+      projectView.render();
 
-        var projectView = new ProjectView();
-        projectView.render();
-
-        console.log("Project route");
+      console.log("Project route");
         
     });
 

@@ -2,17 +2,17 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/mainTemplate.html' 
-], function($, _, Backbone, mainTemplate){
+  'text!templates/dashboardTemplate.html' 
+], function($, _, Backbone, dashboardTemplate){
   
   var MainView = Backbone.View.extend({
-    el: '.container',
+    el: '.page',
     initialize: function () {
       
     },
     render: function () {
 			var that = this;
-      $(this.el).html(mainTemplate);
+      $(this.el).html(dashboardTemplate);
       
 		} 
 	});
