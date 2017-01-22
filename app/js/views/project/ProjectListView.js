@@ -3,10 +3,11 @@ define([
   'underscore',
   'backbone',
   'collections/ProjectsCollection',
+  'views/project/ProjectEditView',
   'text!templates/project/projectListTemplate.html'
-], function($, _, Backbone, ProjectsCollection, projectListTemplate){
+], function($, _, Backbone, ProjectsCollection, ProjectEditView, projectListTemplate){
   var ProjectListView = Backbone.View.extend({
-    el: '.project-list-container',
+    el: '.page',
     
     initialize: function() {
       this.collection = new ProjectsCollection();
@@ -14,6 +15,10 @@ define([
       // this.model.on('change', this.render, this);
       // this.model.on('remove', this.render, this);
 
+    },
+
+    events: {
+      'click .create-project': 'onCreate',
     },
 
     render: function () {
@@ -38,6 +43,13 @@ define([
         }
       });
 
+    },
+
+    onCreate: function () {
+      this.$el.empty();
+
+      var projectEditView = new ProjectEditView();
+      projectEditView.render();
     }
 
   });

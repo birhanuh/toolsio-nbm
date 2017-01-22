@@ -7,7 +7,7 @@ define([
 ], function($, _, Backbone, ProjectModel, projectEditTemplate){
   
   var ProjectEditView = Backbone.View.extend({
-    el: '.project-form-container',
+    el: '.page',
     render: function () {
       $(this.el).html(projectEditTemplate);
       
