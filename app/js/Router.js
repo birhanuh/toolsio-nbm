@@ -3,14 +3,32 @@ define([
   'underscore',
   'backbone',
   'views/DashboardView', 
-  'views/project/ProjectView'
-], function ($, _, Backbone, DashboardView, ProjectView) {
+  'views/project/ProjectEditView',
+  'views/project/ProjectListView'
+], function ($, _, Backbone, DashboardView, ProjectEditView, ProjectListView) {
   
   var Router = Backbone.Router.extend({
     routes: {
-      'messages': 'showMessageAboutMongo', // All urls will trigger this route
+      // Contact
+      'contact': 'showContact', 
+      
+      // About 
       'about': 'showAbout',
-      '/projects': 'showProjects',
+      
+      // Users 
+      'users/edit:id': 'editUser',
+      'users/new': 'newUser',
+      'users': 'showUser',
+      
+      // Projects
+      'projects/edit:id': 'editProject',
+      'projects/new': 'newProject',
+      'projects': 'showProjects',
+      
+      // Sales 
+      'sales/edit:id': 'editSale',
+      'sales/new': 'newSale',
+      'sales': 'showSales',
 
       // Default 
       '*actions': 'defaultAction',
@@ -29,16 +47,21 @@ define([
       var dashboardView = new DashboardView();
       dashboardView.render();
       
-      console.log("default route");        
+      console.log("default/dashboard route");        
 		});
 
+    // Projects 
     router.on('route:showProjects', function () {
-
-      var projectView = new ProjectView();
-      projectView.render();
-
-      console.log("Project route");
-        
+      var projectListView = new ProjectListView();
+      projectListView.render();
+      this.navigate('projects', { trigger: true });
+      console.log("Projects route");        
+    });
+    
+    router.on('route:newProject', function () {
+      var projectEditView = new ProjectEditView();
+      projectEditView.render();
+      console.log("Projects route");        
     });
 
     router.on('route:showMessageAboutMongo', function () {
@@ -52,7 +75,7 @@ define([
       console.log("display about");
         
     });
-
+    
     Backbone.history.start();
     
   };

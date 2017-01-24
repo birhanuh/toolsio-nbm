@@ -159,7 +159,7 @@ mongodbServer.all( '/*', function( req, res, next ) {
 */
 
 
-// This function is responsible for returning all entries for the Message model
+// This function is responsible for returning all entries for the Project model
 var getProjects = function(req, res, next) {
   // Resitify currently has a bug which doesn't allow you to set default headers
   // This headers comply with CORS and allow us to mongodbServer our response to any origin
@@ -187,7 +187,7 @@ var postProject = function(req, res, next) {
     res.send( 203, 'OK' );
   }
   
-  // Create a new message model, fill it up and save it to Mongodb
+  // Create a new project model, fill it up and save it to Mongodb
   var project = new ProjectMongooseModel(); 
   
   console.log("mongodbServer postProject: " + req.params);
@@ -203,15 +203,15 @@ var postProject = function(req, res, next) {
 
 mongodbServer.listen(mongodbPort, function() {
   
-  var consoleMessage = '\n A Simple MongoDb, Mongoose, Restify, and Backbone Tutorial'
-  consoleMessage += '\n +++++++++++++++++++++++++++++++++++++++++++++++++++++' 
-  consoleMessage += '\n\n %s says your mongodbServer is listening at %s';
-  consoleMessage += '\n great! now open your browser to http://localhost:8080';
-  consoleMessage += '\n it will connect to your httpServer to get your static files';
-  consoleMessage += '\n and talk to your mongodbServer to get and post your projects. \n\n';
-  consoleMessage += '+++++++++++++++++++++++++++++++++++++++++++++++++++++ \n\n'  
+  var consoleProject = '\n A Simple MongoDb, Mongoose, Restify, and Backbone Tutorial'
+  consoleProject += '\n +++++++++++++++++++++++++++++++++++++++++++++++++++++' 
+  consoleProject += '\n\n %s says your mongodbServer is listening at %s';
+  consoleProject += '\n great! now open your browser to http://localhost:8080';
+  consoleProject += '\n it will connect to your httpServer to get your static files';
+  consoleProject += '\n and talk to your mongodbServer to get and post your projects. \n\n';
+  consoleProject += '+++++++++++++++++++++++++++++++++++++++++++++++++++++ \n\n'  
  
-  console.log(consoleMessage, mongodbServer.name, mongodbServer.url);
+  console.log(consoleProject, mongodbServer.name, mongodbServer.url);
 
 });
 

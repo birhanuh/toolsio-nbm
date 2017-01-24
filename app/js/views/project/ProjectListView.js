@@ -14,11 +14,11 @@ define([
       // this.model.on('add', this.render, this);
       // this.model.on('change', this.render, this);
       // this.model.on('remove', this.render, this);
-
+      
     },
 
     events: {
-      'click .create-project': 'onCreate',
+      
     },
 
     render: function () {
@@ -43,13 +43,6 @@ define([
         }
       });
 
-    },
-
-    onCreate: function () {
-      this.$el.empty();
-
-      var projectEditView = new ProjectEditView();
-      projectEditView.render();
     }
 
   });

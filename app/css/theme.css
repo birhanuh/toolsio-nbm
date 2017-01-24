@@ -13,12 +13,9 @@ code {
 }
 
 a, a:visited {
-  color: #444;
 }
  
 a:hover {
-  color: #000;
-  text-decoration: none;
 } 
 
 .un-bulleted {
