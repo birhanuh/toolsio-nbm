@@ -3,7 +3,19 @@ html {
   min-height: 100%;
 }
 
+@font-face {
+  font-family: 'Open Sans', sans-serif;
+  src: font-url('fonts/OpenSans-Bold.ttf') format('truetype'),
+    font-url('fonts/OpenSans-Italic.ttf') format('truetype'),
+    font-url('fonts/OpenSans-Light.ttf') format('truetype'),
+    font-url('fonts/OpenSans-Regular.ttf') format('truetype');  
+}
+
 body {
+  /*background-color: $body-background-color;
+  color: $body-text-color;*/
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
   margin-bottom: 60px;
 }
 
