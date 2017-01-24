@@ -29,7 +29,8 @@ define([
         success: function (response) {
           console.log('Successfully saved project with _id: ' +response.toJSON()._id);
           
-          // that.trigger('postProject');
+          // Redirect to projects page
+          location.href = "#projects"
         },
         error: function () {
           console.log("ProjectEditView error on save");

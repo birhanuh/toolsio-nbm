@@ -54,14 +54,14 @@ define([
     router.on('route:showProjects', function () {
       var projectListView = new ProjectListView();
       projectListView.render();
-      this.navigate('projects', { trigger: true });
+      // this.navigate('projects', { trigger: true });
       console.log("Projects route");        
     });
     
     router.on('route:newProject', function () {
       var projectEditView = new ProjectEditView();
       projectEditView.render();
-      console.log("Projects route");        
+      console.log("Projects new route");        
     });
 
     router.on('route:showMessageAboutMongo', function () {

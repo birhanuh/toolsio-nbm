@@ -51,7 +51,7 @@ var sendHTML = function( filePath, contentType, response ){
 var getFilePath = function(url) {
 
   var filePath = './app' + url;
-  if (url == '/' ) filePath = './app/index.html';
+  if (url == '/' ) filePath = './app/public/index.html';
 
   console.log("url: " + url)
 
@@ -196,8 +196,8 @@ var postProject = function(req, res, next) {
   project.date = req.params.date;
   project.description = req.params.description;
   /*message.date = new Date()*/ 
-  project.save(function () {
-    res.send(req.body);
+  project.save(function(err, doc) {
+    res.send(doc);
   });
 }
 

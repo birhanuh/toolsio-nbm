@@ -11,9 +11,9 @@ define([
     
     initialize: function() {
       this.collection = new ProjectsCollection();
-      // this.model.on('add', this.render, this);
-      // this.model.on('change', this.render, this);
-      // this.model.on('remove', this.render, this);
+      this.collection.bind('add', this.render, this);
+      this.collection.bind('change', this.render, this);
+      this.collection.bind('remove', this.render, this);
       
     },
 
@@ -22,6 +22,12 @@ define([
     },
 
     render: function () {
+      var navBar = $('#navbar');
+      var li = navBar.children().children();
+      li.removeClass('active');
+      var currentli = $('.projects');
+      currentli.addClass('active');
+      console.log(li);
       var that = this;
      
       /* no projects at the start */
