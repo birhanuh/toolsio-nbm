@@ -8,10 +8,18 @@ define([
   
   var ProjectEditView = Backbone.View.extend({
     el: '.page',
+
     render: function () {
+      var navBar = $('#navbar');
+      var li = navBar.children().children();
+      li.removeClass('active');
+      var currentLi = $('.projects');
+      currentLi.addClass('active');
+      var that = this;
       $(this.el).html(projectEditTemplate);
       
     },
+    
     events: {
       'click .create-project': 'postProject'
     },

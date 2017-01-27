@@ -25,9 +25,8 @@ define([
       var navBar = $('#navbar');
       var li = navBar.children().children();
       li.removeClass('active');
-      var currentli = $('.projects');
-      currentli.addClass('active');
-      console.log(li);
+      var currentLi = $('.projects');
+      currentLi.addClass('active');
       var that = this;
      
       /* no projects at the start */

@@ -64,12 +64,12 @@ var getContentType = function(filePath) {
    var contentType = 'text/html';
     
     switch (extname) {
-        case '.js':
-            contentType = 'text/javascript';
-            break;
-        case '.css':
-            contentType = 'text/css';
-            break;
+      case '.js':
+        contentType = 'text/javascript';
+        break;
+      case '.css':
+        contentType = 'text/css';
+        break;
     }
 
     return contentType;
