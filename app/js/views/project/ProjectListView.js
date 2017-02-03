@@ -11,9 +11,9 @@ define([
     
     initialize: function() {
       this.collection = new ProjectsCollection();
-      this.collection.bind('add', this.render, this);
-      this.collection.bind('change', this.render, this);
-      this.collection.bind('remove', this.render, this);
+      //this.collection.on('add', this.render, this);
+      //this.collection.on('change', this.render, this);
+      //this.collection.on('remove', this.render, this);
       
     },
 
@@ -27,11 +27,9 @@ define([
       li.removeClass('active');
       var currentLi = $('.projects');
       currentLi.addClass('active');
-      var that = this;
      
       /* no projects at the start */
-
-      that.getProjects();
+      this.getProjects();
     },
 
     getProjects: function(){
@@ -39,12 +37,12 @@ define([
       var that = this;
 
       this.collection.fetch({
-        success: function(projects) {
-          $(that.el).html(_.template(projectListTemplate, {projects: projects.models, _:_}));
-          console.log('Successfully got projects: ', projects);
+        success: function(response) {
+          $(that.el).html(_.template(projectListTemplate)($.extend({}, {projects: response.models, _:_})));
+          console.log('Successfully got projects: ', response);
         },
         error: function(response) {
-            console.log(response, "ProjectList error!");
+          console.log(response, "ProjectList error!");
         }
       });
 

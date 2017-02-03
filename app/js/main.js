@@ -22,7 +22,8 @@ require.config({
 require([
   'Router'
 ], function(Router){
-  
+  // Change Backbone id to mongodb id format (i.e. _id)
+  //Backbone.Model.prototype.idAttribute = '_id';
   Router.initialize();
 
 });

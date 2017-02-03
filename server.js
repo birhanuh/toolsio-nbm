@@ -178,6 +178,24 @@ var getProjects = function(req, res, next) {
   });
 }
 
+// Returns a Project with Id
+var getProject = function(req, res, next) {
+  // Resitify currently has a bug which doesn't allow you to set default headers
+  // This headers comply with CORS and allow us to mongodbServer our response to any origin
+  res.header( 'Access-Control-Allow-Origin', '*' );
+  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
+  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
+  
+  if( 'OPTIONS' == req.method ) {
+    res.send( 203, 'OK' );
+  }
+
+  ProjectMongooseModel.find({_id: req.params.id}, function (arr,data) {
+    res.send(data);
+    console.log("mongodbServer getProject with id: ", data);
+  });
+}
+
 var postProject = function(req, res, next) {
   res.header( 'Access-Control-Allow-Origin', '*' );
   res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
@@ -216,6 +234,7 @@ mongodbServer.listen(mongodbPort, function() {
 });
 
 mongodbServer.get('/projects', getProjects);
+mongodbServer.get('/projects/:id', getProject);
 mongodbServer.post('/projects', postProject);
 
 

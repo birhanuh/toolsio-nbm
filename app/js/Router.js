@@ -3,9 +3,11 @@ define([
   'underscore',
   'backbone',
   'views/DashboardView', 
+  'models/ProjectModel',
+  'views/project/ProjectShowView',
   'views/project/ProjectEditView',
   'views/project/ProjectListView'
-], function ($, _, Backbone, DashboardView, ProjectEditView, ProjectListView) {
+], function ($, _, Backbone, DashboardView, ProjectModel, ProjectShowView, ProjectEditView, ProjectListView) {
   
   var Router = Backbone.Router.extend({
     routes: {
@@ -22,6 +24,7 @@ define([
       
       // Projects
       'projects/edit:id': 'editProject',
+      'projects/:porject_id': 'showProject',
       'projects/new': 'newProject',
       'projects': 'showProjects',
       
@@ -56,6 +59,14 @@ define([
       projectListView.render();
       // this.navigate('projects', { trigger: true });
       console.log("Projects route");        
+    });
+
+    // Show Project 
+    router.on('route:showProject', function (porject_id) {
+      var projectModel = new ProjectModel({ id: porject_id });
+      var projectShowView = new ProjectShowView({model: projectModel});
+      projectShowView.render();
+      console.log("Projects show route");        
     });
     
     router.on('route:newProject', function () {
