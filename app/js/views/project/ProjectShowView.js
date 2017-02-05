@@ -10,9 +10,7 @@ define([
     el: '.page',
 
     initialize: function() {   
-      this.model.on("sync", this.render, this);
 
-      console.log('This model init: ', this.model);
     },
 
     events: {
@@ -26,21 +24,26 @@ define([
       var currentLi = $('.projects');
       currentLi.addClass('active');
 
-      // this.model.fetch({
-      //   success: function(response) {
-      //     console.log('Successfully got project: ', response.name);
-      //   },
-      //   error: function(response) {
-      //     console.log(response, "ProjectList error!");
-      //   }
-      // });
-      
-      console.log('This model: ', this.model.name);
-      //this.$el.html(_.template(projectShowTemplate)($.extend({}, {project: this.model})));
+      this.getProject();
 
       return this;
-    }
+    },
 
+    getProject: function(){
+
+      var that = this;
+
+      this.model.fetch({
+        success: function(response) {
+          that.$el.html(_.template(projectShowTemplate)($.extend({}, {project: response.attributes[0], _:_})));
+          console.log('Successfully got project: ', response.attributes[0]);
+        },
+        error: function(response) {
+          console.log(response, "ProjectList error!");
+        }
+      });
+
+    }
    
   });
   return ProjectShowView;

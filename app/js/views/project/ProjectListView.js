@@ -38,7 +38,7 @@ define([
 
       this.collection.fetch({
         success: function(response) {
-          $(that.el).html(_.template(projectListTemplate)($.extend({}, {projects: response.models, _:_})));
+          that.$el.html(_.template(projectListTemplate)($.extend({}, {projects: response.models, _:_})));
           console.log('Successfully got projects: ', response);
         },
         error: function(response) {

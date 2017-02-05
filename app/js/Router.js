@@ -65,8 +65,7 @@ define([
     router.on('route:showProject', function (porject_id) {
       var projectModel = new ProjectModel({ id: porject_id });
       var projectShowView = new ProjectShowView({model: projectModel});
-      projectShowView.render();
-      console.log("Projects show route");        
+      projectShowView.render();       
     });
     
     router.on('route:newProject', function () {

@@ -117,3 +117,155 @@ body > section .container, body > footer .container {
 .no-margins {
  margin: 0 !important;
 }
+
+// borders
+.border-top-no {
+  border-top: none !important;
+}
+
+.border-bottom-no {
+  border-bottom: none !important;
+}
+
+// alignment
+.vertical-text {
+  transform: rotate(-90deg);
+  transform-origin: left top 0;
+  @include transition(2s);
+}
+
+.center-block {
+  display: table;
+}
+
+.horizontal-line-with-text {
+   width: 100%;
+   text-align: center;
+   border-bottom: 1px solid $medium-grey;
+   line-height: 0.1em;
+   margin: 10px 0 20px;
+
+   span {
+    background:#fff;
+    padding:0 10px;
+  }
+}
+
+// Vertical center
+.vertical-center {
+  position: absolute; // Remember to give parent container position relative
+  top: 50%;
+  @include transform-translate(-50%);
+}
+
+//.vertical-center {
+//  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+//  min-height: 10vh; /* These two lines are counted as one :-)       */
+
+//  display: flex;
+//  align-items: center;
+//}
+
+.vertical-center-small {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 5vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+// Sprite
+.sprite{
+  display: inline-block;
+  background: transparent url('sprite.png') no-repeat;
+}
+
+/* Extremely very extra small devices (phones, less than 480px) */
+@media (max-width: $screen-xxxs-max) {
+  .visible-xxxs {
+    display: inline-block !important;
+  }
+  .hidden-xxxs {
+    display: none;
+  }
+}
+
+/* Very extra small devices (phones, 320px, and upto small phones, 480px) */
+@media (min-width: $screen-xxs-min) and (max-width: $screen-xxs-max) {
+  .visible-xxxs {
+    display: none;
+  }
+}
+
+/* Very extra small devices (phones, less than 480px) */
+@media (max-width: $screen-xxs-max) {
+  .visible-xxs {
+    display: inline-block !important;
+  }
+  .hidden-xxs {
+    display: none;
+  }
+}
+
+/* Extra small devices (phones, 480px, and upto large phones, 768px) */
+@media (min-width: $screen-xs-min) and (max-width: $screen-xs-max) {
+  .visible-xxxs {
+    display: none;
+  }
+  .visible-xxxs {
+    display: none;
+  }
+  .visible-xxs {
+    display: none;
+  }
+}
+
+/* Extra small devices (phones, less than 768px) */
+@media (max-width: $screen-xs-max) {
+  .visible-xxs {
+    display: none;
+  }
+  .navbar-default .navbar-toggle {
+    border-color: $white;
+    .icon-bar {
+      background-color: $white;
+    }
+  }
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: $screen-sm-min) {
+  .navbar-right {
+    margin-right: 0;
+  }
+  .dl-horizontal {
+    dt {
+      float: left;
+      width: 120px;
+      overflow: hidden;
+      clear: left;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    dd {
+      margin-left: 140px;
+    }
+  }
+
+}
+
+/* Small devices (tablets, 768px and upto desktops, 992px) */
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+
+}
+
+/* Medium devices (desktops, 992px and upto large desktops, 1200px) */
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: $screen-lg-min) {
+
+}

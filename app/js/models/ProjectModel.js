@@ -7,14 +7,12 @@ define([
     defaults: {
       name: '',
       date: new Date(),
-      definition: ''
+      description: ''
     },
 
     urlRoot: 'http://localhost:8888/projects',
 
-    parse : function(response){
-      return response;  
-    }  
+ 
   });
   return ProjectModel;
 });
