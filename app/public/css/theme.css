@@ -1,8 +1,5 @@
-.container {
-  background-color: #fff;
-}
 body {
-  color: #444;
+  color: #484848;
 }
 
 code {
@@ -16,12 +13,9 @@ code {
 }
 
 a, a:visited {
-  color: #444;
 }
  
 a:hover {
-  color: #000;
-  text-decoration: none;
 } 
 
 .un-bulleted {

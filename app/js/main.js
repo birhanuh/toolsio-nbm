@@ -20,9 +20,10 @@ require.config({
 // Let's kick off the application
 
 require([
-  'router/MainRouter'
-], function(MainRouter){
-  
-  MainRouter.initialize();
+  'Router'
+], function(Router){
+  // Change Backbone id to mongodb id format (i.e. _id)
+  //Backbone.Model.prototype.idAttribute = '_id';
+  Router.initialize();
 
 });

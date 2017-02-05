@@ -3,39 +3,46 @@ define([
   'underscore',
   'backbone',
   'collections/ProjectsCollection',
+  'views/project/ProjectEditView',
   'text!templates/project/projectListTemplate.html'
-], function($, _, Backbone, ProjectsCollection, projectListTemplate){
+], function($, _, Backbone, ProjectsCollection, ProjectEditView, projectListTemplate){
   var ProjectListView = Backbone.View.extend({
-    model: new ProjectsCollection(),
-    el: '.project-list-container',
+    el: '.page',
     
     initialize: function() {
-      //var projects = new ProjectsCollection();
-      this.model.on('add', this.render, this);
-      this.model.on('change', this.render, this);
-      this.model.on('remove', this.render, this);
+      this.collection = new ProjectsCollection();
+      //this.collection.on('add', this.render, this);
+      //this.collection.on('change', this.render, this);
+      //this.collection.on('remove', this.render, this);
+      
+    },
 
+    events: {
+      
     },
 
     render: function () {
-      var that = this;
+      var navBar = $('#navbar');
+      var li = navBar.children().children();
+      li.removeClass('active');
+      var currentLi = $('.projects');
+      currentLi.addClass('active');
      
       /* no projects at the start */
-
-      that.getProjects();
+      this.getProjects();
     },
 
     getProjects: function(){
 
       var that = this;
 
-      this.model.fetch({
-        success: function(projects) {
-          $(that.el).html(_.template(projectListTemplate, {projects: projects.models, _:_}));
-          console.log('Successfully got projects: ', projects);
+      this.collection.fetch({
+        success: function(response) {
+          that.$el.html(_.template(projectListTemplate)($.extend({}, {projects: response.models, _:_})));
+          console.log('Successfully got projects: ', response);
         },
         error: function(response) {
-            console.log(response, "ProjectList error!");
+          console.log(response, "ProjectList error!");
         }
       });
 

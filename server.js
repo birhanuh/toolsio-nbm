@@ -51,7 +51,7 @@ var sendHTML = function( filePath, contentType, response ){
 var getFilePath = function(url) {
 
   var filePath = './app' + url;
-  if (url == '/' ) filePath = './app/index.html';
+  if (url == '/' ) filePath = './app/public/index.html';
 
   console.log("url: " + url)
 
@@ -64,12 +64,12 @@ var getContentType = function(filePath) {
    var contentType = 'text/html';
     
     switch (extname) {
-        case '.js':
-            contentType = 'text/javascript';
-            break;
-        case '.css':
-            contentType = 'text/css';
-            break;
+      case '.js':
+        contentType = 'text/javascript';
+        break;
+      case '.css':
+        contentType = 'text/css';
+        break;
     }
 
     return contentType;
@@ -159,7 +159,7 @@ mongodbServer.all( '/*', function( req, res, next ) {
 */
 
 
-// This function is responsible for returning all entries for the Message model
+// This function is responsible for returning all entries for the Project model
 var getProjects = function(req, res, next) {
   // Resitify currently has a bug which doesn't allow you to set default headers
   // This headers comply with CORS and allow us to mongodbServer our response to any origin
@@ -178,6 +178,24 @@ var getProjects = function(req, res, next) {
   });
 }
 
+// Returns a Project with Id
+var getProject = function(req, res, next) {
+  // Resitify currently has a bug which doesn't allow you to set default headers
+  // This headers comply with CORS and allow us to mongodbServer our response to any origin
+  res.header( 'Access-Control-Allow-Origin', '*' );
+  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
+  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
+  
+  if( 'OPTIONS' == req.method ) {
+    res.send( 203, 'OK' );
+  }
+
+  ProjectMongooseModel.find({_id: req.params.id}, function (arr,data) {
+    res.send(data);
+    console.log("mongodbServer getProject with id: ", data);
+  });
+}
+
 var postProject = function(req, res, next) {
   res.header( 'Access-Control-Allow-Origin', '*' );
   res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
@@ -187,7 +205,7 @@ var postProject = function(req, res, next) {
     res.send( 203, 'OK' );
   }
   
-  // Create a new message model, fill it up and save it to Mongodb
+  // Create a new project model, fill it up and save it to Mongodb
   var project = new ProjectMongooseModel(); 
   
   console.log("mongodbServer postProject: " + req.params);
@@ -196,26 +214,27 @@ var postProject = function(req, res, next) {
   project.date = req.params.date;
   project.description = req.params.description;
   /*message.date = new Date()*/ 
-  project.save(function () {
-    res.send(req.body);
+  project.save(function(err, doc) {
+    res.send(doc);
   });
 }
 
 mongodbServer.listen(mongodbPort, function() {
   
-  var consoleMessage = '\n A Simple MongoDb, Mongoose, Restify, and Backbone Tutorial'
-  consoleMessage += '\n +++++++++++++++++++++++++++++++++++++++++++++++++++++' 
-  consoleMessage += '\n\n %s says your mongodbServer is listening at %s';
-  consoleMessage += '\n great! now open your browser to http://localhost:8080';
-  consoleMessage += '\n it will connect to your httpServer to get your static files';
-  consoleMessage += '\n and talk to your mongodbServer to get and post your projects. \n\n';
-  consoleMessage += '+++++++++++++++++++++++++++++++++++++++++++++++++++++ \n\n'  
+  var consoleProject = '\n A Simple MongoDb, Mongoose, Restify, and Backbone Tutorial'
+  consoleProject += '\n +++++++++++++++++++++++++++++++++++++++++++++++++++++' 
+  consoleProject += '\n\n %s says your mongodbServer is listening at %s';
+  consoleProject += '\n great! now open your browser to http://localhost:8080';
+  consoleProject += '\n it will connect to your httpServer to get your static files';
+  consoleProject += '\n and talk to your mongodbServer to get and post your projects. \n\n';
+  consoleProject += '+++++++++++++++++++++++++++++++++++++++++++++++++++++ \n\n'  
  
-  console.log(consoleMessage, mongodbServer.name, mongodbServer.url);
+  console.log(consoleProject, mongodbServer.name, mongodbServer.url);
 
 });
 
 mongodbServer.get('/projects', getProjects);
+mongodbServer.get('/projects/:id', getProject);
 mongodbServer.post('/projects', postProject);
 
 

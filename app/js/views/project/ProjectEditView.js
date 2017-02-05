@@ -7,11 +7,19 @@ define([
 ], function($, _, Backbone, ProjectModel, projectEditTemplate){
   
   var ProjectEditView = Backbone.View.extend({
-    el: '.project-form-container',
+    el: '.page',
+
     render: function () {
+      var navBar = $('#navbar');
+      var li = navBar.children().children();
+      li.removeClass('active');
+      var currentLi = $('.projects');
+      currentLi.addClass('active');
+      var that = this;
       $(this.el).html(projectEditTemplate);
       
     },
+    
     events: {
       'click .create-project': 'postProject'
     },
@@ -19,17 +27,18 @@ define([
     postProject: function() {
       var that = this;
 
-      console.log("posting message from ProjectEditView")
+      console.log("posting project from ProjectEditView")
 
       var projectModel = new ProjectModel();
       
       projectModel.save( { name: $('.name-input').val(), date: $('.date-input').val(), 
         description: $('.description-input').val() }, {
         
-        success: function () {
-          console.log("ProjectEditView succes " + projectModel.get('name') )
+        success: function (response) {
+          console.log('Successfully saved project with _id: ' +response.toJSON()._id);
           
-          that.trigger('postProject');
+          // Redirect to projects page
+          location.href = "#projects"
         },
         error: function () {
           console.log("ProjectEditView error on save");
