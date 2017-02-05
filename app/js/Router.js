@@ -23,8 +23,8 @@ define([
       'users': 'showUser',
       
       // Projects
-      'projects/edit:id': 'editProject',
-      'projects/:porject_id': 'showProject',
+      'projects/edit/:porject_id': 'editProject',
+      'projects/show/:porject_id': 'showProject',
       'projects/new': 'newProject',
       'projects': 'showProjects',
       
@@ -61,17 +61,27 @@ define([
       console.log("Projects route");        
     });
 
-    // Show Project 
-    router.on('route:showProject', function (porject_id) {
-      var projectModel = new ProjectModel({ id: porject_id });
-      var projectShowView = new ProjectShowView({model: projectModel});
-      projectShowView.render();       
-    });
-    
+    // New Project
     router.on('route:newProject', function () {
       var projectEditView = new ProjectEditView();
       projectEditView.render();
       console.log("Projects new route");        
+    });
+
+    // Show Project 
+    router.on('route:showProject', function (porject_id) {
+      var projectModel = new ProjectModel({ id: porject_id });
+      var projectShowView = new ProjectShowView({model: projectModel});
+      projectShowView.render();    
+      console.log("Projects show route");    
+    });
+    
+    // Edit Project
+    router.on('route:editProject', function (porject_id) {
+      var projectModel = new ProjectModel({ id: porject_id });
+      var projectEditView = new ProjectEditView({model: projectModel});
+      projectEditView.render();
+      console.log("Projects edit route");        
     });
 
     router.on('route:showMessageAboutMongo', function () {

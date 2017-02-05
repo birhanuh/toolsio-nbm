@@ -6,6 +6,7 @@ require.config({
     jquery: 'libs/jquery/jquery-min',
     underscore: 'libs/underscore/underscore-min', // https://github.com/amdjs
     backbone: 'libs/backbone/backbone-min', // https://github.com/amdjs
+    dateformat: '/public/js/dateformat', 
 
     // Require.js plugins
     text: 'libs/require/text',

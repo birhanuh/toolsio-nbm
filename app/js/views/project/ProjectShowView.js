@@ -10,6 +10,7 @@ define([
     el: '.page',
 
     initialize: function() {   
+      //this.model.on("sync", this.render, this);
 
     },
 
@@ -24,6 +25,7 @@ define([
       var currentLi = $('.projects');
       currentLi.addClass('active');
 
+      // Call get project
       this.getProject();
 
       return this;

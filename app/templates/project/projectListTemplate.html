@@ -25,7 +25,7 @@
             <td><span class="date"><%= project.get('date') %></span></td>
             <td><span class="description"><%= project.get('description') %></span></td>
             <td class="text-center">
-              <a href=<%= "#projects/"+ project.get('_id') %> class="btn btn-info btn-sm view-more-project"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</a>
+              <a href=<%= "#projects/show/"+ project.get('_id') %> class="btn btn-info btn-sm view-more-project"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</a>
             </td>
           </tr>  
         <% }); %>

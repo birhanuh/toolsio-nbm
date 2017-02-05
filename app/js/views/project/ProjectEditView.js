@@ -2,9 +2,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'dateformat',
   'models/ProjectModel',
   'text!templates/project/projectEditTemplate.html'
-], function($, _, Backbone, ProjectModel, projectEditTemplate){
+], function($, _, Backbone, Dateformat, ProjectModel, projectEditTemplate){
   
   var ProjectEditView = Backbone.View.extend({
     el: '.page',
@@ -16,14 +17,33 @@ define([
       var currentLi = $('.projects');
       currentLi.addClass('active');
       var that = this;
-      $(this.el).html(projectEditTemplate);
-      
+
+      // Call get project
+      this.getProject();
+
+      return this;
     },
     
     events: {
       'click .create-project': 'postProject'
     },
     
+    getProject: function(){
+
+      var that = this;
+
+      this.model.fetch({
+        success: function(response) {
+          that.$el.html(_.template(projectEditTemplate)($.extend({}, {project: response.attributes[0], _:_})));
+          console.log('Successfully got project: ', response.attributes[0]);
+        },
+        error: function(response) {
+          console.log(response, "ProjectList error!");
+        }
+      });
+
+    },
+
     postProject: function() {
       var that = this;
 
