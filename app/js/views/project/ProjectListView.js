@@ -11,14 +11,14 @@ define([
     
     initialize: function() {
       this.collection = new ProjectsCollection();
-      //this.collection.on('add', this.render, this);
-      //this.collection.on('change', this.render, this);
-      //this.collection.on('remove', this.render, this);
+      // this.collection.on('add', this.render, this);
+      // this.collection.on('change', this.render, this);
+      this.collection.on('remove', this.render, this);
       
     },
 
     events: {
-      
+      'click .remove-project': 'onRemove',
     },
 
     render: function () {
@@ -46,6 +46,20 @@ define([
         }
       });
 
+    },
+
+    onRemove: function(ev) {
+      var id = $(ev.currentTarget).data('id');
+      var model = this.collection.get(id)
+      console.log('Model from collection: ', this.collection.get(id));
+      model.destroy({
+        success: function(response) {
+          console.log('Successfully removed blog with _id: ' +response.toJSON()._id);
+        },
+        error: function() {
+          console.log('Failed to delete bogs.');     
+        }
+      });
     }
 
   });

@@ -14,7 +14,8 @@
           <th>Name</th>
           <th>Date</th>
           <th>Description</th>
-          <th class="text-center">Action</th>
+          <th class="text-center">View</th>
+          <th class="text-center">Delete</th>
         </tr>
       </thead>
       <tbody class="projects-list">
@@ -27,6 +28,9 @@
             <td class="text-center">
               <a href=<%= "#projects/show/"+ project.get('_id') %> class="btn btn-info btn-sm view-more-project"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</a>
             </td>
+            <td class="text-center">
+               <button class="btn btn-danger btn-sm remove-project" data-id="<%= project.get('_id') %>"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            </td>   
           </tr>  
         <% }); %>
 
