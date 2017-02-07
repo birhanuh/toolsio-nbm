@@ -3,7 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var sessions = require('client-sessions');
-
+var bcrypt = require('bcryptjs');
 // Create a varibale that we can run express from
 var app = express();
 
@@ -85,11 +85,13 @@ app.get('/register', function(req, res) {
   res.render('register.jade');
 });
 app.post('/register', function(req, res) {
+  // Ecrypt password using bycrypt library
+  var hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
   var user = new UserMongooseModel({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    password: req.body.password,
+    password: hash,
   });
   user.save(function(err) {
     if (err) {
@@ -113,7 +115,7 @@ app.post('/login', function(req, res) {
     if (!user) {
       res.render('login.jade', { error: 'Invalid email or password.'});
     } else {
-      if (req.body.password === user.password) {
+      if (bcrypt.compareSync(req.body.password, user.password)) {
         req.session.user = user;
         res.redirect('/dashboard');
       } else {
@@ -140,6 +142,7 @@ app.get('/dashboard', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
+  req.session.reset();
   res.redirect('/');
 });
 
