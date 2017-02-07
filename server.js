@@ -1,131 +1,61 @@
+// Setup express
+var express = require('express');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
-//http server
-var fs = require('fs');
-var httpServer = require('http');
-var path = require('path');
-var connect = require('connect');
-//mongo server
-var mongoose = require('mongoose/');
-var restify = require('restify');  
+// Create a varibale that we can run express from
+var app = express();
 
+app.set('view engine', 'jade');
+
+if (app.get('env' === 'development')) {
+  app.locals.pretty = true;
+}
+
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.set('views', [__dirname + '/app/public', __dirname + '/app/public/auth']);
+
+// Mongodb credentials
 var config = require('./config');
 
-// localhost
+// Points to where our static files going to be
+app.use(express.static(__dirname + '/app/public'));
+app.use(bodyParser.json());
+var port = 8080;
 
-var httpPort = process.env.PORT || 8080;
-var mongodbPort = 8888;
+app.listen(port);
 
-/* 
- 
- see README.md for a more detailed write up 
+console.log('server on port: ' + port);
 
-*/
-
-//////////////////////////////////////////////////////// HTTP - sends html/js/css to the browswer 
-
-var sendHTML = function( filePath, contentType, response ){
-
-  console.log('sendHTML: ' + filePath) ;
-
-  fs.exists(filePath, function( exists ) {
-     
-        if (exists) {
-            fs.readFile(filePath, function(error, content) {
-                if (error) {
-                    response.writeHead(500);
-                    response.end();
-                }
-                else {
-                    response.writeHead(200, { 'Content-Type': contentType });
-                    response.end(content, 'utf-8');
-                }
-            });
-        }
-        else {
-            response.writeHead(404);
-            response.end();
-        }
-    });
-}
-
-var getFilePath = function(url) {
-
-  var filePath = './app' + url;
-  if (url == '/' ) filePath = './app/public/index.html';
-
-  console.log("url: " + url)
-
-  return filePath;
-}
-
-var getContentType = function(filePath) {
-   
-   var extname = path.extname(filePath);
-   var contentType = 'text/html';
-    
-    switch (extname) {
-      case '.js':
-        contentType = 'text/javascript';
-        break;
-      case '.css':
-        contentType = 'text/css';
-        break;
-    }
-
-    return contentType;
-}
-
-var onHtmlRequestHandler = function(request, response) {
-
-  console.log('onHtmlRequestHandler... request.url: ' + request.url) ;
-
-  /*
-   when this is live, nodjitsu only listens on 1 port(80) so the httpServer will hear it first but
-   we need to pass the request to the mongodbServer
-   */
-  if ( process.env.PORT && url === '/projects') {
-    
-    // pass the request to mongodbServer
-   
-
-    return; 
-  } 
-
-  var filePath = getFilePath(request.url);
-  var contentType = getContentType(filePath);
-
-  console.log('onHtmlRequestHandler... getting: ' + filePath) ;
-
-  sendHTML(filePath, contentType, response); 
-
-}
-
-httpServer.createServer(onHtmlRequestHandler).listen(httpPort); 
+// Setup mongoose (Normally diffirent setup ups are on diffirent files)
 
 ////////////////////////////////////////////////////// MONGODB - saves data in the database and posts data to the browser
 
 var mongoURI = ( process.env.PORT ) ? config.creds.mongoose_auth_jitsu : config.creds.mongoose_auth_local;
+mongoose.connect(mongoURI);
 
-db = mongoose.connect(mongoURI),
-Schema = mongoose.Schema;  
+var Schema = mongoose.Schema
 
-var mongodbServer = restify.createServer({
-    formatters: {
-        'application/json': function(req, res, body){
-            if(req.params.callback){
-                var callbackFunctionName = req.params.callback.replace(/[^A-Za-z0-9_\.]/g, '');
-                return callbackFunctionName + "(" + JSON.stringify(body) + ");";
-            } else {
-                return JSON.stringify(body);
-            }
-        },
-        'text/html': function(req, res, body){
-            return body;
-        }
-    }
+// Create a schema for our data
+var UserSchema = new Schema({
+  firstName: { type: String, required: true },
+  lastName: String,
+  email: { type: String, required: true },
+  password: { type: String, required: true }
 });
-
-mongodbServer.use(restify.bodyParser());
+UserSchema.path('email').validate(function(value, done) {
+  this.model('User').count({ email: value }, function(err, count) {
+    if (err) {
+        return done(err);
+    } 
+    // If `count` is greater than zero, "invalidate"
+    done(!count);
+  });
+}, 'Email already exists');
+mongoose.model('User', UserSchema); 
+var UserMongooseModel = mongoose.model('User');
 
 // Create a schema for our data
 var ProjectSchema = new Schema({
@@ -133,109 +63,77 @@ var ProjectSchema = new Schema({
   date: Date,
   description: String
 });
-
 // Use the schema to register a model
 mongoose.model('Project', ProjectSchema); 
 var ProjectMongooseModel = mongoose.model('Project'); // just to emphasize this isn't a Backbone Model
 
-
-/*
-
-this approach was recommended to remove the CORS restrictions instead of adding them to each request
-but its not working right now?! Something is wrong with adding it to mongodbServer
-
-// Enable CORS
-mongodbServer.all( '/*', function( req, res, next ) {
-  res.header( 'Access-Control-Allow-Origin', '*' );
-  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
-  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
-  if( 'OPTIONS' == req.method ) {
-  res.send( 203, 'OK' );
-  }
-  next();
+// Auth routes
+app.get('/', function(req, res) {
+  res.render('index.jade');
 });
 
+app.get('/register', function(req, res) {
+  res.render('register.jade');
+});
 
-*/
-
-
-// This function is responsible for returning all entries for the Project model
-var getProjects = function(req, res, next) {
-  // Resitify currently has a bug which doesn't allow you to set default headers
-  // This headers comply with CORS and allow us to mongodbServer our response to any origin
-  res.header( 'Access-Control-Allow-Origin', '*' );
-  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
-  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
-  
-  if( 'OPTIONS' == req.method ) {
-    res.send( 203, 'OK' );
-  }
-  
-  console.log("mongodbServer getProjects");
-
-  ProjectMongooseModel.find().limit(20).sort('date', -1).execFind(function (arr,data) {
-    res.send(data);
+app.post('/register', function(req, res) {
+  var user = new UserMongooseModel({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    password: req.body.password,
   });
-}
+  console.log('Received a get request for _id: ' +req.body.firstName+ ' ' +req.body.lastName+ ' ' +req.body.email+ ' ' +req.body.password);
+  user.save(function(err) {
+    if (err) {
+      var err = 'User not saved!'
+      if (err.code === 11000) {
+        err = 'Email is already taken, enter another email';   
+      }  
+      res.render('register.jade', { error: err});
+    } else {
+      res.redirect('/dashboard');
+    }
+  })
+});
 
-// Returns a Project with Id
-var getProject = function(req, res, next) {
-  // Resitify currently has a bug which doesn't allow you to set default headers
-  // This headers comply with CORS and allow us to mongodbServer our response to any origin
-  res.header( 'Access-Control-Allow-Origin', '*' );
-  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
-  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
-  
-  if( 'OPTIONS' == req.method ) {
-    res.send( 203, 'OK' );
-  }
+app.get('/login', function(req, res) {
+  res.render('login.jade');
+});
 
-  ProjectMongooseModel.find({_id: req.params.id}, function (arr,data) {
-    res.send(data);
-    console.log("mongodbServer getProject with id: ", data);
+app.get('/dashboard', function(req, res) {
+  res.render('dashboard.jade');
+});
+
+app.get('/logout', function(req, res) {
+  res.redirect('/');
+});
+
+// Routes 
+app.get('/projects', function(req ,res) {
+  ProjectMongooseModel.find(function(err, docs) {
+    docs.forEach(function(item) {
+      console.log('Received a get request for _id: ' +item);
+    });
+    res.send(docs);
   });
-}
+});
 
-var postProject = function(req, res, next) {
-  res.header( 'Access-Control-Allow-Origin', '*' );
-  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
-  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
-  
-  if( 'OPTIONS' == req.method ) {
-    res.send( 203, 'OK' );
+app.post('/projects', function(req, res) {
+  console.log('Received a post projectMongooseModel');
+  for (key in req.body) {
+    console.log(key+ ': ' +req.body[key]);
   }
-  
-  // Create a new project model, fill it up and save it to Mongodb
-  var project = new ProjectMongooseModel(); 
-  
-  console.log("mongodbServer postProject: " + req.params);
-
-  project.name = req.params.name;
-  project.date = req.params.date;
-  project.description = req.params.description;
-  /*message.date = new Date()*/ 
-  project.save(function(err, doc) {
+  var projectMongooseModel = new ProjectMongooseModel(req.body);
+  projectMongooseModel.save(function(err, doc) {
     res.send(doc);
   });
-}
-
-mongodbServer.listen(mongodbPort, function() {
-  
-  var consoleProject = '\n A Simple MongoDb, Mongoose, Restify, and Backbone Tutorial'
-  consoleProject += '\n +++++++++++++++++++++++++++++++++++++++++++++++++++++' 
-  consoleProject += '\n\n %s says your mongodbServer is listening at %s';
-  consoleProject += '\n great! now open your browser to http://localhost:8080';
-  consoleProject += '\n it will connect to your httpServer to get your static files';
-  consoleProject += '\n and talk to your mongodbServer to get and post your projects. \n\n';
-  consoleProject += '+++++++++++++++++++++++++++++++++++++++++++++++++++++ \n\n'  
- 
-  console.log(consoleProject, mongodbServer.name, mongodbServer.url);
-
 });
 
-mongodbServer.get('/projects', getProjects);
-mongodbServer.get('/projects/:id', getProject);
-mongodbServer.post('/projects', postProject);
-
-
+app.delete('/projects/:id', function(req, res) {
+  console.log('Received a delete request for _id: ' +req.params.id);
+  ProjectMongooseModel.remove({_id: req.params.id}, function(err) {
+    res.send({_id: req.params.id});
+  });
+}); 
 
