@@ -2,6 +2,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var sessions = require('client-sessions');
 
 // Create a varibale that we can run express from
 var app = express();
@@ -67,6 +68,14 @@ var ProjectSchema = new Schema({
 mongoose.model('Project', ProjectSchema); 
 var ProjectMongooseModel = mongoose.model('Project'); // just to emphasize this isn't a Backbone Model
 
+// Session Setup
+app.use(sessions({
+  cookieName: 'session',
+  secret: 'sdsdsfsa7df934q3094sdfasdf0q3',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+}));
+
 // Auth routes
 app.get('/', function(req, res) {
   res.render('index.jade');
@@ -88,6 +97,7 @@ app.post('/register', function(req, res) {
       if (err.code === 11000) {
         err = 'Email is already taken, enter another email';   
       }  
+      req.session.user = user; // set-cookie: session=qeu233re341234, set-cookie: session={ email: '...', password: '...' }
       res.render('register.jade', { error: err});
     } else {
       res.redirect('/dashboard');
@@ -104,7 +114,8 @@ app.post('/login', function(req, res) {
       res.render('login.jade', { error: 'Invalid email or password.'});
     } else {
       if (req.body.password === user.password) {
-        res.redirect('/dashboard.jade');
+        req.session.user = user;
+        res.redirect('/dashboard');
       } else {
         res.render('login.jade', { error: 'Invalid email or password.'});
       }
@@ -113,7 +124,19 @@ app.post('/login', function(req, res) {
 });
 
 app.get('/dashboard', function(req, res) {
-  res.render('dashboard.jade');
+  if (req.session && req.session.user) {
+    UserMongooseModel.findOne( {email: req.session.user.email }, function(err, user) {
+      if (!user) {
+        req.session.reset();
+        res.redirect('/login');
+      } else {
+        res.locals.user = user;
+        res.render('dashboard.jade');
+      }
+    });
+  } else {
+    res.redirect('/login');
+  }
 });
 
 app.get('/logout', function(req, res) {
