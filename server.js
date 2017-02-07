@@ -48,7 +48,7 @@ var UserSchema = new Schema({
 UserSchema.path('email').validate(function(value, done) {
   this.model('User').count({ email: value }, function(err, count) {
     if (err) {
-        return done(err);
+      return done(err);
     } 
     // If `count` is greater than zero, "invalidate"
     done(!count);
@@ -75,7 +75,6 @@ app.get('/', function(req, res) {
 app.get('/register', function(req, res) {
   res.render('register.jade');
 });
-
 app.post('/register', function(req, res) {
   var user = new UserMongooseModel({
     firstName: req.body.firstName,
@@ -83,7 +82,6 @@ app.post('/register', function(req, res) {
     email: req.body.email,
     password: req.body.password,
   });
-  console.log('Received a get request for _id: ' +req.body.firstName+ ' ' +req.body.lastName+ ' ' +req.body.email+ ' ' +req.body.password);
   user.save(function(err) {
     if (err) {
       var err = 'User not saved!'
@@ -99,6 +97,19 @@ app.post('/register', function(req, res) {
 
 app.get('/login', function(req, res) {
   res.render('login.jade');
+});
+app.post('/login', function(req, res) {
+  UserMongooseModel.findOne({ email: req.body.email }, function(arr, user) {
+    if (!user) {
+      res.render('login.jade', { error: 'Invalid email or password.'});
+    } else {
+      if (req.body.password === user.password) {
+        res.redirect('/dashboard.jade');
+      } else {
+        res.render('login.jade', { error: 'Invalid email or password.'});
+      }
+    }
+  });
 });
 
 app.get('/dashboard', function(req, res) {
