@@ -55,6 +55,7 @@ app.use(sessions({
   ephemeral: true, // delete this cookie when the browser is closed  */
 }));
 
+// Express validator
 app.use(expressValidator({
   errorFormatter: function(params, msg, value) {
     var namespace = param.split('.'), root = namespace.shift(), formParam = root;
