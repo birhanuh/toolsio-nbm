@@ -2,9 +2,16 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var sessions = require('client-sessions');
+var flash = require('connect-flash');
+var cookieParser = require('cookie-parser');
 var bcrypt = require('bcryptjs');
-// Create a varibale that we can run express from
+var session = require('express-session');
+var validator = require('express-validator');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var csrf = require('csurf');
+
+// Init app
 var app = express();
 
 app.set('view engine', 'jade');
@@ -12,6 +19,19 @@ app.set('view engine', 'jade');
 if (app.get('env' === 'development')) {
   app.locals.pretty = true;
 }
+
+// Session Setup
+app.use(sessions({
+  cookieName: 'session',
+  secret: 'sdsdsfsa7df934q3094sdfasdf0q3',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+  httpOnly: true, // dont let browser javascript access cookies ever
+  //secure: true, // only use cookies over https
+  ephemeral: true, // delete this cookie when the browser is closed  
+}));
+
+app.use(csrf());
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -68,13 +88,29 @@ var ProjectSchema = new Schema({
 mongoose.model('Project', ProjectSchema); 
 var ProjectMongooseModel = mongoose.model('Project'); // just to emphasize this isn't a Backbone Model
 
-// Session Setup
-app.use(sessions({
-  cookieName: 'session',
-  secret: 'sdsdsfsa7df934q3094sdfasdf0q3',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
-}));
+// Middleware for checking user is logged in
+app.use(function(req, res, next) {
+  if (req.session && req.session.user) {
+    UserMongooseModel.findOne( {email: req.session.user.email }, function(err, user) {
+      if (user) {
+        req.user = user;
+        delete req.user.password;
+        req.session.user = user;
+        res.locals.user = user;
+      } 
+      next();
+    });
+  } else {
+    next();
+  }
+});
+function requireLogin(req, res, next) {
+  if (!req.user) {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+}
 
 // Auth routes
 app.get('/', function(req, res) {
@@ -82,7 +118,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/register', function(req, res) {
-  res.render('register.jade');
+  res.render('register.jade', { csrfToken: req.csrfToken() });
 });
 app.post('/register', function(req, res) {
   // Ecrypt password using bycrypt library
@@ -108,7 +144,7 @@ app.post('/register', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-  res.render('login.jade');
+  res.render('login.jade', { csrfToken: req.csrfToken() });
 });
 app.post('/login', function(req, res) {
   UserMongooseModel.findOne({ email: req.body.email }, function(arr, user) {
@@ -125,20 +161,8 @@ app.post('/login', function(req, res) {
   });
 });
 
-app.get('/dashboard', function(req, res) {
-  if (req.session && req.session.user) {
-    UserMongooseModel.findOne( {email: req.session.user.email }, function(err, user) {
-      if (!user) {
-        req.session.reset();
-        res.redirect('/login');
-      } else {
-        res.locals.user = user;
-        res.render('dashboard.jade');
-      }
-    });
-  } else {
-    res.redirect('/login');
-  }
+app.get('/dashboard', requireLogin, function(req, res) {
+  res.render('dashboard.jade');
 });
 
 app.get('/logout', function(req, res) {
