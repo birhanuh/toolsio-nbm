@@ -11,44 +11,77 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var csrf = require('csurf');
 
+var routes = require('./routes/index');
+var users = require('./routes/users');
+
 // Init app
 var app = express();
+var port = 8080;
+app.listen(port);
+console.log('server on port: ' + port);
 
+// View Engine
 app.set('view engine', 'jade');
+app.set('views', [__dirname + '/app/public', __dirname + '/app/public/auth']);
+
+// Points to where our static files going to be
+app.use(express.static(__dirname + '/app/public'));
+
+// BodyParser and Cookie parser Middleware(Setup code)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 if (app.get('env' === 'development')) {
   app.locals.pretty = true;
 }
 
+// Mongodb credentials
+var config = require('./config');
+
 // Session Setup
 app.use(sessions({
+  secret: 'sdsdsfsa7df934q3094sdfasdf0q3',
+  saveUninitialized: true,
+  resave: true,
+
+  /*
   cookieName: 'session',
   secret: 'sdsdsfsa7df934q3094sdfasdf0q3',
   duration: 30 * 60 * 1000,
   activeDuration: 5 * 60 * 1000,
   httpOnly: true, // dont let browser javascript access cookies ever
   //secure: true, // only use cookies over https
-  ephemeral: true, // delete this cookie when the browser is closed  
+  ephemeral: true, // delete this cookie when the browser is closed  */
 }));
 
-app.use(csrf());
+app.use(expressValidator({
+  errorFormatter: function(params, msg, value) {
+    var namespace = param.split('.'), root = namespace.shift(), formParam = root;
 
-// Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg : msg,
+      value : value
+    };
+  }
+}));
 
-app.set('views', [__dirname + '/app/public', __dirname + '/app/public/auth']);
+// Connect Flash
+app.use(flash());
 
-// Mongodb credentials
-var config = require('./config');
+// Global vars
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.error_msg = req.flash('error_msg')
+  res.locals.error = req.flash('error')
+})
 
-// Points to where our static files going to be
-app.use(express.static(__dirname + '/app/public'));
-app.use(bodyParser.json());
-var port = 8080;
-
-app.listen(port);
-
-console.log('server on port: ' + port);
+app.use('/', routes);
+app.use('/users', users);
 
 // Setup mongoose (Normally diffirent setup ups are on diffirent files)
 
