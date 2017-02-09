@@ -16,9 +16,6 @@ var users = require('./routes/users');
 
 // Init app
 var app = express();
-var port = 8080;
-app.listen(port);
-console.log('server on port: ' + port);
 
 // View Engine
 app.set('view engine', 'jade');
@@ -55,6 +52,10 @@ app.use(sessions({
   ephemeral: true, // delete this cookie when the browser is closed  */
 }));
 
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Express validator
 app.use(expressValidator({
   errorFormatter: function(params, msg, value) {
@@ -83,6 +84,12 @@ app.use(function (req, res, next) {
 
 app.use('/', routes);
 app.use('/users', users);
+
+// Set port
+app.set('port', (process.env.PORT || 8080);
+app.listen(app.get('port'), function() {
+  console.log('Server started on port: ' + app.get('port'));
+};
 
 // Setup mongoose (Normally diffirent setup ups are on diffirent files)
 
