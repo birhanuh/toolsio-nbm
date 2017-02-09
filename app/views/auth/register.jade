@@ -1,0 +1,32 @@
+extends ../base
+
+block vars
+  - var title = 'Register'
+
+block body
+  .row
+    .col-sm-6.col-sm-offset-3
+      .panel.panel-default
+        .panel-body
+          h2.page-header.m-t-m Create an Account
+
+          form(method="post", action="/users/register") 
+            .form-group
+              label First name
+              input.form-control(type="text", name="firstName", placeholder="First Name", required=true)
+            .form-group
+              lable Last name
+              input.form-control(type="text", name="lastName", placeholder="Last Name", required=true)
+            .form-group
+              label Email
+              input.form-control(type="email", name="email", placeholder="Email", required=true)
+            .form-group
+              label Password
+              input.form-control(type="password", name="password", placeholder="Password", required=true)
+            .form-group
+              label Confirm password
+              input.form-control(type="password", name="password2", placeholder="Confirm Password", required=true)
+            button.btn.btn-default(type="submit") Submit
+
+        .panel-footer
+          a(href="/users/login") Already a user? Login here

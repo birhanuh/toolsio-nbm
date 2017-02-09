@@ -5,21 +5,20 @@ var mongoose = require('mongoose');
 var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var bcrypt = require('bcryptjs');
-var session = require('express-session');
-var validator = require('express-validator');
+var sessions = require('express-session');
+var expressValidator = require('express-validator');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var csrf = require('csurf');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var routes = require('./app/routes/index');
+var users = require('./app/routes/users');
 
 // Init app
 var app = express();
 
 // View Engine
 app.set('view engine', 'jade');
-app.set('views', [__dirname + '/app/public', __dirname + '/app/public/auth']);
+app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth']);
 
 // Points to where our static files going to be
 app.use(express.static(__dirname + '/app/public'));
@@ -80,16 +79,17 @@ app.use(function (req, res, next) {
   res.locals.success_msg = req.flash('success_msg')
   res.locals.error_msg = req.flash('error_msg')
   res.locals.error = req.flash('error')
+  next();
 })
 
 app.use('/', routes);
 app.use('/users', users);
 
 // Set port
-app.set('port', (process.env.PORT || 8080);
+app.set('port', (process.env.PORT || 8080));
 app.listen(app.get('port'), function() {
   console.log('Server started on port: ' + app.get('port'));
-};
+});
 
 // Setup mongoose (Normally diffirent setup ups are on diffirent files)
 
@@ -129,87 +129,6 @@ var ProjectSchema = new Schema({
 mongoose.model('Project', ProjectSchema); 
 var ProjectMongooseModel = mongoose.model('Project'); // just to emphasize this isn't a Backbone Model
 
-// Middleware for checking user is logged in
-app.use(function(req, res, next) {
-  if (req.session && req.session.user) {
-    UserMongooseModel.findOne( {email: req.session.user.email }, function(err, user) {
-      if (user) {
-        req.user = user;
-        delete req.user.password;
-        req.session.user = user;
-        res.locals.user = user;
-      } 
-      next();
-    });
-  } else {
-    next();
-  }
-});
-function requireLogin(req, res, next) {
-  if (!req.user) {
-    res.redirect('/login');
-  } else {
-    next();
-  }
-}
-
-// Auth routes
-app.get('/', function(req, res) {
-  res.render('index.jade');
-});
-
-app.get('/register', function(req, res) {
-  res.render('register.jade', { csrfToken: req.csrfToken() });
-});
-app.post('/register', function(req, res) {
-  // Ecrypt password using bycrypt library
-  var hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
-  var user = new UserMongooseModel({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: hash,
-  });
-  user.save(function(err) {
-    if (err) {
-      var err = 'User not saved!'
-      if (err.code === 11000) {
-        err = 'Email is already taken, enter another email';   
-      }  
-      req.session.user = user; // set-cookie: session=qeu233re341234, set-cookie: session={ email: '...', password: '...' }
-      res.render('register.jade', { error: err});
-    } else {
-      res.redirect('/dashboard');
-    }
-  })
-});
-
-app.get('/login', function(req, res) {
-  res.render('login.jade', { csrfToken: req.csrfToken() });
-});
-app.post('/login', function(req, res) {
-  UserMongooseModel.findOne({ email: req.body.email }, function(arr, user) {
-    if (!user) {
-      res.render('login.jade', { error: 'Invalid email or password.'});
-    } else {
-      if (bcrypt.compareSync(req.body.password, user.password)) {
-        req.session.user = user;
-        res.redirect('/dashboard');
-      } else {
-        res.render('login.jade', { error: 'Invalid email or password.'});
-      }
-    }
-  });
-});
-
-app.get('/dashboard', requireLogin, function(req, res) {
-  res.render('dashboard.jade');
-});
-
-app.get('/logout', function(req, res) {
-  req.session.reset();
-  res.redirect('/');
-});
 
 // Routes 
 app.get('/projects', function(req ,res) {
