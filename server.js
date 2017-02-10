@@ -76,9 +76,9 @@ app.use(flash());
 
 // Global vars
 app.use(function (req, res, next) {
-  res.locals.success_msg = req.flash('success_msg')
-  res.locals.error_msg = req.flash('error_msg')
-  res.locals.error = req.flash('error')
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
   next();
 })
 
@@ -158,3 +158,85 @@ app.delete('/projects/:id', function(req, res) {
   });
 }); 
 
+
+// // Middleware for checking user is logged in
+// app.use(function(req, res, next) {
+//   if (req.session && req.session.user) {
+//     UserMongooseModel.findOne( {email: req.session.user.email }, function(err, user) {
+//       if (user) {
+//         req.user = user;
+//         delete req.user.password;
+//         req.session.user = user;
+//         res.locals.user = user;
+//       } 
+//       next();
+//     });
+//   } else {
+//     next();
+//   }
+// });
+// function requireLogin(req, res, next) {
+//   if (!req.user) {
+//     res.redirect('/login');
+//   } else {
+//     next();
+//   }
+// }
+
+// // Auth routes
+// app.get('/', function(req, res) {
+//   res.render('index.jade');
+// });
+
+// app.get('/register', function(req, res) {
+//   res.render('register.jade', { csrfToken: req.csrfToken() });
+// });
+// app.post('/register', function(req, res) {
+//   // Ecrypt password using bycrypt library
+//   var hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+//   var user = new UserMongooseModel({
+//     firstName: req.body.firstName,
+//     lastName: req.body.lastName,
+//     email: req.body.email,
+//     password: hash,
+//   });
+//   user.save(function(err) {
+//     if (err) {
+//       var err = 'User not saved!'
+//       if (err.code === 11000) {
+//         err = 'Email is already taken, enter another email';   
+//       }  
+//       req.session.user = user; // set-cookie: session=qeu233re341234, set-cookie: session={ email: '...', password: '...' }
+//       res.render('register.jade', { error: err});
+//     } else {
+//       res.redirect('/dashboard');
+//     }
+//   })
+// });
+
+// app.get('/login', function(req, res) {
+//   res.render('login.jade', { csrfToken: req.csrfToken() });
+// });
+// app.post('/login', function(req, res) {
+//   UserMongooseModel.findOne({ email: req.body.email }, function(arr, user) {
+//     if (!user) {
+//       res.render('login.jade', { error: 'Invalid email or password.'});
+//     } else {
+//       if (bcrypt.compareSync(req.body.password, user.password)) {
+//         req.session.user = user;
+//         res.redirect('/dashboard');
+//       } else {
+//         res.render('login.jade', { error: 'Invalid email or password.'});
+//       }
+//     }
+//   });
+// });
+
+// app.get('/dashboard', requireLogin, function(req, res) {
+//   res.render('dashboard.jade');
+// });
+
+// app.get('/logout', function(req, res) {
+//   req.session.reset();
+//   res.redirect('/');
+// });

@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var User = require('../models/user');
+
 // Get Register
 router.get('/register', function(req, res) {
   res.render('auth/register.jade');
@@ -32,9 +34,22 @@ router.post('/register', function(req, res) {
     res.render('register', {
       errors: errors
     });
-    console.log('PASSED', errors);
   } else {
-    console.log('PASSED');
+    var newUser = new User({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password
+    });
+
+    User.createUser(newUser, function(err, user) {
+      if(err) throw err;
+      console.log(user);
+    });
+
+    req.flash('success_msg', 'You are registered and can now login.');
+
+    res.redirect('/users/login');
   }
 });
 

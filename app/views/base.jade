@@ -47,7 +47,14 @@ html
       .container      
         div(style="clear: both;")
         .page 
-          Loading
+          //- Loading...
+          if success_msg != null
+            .alert.alert-success #{success_msg}
+          if error_msg
+            .alert.alert-danger #{error_msg}
+          if error
+            .alert.alert-danger #{error}
+
           block body
         div(style="clear: both;")
    
