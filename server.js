@@ -91,6 +91,15 @@ app.listen(app.get('port'), function() {
   console.log('Server started on port: ' + app.get('port'));
 });
 
+app.get('/dashboard', function(req, res) {
+  res.render('dashboard.jade');
+});
+
+app.get('/logout', function(req, res) {
+  req.session.reset();
+  res.redirect('/');
+});
+
 // Setup mongoose (Normally diffirent setup ups are on diffirent files)
 
 ////////////////////////////////////////////////////// MONGODB - saves data in the database and posts data to the browser
