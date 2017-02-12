@@ -6,4 +6,16 @@ router.get('/', function(req, res) {
   res.render('index.jade');
 });
 
+router.get('/dashboard', ensureAuthenticated, function(req, res) {
+  res.render('dashboard.jade');
+});
+
+function ensureAuthenticated(req, res, next) {
+  if(req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/users/login');
+  }
+}
+
 module.exports = router;

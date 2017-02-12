@@ -23,24 +23,29 @@ html
       
         #navbar.collapse.navbar-collapse
           ul.nav.navbar-nav
-            li.active 
-              a(href="#") Home
-            li.about 
-              a(href="#about") About
-            li.contact 
-              a(href="#contact") Contact  
-            li.projects 
-              a(href="#projects") Projects
-            li.dashboard 
-              a(href="#projects") Dashboard  
+            if !user  
+              li.active 
+                a(href="#") Home
+              li.about 
+                a(href="#about") About
+              li.contact 
+                a(href="#contact") Contact  
 
-          .navbar-form.navbar-right        
-            .form-group
-              a.btn.btn-primary(href="/users/register") Register        
-            .form-group
-              a.btn.btn-primary(href="/users/login") Login   
-            .form-group
-              a.btn.btn-primary(href="/users/logout") Logout      
+            if user    
+              li.dashboard 
+                a(href="/dashboard") Dashboard  
+              li.projects 
+                a(href="#projects") Projects  
+
+          .navbar-form.navbar-right    
+            if !user    
+              .form-group
+                a.btn.btn-primary(href="/users/register") Register        
+              .form-group
+                a.btn.btn-primary(href="/users/login") Login   
+            if user    
+              .form-group
+                a.btn.btn-primary(href="/users/logout") Logout      
        
     //- Initially populated by templates/layout.html
     section
@@ -48,11 +53,11 @@ html
         div(style="clear: both;")
         .page 
           //- Loading...
-          if success_msg != null
+          if success_msg.length > 0
             .alert.alert-success #{success_msg}
-          if error_msg
+          if error_msg.length > 0
             .alert.alert-danger #{error_msg}
-          if error
+          if error.length > 0
             .alert.alert-danger #{error}
 
           block body

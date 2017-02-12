@@ -16,6 +16,9 @@ var users = require('./app/routes/users');
 // Init app
 var app = express();
 
+// Mongodb credentials
+var config = require('./config');
+
 // View Engine
 app.set('view engine', 'jade');
 app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth']);
@@ -31,9 +34,6 @@ app.use(cookieParser());
 if (app.get('env' === 'development')) {
   app.locals.pretty = true;
 }
-
-// Mongodb credentials
-var config = require('./config');
 
 // Session Setup
 app.use(sessions({
@@ -79,6 +79,7 @@ app.use(function (req, res, next) {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
   next();
 })
 
@@ -89,15 +90,6 @@ app.use('/users', users);
 app.set('port', (process.env.PORT || 8080));
 app.listen(app.get('port'), function() {
   console.log('Server started on port: ' + app.get('port'));
-});
-
-app.get('/dashboard', function(req, res) {
-  res.render('dashboard.jade');
-});
-
-app.get('/logout', function(req, res) {
-  req.session.reset();
-  res.redirect('/');
 });
 
 // Setup mongoose (Normally diffirent setup ups are on diffirent files)
