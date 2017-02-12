@@ -1,131 +1,124 @@
+// Setup express
+var express = require('express');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var flash = require('connect-flash');
+var cookieParser = require('cookie-parser');
+var bcrypt = require('bcryptjs');
+var sessions = require('express-session');
+var expressValidator = require('express-validator');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
-//http server
-var fs = require('fs');
-var httpServer = require('http');
-var path = require('path');
-var connect = require('connect');
-//mongo server
-var mongoose = require('mongoose/');
-var restify = require('restify');  
+var routes = require('./app/routes/index');
+var users = require('./app/routes/users');
 
+// Init app
+var app = express();
+
+// Mongodb credentials
 var config = require('./config');
 
-// localhost
+// View Engine
+app.set('view engine', 'jade');
+app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth']);
 
-var httpPort = process.env.PORT || 8080;
-var mongodbPort = 8888;
+// Points to where our static files going to be
+app.use(express.static(__dirname + '/app/public'));
 
-/* 
- 
- see README.md for a more detailed write up 
+// BodyParser and Cookie parser Middleware(Setup code)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-*/
-
-//////////////////////////////////////////////////////// HTTP - sends html/js/css to the browswer 
-
-var sendHTML = function( filePath, contentType, response ){
-
-  console.log('sendHTML: ' + filePath) ;
-
-  fs.exists(filePath, function( exists ) {
-     
-        if (exists) {
-            fs.readFile(filePath, function(error, content) {
-                if (error) {
-                    response.writeHead(500);
-                    response.end();
-                }
-                else {
-                    response.writeHead(200, { 'Content-Type': contentType });
-                    response.end(content, 'utf-8');
-                }
-            });
-        }
-        else {
-            response.writeHead(404);
-            response.end();
-        }
-    });
+if (app.get('env' === 'development')) {
+  app.locals.pretty = true;
 }
 
-var getFilePath = function(url) {
-
-  var filePath = './app' + url;
-  if (url == '/' ) filePath = './app/public/index.html';
-
-  console.log("url: " + url)
-
-  return filePath;
-}
-
-var getContentType = function(filePath) {
-   
-   var extname = path.extname(filePath);
-   var contentType = 'text/html';
-    
-    switch (extname) {
-      case '.js':
-        contentType = 'text/javascript';
-        break;
-      case '.css':
-        contentType = 'text/css';
-        break;
-    }
-
-    return contentType;
-}
-
-var onHtmlRequestHandler = function(request, response) {
-
-  console.log('onHtmlRequestHandler... request.url: ' + request.url) ;
+// Session Setup
+app.use(sessions({
+  secret: 'sdsdsfsa7df934q3094sdfasdf0q3',
+  saveUninitialized: true,
+  resave: true,
 
   /*
-   when this is live, nodjitsu only listens on 1 port(80) so the httpServer will hear it first but
-   we need to pass the request to the mongodbServer
-   */
-  if ( process.env.PORT && url === '/projects') {
-    
-    // pass the request to mongodbServer
-   
+  cookieName: 'session',
+  secret: 'sdsdsfsa7df934q3094sdfasdf0q3',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+  httpOnly: true, // dont let browser javascript access cookies ever
+  //secure: true, // only use cookies over https
+  ephemeral: true, // delete this cookie when the browser is closed  */
+}));
 
-    return; 
-  } 
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
 
-  var filePath = getFilePath(request.url);
-  var contentType = getContentType(filePath);
+// Express validator
+app.use(expressValidator({
+  errorFormatter: function(params, msg, value) {
+    var namespace = params.split('.'), root = namespace.shift(), formParam = root;
 
-  console.log('onHtmlRequestHandler... getting: ' + filePath) ;
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg : msg,
+      value : value
+    };
+  }
+}));
 
-  sendHTML(filePath, contentType, response); 
+// Connect Flash
+app.use(flash());
 
-}
+// Global vars
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
+  next();
+})
 
-httpServer.createServer(onHtmlRequestHandler).listen(httpPort); 
+app.use('/', routes);
+app.use('/users', users);
+
+// Set port
+app.set('port', (process.env.PORT || 8080));
+app.listen(app.get('port'), function() {
+  console.log('Server started on port: ' + app.get('port'));
+});
+
+// Setup mongoose (Normally diffirent setup ups are on diffirent files)
 
 ////////////////////////////////////////////////////// MONGODB - saves data in the database and posts data to the browser
 
 var mongoURI = ( process.env.PORT ) ? config.creds.mongoose_auth_jitsu : config.creds.mongoose_auth_local;
+mongoose.connect(mongoURI);
 
-db = mongoose.connect(mongoURI),
-Schema = mongoose.Schema;  
+var Schema = mongoose.Schema
 
-var mongodbServer = restify.createServer({
-    formatters: {
-        'application/json': function(req, res, body){
-            if(req.params.callback){
-                var callbackFunctionName = req.params.callback.replace(/[^A-Za-z0-9_\.]/g, '');
-                return callbackFunctionName + "(" + JSON.stringify(body) + ");";
-            } else {
-                return JSON.stringify(body);
-            }
-        },
-        'text/html': function(req, res, body){
-            return body;
-        }
-    }
+// Create a schema for our data
+var UserSchema = new Schema({
+  firstName: { type: String, required: true },
+  lastName: String,
+  email: { type: String, required: true },
+  password: { type: String, required: true }
 });
-
-mongodbServer.use(restify.bodyParser());
+UserSchema.path('email').validate(function(value, done) {
+  this.model('User').count({ email: value }, function(err, count) {
+    if (err) {
+      return done(err);
+    } 
+    // If `count` is greater than zero, "invalidate"
+    done(!count);
+  });
+}, 'Email already exists');
+mongoose.model('User', UserSchema); 
+var UserMongooseModel = mongoose.model('User');
 
 // Create a schema for our data
 var ProjectSchema = new Schema({
@@ -133,109 +126,118 @@ var ProjectSchema = new Schema({
   date: Date,
   description: String
 });
-
 // Use the schema to register a model
 mongoose.model('Project', ProjectSchema); 
 var ProjectMongooseModel = mongoose.model('Project'); // just to emphasize this isn't a Backbone Model
 
 
-/*
-
-this approach was recommended to remove the CORS restrictions instead of adding them to each request
-but its not working right now?! Something is wrong with adding it to mongodbServer
-
-// Enable CORS
-mongodbServer.all( '/*', function( req, res, next ) {
-  res.header( 'Access-Control-Allow-Origin', '*' );
-  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
-  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
-  if( 'OPTIONS' == req.method ) {
-  res.send( 203, 'OK' );
-  }
-  next();
+// Routes 
+app.get('/projects', function(req ,res) {
+  ProjectMongooseModel.find(function(err, docs) {
+    docs.forEach(function(item) {
+      console.log('Received a get request for _id: ' +item);
+    });
+    res.send(docs);
+  });
 });
 
-
-*/
-
-
-// This function is responsible for returning all entries for the Project model
-var getProjects = function(req, res, next) {
-  // Resitify currently has a bug which doesn't allow you to set default headers
-  // This headers comply with CORS and allow us to mongodbServer our response to any origin
-  res.header( 'Access-Control-Allow-Origin', '*' );
-  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
-  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
-  
-  if( 'OPTIONS' == req.method ) {
-    res.send( 203, 'OK' );
+app.post('/projects', function(req, res) {
+  console.log('Received a post projectMongooseModel');
+  for (key in req.body) {
+    console.log(key+ ': ' +req.body[key]);
   }
-  
-  console.log("mongodbServer getProjects");
-
-  ProjectMongooseModel.find().limit(20).sort('date', -1).execFind(function (arr,data) {
-    res.send(data);
-  });
-}
-
-// Returns a Project with Id
-var getProject = function(req, res, next) {
-  // Resitify currently has a bug which doesn't allow you to set default headers
-  // This headers comply with CORS and allow us to mongodbServer our response to any origin
-  res.header( 'Access-Control-Allow-Origin', '*' );
-  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
-  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
-  
-  if( 'OPTIONS' == req.method ) {
-    res.send( 203, 'OK' );
-  }
-
-  ProjectMongooseModel.find({_id: req.params.id}, function (arr,data) {
-    res.send(data);
-    console.log("mongodbServer getProject with id: ", data);
-  });
-}
-
-var postProject = function(req, res, next) {
-  res.header( 'Access-Control-Allow-Origin', '*' );
-  res.header( 'Access-Control-Allow-Method', 'POST, GET, PUT, DELETE, OPTIONS' );
-  res.header( 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-File-Name, Content-Type, Cache-Control' );
-  
-  if( 'OPTIONS' == req.method ) {
-    res.send( 203, 'OK' );
-  }
-  
-  // Create a new project model, fill it up and save it to Mongodb
-  var project = new ProjectMongooseModel(); 
-  
-  console.log("mongodbServer postProject: " + req.params);
-
-  project.name = req.params.name;
-  project.date = req.params.date;
-  project.description = req.params.description;
-  /*message.date = new Date()*/ 
-  project.save(function(err, doc) {
+  var projectMongooseModel = new ProjectMongooseModel(req.body);
+  projectMongooseModel.save(function(err, doc) {
     res.send(doc);
   });
-}
-
-mongodbServer.listen(mongodbPort, function() {
-  
-  var consoleProject = '\n A Simple MongoDb, Mongoose, Restify, and Backbone Tutorial'
-  consoleProject += '\n +++++++++++++++++++++++++++++++++++++++++++++++++++++' 
-  consoleProject += '\n\n %s says your mongodbServer is listening at %s';
-  consoleProject += '\n great! now open your browser to http://localhost:8080';
-  consoleProject += '\n it will connect to your httpServer to get your static files';
-  consoleProject += '\n and talk to your mongodbServer to get and post your projects. \n\n';
-  consoleProject += '+++++++++++++++++++++++++++++++++++++++++++++++++++++ \n\n'  
- 
-  console.log(consoleProject, mongodbServer.name, mongodbServer.url);
-
 });
 
-mongodbServer.get('/projects', getProjects);
-mongodbServer.get('/projects/:id', getProject);
-mongodbServer.post('/projects', postProject);
+app.delete('/projects/:id', function(req, res) {
+  console.log('Received a delete request for _id: ' +req.params.id);
+  ProjectMongooseModel.remove({_id: req.params.id}, function(err) {
+    res.send({_id: req.params.id});
+  });
+}); 
 
 
+// // Middleware for checking user is logged in
+// app.use(function(req, res, next) {
+//   if (req.session && req.session.user) {
+//     UserMongooseModel.findOne( {email: req.session.user.email }, function(err, user) {
+//       if (user) {
+//         req.user = user;
+//         delete req.user.password;
+//         req.session.user = user;
+//         res.locals.user = user;
+//       } 
+//       next();
+//     });
+//   } else {
+//     next();
+//   }
+// });
+// function requireLogin(req, res, next) {
+//   if (!req.user) {
+//     res.redirect('/login');
+//   } else {
+//     next();
+//   }
+// }
 
+// // Auth routes
+// app.get('/', function(req, res) {
+//   res.render('index.jade');
+// });
+
+// app.get('/register', function(req, res) {
+//   res.render('register.jade', { csrfToken: req.csrfToken() });
+// });
+// app.post('/register', function(req, res) {
+//   // Ecrypt password using bycrypt library
+//   var hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+//   var user = new UserMongooseModel({
+//     firstName: req.body.firstName,
+//     lastName: req.body.lastName,
+//     email: req.body.email,
+//     password: hash,
+//   });
+//   user.save(function(err) {
+//     if (err) {
+//       var err = 'User not saved!'
+//       if (err.code === 11000) {
+//         err = 'Email is already taken, enter another email';   
+//       }  
+//       req.session.user = user; // set-cookie: session=qeu233re341234, set-cookie: session={ email: '...', password: '...' }
+//       res.render('register.jade', { error: err});
+//     } else {
+//       res.redirect('/dashboard');
+//     }
+//   })
+// });
+
+// app.get('/login', function(req, res) {
+//   res.render('login.jade', { csrfToken: req.csrfToken() });
+// });
+// app.post('/login', function(req, res) {
+//   UserMongooseModel.findOne({ email: req.body.email }, function(arr, user) {
+//     if (!user) {
+//       res.render('login.jade', { error: 'Invalid email or password.'});
+//     } else {
+//       if (bcrypt.compareSync(req.body.password, user.password)) {
+//         req.session.user = user;
+//         res.redirect('/dashboard');
+//       } else {
+//         res.render('login.jade', { error: 'Invalid email or password.'});
+//       }
+//     }
+//   });
+// });
+
+// app.get('/dashboard', requireLogin, function(req, res) {
+//   res.render('dashboard.jade');
+// });
+
+// app.get('/logout', function(req, res) {
+//   req.session.reset();
+//   res.redirect('/');
+// });

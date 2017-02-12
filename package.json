@@ -1,6 +1,6 @@
 {
-  "name": "nationalpark",
-  "subdomain": "nationalpark",
+  "name": "toolsio-npm",
+  "subdomain": "toolsio-npm",
   "scripts": {
     "start": "server-http.js"
   },
@@ -13,6 +13,14 @@
     "connect": "2.7.4",
     "express": "^4.14.0",
     "mongoose": "2.6.x",
-    "restify": "1.4.x"
+    "restify": "1.4.x",
+    "cookie-parser": "^1.4.1",
+    "connect-flash": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*"
+
   }
 }
