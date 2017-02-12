@@ -6,12 +6,12 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('../models/user');
 
-// Get Register
+// GET Register
 router.get('/register', function(req, res) {
   res.render('auth/register.jade');
 });
 
-// Get Login
+// GET Login
 router.get('/login', function(req, res) {
   res.render('auth/login.jade');
 });
@@ -90,7 +90,7 @@ passport.deserializeUser(function(id, done) {
   });   
 });      
 
-// Post login                  
+// POST login                  
 router.post('/login', passport.authenticate('local', {successRedirect: '/dashboard', 
   failureRedirect: '/users/login', failureFlash: true}), 
   function(req, res) {

@@ -10,8 +10,9 @@ var expressValidator = require('express-validator');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-var routes = require('./app/routes/index');
+var index = require('./app/routes/index');
 var users = require('./app/routes/users');
+var projects = require('./app/routes/projects');
 
 // Init app
 var app = express();
@@ -21,7 +22,9 @@ var config = require('./config');
 
 // View Engine
 app.set('view engine', 'jade');
-app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth']);
+// app.set('view engine', 'ejs');
+// app.engine('html', require('ejs').renderFile)
+app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects']);
 
 // Points to where our static files going to be
 app.use(express.static(__dirname + '/app/public'));
@@ -83,8 +86,9 @@ app.use(function (req, res, next) {
   next();
 })
 
-app.use('/', routes);
+app.use('/', index);
 app.use('/users', users);
+app.use('/projects', projects);
 
 // Set port
 app.set('port', (process.env.PORT || 8080));
