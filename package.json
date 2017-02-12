@@ -1,13 +1,21 @@
 {
-  "name": "toolsio-npm",
-  "subdomain": "toolsio-npm",
+  "name": "toolsio-node",
+  "version": "1.0.0",
+  "description": "MEAN app for managing invoices.",
+  "main": "server.js",
   "scripts": {
-    "start": "server-http.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.0.0-13",
-  "engines": {
-    "node": "0.8.x"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toolsio-com/toolsio-node.git"
   },
+  "author": "Birhanu Hailemariam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/toolsio-com/toolsio-node/issues"
+  },
+  "homepage": "https://github.com/toolsio-com/toolsio-node#readme",
   "dependencies": {
     "body-parser": "^1.16.0",
     "connect": "2.7.4",
