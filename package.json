@@ -1,34 +1,36 @@
 {
   "name": "toolsio-node",
   "version": "1.0.0",
-  "description": "MEAN app for managing invoices.",
-  "main": "server.js",
+  "description": "An project tracking and sales management service.",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/toolsio-com/toolsio-node.git"
+    "url": "git+https://github.com/birhanuh/toolsio-node.git"
   },
   "author": "Birhanu Hailemariam",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/toolsio-com/toolsio-node/issues"
+    "url": "https://github.com/birhanuh/toolsio-node/issues"
   },
-  "homepage": "https://github.com/toolsio-com/toolsio-node#readme",
+  "homepage": "https://github.com/birhanuh/toolsio-node#readme",
   "dependencies": {
-    "body-parser": "^1.16.0",
-    "connect": "2.7.4",
-    "express": "^4.14.0",
-    "mongoose": "2.6.x",
-    "restify": "1.4.x",
-    "cookie-parser": "^1.4.1",
-    "connect-flash": "*",
-    "express-session": "*",
-    "express-validator": "*",
-    "passport": "*",
-    "passport-http": "*",
-    "passport-local": "*"
-
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.16.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.1",
+    "express-react-views": "^0.10.2",
+    "express-session": "^1.15.1",
+    "express-validator": "^3.1.2",
+    "mongoose": "^4.8.2",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   }
 }

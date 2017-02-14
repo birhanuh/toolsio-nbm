@@ -21,9 +21,10 @@ var app = express();
 var config = require('./config');
 
 // View Engine
-app.set('view engine', 'jade');
-// app.set('view engine', 'ejs');
-// app.engine('html', require('ejs').renderFile)
+//app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
+// app.engine('html', require('ejs').renderFile);
+app.engine('jsx', require('express-react-views').createEngine());
 app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects']);
 
 // Points to where our static files going to be
