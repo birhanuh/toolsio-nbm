@@ -3,7 +3,7 @@ var router = express.Router();
 
 // Get Homepage
 router.get('/', function(req, res) {
-  res.render('landing.jade');
+  res.render('index', {});
 });
 
 router.get('/dashboard', ensureAuthenticated, function(req, res) {
