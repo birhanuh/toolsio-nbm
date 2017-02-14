@@ -7,7 +7,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/dashboard', ensureAuthenticated, function(req, res) {
-  res.render('dashboard.jade');
+  res.render('dashboard');
 });
 
 function ensureAuthenticated(req, res, next) {

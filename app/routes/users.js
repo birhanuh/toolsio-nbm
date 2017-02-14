@@ -8,12 +8,12 @@ var User = require('../models/user');
 
 // GET Register
 router.get('/register', function(req, res) {
-  res.render('auth/register.jade');
+  res.render('auth/register');
 });
 
 // GET Login
 router.get('/login', function(req, res) {
-  res.render('auth/login.jade');
+  res.render('auth/login');
 });
 
 // Register User

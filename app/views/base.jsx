@@ -58,8 +58,19 @@ var BaseComponent = React.createClass({
           </nav>
           {/* Initially populated by templates/layout.html */}
           <section>
-            <div className="container">      
-              {this.props.children}
+            <div className="container">     
+              <div className="page">
+                {/*
+                if success_msg.length > 0
+                  .alert.alert-success #{success_msg}
+                if error_msg.length > 0
+                  .alert.alert-danger #{error_msg}
+                if error.length > 0
+                  .alert.alert-danger #{error}</div> 
+                    {this.props.children}
+                */} 
+                {this.props.children}   
+              </div>  
             </div>
           </section>
           
