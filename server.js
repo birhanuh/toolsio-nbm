@@ -22,7 +22,7 @@ var config = require('./config');
 
 // View Engine
 //app.set('view engine', 'jade');
-app.set('view engine', 'ejs');
+app.set('view engine', 'jsx');
 // app.engine('html', require('ejs').renderFile);
 app.engine('jsx', require('express-react-views').createEngine());
 app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects']);
