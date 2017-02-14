@@ -3,7 +3,7 @@ var router = express.Router();
 
 // Get Homepage
 router.get('/', function(req, res) {
-  res.render('index', {});
+  res.render('index', {name: "Argument from route"});
 });
 
 router.get('/dashboard', ensureAuthenticated, function(req, res) {

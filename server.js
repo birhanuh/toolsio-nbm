@@ -27,15 +27,17 @@ app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
 app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects']);
 
-// Points to where our static files going to be
-app.use(express.static(__dirname + '/app/public'));
+// Points to where our static files going to be on development env
+if (app.get('env') === 'development') { 
+  app.use(express.static(__dirname + '/app/public'));
+}  
 
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-if (app.get('env' === 'development')) {
+if (app.get('env') === 'development') {
   app.locals.pretty = true;
 }
 
