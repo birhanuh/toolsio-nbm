@@ -1,20 +1,18 @@
 var mongoose = require('mongoose');
 
-var Schema = mongoose.Schema
-
 // User Schema 
-var ProjectSchema = new Schema({
+var ProjectSchema = new mongoose.Schema({
   name: {
-    type: String
+    type: {type:String, default:''}
   }, 
   date: {
-    type: Date, 
+    type: {type:Date, default:Date.now} 
   },
   status: {
-    type: String
+    type: {type:String, default:'NEW'}
   },
   description: {
-    type: String
+    type: {type:String, default:''}
   }
 });
 

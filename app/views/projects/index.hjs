@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="clearfix">
+      <div class="pull-left">
+        <h1>Projects</h1> 
+      </div>
+      <div class="pull-right">
+        <a href="#projects/new" class="btn btn-primary m-t-l"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;Create new project</a>
+      </div>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Description</th>
+          <th class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody class="projects-list">
+        
+        <!-- This isn't great sanitization and you will want something more secure for outputting untrusted data to the page -->
+          <tr>
+            <td><span class="name">{}</span></td>
+            <td><span class="date">{}</span></td>
+            <td><span class="date">{}</span></td>
+            <td><span class="description">{}</span></td>
+            <td class="text-center">
+              <a href=<%= "/projects/"+ {} class="btn btn-info btn-sm view-more-project"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</a>
+            </td>
+          </tr>  
+      
+
+      </tbody>
+    </table>
+  </div>
+</div>  

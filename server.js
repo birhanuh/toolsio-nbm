@@ -1,5 +1,6 @@
 // Setup express
 var express = require('express');
+var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var flash = require('connect-flash');
@@ -9,10 +10,10 @@ var sessions = require('express-session');
 var expressValidator = require('express-validator');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var logger = require('morgan');
 
-var index = require('./app/routes/index');
-var users = require('./app/routes/users');
-var projects = require('./app/routes/projects');
+var routes = require('./app/routes/index');
+var api = require('./app/routes/api');
 
 // Init app
 var app = express();
@@ -22,24 +23,34 @@ var config = require('./config');
 
 // View Engine
 //app.set('view engine', 'jade');
-app.set('view engine', 'jsx');
+app.set('view engine', 'hjs');
 // app.engine('html', require('ejs').renderFile);
-app.engine('jsx', require('express-react-views').createEngine());
+//app.engine('jsx', require('express-react-views').createEngine());
 app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects']);
 
-// Points to where our static files going to be on development env
-if (app.get('env') === 'development') { 
-  app.use(express.static(__dirname + '/app/public'));
-}  
-
 // BodyParser and Cookie parser Middleware(Setup code)
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+// Points to where our static files going to be on development env
+if (app.get('env') === 'development') { 
+  app.use(express.static(path.join(__dirname + '/app/public')));
+}  
 
 if (app.get('env') === 'development') {
   app.locals.pretty = true;
 }
+
+app.use('/', routes);
+app.use('/api', api);
+
+// Catch 404 and forward to error handler 
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
 // Session Setup
 app.use(sessions({
@@ -89,10 +100,6 @@ app.use(function (req, res, next) {
   next();
 })
 
-app.use('/', index);
-app.use('/users', users);
-app.use('/projects', projects);
-
 // Set port
 app.set('port', (process.env.PORT || 8080));
 app.listen(app.get('port'), function() {
@@ -104,5 +111,11 @@ app.listen(app.get('port'), function() {
 ////////////////////////////////////////////////////// MONGODB - saves data in the database and posts data to the browser
 
 var mongoURI = ( process.env.PORT ) ? config.creds.mongoose_auth_jitsu : config.creds.mongoose_auth_local;
-mongoose.connect(mongoURI);
+mongoose.connect(mongoURI, function(err, res) {
+  if (err) {
+    console.log('DB CONNECTION FAILED: '+err)
+  } else {
+    console.log('DB CONNECTION SUCCESS: '+mongoURI)
+  }
+});
 

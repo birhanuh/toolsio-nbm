@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- <html class="no-js ie6 oldie" lang="en">
+  <html class="no-js ie7 oldie" lang="en"> 
+  <html class="no-js ie8 oldie" lang="en"> 
+  <html class="no-js" lang="en">  -->
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+   
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+
+  </head>
+ <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Toolsio</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-center">
+            <li class="active"><a href="/">Home</a></li>
+            <li class="about"><a href="/about">About</a></li>
+            <li class="contact"><a href="/contact">Contact</a></li>
+            <li class="dashboard"><a href="/about">Dashboard</a></li>
+            <li class="projects"><a href="/projects">Projects</a></li>
+            <li class="sales"><a href="/sales">Sales</a></li>
+            <li class="invoices"><a href="/invoices">Invoices</a></li>
+          </ul>
+          <div class="navbar-form navbar-right">    
+            if (!user) 
+              <div class="form-group">
+                <a href="/users/register" class="btn btn-primary">Register</a>       
+              </div>
+              <div class="form-group">
+                <a href="/users/login" class="btn btn-primary">Login</a>   
+              </div>  
+            if (user)   
+              <div class="form-group">
+                <a href="/users/logout" class="btn btn-primary">Logout</a>
+              </div>  
+          </div>       
+        </div> <!-- .nav-collapse  -->
+      </div>
+    </nav>
+    <!-- Initially populated by templates/layout.html  -->
+    <section>
+      <div class="container">     
+        <div id="root">
+          
+          <!-- if success_msg.length > 0
+            .alert.alert-success #{success_msg}
+          if error_msg.length > 0
+            .alert.alert-danger #{error_msg}
+          if error.length > 0
+            .alert.alert-danger #{error}</div> 
+              {this.props.children} -->
+          
+          <!-- {this.props.children}    -->
+          <h1>Welcome toolsio</h1>
+        </div>  
+      </div>
+    </section>
+    
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>
+
+    <script type="text/javascript" src="../build/bundle.js"></script>
+  </body>
+</html> 
