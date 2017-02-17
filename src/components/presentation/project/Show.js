@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 
-class Project extends Component {
+class Show extends Component {
   render() {
     return (
       <div className="well">
@@ -28,4 +28,4 @@ class Project extends Component {
   }
 }
 
-export default Project
+export default Show

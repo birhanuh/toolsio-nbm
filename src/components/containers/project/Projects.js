@@ -1,7 +1,6 @@
 import React, { Component } from 'react' 
-
-import APIManager from '../../../utils/APIManager'
-import Form from './form'
+import { Create, Show } from '../../presentation'
+import { APIManager } from '../../../utils'
 
 class Projects extends Component {
   constructor() {
@@ -10,6 +9,22 @@ class Projects extends Component {
       list: [
       ]
     }
+  }
+  
+  submitProject() {
+    APIManager.post('/api/projects', this.state.project, (err, response) => {
+      if (err) {
+        alert('ERROR' +err.message)
+        return
+      }
+
+      console.log('Project created: '+JSON.stringify(response.result))
+      let updatedList = Object.assign([], this.state.list)
+      updatedList.push(response.result)
+      this.setState({
+        project: updatedProject
+      })
+    })
   }
 
   componentDidMount() {
@@ -36,7 +51,7 @@ class Projects extends Component {
       return (
         <tr key={project._id}>
           <td><span className="name">{project.name}</span></td>
-          <td><span className="date">{project.date.toString()}</span></td>
+          <td><span className="date">{project.date}</span></td>
           <td><span className="date">{project.state}</span></td>
           <td><span className="description">{project.description}</span></td>
           <td className="text-center">
@@ -58,7 +73,7 @@ class Projects extends Component {
             </div>
           </div>
 
-          <Form />
+          <Create onCreate={thid.submitProject.bind(this)}/>
           
           <table className="table">
             <thead>
