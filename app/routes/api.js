@@ -69,6 +69,7 @@ router.post('/:resource', function(req, res) {
   
   var resource = req.params.resource
   
+  console.log('req: '+req.params)
   var controller = controllers[resource]
   if (controller == null) {
     res.json({
