@@ -25,7 +25,7 @@ class Form extends Component {
     })
 
     let updatedList = Object.assign([], this.state.list)
-    updatedList.push(this.state.comment)
+    updatedList.push(this.state.project)
 
     this.setState({
       project: updatedList

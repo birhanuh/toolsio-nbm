@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 
-import superagent from 'superagent'
+import APIManager from '../../../utils/APIManager'
 import Form from './form'
 
 class Projects extends Component {
@@ -15,20 +15,15 @@ class Projects extends Component {
   componentDidMount() {
     console.log('componentDidMount')
 
-    superagent
-    .get('api/projects')
-    .query(null)
-    .set('Accept', 'application/json')
-    .end((err, response) => {
+    APIManager.get('/api/projects', null, (err, response) => {
       if (err) {
-        alert('ERROR' +err)
+        alert('ERROR' +err.message)
         return
       }
-      console.log(JSON.stringify(response.body))
 
-      let results = response.body.results
+      console.log(JSON.stringify(response.results))
       this.setState({
-        list: results
+        list: response.results
       })
     })
 
@@ -38,7 +33,6 @@ class Projects extends Component {
     //  const projectList = this.state.list.map(function() {...}) ES5 version
 
     const projectList = this.state.list.map((project, i) => {
-      console.log('list: '+project.date.toString());
       return (
         <tr key={project._id}>
           <td><span className="name">{project.name}</span></td>
