@@ -27,7 +27,7 @@ export default {
     superagent
     .post(url)
     .send(body)
-    .set('', 'application/json')
+    .set('Accept', 'application/json')
     .end((err, response) => {
       if (err) {
         callback(err, null)

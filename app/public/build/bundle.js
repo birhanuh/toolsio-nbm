@@ -9513,7 +9513,7 @@ var Projects = function (_Component) {
         var updatedList = Object.assign([], _this2.state.list);
         updatedList.push(response.result);
         _this2.setState({
-          project: updatedProject
+          project: updatedList
         });
       });
     }
@@ -9811,6 +9811,7 @@ var Create = function (_Component) {
 
       // Create a copy of the state and update it
       var updatedProject = Object.assign({}, this.state.project);
+      console.log(event.target.id + ' = ' + event.target.value);
       updatedProject[event.target.id] = event.target.value;
       this.setState({
         project: updatedProject
@@ -9840,15 +9841,7 @@ var Create = function (_Component) {
                 'h1',
                 null,
                 'New Project'
-              ),
-              '// ',
-              _react2.default.createElement(
-                'p',
-                null,
-                'Name: ',
-                this.state.project.name
-              ),
-              ' We only update this part'
+              )
             )
           ),
           _react2.default.createElement(
@@ -10077,7 +10070,7 @@ exports.default = {
   },
 
   post: function post(url, body, callback) {
-    _superagent2.default.post(url).send(body).set('', 'application/json').end(function (err, response) {
+    _superagent2.default.post(url).send(body).set('Accept', 'application/json').end(function (err, response) {
       if (err) {
         callback(err, null);
         return;

@@ -36,7 +36,7 @@ class Create extends Component {
           <div className="form-group">
             <div className="col-sm-offset-2 col-sm-10">
               <h1>New Project</h1> 
-              // <p>Name: {this.state.project.name}</p> We only update this part
+              {/* <p>Name: {this.state.project.name}</p> We only update this part */}
             </div>
           </div>
           <div className="form-group">

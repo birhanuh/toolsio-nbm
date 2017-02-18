@@ -22,7 +22,7 @@ class Projects extends Component {
       let updatedList = Object.assign([], this.state.list)
       updatedList.push(response.result)
       this.setState({
-        project: updatedProject
+        project: updatedList
       })
     })
   }
