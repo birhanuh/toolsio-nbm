@@ -11,8 +11,8 @@ class Projects extends Component {
     }
   }
   
-  submitProject() {
-    APIManager.post('/api/projects', this.state.project, (err, response) => {
+  submitProject(project) {
+    APIManager.post('/api/projects', project, (err, response) => {
       if (err) {
         alert('ERROR' +err.message)
         return
@@ -73,7 +73,7 @@ class Projects extends Component {
             </div>
           </div>
 
-          <Create onCreate={thid.submitProject.bind(this)}/>
+          <Create onCreate={this.submitProject.bind(this)}/>
           
           <table className="table">
             <thead>

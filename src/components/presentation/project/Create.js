@@ -1,5 +1,4 @@
 import React, { Component } from 'react' 
-import APIManager from '../../../utils'
 
 class Create extends Component {
   constructor() {
@@ -19,14 +18,15 @@ class Create extends Component {
 
     // Create a copy of the state and update it
     let updatedProject = Object.assign({}, this.state.project)
+    console.log(event.target.id +' = '+event.target.value)
     updatedProject[event.target.id] = event.target.value
     this.setState({
       project: updatedProject
     })
   }
 
-  submitProject() {
-    this.props.onCreate()
+  submitProject(event) {
+    this.props.onCreate(this.state.project)
   }
 
   render() {
@@ -36,7 +36,7 @@ class Create extends Component {
           <div className="form-group">
             <div className="col-sm-offset-2 col-sm-10">
               <h1>New Project</h1> 
-              <p>Name: {this.state.project.name}</p> // We only update this part
+              // <p>Name: {this.state.project.name}</p> We only update this part
             </div>
           </div>
           <div className="form-group">
