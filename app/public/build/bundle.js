@@ -9472,6 +9472,72 @@ var _react = __webpack_require__(20);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _Projects = __webpack_require__(83);
+
+var _Projects2 = _interopRequireDefault(_Projects);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+//import Sales from '../containers/Sales'
+
+var Dashboard = function (_Component) {
+  _inherits(Dashboard, _Component);
+
+  function Dashboard() {
+    _classCallCheck(this, Dashboard);
+
+    return _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).apply(this, arguments));
+  }
+
+  _createClass(Dashboard, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(_Projects2.default, null)
+      );
+    }
+  }]);
+
+  return Dashboard;
+}(_react.Component);
+
+exports.default = Dashboard;
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = __webpack_require__(117);
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(20);
+
+var _react2 = _interopRequireDefault(_react);
+
 var _presentation = __webpack_require__(84);
 
 var _utils = __webpack_require__(88);
@@ -9493,6 +9559,7 @@ var Projects = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Projects.__proto__ || Object.getPrototypeOf(Projects)).call(this));
 
     _this.state = {
+      selected: 0,
       list: []
     };
     return _this;
@@ -9535,16 +9602,35 @@ var Projects = function (_Component) {
           list: response.results
         });
       });
+
+      // Set dafalult value to selected property
+      this.setState({
+        selected: 0
+      });
+    }
+  }, {
+    key: 'onSelect',
+    value: function onSelect(index) {
+      //event.preventDefault();
+      this.setState({
+        selected: index
+      });
+
+      console.log('onSelect: ', this.state.selected);
     }
   }, {
     key: 'render',
     value: function render() {
-      //  const projectList = this.state.list.map(function() {...}) ES5 version
+      var _this4 = this;
 
+      var projectFromList = Object.assign([], this.state.list);
+      console.log('onSelect: ', projectFromList);
+      //  const projectList = this.state.list.map(function() {...}) ES5 version
       var projectList = this.state.list.map(function (project, i) {
+        var selected = i == _this4.state.selected;
         return _react2.default.createElement(
           'tr',
-          { key: project._id },
+          { key: i, className: selected ? 'active' : '' },
           _react2.default.createElement(
             'td',
             null,
@@ -9586,7 +9672,7 @@ var Projects = function (_Component) {
             { className: 'text-center' },
             _react2.default.createElement(
               'a',
-              { href: '/projects/', className: 'btn btn-info btn-sm view-more-project' },
+              { href: '#', onClick: _this4.onSelect.bind(_this4, i), className: 'btn btn-info btn-sm view-more-project' },
               _react2.default.createElement('i', { className: 'fa fa-eye', 'aria-hidden': 'true' }),
               '\xA0View more'
             )
@@ -9646,6 +9732,11 @@ var Projects = function (_Component) {
                 _react2.default.createElement(
                   'th',
                   null,
+                  'Status'
+                ),
+                _react2.default.createElement(
+                  'th',
+                  null,
                   'Description'
                 ),
                 _react2.default.createElement(
@@ -9660,7 +9751,8 @@ var Projects = function (_Component) {
               { className: 'projects-list' },
               projectList
             )
-          )
+          ),
+          _react2.default.createElement(_presentation.Show, { project: projectFromList[this.state.selected] })
         )
       );
     }
@@ -9670,70 +9762,6 @@ var Projects = function (_Component) {
 }(_react.Component);
 
 exports.default = Projects;
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(20);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Dashboard = function (_Component) {
-  _inherits(Dashboard, _Component);
-
-  function Dashboard() {
-    _classCallCheck(this, Dashboard);
-
-    return _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).apply(this, arguments));
-  }
-
-  _createClass(Dashboard, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'h1',
-          null,
-          'This is Dashboard'
-        )
-      );
-    }
-  }]);
-
-  return Dashboard;
-}(_react.Component);
-
-exports.default = Dashboard;
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = __webpack_require__(117);
-
 
 /***/ }),
 /* 84 */
@@ -9975,7 +10003,11 @@ var Show = function (_Component) {
           _react2.default.createElement(
             "dd",
             null,
-            _react2.default.createElement("span", { className: "name" })
+            _react2.default.createElement(
+              "span",
+              { className: "name" },
+              this.props.project.name
+            )
           ),
           _react2.default.createElement(
             "dt",
@@ -9985,7 +10017,11 @@ var Show = function (_Component) {
           _react2.default.createElement(
             "dd",
             null,
-            _react2.default.createElement("span", { className: "date" })
+            _react2.default.createElement(
+              "span",
+              { className: "date" },
+              this.props.project.date
+            )
           ),
           _react2.default.createElement(
             "dt",
@@ -9995,7 +10031,11 @@ var Show = function (_Component) {
           _react2.default.createElement(
             "dd",
             null,
-            _react2.default.createElement("span", { className: "status" })
+            _react2.default.createElement(
+              "span",
+              { className: "status" },
+              this.props.project.status
+            )
           ),
           _react2.default.createElement(
             "dt",
@@ -10005,7 +10045,11 @@ var Show = function (_Component) {
           _react2.default.createElement(
             "dd",
             null,
-            _react2.default.createElement("span", { className: "description" })
+            _react2.default.createElement(
+              "span",
+              { className: "description" },
+              this.props.project.description
+            )
           ),
           _react2.default.createElement(
             "div",
@@ -24303,17 +24347,13 @@ var _react = __webpack_require__(20);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(83);
+var _reactDom = __webpack_require__(82);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _Projects = __webpack_require__(81);
+var _Home = __webpack_require__(81);
 
-var _Projects2 = _interopRequireDefault(_Projects);
-
-var _Dashboard = __webpack_require__(82);
-
-var _Dashboard2 = _interopRequireDefault(_Dashboard);
+var _Home2 = _interopRequireDefault(_Home);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24341,7 +24381,7 @@ var App = function (_Component) {
         'div',
         null,
         'Hello React!',
-        _react2.default.createElement(_Projects2.default, null)
+        _react2.default.createElement(_Home2.default, null)
       );
     }
   }]);

@@ -27,6 +27,7 @@ router.post('/register', function(req, res) {
   // Validation
   req.checkBody('firstName', 'First name is required').notEmpty();
   req.checkBody('lastName', 'Last name is required').notEmpty();
+  req.checkBody('email', 'Email is required').notEmpty();
   req.checkBody('email', 'Email is required').isEmail();
   req.checkBody('password', 'Password is required').notEmpty();
   req.checkBody('password2', 'Password do not match').equals(req.body.password);
@@ -65,7 +66,7 @@ passport.use(new LocalStrategy({
     User.getUserByEmail(username, function(err, user) {
       if (err) throw err; 
       if (!user) {
-        return done(null, false, { message: 'Incorrect email.'});
+        return done(null, false, { message: 'Unknown email.'});
       }
       
       User.comparePassword(password, user.password, function(err, isMatch) {

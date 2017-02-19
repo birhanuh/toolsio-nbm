@@ -1,10 +1,12 @@
 import React, { Component } from 'react' 
+import Projects from '../containers/Projects'
+//import Sales from '../containers/Sales'
 
 class Dashboard extends Component {
   render() {
     return (
       <div>
-        <h1>This is Dashboard</h1>
+        <Projects />
      
       </div> 
     )

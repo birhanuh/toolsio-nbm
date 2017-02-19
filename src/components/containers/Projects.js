@@ -1,11 +1,12 @@
 import React, { Component } from 'react' 
-import { Create, Show } from '../../presentation'
-import { APIManager } from '../../../utils'
+import { Create, Show } from '../presentation'
+import { APIManager } from '../../utils'
 
 class Projects extends Component {
   constructor() {
     super()
     this.state = {
+      selected: 0,
       list: [
       ]
     }
@@ -42,20 +43,34 @@ class Projects extends Component {
       })
     })
 
+    // Set dafalult value to selected property
+    this.setState({
+      selected: 0
+    })
+  }
+
+  onSelect(index) {
+    //event.preventDefault();
+    this.setState({
+      selected: index
+    })
+
+    console.log('onSelect: ', this.state.selected)
   }
 
   render() {
+    console.log('onSelect: ', this.state.list)
     //  const projectList = this.state.list.map(function() {...}) ES5 version
-
     const projectList = this.state.list.map((project, i) => {
+      let selected = (i == this.state.selected)
       return (
-        <tr key={project._id}>
+        <tr key={i} className={selected ? 'active' : ''} >
           <td><span className="name">{project.name}</span></td>
           <td><span className="date">{project.date}</span></td>
           <td><span className="date">{project.state}</span></td>
           <td><span className="description">{project.description}</span></td>
           <td className="text-center">
-            <a href="/projects/" className="btn btn-info btn-sm view-more-project"><i className="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</a>
+            <a href="#" onClick={this.onSelect.bind(this, i)} className="btn btn-info btn-sm view-more-project"><i className="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</a>
           </td>
         </tr> 
       )  
@@ -80,6 +95,7 @@ class Projects extends Component {
               <tr>
                 <th>Name</th>
                 <th>Date</th>
+                <th>Status</th>
                 <th>Description</th>
                 <th className="text-center">Action</th>
               </tr>
@@ -90,6 +106,8 @@ class Projects extends Component {
 
             </tbody>
           </table>
+
+          {/*<Show project={this.state.list[this.state.selected]} /> */}
         </div>
       </div> 
     )

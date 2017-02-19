@@ -6,7 +6,8 @@ var Schema = mongoose.Schema
 // User Schema 
 var UserSchema = new Schema({
   firstName: {
-    type: String
+    type: String,
+    //index: true
   }, 
   lastName: {
     type: String
