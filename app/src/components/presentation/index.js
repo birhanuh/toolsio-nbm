@@ -1,5 +1,5 @@
-import Create from './project/Create'
-import Show from './project/Show'
+import CreateProject from './project/Create'
+import ShowProject from './project/Show'
 
 export {
   CreateProject,

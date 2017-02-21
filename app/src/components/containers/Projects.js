@@ -75,39 +75,41 @@ class Projects extends Component {
     })
 
     return (
-      <div className="row">
-        <div className="col-sm-12">
-          <div className="clearfix">
-            <div className="pull-left">
-              <h1>Projects</h1> 
+      <div className="container">   
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="clearfix">
+              <div className="pull-left">
+                <h1>Projects</h1> 
+              </div>
+              <div className="pull-right">
+                <a href="#projects/new" className="btn btn-primary m-t-l"><i className="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;Create new project</a>
+              </div>
             </div>
-            <div className="pull-right">
-              <a href="#projects/new" className="btn btn-primary m-t-l"><i className="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;Create new project</a>
-            </div>
+
+            <Create onCreate={this.submitProject.bind(this)}/>
+            
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Description</th>
+                  <th className="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody className="projects-list">
+                
+                {projectList}      
+
+              </tbody>
+            </table>
+
+            {project}
           </div>
-
-          <Create onCreate={this.submitProject.bind(this)}/>
-          
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Description</th>
-                <th className="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody className="projects-list">
-              
-              {projectList}      
-
-            </tbody>
-          </table>
-
-          {project}
-        </div>
-      </div> 
+        </div> 
+      </div>
     )
   }
 }

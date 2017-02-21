@@ -1,17 +1,8 @@
 import React, { Component } from 'react' // ES6 version
 import ReactDOM from 'react-dom'
+import { Router, browserHistory } from 'react-router'
 //var React = require('react') // ES5 version
 
-import Home from './components/layout/Home'
+import routes from './routes'
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Home />
-      </div>  
-    )
-  }
-}
-
-ReactDOM.render(<App/>, document.getElementById('app'))
+ReactDOM.render(<Router history={browserHistory} routes={routes} />, document.getElementById('app'))
