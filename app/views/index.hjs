@@ -57,7 +57,7 @@
     <!-- Initially populated by templates/layout.html  -->
     <section>
       <div class="container">     
-        <div id="root">
+        <div id="app">
           
           <!-- if success_msg.length > 0
             .alert.alert-success #{success_msg}

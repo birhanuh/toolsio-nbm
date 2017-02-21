@@ -54,7 +54,6 @@ class Projects extends Component {
 
   render() {
     //  Return Show component if this.state.list not null
-    console.log('render: ', this.state.list[this.state.selected])
     const project = !this.state.list[this.state.selected] ? null : (
       <Show project={this.state.list[this.state.selected]} /> 
     )
