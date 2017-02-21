@@ -7,8 +7,7 @@ class Projects extends Component {
     super()
     this.state = {
       selected: 0,
-      list: [
-      ]
+      list: []
     }
   }
   
@@ -42,24 +41,24 @@ class Projects extends Component {
         list: response.results
       })
     })
-
-    // Set dafalult value to selected property
-    this.setState({
-      selected: 0
-    })
   }
 
   onSelect(index) {
-    //event.preventDefault();
+    event.preventDefault();
     this.setState({
       selected: index
     })
 
-    console.log('onSelect: ', this.state.selected)
+    console.log('onSelect click: ', this.state.selected)
   }
 
   render() {
-    console.log('onSelect: ', this.state.list)
+    //  Return Show component if this.state.list not null
+    console.log('render: ', this.state.list[this.state.selected])
+    const project = !this.state.list[this.state.selected] ? null : (
+      <Show project={this.state.list[this.state.selected]} /> 
+    )
+
     //  const projectList = this.state.list.map(function() {...}) ES5 version
     const projectList = this.state.list.map((project, i) => {
       let selected = (i == this.state.selected)
@@ -70,7 +69,7 @@ class Projects extends Component {
           <td><span className="date">{project.state}</span></td>
           <td><span className="description">{project.description}</span></td>
           <td className="text-center">
-            <a href="#" onClick={this.onSelect.bind(this, i)} className="btn btn-info btn-sm view-more-project"><i className="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</a>
+            <button onClick={this.onSelect.bind(this, i)} className="btn btn-info btn-sm view-more-project"><i className="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</button>
           </td>
         </tr> 
       )  
@@ -107,7 +106,7 @@ class Projects extends Component {
             </tbody>
           </table>
 
-          {/*<Show project={this.state.list[this.state.selected]} /> */}
+          {project}
         </div>
       </div> 
     )

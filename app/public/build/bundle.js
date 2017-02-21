@@ -9602,29 +9602,26 @@ var Projects = function (_Component) {
           list: response.results
         });
       });
-
-      // Set dafalult value to selected property
-      this.setState({
-        selected: 0
-      });
     }
   }, {
     key: 'onSelect',
     value: function onSelect(index) {
-      //event.preventDefault();
+      event.preventDefault();
       this.setState({
         selected: index
       });
 
-      console.log('onSelect: ', this.state.selected);
+      console.log('onSelect click: ', this.state.selected);
     }
   }, {
     key: 'render',
     value: function render() {
       var _this4 = this;
 
-      var projectFromList = Object.assign([], this.state.list);
-      console.log('onSelect: ', projectFromList);
+      //  Return Show component if this.state.list not null
+      console.log('render: ', this.state.list[this.state.selected]);
+      var project = !this.state.list[this.state.selected] ? null : _react2.default.createElement(_presentation.Show, { project: this.state.list[this.state.selected] });
+
       //  const projectList = this.state.list.map(function() {...}) ES5 version
       var projectList = this.state.list.map(function (project, i) {
         var selected = i == _this4.state.selected;
@@ -9671,8 +9668,8 @@ var Projects = function (_Component) {
             'td',
             { className: 'text-center' },
             _react2.default.createElement(
-              'a',
-              { href: '#', onClick: _this4.onSelect.bind(_this4, i), className: 'btn btn-info btn-sm view-more-project' },
+              'button',
+              { onClick: _this4.onSelect.bind(_this4, i), className: 'btn btn-info btn-sm view-more-project' },
               _react2.default.createElement('i', { className: 'fa fa-eye', 'aria-hidden': 'true' }),
               '\xA0View more'
             )
@@ -9752,7 +9749,7 @@ var Projects = function (_Component) {
               projectList
             )
           ),
-          _react2.default.createElement(_presentation.Show, { project: projectFromList[this.state.selected] })
+          project
         )
       );
     }
@@ -9987,84 +9984,85 @@ var Show = function (_Component) {
   }
 
   _createClass(Show, [{
-    key: "render",
+    key: 'render',
     value: function render() {
+      console.log('onSelect Show: ', this.props.project);
       return _react2.default.createElement(
-        "div",
-        { className: "well" },
+        'div',
+        { className: 'well' },
         _react2.default.createElement(
-          "dl",
+          'dl',
           null,
           _react2.default.createElement(
-            "dt",
+            'dt',
             null,
-            "Name:"
+            'Name:'
           ),
           _react2.default.createElement(
-            "dd",
+            'dd',
             null,
             _react2.default.createElement(
-              "span",
-              { className: "name" },
+              'span',
+              { className: 'name' },
               this.props.project.name
             )
           ),
           _react2.default.createElement(
-            "dt",
+            'dt',
             null,
-            "Date:"
+            'Date:'
           ),
           _react2.default.createElement(
-            "dd",
+            'dd',
             null,
             _react2.default.createElement(
-              "span",
-              { className: "date" },
+              'span',
+              { className: 'date' },
               this.props.project.date
             )
           ),
           _react2.default.createElement(
-            "dt",
+            'dt',
             null,
-            "Status:"
+            'Status:'
           ),
           _react2.default.createElement(
-            "dd",
+            'dd',
             null,
             _react2.default.createElement(
-              "span",
-              { className: "status" },
+              'span',
+              { className: 'status' },
               this.props.project.status
             )
           ),
           _react2.default.createElement(
-            "dt",
+            'dt',
             null,
-            "Description:"
+            'Description:'
           ),
           _react2.default.createElement(
-            "dd",
+            'dd',
             null,
             _react2.default.createElement(
-              "span",
-              { className: "description" },
+              'span',
+              { className: 'description' },
               this.props.project.description
             )
           ),
           _react2.default.createElement(
-            "div",
-            { className: "btn-toolbar m-t-l" },
+            'div',
+            { className: 'btn-toolbar m-t-l' },
             _react2.default.createElement(
-              "a",
-              { href: "#projects", className: "btn btn-default" },
-              _react2.default.createElement("i", { className: "fa fa-ban", "aria-hidden": "true" }),
-              "\xA0Cancel"
+              'a',
+              { href: '#projects', className: 'btn btn-default' },
+              _react2.default.createElement('i', { className: 'fa fa-ban', 'aria-hidden': 'true' }),
+              '\xA0Cancel'
             ),
             _react2.default.createElement(
-              "button",
-              { className: "btn btn-primary edit-project" },
-              _react2.default.createElement("i", { className: "fa fa-pencil", "aria-hidden": "true" }),
-              "\xA0Edit project"
+              'button',
+              { className: 'btn btn-primary edit-project' },
+              _react2.default.createElement('i', { className: 'fa fa-pencil', 'aria-hidden': 'true' }),
+              '\xA0Edit project'
             )
           )
         )
@@ -24380,7 +24378,6 @@ var App = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        'Hello React!',
         _react2.default.createElement(_Home2.default, null)
       );
     }

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 class Show extends Component {
   render() {
+    console.log('onSelect Show: ', this.props.project)
     return (
       <div className="well">
 
@@ -22,7 +23,7 @@ class Show extends Component {
             <a href="#projects" className="btn btn-default"><i className="fa fa-ban" aria-hidden="true"></i>&nbsp;Cancel</a>
             <button className="btn btn-primary edit-project"><i className="fa fa-pencil" aria-hidden="true"></i>&nbsp;Edit project</button>
           </div>
-        </dl>      
+        </dl>   
       </div> 
     )
   }
