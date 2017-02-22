@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 export default() => {
   return (
@@ -11,30 +12,33 @@ export default() => {
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
           </button>
-          <a className="navbar-brand" href="/">Toolsio</a>
+          <Link className="navbar-brand" href="/">Toolsio</Link>
         </div>
         <div id="navbar" className="collapse navbar-collapse">
           <ul className="nav navbar-nav navbar-center">
-            <li className="active"><a href="/">Home</a></li>
-            <li className="about"><a href="/about">About</a></li>
-            <li className="contact"><a href="/contact">Contact</a></li>
-            <li className="dashboard"><a href="/about">Dashboard</a></li>
-            <li className="projects"><a href="/projects">Projects</a></li>
-            <li className="sales"><a href="/sales">Sales</a></li>
-            <li className="invoices"><a href="/invoices">Invoices</a></li>
+            <li className="active"><Link to="/">Home</Link></li>
+            <li className="about"><Link to="/Linkbout">About</Link></li>
+            <li className="contact"><Link to="/contact">Contact</Link></li>
+            <li className="dashboard"><Link to="/Linkbout">Dashboard</Link></li>
+            <li className="projects"><Link to="/projects">Projects</Link></li>
+            <li className="sales"><Link to="/sales">Sales</Link></li>
+            <li className="invoices"><Link to="/invoices">Invoices</Link></li>
           </ul>
           <div className="navbar-form navbar-right">    
             
               <div className="form-group">
-                <a href="/users/register" className="btn btn-primary">Register</a>       
+                <Link to="/signup" className="btn btn-primary">Sign up</Link>       
               </div>
+              ''
               <div className="form-group">
-                <a href="/users/login" className="btn btn-primary">Login</a>   
+                <Link to="/login" className="btn btn-primary">Log in</Link>   
               </div>  
-               
+              
+              {/* 
               <div className="form-group">
-                <a href="/users/logout" className="btn btn-primary">Logout</a>
-              </div>  
+                <Link to="/logout" className="btn btn-primary">Logout</Link>
+              </div>
+              */}  
           </div>       
         </div> {/* .nav-collapse  */}
       </div>
