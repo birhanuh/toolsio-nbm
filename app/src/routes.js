@@ -2,8 +2,8 @@ import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 
 import { Home, Landing } from './components/layout/'
-import Signup from './components/layout/auth/Signup'
-import Login from './components/layout/auth/Login'
+import Signup from './components/presentation/auth/Signup'
+import Login from './components/presentation/auth/Login'
 
 export default (
   <Route path="/" component={Home}>
