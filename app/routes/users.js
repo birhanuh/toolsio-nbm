@@ -1,3 +1,52 @@
+import express from 'express'
+import Validator from 'express-validator'
+import isEmpty from 'lodash/isEmpty'
+
+var router = express.Router();
+
+function validateInput(data) {
+  let errors = {}
+
+  if (Validator.isNull(data.firstName)) {
+    errors.firstName = 'First Name is required'
+  }
+  if (Validator.isNull(data.lastName)) {
+    errors.lastName = 'Last Name is required'
+  }
+  if (Validator.isNull(data.email)) {
+    errors.email = 'Email is required'
+  }
+  if (!Validator.isEmail(data.email)) {
+    errors.email = 'Wrong Email format'
+  }
+  if (Validator.isNull(data.password)) {
+    errors.password = 'Email is required'
+  }
+  if (Validator.isNull(data.password2)) {
+    errors.passwordConfirmation = 'Email is required'
+  }
+  if (!Validator.equals(data.password, data.passwordConfirmation)) {
+    errors.passwordConfirmation = "Password doesn't match"
+  }
+
+  return {
+    errors,
+    isValid: isEmpty(errors)
+  }
+}
+
+// Register User
+router.post('/register', function(req, res) {
+  const { errors, isValid } = validateInput(req.body)
+
+  if (!isValid) {
+    res.status(400).json(errors)
+  }  
+});
+
+module.exports = router;
+
+/**
 var express = require('express');
 var router = express.Router();
 
@@ -106,3 +155,4 @@ router.get('/logout', function(req, res) {
 });
 
 module.exports = router;
+*/

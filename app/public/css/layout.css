@@ -19,8 +19,8 @@ body {
   margin-bottom: 60px;
 }
 
-section {
-  margin-top: 50px;
+section > .container {
+  margin-top: 70px;
 }
 
 body > section .container, body > footer .container {

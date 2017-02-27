@@ -5,7 +5,7 @@ class Landing extends Component {
     return (
       <div className="jumbotron">
         <div className="container">   
-          <h1>Welcome to Toolsio</h1>
+          <h1>Welcome to Toolsio!</h1>
         </div>  
       </div>
     )

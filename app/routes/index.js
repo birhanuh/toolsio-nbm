@@ -1,10 +1,14 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+import path from 'path'
+let router = express.Router();
 
 // Get Homepage
-router.get('/', function(req, res) {
-  res.render('index', {title: "Express"});
+router.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
+// router.get('/', function(req, res) {
+//   res.render('index', {title: "Express"});
+// });
 
 router.get('/dashboard', ensureAuthenticated, function(req, res) {
   res.render('dashboard');
