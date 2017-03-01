@@ -1,5 +1,5 @@
 import express from 'express'
-import Validator from 'express-validator'
+import Validator from 'validator'
 import isEmpty from 'lodash/isEmpty'
 
 var router = express.Router();
@@ -7,28 +7,31 @@ var router = express.Router();
 function validateInput(data) {
   let errors = {}
 
-  if (Validator.isNull(data.firstName)) {
+  if (!data.firstName) {
     errors.firstName = 'First Name is required'
   }
-  if (Validator.isNull(data.lastName)) {
+  if (!data.lastName) {
     errors.lastName = 'Last Name is required'
   }
-  if (Validator.isNull(data.email)) {
+  if (!data.email) {
     errors.email = 'Email is required'
+  } else {
+    if (!Validator.isEmail(data.email)) {
+      errors.email = 'Wrong Email format'
+    }
+  }  
+  if (!data.password) {
+    errors.password = 'Password is required'
   }
-  if (!Validator.isEmail(data.email)) {
-    errors.email = 'Wrong Email format'
+  if (!data.password2) {
+    errors.passwordConfirmation = 'Password confirmation is required'
   }
-  if (Validator.isNull(data.password)) {
-    errors.password = 'Email is required'
+  if (data.password && data.passwordConfirmation) {
+    if (!Validator.equals(data.password, data.passwordConfirmation)) {
+      errors.passwordConfirmation = "Password doesn't match"
+    }
   }
-  if (Validator.isNull(data.password2)) {
-    errors.passwordConfirmation = 'Email is required'
-  }
-  if (!Validator.equals(data.password, data.passwordConfirmation)) {
-    errors.passwordConfirmation = "Password doesn't match"
-  }
-
+    
   return {
     errors,
     isValid: isEmpty(errors)
@@ -38,7 +41,7 @@ function validateInput(data) {
 // Register User
 router.post('/register', function(req, res) {
   const { errors, isValid } = validateInput(req.body)
-
+ 
   if (!isValid) {
     res.status(400).json(errors)
   }  
@@ -156,3 +159,19 @@ router.get('/logout', function(req, res) {
 
 module.exports = router;
 */
+
+  // var firstName = data.body.firstName;
+  // var lastName = data.body.lasttName;
+  // var email = data.body.email;
+  // var password = data.body.password;
+  // var password2 = data.body.password2;
+
+  // // Validation
+  // data.checkBody('firstName', 'First name is required').notEmpty();
+  // data.checkBody('lastName', 'Last name is required').notEmpty();
+  // data.checkBody('email', 'Email is required').notEmpty();
+  // data.checkBody('email', 'Wrong Email format').isEmail();
+  // data.checkBody('password', 'Password is required').notEmpty();
+  // data.checkBody('password2', 'Password do not match').equals(data.body.password);
+
+  // let errors = data.validationErrors();

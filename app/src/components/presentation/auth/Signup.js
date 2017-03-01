@@ -1,6 +1,7 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
-import { userSignupRequest } from '../../containers/Authentication'
+import { userSignupRequest } from '../../../utils/Authentication'
+import classnames from 'classnames'
 
 class Signup extends Component {
   constructor() {
@@ -12,11 +13,13 @@ class Signup extends Component {
         email: '',
         password: '',
         passwordConfirmation: ''
-      }
+      },
+      errors: {},
+      isLoading: false
     }
   }
   
-  onChange(e) {
+  onChange(event) {
     let updatedUser = Object.assign({}, this.state.user)
     updatedUser[event.target.name] = event.target.value
     this.setState({
@@ -24,13 +27,20 @@ class Signup extends Component {
     })
   }
 
-  onSubmit(e) {
-    e.preventDefault()
-    this.props.userSignupRequest(this.state.user)
+  onSubmit(event) {
+    event.preventDefault()
+    // Empty errros state for each submit
+    this.setState({ errros: {}, isLoading: true })
+
+    // Make submit
+    this.props.userSignupRequest(this.state.user).then(
+      () => {},
+      ({ response }) => this.setState({ errors: response.data, isLoading: false })
+      )
   }
 
   render() {
-    //const { userSignupRequest } = this.props
+    const { errors } = this.state
     return (
       <div className="container">
         <div className="row">
@@ -45,27 +55,32 @@ class Signup extends Component {
                 */}    
                 
                 <form onSubmit={this.onSubmit.bind(this)}>
-                  <div className="form-group">
-                    <label className="control-label">First name</label>
-                    <input className="form-control" type="text" name="firstName" value={this.state.firstName} onChange={this.onChange.bind(this)} placeholder="First Name"/>
+                  <div className={classnames("form-group", { 'has-error': errors.firstName})}>
+                    <label className="control-label">First Name</label>
+                    <input className="form-control" type="text" name="firstName" value={this.state.user.firstName} onChange={this.onChange.bind(this)} placeholder="First Name"/>
+                    { errors.firstName && <span className="help-block">{errors.firstName}</span>}
                   </div>
-                  <div className="form-group">
-                    <label>Last name</label>
-                    <input className="form-control" type="text" name="lastName" value={this.state.lastName} onChange={this.onChange.bind(this)} placeholder="Last Name"/>
+                  <div className={classnames("form-group", { 'has-error': errors.lastName})}>
+                    <label className="control-label">Last Name</label>
+                    <input className="form-control" type="text" name="lastName" value={this.state.user.lastName} onChange={this.onChange.bind(this)} placeholder="Last Name"/>
+                    { errors.firstName && <span className="help-block">{errors.lastName}</span>}
                   </div>
-                  <div className="form-group">
-                    <label>Email</label>
-                    <input className="form-control" type="email" name="email" value={this.state.email} onChange={this.onChange.bind(this)} placeholder="Email"/>
+                  <div className={classnames("form-group", { 'has-error': errors.email})}>
+                    <label className="control-label">Email</label>
+                    <input className="form-control" type="email" name="email" value={this.state.user.email} onChange={this.onChange.bind(this)} placeholder="Email"/>
+                    { errors.firstName && <span className="help-block">{errors.email}</span>}
                   </div>
-                  <div className="form-group">
-                    <label>Password</label>
-                    <input className="form-control" type="password" name="password" value={this.state.password} onChange={this.onChange.bind(this)} placeholder="Password"/>
+                  <div className={classnames("form-group", { 'has-error': errors.password})}>
+                    <label className="control-label">Password</label>
+                    <input className="form-control" type="password" name="password" value={this.state.user.password} onChange={this.onChange.bind(this)} placeholder="Password"/>
+                    { errors.firstName && <span className="help-block">{errors.password}</span>}
                   </div>
-                  <div className="form-group">
-                    <label>Confirm password</label>
-                    <input className="form-control" type="password" name="passwordConfirmation" value={this.state.passwordConfirmation} onChange={this.onChange.bind(this)} placeholder="Confirm Password"/>
+                  <div className={classnames("form-group", { 'has-error': errors.passwordConfirmation})}>
+                    <label className="control-label">Confirm password</label>
+                    <input className="form-control" type="password" name="passwordConfirmation" value={this.state.user.passwordConfirmation} onChange={this.onChange.bind(this)} placeholder="Confirm Password"/>
+                    { errors.firstName && <span className="help-block">{errors.passwordConfirmation}</span>}
                   </div>
-                  <button type="submit" className="btn btn-default">Submit</button>
+                  <button disabled={this.state.isLoading} className="btn btn-default">Submit</button>
                 </form>  
               </div>    
               <div className="panel-footer">

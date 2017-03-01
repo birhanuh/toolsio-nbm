@@ -1,11 +1,13 @@
 // Setup express
 import express from 'express'
+
 import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
 import logger from 'morgan'
 
+// webpack
 import webpack from 'webpack'
 import webpackMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
@@ -42,6 +44,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 // Points to where our static files going to be on development env
 if (app.get('env') === 'development') { 
   app.use(express.static(path.join(__dirname + '/app/public')));
