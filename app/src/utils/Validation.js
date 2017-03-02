@@ -1,14 +1,7 @@
-import axios from 'axios'
 import Validator from 'validator'
 import isEmpty from 'lodash/isEmpty'
 
 export default {
-
-  userSignupRequest: (userData) => {
-    return dispatch => {
-      return axios.post('/users/register', userData)
-    }
-  }, 
 
   validateInput: (data) => {
     let errors = {}

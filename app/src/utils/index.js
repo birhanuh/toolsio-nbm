@@ -1,7 +1,7 @@
 import APIManager from './APIManager'
-import Authentication from './Authentication'
+import Validation from './Validation'
 
 export {
   APIManager,
-  Authentication
+  Validation
 }

@@ -1,11 +1,11 @@
 import express from 'express'
-import { Authentication } from '../src/utils'
+import { Validation } from '../src/utils'
 
 var router = express.Router();
 
 // Register User
 router.post('/register', function(req, res) {
-  const { errors, isValid } = Authentication.validateInput(req.body)
+  const { errors, isValid } = Validation.validateInput(req.body)
  
   if (isValid) {
     res.json({ success: true })

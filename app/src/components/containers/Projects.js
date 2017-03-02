@@ -68,7 +68,7 @@ class Projects extends Component {
           <td><span className="date">{project.state}</span></td>
           <td><span className="description">{project.description}</span></td>
           <td className="text-center">
-            <button onClick={this.onSelect.bind(this, i)} className="btn btn-info btn-sm view-more-project"><i className="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</button>
+            <button index={i} onClick={this.onSelect.bind(this)} className="btn btn-info btn-sm view-more-project"><i className="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</button>
           </td>
         </tr> 
       )  

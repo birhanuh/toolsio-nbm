@@ -1,6 +1,8 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
-import { Authentication } from '../../../utils'
+import { Validation } from '../../../utils'
+import { userSignupRequest } from '../../../actions/authentication'
+import { addFlashMessage } from '../../../actions/flashMessages'
 import InputFiled from '../../../utils/FormGroup'
 import { browserHistory } from 'react-router'
 
@@ -29,7 +31,7 @@ class Signup extends Component {
   }
 
   isValid() {
-    const { errors, isValid } = Authentication.validateInput(this.state.user)
+    const { errors, isValid } = Validation.validateInput(this.state.user)
 
     if (!isValid) {
       this.setState({ errors })
@@ -47,6 +49,10 @@ class Signup extends Component {
       // Make submit
       this.props.userSignupRequest(this.state.user).then(
         () => {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: 'You have signed up successfully!'
+          })
           this.context.router.push('/dashboard')
         },
         ({ response }) => this.setState({ errors: response.data, isLoading: false })
@@ -128,11 +134,10 @@ class Signup extends Component {
   }
 }
 
-let userSignupRequest = Authentication.userSignupRequest 
-
 // Proptypes definition
 Signup.propTypes = {
-  userSignupRequest: React.PropTypes.func.isRequired
+  userSignupRequest: React.PropTypes.func.isRequired,
+  addFlashMessage: React.PropTypes.func.isRequired
 }
 
 // Contexttype definition
@@ -140,4 +145,4 @@ Signup.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-export default connect(null, { userSignupRequest })(Signup)
+export default connect(null, { userSignupRequest, addFlashMessage })(Signup)
