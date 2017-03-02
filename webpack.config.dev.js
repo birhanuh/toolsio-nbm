@@ -22,7 +22,10 @@ export default {
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        include: path.join(__dirname, '/app/src'),
+        //include: [
+        //  path.join(__dirname, '/app/src'),
+        //  path.join(__dirname, '/app/routes')
+        //]
         loaders: [ 'react-hot', 'babel' ],
       }
     ]

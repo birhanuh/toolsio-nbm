@@ -1,48 +1,15 @@
 import express from 'express'
-import Validator from 'validator'
-import isEmpty from 'lodash/isEmpty'
+import { Authentication } from '../src/utils'
 
 var router = express.Router();
 
-function validateInput(data) {
-  let errors = {}
-
-  if (!data.firstName) {
-    errors.firstName = 'First Name is required'
-  }
-  if (!data.lastName) {
-    errors.lastName = 'Last Name is required'
-  }
-  if (!data.email) {
-    errors.email = 'Email is required'
-  } else {
-    if (!Validator.isEmail(data.email)) {
-      errors.email = 'Wrong Email format'
-    }
-  }  
-  if (!data.password) {
-    errors.password = 'Password is required'
-  }
-  if (!data.password2) {
-    errors.passwordConfirmation = 'Password confirmation is required'
-  }
-  if (data.password && data.passwordConfirmation) {
-    if (!Validator.equals(data.password, data.passwordConfirmation)) {
-      errors.passwordConfirmation = "Password doesn't match"
-    }
-  }
-    
-  return {
-    errors,
-    isValid: isEmpty(errors)
-  }
-}
-
 // Register User
 router.post('/register', function(req, res) {
-  const { errors, isValid } = validateInput(req.body)
+  const { errors, isValid } = Authentication.validateInput(req.body)
  
-  if (!isValid) {
+  if (isValid) {
+    res.json({ success: true })
+  } else {  
     res.status(400).json(errors)
   }  
 });

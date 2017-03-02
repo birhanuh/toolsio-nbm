@@ -1,7 +1,8 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
-import { userSignupRequest } from '../../../utils/Authentication'
-import classnames from 'classnames'
+import { Authentication } from '../../../utils'
+import InputFiled from '../../../utils/FormGroup'
+import { browserHistory } from 'react-router'
 
 class Signup extends Component {
   constructor() {
@@ -12,7 +13,7 @@ class Signup extends Component {
         lastName: '',
         email: '',
         password: '',
-        passwordConfirmation: ''
+        confirmPassword: ''
       },
       errors: {},
       isLoading: false
@@ -27,16 +28,30 @@ class Signup extends Component {
     })
   }
 
+  isValid() {
+    const { errors, isValid } = Authentication.validateInput(this.state.user)
+
+    if (!isValid) {
+      this.setState({ errors })
+    }
+
+    return isValid;
+  }
+
   onSubmit(event) {
     event.preventDefault()
     // Empty errros state for each submit
     this.setState({ errros: {}, isLoading: true })
 
-    // Make submit
-    this.props.userSignupRequest(this.state.user).then(
-      () => {},
-      ({ response }) => this.setState({ errors: response.data, isLoading: false })
-      )
+    if (this.isValid()) { 
+      // Make submit
+      this.props.userSignupRequest(this.state.user).then(
+        () => {
+          this.context.router.push('/dashboard')
+        },
+        ({ response }) => this.setState({ errors: response.data, isLoading: false })
+        )
+    }  
   }
 
   render() {
@@ -55,31 +70,50 @@ class Signup extends Component {
                 */}    
                 
                 <form onSubmit={this.onSubmit.bind(this)}>
-                  <div className={classnames("form-group", { 'has-error': errors.firstName})}>
-                    <label className="control-label">First Name</label>
-                    <input className="form-control" type="text" name="firstName" value={this.state.user.firstName} onChange={this.onChange.bind(this)} placeholder="First Name"/>
-                    { errors.firstName && <span className="help-block">{errors.firstName}</span>}
-                  </div>
-                  <div className={classnames("form-group", { 'has-error': errors.lastName})}>
-                    <label className="control-label">Last Name</label>
-                    <input className="form-control" type="text" name="lastName" value={this.state.user.lastName} onChange={this.onChange.bind(this)} placeholder="Last Name"/>
-                    { errors.firstName && <span className="help-block">{errors.lastName}</span>}
-                  </div>
-                  <div className={classnames("form-group", { 'has-error': errors.email})}>
-                    <label className="control-label">Email</label>
-                    <input className="form-control" type="email" name="email" value={this.state.user.email} onChange={this.onChange.bind(this)} placeholder="Email"/>
-                    { errors.firstName && <span className="help-block">{errors.email}</span>}
-                  </div>
-                  <div className={classnames("form-group", { 'has-error': errors.password})}>
-                    <label className="control-label">Password</label>
-                    <input className="form-control" type="password" name="password" value={this.state.user.password} onChange={this.onChange.bind(this)} placeholder="Password"/>
-                    { errors.firstName && <span className="help-block">{errors.password}</span>}
-                  </div>
-                  <div className={classnames("form-group", { 'has-error': errors.passwordConfirmation})}>
-                    <label className="control-label">Confirm password</label>
-                    <input className="form-control" type="password" name="passwordConfirmation" value={this.state.user.passwordConfirmation} onChange={this.onChange.bind(this)} placeholder="Confirm Password"/>
-                    { errors.firstName && <span className="help-block">{errors.passwordConfirmation}</span>}
-                  </div>
+                  <InputFiled
+                    label="First Name"
+                    field="firstName" 
+                    value={this.state.user.firstName} 
+                    onChange={this.onChange.bind(this)} 
+                    placeholder="First Name"
+                    error={errors.firstName}
+                  />
+                  <InputFiled
+                    label="Last Name"
+                    field="lastName" 
+                    value={this.state.user.lastName} 
+                    onChange={this.onChange.bind(this)} 
+                    placeholder="Last Name"
+                    error={errors.lastName}
+                  />
+                  <InputFiled
+                    label="Email"
+                    field="email" 
+                    type="email"
+                    value={this.state.user.email} 
+                    onChange={this.onChange.bind(this)} 
+                    placeholder="Email"
+                    error={errors.email}
+                  />
+                  <InputFiled
+                    label="Password"
+                    field="password" 
+                    type="password"
+                    value={this.state.user.password} 
+                    onChange={this.onChange.bind(this)} 
+                    placeholder="Password"
+                    error={errors.password}
+                  />
+                  <InputFiled
+                    label="Confirm password"
+                    field="confirmPassword" 
+                    type="password"
+                    value={this.state.user.confirmPassword} 
+                    onChange={this.onChange.bind(this)} 
+                    placeholder="Confirm password"
+                    error={errors.confirmPassword}
+                  />
+                  
                   <button disabled={this.state.isLoading} className="btn btn-default">Submit</button>
                 </form>  
               </div>    
@@ -94,9 +128,16 @@ class Signup extends Component {
   }
 }
 
+let userSignupRequest = Authentication.userSignupRequest 
+
 // Proptypes definition
 Signup.propTypes = {
   userSignupRequest: React.PropTypes.func.isRequired
+}
+
+// Contexttype definition
+Signup.contextTypes = {
+  router: React.PropTypes.object.isRequired
 }
 
 export default connect(null, { userSignupRequest })(Signup)
