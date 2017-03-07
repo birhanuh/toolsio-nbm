@@ -1,5 +1,7 @@
 import React, { Component } from 'react' 
+import classnames from 'classnames'
 import NavigationBar from './NavigationBar'
+import FlashMessagesList from '../../flash/FlashMessagesList'
 import Projects from '../containers/Projects'
 //import Sales from '../containers/Sales'
 
@@ -10,15 +12,12 @@ class Home extends Component {
         <NavigationBar />
       
         <section>         
-            {/*if success_msg.length > 0
-              .alert.alert-success #{success_msg}
-            if error_msg.length > 0
-              .alert.alert-danger #{error_msg}
-            if error.length > 0
-              .alert.alert-danger #{error}</div> 
-                {this.props.children} */}
-            
-          {this.props.children}
+          <div className={classnames({'container': this.props.location.pathname != '/'})}>
+            <div className={classnames({'container': this.props.location.pathname === '/'})}>
+              <FlashMessagesList />
+            </div>  
+            {this.props.children}
+          </div>
         </section>
         
         <footer className="footer">
