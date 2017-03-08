@@ -20,9 +20,13 @@ class Home extends Component {
           </div>
         </section>
         
-        <footer className="footer">
+        <footer>
           <div className="container">
-            <p className="text-muted">Place sticky footer content here.</p>
+            <div className="row">
+              <div className="col-sm-12">
+                <p className="text-muted">Place sticky footer content here.</p>
+              </div>
+            </div>  
           </div>
         </footer>
       </div>

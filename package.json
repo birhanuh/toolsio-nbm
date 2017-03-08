@@ -22,7 +22,8 @@
   "homepage": "https://github.com/birhanuh/toolsio-node#readme",
   "dependencies": {
     "axios": "^0.15.3",
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^1.0.2",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.16.1",
     "classnames": "^2.2.5",
     "connect-flash": "^0.1.1",

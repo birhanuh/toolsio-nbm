@@ -6,6 +6,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
 import logger from 'morgan'
+import Promise from 'bluebird'
 
 // webpack
 import webpack from 'webpack'
@@ -69,6 +70,7 @@ app.listen(app.get('port'), () =>
 ////////////////////////////////////////////////////// MONGODB - saves data in the database and posts data to the browser
 
 let mongoURI = ( process.env.PORT ) ? config.creds.mongoose_auth_jitsu : config.creds.mongoose_auth_local;
+Promise.promisifyAll(mongoose)
 mongoose.connect(mongoURI, function(err, res) {
   if (err) {
     console.log('DB CONNECTION FAILED: '+err)

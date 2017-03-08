@@ -1,20 +1,54 @@
 import express from 'express'
+import bcrypt from 'bcrypt'
 import { Validation } from '../src/utils'
+import isEmpty from 'lodash/isEmpty'
 
-var router = express.Router();
+import User from '../models/user'
+
+let router = express.Router();
+
+function validateInput(data, otherValidation) {
+  let { errors } = otherValidation(data)
+
+  return User.findAsync({ email: data.email }).then(user => {
+    if (user) { 
+      if (user[0].email === data.email) { errors.email = 'There is user with such email' }
+    }
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  })
+}
 
 // Register User
 router.post('/register', function(req, res) {
-  const { errors, isValid } = Validation.validateInput(req.body)
- 
-  if (isValid) {
-    res.json({ success: true })
-  } else {  
-    res.status(400).json(errors)
-  }  
-});
+  validateInput(req.body, Validation.validateInput).then(({ errors, isValid }) => {
+    if (isValid) {
+      //res.json({ success: true })
+      const { firstName, lastName, email, password } = req.body
+      const password_digest = bcrypt.hashSync(password, 10)
 
-module.exports = router;
+      var newUser = new User({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password_digest
+      });
+
+      newUser.save()
+        .then(user => res.json({ success: true }))
+        .catch(err => res.status(500).json({ error: err }))
+
+    } else {  
+      res.status(400).json(errors)
+    } 
+  })
+  
+})
+
+module.exports = router
 
 /**
 var express = require('express');
