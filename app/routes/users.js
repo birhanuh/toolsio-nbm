@@ -11,7 +11,7 @@ function validateInput(data, otherValidation) {
   let { errors } = otherValidation(data)
 
   return User.findAsync({ email: data.email }).then(user => {
-    if (user) { 
+    if (user[0]) { 
       if (user[0].email === data.email) { errors.email = 'There is user with such email' }
     }
 

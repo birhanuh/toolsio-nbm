@@ -38,7 +38,7 @@ class Signup extends Component {
       this.props.isUserExists(val).then(res => {
         let errors = this.state.errors
         let invalid
-        if (res.data.user) {
+        if (res.data.user[0]) {
           errors[field] = 'There is user with such '+ field
           invalid = true
         } else {
