@@ -1,7 +1,7 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
 import { Validation } from '../../../utils'
-import { userSignupRequest } from '../../../actions/authentication'
+import { userSignupRequest, isUserExists } from '../../../actions/authentication'
 import { addFlashMessage } from '../../../actions/flashMessages'
 import FormGroup from '../../../utils/FormGroup'
 import { browserHistory } from 'react-router'
@@ -18,7 +18,8 @@ class Signup extends Component {
         confirmPassword: ''
       },
       errors: {},
-      isLoading: false
+      isLoading: false,
+      invalid: false
     }
   }
   
@@ -28,6 +29,25 @@ class Signup extends Component {
     this.setState({
       user: updatedUser
     })
+  }
+
+  checkUserExists(event) {
+    const field = event.target.name
+    const val = event.target.value
+    if (val !== '') {
+      this.props.isUserExists(val).then(res => {
+        let errors = this.state.errors
+        let invalid
+        if (res.data.user) {
+          errors[field] = 'There is user with such '+ field
+          invalid = true
+        } else {
+          errors[field] = ''
+          invalid = false
+        }
+        this.setState({ errors, invalid })
+      })
+    }
   }
 
   isValid() {
@@ -62,17 +82,12 @@ class Signup extends Component {
 
   render() {
     const { errors } = this.state
-    return (
+    return (      
       <div className="row">
         <div className="col-sm-6 col-sm-offset-3">
           <div className="panel panel-default">
             <div className="panel-body">
               <h2 className="page-header m-t-m">Create an Account</h2>
-
-              {/* if errors
-                each error in errors
-                  .alert.alert-danger #{error.msg}
-              */}    
               
               <form onSubmit={this.onSubmit.bind(this)}>
                 <FormGroup
@@ -97,6 +112,7 @@ class Signup extends Component {
                   type="email"
                   value={this.state.user.email} 
                   onChange={this.onChange.bind(this)} 
+                  checkUserExists={this.checkUserExists.bind(this)} 
                   placeholder="Email"
                   error={errors.email}
                 />
@@ -119,15 +135,16 @@ class Signup extends Component {
                   error={errors.confirmPassword}
                 />
                 
-                <button disabled={this.state.isLoading} className="btn btn-default">Submit</button>
-              </form>  
-            </div>    
+                <button disabled={this.state.isLoading || this.state.invalid} className="btn btn-primary">Submit</button>
+              </form>         
+                 
+            </div>  
             <div className="panel-footer">
               <a href="/users/login">Already a user? Login here</a>
             </div>
           </div>
         </div>
-      </div>  
+      </div>   
     )
   }
 }
@@ -135,7 +152,8 @@ class Signup extends Component {
 // Proptypes definition
 Signup.propTypes = {
   userSignupRequest: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  addFlashMessage: React.PropTypes.func.isRequired,
+  isUserExists: React.PropTypes.func.isRequired
 }
 
 // Contexttype definition
@@ -143,4 +161,5 @@ Signup.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-export default connect(null, { userSignupRequest, addFlashMessage })(Signup)
+export default connect(null, { userSignupRequest, addFlashMessage, isUserExists })(Signup)
+

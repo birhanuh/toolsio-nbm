@@ -4,7 +4,7 @@ var router = express.Router();
 var ProjectMongooseModel = require('../models/project');
 
 // GET Projects
-router.get('/', function(req ,res, next) {
+router.get('/projects', function(req ,res, next) {
   ProjectMongooseModel.find(function(err, projects) {
     if (err) {
       res.send(err);
@@ -14,7 +14,7 @@ router.get('/', function(req ,res, next) {
 });
 
 // GET Project
-router.get('/:id', function(req, res, next) {
+router.get('/projects/:id', function(req, res, next) {
   ProjectMongooseModel.findOne({_id: req.params.id}, function(err, project) {
     if (err) {
       res.send(err);
@@ -24,7 +24,7 @@ router.get('/:id', function(req, res, next) {
 }); 
 
 // POST Project
-router.post('/', function(req, res, next) {
+router.post('/projects', function(req, res, next) {
   var project = req.body;
   if (!task.name || !project.date || !project.status || !project.description) {
     res.status(400);

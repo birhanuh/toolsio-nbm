@@ -17,9 +17,9 @@ import webpackConfig from './webpack.config.dev'
 // Init app
 let app = express();
 
-import routes from './app/routes/index';
 import users from './app/routes/users';
 import api from './app/routes/api';
+import routes from './app/routes/index';
 
 const compiler = webpack(webpackConfig)
 
@@ -55,9 +55,9 @@ if (app.get('env') === 'development') {
   app.locals.pretty = true;
 }
 
-app.use('/', routes);
 app.use('/users', users);
 app.use('/api', api);
+app.use('/', routes);
 
 // Set port
 app.set('port', (process.env.PORT || 8080));

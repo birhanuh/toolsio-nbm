@@ -53,7 +53,7 @@ class Projects extends Component {
   }
 
   render() {
-    //  Return Show component if this.state.list not null
+    // Return Show component if this.state.list not null
     const project = !this.state.list[this.state.selected] ? null : (
       <Show project={this.state.list[this.state.selected]} /> 
     )
