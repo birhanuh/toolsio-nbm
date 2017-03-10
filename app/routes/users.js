@@ -1,107 +1,59 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express'
+import bcrypt from 'bcrypt'
+import { Validation } from '../src/utils'
+import isEmpty from 'lodash/isEmpty'
 
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+import User from '../models/user'
 
-var User = require('../models/user');
+let router = express.Router();
 
-// Get Register
-router.get('/register', function(req, res) {
-  res.render('auth/register.jade');
-});
+function validateInput(data, otherValidation) {
+  let { errors } = otherValidation(data)
 
-// Get Login
-router.get('/login', function(req, res) {
-  res.render('auth/login.jade');
-});
+  return User.findAsync({ email: data.email }).then(user => {
+    if (user[0]) { 
+      if (user[0].email === data.email) { errors.email = 'There is user with such email' }
+    }
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  })
+}
+
+// Get user
+router.get('/:identifier', (req, res) => {
+  User.findAsync({ email: req.params.identifier }).then(user => {
+    res.json( { user }) 
+  })
+})
 
 // Register User
 router.post('/register', function(req, res) {
-  var firstName = req.body.firstName;
-  var lastName = req.body.lasttName;
-  var email = req.body.email;
-  var password = req.body.password;
-  var password2 = req.body.password2;
+  validateInput(req.body, Validation.validateInput).then(({ errors, isValid }) => {
+    if (isValid) {
+      //res.json({ success: true })
+      const { firstName, lastName, email, password } = req.body
+      const password_digest = bcrypt.hashSync(password, 10)
 
-  // Validation
-  req.checkBody('firstName', 'First name is required').notEmpty();
-  req.checkBody('lastName', 'Last name is required').notEmpty();
-  req.checkBody('email', 'Email is required').isEmail();
-  req.checkBody('password', 'Password is required').notEmpty();
-  req.checkBody('password2', 'Password do not match').equals(req.body.password);
+      var newUser = new User({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password_digest
+      });
 
-  var errors = req.validationErrors();
+      newUser.save()
+        .then(user => res.json({ success: true }))
+        .catch(err => res.status(500).json({ error: err }))
 
-  if (errors) {
-    res.render('register', {
-      errors: errors
-    });
-  } else {
-    var newUser = new User({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password
-    });
+    } else {  
+      res.status(400).json(errors)
+    } 
+  })
+  
+})
 
-    User.createUser(newUser, function(err, user) {
-      if(err) throw err;
-      console.log(user);
-    });
+module.exports = router
 
-    req.flash('success_msg', 'You are registered and can now login.');
-
-    res.redirect('/users/login');
-  }
-});
-
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-  },
-  function(username, password, done) {
-    console.log("LocalStrategy working...");
-    User.getUserByEmail(username, function(err, user) {
-      if (err) throw err; 
-      if (!user) {
-        return done(null, false, { message: 'Incorrect email.'});
-      }
-      
-      User.comparePassword(password, user.password, function(err, isMatch) {
-        if(err) throw err;
-        
-        if(isMatch){
-          return done(null, user);
-        } else {
-          return done(null, false, {message: 'Invalid password'});
-        }
-    });
-  });
-}));
-
-passport.serializeUser(function(user, done) {
-  done(null, user.id); 
-});
-
-passport.deserializeUser(function(id, done) {
-  User.getUserById(id, function(err, user) {
-    done(err, user);
-  });   
-});      
-
-// Post login                  
-router.post('/login', passport.authenticate('local', {successRedirect: '/dashboard', 
-  failureRedirect: '/users/login', failureFlash: true}), 
-  function(req, res) {
-    req.flash('success_msg', 'You are logged');
-    res.redirect('/dashboard');
-});
-
-router.get('/logout', function(req, res) {
-  req.logout();  
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/');
-});
-
-module.exports = router;

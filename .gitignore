@@ -2,3 +2,5 @@ temp
 dist
 config.js
 .DS_Store
+server2.js
+node_modules/
