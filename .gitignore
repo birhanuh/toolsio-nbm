@@ -1,6 +1,20 @@
-temp
-dist
-config.js
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
 .DS_Store
-server2.js
-node_modules/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+client/node_modules/
+server/node_modules/
