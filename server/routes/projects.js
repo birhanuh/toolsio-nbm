@@ -50,7 +50,7 @@ router.delete('/projects/:id', function(req, res, next) {
   });
 }); 
 
-// DELETE Project
+// UPDATE Project
 router.put('/projects/:id', function(req, res, next) {
   var project = req.body;
   var updProject = {};

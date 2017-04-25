@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import NavigationBar from './NavigationBar'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
-class Home extends Component {
+class index extends Component {
   render() {
     return (
       <div>
@@ -32,5 +32,5 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default index
 

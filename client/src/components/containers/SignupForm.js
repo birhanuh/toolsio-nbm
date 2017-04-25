@@ -3,8 +3,8 @@ import { Validation } from '../../utils'
 import FormGroup from '../../utils/FormGroup'
 
 class SignupForm extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       user: {
         firstName: '',
