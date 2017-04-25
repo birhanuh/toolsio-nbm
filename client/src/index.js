@@ -12,6 +12,7 @@ import { setCurrentUser } from './actions/authentication'
 
 import routes from './routes'
 
+// A state for the entire project created by Redux
 const store = createStore(
   rootReducer,
   //(state = {}) => state, // Dummy Reducer
@@ -24,6 +25,7 @@ const store = createStore(
 if (localStorage.jwtToken) {
   setAuthorizationToken(localStorage.jwtToken)
   store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
+  console.log('index called!')
 }
 
 render(

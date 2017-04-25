@@ -4,7 +4,9 @@ var ProjectsController = require('../controllers/ProjectsController')
 var controllers = require('../controllers')
 import authenticate from '../middlewares/authenticate'
 
-// POST recources
+// POST recources (authenticate middleware function called when request comes and it checks for toke validation,
+// if every thing is ok, it procced to the route code but, if there no-toket or token-is-invalid then middlewaer 
+// response with error and halt operatoin so, route code never excutes)
 router.get('/:resource', authenticate, function(req, res) {
   
   var resource = req.params.resource

@@ -1,8 +1,8 @@
 import React, { Component } from 'react' 
 
 class Create extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
        project: {
         name: '', 

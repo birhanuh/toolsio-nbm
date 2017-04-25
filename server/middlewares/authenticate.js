@@ -3,7 +3,7 @@ import config from '../config'
 
 import User from '../models/user'
 
-// next is a callback function that calles the next function in chain 
+// next is a callback function that calls the next function in chain 
 export default (req, res, next) => {
   const authorizationHeader = req.headers['authorization']
   let token
@@ -19,7 +19,7 @@ export default (req, res, next) => {
       } else {
         User.findAsync({ id: decoded.id }).fetch().then(user => {
           if (!user) {
-            res.status(401).json({ error: 'No such user' })
+            res.status(404).json({ error: 'No such user' })
           } else {
             req.currentUser = user
             next()

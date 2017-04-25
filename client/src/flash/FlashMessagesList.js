@@ -20,10 +20,11 @@ FlashMessagesList.propTypes = {
   deleteFlashMessage: React.PropTypes.func.isRequired
 }
 
-function mapStateProps(state) {
+// Takes our global state and return just flashMessages
+function mapStateToProps(state) {
   return {
     messages: state.flashMessages
   }
 }
 
-export default connect(mapStateProps, { deleteFlashMessage })(FlashMessagesList)
+export default connect(mapStateToProps, { deleteFlashMessage })(FlashMessagesList)

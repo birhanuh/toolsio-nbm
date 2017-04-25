@@ -39,7 +39,7 @@ class NavigationBar extends Component {
           <div className="form-group">
             <Link to="/signup" className="btn btn-primary">Sign up</Link>       
           </div>
-          "
+          &nbsp;&nbsp;
           <div className="form-group">
             <Link to="/login" className="btn btn-primary">Log in</Link>   
           </div>  
@@ -57,7 +57,7 @@ class NavigationBar extends Component {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <Link className="navbar-brand" href="/">Toolsio</Link>
+            { isAuthenticated ? <Link className="navbar-brand" to="/dashboard">Toolsio</Link> : <Link className="navbar-brand" to="/">Toolsio</Link> }
           </div>
           
           {/* Call links conditionally.  */}
