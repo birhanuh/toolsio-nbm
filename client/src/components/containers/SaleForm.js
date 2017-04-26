@@ -35,7 +35,7 @@ class SaleForm extends Component {
     clearTimeout(this.clickTimeout);
   }
 
-   handleChange(date) {
+  handleChange(date) {
     this.setState({
       startDate: date
     });
@@ -68,7 +68,6 @@ class SaleForm extends Component {
               selected={startDate}
               onChange={this.handleChange.bind(this)}
               className="form-control"
-              relativeSize={true}
             />
           </div>
         </div>
