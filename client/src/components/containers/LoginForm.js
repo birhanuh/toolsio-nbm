@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import FormGroup from '../../utils/FormGroup'
+import Input from '../../utils/FormGroup'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { loginRequest } from '../../actions/authentication'
@@ -64,7 +64,7 @@ class LoginForm extends Component {
           <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           {errors.form}</div> }
 
-        <FormGroup
+        <Input
           label="Email"
           field="email" 
           value={this.state.user.email} 
@@ -72,7 +72,7 @@ class LoginForm extends Component {
           placeholder="Email"
           error={errors.email}
         />
-        <FormGroup
+        <Input
           label="Password"
           field="password" 
           value={this.state.user.password} 

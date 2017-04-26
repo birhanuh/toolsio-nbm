@@ -1,7 +1,7 @@
 import React from 'react' 
 import classnames from 'classnames'
 
-const FormGroup = ({ type, field, value, label, error, placeholder, onChange, checkUserExists}) => {
+const Input = ({ type, field, value, label, error, placeholder, onChange, checkUserExists}) => {
   return (
     <div className={classnames("form-group", { 'has-error': error })}>
       <label className="control-label">{label}</label>
@@ -19,7 +19,7 @@ const FormGroup = ({ type, field, value, label, error, placeholder, onChange, ch
   )
 }
 
-FormGroup.propTypes = {  
+Input.propTypes = {  
   type: React.PropTypes.string.isRequired, 
   field: React.PropTypes.string.isRequired, 
   value: React.PropTypes.string.isRequired, 
@@ -30,8 +30,8 @@ FormGroup.propTypes = {
   checkUserExists: React.PropTypes.func
 }
 
-FormGroup.defaultProps = {
+Input.defaultProps = {
   type: 'text'
 }
 
-export default FormGroup
+export default Input

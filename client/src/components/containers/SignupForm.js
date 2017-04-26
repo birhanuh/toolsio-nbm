@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import { Validation } from '../../utils'
-import FormGroup from '../../utils/FormGroup'
+import Input from '../../utils/FormGroup'
 
 class SignupForm extends Component {
   constructor(props) {
@@ -85,7 +85,7 @@ class SignupForm extends Component {
           <h2 className="page-header m-t-m">Create an Account</h2>
           
           <form onSubmit={this.onSubmit.bind(this)}>
-            <FormGroup
+            <Input
               label="First Name"
               field="firstName" 
               value={this.state.user.firstName} 
@@ -93,7 +93,7 @@ class SignupForm extends Component {
               placeholder="First Name"
               error={errors.firstName}
             />
-            <FormGroup
+            <Input
               label="Last Name"
               field="lastName" 
               value={this.state.user.lastName} 
@@ -101,7 +101,7 @@ class SignupForm extends Component {
               placeholder="Last Name"
               error={errors.lastName}
             />
-            <FormGroup
+            <Input
               label="Email"
               field="email" 
               type="email"
@@ -111,7 +111,7 @@ class SignupForm extends Component {
               placeholder="Email"
               error={errors.email}
             />
-            <FormGroup
+            <Input
               label="Password"
               field="password" 
               type="password"
@@ -120,7 +120,7 @@ class SignupForm extends Component {
               placeholder="Password"
               error={errors.password}
             />
-            <FormGroup
+            <Input
               label="Confirm password"
               field="confirmPassword" 
               type="password"

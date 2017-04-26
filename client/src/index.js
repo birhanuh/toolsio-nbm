@@ -25,7 +25,6 @@ const store = createStore(
 if (localStorage.jwtToken) {
   setAuthorizationToken(localStorage.jwtToken)
   store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
-  console.log('index called!')
 }
 
 render(
