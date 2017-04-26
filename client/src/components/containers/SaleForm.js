@@ -3,12 +3,16 @@ import { connect } from 'react-redux'
 import { createSale } from '../../actions/saleActions'
 import FormField from '../../utils/FormField'
 
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
+
 class SaleForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
       name: '',
-      date: new Date().toString(),
+      startDate: moment(),
       status: '',
       description: '',
       errors: {},
@@ -27,9 +31,19 @@ class SaleForm extends Component {
     this.props.createSale(this.state)
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.clickTimeout);
+  }
+
+   handleChange(date) {
+    this.setState({
+      startDate: date
+    });
+  } 
+
   render() {
-    const { name, date, status, description, errors, isLoading } = this.state
-    console.log('date: ', new Date())
+    const { name, startDate, status, description, errors, isLoading } = this.state
+    
     return (              
       <form onSubmit={this.onSubmit.bind(this)}>
 
@@ -47,17 +61,17 @@ class SaleForm extends Component {
           labelHorizontal="col-sm-2"
           inputHorizontal="col-sm-10"
         />
-        <FormField
-          label="Date"
-          name="date" 
-          type="date"
-          value={date} 
-          onChange={this.onChange.bind(this)} 
-          placeholder="Date"
-          error={errors.date}
-          labelHorizontal="col-sm-2"
-          inputHorizontal="col-sm-10"
-        />
+        <div className="form-group">
+          <label className="control-label col-sm-2" htmlFor="date">Date:</label>
+          <div className="col-sm-10">
+            <DatePicker
+              selected={startDate}
+              onChange={this.handleChange.bind(this)}
+              className="form-control"
+              relativeSize={true}
+            />
+          </div>
+        </div>
         <FormField
           formType="select"
           label="status"

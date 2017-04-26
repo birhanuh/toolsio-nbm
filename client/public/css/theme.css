@@ -1,45 +1,30 @@
-body {
-  color: #484848;
+.react-datepicker {
+  font-size: 1em !important;
 }
-
-code {
-  border:1px dashed #E1E1E1;
-  color:#333344;
-  background:#FAFAFA;
-  font-family:monospace;
-  overflow:auto;
-  font-size:11px;
-  padding:0.2em;
+.react-datepicker__header {
+  padding-top: 0.8em !important;
 }
-
-a, a:visited {
+.react-datepicker__month {
+  margin: 0.4em 1em !important;
 }
- 
-a:hover {
-} 
-
-.un-bulleted {
-  list-style: none;
+.react-datepicker__day-name, .react-datepicker__day {
+  width: 1.9em !important;
+  line-height: 1.9em !important;
+  margin: 0.166em !important;
 }
-
-.guestbook-form-container {
-  width: 500px
+.react-datepicker__current-month {
+  font-size: 1em !important;
 }
-
-.message {
-  font-size: 110%;
-  width: 500px;
-  height: 40px;
-  margin-bottom: 10px;
+.react-datepicker__navigation {
+  top: 1em !important;
+  line-height: 1.7em !important;
+  border: 0.45em solid transparent !important;
 }
-
-.post-message {
-  clear: both;
+.react-datepicker__navigation--previous {
+  border-right-color: #ccc !important;
+  left: 1em !important;
 }
-
-
-
-.date {
-  color: #ccc;
-  
+.react-datepicker__navigation--next {
+  border-left-color: #ccc !important;
+  right: 1em !important;
 }
