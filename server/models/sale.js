@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 // User Schema 
-let ProjectSchema = new mongoose.Schema({
+let SaleSchema = new mongoose.Schema({
   name: {
     type: String, 
     default:''
@@ -20,4 +20,4 @@ let ProjectSchema = new mongoose.Schema({
   }
 })
 
-let Project = module.exports = mongoose.model('Project', ProjectSchema);
+let Sale = module.exports = mongoose.model('Sale', SaleSchema);

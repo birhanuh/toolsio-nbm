@@ -65,6 +65,7 @@ class SaleForm extends Component {
           <label className="control-label col-sm-2" htmlFor="date">Date:</label>
           <div className="col-sm-10">
             <DatePicker
+              dateFormat="DD/MM/YYYY"
               selected={startDate}
               onChange={this.handleChange.bind(this)}
               className="form-control"
@@ -105,7 +106,7 @@ class SaleForm extends Component {
 
         <div className="form-group">
           <div className="col-sm-offset-2 col-sm-2">    
-            <button disabled={isLoading} className="btn btn-primary">Login</button>
+            <button disabled={isLoading} className="btn btn-primary"><i className="fa fa-check-circle" aria-hidden="true"></i>&nbsp;Add Sale</button>
           </div>
         </div>  
       </form>         

@@ -1,6 +1,5 @@
 var express = require('express')
 var router = express.Router()
-var ProjectsController = require('../controllers/ProjectsController')
 var controllers = require('../controllers')
 import authenticate from '../middlewares/authenticate'
 

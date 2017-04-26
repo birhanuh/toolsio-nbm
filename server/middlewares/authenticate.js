@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode'
+import jwt from 'jsonwebtoken'
 import config from '../config'
 
 import User from '../models/user'
@@ -13,11 +13,11 @@ export default (req, res, next) => {
   }
 
   if (token) {
-    jwtDecode.verify(token, config.jwtSecret, (err, decoded) => {
+    jwt.verify(token, config.jwtSecret, (err, decoded) => {
       if (err) {
         res.status(401).json({ error: 'Failed to authenticate' })
       } else {
-        User.findAsync({ id: decoded.id }).fetch().then(user => {
+        User.findAsync({ id: decoded.id }).then(user => {
           if (!user) {
             res.status(404).json({ error: 'No such user' })
           } else {

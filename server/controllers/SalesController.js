@@ -1,52 +1,52 @@
-import Project from '../models/project'
+import Sale from '../models/sale'
 
 export default {
   
   find: function(params, callback) {
-    Project.find(params, function(err, projects) {
+    Sale.find(params, function(err, sales) {
       if (err) {
         callback(err, null)
         return
       }
 
-      callback(null, projects)
+      callback(null, sales)
     })
   },
 
   findById: function(id, callback) {
-    Project.findById(id, function(err, project) {
+    Sale.findById(id, function(err, sale) {
       if (err) {
         callback(err, null)
         return
       }
 
-      callback(null, project)
+      callback(null, sale)
     })
   },
 
   create: function(params, callback) {
-    Project.create(params, function(err, project) {
+    Sale.create(params, function(err, sale) {
       if (err) {
         callback(err, null)
         return
       }
-      callback(null, project)
+      callback(null, sale)
     })
   },
 
   update: function(id, params, callback) {
-    Project.findByIdAndUpdate(id, params, {new:true}, function(err, project) {
+    Sale.findByIdAndUpdate(id, params, {new:true}, function(err, sale) {
       if (err) {
         callback(err, null)
         return
       }
 
-      callback(null, project)
+      callback(null, sale)
     })
   },
 
   delete: function(id, callback) {
-    Project.findByIdAndRemove(id, function(err, project) {
+    Sale.findByIdAndRemove(id, function(err, sale) {
       if (err) {
         callback(err, null)
         return

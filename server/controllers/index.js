@@ -1,9 +1,9 @@
-var express = require('express')
+import express from 'express'
 
-var ProjectsController = require('./ProjectsController')
-//var SalesController = rquire('./SalesController')
+import ProjectsController from './ProjectsController'
+import SalesController from'./SalesController'
 
 module.exports = {
   projects: ProjectsController,
-  //sales: SalesController,
+  sales: SalesController,
 }
