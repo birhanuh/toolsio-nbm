@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import { Validation } from '../../utils'
-import Input from '../../utils/FormGroup'
+import FormField from '../../utils/FormField'
 
 class SignupForm extends Component {
   constructor(props) {
@@ -85,25 +85,25 @@ class SignupForm extends Component {
           <h2 className="page-header m-t-m">Create an Account</h2>
           
           <form onSubmit={this.onSubmit.bind(this)}>
-            <Input
+            <FormField
               label="First Name"
-              field="firstName" 
+              name="firstName" 
               value={this.state.user.firstName} 
               onChange={this.onChange.bind(this)} 
               placeholder="First Name"
               error={errors.firstName}
             />
-            <Input
+            <FormField
               label="Last Name"
-              field="lastName" 
+              name="lastName" 
               value={this.state.user.lastName} 
               onChange={this.onChange.bind(this)} 
               placeholder="Last Name"
               error={errors.lastName}
             />
-            <Input
+            <FormField
               label="Email"
-              field="email" 
+              name="email" 
               type="email"
               value={this.state.user.email} 
               onChange={this.onChange.bind(this)} 
@@ -111,18 +111,18 @@ class SignupForm extends Component {
               placeholder="Email"
               error={errors.email}
             />
-            <Input
+            <FormField
               label="Password"
-              field="password" 
+              name="password" 
               type="password"
               value={this.state.user.password} 
               onChange={this.onChange.bind(this)} 
               placeholder="Password"
               error={errors.password}
             />
-            <Input
+            <FormField
               label="Confirm password"
-              field="confirmPassword" 
+              name="confirmPassword" 
               type="password"
               value={this.state.user.confirmPassword} 
               onChange={this.onChange.bind(this)} 

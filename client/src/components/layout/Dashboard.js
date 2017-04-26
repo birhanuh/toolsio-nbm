@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
 import List from './List'
 
-import { createStore, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk'
-import rootReducer from '../../rootReducer'
-import { setAuthorizationToken } from '../../utils'
-import jwtDecode from 'jwt-decode'
-import { setCurrentUser } from '../../actions/authentication'
-
 class Dashboard extends Component {
   constructor(props) {
     super(props)
@@ -81,22 +74,6 @@ class Dashboard extends Component {
   render() {
     let buttonDisabled = this.state.model === null || this.state.brand === null
     let selectDisabled = this.state.brand === null
-    
-    // A state for the entire project created by Redux
-    const store = createStore(
-      rootReducer,
-      //(state = {}) => state, // Dummy Reducer
-      compose(
-        applyMiddleware(thunk),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-      )
-    )
-
-    if (localStorage.jwtToken) {
-      setAuthorizationToken(localStorage.jwtToken)
-      store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
-      console.log('Dashboard called.')
-    }
 
     return ( 
       <div>
