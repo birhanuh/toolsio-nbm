@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import List from './List' 
 import { connect } from 'react-redux'
+import { fetchSales } from '../../actions/saleActions'
 
 class Sales extends Component {
+
+  componentDidMount() {
+    this.props.fetchSales()
+  }
 
   render() {
     return (
@@ -18,7 +23,8 @@ class Sales extends Component {
 }
 
 Sales.propTypes = {
-  sales: React.PropTypes.array.isRequired
+  sales: React.PropTypes.array.isRequired,
+  fetchSales: React.propTypes.func.isRequired
 }
 
 function mapSateToProps(state) {
@@ -27,4 +33,4 @@ function mapSateToProps(state) {
   }
 }
 
-export default (mapSateToProps)(Sales)
+export default connect(mapSateToProps, { fetchSales })(Sales)

@@ -8,14 +8,12 @@ export default function List({ sales }) => {
   const salesList = (
     <p>games list</p>
   )
-  
-  render() {
-    return (
-      <div>
-        { sales.length === 0 ? emptyMessage }
-      </div>   
-    )
-  }
+
+  return (
+    <div>
+      { sales.length === 0 ? emptyMessage }
+    </div>   
+  )
 }
 
 List.propTypes = {

@@ -9,7 +9,7 @@ import logger from 'morgan'
 import Promise from 'bluebird'
 
 // Init app
-let app = express()
+const app = express()
 
 import users from './routes/users'
 import api from './routes/api'
