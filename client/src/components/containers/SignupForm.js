@@ -80,11 +80,18 @@ class SignupForm extends Component {
   render() {
     const { errors, isLoading, invalid } = this.state
     return (      
-      <div className="panel panel-default">
-        <div className="panel-body">
-          <h2 className="page-header m-t-m">Create an Account</h2>
+      <div className="column">
+        <h2 className="ui teal image header">
+          <a className="" href="/">
+            <img src="/images/logo-square.png" className="image" alt="logo-square" />
+          </a>
+          <div className="content">
+            Create an account
+          </div>
+        </h2>
           
-          <form onSubmit={this.onSubmit.bind(this)}>
+        <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
+          <div className="ui stacked segment">
             <FormField
               label="First Name"
               name="firstName" 
@@ -130,13 +137,11 @@ class SignupForm extends Component {
               error={errors.confirmPassword}
             />
             
-            <div className="className">
-              <button disabled={isLoading || invalid} className="btn btn-primary">Register</button>
-            </div>
-          </form>         
+            <button disabled={isLoading || invalid} className="ui fluid large teal submit button">Register</button>
+          </div>
+        </form>         
              
-        </div>  
-        <div className="panel-footer">
+        <div className="ui message"> 
           <a href="/users/login">Already a user? Login here</a>
         </div>
       </div> 

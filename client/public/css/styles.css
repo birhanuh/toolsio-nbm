@@ -2,7 +2,7 @@
    the opinions are too diverse                      */
 
 /* Third party helper libraries */
-@import url("bootstrap/bootstrap.min.css");
+@import url("../semantic/dist/semantic.min.css");
 @import url("font-awesome-4.7.0/css/font-awesome.min.css");
 
 /* Custom themes */

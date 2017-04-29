@@ -13,58 +13,58 @@ class NavigationBar extends Component {
     const { isAuthenticated } = this.props.auth
 
     const userLinks = (
-      <div id="navbar" className="collapse navbar-collapse">
-        <ul className="nav navbar-nav navbar-center">
-          <li className="dashboard"><Link to="/dashboard">Dashboard</Link></li>
-          <li className="projects"><Link to="/projects">Projects</Link></li>
-          <li className="sales"><Link to="/sales">Sales</Link></li>
-          <li className="invoices"><Link to="/invoices">Invoices</Link></li>
-        </ul>
-        <div className="navbar-form navbar-right">      
-          <div className="form-group">
-            <a to="#" onClick={this.logout.bind(this)} className="btn btn-primary">Log out</a>   
-          </div>  
-        </div>       
-      </div> // .nav-collapse 
+      <nav className="ui fixed inverted menu">
+        <div className="ui container">
+          <Link className="header item" to="/dashboard">
+            <img className="logo" src="/images/logo-square.png" alt="logo-square" />
+            Toolsio
+          </Link>
+          <Link className="item" activeclassName="active" activeOnlyWhenExact to="/dashboard">Dashboard</Link>
+          <Link className="item" activeclassName="active" activeOnlyWhenExact to="/projects">Projects</Link>
+          <Link className="item" activeclassName="active" activeOnlyWhenExact to="/sales">Sales</Link>
+          <Link className="item" activeclassName="active" activeOnlyWhenExact to="/invoices">Invoices</Link>
+     
+          <div className="right item">      
+            <a className="ui inverted button" to="#" onClick={this.logout.bind(this)} >Log out</a>   
+          </div>
+        </div>  
+      </nav>
     )
 
     const guestLinks = (
-      <div id="navbar" className="collapse navbar-collapse">
-        <ul className="nav navbar-nav navbar-center">
-          <li className="active"><Link to="/">Home</Link></li>
-          <li className="about"><Link to="/about">About</Link></li>
-          <li className="contact"><Link to="/contact">Contact</Link></li>
-        </ul>
-        <div className="navbar-form navbar-right">                
-          <div className="form-group">
-            <Link to="/signup" className="btn btn-primary">Sign up</Link>       
+      <div className="ui inverted vertical masthead center aligned segment">
+        <div className="ui container">
+          <div className="ui large secondary inverted pointing menu">
+            <Link className="toc item" to="/">
+              <i className="sidebar icon"></i>
+            </Link> 
+            <Link className="item" activeclassName="active" activeOnlyWhenExact to="/">Home</Link>
+            <Link className="item" activeclassName="active" activeOnlyWhenExact to="/about">About</Link>
+            <Link className="item" activeclassName="active" activeOnlyWhenExact to="/contact">Contact</Link>
+         
+            <div className="right item">      
+              <Link className="ui inverted button" to="/signup">Sign up</Link>       
+              <Link className="ui inverted button"  to="/login">Log in</Link>    
+            </div>  
           </div>
-          &nbsp;&nbsp;
-          <div className="form-group">
-            <Link to="/login" className="btn btn-primary">Log in</Link>   
-          </div>  
-        </div>       
-      </div> // .nav-collapse
+        </div>
+
+        <div className="ui text container">
+          <h1 className="ui inverted header">
+            Welcome to Toolsio!
+          </h1>
+          <h2>Do whatever you want when you want to.</h2>
+          <div className="ui huge primary button">Get Started <i className="right arrow icon"></i></div>
+        </div>
+      </div>
     )
 
     return (
-      <nav className="navbar navbar-inverse navbar-fixed-top">
-        <div className="container">
-          <div className="navbar-header">
-            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            { isAuthenticated ? <Link className="navbar-brand" to="/dashboard">Toolsio</Link> : <Link className="navbar-brand" to="/">Toolsio</Link> }
-          </div>
-          
-          {/* Call links conditionally.  */}
-          { isAuthenticated ? userLinks : guestLinks }
+      <div>    
+        {/* Call links conditionally.  */}
+        { isAuthenticated ? userLinks : guestLinks }
 
-        </div>
-      </nav>
+      </div>
     )
   }
 }

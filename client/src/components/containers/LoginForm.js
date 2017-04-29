@@ -1,5 +1,4 @@
 import React, { Component } from 'react' 
-import FormField from '../../utils/FormField'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { loginRequest } from '../../actions/authentication'
@@ -57,34 +56,47 @@ class LoginForm extends Component {
   render() {
     const { errors, isLoading } = this.state
    
-    return (              
-      <form onSubmit={this.onSubmit.bind(this)}>
+    return (   
+      <div className="column">
+        <h2 className="ui teal image header">
+          <img src="/images/logo-square.png" className="image" alt="logo-square" />
+          <div className="content">
+            Log-in to your account
+          </div>
+        </h2>
+        <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
+          <div className="ui stacked segment">
+            { errors.form && <div className="ui error message">
+              <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              {errors.form}</div> }
+            <div className="field">
+              <div className="ui left icon input">
+                <i className="user icon"></i>
+                <input type="text" name="email" placeholder="E-mail address" 
+                  value={this.state.user.email} onChange={this.onChange.bind(this)} />
+                  { errors.email && <span className="help-block">{errors.email}</span>}
+              </div>
+            </div>  
+            <div className="field">
+              <div className="ui left icon input">
+                <i className="lock icon"></i>
+                <input type="password" name="password" placeholder="Password" 
+                  value={this.state.user.password} onChange={this.onChange.bind(this)} />
+                  { errors.password && <span className="help-block">{errors.password}</span>}
+              </div>
+            </div>
+                  
+            <button disabled={isLoading} className="ui fluid large teal submit button">Login</button>
+              
+          </div>
+        </form>         
 
-        { errors.form && <div className="alert alert-danger alert-dismissible">
-          <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          {errors.form}</div> }
+        <div className="ui message">
+          New to us? <a href="/users/signup">Sign Up</a>
+        </div>
+      </div>
 
-        <FormField
-          label="Email"
-          name="email" 
-          value={this.state.user.email} 
-          onChange={this.onChange.bind(this)} 
-          placeholder="Email"
-          error={errors.email}
-        />
-        <FormField
-          label="Password"
-          name="password" 
-          value={this.state.user.password} 
-          onChange={this.onChange.bind(this)} 
-          placeholder="Last Name"
-          error={errors.password}
-          type="password"
-        />
-        <div className="form-group">        
-          <button disabled={isLoading} className="btn btn-primary">Login</button>
-        </div>  
-      </form>         
+      
     )
   }
 }

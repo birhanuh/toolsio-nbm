@@ -45,7 +45,7 @@ class SaleForm extends Component {
     const { name, startDate, status, description, errors, isLoading } = this.state
     
     return (              
-      <form onSubmit={this.onSubmit.bind(this)}>
+      <form className="ui form" onSubmit={this.onSubmit.bind(this)}>
 
         { errors.form && <div className="alert alert-danger alert-dismissible">
           <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -58,19 +58,16 @@ class SaleForm extends Component {
           onChange={this.onChange.bind(this)} 
           placeholder="Name"
           error={errors.name}
-          labelHorizontal="col-sm-2"
-          inputHorizontal="col-sm-10"
+          labelHorizontal=""
+          inputHorizontal=""
         />
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="date">Date:</label>
-          <div className="col-sm-10">
-            <DatePicker
-              dateFormat="DD/MM/YYYY"
-              selected={startDate}
-              onChange={this.handleChange.bind(this)}
-              className="form-control"
-            />
-          </div>
+        <div className="field">
+          <label className="" htmlFor="date">Date:</label>
+          <DatePicker
+            dateFormat="DD/MM/YYYY"
+            selected={startDate}
+            onChange={this.handleChange.bind(this)}
+          />
         </div>
         <FormField
           formType="select"
@@ -79,8 +76,8 @@ class SaleForm extends Component {
           type="select"
           value={status} 
           onChange={this.onChange.bind(this)} 
-          labelHorizontal="col-sm-2"
-          inputHorizontal="col-sm-10"
+          labelHorizontal=""
+          inputHorizontal=""
 
           options={[
             <option key="default" value="" disabled>Set Status</option>,
@@ -100,14 +97,12 @@ class SaleForm extends Component {
           placeholder="Description"
           error={errors.description}
           formGroup=""
-          labelHorizontal="col-sm-2"
-          inputHorizontal="col-sm-10"
+          labelHorizontal=""
+          inputHorizontal=""
         />
 
-        <div className="form-group">
-          <div className="col-sm-offset-2 col-sm-2">    
-            <button disabled={isLoading} className="btn btn-primary"><i className="fa fa-check-circle" aria-hidden="true"></i>&nbsp;Add Sale</button>
-          </div>
+        <div className="filed">    
+          <button disabled={isLoading} className="ui primary button"><i className="fa fa-check-circle" aria-hidden="true"></i>&nbsp;Add Sale</button>
         </div>  
       </form>         
     )

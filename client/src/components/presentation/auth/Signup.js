@@ -8,12 +8,8 @@ class Signup extends Component {
   render() {
     const { signupRequest, isUserExists, addFlashMessage } = this.props
     return (      
-      <div className="row">
-        <div className="col-sm-6 col-sm-offset-3">
-          
-          <SignupForm signupRequest={signupRequest} isUserExists={isUserExists} addFlashMessage={addFlashMessage}/>
-        </div>
-      </div>   
+      
+      <SignupForm signupRequest={signupRequest} isUserExists={isUserExists} addFlashMessage={addFlashMessage}/>  
     )
   }
 }

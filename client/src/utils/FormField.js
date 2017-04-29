@@ -4,11 +4,10 @@ import classnames from 'classnames'
 const FormField = ({ type, formType, options, name, field, value, label, error, placeholder, onChange, checkUserExists, labelHorizontal, inputHorizontal}) => {
   if (formType === 'textarea') {
     return (
-      <div className={classnames("form-group", { 'has-error': error })}>
-        <label className={"control-label " +labelHorizontal}>{label}</label>
+      <div className={classnames("field", { 'ui error message': error })}>
+        <label htmlFor={name} className={labelHorizontal}>{label}</label>
         <div className={inputHorizontal}>
-          <textarea 
-            className="form-control" 
+          <textarea  
             type={type}
             name={name} 
             value={value} 
@@ -22,11 +21,10 @@ const FormField = ({ type, formType, options, name, field, value, label, error, 
     )
   } else if (formType === 'select') {
     return (
-      <div className={classnames("form-group", { 'has-error': error })}>
-        <label className={"control-label " +labelHorizontal}>{label}</label>
+      <div className={classnames("field", { 'ui error message': error })}>
+        <label htmlFor={name} className={labelHorizontal}>{label}</label>
         <div className={inputHorizontal}>
-          <select 
-            className="form-control" 
+          <select  
             type={type}
             name={name} 
             value={value} 
@@ -40,11 +38,10 @@ const FormField = ({ type, formType, options, name, field, value, label, error, 
     )
   } else {
     return (
-      <div className={classnames("form-group", { 'has-error': error })}>
-        <label className={"control-label " +labelHorizontal}>{label}</label>
+      <div className={classnames("field", { 'ui error message': error })}>
+        <label htmlFor={name} className={labelHorizontal}>{label}</label>
         <div className={inputHorizontal}>
           <input 
-            className="form-control" 
             type={type}
             name={name} 
             value={value} 
