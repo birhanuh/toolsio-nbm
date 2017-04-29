@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { loginRequest } from '../../actions/authentication'
 import { addFlashMessage } from '../../actions/flashMessages'
+import classnames from 'classnames'
 
 class LoginForm extends Component {
   constructor(props) {
@@ -57,7 +58,7 @@ class LoginForm extends Component {
     const { errors, isLoading } = this.state
    
     return (   
-      <div className="column">
+      <div>
         <h2 className="ui teal image header">
           <img src="/images/logo-square.png" className="image" alt="logo-square" />
           <div className="content">
@@ -69,20 +70,20 @@ class LoginForm extends Component {
             { errors.form && <div className="ui error message">
               <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               {errors.form}</div> }
-            <div className="field">
+            <div className={classnames("field", { error: !!errors.email })}>
               <div className="ui left icon input">
                 <i className="user icon"></i>
                 <input type="text" name="email" placeholder="E-mail address" 
                   value={this.state.user.email} onChange={this.onChange.bind(this)} />
-                  { errors.email && <span className="help-block">{errors.email}</span>}
+                <span>{errors.email}</span>
               </div>
             </div>  
-            <div className="field">
+            <div className={classnames("field", { error: !!errors.password })}>
               <div className="ui left icon input">
                 <i className="lock icon"></i>
                 <input type="password" name="password" placeholder="Password" 
                   value={this.state.user.password} onChange={this.onChange.bind(this)} />
-                  { errors.password && <span className="help-block">{errors.password}</span>}
+                <span>{errors.password}</span>
               </div>
             </div>
                   

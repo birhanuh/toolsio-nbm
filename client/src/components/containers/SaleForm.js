@@ -1,5 +1,7 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
+import classnames from 'classnames'
+import { Validation } from '../../utils'
 import { createSale } from '../../actions/saleActions'
 import FormField from '../../utils/FormField'
 
@@ -12,7 +14,7 @@ class SaleForm extends Component {
     super(props)
     this.state = {
       name: '',
-      startDate: moment(),
+      date: moment(),
       status: '',
       description: '',
       errors: {},
@@ -20,54 +22,75 @@ class SaleForm extends Component {
     }
   }
 
-  onChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+  handleChange = (e) => {
+    if (!!this.state.errors[e.target.name]) {
+      // Clone errors form states to local varibale
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[e.target.name]
+
+      this.setState({
+        [e.target.name]: e.target.value,
+        errors
+      })
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      })
+    }
+   
   }
 
-  onSubmit(e) {
+  isValid() {
+    const { errors, isValid } = Validation.validateSaleInput(this.state)
+
+    if (!isValid) {
+      this.setState({ errors })
+    }
+
+    return isValid;
+  }
+
+  handleSubmit = (e) => {
     e.preventDefault()
-    this.props.createSale(this.state)
+
+    // Validation
+    if (this.isValid()) { 
+      this.props.createSale(this.state)
+    }
   }
 
   componentWillUnmount() {
     clearTimeout(this.clickTimeout);
   }
 
-  handleChange(date) {
+  handleChangeDate(date) {
     this.setState({
-      startDate: date
+      date: date
     });
   } 
 
   render() {
-    const { name, startDate, status, description, errors, isLoading } = this.state
+    const { name, date, status, description, errors, isLoading } = this.state
     
     return (              
-      <form className="ui form" onSubmit={this.onSubmit.bind(this)}>
-
-        { errors.form && <div className="alert alert-danger alert-dismissible">
-          <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          {errors.form}</div> }
+      <form className="ui form" onSubmit={this.handleSubmit.bind(this)}>
 
         <FormField
           label="Name"
           name="name" 
           value={name} 
-          onChange={this.onChange.bind(this)} 
+          onChange={this.handleChange.bind(this)} 
           placeholder="Name"
           error={errors.name}
-          labelHorizontal=""
-          inputHorizontal=""
         />
-        <div className="field">
+        <div  className={classnames("field", { error: !!errors.date })}>
           <label className="" htmlFor="date">Date:</label>
           <DatePicker
             dateFormat="DD/MM/YYYY"
-            selected={startDate}
-            onChange={this.handleChange.bind(this)}
+            selected={date}
+            onChange={this.handleChangeDate.bind(this)}
           />
+          <span>{errors.password}</span>
         </div>
         <FormField
           formType="select"
@@ -75,9 +98,8 @@ class SaleForm extends Component {
           name="status"
           type="select"
           value={status} 
-          onChange={this.onChange.bind(this)} 
-          labelHorizontal=""
-          inputHorizontal=""
+          onChange={this.handleChange.bind(this)} 
+          error={errors.status}
 
           options={[
             <option key="default" value="" disabled>Set Status</option>,
@@ -93,12 +115,9 @@ class SaleForm extends Component {
           label="Description"
           name="description" 
           value={description} 
-          onChange={this.onChange.bind(this)} 
+          onChange={this.handleChange.bind(this)} 
           placeholder="Description"
           error={errors.description}
-          formGroup=""
-          labelHorizontal=""
-          inputHorizontal=""
         />
 
         <div className="filed">    

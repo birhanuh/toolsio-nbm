@@ -4,7 +4,7 @@ import classnames from 'classnames'
 const FormField = ({ type, formType, options, name, field, value, label, error, placeholder, onChange, checkUserExists, labelHorizontal, inputHorizontal}) => {
   if (formType === 'textarea') {
     return (
-      <div className={classnames("field", { 'ui error message': error })}>
+      <div className={classnames("field", { error: !!error })}>
         <label htmlFor={name} className={labelHorizontal}>{label}</label>
         <div className={inputHorizontal}>
           <textarea  
@@ -16,12 +16,12 @@ const FormField = ({ type, formType, options, name, field, value, label, error, 
             placeholder={placeholder}>
           </textarea>
         </div>
-        { error && <span className="help-block">{error}</span>}
+        <span>{error}</span>
       </div>
     )
   } else if (formType === 'select') {
     return (
-      <div className={classnames("field", { 'ui error message': error })}>
+      <div className={classnames("field", { error: !!error })}>
         <label htmlFor={name} className={labelHorizontal}>{label}</label>
         <div className={inputHorizontal}>
           <select  
@@ -33,12 +33,12 @@ const FormField = ({ type, formType, options, name, field, value, label, error, 
             {options}
           </select>  
         </div>
-        { error && <span className="help-block">{error}</span>}
+        <span>{error}</span>
       </div>
     )
   } else {
     return (
-      <div className={classnames("field", { 'ui error message': error })}>
+      <div className={classnames("field", { error: !!error })}>
         <label htmlFor={name} className={labelHorizontal}>{label}</label>
         <div className={inputHorizontal}>
           <input 
@@ -50,7 +50,7 @@ const FormField = ({ type, formType, options, name, field, value, label, error, 
             placeholder={placeholder} 
           />
         </div>
-        { error && <span className="help-block">{error}</span>}
+        <span>{error}</span>
       </div>
     )
   }  

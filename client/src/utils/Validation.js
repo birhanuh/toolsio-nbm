@@ -51,6 +51,28 @@ export default {
       errors,
       isValid: isEmpty(errors)
     }
+  },
+
+  validateSaleInput: (data) => {
+    let errors = {}
+
+    if (!data.name) {
+      errors.name = 'Name is required'
+    }
+    if (!data.date) {
+      errors.date = 'Date is required'
+    }
+    if (!data.status) {
+      errors.status = 'Name is required'
+    }
+    if (!data.description) {
+      errors.description = 'Date is required'
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
   }
 
 }  

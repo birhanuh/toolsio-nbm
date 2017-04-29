@@ -80,7 +80,7 @@ class SignupForm extends Component {
   render() {
     const { errors, isLoading, invalid } = this.state
     return (      
-      <div className="column">
+      <div>
         <h2 className="ui teal image header">
           <a className="" href="/">
             <img src="/images/logo-square.png" className="image" alt="logo-square" />
