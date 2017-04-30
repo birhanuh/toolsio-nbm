@@ -16,8 +16,8 @@ export function createSale(sale) {
 
 export function fetchSales() {
   return dispatch => {
-    return axios.get('/api/sales')
-            .then(res => res.json())
-            .then(data => dispatch(setSales(data.sales)))
+    return axios.get('/api/sales').then(res => {
+      dispatch(setSales(res.data.results))
+    })
   }
 }

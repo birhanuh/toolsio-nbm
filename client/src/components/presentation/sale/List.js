@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default function List({ sales }) => {
+export default function List({ sales }) {
   const emptyMessage = (
     <p>There are no games yet in your collection.</p>
   )
@@ -11,7 +11,7 @@ export default function List({ sales }) => {
 
   return (
     <div>
-      { sales.length === 0 ? emptyMessage }
+      { sales.length === 0 ? emptyMessage : salesList }
     </div>   
   )
 }
