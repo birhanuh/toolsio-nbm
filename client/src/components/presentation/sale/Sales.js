@@ -11,12 +11,9 @@ class Sales extends Component {
 
   render() {
     return (
-      <div className="row">
-        <div className="col-sm-12">
-          <h1>Sales</h1>
-
-          <List sales={this.props.sales} />
-        </div>
+      <div>
+        <h1>Sales</h1>
+        <List sales={this.props.sales} />      
       </div>   
     )
   }

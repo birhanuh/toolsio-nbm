@@ -55,7 +55,13 @@ class SaleForm extends Component {
 
     // Validation
     if (this.isValid()) { 
-      this.props.createSale(this.state)
+      this.setState({ isLoading: true })
+      this.props.createSale(this.state).then(
+        () => {
+
+        },
+        ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false })
+      )
     }
   }
 
@@ -73,7 +79,7 @@ class SaleForm extends Component {
     const { name, date, status, description, errors, isLoading } = this.state
     
     return (              
-      <form className="ui form" onSubmit={this.handleSubmit.bind(this)}>
+      <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
         <FormField
           label="Name"
@@ -117,7 +123,6 @@ class SaleForm extends Component {
           value={description} 
           onChange={this.handleChange.bind(this)} 
           placeholder="Description"
-          error={errors.description}
         />
 
         <div className="filed">    

@@ -66,12 +66,12 @@ class LoginForm extends Component {
           </div>
         </h2>
         <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
+
+          { errors.form && <div className="ui negative message"><p>{errors.form}</p></div> }
+
           <div className="ui stacked segment">
-            { errors.form && <div className="ui error message">
-              <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              {errors.form}</div> }
             <div className={classnames("field", { error: !!errors.email })}>
-              <div className="ui left icon input">
+              <div className="ui right icon input">
                 <i className="user icon"></i>
                 <input type="text" name="email" placeholder="E-mail address" 
                   value={this.state.user.email} onChange={this.onChange.bind(this)} />
@@ -79,7 +79,7 @@ class LoginForm extends Component {
               </div>
             </div>  
             <div className={classnames("field", { error: !!errors.password })}>
-              <div className="ui left icon input">
+              <div className="ui right icon input">
                 <i className="lock icon"></i>
                 <input type="password" name="password" placeholder="Password" 
                   value={this.state.user.password} onChange={this.onChange.bind(this)} />

@@ -21,9 +21,11 @@ router.get('/:resource', authenticate, function(req, res) {
 
   controller.find(req.query, function(err, results) {
     if (err) {
-      res.json({
-        confirmation: 'fail',
-        message: err
+      res.json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
       })
       return
     }
@@ -52,9 +54,11 @@ router.get('/:resource/:id', authenticate, function(req, res) {
 
   controller.findById(id, function(err, result) {
     if (err) {
-      res.json({
-        confirmation: 'fail',
-        message: 'Not Found'
+      res.json({ 
+        errors: {
+          confirmation: 'fail',
+          message: 'Not found'
+        }
       })
       return
     }
@@ -82,9 +86,11 @@ router.post('/:resource', authenticate, function(req, res) {
 
   controller.create(req.body, function(err, result) {
     if (err) {
-      res.json({
-        confirmation: 'fail',
-        message: err
+      res.json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
       })
       return
     }

@@ -65,9 +65,6 @@ export default {
     if (!data.status) {
       errors.status = 'Name is required'
     }
-    if (!data.description) {
-      errors.description = 'Date is required'
-    }
     
     return {
       errors,

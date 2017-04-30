@@ -57,6 +57,7 @@ router.post('/register', function(req, res) {
   
 })
 
+// Login User
 router.post('/login', (req, res) => {
   const { email, password } = req.body
 
