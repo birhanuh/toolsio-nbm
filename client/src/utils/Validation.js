@@ -63,7 +63,7 @@ export default {
       errors.date = 'Date is required'
     }
     if (!data.status) {
-      errors.status = 'Name is required'
+      errors.status = 'Status is required'
     }
     
     return {

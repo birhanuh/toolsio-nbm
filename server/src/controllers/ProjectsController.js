@@ -1,4 +1,5 @@
 import Project from '../models/project'
+import Validation from '../utils'
 
 export default {
   
@@ -35,7 +36,7 @@ export default {
   },
 
   update: function(id, params, callback) {
-    Project.findByIdAndUpdate(id, params, {new:true}, function(err, project) {
+    Project.findByIdAndUpdate(id, params, {new: true}, function(err, project) {
       if (err) {
         callback(err, null)
         return

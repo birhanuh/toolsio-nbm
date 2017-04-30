@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { createSale } from '../../actions/saleActions'
@@ -18,7 +19,8 @@ class SaleForm extends Component {
       status: '',
       description: '',
       errors: {},
-      isLoading: false
+      isLoading: false,
+      done: false 
     }
   }
 
@@ -54,12 +56,10 @@ class SaleForm extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid()) { 
+    if (this.isValid) { 
       this.setState({ isLoading: true })
       this.props.createSale(this.state).then(
-        () => {
-
-        },
+        () => { this.setState({ done: true }) },
         ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false })
       )
     }
@@ -76,10 +76,12 @@ class SaleForm extends Component {
   } 
 
   render() {
-    const { name, date, status, description, errors, isLoading } = this.state
+    const { name, date, status, description, errors, isLoading, done } = this.state
     
-    return (              
+    const form = (
       <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+
+        { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
         <FormField
           label="Name"
@@ -128,7 +130,13 @@ class SaleForm extends Component {
         <div className="filed">    
           <button disabled={isLoading} className="ui primary button"><i className="fa fa-check-circle" aria-hidden="true"></i>&nbsp;Add Sale</button>
         </div>  
-      </form>         
+      </form> 
+    )
+
+    return (  
+      <div>            
+        { done ? <Redirect to="/sales" /> : form }  
+      </div>  
     )
   }
 }

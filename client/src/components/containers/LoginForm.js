@@ -66,10 +66,10 @@ class LoginForm extends Component {
           </div>
         </h2>
         <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
-
-          { errors.form && <div className="ui negative message"><p>{errors.form}</p></div> }
-
           <div className="ui stacked segment">
+
+            { errors.form && <div className="ui negative message"><p>{errors.form}</p></div> }
+
             <div className={classnames("field", { error: !!errors.email })}>
               <div className="ui right icon input">
                 <i className="user icon"></i>

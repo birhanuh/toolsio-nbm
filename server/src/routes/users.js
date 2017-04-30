@@ -62,19 +62,19 @@ router.post('/login', (req, res) => {
   const { email, password } = req.body
 
   User.findAsync({ email: email }).then(user => {
-      if (user) {
-        if (bcrypt.compareSync(password, user[0].password)) {
-          const token = jwt.sign({
-            id: user[0]._id,
-            email: user[0].email
-          }, config.jwtSecret)
-          res.json({ token })
-        } else {
-          res.status(401).json({ errors: { form: 'Invalid Credentials' } }) 
-        }
+    if (user) {
+      if (bcrypt.compareSync(password, user[0].password)) {
+        const token = jwt.sign({
+          id: user[0]._id,
+          email: user[0].email
+        }, config.jwtSecret)
+        res.json({ token })
       } else {
         res.status(401).json({ errors: { form: 'Invalid Credentials' } }) 
-      }  
+      }
+    } else {
+      res.status(401).json({ errors: { form: 'Invalid Credentials' } }) 
+    }  
   })
 })
 

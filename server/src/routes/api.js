@@ -12,16 +12,18 @@ router.get('/:resource', authenticate, function(req, res) {
   
   var controller = controllers[resource]
   if (controller == null) {
-    res.json({
-      confirmation: 'fail',
-      message: 'Invalid Resource Request: '+resource
+    res.status(500).json({
+      errors: {
+        confirmation: 'fail',
+        message: 'Invalid Resource Request: '+resource
+      }
     })
     return
   }
 
   controller.find(req.query, function(err, results) {
     if (err) {
-      res.json({ 
+      res.status(500).json({ 
         errors: {
           confirmation: 'fail',
           message: err
@@ -45,19 +47,21 @@ router.get('/:resource/:id', authenticate, function(req, res) {
 
   var controller = controllers[resource]
   if (controller == null) {
-    res.json({
-      confirmation: 'fail',
-      message: 'Invalid Resource Request: '+resource
+    res.status(500).json({
+      errors: {
+        confirmation: 'fail',
+        message: 'Invalid Resource Request: '+resource
+      }
     })
     return
   }
 
   controller.findById(id, function(err, result) {
     if (err) {
-      res.json({ 
+      res.status(500).json({ 
         errors: {
           confirmation: 'fail',
-          message: 'Not found'
+          message: 'Sale not found'
         }
       })
       return
@@ -77,19 +81,27 @@ router.post('/:resource', authenticate, function(req, res) {
   
   var controller = controllers[resource]
   if (controller == null) {
-    res.json({
-      confirmation: 'fail',
-      message: 'Invalid Resource Request: '+resource
+    res.status(500).json({
+      errors: {
+        confirmation: 'fail',
+        message: 'Invalid Resource Request: '+resource
+      }
     })
     return
   }
 
-  controller.create(req.body, function(err, result) {
-    if (err) {
-      res.json({ 
+  controller.create(req.body, function(valdiationErr, dbError, result) {
+    if (valdiationErr) {
+      res.status(400).json({ 
+        errors: valdiationErr 
+      })
+      return
+    }
+    if (dbError) {
+      res.status(500).json({ 
         errors: {
           confirmation: 'fail',
-          message: err
+          message: dbError
         }
       })
       return
