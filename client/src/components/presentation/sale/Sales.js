@@ -14,7 +14,10 @@ class Sales extends Component {
     return (
       <div>
         <h1>Sales</h1>
-        <Link className="ui primary button" to="/sales/new">Create Sale</Link>
+        <Link className="ui primary button" to="/sales/new">
+          <i className="add circle icon"></i>
+          Create new Sale
+        </Link>
         <List sales={this.props.sales} />      
       </div>   
     )

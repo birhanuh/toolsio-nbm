@@ -128,7 +128,7 @@ class SaleForm extends Component {
         />
 
         <div className="filed">    
-          <button disabled={isLoading} className="ui primary button"><i className="fa fa-check-circle" aria-hidden="true"></i>&nbsp;Add Sale</button>
+          <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;Add Sale</button>
         </div>  
       </form> 
     )

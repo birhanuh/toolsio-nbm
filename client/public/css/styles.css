@@ -3,7 +3,6 @@
 
 /* Third party helper libraries */
 @import url("../semantic/dist/semantic.min.css");
-@import url("font-awesome-4.7.0/css/font-awesome.min.css");
 
 /* Custom themes */
 @import url("datepicker.css");
