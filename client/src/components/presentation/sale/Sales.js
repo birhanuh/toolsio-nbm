@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import List from './List' 
 import { connect } from 'react-redux'
 import { fetchSales } from '../../../actions/saleActions'
@@ -12,12 +12,15 @@ class Sales extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Sales</h1>
-        <Link className="ui primary button" to="/sales/new">
+      <div>      
+        <Link className="ui right floated primary button" to="/sales/new">
           <i className="add circle icon"></i>
           Create new Sale
         </Link>
+        <h1 className="ui header">Sales</h1>          
+        
+        <div className="ui divider"></div>
+
         <List sales={this.props.sales} />      
       </div>   
     )

@@ -1,4 +1,5 @@
 import React from 'react'
+import Card from './Card'
 
 export default function List({ sales }) {
   const emptyMessage = (
@@ -6,7 +7,19 @@ export default function List({ sales }) {
   )
 
   const salesList = (
-    <p>games list</p>
+    <table className="ui striped selectable table">
+       <thead>
+          <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          { sales.map(sale => <Card sale={sale} key={sale._id} />) }
+        </tbody>
+    </table>
   )
 
   return (

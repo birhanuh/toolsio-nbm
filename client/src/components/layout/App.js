@@ -1,12 +1,23 @@
 import React, { Component } from 'react' 
+import { Route } from 'react-router-dom'
 import classnames from 'classnames'
+
+import Dashboard from './Dashboard'
+import Landing from './Landing'
+import Signup from '../presentation/auth/Signup'
+import Login from '../presentation/auth/Login'
+import Projects from '../containers/Projects'
+import Sales from '../presentation/sale/Sales'
+import CreateSale from '../presentation/sale/Create'
+import requireAuth from '../../utils/requireAuth'
+
 import NavigationBar from './NavigationBar'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
-class index extends Component {
+class App extends Component {
   render() {
-    let landingPage = this.props.location.pathname === '/' ? true : false
-    let authPages = this.props.location.pathname === '/login' || this.props.location.pathname === '/signup'
+    let landingPage = window.location.pathname === '/' ? true : false
+    let authPages = window.location.pathname === '/login' || window.location.pathname === '/signup'
       ? true : false
 
     let internalPages = (landingPage || authPages) ? false : true 
@@ -20,7 +31,13 @@ class index extends Component {
           
           <FlashMessagesList />
           
-          {this.props.children}
+          <Route exact path="/" component={Landing} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
+          <Route path="/dashboard" component={requireAuth(Dashboard)} />
+          <Route exact path="/projects" component={requireAuth(Projects)} />
+          <Route exact path="/sales" component={requireAuth(Sales)} />
+          <Route path="/sales/new" component={requireAuth(CreateSale)} />
         </section>
         
         { !authPages &&
@@ -75,5 +92,5 @@ class index extends Component {
   }
 }
 
-export default index
+export default App
 

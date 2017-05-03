@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/authentication'
 
@@ -19,10 +19,10 @@ class NavigationBar extends Component {
             <img className="logo" src="/images/logo-square.png" alt="logo-square" />
             Toolsio
           </Link>
-          <Link className="item" activeclassName="active" activeOnlyWhenExact to="/dashboard">Dashboard</Link>
-          <Link className="item" activeclassName="active" activeOnlyWhenExact to="/projects">Projects</Link>
-          <Link className="item" activeclassName="active" activeOnlyWhenExact to="/sales">Sales</Link>
-          <Link className="item" activeclassName="active" activeOnlyWhenExact to="/invoices">Invoices</Link>
+          <Link className="item" to="/dashboard">Dashboard</Link>
+          <Link className="item" to="/projects">Projects</Link>
+          <Link className="item" to="/sales">Sales</Link>
+          <Link className="item" to="/invoices">Invoices</Link>
      
           <div className="right item">      
             <a className="ui inverted button" to="#" onClick={this.logout.bind(this)} >Log out</a>   
@@ -38,9 +38,9 @@ class NavigationBar extends Component {
             <Link className="toc item" to="/">
               <i className="sidebar icon"></i>
             </Link> 
-            <Link className="item" activeclassName="active" activeOnlyWhenExact to="/">Home</Link>
-            <Link className="item" activeclassName="active" activeOnlyWhenExact to="/about">About</Link>
-            <Link className="item" activeclassName="active" activeOnlyWhenExact to="/contact">Contact</Link>
+            <Link className="item" to="/">Home</Link>
+            <Link className="item" to="/about">About</Link>
+            <Link className="item" to="/contact">Contact</Link>
          
             <div className="right item">      
               <Link className="ui inverted button" to="/signup">Sign up</Link>       

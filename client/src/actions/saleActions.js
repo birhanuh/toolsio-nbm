@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { SET_SALES } from './types'
+import { SET_SALES, ADD_SALE } from './types'
 
 export function setSales(sales) {
   return {
@@ -8,9 +8,17 @@ export function setSales(sales) {
   }
 }
 
+export function addSale(sale) {
+  return {
+    type: ADD_SALE,
+    sale
+  }
+}
+
 export function createSale(sale) {
   return dispatch => {
     return axios.post('/api/sales', sale)
+    //return axios.post('/api/sales', sale).then(res => dispatch(addSale(res.data.result)))
   }
 }
 
