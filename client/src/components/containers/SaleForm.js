@@ -60,8 +60,7 @@ class SaleForm extends Component {
       this.setState({ isLoading: true })
       this.props.createSale(this.state).then(
         () => { this.setState({ done: true }) },
-        ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false })
-      )
+        ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) )
     }
   }
 

@@ -17,8 +17,7 @@ export function addSale(sale) {
 
 export function createSale(sale) {
   return dispatch => {
-    return axios.post('/api/sales', sale)
-    //return axios.post('/api/sales', sale).then(res => dispatch(addSale(res.data.result)))
+    return axios.post('/api/sales', sale).then(res => { dispatch(addSale(res.data.result)) } )
   }
 }
 
