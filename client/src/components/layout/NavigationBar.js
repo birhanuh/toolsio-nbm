@@ -38,13 +38,13 @@ class NavigationBar extends Component {
             <Link className="toc item" to="/">
               <i className="sidebar icon"></i>
             </Link> 
-            <Link className="item" to="/">Home</Link>
+            <Link className="active item" to="/">Home</Link>
             <Link className="item" to="/about">About</Link>
             <Link className="item" to="/contact">Contact</Link>
          
-            <div className="right item">      
-              <Link className="ui inverted button" to="/signup">Sign up</Link>       
-              <Link className="ui inverted button"  to="/login">Log in</Link>    
+            <div className="right item">                    
+              <Link className="ui inverted button"  to="/login">Log in</Link>     
+              <Link className="ui inverted button" to="/signup">Sign up</Link>    
             </div>  
           </div>
         </div>

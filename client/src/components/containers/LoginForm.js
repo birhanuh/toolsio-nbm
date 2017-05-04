@@ -47,7 +47,7 @@ class LoginForm extends Component {
             type: 'success',
             text: 'You have signed in successfully!'
           })
-          this.context.router.push('/dashboard')
+          this.context.router.history.push('/dashboard')
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )  

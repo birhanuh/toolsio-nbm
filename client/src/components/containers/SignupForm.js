@@ -70,7 +70,7 @@ class SignupForm extends Component {
             type: 'success',
             text: 'You have signed up successfully!'
           })
-          this.context.router.push('/dashboard')
+          this.context.histrory.push('/dashboard')
         },
         ({ response }) => this.setState({ errors: response.data, isLoading: false })
       )
