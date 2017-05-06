@@ -25,6 +25,7 @@ const FormField = ({ type, formType, options, name, field, value, label, error, 
         <label htmlFor={name} className={labelHorizontal}>{label}</label>
         <div className={inputHorizontal}>
           <select  
+            className="ui dropdown"
             type={type}
             name={name} 
             value={value} 

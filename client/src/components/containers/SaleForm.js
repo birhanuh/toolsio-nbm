@@ -10,6 +10,8 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import '%PUBLIC_URL%/js/semantic_ui_custome.js'
+
 class SaleForm extends Component {
   constructor(props) {
     super(props)

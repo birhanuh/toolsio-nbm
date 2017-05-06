@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Card({sale}) {
+export default function Tr({sale}) {
   
   return (
     <tr>
@@ -12,6 +12,6 @@ export default function Card({sale}) {
   )
 }
 
-Card.propTypes = {
+Tr.propTypes = {
   sale: React.PropTypes.object.isRequired
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import Card from './Card'
+import Tr from './Tr'
 
 export default function List({ sales }) {
   const emptyMessage = (
@@ -17,7 +17,7 @@ export default function List({ sales }) {
           </tr>
         </thead>
         <tbody>
-          { sales.map(sale => <Card sale={sale} key={sale._id} />) }
+          { sales.map(sale => <Tr sale={sale} key={sale._id} />) }
         </tbody>
     </table>
   )
