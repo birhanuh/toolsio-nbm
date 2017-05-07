@@ -14,7 +14,7 @@ import { setCurrentUser } from './actions/authentication'
 // CSS
 import './css/styles.css'
 
-import App from './components/layout/App'
+import App from './components/Layouts/App'
 //import routes from './routes'
 
 // A state for the entire project created by Redux

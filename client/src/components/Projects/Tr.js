@@ -1,8 +1,7 @@
 import React, { Component } from 'react' 
 
-class Show extends Component {
+class Tr extends Component {
   render() {
-    console.log('onSelect Show: ', this.props.project)
     return (
       <div className="well">
 
@@ -29,4 +28,4 @@ class Show extends Component {
   }
 }
 
-export default Show
+export default Tr

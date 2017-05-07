@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import SaleForm from '../../containers/SaleForm'
+import SaleForm from './SaleForm'
 
 class Create extends Component {
 

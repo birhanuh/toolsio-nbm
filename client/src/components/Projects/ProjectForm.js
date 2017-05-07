@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
-import { CreateProject, ShowProject } from '../presentation'
+import Create from './Create'
+import Show from './Show'
 import { APIManager } from '../../utils'
 
 class Projects extends Component {

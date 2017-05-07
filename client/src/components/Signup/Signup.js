@@ -1,8 +1,8 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
-import SignupForm from '../../containers/SignupForm'
-import { signupRequest, isUserExists } from '../../../actions/authentication'
-import { addFlashMessage } from '../../../actions/flashMessages'
+import SignupForm from './SignupForm'
+import { signupRequest, isUserExists } from '../../actions/authentication'
+import { addFlashMessage } from '../../actions/flashMessages'
 
 class Signup extends Component {
   render() {

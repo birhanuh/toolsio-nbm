@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { connect } from 'react-redux'
-import { fetchSales } from '../../../actions/saleActions'
+import { fetchSales } from '../../actions/saleActions'
 
 class Sales extends Component {
 
