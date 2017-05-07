@@ -11,6 +11,9 @@ import { setAuthorizationToken } from './utils'
 import jwtDecode from 'jwt-decode'
 import { setCurrentUser } from './actions/authentication'
 
+// CSS
+import './css/styles.css'
+
 import App from './components/layout/App'
 //import routes from './routes'
 

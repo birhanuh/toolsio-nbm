@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
 
+// JS Custome
+import '../../js/landing_page.js'
+
+// Images
+import white_image from '../../images/white-image.png'; 
+import nan from '../../images/nan.jpg'; 
+
 class Landing extends Component {
   render() {
     return (
@@ -14,7 +21,7 @@ class Landing extends Component {
                 <p>Yes that's right, you thought it was the stuff of dreams, but even bananas can be bioengineered.</p>
               </div>
               <div className="six wide right floated column">
-                <img src="/images/white-image.png" className="ui large bordered rounded image" alt="" />
+                <img src={white_image} className="ui large bordered rounded image" alt="" />
               </div>
             </div>
             <div className="row">
@@ -36,7 +43,7 @@ class Landing extends Component {
               <div className="column">
                 <h3>"I shouldn't have gone with their competitor."</h3>
                 <p>
-                  <img src="/images/nan.jpg" className="ui avatar image" alt="nan" /> <b>Nan</b> Chief Fun Officer Acme Toys
+                  <img src={nan} className="ui avatar image" alt="nan" /> <b>Nan</b> Chief Fun Officer Acme Toys
                 </p>
               </div>
             </div>

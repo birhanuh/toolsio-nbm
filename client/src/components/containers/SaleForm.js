@@ -10,7 +10,8 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import '%PUBLIC_URL%/js/semantic_ui_custome.js'
+// JS semantic
+import { Dropdown } from 'semantic-ui-react'
 
 class SaleForm extends Component {
   constructor(props) {
@@ -78,7 +79,11 @@ class SaleForm extends Component {
 
   render() {
     const { name, date, status, description, errors, isLoading, done } = this.state
-    
+    const statusOptions = [ { key: 'default', value:'', text: 'Set Status' },
+        { key: 'new', value: 'new', text: 'NEW' },
+        { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
+        { key: 'ready', value: 'ready', text: 'READY' } ,
+        { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
     const form = (
       <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
@@ -101,24 +106,15 @@ class SaleForm extends Component {
           />
           <span>{errors.password}</span>
         </div>
-        <FormField
-          formType="select"
+        
+        <Dropdown 
           label="status"
-          name="status"
-          type="select"
+          placeholder='Status' 
+          search selection options={statusOptions}   
           value={status} 
           onChange={this.handleChange.bind(this)} 
-          error={errors.status}
-
-          options={[
-            <option key="default" value="" disabled>Set Status</option>,
-            <option key="new" value="new">NEW</option>,
-            <option key="in progress" value="in progress">IN PROGRESS</option>,
-            <option key="ready" value="ready">READY</option>,
-            <option key="delivered" value="delivered">DELIVERED</option>
-            ]
-          }
-        />
+          error={errors.status} />
+  
         <FormField
           formType="textarea"
           label="Description"

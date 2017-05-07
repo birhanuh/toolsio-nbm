@@ -214,13 +214,13 @@ body {
   @include transform-translate(-50%);
 }
 
-//.vertical-center {
-//  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
-//  min-height: 10vh; /* These two lines are counted as one :-)       */
+/*.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+/*  min-height: 10vh; /* These two lines are counted as one :-)       */
 
-//  display: flex;
-//  align-items: center;
-//}
+/*  display: flex;
+    align-items: center;
+  } */
 
 .vertical-center-small {
   min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
@@ -233,7 +233,7 @@ body {
 // Sprite
 .sprite{
   display: inline-block;
-  background: transparent url('sprite.png') no-repeat;
+  /*background: transparent url('../images/sprite.png') no-repeat; */
 }
 
 @media only screen and (max-width: 700px) {

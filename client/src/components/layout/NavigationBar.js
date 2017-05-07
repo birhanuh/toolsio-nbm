@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/authentication'
 
+import logo from '../../images/logo-square.png'; 
+
 class NavigationBar extends Component {
   logout(e) {
     e.preventDefault()
@@ -16,7 +18,7 @@ class NavigationBar extends Component {
       <nav className="ui fixed inverted menu">
         <div className="ui container">
           <Link className="header item" to="/dashboard">
-            <img className="logo" src="/images/logo-square.png" alt="logo-square" />
+            <img className="logo" src={logo} alt="logo-square" />
             Toolsio
           </Link>
           <Link className="item" to="/dashboard">Dashboard</Link>
