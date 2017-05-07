@@ -79,17 +79,7 @@ class SignupForm extends Component {
 
   render() {
     const { errors, isLoading, invalid } = this.state
-    return (      
-      <div>
-        <h2 className="ui teal image header">
-          <a className="" href="/">
-            <img src="/images/logo-square.png" className="image" alt="logo-square" />
-          </a>
-          <div className="content">
-            Create an account
-          </div>
-        </h2>
-          
+    return (            
         <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
           <div className="ui stacked segment">
             <FormField
@@ -140,11 +130,7 @@ class SignupForm extends Component {
             <button disabled={isLoading || invalid} className="ui fluid large teal submit button">Register</button>
           </div>
         </form>         
-             
-        <div className="ui message"> 
-          <a href="/users/login">Already a user? Login here</a>
-        </div>
-      </div> 
+
     )
   }
 }

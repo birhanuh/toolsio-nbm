@@ -57,14 +57,7 @@ class LoginForm extends Component {
   render() {
     const { errors, isLoading } = this.state
    
-    return (   
-      <div>
-        <h2 className="ui teal image header">
-          <img src="/images/logo-square.png" className="image" alt="logo-square" />
-          <div className="content">
-            Log-in to your account
-          </div>
-        </h2>
+    return (  
         <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
           <div className="ui stacked segment">
 
@@ -91,12 +84,6 @@ class LoginForm extends Component {
               
           </div>
         </form>         
-
-        <div className="ui message">
-          New to us? <a href="/users/signup">Sign Up</a>
-        </div>
-      </div>
-
       
     )
   }
