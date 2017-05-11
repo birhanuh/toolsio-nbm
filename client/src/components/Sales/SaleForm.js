@@ -11,16 +11,17 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // JS semantic
-import { Dropdown } from 'semantic-ui-react'
+//import { Dropdown, Input } from 'semantic-ui-react'
 
 class SaleForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
-      date: moment(),
-      status: '',
-      description: '',
+      _id: this.props.sale ? this.props.sale._id : null,
+      name: this.props.sale ? this.props.sale.name : '',
+      date: this.props.sale ? this.props.sale.date : moment(),
+      status: this.props.sale ? this.props.sale.status : '',
+      description: this.props.sale ? this.props.sale.description : '',
       errors: {},
       isLoading: false,
       done: false 
@@ -79,11 +80,12 @@ class SaleForm extends Component {
 
   render() {
     const { name, date, status, description, errors, isLoading, done } = this.state
-    const statusOptions = [ { key: 'default', value:'', text: 'Set Status' },
-        { key: 'new', value: 'new', text: 'NEW' },
-        { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
-        { key: 'ready', value: 'ready', text: 'READY' } ,
-        { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
+    
+    //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
+    //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
+    //    { key: 'ready', value: 'ready', text: 'READY' } ,
+    //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
+    
     const form = (
       <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
@@ -107,14 +109,36 @@ class SaleForm extends Component {
           <span>{errors.password}</span>
         </div>
         
-        <Dropdown 
+        <FormField
+          formType="select"
           label="status"
-          placeholder='Status' 
-          search selection options={statusOptions}   
+          name="status"
+          type="select"
           value={status} 
           onChange={this.handleChange.bind(this)} 
-          error={errors.status} />
-  
+          error={errors.status}
+
+          options={[
+            <option key="default" value="" disabled>Set Status</option>,
+            <option key="new" value="new">NEW</option>,
+            <option key="in progress" value="in progress">IN PROGRESS</option>,
+            <option key="ready" value="ready">READY</option>,
+            <option key="delivered" value="delivered">DELIVERED</option>
+            ]
+          }
+        />
+
+        {/*
+        <div className={classnames("field", { error: !!error.status })}>
+          <label htmlFor="status">Status</label>
+          <Dropdown 
+            placeholder='Status' 
+            search selection options={statusOptions}   
+            value={status} 
+            onChange={this.handleChange.bind(this)} 
+            error={errors.status} />
+        </div>      
+        */}
         <FormField
           formType="textarea"
           label="Description"
@@ -142,5 +166,14 @@ SaleForm.propTypes = {
   createSale: React.PropTypes.func.isRequired
 }
 
-export default connect(null, { createSale })(SaleForm)
+function mapStateToProps(state, props) {
+  if (props.params._id) {
+    return {
+      sale: state.sales.find(item => item._id === props.params._id)
+    }
+  } 
+  return { game: null }
+}
+
+export default connect(mapStateToProps, { createSale })(SaleForm)
 

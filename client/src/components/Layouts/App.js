@@ -40,6 +40,7 @@ class App extends Component {
           <Route exact path="/projects" component={requireAuth(Projects)} />
           <Route exact path="/sales" component={requireAuth(Sales)} />
           <Route path="/sales/new" component={requireAuth(CreateSale)} />
+          <Route path="/sales/:_id" component={requireAuth(CreateSale)} />
         </section>
         
         { !authPages &&
