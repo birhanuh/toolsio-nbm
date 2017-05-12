@@ -14,6 +14,7 @@ export default function List({ sales }) {
             <th>Date</th>
             <th>Status</th>
             <th>Description</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

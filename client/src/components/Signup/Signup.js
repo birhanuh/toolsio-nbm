@@ -24,7 +24,7 @@ class Signup extends Component {
         <SignupForm signupRequest={signupRequest} isUserExists={isUserExists} addFlashMessage={addFlashMessage}/> 
 
         <div className="ui message"> 
-          <a href="/users/login">Already a user? Login here</a>
+          <a href="/login">Already a user? Login here</a>
         </div>
       </div>  
     )

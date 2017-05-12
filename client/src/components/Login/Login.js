@@ -17,7 +17,7 @@ class Login extends Component {
         <LoginForm />
 
         <div className="ui message">
-          New to us? <a href="/users/signup">Sign Up</a>
+          New to us? <a href="/signup">Sign Up</a>
         </div>
       </div>
     )

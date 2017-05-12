@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { createSale } from '../../actions/saleActions'
@@ -11,16 +11,17 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // JS semantic
-import { Dropdown } from 'semantic-ui-react'
+//import { Dropdown, Input } from 'semantic-ui-react'
 
 class SaleForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
-      date: moment(),
-      status: '',
-      description: '',
+      _id: this.props.sale ? this.props.sale._id : null,
+      name: this.props.sale ? this.props.sale.name : '',
+      date: this.props.sale ? moment(this.props.sale.date) : moment(),
+      status: this.props.sale ? this.props.sale.status : '',
+      description: this.props.sale ? this.props.sale.description : '',
       errors: {},
       isLoading: false,
       done: false 
@@ -79,55 +80,81 @@ class SaleForm extends Component {
 
   render() {
     const { name, date, status, description, errors, isLoading, done } = this.state
-    const statusOptions = [ { key: 'default', value:'', text: 'Set Status' },
-        { key: 'new', value: 'new', text: 'NEW' },
-        { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
-        { key: 'ready', value: 'ready', text: 'READY' } ,
-        { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
+    
+    //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
+    //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
+    //    { key: 'ready', value: 'ready', text: 'READY' } ,
+    //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
+    
     const form = (
-      <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+      <div>
+        <h1 className="ui header">Create new Sale</h1>
+        <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
-        { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+          { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-        <FormField
-          label="Name"
-          name="name" 
-          value={name} 
-          onChange={this.handleChange.bind(this)} 
-          placeholder="Name"
-          error={errors.name}
-        />
-        <div  className={classnames("field", { error: !!errors.date })}>
-          <label className="" htmlFor="date">Date:</label>
-          <DatePicker
-            dateFormat="DD/MM/YYYY"
-            selected={date}
-            onChange={this.handleChangeDate.bind(this)}
+          <FormField
+            label="Name"
+            name="name" 
+            value={name} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder="Name"
+            error={errors.name}
           />
-          <span>{errors.password}</span>
-        </div>
-        
-        <Dropdown 
-          label="status"
-          placeholder='Status' 
-          search selection options={statusOptions}   
-          value={status} 
-          onChange={this.handleChange.bind(this)} 
-          error={errors.status} />
-  
-        <FormField
-          formType="textarea"
-          label="Description"
-          name="description" 
-          value={description} 
-          onChange={this.handleChange.bind(this)} 
-          placeholder="Description"
-        />
+          <div  className={classnames("field", { error: !!errors.date })}>
+            <label className="" htmlFor="date">Date:</label>
+            <DatePicker
+              dateFormat="DD/MM/YYYY"
+              selected={date}
+              onChange={this.handleChangeDate.bind(this)}
+            />
+            <span>{errors.password}</span>
+          </div>
+          
+          <FormField
+            formType="select"
+            label="status"
+            name="status"
+            type="select"
+            value={status} 
+            onChange={this.handleChange.bind(this)} 
+            error={errors.status}
 
-        <div className="filed">    
-          <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;Add Sale</button>
-        </div>  
-      </form> 
+            options={[
+              <option key="default" value="" disabled>Set Status</option>,
+              <option key="new" value="new">NEW</option>,
+              <option key="in progress" value="in progress">IN PROGRESS</option>,
+              <option key="ready" value="ready">READY</option>,
+              <option key="delivered" value="delivered">DELIVERED</option>
+              ]
+            }
+          />
+
+          {/*
+          <div className={classnames("field", { error: !!error.status })}>
+            <label htmlFor="status">Status</label>
+            <Dropdown 
+              placeholder='Status' 
+              search selection options={statusOptions}   
+              value={status} 
+              onChange={this.handleChange.bind(this)} 
+              error={errors.status} />
+          </div>      
+          */}
+          <FormField
+            formType="textarea"
+            label="Description"
+            name="description" 
+            value={description} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder="Description"
+          />
+
+          <div className="filed">    
+            <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;Add Sale</button>
+          </div>  
+        </form> 
+      </div>
     )
 
     return (  
@@ -142,5 +169,15 @@ SaleForm.propTypes = {
   createSale: React.PropTypes.func.isRequired
 }
 
-export default connect(null, { createSale })(SaleForm)
+function mapStateToProps(state, props) {
+  const { match } = props
+  if (match.params._id) {
+    return {
+      sale: state.sales.find(item => item._id === match.params._id)
+    }
+  } 
+  return { sale: null }
+}
+
+export default connect(mapStateToProps, { createSale })(SaleForm)
 
