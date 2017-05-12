@@ -11,13 +11,13 @@ export default function(ComposedComponent) {
           type: 'error',
           text: 'You need to login to access this page!'
         })
-        this.context.router.history.push('/login')
+        this.context.router.push('/login')
       }
     }
 
     componentWillUpdate(nextProps) {
       if (!nextProps.isAuthenticated) {
-        this.context.router.history.push('/')
+        this.context.router.push('/')
       }
     }
 

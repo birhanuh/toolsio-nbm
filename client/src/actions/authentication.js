@@ -3,13 +3,6 @@ import { setAuthorizationToken } from '../utils'
 import jwtDecode from 'jwt-decode'
 import { SET_CURRENT_USER } from './types'
 
-export function setCurrentUser(user) {
-  return {
-    type: SET_CURRENT_USER,
-    user
-  }
-}
-
 export function signupRequest(data) {
   return dispatch => {
     return axios.post('/users/register', data)
@@ -41,5 +34,12 @@ export function logout() {
     localStorage.removeItem('jwtToken')
     setAuthorizationToken(false)
     dispatch(setCurrentUser({}))
+  }
+}
+
+export function setCurrentUser(user) {
+  return {
+    type: SET_CURRENT_USER,
+    user
   }
 }
