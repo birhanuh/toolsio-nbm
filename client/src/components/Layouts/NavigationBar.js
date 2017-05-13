@@ -62,11 +62,11 @@ class NavigationBar extends Component {
     )
 
     return (
-      <div>    
+      <header>    
         {/* Call links conditionally.  */}
         { isAuthenticated ? userLinks : guestLinks }
 
-      </div>
+      </header>
     )
   }
 }

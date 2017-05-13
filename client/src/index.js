@@ -12,7 +12,7 @@ import jwtDecode from 'jwt-decode'
 import { setCurrentUser } from './actions/authentication'
 
 // CSS
-import './css/styles.css'
+import './css/app.css'
 
 import App from './components/Layouts/App'
 //import routes from './routes'
