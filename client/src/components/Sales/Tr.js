@@ -11,7 +11,7 @@ export default function Tr({sale}) {
       <td>{sale.description}</td>
       <td>
         <button className="ui icon basic button red"><i className="delete icon"></i></button>
-        <Link to={`/sale/${sale._id}`} className="ui icon basic button green"><i className="edit icon"></i></Link>
+        <Link to={`/sales/${sale._id}`} className="ui icon basic button green"><i className="edit icon"></i></Link>
       </td>
     </tr>
   )

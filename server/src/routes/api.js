@@ -61,11 +61,12 @@ router.get('/:resource/:id', authenticate, function(req, res) {
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
-          message: 'Sale not found'
+          message: err
         }
       })
       return
     }
+  
     res.json({
       confirmation: 'success',
       result: result

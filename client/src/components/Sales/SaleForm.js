@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { createSale } from '../../actions/saleActions'
+import { createSale, fetchSale } from '../../actions/saleActions'
 import FormField from '../../utils/FormField'
 
 import DatePicker from 'react-datepicker';
@@ -26,6 +26,22 @@ class SaleForm extends Component {
       isLoading: false,
       done: false 
     }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      _id: nextProps.sale._id,
+      name: nextProps.sale.name,
+      date: moment(nextProps.sale.date),
+      status: nextProps.sale.status,
+      description: nextProps.sale.description
+    })
+  }
+
+  componentDidMount = () => {
+    if (this.props.match.params._id) {
+      this.props.fetchSale(this.props.match.params._id)
+    } else {}
   }
 
   handleChange = (e) => {
@@ -179,5 +195,5 @@ function mapStateToProps(state, props) {
   return { sale: null }
 }
 
-export default connect(mapStateToProps, { createSale })(SaleForm)
+export default connect(mapStateToProps, { createSale, fetchSale })(SaleForm)
 
