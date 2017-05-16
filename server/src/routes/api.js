@@ -1,6 +1,6 @@
-var express = require('express')
-var router = express.Router()
-var controllers = require('../controllers')
+import express from 'express'
+let router = express.Router()
+import controllers from '../controllers'
 import authenticate from '../middlewares/authenticate'
 
 // POST recources (authenticate middleware function called when request comes and it checks for toke validation,
@@ -9,7 +9,6 @@ import authenticate from '../middlewares/authenticate'
 router.get('/:resource', authenticate, function(req, res) {
   
   var resource = req.params.resource
-  
   var controller = controllers[resource]
   if (controller == null) {
     res.status(500).json({
@@ -115,4 +114,41 @@ router.post('/:resource', authenticate, function(req, res) {
 
 })
 
-module.exports = router;
+router.put('/:resource/:id', authenticate, function(req, res) {
+
+  var resource = req.params.resource
+
+  var controller = controllers[resource]
+  if (controller == null) {
+    res.status(500).json({
+      errors: {
+        confirmation: 'fail',
+        message: 'Invalid Resource Request: '+resource
+      }  
+    })
+  } 
+
+  controller.update(req.params.id, req.body, function(valdiationErr, dbError, result) {
+    if (valdiationErr) {
+      res.status(400).json({ 
+        errors: valdiationErr 
+      })
+      return
+    }
+    if (dbError) {
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: dbError
+        }
+      })
+      return
+    }
+    res.json({
+      confirmation: 'success',
+      result: result
+    })
+  })
+})
+
+export default router

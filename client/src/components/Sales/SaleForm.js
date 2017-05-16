@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { createSale, fetchSale } from '../../actions/saleActions'
+import { createSale, fetchSale, updateSale } from '../../actions/saleActions'
 import FormField from '../../utils/FormField'
 
 import DatePicker from 'react-datepicker';
@@ -78,14 +78,17 @@ class SaleForm extends Component {
     // Validation
     if (this.isValid) { 
       this.setState({ isLoading: true })
-      this.props.createSale(this.state).then(
-        () => { this.setState({ done: true }) },
-        ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) )
-    }
-  }
 
-  componentWillUnmount() {
-    clearTimeout(this.clickTimeout);
+      if (this.state._id) {
+        this.props.updateSale(this.state).then(
+          () => { this.setState({ done: true }) },
+          ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) )   
+      } else {        
+        this.props.createSale(this.state).then(
+          () => { this.setState({ done: true }) },
+          ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) )   
+      }
+    }
   }
 
   handleChangeDate(date) {
@@ -195,5 +198,5 @@ function mapStateToProps(state, props) {
   return { sale: null }
 }
 
-export default connect(mapStateToProps, { createSale, fetchSale })(SaleForm)
+export default connect(mapStateToProps, { createSale, fetchSale, updateSale })(SaleForm)
 
