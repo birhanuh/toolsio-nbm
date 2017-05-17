@@ -51,7 +51,7 @@ export default {
           callback(null, err, null)
           return
         }
-        console.log('sale: ', sale)
+      
         callback(null, null, sale)
       })
     } else {

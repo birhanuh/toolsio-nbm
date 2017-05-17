@@ -1,9 +1,6 @@
 import React, { Component } from 'react' 
-import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { createSale, fetchSale, updateSale } from '../../actions/saleActions'
 import FormField from '../../utils/FormField'
 
 import DatePicker from 'react-datepicker';
@@ -23,8 +20,7 @@ class SaleForm extends Component {
       status: this.props.sale ? this.props.sale.status : '',
       description: this.props.sale ? this.props.sale.description : '',
       errors: {},
-      isLoading: false,
-      done: false 
+      isLoading: false
     }
   }
 
@@ -36,12 +32,6 @@ class SaleForm extends Component {
       status: nextProps.sale.status,
       description: nextProps.sale.description
     })
-  }
-
-  componentDidMount = () => {
-    if (this.props.match.params._id) {
-      this.props.fetchSale(this.props.match.params._id)
-    } else {}
   }
 
   handleChange = (e) => {
@@ -77,17 +67,10 @@ class SaleForm extends Component {
 
     // Validation
     if (this.isValid) { 
+      const { _id, name, date, status, description } = this.state
       this.setState({ isLoading: true })
-
-      if (this.state._id) {
-        this.props.updateSale(this.state).then(
-          () => { this.setState({ done: true }) },
-          ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) )   
-      } else {        
-        this.props.createSale(this.state).then(
-          () => { this.setState({ done: true }) },
-          ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) )   
-      }
+      this.props.saveSale({ _id, name, date, status, description })
+        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 
@@ -98,14 +81,14 @@ class SaleForm extends Component {
   } 
 
   render() {
-    const { name, date, status, description, errors, isLoading, done } = this.state
+    const { name, date, status, description, errors, isLoading } = this.state
     
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
     //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
     //    { key: 'ready', value: 'ready', text: 'READY' } ,
     //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
-    
-    const form = (
+
+    return (  
       <div>
         <h1 className="ui header">Create new Sale</h1>
         <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
@@ -175,28 +158,8 @@ class SaleForm extends Component {
         </form> 
       </div>
     )
-
-    return (  
-      <div>            
-        { done ? <Redirect to="/sales" /> : form }  
-      </div>  
-    )
   }
 }
 
-SaleForm.propTypes = {
-  createSale: React.PropTypes.func.isRequired
-}
-
-function mapStateToProps(state, props) {
-  const { match } = props
-  if (match.params._id) {
-    return {
-      sale: state.sales.find(item => item._id === match.params._id)
-    }
-  } 
-  return { sale: null }
-}
-
-export default connect(mapStateToProps, { createSale, fetchSale, updateSale })(SaleForm)
+export default SaleForm
 

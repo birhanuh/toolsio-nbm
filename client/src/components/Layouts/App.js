@@ -8,7 +8,7 @@ import Signup from '../Signup/Signup'
 import Login from '../Login/Login'
 import Projects from '../Projects/Projects'
 import Sales from '../Sales/Sales'
-import SaleForm from '../Sales/SaleForm'
+import SaleFormPage from '../Sales/SaleFormPage'
 import requireAuth from '../../utils/requireAuth'
 
 import NavigationBar from './NavigationBar'
@@ -39,8 +39,8 @@ class App extends Component {
           <Route path="/dashboard" component={requireAuth(Dashboard)} />
           <Route exact path="/projects" component={requireAuth(Projects)} />
           <Route exact path="/sales" component={requireAuth(Sales)} />
-          <Route path="/sales/new" component={requireAuth(SaleForm)} />
-          <Route path="/sales/:_id" component={requireAuth(SaleForm)} />
+          <Route path="/sales/new" component={requireAuth(SaleFormPage)} />
+          <Route path="/sales/:_id" component={requireAuth(SaleFormPage)} />
         </section>
         
         { !authPages &&
