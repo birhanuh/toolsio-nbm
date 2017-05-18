@@ -2,17 +2,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { createSale, fetchSale, updateSale } from '../../actions/saleActions'
-import SaleForm from './SaleForm'
+import Form from './Form'
 
-class SaleFormPage  extends Component {
+class FormPage  extends Component {
   
   state = {
     redirect: false
   }
 
   componentDidMount = () => {
-    if (this.props.match.params._id) {
-      this.props.fetchSale(this.props.match.params._id)
+    const { match } = this.props
+    if (match.params._id) {
+      this.props.fetchSale(match.params._id)
     } else {}
   }
 
@@ -32,14 +33,14 @@ class SaleFormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/sales" /> : 
-          <SaleForm sale={this.props.sale} saveSale={this.saveSale} />
+          <Form sale={this.props.sale} saveSale={this.saveSale} />
         }
       </div>
     )
   }
 }
 
-SaleFormPage.propTypes = {
+FormPage.propTypes = {
   createSale: React.PropTypes.func.isRequired,
   fetchSale: React.PropTypes.func.isRequired,
   updateSale: React.PropTypes.func.isRequired
@@ -55,6 +56,6 @@ function mapStateToProps(state, props) {
   return { sale: null }
 }
 
-export default connect(mapStateToProps, { createSale, fetchSale, updateSale })(SaleFormPage)
+export default connect(mapStateToProps, { createSale, fetchSale, updateSale })(FormPage)
 
 

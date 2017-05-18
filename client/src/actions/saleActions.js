@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED } from './types'
+import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED, SALE_DELETED } from './types'
 
 export function setSales(sales) {
   return {
@@ -29,15 +29,34 @@ export function saleUpdated(sale) {
   }
 }
 
+export function saleDeleted(saleId) {
+  return {
+    type: SALE_DELETED,
+    saleId
+  }
+}
+
 export function createSale(sale) {
   return dispatch => {
-    return axios.post('/api/sales', sale).then(res => { dispatch(addSale(res.data.result)) } )
+    return axios.post('/api/sales', sale).then(res => { 
+      dispatch(addSale(res.data.result)) 
+    })
   }
 }
 
 export function updateSale(sale) {
   return dispatch => {
-    return axios.put(`/api/sales/${sale._id}`, sale).then(res => { dispatch(saleUpdated(res.data.result)) } )
+    return axios.put(`/api/sales/${sale._id}`, sale).then(res => { 
+      dispatch(saleUpdated(res.data.result)) 
+    })
+  }
+}
+
+export function deleteSale(id) {
+  return dispatch => {
+    return axios.delete(`/api/sales/${id}`).then(res => { 
+      dispatch(saleDeleted(id)) 
+    })
   }
 }
 

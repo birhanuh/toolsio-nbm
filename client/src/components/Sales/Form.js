@@ -10,7 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 // JS semantic
 //import { Dropdown, Input } from 'semantic-ui-react'
 
-class SaleForm extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -161,5 +161,5 @@ class SaleForm extends Component {
   }
 }
 
-export default SaleForm
+export default Form
 

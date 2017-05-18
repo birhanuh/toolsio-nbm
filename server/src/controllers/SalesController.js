@@ -42,7 +42,7 @@ export default {
     }
   },
 
-  update: (id, params, callback) => {
+  findByIdAndUpdate: (id, params, callback) => {
     const { errors, isValid } = Validation.validateSaleInput(params)
 
     if (isValid) {
@@ -60,14 +60,14 @@ export default {
 
   },
 
-  delete: (id, callback) => {
-    Sale.findByIdAndRemove(id, function(err, sale) {
+  findByIdAndRemove: (id, callback) => {
+    Sale.findByIdAndRemove(id, function(err, r) {
       if (err) {
-        callback(err, null)
+        callback(err, {})
         return
       }
 
-      callback(null, null)
+      callback(null, {})
     })
   }
 }

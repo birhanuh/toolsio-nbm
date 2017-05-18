@@ -1,4 +1,4 @@
-import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED } from '../actions/types'
+import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED, SALE_DELETED } from '../actions/types'
 
 export default function sales(state = [], action = {}) {
   switch(action.type) {
@@ -7,6 +7,9 @@ export default function sales(state = [], action = {}) {
         ...state, 
         action.sale
       ]
+
+    case SALE_DELETED:
+      return state.filter(item => item._id !== action.saleId)
     
     case SALE_UPDATED:
       return state.map(item => {

@@ -74,7 +74,7 @@ router.get('/:resource/:id', authenticate, function(req, res) {
 
 })
 
-// POST
+// POST resource 
 router.post('/:resource', authenticate, function(req, res) {
   
   var resource = req.params.resource
@@ -114,6 +114,7 @@ router.post('/:resource', authenticate, function(req, res) {
 
 })
 
+// UPDATE resource with id
 router.put('/:resource/:id', authenticate, function(req, res) {
 
   var resource = req.params.resource
@@ -151,4 +152,39 @@ router.put('/:resource/:id', authenticate, function(req, res) {
   })
 })
 
+// DELETE resource with id
+router.delete('/:resource/:id', authenticate, function(req, res) {
+  
+  var resource = req.params.resource
+  var id = req.params.id
+
+  var controller = controllers[resource]
+  if (controller == null) {
+    res.status(500).json({
+      errors: {
+        confirmation: 'fail',
+        message: 'Invalid Resource Request: '+resource
+      }
+    })
+    return
+  }
+
+  controller.findByIdAndRemove(id, function(err, result) {
+    if (err) {
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
+      })
+      return
+    }
+  
+    res.json({
+      confirmation: 'success',
+      result: result
+    })
+  })
+
+})
 export default router
