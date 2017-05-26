@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import List from './List'
 
-class Dashboard extends Component {
+class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -93,4 +93,4 @@ class Dashboard extends Component {
   }  
 }
 
-export default Dashboard
+export default Page

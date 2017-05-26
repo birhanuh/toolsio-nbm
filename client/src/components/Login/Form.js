@@ -5,7 +5,7 @@ import { loginRequest } from '../../actions/authentication'
 import { addFlashMessage } from '../../actions/flashMessages'
 import classnames from 'classnames'
 
-class LoginForm extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -89,14 +89,14 @@ class LoginForm extends Component {
   }
 }
 
-LoginForm.propTypes = {
+Form.propTypes = {
   loginRequest: React.PropTypes.func.isRequired,
   addFlashMessage: React.PropTypes.func.isRequired
 }
 
-LoginForm.contextTypes = {
+Form.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-export default connect(null, { loginRequest, addFlashMessage })(LoginForm)
+export default connect(null, { loginRequest, addFlashMessage })(Form)
 

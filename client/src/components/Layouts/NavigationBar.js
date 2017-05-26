@@ -1,9 +1,15 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/authentication'
 
 import logo from '../../images/logo-square.png'; 
+
+const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
+  <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
+    <Link className={match ? 'active item' : 'item' } to={to}>{label}</Link>
+  )} />
+)
 
 class NavigationBar extends Component {
   logout(e) {
@@ -21,10 +27,10 @@ class NavigationBar extends Component {
             <img className="logo" src={logo} alt="logo-square" />
             Toolsio
           </Link>
-          <Link className="item" to="/dashboard">Dashboard</Link>
-          <Link className="item" to="/projects">Projects</Link>
-          <Link className="item" to="/sales">Sales</Link>
-          <Link className="item" to="/invoices">Invoices</Link>
+          <ActiveLink activeOnlyWhenExact to="/dashboard" label="Dashboard" />
+          <ActiveLink activeOnlyWhenExact to="/projects" label="Projects" />
+          <ActiveLink activeOnlyWhenExact to="/sales" label="Sales" />
+          <ActiveLink activeOnlyWhenExact to="/invoices" label="Invoices" />
      
           <div className="right item">      
             <a className="ui inverted button" to="#" onClick={this.logout.bind(this)} >Log out</a>   
@@ -40,9 +46,9 @@ class NavigationBar extends Component {
             <Link className="toc item" to="/">
               <i className="sidebar icon"></i>
             </Link> 
-            <Link className="active item" to="/">Home</Link>
-            <Link className="item" to="/about">About</Link>
-            <Link className="item" to="/contact">Contact</Link>
+            <ActiveLink activeOnlyWhenExact to="/" label="Home" />
+            <ActiveLink activeOnlyWhenExact to="/about" label="About" />
+            <ActiveLink activeOnlyWhenExact to="/contact" label="Contact" />
          
             <div className="right item">                    
               <Link className="ui inverted button"  to="/login">Log in</Link>     

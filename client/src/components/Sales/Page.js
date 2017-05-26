@@ -4,7 +4,7 @@ import List from './List'
 import { connect } from 'react-redux'
 import { fetchSales, deleteSale } from '../../actions/saleActions'
 
-class Sales extends Component {
+class Page extends Component {
 
   componentDidMount() {
     this.props.fetchSales()
@@ -27,7 +27,7 @@ class Sales extends Component {
   }
 }
 
-Sales.propTypes = {
+Page.propTypes = {
   sales: React.PropTypes.array.isRequired,
   fetchSales: React.PropTypes.func.isRequired,
   deleteSale: React.PropTypes.func.isRequired
@@ -39,4 +39,4 @@ function mapSateToProps(state) {
   }
 }
 
-export default connect(mapSateToProps, { fetchSales, deleteSale })(Sales)
+export default connect(mapSateToProps, { fetchSales, deleteSale })(Page)
