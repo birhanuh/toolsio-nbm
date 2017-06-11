@@ -24,8 +24,12 @@ class App extends Component {
 
     let internalPages = (landingPage || authPages) ? false : true 
 
+    if (authPages) {
+      document.body.className = 'auth'
+    } 
+
     return (
-      <div className={classnames({'pusher': landingPage, 'ui middle aligned center aligned grid auth': authPages})}>
+      <div className={classnames({'pusher': landingPage, 'ui middle aligned center aligned grid': authPages})}>
         
         { !authPages && <NavigationBar /> }
       

@@ -102,7 +102,6 @@ body {
 
 .auth {
   background-color: #DADADA;
-  height: 100%;
 }
 
 .auth .column {
@@ -131,6 +130,11 @@ body {
 // UI form
 .ui.form .field>label {
   text-align: left;
+}
+
+// UI message
+.ui.message p:last-child {
+  margin-top: 0;
 }
 
 // Margins
