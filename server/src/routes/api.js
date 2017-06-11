@@ -1,6 +1,6 @@
-var express = require('express')
-var router = express.Router()
-var controllers = require('../controllers')
+import express from 'express'
+let router = express.Router()
+import controllers from '../controllers'
 import authenticate from '../middlewares/authenticate'
 
 // POST recources (authenticate middleware function called when request comes and it checks for toke validation,
@@ -9,7 +9,6 @@ import authenticate from '../middlewares/authenticate'
 router.get('/:resource', authenticate, function(req, res) {
   
   var resource = req.params.resource
-  
   var controller = controllers[resource]
   if (controller == null) {
     res.status(500).json({
@@ -61,11 +60,12 @@ router.get('/:resource/:id', authenticate, function(req, res) {
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
-          message: 'Sale not found'
+          message: err
         }
       })
       return
     }
+  
     res.json({
       confirmation: 'success',
       result: result
@@ -74,7 +74,7 @@ router.get('/:resource/:id', authenticate, function(req, res) {
 
 })
 
-// POST
+// POST resource 
 router.post('/:resource', authenticate, function(req, res) {
   
   var resource = req.params.resource
@@ -114,4 +114,77 @@ router.post('/:resource', authenticate, function(req, res) {
 
 })
 
-module.exports = router;
+// UPDATE resource with id
+router.put('/:resource/:id', authenticate, function(req, res) {
+
+  var resource = req.params.resource
+
+  var controller = controllers[resource]
+  if (controller == null) {
+    res.status(500).json({
+      errors: {
+        confirmation: 'fail',
+        message: 'Invalid Resource Request: '+resource
+      }  
+    })
+  } 
+
+  controller.update(req.params.id, req.body, function(valdiationErr, dbError, result) {
+    if (valdiationErr) {
+      res.status(400).json({ 
+        errors: valdiationErr 
+      })
+      return
+    }
+    if (dbError) {
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: dbError
+        }
+      })
+      return
+    }
+    res.json({
+      confirmation: 'success',
+      result: result
+    })
+  })
+})
+
+// DELETE resource with id
+router.delete('/:resource/:id', authenticate, function(req, res) {
+  
+  var resource = req.params.resource
+  var id = req.params.id
+
+  var controller = controllers[resource]
+  if (controller == null) {
+    res.status(500).json({
+      errors: {
+        confirmation: 'fail',
+        message: 'Invalid Resource Request: '+resource
+      }
+    })
+    return
+  }
+
+  controller.findByIdAndRemove(id, function(err, result) {
+    if (err) {
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
+      })
+      return
+    }
+  
+    res.json({
+      confirmation: 'success',
+      result: result
+    })
+  })
+
+})
+export default router

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Validation } from '../../utils'
 import FormField from '../../utils/FormField'
 
-class SignupForm extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -136,17 +136,17 @@ class SignupForm extends Component {
 }
 
 // Proptypes definition
-SignupForm.propTypes = {
+Form.propTypes = {
   signupRequest: React.PropTypes.func.isRequired,
   addFlashMessage: React.PropTypes.func.isRequired,
   isUserExists: React.PropTypes.func.isRequired
 }
 
 // Contexttype definition
-SignupForm.contextTypes = {
+Form.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-export default SignupForm
+export default Form
 
 

@@ -1,20 +1,22 @@
 import React, { Component } from 'react' 
-import LoginForm from './LoginForm'
+import Form from './Form'
 
 import logo from '../../images/logo-square.png'; 
 
-class Login extends Component {
+class Page extends Component {
   render() {
     return (       
       <div>
         <h2 className="ui teal image header">
-          <img src={logo} className="image" alt="logo-square" />
+          <a className="" href="/">
+            <img src={logo} className="image" alt="logo-square" />
+          </a>
           <div className="content">
             Log-in to your account
           </div>
         </h2>
         
-        <LoginForm />
+        <Form />
 
         <div className="ui message">
           New to us? <a href="/signup">Sign Up</a>
@@ -24,4 +26,4 @@ class Login extends Component {
   }
 }
 
-export default Login
+export default Page

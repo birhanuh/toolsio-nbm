@@ -12,6 +12,7 @@
     "react": "^15.4.2",
     "react-datepicker": "^0.46.0",
     "react-dom": "^15.4.2",
+    "react-localization": "0.0.16",
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.0.0-beta.8",
     "redux": "^3.6.0",
@@ -25,11 +26,16 @@
     "validator": "^7.0.0"
   },
   "devDependencies": {
+    "node-sass-chokidar": "0.0.1",
+    "npm-run-all": "^4.0.2",
     "react-scripts": "0.9.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

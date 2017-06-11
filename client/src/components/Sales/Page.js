@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { connect } from 'react-redux'
-import { fetchSales } from '../../actions/saleActions'
+import { fetchSales, deleteSale } from '../../actions/saleActions'
 
-class Sales extends Component {
+class Page extends Component {
 
   componentDidMount() {
     this.props.fetchSales()
@@ -21,15 +21,16 @@ class Sales extends Component {
         
         <div className="ui divider"></div>
 
-        <List sales={this.props.sales} />      
+        <List sales={this.props.sales} deleteSale={deleteSale} />      
       </div>   
     )
   }
 }
 
-Sales.propTypes = {
+Page.propTypes = {
   sales: React.PropTypes.array.isRequired,
-  fetchSales: React.PropTypes.func.isRequired
+  fetchSales: React.PropTypes.func.isRequired,
+  deleteSale: React.PropTypes.func.isRequired
 }
 
 function mapSateToProps(state) {
@@ -38,4 +39,4 @@ function mapSateToProps(state) {
   }
 }
 
-export default connect(mapSateToProps, { fetchSales })(Sales)
+export default connect(mapSateToProps, { fetchSales, deleteSale })(Page)

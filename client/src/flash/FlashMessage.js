@@ -10,12 +10,12 @@ class FlashMessage extends Component {
   render() {
     const { type, text } = this.props.message
     return (
-      <div className={classnames('alert', {
-        'alert-success': type === 'success',
-        'alert-danger': type === 'error'
+      <div className={classnames('ui message', {
+        'positive': type === 'success',
+        'negative': type === 'error'
       })}>
-        <button onClick={this.onClick.bind(this)} className="close"><span>&times;</span></button>
-        {text}
+        <i onClick={this.onClick.bind(this)} className="close icon"></i>
+        <p>{text}</p>
       </div>
     )
   }

@@ -25,6 +25,12 @@ export default (req, res, next) => {
             next()
           }
         })
+
+        // We don't need to query db on each request. Later where we need user
+        // we can query db and handle non existing user. Most of the time we need user id anyway e.g
+        // to create relationship b/n tables...
+        //  req.userId = decoded.id
+        //  next()
       }
     })
   } else {

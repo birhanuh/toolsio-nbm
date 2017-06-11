@@ -1,9 +1,7 @@
-import express from 'express'
-
-import ProjectsController from './ProjectsController'
-import SalesController from'./SalesController'
+import projects from './ProjectsController'
+import sales from'./SalesController'
 
 module.exports = {
-  projects: ProjectsController,
-  sales: SalesController,
+  projects,
+  sales
 }

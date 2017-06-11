@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import classnames from 'classnames'
 
-import Dashboard from './Dashboard'
+import Dashboard from '../Dashboard/Page'
 import Landing from './Landing'
-import Signup from '../Signup/Signup'
-import Login from '../Login/Login'
+import Signup from '../Signup/Page'
+import Login from '../Login/Page'
 import Projects from '../Projects/Projects'
-import Sales from '../Sales/Sales'
-import CreateSale from '../Sales/Create'
+import Sales from '../Sales/Page'
+import SaleFormPage from '../Sales/FormPage'
 import requireAuth from '../../utils/requireAuth'
 
 import NavigationBar from './NavigationBar'
@@ -24,8 +24,12 @@ class App extends Component {
 
     let internalPages = (landingPage || authPages) ? false : true 
 
+    if (authPages) {
+      document.body.className = 'auth'
+    } 
+
     return (
-      <div className={classnames({'pusher': landingPage, 'ui middle aligned center aligned grid auth': authPages})}>
+      <div className={classnames({'pusher': landingPage, 'ui middle aligned center aligned grid': authPages})}>
         
         { !authPages && <NavigationBar /> }
       
@@ -39,8 +43,8 @@ class App extends Component {
           <Route path="/dashboard" component={requireAuth(Dashboard)} />
           <Route exact path="/projects" component={requireAuth(Projects)} />
           <Route exact path="/sales" component={requireAuth(Sales)} />
-          <Route path="/sales/new" component={requireAuth(CreateSale)} />
-          <Route path="/sales/:_id" component={requireAuth(CreateSale)} />
+          <Route exact path="/sales/new" component={requireAuth(SaleFormPage)} />
+          <Route exact path="/sales/:id" component={requireAuth(SaleFormPage)} />
         </section>
         
         { !authPages &&

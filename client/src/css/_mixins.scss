@@ -1,0 +1,56 @@
+// Mixin functions
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+       -o-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin transform-translate($percent) {
+  -webkit-transform: translateY($percent);
+     -moz-transform: translateY($percent);
+      -ms-transform: translateY($percent);
+       -o-transform: translateY($percent);
+          transform: translateY($percent);
+}
+
+@mixin web-appearance($display) {
+  -webkit-appearance: ($display);
+     -moz-appearance: ($display);
+      -ms-appearance: ($display);
+       -o-appearance: ($display);
+          appearance: ($display);
+}
+
+@mixin scrollbar {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+     -moz-appearance: inset 0 0 6px rgba(0,0,0,0.3);
+      -ms-appearance: inset 0 0 6px rgba(0,0,0,0.3);
+       -o-appearance: inset 0 0 6px rgba(0,0,0,0.3);
+          appearance: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+@mixin transition($options) {
+  // e.g @include transition (2s ease-in)
+  -webkit-transition: opacity ($options);
+     -moz-transition: opacity ($options);
+       -o-transition: opacity ($options);
+      -ms-transition: opacity ($options);
+          transition: opacity ($options);
+}
+
+@mixin animation-delay($second) {
+  -webkit-animation-delay: ($second) !important;
+     -moz-animation-delay: ($second) !important;
+      -ms-animation-delay: ($second) !important;
+       -o-animation-delay: ($second) !important;
+          animation-delay: ($second) !important;
+}
+
+@mixin animation-duration($second) {
+  -webkit-animation-duration: ($second);
+          animation-duration: ($second);
+      -webkit-animation-fill-mode: both;
+              animation-fill-mode: both;
+}

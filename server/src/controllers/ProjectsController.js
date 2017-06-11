@@ -3,7 +3,7 @@ import Validation from '../utils'
 
 export default {
   
-  find: function(params, callback) {
+  find: (params, callback) => {
     Project.find(params, function(err, projects) {
       if (err) {
         callback(err, null)
@@ -14,7 +14,7 @@ export default {
     })
   },
 
-  findById: function(id, callback) {
+  findById: (id, callback) => {
     Project.findById(id, function(err, project) {
       if (err) {
         callback(err, null)
@@ -25,7 +25,7 @@ export default {
     })
   },
 
-  create: function(params, callback) {
+  create: (params, callback) => {
     Project.create(params, function(err, project) {
       if (err) {
         callback(err, null)
@@ -35,7 +35,7 @@ export default {
     })
   },
 
-  update: function(id, params, callback) {
+  update: (id, params, callback) => {
     Project.findByIdAndUpdate(id, params, {new: true}, function(err, project) {
       if (err) {
         callback(err, null)
@@ -46,7 +46,7 @@ export default {
     })
   },
 
-  delete: function(id, callback) {
+  delete: (id, callback) => {
     Project.findByIdAndRemove(id, function(err, project) {
       if (err) {
         callback(err, null)

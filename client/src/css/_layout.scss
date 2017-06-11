@@ -16,7 +16,8 @@ body {
   /*background-color: $body-background-color;
   color: $body-text-color;*/
   font-family: 'Open Sans', sans-serif;
-  font-size: 13px;
+  font-size: 16px;
+  line-height: 1;
   margin-bottom: 430px;
 }
 
@@ -101,15 +102,39 @@ body {
 
 .auth {
   background-color: #DADADA;
-  height: 100%;
 }
 
 .auth .column {
+  margin-top: 100px;
   max-width: 450px;
 }
 
 .main.container {
   margin-top: 7em;
+}
+
+// UI header
+.ui.header>a {
+  display: inline-block;
+  margin-top: .14285714em;
+  width: 2.5em;
+  height: auto;
+  vertical-align: middle;
+}
+
+.ui.header>a+.content {
+  padding-left: .75rem;
+  vertical-align: middle;
+}
+
+// UI form
+.ui.form .field>label {
+  text-align: left;
+}
+
+// UI message
+.ui.message p:last-child {
+  margin-top: 0;
 }
 
 // Margins

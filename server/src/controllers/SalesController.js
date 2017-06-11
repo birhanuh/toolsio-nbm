@@ -3,7 +3,7 @@ import { Validation } from '../utils'
 
 export default {
   
-  find: function(params, callback) {
+  find: (params, callback) => {
     Sale.find(params, function(err, sales) {
       if (err) {
         callback(err, null)
@@ -14,7 +14,7 @@ export default {
     })
   },
 
-  findById: function(id, callback) {
+  findById: (id, callback) => {
     Sale.findById(id, function(err, sale) {
       if (err) {
         callback(err, null)
@@ -25,7 +25,7 @@ export default {
     })
   },
 
-  create: function(params, callback) {
+  create: (params, callback) => {
     const { errors, isValid } = Validation.validateSaleInput(params)
 
     if (isValid) {
@@ -42,7 +42,7 @@ export default {
     }
   },
 
-  update: function(id, params, callback) {
+  findByIdAndUpdate: (id, params, callback) => {
     const { errors, isValid } = Validation.validateSaleInput(params)
 
     if (isValid) {
@@ -51,7 +51,7 @@ export default {
           callback(null, err, null)
           return
         }
-
+      
         callback(null, null, sale)
       })
     } else {
@@ -60,14 +60,14 @@ export default {
 
   },
 
-  delete: function(id, callback) {
-    Sale.findByIdAndRemove(id, function(err, sale) {
+  findByIdAndRemove: (id, callback) => {
+    Sale.findByIdAndRemove(id, function(err, r) {
       if (err) {
-        callback(err, null)
+        callback(err, {})
         return
       }
 
-      callback(null, null)
+      callback(null, {})
     })
   }
 }

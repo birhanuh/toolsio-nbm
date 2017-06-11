@@ -1,7 +1,7 @@
 import React from 'react'
 import Tr from './Tr'
 
-export default function List({ sales }) {
+export default function List({ sales, deleteSale }) {
   const emptyMessage = (
     <p>There are no games yet in your collection.</p>
   )
@@ -18,7 +18,7 @@ export default function List({ sales }) {
           </tr>
         </thead>
         <tbody>
-          { sales.map(sale => <Tr sale={sale} key={sale._id} />) }
+          { sales.map(sale => <Tr sale={sale} key={sale._id} deleteSale={deleteSale} />) }
         </tbody>
     </table>
   )
@@ -31,5 +31,6 @@ export default function List({ sales }) {
 }
 
 List.propTypes = {
-  sales: React.PropTypes.array.isRequired
+  sales: React.PropTypes.array.isRequired,
+  deleteSale: React.PropTypes.func.isRequired
 }

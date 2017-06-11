@@ -1,9 +1,18 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/authentication'
 
+// Localization 
+import T from 'i18n-react';
+
 import logo from '../../images/logo-square.png'; 
+
+const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
+  <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
+    <Link className={match ? 'active item' : 'item' } to={to}>{label}</Link>
+  )} />
+)
 
 class NavigationBar extends Component {
   logout(e) {
@@ -21,13 +30,13 @@ class NavigationBar extends Component {
             <img className="logo" src={logo} alt="logo-square" />
             Toolsio
           </Link>
-          <Link className="item" to="/dashboard">Dashboard</Link>
-          <Link className="item" to="/projects">Projects</Link>
-          <Link className="item" to="/sales">Sales</Link>
-          <Link className="item" to="/invoices">Invoices</Link>
+          <ActiveLink activeOnlyWhenExact to="/dashboard" label={T.translate("dashboard.header")} />
+          <ActiveLink activeOnlyWhenExact to="/projects" label={T.translate("projects.header")} />
+          <ActiveLink activeOnlyWhenExact to="/sales" label={T.translate("sales.header")} />
+          <ActiveLink activeOnlyWhenExact to="/invoices" label={T.translate("invoices.header")}/>
      
           <div className="right item">      
-            <a className="ui inverted button" to="#" onClick={this.logout.bind(this)} >Log out</a>   
+            <a className="ui inverted button" to="#" onClick={this.logout.bind(this)} >{T.translate("internal_navigation.log_out")}</a>   
           </div>
         </div>  
       </nav>
@@ -40,33 +49,34 @@ class NavigationBar extends Component {
             <Link className="toc item" to="/">
               <i className="sidebar icon"></i>
             </Link> 
-            <Link className="active item" to="/">Home</Link>
-            <Link className="item" to="/about">About</Link>
-            <Link className="item" to="/contact">Contact</Link>
+            <ActiveLink activeOnlyWhenExact to="/" label={T.translate("landing.home.header")} />
+            <ActiveLink activeOnlyWhenExact to="/features" label={T.translate("landing.features.header")} />
+            <ActiveLink activeOnlyWhenExact to="/clients" label={T.translate("landing.clients.header")} />
+            <ActiveLink activeOnlyWhenExact to="/pricing" label={T.translate("landing.pricing.header")} />
+            <ActiveLink activeOnlyWhenExact to="/testmonial" label={T.translate("landing.testmonial.header")} />
+            <ActiveLink activeOnlyWhenExact to="/contacts" label={T.translate("landing.contacts.header")} />
          
             <div className="right item">                    
-              <Link className="ui inverted button"  to="/login">Log in</Link>     
-              <Link className="ui inverted button" to="/signup">Sign up</Link>    
+              <Link className="ui inverted button"  to="/login">{T.translate("accounts.login.sign_in")}</Link>     
+              <Link className="ui inverted button" to="/signup">{T.translate("accounts.new.sign_up")}</Link>    
             </div>  
           </div>
         </div>
 
         <div className="ui text container">
-          <h1 className="ui inverted header">
-            Welcome to Toolsio!
-          </h1>
-          <h2>Do whatever you want when you want to.</h2>
-          <div className="ui huge primary button">Get Started <i className="right arrow icon"></i></div>
+          <h1 className="ui inverted header">{T.translate("landing.home.welcome")}</h1>
+          <h2>{T.translate("landing.home.slogan")}</h2>
+          <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
         </div>
       </div>
     )
 
     return (
-      <div>    
+      <header>    
         {/* Call links conditionally.  */}
         { isAuthenticated ? userLinks : guestLinks }
 
-      </div>
+      </header>
     )
   }
 }

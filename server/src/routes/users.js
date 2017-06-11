@@ -13,8 +13,8 @@ function validateRegistrationInput(data, otherValidation) {
   let { errors } = otherValidation(data)
 
   return User.findAsync({ email: data.email }).then(user => {
-    if (user[0]) { 
-      if (user[0].email === data.email) { errors.email = 'There is user with such email' }
+    if (user) { 
+      if (user[0].email === data.email) { errors.email = 'Email is already taken' }
     }
 
     return {
