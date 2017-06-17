@@ -1,67 +1,211 @@
 import React, { Component } from 'react'
 
 // JS Custome
-import '../../js/landing_page.js'
+import '../../js/landing.js'
+
+// Localization 
+import T from 'i18n-react'
 
 // Images
-import white_image from '../../images/white-image.png'; 
 import nan from '../../images/nan.jpg'; 
 
 class Landing extends Component {
+
   render() {
     return (
       <div>
-        <div className="ui vertical stripe segment">
+        <div className="ui vertical stripe features background-white">
           <div className="ui middle aligned stackable grid container">
             <div className="row">
-              <div className="eight wide column">
-                <h3 className="ui header">We Help Companies and Companions</h3>
-                <p>We can give your company superpowers to do things that they never thought possible. Let us delight your customers and empower your needs...through pure data analytics.</p>
-                <h3 className="ui header">We Make Bananas That Can Dance</h3>
-                <p>Yes that's right, you thought it was the stuff of dreams, but even bananas can be bioengineered.</p>
+              <div className="center aligned column">
+                <h3 className="ui header">{T.translate("landing.features.header")}</h3>
               </div>
-              <div className="six wide right floated column">
-                <img src={white_image} className="ui large bordered rounded image" alt="" />
-              </div>
-            </div>
+            </div>  
+            <div className="row">  
+              <div className="eight wide column">     
+                <div className="sprite invoice"></div>
+                <blockquote>
+                  <h4 className="ui header">{T.translate("landing.features.invoice.header")}</h4>
+                  <div className="body-text">
+                    <p>{T.translate("landing.features.invoice.text")}</p>
+                  </div>
+                </blockquote>  
+              </div>  
+              <div className="eight wide column">     
+                <div className="sprite sale"></div>
+                <blockquote>
+                  <h4 className="ui header">{T.translate("landing.features.sale.header")}</h4>
+                  <div className="body-text">
+                    <p>{T.translate("landing.features.sale.text")}</p>
+                  </div>
+                </blockquote>  
+              </div>  
+              <div className="eight wide column">     
+                <div className="sprite project"></div>
+                <blockquote>
+                  <h4 className="ui header">{T.translate("landing.features.project.header")}</h4>
+                  <div className="body-text">
+                    <p>{T.translate("landing.features.project.text")}</p>
+                  </div>
+                </blockquote>  
+              </div>  
+              <div className="eight wide column">     
+                <div className="sprite analysis"></div>
+                <blockquote>
+                  <h4 className="ui header">{T.translate("landing.features.analysis.header")}</h4>
+                  <div className="body-text">
+                    <p>{T.translate("landing.features.analysis.text")}</p>
+                  </div>
+                </blockquote>  
+              </div>  
+            </div>  
+          </div>
+        </div>
+
+        <div className="ui vertical stripe clients background-xx-light-grey">          
+          <div className="ui middle aligned stackable grid container">
             <div className="row">
               <div className="center aligned column">
-                <a className="ui huge button">Check Them Out</a>
+                <h3 className="ui header">{T.translate("landing.clients.header")}</h3>
               </div>
+            </div>  
+            <div className="ui text container">
+              <div className="ui three column grid">
+                <div className="center aligned row">
+                  <div className="column">
+                    <div className="company-logo"><div className="sprite logo-one"></div></div>
+                  </div>
+                  <div className="column">  
+                    <div className="company-logo"><div className="sprite logo-two"></div></div>
+                  </div>
+                  <div className="column">
+                    <div className="company-logo"><div className="sprite logo-one"></div></div>
+                  </div>
+                  <div className="column">
+                    <div className="company-logo"><div className="sprite logo-two"></div></div>
+                  </div>
+                  <div className="column">
+                    <div className="company-logo"><div className="sprite logo-one"></div></div>
+                  </div>
+                  <div className="column">
+                    <div className="company-logo"><div className="sprite logo-two"></div></div>
+                  </div>
+                </div>
+              </div>  
             </div>
           </div>
-        </div>
+        </div>  
 
-
-        <div className="ui vertical stripe quote segment">
-          <div className="ui equal width stackable internally celled grid">
+        <div className="ui vertical stripe testimonials">
+          <div className="ui text container">
             <div className="center aligned row">
               <div className="column">
-                <h3>"What a Company"</h3>
-                <p>That is what they all say about us</p>
-              </div>
-              <div className="column">
-                <h3>"I shouldn't have gone with their competitor."</h3>
-                <p>
-                  <img src={nan} className="ui avatar image" alt="nan" /> <b>Nan</b> Chief Fun Officer Acme Toys
-                </p>
+                <div className="slider slider1"> 
+                  <div className="slides">
+                    <div className="slide-item item1">
+                      <i className="quote left icon"></i>
+                      <h5> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
+                      <p>- Jonathan Deo</p>
+                    </div>    
+                    <div className="slide-item item2">
+                      <i className="quote left icon"></i>
+                      <h5> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
+                      <p>- Jonathan Deo</p>
+                    </div>  
+                    <div className="slide-item item3">
+                      <i className="quote left icon"></i>
+                      <h5> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
+                      <p>- Jonathan Deo</p>
+                    </div>  
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </div>  
         </div>
 
-        <div className="ui vertical stripe segment">
+        <div className="ui vertical stripe pricing background-xx-light-grey">          
+          <div className="ui middle aligned stackable grid container">
+            <div className="ui three column centered grid">
+              <div className="column">
+                <ul className="pricing-plan">
+                  <li className="pricing-title">Basic</li>
+                  <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
+                  <li className="pricing-price">$16</li>
+                  <li>Dashboards</li>
+                  <li>Projects view</li>
+                  <li>Contacts</li>
+                  <li>Calendar</li>
+                  <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                </ul>
+              </div>
+              <div className="column">
+                <ul className="pricing-plan">
+                  <li className="pricing-title">Standard</li>
+                  <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
+                  <li className="pricing-price">$22</li>
+                  <li>Dashboards</li>
+                  <li>Projects view</li>
+                  <li>Contacts</li>
+                  <li>Calendar</li>
+                  <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                </ul>
+              </div>
+              <div className="column">
+                <ul className="pricing-plan">
+                  <li className="pricing-title">Premium</li>
+                  <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
+                  <li className="pricing-price">$200</li>
+                  <li>Dashboards</li>
+                  <li>Projects view</li>
+                  <li>Contacts</li>
+                  <li>Calendar</li>
+                  <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>      
+        </div>  
+
+        <div className="ui vertical stripe bottom-cta background-white">
           <div className="ui text container">
-            <h3 className="ui header">Breaking The Grid, Grabs Your Attention</h3>
-            <p>Instead of focusing on content creation and hard work, we have learned how to master the art of doing nothing by providing massive amounts of whitespace and generic content that can seem massive, monolithic and worth your attention.</p>
-            <a className="ui large button">Read More</a>
-            <h4 className="ui horizontal header divider">
-              <a href="#">Case Studies</a>
-            </h4>
-            <h3 className="ui header">Did We Tell You About Our Bananas?</h3>
-            <p>Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but its really true. It took years of gene splicing and combinatory DNA research, but our bananas can really dance.</p>
-            <a className="ui large button">I'm Still Quite Interested</a>
+            <div className="ui one column centered grid">
+              <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
+            </div>
           </div>
+        </div>  
+
+        <div className="ui vertical stripe contacts background-xx-light-grey">  
+          <div className="ui middle aligned stackable grid container">        
+            <div className="ui text container">
+              <div className="ui one column centered grid">
+                <div className="one column centered row">
+                  <h3 className="ui header">{T.translate("landing.clients.header")}</h3>
+                </div>
+                <div className="one column centered row">
+                  <div className="column">
+                    <p>{T.translate("landing.contacts.description")}</p>
+                    
+                    <form className="ui form">
+                      <div className="field">
+                        <label>{T.translate("landing.contacts.name")}</label>
+                        <input type="text" name="name" placeholder={T.translate("landing.contacts.name")} />
+                      </div>
+                      <div className="field">
+                        <label>{T.translate("landing.contacts.email")}</label>
+                        <input type="text" name="email" placeholder={T.translate("landing.contacts.email")} />
+                      </div>
+                      <div className="field">
+                        <label>{T.translate("landing.contacts.message")}</label>
+                        <textarea></textarea>
+                      </div>
+                      <button className="ui primary button" type="submit">{T.translate("button.send")}</button>
+                    </form> 
+                  </div>
+                </div>  
+              </div> 
+            </div>
+          </div>         
         </div>
 
       </div>

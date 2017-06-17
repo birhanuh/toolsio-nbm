@@ -43,7 +43,8 @@
       "header": "Clients"
     },
     "pricing": {
-      "header": "Pricing"
+      "header": "Pricing",
+      "learn_more": "Learn more"
     },
     "testmonial": {
       "header": "Testmonial"
@@ -51,6 +52,9 @@
     "contacts": {
       "header": "Contacts",
       "description": "You can contact us freely by sending a message. For example, fo inquires related with how to upgrade your free tier and have access to more feature. For reporting softwares bugs. Or generally, how to use the serivces ans so on...",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
       "create": {
         "notice": "Thank you for your message. We will contact you soon!",
         "error": "Can not send message."

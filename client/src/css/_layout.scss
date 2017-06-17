@@ -137,6 +137,478 @@ body {
   margin-top: 0;
 }
 
+
+p {
+  font-size: 14px;
+}
+
+a {
+  color: $turquoise;
+  &:hover, &:focus {
+    color: $dark-turquoise;
+  }
+}
+
+// Flash
+.alert {
+  border-radius: (3px);
+}
+
+.alert-success {
+  color: $dark-grass;
+  background: $white-grass;
+  border-color: $x-light-grass;
+}
+
+.alert-warning {
+  color: $dark-orange;
+  background: $white-orange;
+  border-color: $x-light-orange;
+}
+
+.alert-danger {
+  color: $dark-red;
+  background: $white-red;
+  border-color: $x-light-red;
+}
+
+.alert-notice {
+  @extend .alert-success;
+}
+
+.alert-alert {
+  @extend .alert-danger;
+}
+
+.flash_warning {
+  @extend .alert-warning;
+}
+
+.has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
+  color: $red;
+}
+
+.has-error .form-control {
+  border-color: $red;
+  box-shadow: none;
+}
+
+.alert-dismissable .close, .alert-dismissible .close {
+  top: 0; 
+}
+
+// footer
+#footer {
+  padding: 10px;
+  background-color: $x-dark-mid-night-blue;
+  color: $dark-medium-grey;
+}
+
+.footer-inner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-top: -50px;
+  height: 55px;
+  padding: 7px;
+}
+
+// Logo
+.logo-small {
+  width: 95px;
+  height: 28px;
+}
+
+// Badge
+.badge {
+  border-radius: 2px;
+}
+
+.badge-light-blue, .label-light-blue {
+  background-color: $light-blue !important;
+}
+
+.badge-orange, .label-orange {
+  background-color: $orange !important;
+}
+
+// Line break
+.x-light-turquoise-hr {
+  border-top: 1px solid $x-light-turquoise;
+}
+
+.medium-grey-hr {
+  border-top: 1px solid $medium-grey;
+}
+
+// Thumbnail
+.thumbnail {
+  @include border-radius(0);
+}
+
+// Navbar
+.navbar-nav {
+  margin: 0 auto;
+}
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: transparent;
+}
+
+// Font awesome
+
+// Background
+.background-success {
+  background-color: $grass;
+}
+
+.background-info {
+  background-color: $blue;
+}
+
+.background-warning {
+  background-color: $orange;
+}
+
+.background-danger {
+  background-color: $red;
+}
+
+.background-yellow {
+  background-color: $yellow !important;
+}
+
+.background-white {
+  background-color: $white !important;
+}
+
+.background-light-grey {
+  background-color: $light-grey !important;
+}
+
+.background-xx-light-grey {
+  background-color: $xx-light-grey;
+}
+
+// Color
+.turquoise {
+  color: $turquoise !important;
+}
+
+.body-text {
+  color: $body-text-color !important;
+  &:hover {
+    color: $dark-grey !important;
+  }
+}
+
+.xx-light-grey {
+  color: $xx-light-grey;
+}
+
+// Navpills active
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+  color: $light-mid-night-blue;
+  background: $light-grey;
+  border: 1px solid $light-mid-night-blue;
+}
+
+.nav-pills > li > a { 
+  border-radius: 0;
+}
+
+// Display
+.visible-all-inline-block {
+  display: inline-block !important;
+}
+
+.visible-all-inline {
+  display: inline !important;
+}
+
+.visible-all-block {
+  display: block !important;
+}
+
+// Panel
+.panel {
+  @include border-radius(3px);
+  box-shadow: none;
+  //box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+
+.panel-heading, .panel-footer {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.panel-default {
+  border: 1px solid $light-grey;
+}
+
+.panel-default > .panel-heading {
+  color: inherit;
+  background-color: $white;
+}
+
+.panel-title {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 18px;
+}
+
+.panel-body {
+  padding: 20px;
+}
+
+.panel-footer {
+  background: $xx-light-grey;
+}
+
+.panel-transparent-header {
+  background: none;
+  border: none;
+  .panel-heading {
+    background: transparent;
+    padding: 10px 0;
+  }
+  .panel-body {
+    background: $white;
+    border-left: 1px solid $light-grey;
+    border-right: 1px solid $light-grey;
+    border-bottom: 1px solid $light-grey;
+  }
+}
+
+.panel-dark-header-outline {
+  .panel-heading {
+    border-bottom: 1px solid $black;
+  }
+}
+
+.panel-turqouise-header-outline {
+  .panel-heading {
+    border-bottom: 1px solid $turquoise;
+  }
+}
+
+.panel-success-bottom-outline {
+  border-bottom: 2px solid $grass;
+}
+
+.panel-info-bottom-outline {
+  border-bottom: 2px solid $blue;
+}
+
+.panel-warning-bottom-outline {
+  border-bottom: 2px solid $orange;
+}
+
+.panel-danger-bottom-outline {
+  border-bottom: 2px solid $red;
+}
+
+.sub-header {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  background-color: $light-grey;
+  margin-bottom: 10px;
+}
+
+// Progress bar
+.progress {
+  background-color: $xx-light-grey;
+  @include border-radius(2px);
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+.progress-small {
+  height: 10px;
+}
+.progress .progress-bar {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  background-color: #dc6767;
+}
+
+.progress .progress-bar.progress-bar-turquoise {
+  background-color: $turquoise !important;
+}
+
+.progress .progress-bar.progress-bar-success {
+  background-color: $grass !important;
+}
+
+.progress .progress-bar.progress-bar-info {
+  background-color: $light-blue !important;
+}
+
+.progress .progress-bar.progress-bar-danger {
+  background-color: $red !important;
+}
+
+.progress .progress-bar.progress-bar-warning {
+  background-color: $orange !important;
+}
+
+// Well
+.well {
+  position: relative;
+  background-color: $white;
+  border: 1px solid $light-grey;
+  @include border-radius(3px);
+  box-shdow: none;
+  //box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+
+// Dropdown
+.dropdown-menu {
+  min-width: 180px;
+}
+
+// Breadcrumb
+.breadcrumb > li {
+  font-size: 11px;
+}
+
+// Description list
+dt {
+  font-weight: bold;
+}
+
+//Image
+.img-circle {
+  border-radius: 50% !important;
+}
+
+.img-rounded {
+  border-radius: 3px;
+}
+
+// Custome note box
+.bs-callout {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid $light-grey;
+  border-left-width: 5px;
+  @include border-radius(3px);
+  background-color: $white
+}
+
+.bs-callout-sm {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.bs-callout-success {
+  border-left-color: $grass;
+  .heading {
+    color: $grass;
+  }
+}
+
+.bs-callout-info {
+  border-left-color: $blue;
+  .heading {
+    color: $blue;
+  }
+}
+
+.bs-callout-info-colored {
+  border-left-color: $blue;
+  background: $white-blue;
+  border-color: $blue;
+  .heading {
+    color: $blue;
+  }
+}
+
+.bs-callout-warning {
+  border-left-color: $orange;
+  .heading {
+    color: $orange;
+  }
+}
+
+.bs-callout-warning-colored {
+  border-left-color: $orange;
+  background: $white-orange;
+  border-color: $orange;
+  .heading {
+    color: $orange;
+  }
+}
+
+.bs-callout-danger {
+  border-left-color: $red;
+  .heading {
+    color: $red;
+  }
+}
+
+.well-left-text {
+  .pull-left h3, h4, h5 {
+    margin-left: 25px;
+  }
+  .row {
+    margin-left: 10px;
+  }
+}
+
+.well-text-container {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 20px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  span {
+    color: $white;
+    transform: rotate(-90deg);
+    position: absolute;
+    bottom: 7px;
+    width: 100%;
+  }
+}
+
+// Custome fieldset and legend
+.custom-fieldset {
+  border: 1px solid $light-grey !important;
+  margin: 15px 2px !important;
+  padding: 0.35em 0.625em 0.75em !important;
+  .custom-legend {
+    width: auto;
+    margin-bottom: 15px;
+    font-size: 13px;
+    color: $body-text-color;
+    border-bottom: none;
+  }
+}
+
+// Padding
+.no-gutter > [class*='col-'] {
+  padding-right:0;
+  padding-left:0;
+}
+
+// Pagination
+.pagination > li > a, .pagination > li > span {
+  color: $turquoise;
+}
+
+.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus, .pagination > .active > span, .pagination > .active > span:hover, .pagination > .active > span:focus {
+  background-color: $turquoise;
+  border-color: $dark-turquoise;
+}
+
+// Pagination
+.pagination {
+  margin: 20px 15px;
+}
+
 // Margins
 .m-t-n {
  margin-top: 0 !important;
@@ -258,7 +730,7 @@ body {
 // Sprite
 .sprite{
   display: inline-block;
-  /*background: transparent url('../images/sprite.png') no-repeat; */
+  background: transparent url('../images/sprite.png') no-repeat; 
 }
 
 @media only screen and (max-width: 700px) {

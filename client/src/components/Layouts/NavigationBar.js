@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { logout } from '../../actions/authentication'
 
 // Localization 
-import T from 'i18n-react';
+import T from 'i18n-react'
 
 import logo from '../../images/logo-square.png'; 
 
@@ -64,8 +64,11 @@ class NavigationBar extends Component {
         </div>
 
         <div className="ui text container">
-          <h1 className="ui inverted header">{T.translate("landing.home.welcome")}</h1>
-          <h2>{T.translate("landing.home.slogan")}</h2>
+          <h1 className="ui inverted header">
+            {T.translate("landing.home.welcome")}&nbsp;
+            <div className="turquoise visible-all-inline">{T.translate("internal_navigation.toolsio")}</div>
+          </h1>
+          <h3>{T.translate("landing.home.slogan")}</h3>
           <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
         </div>
       </div>
