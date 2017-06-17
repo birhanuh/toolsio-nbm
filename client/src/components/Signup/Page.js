@@ -4,6 +4,9 @@ import Form from './Form'
 import { signupRequest, isUserExists } from '../../actions/authentication'
 import { addFlashMessage } from '../../actions/flashMessages'
 
+// Localization 
+import T from 'i18n-react'
+
 import logo from '../../images/logo-square.png'; 
 
 class Page extends Component {
@@ -16,15 +19,13 @@ class Page extends Component {
           <a className="" href="/">
             <img src={logo} className="image" alt="logo-square" />
           </a>
-          <div className="content">
-            Create an account
-          </div>
+          <div className="content">{T.translate("sign_up.header")}</div>
         </h2>
         
         <Form signupRequest={signupRequest} isUserExists={isUserExists} addFlashMessage={addFlashMessage}/> 
 
         <div className="ui message"> 
-          <a href="/login">Already a user? Login here</a>
+          <a href="/login">{T.translate("sign_up.already_a_user")}</a>
         </div>
       </div>  
     )

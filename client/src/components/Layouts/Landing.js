@@ -7,7 +7,6 @@ import '../../js/landing.js'
 import T from 'i18n-react'
 
 // Images
-import nan from '../../images/nan.jpg'; 
 
 class Landing extends Component {
 
@@ -16,62 +15,52 @@ class Landing extends Component {
       <div>
         <div className="ui vertical stripe features background-white">
           <div className="ui middle aligned stackable grid container">
-            <div className="row">
-              <div className="center aligned column">
+            <div className="ui two column centered grid">
+              <div className="column">
                 <h3 className="ui header">{T.translate("landing.features.header")}</h3>
               </div>
-            </div>  
-            <div className="row">  
-              <div className="eight wide column">     
-                <div className="sprite invoice"></div>
-                <blockquote>
-                  <h4 className="ui header">{T.translate("landing.features.invoice.header")}</h4>
-                  <div className="body-text">
+              <div className="two column centered row">  
+                <div className="column">     
+                  <div className="sprite invoice left floated"></div>
+                  <blockquote>
+                    <h4 className="ui header">{T.translate("landing.features.invoice.header")}</h4>
                     <p>{T.translate("landing.features.invoice.text")}</p>
-                  </div>
-                </blockquote>  
-              </div>  
-              <div className="eight wide column">     
-                <div className="sprite sale"></div>
-                <blockquote>
-                  <h4 className="ui header">{T.translate("landing.features.sale.header")}</h4>
-                  <div className="body-text">
+                  </blockquote>  
+                </div>  
+                <div className="column">     
+                  <div className="sprite sale left floated"></div>
+                  <blockquote>
+                    <h4 className="ui header">{T.translate("landing.features.sale.header")}</h4>
                     <p>{T.translate("landing.features.sale.text")}</p>
-                  </div>
-                </blockquote>  
-              </div>  
-              <div className="eight wide column">     
-                <div className="sprite project"></div>
-                <blockquote>
-                  <h4 className="ui header">{T.translate("landing.features.project.header")}</h4>
-                  <div className="body-text">
+                  </blockquote>  
+                </div>  
+                <div className="column">     
+                  <div className="sprite project left floated"></div>
+                  <blockquote>
+                    <h4 className="ui header">{T.translate("landing.features.project.header")}</h4>
                     <p>{T.translate("landing.features.project.text")}</p>
-                  </div>
-                </blockquote>  
-              </div>  
-              <div className="eight wide column">     
-                <div className="sprite analysis"></div>
-                <blockquote>
-                  <h4 className="ui header">{T.translate("landing.features.analysis.header")}</h4>
-                  <div className="body-text">
+                  </blockquote>  
+                </div>  
+                <div className="column">     
+                  <div className="sprite analysis left floated"></div>
+                  <blockquote>
+                    <h4 className="ui header">{T.translate("landing.features.analysis.header")}</h4>
                     <p>{T.translate("landing.features.analysis.text")}</p>
-                  </div>
-                </blockquote>  
-              </div>  
-            </div>  
+                  </blockquote>  
+                </div>  
+              </div>
+            </div>    
           </div>
         </div>
 
         <div className="ui vertical stripe clients background-xx-light-grey">          
           <div className="ui middle aligned stackable grid container">
-            <div className="row">
-              <div className="center aligned column">
+            <div className="ui two column centered grid">
+              <div className="column">
                 <h3 className="ui header">{T.translate("landing.clients.header")}</h3>
               </div>
-            </div>  
-            <div className="ui text container">
-              <div className="ui three column grid">
-                <div className="center aligned row">
+              <div className="column row">
+                <div className="ui three column grid">
                   <div className="column">
                     <div className="company-logo"><div className="sprite logo-one"></div></div>
                   </div>
@@ -91,7 +80,7 @@ class Landing extends Component {
                     <div className="company-logo"><div className="sprite logo-two"></div></div>
                   </div>
                 </div>
-              </div>  
+              </div>
             </div>
           </div>
         </div>  
@@ -128,61 +117,67 @@ class Landing extends Component {
           <div className="ui middle aligned stackable grid container">
             <div className="ui three column centered grid">
               <div className="column">
-                <ul className="pricing-plan">
-                  <li className="pricing-title">Basic</li>
-                  <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
-                  <li className="pricing-price">$16</li>
-                  <li>Dashboards</li>
-                  <li>Projects view</li>
-                  <li>Contacts</li>
-                  <li>Calendar</li>
-                  <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
-                </ul>
+                <h3 className="ui header">{T.translate("landing.pricing.header")}</h3>
               </div>
-              <div className="column">
-                <ul className="pricing-plan">
-                  <li className="pricing-title">Standard</li>
-                  <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
-                  <li className="pricing-price">$22</li>
-                  <li>Dashboards</li>
-                  <li>Projects view</li>
-                  <li>Contacts</li>
-                  <li>Calendar</li>
-                  <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
-                </ul>
-              </div>
-              <div className="column">
-                <ul className="pricing-plan">
-                  <li className="pricing-title">Premium</li>
-                  <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
-                  <li className="pricing-price">$200</li>
-                  <li>Dashboards</li>
-                  <li>Projects view</li>
-                  <li>Contacts</li>
-                  <li>Calendar</li>
-                  <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
-                </ul>
-              </div>
+              <div className="three column row">
+                <div className="column">
+                  <ul className="pricing-plan">
+                    <li className="pricing-title">Basic</li>
+                    <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
+                    <li className="pricing-price">$16</li>
+                    <li>Dashboards</li>
+                    <li>Projects view</li>
+                    <li>Contacts</li>
+                    <li>Calendar</li>
+                    <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                  </ul>
+                </div>
+                <div className="column">
+                  <ul className="pricing-plan">
+                    <li className="pricing-title">Standard</li>
+                    <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
+                    <li className="pricing-price">$22</li>
+                    <li>Dashboards</li>
+                    <li>Projects view</li>
+                    <li>Contacts</li>
+                    <li>Calendar</li>
+                    <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                  </ul>
+                </div>
+                <div className="column">
+                  <ul className="pricing-plan">
+                    <li className="pricing-title">Premium</li>
+                    <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
+                    <li className="pricing-price">$200</li>
+                    <li>Dashboards</li>
+                    <li>Projects view</li>
+                    <li>Contacts</li>
+                    <li>Calendar</li>
+                    <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                  </ul>
+                </div>
+              </div>  
             </div>
           </div>      
         </div>  
 
         <div className="ui vertical stripe bottom-cta background-white">
-          <div className="ui text container">
-            <div className="ui one column centered grid">
-              <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
+          <div className="ui middle aligned stackable grid container">  
+            <div className="ui two column centered grid">
+              <div className="column centered row">
+                <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
+              </div>  
             </div>
           </div>
         </div>  
 
         <div className="ui vertical stripe contacts background-xx-light-grey">  
-          <div className="ui middle aligned stackable grid container">        
-            <div className="ui text container">
-              <div className="ui one column centered grid">
-                <div className="one column centered row">
-                  <h3 className="ui header">{T.translate("landing.clients.header")}</h3>
+          <div className="ui middle aligned stackable grid container"> 
+              <div className="ui two column centered grid">
+                <div className="column">
+                  <h3 className="ui header">{T.translate("landing.contacts.header")}</h3>
                 </div>
-                <div className="one column centered row">
+                <div className="column row">
                   <div className="column">
                     <p>{T.translate("landing.contacts.description")}</p>
                     
@@ -197,14 +192,13 @@ class Landing extends Component {
                       </div>
                       <div className="field">
                         <label>{T.translate("landing.contacts.message")}</label>
-                        <textarea></textarea>
+                        <textarea placeholder={T.translate("landing.contacts.message")+'...'}></textarea>
                       </div>
                       <button className="ui primary button" type="submit">{T.translate("button.send")}</button>
                     </form> 
                   </div>
                 </div>  
               </div> 
-            </div>
           </div>         
         </div>
 

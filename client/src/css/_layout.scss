@@ -13,12 +13,12 @@
 }
 
 body {
-  /*background-color: $body-background-color;
-  color: $body-text-color;*/
+  background-color: $body-background-color;
+  color: $body-text-color;
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   line-height: 1;
-  margin-bottom: 430px;
+  margin-bottom: 360px;
 }
 
 .hidden.menu {
@@ -101,7 +101,7 @@ body {
 }
 
 .auth {
-  background-color: #DADADA;
+  background-color: $body-background-color;
 }
 
 .auth .column {
@@ -114,7 +114,11 @@ body {
 }
 
 // UI header
-.ui.header>a {
+.ui.header {
+  color: $body-text-color;
+}
+
+.ui.header> a {
   display: inline-block;
   margin-top: .14285714em;
   width: 2.5em;
@@ -122,24 +126,19 @@ body {
   vertical-align: middle;
 }
 
-.ui.header>a+.content {
+.ui.header> a+.content {
   padding-left: .75rem;
   vertical-align: middle;
 }
 
 // UI form
-.ui.form .field>label {
+.ui.form .field > label {
   text-align: left;
 }
 
 // UI message
 .ui.message p:last-child {
   margin-top: 0;
-}
-
-
-p {
-  font-size: 14px;
 }
 
 a {
@@ -294,13 +293,6 @@ a {
 // Color
 .turquoise {
   color: $turquoise !important;
-}
-
-.body-text {
-  color: $body-text-color !important;
-  &:hover {
-    color: $dark-grey !important;
-  }
 }
 
 .xx-light-grey {

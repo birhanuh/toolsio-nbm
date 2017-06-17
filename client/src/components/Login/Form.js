@@ -5,6 +5,9 @@ import { loginRequest } from '../../actions/authentication'
 import { addFlashMessage } from '../../actions/flashMessages'
 import classnames from 'classnames'
 
+// Localization 
+import T from 'i18n-react'
+
 class Form extends Component {
   constructor(props) {
     super(props)
@@ -66,7 +69,7 @@ class Form extends Component {
             <div className={classnames("field", { error: !!errors.email })}>
               <div className="ui right icon input">
                 <i className="user icon"></i>
-                <input type="text" name="email" placeholder="E-mail address" 
+                <input type="text" name="email" placeholder={T.translate("sign_in.email")} 
                   value={this.state.user.email} onChange={this.onChange.bind(this)} />
                 <span>{errors.email}</span>
               </div>
@@ -74,13 +77,13 @@ class Form extends Component {
             <div className={classnames("field", { error: !!errors.password })}>
               <div className="ui right icon input">
                 <i className="lock icon"></i>
-                <input type="password" name="password" placeholder="Password" 
+                <input type="password" name="password" placeholder={T.translate("sign_in.password")}
                   value={this.state.user.password} onChange={this.onChange.bind(this)} />
                 <span>{errors.password}</span>
               </div>
             </div>
                   
-            <button disabled={isLoading} className="ui fluid large teal submit button">Login</button>
+            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_in.sign_in")}</button>
               
           </div>
         </form>         

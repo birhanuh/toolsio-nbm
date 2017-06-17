@@ -1,52 +1,48 @@
-.color-success { color: #3C763D; }
-.extra-margin-top { margin-top: 40px; }
-
-.icon-link:hover {
-  text-decoration: none;
-  i { color: $turquoise; }
-}
-
-.headline-top-page {
-  margin-top: 30px;
-}
-
-h1 {
-  line-height: 125%;
-  letter-spacing: -0.2px;
-}
-
-h2 {
-  line-height: 115%;
-  letter-spacing: -0.2px;
-}
-
-h3 {
-  line-height: 105%;
-  letter-spacing: -0.2px;
-}
-
-.panel, .well {
-  h1 {
-    margin-top: 6px;
-    margin-bottom: 22px;
-  }
-  h2 {
-    margin-top: 4px;
-    margin-bottom: 18px;
-  }
-  h3 {
-    margin-top: 2px;
-    margin-bottom: 14px;
-  }
-}
-
 // Sizes
-.text-bold {
-  font-weight: bold !important;
+h1, h1.ui.header {
+  font-size: 2.25em;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+  font-weight: 500;
 }
 
-.small-font {
-  font-size: 85%;
+h2, h2.ui.header {
+  font-size: 1.875em;
+  line-height: 1.15;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h3, h3.ui.header {
+  font-size: 1.5em;
+  line-height: 1.05;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h4, h4.ui.header {
+  font-size: 1.25em;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h5, h5.ui.header {
+  font-size: 1.125em;
+  line-height: 1.15;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h6, h6.ui.header {
+  font-size: 1em;
+  font-size: 1.05;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+p, span, label, a {
+  font-size: 0.875em;
 }
 
 // Labels
@@ -100,12 +96,12 @@ h3 {
 }
 
 // Links
-a.text-info:hover, a.text-info:focus {
-  color: $dark-blue;
-}
-
 a.text-success:hover, a.text-success:focus {
   color: $dark-grass;
+}
+
+a.text-info:hover, a.text-info:focus {
+  color: $dark-blue;
 }
 
 a.text-warning:hover, a.text-warning:focus {

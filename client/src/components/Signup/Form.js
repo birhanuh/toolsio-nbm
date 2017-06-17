@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { Validation } from '../../utils'
 import FormField from '../../utils/FormField'
 
+// Localization 
+import T from 'i18n-react'
+
 class Form extends Component {
   constructor(props) {
     super(props)
@@ -83,51 +86,51 @@ class Form extends Component {
         <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
           <div className="ui stacked segment">
             <FormField
-              label="First Name"
+              label={T.translate("sign_up.first_name")}
               name="firstName" 
               value={this.state.user.firstName} 
               onChange={this.onChange.bind(this)} 
-              placeholder="First Name"
+              placeholder={T.translate("sign_up.first_name")}
               error={errors.firstName}
             />
             <FormField
-              label="Last Name"
+              label={T.translate("sign_up.last_name")}
               name="lastName" 
               value={this.state.user.lastName} 
               onChange={this.onChange.bind(this)} 
-              placeholder="Last Name"
+              placeholder={T.translate("sign_up.last_name")}
               error={errors.lastName}
             />
             <FormField
-              label="Email"
+              label={T.translate("sign_up.email")}
               name="email" 
               type="email"
               value={this.state.user.email} 
               onChange={this.onChange.bind(this)} 
               checkUserExists={this.checkUserExists.bind(this)} 
-              placeholder="Email"
+              placeholder={T.translate("sign_up.email")}
               error={errors.email}
             />
             <FormField
-              label="Password"
+              label={T.translate("sign_up.password")}
               name="password" 
               type="password"
               value={this.state.user.password} 
               onChange={this.onChange.bind(this)} 
-              placeholder="Password"
+              placeholder={T.translate("sign_up.password")}
               error={errors.password}
             />
             <FormField
-              label="Confirm password"
+              label={T.translate("sign_up.confirm_password")}
               name="confirmPassword" 
               type="password"
               value={this.state.user.confirmPassword} 
               onChange={this.onChange.bind(this)} 
-              placeholder="Confirm password"
+              placeholder={T.translate("sign_up.confirm_password")}
               error={errors.confirmPassword}
             />
             
-            <button disabled={isLoading || invalid} className="ui fluid large teal submit button">Register</button>
+            <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
           </div>
         </form>         
 

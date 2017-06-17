@@ -57,8 +57,8 @@ class NavigationBar extends Component {
             <ActiveLink activeOnlyWhenExact to="/contacts" label={T.translate("landing.contacts.header")} />
          
             <div className="right item">                    
-              <Link className="ui inverted button"  to="/login">{T.translate("accounts.login.sign_in")}</Link>     
-              <Link className="ui inverted button" to="/signup">{T.translate("accounts.new.sign_up")}</Link>    
+              <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link>     
+              <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
             </div>  
           </div>
         </div>
@@ -68,7 +68,7 @@ class NavigationBar extends Component {
             {T.translate("landing.home.welcome")}&nbsp;
             <div className="turquoise visible-all-inline">{T.translate("internal_navigation.toolsio")}</div>
           </h1>
-          <h3>{T.translate("landing.home.slogan")}</h3>
+          <h5>{T.translate("landing.home.slogan")}</h5>
           <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
         </div>
       </div>
