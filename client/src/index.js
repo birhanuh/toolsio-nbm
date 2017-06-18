@@ -14,9 +14,6 @@ import { setCurrentUser } from './actions/authentication'
 // Localization 
 import T from 'i18n-react'
 
-// CSS
-import './css/app.css'
-
 import App from './components/Layouts/App'
 //import routes from './routes'
 

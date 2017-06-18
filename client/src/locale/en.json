@@ -61,7 +61,7 @@
       }
     },
     "footer": {
-      "copyright": "Copyright &copy; Toolsio, Ltd. 2016",
+      "copyright": "Copyright &copy; Toolsio, Ltd. 2017",
       "address": "Pyyntitie 2 C 50, 02230, Espoo, Finland",
       "toolsio": "Toolsio"
     }
@@ -74,10 +74,10 @@
     "password": "Password",
     "confirm_password": "Confirm password",
     "notice": "All (*) fields are mandatory. Enter correct information.",
-    "already_a_user": "Already a user? Log in here",
+    "already_a_user": "Already a user?",
+    "sign_in_here": "Sign in here",
     "sign_up": "Sign up",
     "notice": "All (*) fields are mandatory. Enter correct information.",
-    "already_a_user": "Already a user? Log in here",
     "sign_up": "Sign up",    
     "subdomain": {
       "header": "Enter your subdomain",

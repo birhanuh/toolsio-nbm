@@ -132,6 +132,10 @@
   }
 }
 
+.ui.teal.button {
+  @extend .ui.primary.button;
+}
+
 // Button icons
 .ui.icon.primary.button {
   i {

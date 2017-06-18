@@ -25,7 +25,11 @@ class Page extends Component {
         <Form signupRequest={signupRequest} isUserExists={isUserExists} addFlashMessage={addFlashMessage}/> 
 
         <div className="ui message"> 
-          <a href="/login">{T.translate("sign_up.already_a_user")}</a>
+          {T.translate("sign_up.already_a_user")}&nbsp;<a href="/login">{T.translate("sign_up.sign_in_here")}</a>
+        </div>
+        <div>
+          <small className="visible-all-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="visible-all-block">{T.translate("landing.footer.address")}</small>
         </div>
       </div>  
     )

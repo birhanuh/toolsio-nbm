@@ -14,8 +14,8 @@ class Landing extends Component {
     return (
       <div>
         <div className="ui vertical stripe features background-white">
-          <div className="ui middle aligned stackable grid container">
-            <div className="ui two column centered grid">
+          <div className="ui middle aligned container">
+            <div className="ui two column stackable centered grid">
               <div className="column">
                 <h3 className="ui header">{T.translate("landing.features.header")}</h3>
               </div>
@@ -54,8 +54,8 @@ class Landing extends Component {
         </div>
 
         <div className="ui vertical stripe clients background-xx-light-grey">          
-          <div className="ui middle aligned stackable grid container">
-            <div className="ui two column centered grid">
+          <div className="ui middle aligned container">
+            <div className="ui two column stackable centered grid">
               <div className="column">
                 <h3 className="ui header">{T.translate("landing.clients.header")}</h3>
               </div>
@@ -93,17 +93,17 @@ class Landing extends Component {
                   <div className="slides">
                     <div className="slide-item item1">
                       <i className="quote left icon"></i>
-                      <h5> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
+                      <h6 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h6>
                       <p>- Jonathan Deo</p>
                     </div>    
                     <div className="slide-item item2">
                       <i className="quote left icon"></i>
-                      <h5> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
+                      <h6 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h6>
                       <p>- Jonathan Deo</p>
                     </div>  
                     <div className="slide-item item3">
                       <i className="quote left icon"></i>
-                      <h5> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
+                      <h6 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h6>
                       <p>- Jonathan Deo</p>
                     </div>  
                   </div>
@@ -114,8 +114,8 @@ class Landing extends Component {
         </div>
 
         <div className="ui vertical stripe pricing background-xx-light-grey">          
-          <div className="ui middle aligned stackable grid container">
-            <div className="ui three column centered grid">
+          <div className="ui middle aligned container">
+            <div className="ui three column stackable centered grid">
               <div className="column">
                 <h3 className="ui header">{T.translate("landing.pricing.header")}</h3>
               </div>
@@ -162,8 +162,8 @@ class Landing extends Component {
         </div>  
 
         <div className="ui vertical stripe bottom-cta background-white">
-          <div className="ui middle aligned stackable grid container">  
-            <div className="ui two column centered grid">
+          <div className="ui middle aligned container">  
+            <div className="ui two column stackable centered grid">
               <div className="column centered row">
                 <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
               </div>  
@@ -172,8 +172,8 @@ class Landing extends Component {
         </div>  
 
         <div className="ui vertical stripe contacts background-xx-light-grey">  
-          <div className="ui middle aligned stackable grid container"> 
-              <div className="ui two column centered grid">
+          <div className="ui middle aligned container"> 
+              <div className="ui two column stackable centered grid">
                 <div className="column">
                   <h3 className="ui header">{T.translate("landing.contacts.header")}</h3>
                 </div>

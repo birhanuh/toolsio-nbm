@@ -24,6 +24,10 @@ class Page extends Component {
         <div className="ui message">
           {T.translate("sign_in.new_to_us")}&nbsp;<a href="/signup">{T.translate("sign_up.sign_up")}</a>
         </div>
+        <div>
+          <small className="visible-all-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="visible-all-block">{T.translate("landing.footer.address")}</small>
+        </div>
       </div>
     )
   }

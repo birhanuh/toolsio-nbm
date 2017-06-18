@@ -1,5 +1,11 @@
 import $ from 'jquery'
 
+
+//import '../semantic/dist/components/visibility'
+//import '../semantic/dist/components/transition'
+//import '../semantic/dist/components/sidebar'
+//import { visibility, transition } from 'semantic-ui-react'
+
 $(document).ready(function() {
   /*
   // fix menu when passed
