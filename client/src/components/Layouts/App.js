@@ -98,6 +98,10 @@ class App extends Component {
                 <a className="item" href="#">Privacy Policy</a>
               </div>
             </div>
+
+            <a href="#" className="back-to-top">
+              <i className="chevron up icon"></i>  
+            </a>
           </footer>
         }
       </div>

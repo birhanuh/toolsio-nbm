@@ -17,12 +17,8 @@
   color: $turquoise !important;
 }
 
-.navbar-bg {
-  background-color: rgba(34,34,34,0.95);
-  padding: 8px 0;
-  -webkit-transition: all .5s ease-in-out;
-  -moz-transition: all .5s ease-in-out;
-  transition: all .5s ease-in-out;
+.menu.transition .ui.inverted.button:hover, .ui.inverted.button:active, .ui.inverted.button:focus {
+  color: $white;
 }
 
 // Landing page
@@ -65,7 +61,7 @@
   text-align: center;
 }
 
-.features {
+#features {
   .sprite {
     float: left;
     margin-right: 20px;
@@ -76,17 +72,17 @@
   }  
 }
 
-.features, .pricing {
+#features, #pricing {
   margin-top: 2px;
   box-shadow: 0 -1px 0 rgba(3,139,152,1);
 }
 
-.clients {
+#clients {
   margin-bottom: 1px;
   border-bottom: solid 1px rgba(3,139,152,1);
 }
 
-.clients, .bottom-cta, .contacts {
+#clients, #bottom-cta, #contacts {
   box-shadow: 0 -1px 0 rgba(rgb(228,229,231),1);
 }
 
@@ -104,7 +100,7 @@
   }
 }
 
-.testimonials {
+#testimonials {
   background: url("../images/pattern.png"),url("../images/testimonials.jpg");
   .carousel-indicators {
     margin-bottom: -40px;
@@ -186,6 +182,7 @@
     font-size: 15px;
     display: block;
     line-height: 33px;
+    width: inherit;
   }
 }
 

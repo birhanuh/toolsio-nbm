@@ -126,7 +126,7 @@
 .ui.inverted.button {
   box-shadow: 0 0 0 2px $turquoise inset !important;
   color: $turquoise;
-  &:hover, &:focus {
+  &:hover, &:active, &:focus, {
     box-shadow: 0 0 0 2px $turquoise inset !important;
     background: $turquoise;
   }

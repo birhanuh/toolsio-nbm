@@ -43,33 +43,54 @@ class NavigationBar extends Component {
     )
 
     const guestLinks = (
-      <div className="ui inverted vertical masthead center aligned segment">
-        <div className="ui container">
-          <div className="ui large secondary inverted pointing menu">
-            <Link className="toc item" to="/">
-              <i className="sidebar icon"></i>
-            </Link> 
-            <ActiveLink activeOnlyWhenExact to="/" label={T.translate("landing.home.header")} />
-            <ActiveLink activeOnlyWhenExact to="/features" label={T.translate("landing.features.header")} />
-            <ActiveLink activeOnlyWhenExact to="/clients" label={T.translate("landing.clients.header")} />
-            <ActiveLink activeOnlyWhenExact to="/pricing" label={T.translate("landing.pricing.header")} />
-            <ActiveLink activeOnlyWhenExact to="/testmonial" label={T.translate("landing.testmonial.header")} />
-            <ActiveLink activeOnlyWhenExact to="/contacts" label={T.translate("landing.contacts.header")} />
-         
-            <div className="right item">                    
-              <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link>     
-              <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
-            </div>  
+      <div>
+        <div className="ui large top fixed menu transition hidden pointing menu">
+          <div className="ui container">
+            <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
+              <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
+              <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
+              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
+              <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+              <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
+           
+              <div className="right menu">
+                <div className="item">                     
+                  <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link>     
+                </div>
+                <div className="item">   
+                  <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+                </div>
+              </div>  
           </div>
         </div>
+        <div id="home" className="ui inverted vertical masthead center aligned segment">
+          <div className="ui container">
+            <div className="ui large secondary inverted pointing menu">
+              <Link className="toc item" to="/">
+                <i className="sidebar icon"></i>
+              </Link> 
+              <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
+              <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
+              <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
+              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
+              <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+              <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
+           
+              <div className="right item">                    
+                <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link>     
+                <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+              </div>  
+            </div>
+          </div>
 
-        <div className="ui text container">
-          <h1 className="ui inverted header">
-            {T.translate("landing.home.welcome")}&nbsp;
-            <div className="turquoise visible-all-inline">{T.translate("internal_navigation.toolsio")}</div>
-          </h1>
-          <h5>{T.translate("landing.home.slogan")}</h5>
-          <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
+          <div className="ui text container">
+            <h1 className="ui inverted header">
+              {T.translate("landing.home.welcome")}&nbsp;
+              <div className="turquoise visible-all-inline">{T.translate("internal_navigation.toolsio")}</div>
+            </h1>
+            <h5>{T.translate("landing.home.slogan")}</h5>
+            <a href="/signup" className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
+          </div>
         </div>
       </div>
     )

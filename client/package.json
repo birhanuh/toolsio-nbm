@@ -20,6 +20,9 @@
     "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.10",
     "semantic-ui-react": "^0.68.3",
+    "semantic-ui-sidebar": "^2.2.10",
+    "semantic-ui-transition": "^2.2.10",
+    "semantic-ui-visibility": "^2.2.10",
     "shortid": "^2.2.8",
     "superagent": "^3.5.1",
     "validator": "^7.0.0"

@@ -13,7 +13,7 @@ class Landing extends Component {
   render() {
     return (
       <div>
-        <div className="ui vertical stripe features background-white">
+        <div id="features" className="ui vertical stripe background-white">
           <div className="ui middle aligned container">
             <div className="ui two column stackable centered grid">
               <div className="column">
@@ -53,7 +53,7 @@ class Landing extends Component {
           </div>
         </div>
 
-        <div className="ui vertical stripe clients background-xx-light-grey">          
+        <div id="clients" className="ui vertical stripe background-xx-light-grey">          
           <div className="ui middle aligned container">
             <div className="ui two column stackable centered grid">
               <div className="column">
@@ -85,7 +85,7 @@ class Landing extends Component {
           </div>
         </div>  
 
-        <div className="ui vertical stripe testimonials">
+        <div id="testimonials" className="ui vertical stripe">
           <div className="ui text container">
             <div className="center aligned row">
               <div className="column">
@@ -113,7 +113,7 @@ class Landing extends Component {
           </div>  
         </div>
 
-        <div className="ui vertical stripe pricing background-xx-light-grey">          
+        <div id="pricing" className="ui vertical stripe background-xx-light-grey">          
           <div className="ui middle aligned container">
             <div className="ui three column stackable centered grid">
               <div className="column">
@@ -161,17 +161,17 @@ class Landing extends Component {
           </div>      
         </div>  
 
-        <div className="ui vertical stripe bottom-cta background-white">
+        <div id="bottom-cta" className="ui vertical stripe background-white">
           <div className="ui middle aligned container">  
             <div className="ui two column stackable centered grid">
               <div className="column centered row">
-                <div className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></div>
+                <a href="/signup" className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
               </div>  
             </div>
           </div>
         </div>  
 
-        <div className="ui vertical stripe contacts background-xx-light-grey">  
+        <div id="contacts" className="ui vertical stripe background-xx-light-grey">  
           <div className="ui middle aligned container"> 
               <div className="ui two column stackable centered grid">
                 <div className="column">
