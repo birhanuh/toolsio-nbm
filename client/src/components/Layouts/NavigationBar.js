@@ -49,8 +49,8 @@ class NavigationBar extends Component {
             <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
               <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
               <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
-              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
               <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
               <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
            
               <div className="right menu">
@@ -72,8 +72,8 @@ class NavigationBar extends Component {
               <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
               <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
               <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
-              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
               <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
               <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
            
               <div className="right item">                    

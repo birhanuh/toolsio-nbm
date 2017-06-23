@@ -10,7 +10,7 @@ $.fn.visibility = require('semantic-ui-visibility')
 $(document).ready(function() {
 
   // fix menu when passed
-  $('.masthead')
+  $('.masthead .ui.text.container')
     .visibility({
       once: false,
       onBottomPassed: function() {
@@ -27,6 +27,10 @@ $(document).ready(function() {
     .sidebar('attach events', '.toc.item')
   ;  
 
+  $('.back-to-top').click(function(){
+    $("html, body").animate({ scrollTop: 0 }, 1000);
+    return false;
+  });
 });
 
 /* ==============================================
@@ -39,6 +43,7 @@ $(window).scroll(function(){
     $('.back-to-top').fadeOut();
   }
 });
+
 /* ==============================================
 2.Smooth Scroll To Anchor
 =============================================== */
