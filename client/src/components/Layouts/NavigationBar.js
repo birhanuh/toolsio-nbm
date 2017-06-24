@@ -47,21 +47,31 @@ class NavigationBar extends Component {
         <div className="ui large top fixed menu transition hidden pointing menu">
           <div className="ui container">
             <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
-              <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
-              <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
-              <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
-              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
-              <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
-           
-              <div className="right menu">
-                <div className="item">                     
-                  <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link>     
-                </div>
-                <div className="item">   
-                  <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
-                </div>
-              </div>  
+            <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
+            <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
+            <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+            <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
+            <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
+         
+            <div className="right menu">
+              <div className="item">                     
+                <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link>     
+              </div>
+              <div className="item">   
+                <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+              </div>
+            </div>  
           </div>
+        </div>
+        <div className="ui vertical inverted sidebar menu left">
+          <ActiveLink activeOnlyWhenExact className="active item" to="#home" label={T.translate("landing.home.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#features" label={T.translate("landing.features.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#clients" label={T.translate("landing.clients.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#testimonials" label={T.translate("landing.testmonial.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#pricing" label={T.translate("landing.pricing.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#contacts" label={T.translate("landing.contacts.header")} />
+          <Link className="item" to="/login">{T.translate("sign_in.sign_in")}</Link>    
+          <Link className="item" to="/login">{T.translate("sign_up.sign_up")}</Link>    
         </div>
         <div id="home" className="ui inverted vertical masthead center aligned segment">
           <div className="ui container">

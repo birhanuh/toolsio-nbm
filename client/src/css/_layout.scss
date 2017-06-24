@@ -14,7 +14,7 @@
 
 body {
   background-color: $body-background-color;
-  color: $body-text-color;
+  color: $body-color;
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   margin-bottom: 360px;
@@ -114,7 +114,7 @@ body {
 
 // UI header
 .ui.header {
-  color: $body-text-color;
+  color: $body-color;
 }
 
 .ui.header> a {
@@ -574,7 +574,7 @@ dt {
     width: auto;
     margin-bottom: 15px;
     font-size: 13px;
-    color: $body-text-color;
+    color: $body-color;
     border-bottom: none;
   }
 }
