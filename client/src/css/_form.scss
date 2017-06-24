@@ -1,0 +1,196 @@
+// Input fields
+.ui.form input:not([type]), .ui.form input[type=date], .ui.form input[type=datetime-local], .ui.form input[type=email], .ui.form input[type=file], .ui.form input[type=number], .ui.form input[type=password], .ui.form input[type=search], .ui.form input[type=tel], .ui.form input[type=text], .ui.form input[type=time], .ui.form input[type=url]  {
+  border: 1px solid $light-grey;
+  @include border-radius(3px);
+  box-shadow: none;
+  font-size: 14px;
+  height: 34px;
+  &:focus {
+    border-color: $turquoise;
+    box-shadow: none;
+  }
+}
+
+
+//Checkbox
+.icheckbox_minimal-grey, .iradio_minimal-grey {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  background: url(../images/checkbox-radio-grey.png) no-repeat;
+  border: none;
+  cursor: pointer;
+}
+
+.icheckbox_minimal-grey {
+  background-position: 0 0;
+}
+
+// Customize date dropdowns take auto width
+.date > .col-sm-9 .form-control {
+  display: inline-block;
+  width: auto;
+}
+
+// Buttons
+.ui.button {
+  background-color: $medium-grey;
+  border-color: $medium-grey;
+  &:hover, &.focus {
+    background: $dark-medium-grey;
+    border-color: $dark-medium-grey;
+  }
+  font-weight: 600;
+  @include border-radius(3px);  
+  -webkit-transition: background-color 300ms ease-out;
+  -moz-transition: background-color 300ms ease-out;
+  -o-transition: background-color 300ms ease-out;
+  transition: background-color 300ms ease-out;
+}
+
+.ui.primary.button {
+  background-color: $turquoise !important;
+  border-color: $turquoise !important;
+  &:hover, &:focus {
+    background-color: $dark-turquoise !important;
+    border-color: $dark-turquoise !important;
+  }
+}
+
+.ui.negative.button {
+  background-color: $red;
+  border-color: $red;
+  &:hover, &.focus {
+    background-color: $dark-red;
+    border-color: $dark-red;
+  }
+}
+
+.ui.positive.button {
+  background: $grass;
+  border-color: $grass;
+  &:hover, &.focus {
+    background-color: $dark-grass;
+    border-color: $dark-grass;
+  }
+}
+
+.ui.info.button {
+  background: $light-blue;
+  border-color: $light-blue;
+  &:hover, &.focus {
+    background-color: $blue;
+    border-color: $blue;
+  }
+}
+
+.ui.black.button {
+  @extend .ui.button;
+  color: $white;
+  background: $mid-night-blue;
+  border-color: $mid-night-blue;
+  &:hover, &.focus {
+    color: $white;
+    background-color: $x-dark-mid-night-blue;
+    border-color: $x-dark-mid-night-blue;
+  }
+}
+
+.ui.primary.basic.button {
+  color: $turquoise;
+  &:hover {
+    color: $white;
+    background: $turquoise !important;
+  }
+}
+
+.ui.negative.basic.button {
+  color: $red;
+  &:hover {
+    color: $white;
+    background: $red !important;
+  }
+}
+
+.ui.positive.basic.button {
+  color: $grass;
+  &:hover {
+    color: $white;
+    background: $grass !important;
+  }
+}
+
+.ui.inverted.button {
+  box-shadow: 0 0 0 2px $turquoise inset !important;
+  color: $turquoise;
+  &:hover, &:active, &:focus, {
+    box-shadow: 0 0 0 2px $turquoise inset !important;
+    background: $turquoise;
+  }
+}
+
+.ui.teal.button {
+  @extend .ui.primary.button;
+}
+
+// Button icons
+.ui.icon.primary.button {
+  i {
+    color: $white !important;
+  }
+}
+
+// Search button
+.search-button {
+  padding: 0;
+  button {
+    background-color: $light-medium-grey;
+    border-width: 8px;
+    border: none;
+    padding: 9px 13px;
+  }
+}
+
+// dropdown-select
+select {
+  @include web-appearance(none);
+  text-indent: 0.01px;
+  text-overflow: '';
+  background-image: asset-url('up-down-arrow') !important;
+  background-position: 98% 50%;
+  background-repeat: no-repeat;
+}
+
+select.date {
+  background-position: 93% 50%;
+}
+
+// input to link
+.button-to-link {
+  background:none!important;
+  border:none;
+  padding:0!important;
+  font: inherit;
+  /*border is optional*/
+  cursor: pointer;
+}
+
+/* Extra small devices (phones, less than 768px) */
+@media (max-width: $screen-xs-max) {
+  .btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Small devices (tablets, 768px and upto large desktops, 1200px and up) */
+@media (min-width: $screen-sm-min) {
+  .form-inline label.datetime {
+    display: block;
+    margin-bottom: 0;
+  }
+}

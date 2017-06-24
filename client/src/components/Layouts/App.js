@@ -14,6 +14,12 @@ import requireAuth from '../../utils/requireAuth'
 import NavigationBar from './NavigationBar'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
+// Semantic CSS
+import 'semantic-ui-css/semantic.min.css';
+
+// CSS
+import '../../css/app.css'
+
 import logo from '../../images/logo-square.png'; 
 
 class App extends Component {
@@ -92,6 +98,10 @@ class App extends Component {
                 <a className="item" href="#">Privacy Policy</a>
               </div>
             </div>
+
+            <a href="#" className="back-to-top">
+              <i className="chevron up icon"></i>  
+            </a>
           </footer>
         }
       </div>

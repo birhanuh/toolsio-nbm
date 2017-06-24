@@ -3,9 +3,9 @@ $black: #000000;
 $white: #ffffff;
 
 //$body-background-color: #f1f3f6;
-//$body-text-color: #4a4a4a;
+//$body-color: #4a4a4a;
 $body-background-color: #ecebe8;
-$body-text-color: #6a6c6f;
+$body-color: #6a6c6f;
 
 $white-turquoise: #cce7ea;
 $x-light-turquoise: #66b4bb;
@@ -67,7 +67,7 @@ $x-light-mid-night-blue: #989ea7;
 
 // Fonts
 
-// Responsive
+// Breaking points
 $screen-xxxs-max: 320px;
 $screen-xxs-min: 320px;
 $screen-xxs-max: 480px;
@@ -78,3 +78,4 @@ $screen-sm-max: 992px;
 $screen-md-min: 992px;
 $screen-md-max: 1200px;
 $screen-lg-min: 1200px;
+

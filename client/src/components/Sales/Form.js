@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
-// JS semantic
+// Semantic UI JS
 //import { Dropdown, Input } from 'semantic-ui-react'
 
 class Form extends Component {

@@ -2,14 +2,16 @@
    the opinions are too diverse                      */
 
 /* Third party helper libraries */
-@import "../semantic/dist/semantic.min.css";
 
 // Local styles
 @import "_variables";
 @import "_mixins";
 
 /* Custom themes */
-@import "_datepicker.scss";
 @import "_pages.scss";
 @import "_layout.scss";
-
+@import "_landing.scss";
+@import "_typography.scss";
+@import "_table.scss";
+@import "_form.scss";
+@import "_breadcrumb.scss";

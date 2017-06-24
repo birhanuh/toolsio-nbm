@@ -1,0 +1,113 @@
+// Sizes
+h1, h1.ui.header {
+  font-size: 2.25em;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h2, h2.ui.header {
+  font-size: 1.875em;
+  line-height: 1.15;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h3, h3.ui.header {
+  font-size: 1.5em;
+  line-height: 1.05;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h4, h4.ui.header {
+  font-size: 1.25em;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h5, h5.ui.header {
+  font-size: 1.125em;
+  line-height: 1.15;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+h6, h6.ui.header {
+  font-size: 1em;
+  line-height: 1.05;
+  letter-spacing: -0.2px;
+  font-weight: 500;
+}
+
+p, span, label, a {
+  font-size: 0.875em;
+}
+
+// Labels
+.label-success {
+  background: $grass;
+}
+
+.label-info {
+  background: $blue;
+}
+
+.label-warning {
+  background: $orange
+}
+
+.label-danger {
+  background: $red;
+}
+
+// Text
+.text-primary {
+  color: $turquoise;
+}
+
+.text-success {
+  color: $grass;
+}
+
+.text-info {
+  color: $blue;
+}
+
+.text-warning {
+  color: $orange
+}
+
+.text-danger {
+  color: $red;
+}
+
+.text-muted {
+  color: $dark-grey;
+}
+
+.text-dark-medium-grey {
+  color: $dark-medium-grey;
+}
+
+.text-x-light-dark-grey {
+  color: $x-light-dark-grey;
+}
+
+// Links
+a.text-success:hover, a.text-success:focus {
+  color: $dark-grass;
+}
+
+a.text-info:hover, a.text-info:focus {
+  color: $dark-blue;
+}
+
+a.text-warning:hover, a.text-warning:focus {
+  color: $dark-orange;
+}
+
+a.text-danger:hover, a.text-danger:focus {
+  color: $dark-red;
+}
