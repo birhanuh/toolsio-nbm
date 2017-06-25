@@ -12,16 +12,20 @@ class Page extends Component {
 
   render() {
     return (
-      <div>      
-        <Link className="ui right floated primary button" to="/sales/new">
-          <i className="add circle icon"></i>
-          Create new Sale
-        </Link>
-        <h1 className="ui header">Sales</h1>          
-        
-        <div className="ui divider"></div>
+      <div>
+        <div className="row column">  
+          <Link className="ui right floated primary button" to="/sales/new">
+            <i className="add circle icon"></i>
+            Create new Sale
+          </Link>
+          <h1 className="ui header m-t-n">Sales</h1>   
 
-        <List sales={this.props.sales} deleteSale={deleteSale} />      
+          <div className="ui divider"></div>  
+        </div>
+        
+        <div className="row column">     
+          <List sales={this.props.sales} deleteSale={deleteSale} />   
+        </div>       
       </div>   
     )
   }

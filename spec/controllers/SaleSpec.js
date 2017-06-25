@@ -1,8 +1,18 @@
+// Mongodb credentials
+import config from '../../server/config'
+
+// Mongodb connecton
+import db from '../../server/db'
+
 describe("Sale", function() {
   var SaleController = require('../../server/src/controllers/SalesController');
   var Sale = require('../factories/Sale');
   var saleController;
   var sale;
+
+  before(function(done) {
+    db.connect(config.moongose_test)
+  })
 
   beforeEach(function() {
     saleController = new SaleController();
@@ -57,4 +67,9 @@ describe("Sale", function() {
       }).toThrowError("song is already playing");
     });
   });
+
+  after(function() {
+    db.drop(config.moongose_test, 'sales')
+  })
+
 });
