@@ -1,7 +1,13 @@
 var FactoryGirl = require('factory_girl'); // for nodejs
+
 FactoryGirl.define('sale', function() {
-  this.id = Math.random()*101|0;
+  //this.id = Math.random()*101|0;
   this.name = 'Sale 1'
+  this.date = new Date() 
   this.status = 'NEW'
   this.description = 'Description. ..'
 })
+
+
+
+var FactoryGirl = module.exports = FactoryGirl

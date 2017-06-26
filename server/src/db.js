@@ -26,6 +26,5 @@ export default {
 
 }
 
-// Promisify mongoose functions
-//mongoose.promisif = Promise
+// Promisify mongoose with bluebird
 Promise.promisifyAll(mongoose)

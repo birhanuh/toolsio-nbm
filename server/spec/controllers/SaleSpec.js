@@ -6,19 +6,8 @@ import db from '../../src/db'
 
 import axios from 'axios'
 
-var FactoryGirl = require('factory_girl') 
-
 // Load factories 
-//FactoryGirl.definitionFilePaths = [__dirname + '/factories']
-//FactoryGirl.findDefinitions()
-
-FactoryGirl.define('sale', function() {
-  //this.id = Math.random()*101|0;
-  this.name = 'Sale 1'
-  this.date = new Date() 
-  this.status = 'NEW'
-  this.description = 'Description. ..'
-})
+import FactoryGirl from '../factories' 
 
 describe("SalesController", function() { 
 
@@ -26,12 +15,19 @@ describe("SalesController", function() {
   let salesController = controllers['sales']
   let sale = FactoryGirl.create('sale')
 
-  beforeEach(function() {
+  beforeAll(function() {
     db.connect(config.mongoose_test)
   })
 
-  afterEach(function() {
+  afterAll(function() {
     db.drop('sales', config.mongoose_test)
+  })
+
+  it("creates sale", function() { 
+
+    salesController.create(sale, function(valdiationErr, dbError, result) {
+      expect(result.length).not.toBe(0)
+    })
   })
 
   it("creates sale", function() { 
