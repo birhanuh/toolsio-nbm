@@ -7,7 +7,18 @@ import db from '../../src/db'
 import axios from 'axios'
 
 // Load factories 
-import FactoryGirl from '../factories' 
+import FactoryGirl from '../factories'
+
+// Load factories 
+import sales from '../fixtures/sales' 
+
+// Schema
+import schema from'../../src/models/Sale'
+
+/*// Factories 
+import fixtures from 'pow-mongoose-fixtures'
+//Files
+fixtures.load(__dirname + '/../fixtures/sales.js')*/
 
 describe("SalesController", function() { 
 
@@ -28,6 +39,7 @@ describe("SalesController", function() {
     salesController.create(sale, function(valdiationErr, dbError, result) {
       expect(result.length).not.toBe(0)
     })
+    db.fixtures(config.mongoose_test, schema, sales)
   })
 
   it("creates sale", function() { 

@@ -21,6 +21,17 @@ export default {
       mongoose.connection.collections[collectionName].drop( function(err) {
         console.log('collection dropped');
       })
+
+      /* Close connection */
+      mongoose.connection.close()
+    })
+  },
+
+  fixtures: function(mongoURI, schema, data) {
+    mongoose.createConnection(mongoURI, function(err, db) {    
+      schema.collection.insertMany(data, function(err,r) {
+        console.log('collection inserted')
+      })    
     })
   }
 

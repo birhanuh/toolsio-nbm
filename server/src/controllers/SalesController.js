@@ -1,4 +1,4 @@
-import Sale from '../models/sale'
+import Sale from '../models/Sale'
 import { Validation } from '../utils'
 
 export default {
