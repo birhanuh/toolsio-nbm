@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "nodemon --watch src --exec babel-node -- src/index.js",
-    "test": "./node_modules/.bin/jasmine-es6 spec"
+    "test": "babel-node spec/run.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
     "babel-cli": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "factory_girl": "^0.2.3",
+    "jasmine": "^2.6.0",
     "jasmine-es6": "^0.4.0",
     "nodemon": "^1.11.0"
   }

@@ -4,7 +4,6 @@ import express from 'express'
 import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import mongoose from 'mongoose'
 import logger from 'morgan'
 
 // Init app

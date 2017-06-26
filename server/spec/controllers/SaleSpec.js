@@ -20,30 +20,33 @@ FactoryGirl.define('sale', function() {
   this.description = 'Description. ..'
 })
 
-describe("Sale controller", function() { 
+describe("SalesController", function() { 
 
   let controllers = require('../../src/controllers')
   let salesController = controllers['sales']
   let sale = FactoryGirl.create('sale')
 
   beforeEach(function() {
-    db.connect(config.moongose_test)
+    db.connect(config.mongoose_test)
   })
 
   afterEach(function() {
-    db.drop(config.moongose_test, 'sales')
+    db.drop('sales', config.mongoose_test)
   })
 
-  it("create", function() {
-    /*axios.post('/api/sales', sale).then(res => { 
-      expect(response.statusCode).toBe(200)
-    })*/
+  it("creates sale", function() { 
+
     salesController.create(sale, function(valdiationErr, dbError, result) {
-      console.log('sale: ', sale)
       expect(result.length).not.toBe(0)
-      //done()
     })
-
   })
+
+  /*
+  it("it returns status code 200", function() {
+    axios.post('/api/sales', sale).then(res => { 
+      expect(response.statusCode).toBe(200)
+    })
+  })
+  */
 
 })

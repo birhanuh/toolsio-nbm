@@ -12,11 +12,14 @@ export default {
     })
   },
 
-  drop: function(collectionName, mongoURI) {    
+  drop: function(collectionName, mongoURI) {   
     mongoose.createConnection(mongoURI, function(err, db) {    
-      db.collection(collectionName,function(err, collection){
-        collection.remove({},function(err, removed){
-        })
+      /* Drop the DB */
+      //mongoose.connection.db.dropDatabase();
+
+      /* Drop collections */
+      mongoose.connection.collections[collectionName].drop( function(err) {
+        console.log('collection dropped');
       })
     })
   }
@@ -24,4 +27,5 @@ export default {
 }
 
 // Promisify mongoose functions
+//mongoose.promisif = Promise
 Promise.promisifyAll(mongoose)
