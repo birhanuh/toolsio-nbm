@@ -41,7 +41,7 @@ class App extends Component {
         
         { !authPages && <NavigationBar /> }
       
-        <section className={classnames({'ui middle aligned container internal': internalPages, 'auth column': authPages})}>   
+        <section className={classnames({'ui middle aligned container internal': internalPages, 'auth column row': authPages})}>   
           <div className={classnames({'ui stackable grid': internalPages})}>
             <div className="sixteen wide column">
               <FlashMessagesList />
@@ -61,7 +61,7 @@ class App extends Component {
           </div>
         </section>
         
-        { (!authPages || !landingPage) &&
+        { internalPages &&
           <footer className="ui inverted vertical footer segment">
             <div className="ui middle aligned container">
               <div className="ui stackable inverted grid">      

@@ -90,72 +90,80 @@ class Form extends Component {
 
     return (  
       <div>
-        <h1 className="ui header">Create new Sale</h1>
-        <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+        <div className="ui stackable grid">
+          <div className="eight wide column ui segment">  
 
-          { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+            <div className="column row">  
+              <h1 className="ui header">Create new Sale</h1>
+            </div>
 
-          <FormField
-            label="Name"
-            name="name" 
-            value={name} 
-            onChange={this.handleChange.bind(this)} 
-            placeholder="Name"
-            error={errors.name}
-          />
-          <div  className={classnames("field", { error: !!errors.date })}>
-            <label className="" htmlFor="date">Date:</label>
-            <DatePicker
-              dateFormat="DD/MM/YYYY"
-              selected={date}
-              onChange={this.handleChangeDate.bind(this)}
-            />
-            <span>{errors.password}</span>
-          </div>
-          
-          <FormField
-            formType="select"
-            label="status"
-            name="status"
-            type="select"
-            value={status} 
-            onChange={this.handleChange.bind(this)} 
-            error={errors.status}
+            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
-            options={[
-              <option key="default" value="" disabled>Set Status</option>,
-              <option key="new" value="new">NEW</option>,
-              <option key="in progress" value="in progress">IN PROGRESS</option>,
-              <option key="ready" value="ready">READY</option>,
-              <option key="delivered" value="delivered">DELIVERED</option>
-              ]
-            }
-          />
+              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-          {/*
-          <div className={classnames("field", { error: !!error.status })}>
-            <label htmlFor="status">Status</label>
-            <Dropdown 
-              placeholder='Status' 
-              search selection options={statusOptions}   
-              value={status} 
-              onChange={this.handleChange.bind(this)} 
-              error={errors.status} />
-          </div>      
-          */}
-          <FormField
-            formType="textarea"
-            label="Description"
-            name="description" 
-            value={description} 
-            onChange={this.handleChange.bind(this)} 
-            placeholder="Description"
-          />
+              <FormField
+                label="Name"
+                name="name" 
+                value={name} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Name"
+                error={errors.name}
+              />
+              <div  className={classnames("field", { error: !!errors.date })}>
+                <label className="" htmlFor="date">Date:</label>
+                <DatePicker
+                  dateFormat="DD/MM/YYYY"
+                  selected={date}
+                  onChange={this.handleChangeDate.bind(this)}
+                />
+                <span>{errors.password}</span>
+              </div>
+              
+              <FormField
+                formType="select"
+                label="status"
+                name="status"
+                type="select"
+                value={status} 
+                onChange={this.handleChange.bind(this)} 
+                error={errors.status}
 
-          <div className="filed">    
-            <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;Add Sale</button>
+                options={[
+                  <option key="default" value="" disabled>Set Status</option>,
+                  <option key="new" value="new">NEW</option>,
+                  <option key="in progress" value="in progress">IN PROGRESS</option>,
+                  <option key="ready" value="ready">READY</option>,
+                  <option key="delivered" value="delivered">DELIVERED</option>
+                  ]
+                }
+              />
+
+              {/*
+              <div className={classnames("field", { error: !!error.status })}>
+                <label htmlFor="status">Status</label>
+                <Dropdown 
+                  placeholder='Status' 
+                  search selection options={statusOptions}   
+                  value={status} 
+                  onChange={this.handleChange.bind(this)} 
+                  error={errors.status} />
+              </div>      
+              */}
+              <FormField
+                formType="textarea"
+                label="Description"
+                name="description" 
+                value={description} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Description"
+              />
+
+              <div className="filed">    
+                <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;Add Sale</button>
+              </div>  
+            </form> 
           </div>  
-        </form> 
+        </div>
       </div>
     )
   }

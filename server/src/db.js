@@ -12,8 +12,8 @@ export default {
     })
   },
 
-  drop: function(collectionName, mongoURI) {
-    mongoose.connect(mongoURI, function(err, db) {
+  drop: function(collectionName, mongoURI) {    
+    mongoose.createConnection(mongoURI, function(err, db) {    
       db.collection(collectionName,function(err, collection){
         collection.remove({},function(err, removed){
         })
