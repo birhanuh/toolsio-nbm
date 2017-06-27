@@ -41,7 +41,6 @@
     "factory_girl": "^0.2.3",
     "jasmine": "^2.6.0",
     "jasmine-es6": "^0.4.0",
-    "nodemon": "^1.11.0",
-    "pow-mongoose-fixtures": "^0.3.0"
+    "nodemon": "^1.11.0"
   }
 }
