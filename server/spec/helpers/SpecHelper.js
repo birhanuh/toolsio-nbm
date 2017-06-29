@@ -9,7 +9,8 @@ beforeEach(function () {
             pass: player.currentlyPlayingSong === expected && player.isPlaying
           }
         }
-      };
+      }
     }
-  });
-});
+  })
+})
+

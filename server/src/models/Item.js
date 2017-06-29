@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-let itemSchema = new Schema({
+let itemSchema = new mongoose.Schema({
   name: { type: String,required: true },
   date: { type: Date, required: true },
   unit: { type: Number, required: true },

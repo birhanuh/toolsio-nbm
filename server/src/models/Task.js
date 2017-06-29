@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-let taskSchema = new Schema({
+let taskSchema = new mongoose.Schema({
   name: { type: String,required: true },
   date: { type: Date, required: true },
   hours: { type: Number, min: 1, max: 8, required: true },
