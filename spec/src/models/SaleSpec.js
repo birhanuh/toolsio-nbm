@@ -1,8 +1,8 @@
 // Mongodb credentials
-import config from '../../src/config'
+import config from '../../../server/src/config'
 
 // Mongodb connecton
-import db from '../../src/db'
+import db from '../../../server/src/db'
 
 import axios from 'axios'
 
@@ -13,7 +13,7 @@ import FactoryGirl from '../factories'
 import sales from '../fixtures/sales' 
 
 // Schema
-var Sale = require('../../src/models/Sale')
+var Sale = require('../../../server/src/models/Sale')
 
 /*// Factories 
 import fixtures from 'pow-mongoose-fixtures'
@@ -22,7 +22,7 @@ fixtures.load(__dirname + '/../fixtures/sales.js')*/
 
 describe("Sale", function() { 
 
-  let controllers = require('../../src/controllers')
+  let controllers = require('../../../server/src/controllers')
   let salesController = controllers['sales']
   let sale = FactoryGirl.create('sale')
 
