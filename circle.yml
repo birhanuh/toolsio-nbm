@@ -8,6 +8,10 @@ machine:
   node:
     version:
       7.2.1
+  
+  dependencies:
+    override:
+      - npm install
 
   test:
     override:    
