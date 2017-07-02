@@ -1,0 +1,19 @@
+## Customize the test machine
+machine:
+
+  timezone:
+    Europe/Athens # List of timezones http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+  # Version of ruby to use
+  node:
+    version:
+      7.2.1
+
+  # Add some environment variables
+  environment:
+    ACCEPTANCE_TESTS: test
+    TESTOPTS: --seed=7862
+
+
+
+
