@@ -1,27 +1,25 @@
-## Customize the test machine
 machine:
-
-  timezone:
-    Europe/Athens # List of timezones http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-
-  # Version of ruby to use
-  node:
-    version:
-      7.2.1
-  
-  dependencies:
-    override:
-      - npm install
-
-  test:
-    override:    
-      - jasmine spec
-
-  # Add some environment variables
   environment:
-    ACCEPTANCE_TESTS: test
-    TESTOPTS: --seed=7862
+    XCODE_SCHEME: "test"
+    XCODE_WORKSPACE: "platforms/ios"
+    XCODE_PROJECT: "toolsio-react.xcodeproj"
+  xcode:
+    version: "8.3.3"
+dependencies:
+  override:
+    - brew install node
+    - npm install
+test:
+  override:
+    - npm test spec
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/jasmine/
+    - find . -type f -regex ".*/test_out/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
-
-
+deployment:
+  hub:
+    branch: deploy
+    commands:
+      - chmod +x ./deploy-version.sh
+      - ./deploy-version.sh
 
