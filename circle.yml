@@ -9,6 +9,10 @@ machine:
     version:
       7.2.1
 
+  test:
+    override:    
+      - jasmine spec
+
   # Add some environment variables
   environment:
     ACCEPTANCE_TESTS: test
