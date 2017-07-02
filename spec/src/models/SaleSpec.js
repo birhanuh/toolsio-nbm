@@ -20,11 +20,11 @@ import fixtures from 'pow-mongoose-fixtures'
 //Files
 fixtures.load(__dirname + '/../fixtures/sales.js')*/
 
-describe("Sale", function() { 
+let controllers = require('../../../server/src/controllers')
+let salesController = controllers['sales']
+let sale = FactoryGirl.create('sale')
 
-  let controllers = require('../../../server/src/controllers')
-  let salesController = controllers['sales']
-  let sale = FactoryGirl.create('sale')
+describe("Sale", function() { 
 
   beforeAll(function() {
     db.connect(config.mongoose_test)
