@@ -9,9 +9,6 @@ dependencies:
 test:
   override:
     - npm test spec
-  post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/jasmine/
-    - find . -type f -regex ".*/test_out/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
 deployment:
   hub:
