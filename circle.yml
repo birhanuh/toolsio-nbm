@@ -5,7 +5,7 @@ machine:
     version: "8.3.3"
 test:
   override:
-    - npm test spec/
+    - npm test toolsio-react/spec/
 
 deployment:
   hub:
