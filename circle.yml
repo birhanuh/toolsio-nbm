@@ -3,6 +3,12 @@ machine:
     XCODE_SCHEME: "test"
   xcode:
     version: "8.3.3"
+
+dependencies:
+  override:
+    - cd spec/ 
+    - npm install
+
 test:
   override:
     - cd spec/ 
