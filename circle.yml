@@ -5,7 +5,6 @@ machine:
     version: "8.3.3"
 dependencies:
   override:
-    - brew install node
     - npm install
 test:
   override:
