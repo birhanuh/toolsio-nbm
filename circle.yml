@@ -8,7 +8,7 @@ dependencies:
     - npm install
 test:
   override:
-    - npm test spec
+    - npm test spec/
 
 deployment:
   hub:
