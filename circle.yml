@@ -1,0 +1,23 @@
+machine:
+  environment:
+    XCODE_SCHEME: "test"
+  xcode:
+    version: "8.3.3"
+
+dependencies:
+  override:
+    - cd $HOME/$CIRCLE_PROJECT_REPONAME/spec 
+    - npm install
+
+test:
+  override:
+    - cd spec/ 
+    - npm test
+
+deployment:
+  hub:
+    branch: deploy
+    commands:
+      - chmod +x ./deploy-version.sh
+      - ./deploy-version.sh
+

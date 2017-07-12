@@ -7,7 +7,7 @@ export default function List({ sales, deleteSale }) {
   )
 
   const salesList = (
-    <table className="ui striped selectable table">
+    <table className="ui striped selectable small table">
        <thead>
           <tr>
             <th>Name</th>

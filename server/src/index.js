@@ -4,9 +4,7 @@ import express from 'express'
 import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import mongoose from 'mongoose'
 import logger from 'morgan'
-import Promise from 'bluebird'
 
 // Init app
 const app = express()
@@ -17,6 +15,9 @@ import api from './routes/api'
 
 // Mongodb credentials
 import config from './config'
+
+// Mongodb connection
+import db from './db'
 
 // View Engine
 //app.set('view engine', 'jade');
@@ -50,17 +51,10 @@ app.listen(app.get('port'), () =>
   console.log('Server started on port: ' + app.get('port'))
 );
 
-// Setup mongoose (Normally diffirent setup ups are on diffirent files)
-let mongoURI = ( process.env.PORT ) ? config.mongoose_auth_jitsu : config.mongoose_auth_local
+// Setup mongoose 
+let mongoURI = config.mongoose
 
-mongoose.connect(mongoURI, function(err, res) {
-  if (err) {
-    console.log('DB CONNECTION FAILED: '+err)
-  } else {
-    console.log('DB CONNECTION SUCCESS: '+mongoURI)
-  }
-});
+db.connect(mongoURI)
 
-// Promisify mongoose functions
-Promise.promisifyAll(mongoose)
+
 

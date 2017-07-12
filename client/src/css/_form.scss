@@ -178,19 +178,14 @@ select.date {
   cursor: pointer;
 }
 
-/* Extra small devices (phones, less than 768px) */
-@media (max-width: $screen-xs-max) {
+/* Small devices (phones, less than 768px) */
+@media (max-width: $screen-sm) {
   .btn {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
+    
   }
 }
 
-/* Small devices (tablets, 768px and upto large desktops, 1200px and up) */
-@media (min-width: $screen-sm-min) {
-  .form-inline label.datetime {
-    display: block;
-    margin-bottom: 0;
-  }
+/* Medium and large devices (tablets, 768px and upto large desktops, 1200px and up) */
+@media (min-width: $screen-sm) {
+  
 }

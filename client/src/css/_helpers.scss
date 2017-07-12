@@ -1,0 +1,187 @@
+// Background
+.background-success {
+  background-color: $grass;
+}
+
+.background-info {
+  background-color: $blue;
+}
+
+.background-warning {
+  background-color: $orange;
+}
+
+.background-danger {
+  background-color: $red;
+}
+
+.background-yellow {
+  background-color: $yellow !important;
+}
+
+.background-white {
+  background-color: $white !important;
+}
+
+.background-light-grey {
+  background-color: $light-grey !important;
+}
+
+.background-xx-light-grey {
+  background-color: $xx-light-grey;
+}
+
+// Color
+.turquoise {
+  color: $turquoise !important;
+}
+
+.xx-light-grey {
+  color: $xx-light-grey;
+}
+
+// Display
+.visible-all-inline-block {
+  display: inline-block !important;
+}
+
+.visible-all-inline {
+  display: inline !important;
+}
+
+.visible-all-block {
+  display: block !important;
+}
+
+// Margins
+.m-t-n {
+ margin-top: 0 !important;
+ padding-top: 0 !important;
+}
+
+.m-b-n {
+ margin-bottom: 0 !important;
+}
+
+.m-t-xxs {
+ margin-top: 3px !important;
+}
+
+.m-t-xs {
+ margin-top: 5px !important;
+}
+
+.m-b-xxs {
+ margin-bottom: 3px !important;
+}
+
+.m-b-xs {
+ margin-bottom: 5px !important;
+}
+
+.m-t-s {
+ margin-top: 10px !important;
+}
+
+.m-b-s {
+ margin-bottom: 10px !important;
+}
+
+.m-t-m {
+ margin-top: 15px !important;
+}
+
+.m-b-m {
+ margin-bottom: 15px !important;
+}
+
+.m-t-l {
+ margin-top: 20px !important;
+}
+
+.m-b-l {
+ margin-bottom: 20px !important;
+}
+
+.m-t-xl {
+ margin-top: 30px !important;
+}
+
+.m-b-xl {
+ margin-bottom: 30px !important;
+}
+
+.no-margins {
+ margin: 0 !important;
+}
+
+// borders
+.border-top-no {
+  border-top: none !important;
+}
+
+.border-bottom-no {
+  border-bottom: none !important;
+}
+
+// alignment
+.vertical-text {
+  transform: rotate(-90deg);
+  transform-origin: left top 0;
+  @include transition(2s);
+}
+
+.center-block {
+  display: table;
+}
+
+.horizontal-line-with-text {
+   width: 100%;
+   text-align: center;
+   border-bottom: 1px solid $medium-grey;
+   line-height: 0.1em;
+   margin: 10px 0 20px;
+   span {
+    background:#fff;
+    padding:0 10px;
+  }
+}
+
+// Vertical center
+.vertical-text-align-wrapper {
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
+.vertical-text-align-element {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+/* Very extra small devices (phones, less than 480px) */
+@media (max-width: $screen-xxs) {
+  
+  
+}
+
+/* Extra small devices (phones, 320px, and upto small phones, 480px) */
+@media (min-width: $screen-xxs) and (max-width: $screen-xs) {
+  
+}
+
+/* Extra small devices (phones, less than 480px) */
+@media (max-width: $screen-xs) {
+  
+}
+
+/* Small devices (phones, 480px, and upto large phones, 768px) */
+@media (min-width: $screen-xs) and (max-width: $screen-sm) {
+  
+}
+
+/* Small devices (phones, less than 768px) */
+@media (max-width: $screen-sm) {
+ 
+
+}

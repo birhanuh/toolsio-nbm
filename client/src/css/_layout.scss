@@ -17,13 +17,81 @@ body {
   color: $body-color;
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
+  line-height: 24px;
+  moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased; 
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
   margin-bottom: 360px;
 }
 
+body.internal-page {
+  margin-bottom: 220px;
+}
+
+// Anchor 
+a {
+  color: $turquoise;
+  &:hover, &:focus {
+    color: $dark-turquoise;
+  }
+}
+
+// UI header
+.ui.header {
+  color: $body-color;
+}
+
+.ui.header> a {
+  display: inline-block;
+  margin-top: .14285714em;
+  width: 2.5em;
+  height: auto;
+  vertical-align: middle;
+}
+
+.ui.header> a+.content {
+  padding-left: .75rem;
+  vertical-align: middle;
+}
+
+// Menu
 .hidden.menu {
   display: none;
 }
 
+.secondary.pointing.menu .toc.item {
+  display: none;
+}
+
+.ui.secondary.inverted.menu .link.item, .ui.secondary.inverted.menu a.item  {
+  text-transform: uppercase;
+  color: $white !important;
+  &:hover {
+    color: $turquoise !important;
+  }
+}
+
+.ui.secondary.inverted.pointing.menu .active.item {
+  border-color: $turquoise;
+  color: $turquoise !important;
+}
+
+.menu.transition .ui.inverted.button:hover, .ui.inverted.button:active, .ui.inverted.button:focus {
+  color: $white;
+}
+
+// Container
+.ui.container.internal {   
+  margin-top: 70px;
+}
+
+.homepages.landing {
+  line-height: 1.9;  
+}
+
+// Masthead
 .masthead.segment {
   min-height: 700px;
   padding: 1em 0em;
@@ -49,6 +117,33 @@ body {
   font-weight: normal;
 }
 
+.masthead.segment {
+  min-height: 500px;
+}    
+
+.masthead {
+  background: url("../images/pattern.png"), url("../images/jumbotron.jpg") !important;
+  overflow: hidden;
+  background-size: cover;
+  .ui.text.container {
+    margin-top: 86px;
+  }
+  h1.ui.header {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 48px;
+    color: #ffffff;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+  }
+  h5 {
+    color: $medium-grey;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+    margin-top: 0;
+    margin-bottom: 60px;
+  }
+}
+
+// Stripe
 .ui.vertical.stripe {
   padding: 8em 0em;
 }
@@ -83,12 +178,22 @@ body {
   padding-bottom: 5em;
 }
 
-.footer.segment {
-  padding: 5em 0em;
+.ui.vertical.stripe {
+  padding: 4em 0em;
+  h3 {
+    font-size: 1.5em;
+    color: $mid-night-blue;
+    margin-top: -30px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  p {
+    font-size: 0.875em;
+  }
 }
 
-.secondary.pointing.menu .toc.item {
-  display: none;
+.footer.segment {
+  padding: 5em 0em;
 }
 
 .ui.footer.segment {
@@ -99,35 +204,10 @@ body {
   width: 100%;
 }
 
-.auth {
-  background-color: $body-background-color;
-}
-
-.auth .column {
+// Auth
+.auth.column {
   margin-top: 100px;
   max-width: 450px;
-}
-
-.main.container {
-  margin-top: 7em;
-}
-
-// UI header
-.ui.header {
-  color: $body-color;
-}
-
-.ui.header> a {
-  display: inline-block;
-  margin-top: .14285714em;
-  width: 2.5em;
-  height: auto;
-  vertical-align: middle;
-}
-
-.ui.header> a+.content {
-  padding-left: .75rem;
-  vertical-align: middle;
 }
 
 // UI form
@@ -138,13 +218,6 @@ body {
 // UI message
 .ui.message p:last-child {
   margin-top: 0;
-}
-
-a {
-  color: $turquoise;
-  &:hover, &:focus {
-    color: $dark-turquoise;
-  }
 }
 
 // Flash
@@ -243,83 +316,6 @@ a {
 // Thumbnail
 .thumbnail {
   @include border-radius(0);
-}
-
-// Navbar
-.navbar-nav {
-  margin: 0 auto;
-}
-
-.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
-  background-color: transparent;
-}
-
-// Font awesome
-
-// Background
-.background-success {
-  background-color: $grass;
-}
-
-.background-info {
-  background-color: $blue;
-}
-
-.background-warning {
-  background-color: $orange;
-}
-
-.background-danger {
-  background-color: $red;
-}
-
-.background-yellow {
-  background-color: $yellow !important;
-}
-
-.background-white {
-  background-color: $white !important;
-}
-
-.background-light-grey {
-  background-color: $light-grey !important;
-}
-
-.background-xx-light-grey {
-  background-color: $xx-light-grey;
-}
-
-// Color
-.turquoise {
-  color: $turquoise !important;
-}
-
-.xx-light-grey {
-  color: $xx-light-grey;
-}
-
-// Navpills active
-.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
-  color: $light-mid-night-blue;
-  background: $light-grey;
-  border: 1px solid $light-mid-night-blue;
-}
-
-.nav-pills > li > a { 
-  border-radius: 0;
-}
-
-// Display
-.visible-all-inline-block {
-  display: inline-block !important;
-}
-
-.visible-all-inline {
-  display: inline !important;
-}
-
-.visible-all-block {
-  display: block !important;
 }
 
 // Panel
@@ -600,131 +596,207 @@ dt {
   margin: 20px 15px;
 }
 
-// Margins
-.m-t-n {
- margin-top: 0 !important;
- padding-top: 0 !important;
-}
-
-.m-b-n {
- margin-bottom: 0 !important;
-}
-
-.m-t-xxs {
- margin-top: 3px !important;
-}
-
-.m-t-xs {
- margin-top: 5px !important;
-}
-
-.m-b-xxs {
- margin-bottom: 3px !important;
-}
-
-.m-b-xs {
- margin-bottom: 5px !important;
-}
-
-.m-t-s {
- margin-top: 10px !important;
-}
-
-.m-b-s {
- margin-bottom: 10px !important;
-}
-
-.m-t-m {
- margin-top: 15px !important;
-}
-
-.m-b-m {
- margin-bottom: 15px !important;
-}
-
-.m-t-l {
- margin-top: 20px !important;
-}
-
-.m-b-l {
- margin-bottom: 20px !important;
-}
-
-.m-t-xl {
- margin-top: 30px !important;
-}
-
-.m-b-xl {
- margin-bottom: 30px !important;
-}
-
-.no-margins {
- margin: 0 !important;
-}
-
-// borders
-.border-top-no {
-  border-top: none !important;
-}
-
-.border-bottom-no {
-  border-bottom: none !important;
-}
-
-// alignment
-.vertical-text {
-  transform: rotate(-90deg);
-  transform-origin: left top 0;
-  @include transition(2s);
-}
-
-.center-block {
-  display: table;
-}
-
-.horizontal-line-with-text {
-   width: 100%;
-   text-align: center;
-   border-bottom: 1px solid $medium-grey;
-   line-height: 0.1em;
-   margin: 10px 0 20px;
-
-   span {
-    background:#fff;
-    padding:0 10px;
-  }
-}
-
-// Vertical center
-.vertical-center {
-  position: absolute; // Remember to give parent container position relative
-  top: 50%;
-  @include transform-translate(-50%);
-}
-
-/*.vertical-center {
-  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
-/*  min-height: 10vh; /* These two lines are counted as one :-)       */
-
-/*  display: flex;
-    align-items: center;
-  } */
-
-.vertical-center-small {
-  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
-  min-height: 5vh; /* These two lines are counted as one :-)       */
-
-  display: flex;
-  align-items: center;
-}
-
 // Sprite
 .sprite{
   display: inline-block;
   background: transparent url('../images/sprite.png') no-repeat; 
 }
 
-@media only screen and (max-width: 700px) {
+.sprite.invoice {
+  height: 48px;
+  width: 48px;
+  background-position: left top;  
+}
+
+.sprite.sale {
+  height: 48px;
+  width: 48px;
+  background-position: -48px top;  
+}
+
+.sprite.project {
+  height: 48px;
+  width: 48px;
+  background-position: -96px top;  
+}
+
+.sprite.analysis {
+  height: 48px;
+  width: 48px;
+  background-position: -142px top;  
+}
+
+.sprite.logo-one {
+  height: 100px;
+  width: 100px;
+  background-position: -191px top;  
+}
+
+.sprite.logo-two {
+  height: 100px;
+  width: 100px;
+  background-position: -291px top;  
+}
+
+// company logo
+.company-logo {
+  background: #f7f9fa;
+  padding: 10px;
+  margin: 0px 0 20px 0;
+  text-align: center;
+}
+
+#features {
+  .sprite {
+    float: left;
+    margin-right: 20px;
+  }
+  blockquote {
+    overflow: hidden;
+    border: none;
+  }  
+}
+
+#features, #pricing {
+  margin-top: 2px;
+  box-shadow: 0 -1px 0 rgba(3,139,152,1);
+}
+
+#clients {
+  margin-bottom: 1px;
+  border-bottom: solid 1px rgba(3,139,152,1);
+}
+
+#clients, #bottom-cta, #contacts {
+  box-shadow: 0 -1px 0 rgba(rgb(228,229,231),1);
+}
+
+#testimonials {
+  background: url("../images/pattern.png"),url("../images/testimonials.jpg");
+  .carousel-indicators {
+    margin-bottom: -40px;
+  }
+  .carousel-indicators li {
+    border: 1px solid $turquoise;
+    margin-left: 5px;
+  }
+  .carousel-indicators .active {
+    background-color: $turquoise;
+  }
+  .slide-item p {
+    color: $turquoise;
+  }
+  .slide-item h6 {
+    font-weight: 400;
+    color: $medium-grey;
+  }
+  .quote.icon {
+    color: $turquoise;
+    font-size: 30px;
+  }
+}
+
+// pricing
+.pricing-plan {
+  margin: 0 10px 0 10px;
+  border-radius: 4px;
+  padding-bottom: 20px;
+  background: #fff;
+  border: 1px solid #e4e5e7;
+  padding-left: 0;
+  list-style: none;
+  li {
+    font-size: 0.875em;
+    line-height: 1.5;
+  }
+  li.pricing-title {
+    background: $mid-night-blue;
+    color: $white;
+    padding: 15px 10px 15px 10px;
+    border-radius: 4px 4px 0 0;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  li.pricing-desc {
+    border-top: none;
+    padding: 15px 16px 0px 16px;
+  }
+  li.pricing-price {
+    font-weight: 600;
+    font-size: 30px;
+    color: $turquoise;
+  }
+  li {
+    padding: 10px 15px;
+    text-align: center;
+    color: $x-light-dark-grey;
+  }
+}
+
+.back-to-top {
+  width: 40px;
+  height: 50px;
+  position: fixed;
+  bottom: 0px;
+  right: 20px;
+  display: none;
+  background: $turquoise;
+  opacity: 0.7;
+  text-align: center;
+  z-index: 10000;
+  &:hover {
+    background: $light-turquoise;
+    text-decoration: none;
+  }
+  i {
+    color: #fff;
+    font-size: 15px;
+    display: block;
+    line-height: 33px;
+    width: inherit;
+  }
+}
+
+// Animation
+.animation-delay-1 {
+  @include animation-delay(.1s);
+}
+
+.fadeInRightBig {
+  -webkit-animation-name: fadeInRightBig;
+          animation-name: fadeInRightBig;
+}
+
+.animated {
+  @include animation-duration(1s);
+}
+
+/* Very extra small devices (phones, less than 480px) */
+@media (max-width: $screen-xxs) {
+ 
+}
+
+/* Extra small devices (phones, 320px, and upto small phones, 480px) */
+@media (min-width: $screen-xs) and (max-width: $screen-xs) {
+  
+}
+
+/* Extra small devices (phones, less than 480px) */
+@media (max-width: $screen-xs) {
+
+}
+
+/* Small devices (phones, 480px, and upto large phones, 768px) */
+@media (min-width: $screen-xs) and (max-width: $screen-sm) {
+  
+}
+
+/* Small devices (phones, less than 768px) */
+@media (max-width: $screen-sm) {
+  body {
+    margin-bottom: 800px;
+  }
+
   .ui.fixed.menu {
     display: none !important;
   }
@@ -748,64 +820,8 @@ dt {
   }
 }
 
-/* Extremely very extra small devices (phones, less than 480px) */
-@media (max-width: $screen-xxxs-max) {
-  .visible-xxxs {
-    display: inline-block !important;
-  }
-  .hidden-xxxs {
-    display: none;
-  }
-}
-
-/* Very extra small devices (phones, 320px, and upto small phones, 480px) */
-@media (min-width: $screen-xxs-min) and (max-width: $screen-xxs-max) {
-  .visible-xxxs {
-    display: none;
-  }
-}
-
-/* Very extra small devices (phones, less than 480px) */
-@media (max-width: $screen-xxs-max) {
-  .visible-xxs {
-    display: inline-block !important;
-  }
-  .hidden-xxs {
-    display: none;
-  }
-}
-
-/* Extra small devices (phones, 480px, and upto large phones, 768px) */
-@media (min-width: $screen-xs-min) and (max-width: $screen-xs-max) {
-  .visible-xxxs {
-    display: none;
-  }
-  .visible-xxxs {
-    display: none;
-  }
-  .visible-xxs {
-    display: none;
-  }
-}
-
-/* Extra small devices (phones, less than 768px) */
-@media (max-width: $screen-xs-max) {
-  .visible-xxs {
-    display: none;
-  }
-  .navbar-default .navbar-toggle {
-    border-color: $white;
-    .icon-bar {
-      background-color: $white;
-    }
-  }
-}
-
-/* Small devices (tablets, 768px and up) */
-@media (min-width: $screen-sm-min) {
-  .navbar-right {
-    margin-right: 0;
-  }
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: $screen-sm) {
   .dl-horizontal {
     dt {
       float: left;
@@ -823,17 +839,17 @@ dt {
 
 }
 
-/* Small devices (tablets, 768px and upto desktops, 992px) */
-@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+/* Small medium devices (tablets, 768px and upto desktops, 992px) */
+@media (min-width: $screen-sm) and (max-width: $screen-md) {
 
 }
 
 /* Medium devices (desktops, 992px and upto large desktops, 1200px) */
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+@media (min-width: $screen-md) and (max-width: $screen-lg) {
 
 }
 
 /* Large devices (large desktops, 1200px and up) */
-@media (min-width: $screen-lg-min) {
+@media (min-width: $screen-lg) {
 
 }

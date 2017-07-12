@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import config from '../config'
 
-import User from '../models/user'
+import User from '../models/User'
 
 // next is a callback function that calls the next function in chain 
 export default (req, res, next) => {

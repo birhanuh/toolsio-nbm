@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 import jwt from 'jsonwebtoken'
 import config from '../config'
 
-import User from '../models/user'
+import User from '../models/User'
 
 let router = express.Router();
 
@@ -13,7 +13,7 @@ function validateRegistrationInput(data, otherValidation) {
   let { errors } = otherValidation(data)
 
   return User.findAsync({ email: data.email }).then(user => {
-    if (user) { 
+    if (user[0]) { 
       if (user[0].email === data.email) { errors.email = 'Email is already taken' }
     }
 
@@ -62,7 +62,7 @@ router.post('/login', (req, res) => {
   const { email, password } = req.body
 
   User.findAsync({ email: email }).then(user => {
-    if (user) {
+    if (user[0]) {
       if (bcrypt.compareSync(password, user[0].password)) {
         const token = jwt.sign({
           id: user[0]._id,

@@ -1,23 +1,21 @@
-import mongoose from 'mongoose'
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
+
+let items = []
 
 // User Schema 
-let SaleSchema = new mongoose.Schema({
-  name: {
-    type: String, 
-    default:''
-  }, 
-  date: {
-    type: Date, 
-    default: Date.now 
-  },
-  status: {
-    type: String, 
-    default: 'NEW'
-  },
-  description: {
-    type: String, 
-    default: ''
-  }
+let saleSchema = new mongoose.Schema({
+  customer: { type: ObjectId, required: true },
+  name: { type: String, required: true },
+  date: { type: Date, required: true },
+  status: { type: String, required: true },
+  description: { type: String, default: '' },
+  items: { type: [items], required: true }
 })
 
-let Sale = module.exports = mongoose.model('Sale', SaleSchema);
+saleSchema.methods.addItems = function(items) {
+  this.items.push(items)
+}
+
+let Sale = module.exports = mongoose.model('Sale', saleSchema)

@@ -30,13 +30,13 @@ class NavigationBar extends Component {
             <img className="logo" src={logo} alt="logo-square" />
             Toolsio
           </Link>
-          <ActiveLink activeOnlyWhenExact to="/dashboard" label={T.translate("dashboard.header")} />
-          <ActiveLink activeOnlyWhenExact to="/projects" label={T.translate("projects.header")} />
-          <ActiveLink activeOnlyWhenExact to="/sales" label={T.translate("sales.header")} />
-          <ActiveLink activeOnlyWhenExact to="/invoices" label={T.translate("invoices.header")}/>
+          <ActiveLink activeOnlyWhenExact to="/dashboard" label={T.translate("dashboards.header")} />
+          <ActiveLink activeOnlyWhenExact to="/projects" label={T.translate("projects.index.header")} />
+          <ActiveLink activeOnlyWhenExact to="/sales" label={T.translate("sales.index.header")} />
+          <ActiveLink activeOnlyWhenExact to="/invoices" label={T.translate("invoices.index.header")}/>
      
           <div className="right item">      
-            <a className="ui inverted button" to="#" onClick={this.logout.bind(this)} >{T.translate("internal_navigation.log_out")}</a>   
+            <a className="ui inverted button" to="#" onClick={this.logout.bind(this)} >{T.translate("internal_navigation.sign_out")}</a>   
           </div>
         </div>  
       </nav>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
 
 import Dashboard from '../Dashboard/Page'
@@ -30,30 +30,51 @@ class App extends Component {
 
     let internalPages = (landingPage || authPages) ? false : true 
 
-    if (authPages) {
-      document.body.className = 'auth'
-    } 
+    document.body.className = ''
+
+    if (internalPages) {
+      document.body.className = 'internal-page'
+    }  
 
     return (
       <div className={classnames({'pusher': landingPage, 'ui middle aligned center aligned grid': authPages})}>
         
         { !authPages && <NavigationBar /> }
       
-        <section className={classnames({'ui main text container': internalPages, 'column': authPages})}>   
-          
-          <FlashMessagesList />
-          
-          <Route exact path="/" component={Landing} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/login" component={Login} />
-          <Route path="/dashboard" component={requireAuth(Dashboard)} />
-          <Route exact path="/projects" component={requireAuth(Projects)} />
-          <Route exact path="/sales" component={requireAuth(Sales)} />
-          <Route exact path="/sales/new" component={requireAuth(SaleFormPage)} />
-          <Route exact path="/sales/:id" component={requireAuth(SaleFormPage)} />
+        <section className={classnames({'ui middle aligned container internal': internalPages, 'auth column row': authPages})}>   
+          <div className={classnames({'ui stackable grid': internalPages})}>
+            <div className="sixteen wide column">
+              <FlashMessagesList />
+            </div>
+            <div className={classnames({'sixteen wide column': internalPages})}>
+              <Switch>
+                <Route exact path="/" component={Landing} />
+                <Route path="/signup" component={Signup} />
+                <Route path="/login" component={Login} />
+                <Route path="/dashboard" component={requireAuth(Dashboard)} />
+                <Route exact path="/projects" component={requireAuth(Projects)} />
+                <Route exact path="/sales" component={requireAuth(Sales)} />
+                <Route exact path="/sales/:id" component={requireAuth(SaleFormPage)} /> 
+                <Route exact path="/sales/new" component={requireAuth(SaleFormPage)} />
+              </Switch>
+            </div>
+          </div>
         </section>
         
-        { !authPages &&
+        { internalPages &&
+          <footer className="ui inverted vertical footer segment">
+            <div className="ui middle aligned container">
+              <div className="ui stackable inverted grid">      
+                <div className="ten wide column">
+                  <h4 className="ui inverted header">Footer Header</h4>
+                  <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+                </div>
+              </div>
+            </div>
+          </footer>
+        }
+          
+        { landingPage &&
           <footer className="ui inverted vertical footer segment">
             <div className="ui center aligned container">
               <div className="ui stackable inverted divided grid">
