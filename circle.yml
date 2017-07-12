@@ -6,7 +6,7 @@ machine:
 
 dependencies:
   override:
-    - cd spec/ 
+    - cd $HOME/$CIRCLE_PROJECT_REPONAME/spec 
     - npm install
 
 test:
