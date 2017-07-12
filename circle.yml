@@ -1,8 +1,6 @@
 machine:
   environment:
     XCODE_SCHEME: "test"
-    XCODE_WORKSPACE: "platforms/ios"
-    XCODE_PROJECT: "toolsio-react.xcodeproj"
   xcode:
     version: "8.3.3"
 dependencies:
