@@ -33,6 +33,7 @@ export default function sales(state = [], action = {}) {
 
     case SET_SALES:
       return action.sales
+      
     default: return state
   }
 }
