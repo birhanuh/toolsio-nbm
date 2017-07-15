@@ -178,7 +178,7 @@
   "projects": {
     "index": {
       "header": "Projects",
-      "empty_projects": "You have no projects yet",
+      "empty_projects": "There are no projects yet",
       "create_new_project": "Create new project",
       "status": "Status",
       "user": "User",
@@ -267,7 +267,7 @@
     "index": {
       "header": "Customers",
       "add_new_customer_button": "Add new customer",
-      "empty_customers": "You have no customers yet",
+      "empty_customers": "There are no customers yet",
       "description": "All added Customers are shown here."
     },
     "new": {
@@ -299,7 +299,7 @@
     "index": {
       "header": "Invoices",
       "are_you_sure": "Are you sure?",
-      "empty_invoices": "You have no invoices yet",
+      "empty_invoices": "There are no invoices yet",
       "create_invoice": "Create new Invoice",
       "description": "All created Invoices are shown here."
     },
@@ -373,7 +373,7 @@
   "sales": {
     "index": {
       "header": "Sales",
-      "empty_sales": "You have no sales yet",
+      "empty_sales": "There are no sales yet",
       "add_new_sale": "Add new sale",
       "status": "Status",
       "user": "User",
@@ -433,7 +433,7 @@
         "total": "Total"
       },
       "create": {
-        "empty_items": "You have no items yet",
+        "empty_items": "There are no items yet",
         "add_new_item_button": "Add new item",
         "notice_create": "Item created!"
       },

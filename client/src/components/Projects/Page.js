@@ -4,6 +4,9 @@ import List from './List'
 import { connect } from 'react-redux'
 import { fetchProjects } from '../../actions/projectActions'
 
+// Localization 
+import T from 'i18n-react'
+
 class Projects extends Component {
 
   componentDidMount() {
@@ -17,7 +20,7 @@ class Projects extends Component {
           <i className="add circle icon"></i>
           Create new Sale
         </Link>
-        <h1 className="ui header">Projects</h1>          
+        <h1 className="ui header">{T.translate("projects.index.header")}</h1>          
         
         <div className="ui divider"></div>
 

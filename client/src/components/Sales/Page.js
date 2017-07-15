@@ -4,6 +4,9 @@ import List from './List'
 import { connect } from 'react-redux'
 import { fetchSales, deleteSale } from '../../actions/saleActions'
 
+// Localization 
+import T from 'i18n-react'
+
 class Page extends Component {
 
   componentDidMount() {
@@ -18,7 +21,7 @@ class Page extends Component {
             <i className="add circle icon"></i>
             Create new Sale
           </Link>
-          <h1 className="ui header m-t-n">Sales</h1>   
+          <h1 className="ui header m-t-n">{T.translate("sales.index.header")}</h1>   
 
           <div className="ui divider"></div>  
         </div>

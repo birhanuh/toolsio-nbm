@@ -1,12 +1,15 @@
 import React from 'react'
 import Tr from './Tr'
 
-export default function List({ sales }) {
+// Localization 
+import T from 'i18n-react'
+
+export default function List({ projects }) {
   const emptyMessage = (
-    <p>There are no games yet in your collection.</p>
+    <p>{T.translate("projects.index.empty_projects")}</p>
   )
 
-  const salesList = (
+  const projectsList = (
     <table className="ui striped selectable table">
        <thead>
           <tr>
@@ -17,18 +20,18 @@ export default function List({ sales }) {
           </tr>
         </thead>
         <tbody>
-          { sales.map(sale => <Tr sale={sale} key={sale._id} />) }
+          { projects.map(project => <Tr project={project} key={project._id} />) }
         </tbody>
     </table>
   )
 
   return (
     <div>
-      { sales.length === 0 ? emptyMessage : salesList }
+      { projects.length === 0 ? emptyMessage : projectsList }
     </div>   
   )
 }
 
 List.propTypes = {
-  sales: React.PropTypes.array.isRequired
+  projects: React.PropTypes.array.isRequired
 }
