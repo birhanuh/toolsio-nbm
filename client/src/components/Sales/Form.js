@@ -3,9 +3,9 @@ import classnames from 'classnames'
 import { Validation } from '../../utils'
 import FormField from '../../utils/FormField'
 
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
-import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+import 'react-datepicker/dist/react-datepicker.css'
 
 // Semantic UI JS
 //import { Dropdown, Input } from 'semantic-ui-react'

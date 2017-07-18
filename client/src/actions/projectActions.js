@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED, SALE_DELETED } from './types'
+import { SET_PROJECTS, ADD_PROJECT, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED } from './types'
 
 export function setProjects(projects) {
   return {
-    type: SET_GAMES,
+    type: SET_PROJECTS,
     projects
   }
 }

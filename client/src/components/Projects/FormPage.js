@@ -1,114 +1,60 @@
 import React, { Component } from 'react' 
-import Create from './Create'
-import Show from './Show'
-import { APIManager } from '../../utils'
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import { createProject, fetchProject, updateProject } from '../../actions/projectActions'
+import Form from './Form'
 
-class Projects extends Component {
+class FormPage  extends Component {
+  
   state = {
     redirect: false
   }
-  
-  submitProject(project) {
-    APIManager.post('/api/projects', project, (err, response) => {
-      if (err) {
-        alert('ERROR' +err.message)
-        return
-      }
 
-      console.log('Project created: '+JSON.stringify(response.result))
-      let updatedList = Object.assign([], this.state.list)
-      updatedList.push(response.result)
-      this.setState({
-        project: updatedList
-      })
-    })
+  componentDidMount = () => {
+    const { match } = this.props
+    if (match.params._id) {
+      this.props.fetchSale(match.params._id)
+    } else {}
   }
 
-  componentDidMount() {
-    console.log('componentDidMount')
-
-    APIManager.get('/api/projects', null, (err, response) => {
-      if (err) {
-        alert('ERROR' +err.message)
-        return
-      }
-
-      console.log(JSON.stringify(response.results))
-      this.setState({
-        list: response.results
-      })
-    })
-  }
-
-  onSelect(index) {
-    event.preventDefault();
-    this.setState({
-      selected: index
-    })
-
-    console.log('onSelect click: ', this.state.selected)
+  saveSale = ({ _id, name, customer, deadline, status, description }) => {
+    if (_id) {
+      return this.props.updateProject({ _id, name, customer, deadline, status, description }).then(
+        () => { this.setState({ redirect: true }) } )   
+    } else {        
+      return this.props.createProject({ _id, name, customer, deadline, status, description }).then(
+        () => { this.setState({ redirect: true }) } )   
+    }
   }
 
   render() {
-    // Return Show component if this.state.list not null
-    const project = !this.state.list[this.state.selected] ? null : (
-      <ShowProject project={this.state.list[this.state.selected]} /> 
-    )
-
-    //  const projectList = this.state.list.map(function() {...}) ES5 version
-    const projectList = this.state.list.map((project, i) => {
-      let selected = (i === this.state.selected)
-      return (
-        <tr key={i} className={selected ? 'active' : ''} >
-          <td><span className="name">{project.name}</span></td>
-          <td><span className="date">{project.date}</span></td>
-          <td><span className="date">{project.state}</span></td>
-          <td><span className="description">{project.description}</span></td>
-          <td className="text-center">
-            <button onClick={this.onSelect.bind(this, i)} className="btn btn-info btn-sm view-more-project"><i className="fa fa-eye" aria-hidden="true"></i>&nbsp;View more</button>
-          </td>
-        </tr> 
-      )  
-    })
-
-    return (  
-      <div className="row">
-        <div className="col-sm-12">
-          <div className="clearfix">
-            <div className="pull-left">
-              <h1>Projects</h1> 
-            </div>
-            <div className="pull-right">
-              <a href="#" className="btn btn-primary m-t-l"><i className="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;Create new project</a>
-            </div>
-          </div>
-
-          <CreateProject onCreate={this.submitProject.bind(this)}/>
-          
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Description</th>
-                <th className="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody className="projects-list">
-              
-              {projectList}      
-
-            </tbody>
-          </table>
-
-          {project}
-
-        </div>
-      </div> 
+   return (
+      <div>
+        {
+          this.state.redirect ? 
+          <Redirect to="/sales" /> : 
+          <Form project={this.props.sale} saveProject={this.saveProject} />
+        }
+      </div>
     )
   }
 }
 
-export default Projects
+FormPage.propTypes = {
+  createProject: React.PropTypes.func.isRequired,
+  fetchProject: React.PropTypes.func.isRequired,
+  updateProject: React.PropTypes.func.isRequired
+}
+
+function mapStateToProps(state, props) {
+  const { match } = props
+  if (match.params._id) {
+    return {
+      project: state.projects.find(item => item._id === match.params._id)
+    }
+  } 
+  return { project: null }
+}
+
+export default connect(mapStateToProps, { createProject, fetchProject, updateProject })(FormPage)
 
