@@ -4,12 +4,8 @@ import Show from './Show'
 import { APIManager } from '../../utils'
 
 class Projects extends Component {
-  constructor() {
-    super()
-    this.state = {
-      selected: 0,
-      list: []
-    }
+  state = {
+    redirect: false
   }
   
   submitProject(project) {

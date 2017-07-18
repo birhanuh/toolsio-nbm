@@ -17,12 +17,12 @@ class FormPage  extends Component {
     } else {}
   }
 
-  saveSale = ({ _id, name, date, status, description }) => {
+  saveSale = ({ _id, name, customer, deadline, status, description }) => {
     if (_id) {
-      return this.props.updateSale({ _id, name, date, status, description }).then(
+      return this.props.updateSale({ _id, name, customer, deadline, status, description }).then(
         () => { this.setState({ redirect: true }) } )   
     } else {        
-      return this.props.createSale({ _id, name, date, status, description }).then(
+      return this.props.createSale({ _id, name, customer, deadline, status, description }).then(
         () => { this.setState({ redirect: true }) } )   
     }
   }

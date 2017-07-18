@@ -14,11 +14,12 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.sale ? this.props.sale._id : null,
-      name: this.props.sale ? this.props.sale.name : '',
-      date: this.props.sale ? moment(this.props.sale.date) : moment(),
-      status: this.props.sale ? this.props.sale.status : '',
-      description: this.props.sale ? this.props.sale.description : '',
+      _id: this.props.sale._id ? this.props.sale._id : null,
+      name: this.props.sale.name ? this.props.sale.name : '',
+      deadline: this.props.sale.deadline ? moment(this.props.sale.deadline) : moment(),
+      customer: this.props.sale.customer ? this.props.sale.customer : '',
+      status: this.props.sale.status ? this.props.sale.status : '',
+      description: this.props.sale.description ? this.props.sale.description : '',
       errors: {},
       isLoading: false
     }
@@ -28,7 +29,8 @@ class Form extends Component {
     this.setState({
       _id: nextProps.sale._id,
       name: nextProps.sale.name,
-      date: moment(nextProps.sale.date),
+      deadline: moment(nextProps.sale.deadline),
+      customer: nextProps.sale.customer,
       status: nextProps.sale.status,
       description: nextProps.sale.description
     })
@@ -36,7 +38,7 @@ class Form extends Component {
 
   handleChange = (e) => {
     if (!!this.state.errors[e.target.name]) {
-      // Clone errors form states to local varibale
+      // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
 
@@ -62,26 +64,26 @@ class Form extends Component {
     return isValid;
   }
 
-  handleSubmit = (e) => {
+  submitSale = (e) => {
     e.preventDefault()
 
     // Validation
     if (this.isValid) { 
-      const { _id, name, date, status, description } = this.state
+      const { _id, name, deadline, customer, status, description } = this.state
       this.setState({ isLoading: true })
-      this.props.saveSale({ _id, name, date, status, description })
+      this.props.saveSale({ _id, name, customer, deadline, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 
-  handleChangeDate(date) {
+  handleChangeDate(deadline) {
     this.setState({
-      date: date
+      deadline: deadline
     });
   } 
 
   render() {
-    const { name, date, status, description, errors, isLoading } = this.state
+    const { name, deadline, customer, status, description, errors, isLoading } = this.state
     
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
     //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
@@ -97,7 +99,7 @@ class Form extends Component {
               <h1 className="ui header">Create new Sale</h1>
             </div>
 
-            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitSale.bind(this)}>
 
               { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
@@ -109,16 +111,30 @@ class Form extends Component {
                 placeholder="Name"
                 error={errors.name}
               />
-              <div  className={classnames("field", { error: !!errors.date })}>
-                <label className="" htmlFor="date">Date:</label>
+              <div  className={classnames("field", { error: !!errors.deadline })}>
+                <label className="" htmlFor="date">Deadline:</label>
                 <DatePicker
                   dateFormat="DD/MM/YYYY"
-                  selected={date}
+                  selected={deadline}
                   onChange={this.handleChangeDate.bind(this)}
                 />
                 <span>{errors.password}</span>
               </div>
-              
+              <FormField
+                formType="select"
+                label="customer"
+                name="customer"
+                type="select"
+                value={status} 
+                onChange={this.handleChange.bind(this)} 
+                error={errors.status}
+
+                options={[
+                  <option key="default" value="" disabled>Set Customer</option>,
+                  <option key="1" value="1">Customer 1</option>,
+                  <option key="2" value="2">Customer 2</option>
+                ]}
+              />
               <FormField
                 formType="select"
                 label="status"

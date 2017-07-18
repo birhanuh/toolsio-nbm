@@ -2,6 +2,10 @@ import { SET_PROJECTS, ADD_PROJECT, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DE
 
 export default function projects(state = [], action = {}) {
   switch(action.type) {
+    
+    case SET_PROJECTS:
+      return action.projects
+      
     case ADD_PROJECT:
       return [
         ...state, 
@@ -30,9 +34,6 @@ export default function projects(state = [], action = {}) {
           action.project
         ]
       }
-
-    case SET_PROJECTS:
-      return action.projects
       
     default: return state
   }

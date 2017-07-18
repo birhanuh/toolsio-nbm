@@ -1,75 +1,169 @@
 import React, { Component } from 'react' 
 
-class Create extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-       project: {
-        name: '', 
-        date: new Date(), 
-        state: 'NEW', 
-        description: ''
-      }
+      _id: this.props.project._id ? this.props.project._id : null,
+      name: this.props.project.name ? this.props.project.name : '',
+      deadline: this.props.project.deadline ? moment(this.props.project.deadline) : moment(),
+      customer: this.props.project.customer ? this.props.project.customer : '',
+      status: this.props.project.status ? this.props.project.status : '',
+      description: this.props.project.description ? this.props.project.description : '',
+      errors: {},
+      isLoading: false
     }
   }
 
-  updateProject(event) {
-    //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
-
-    // Create a copy of the state and update it
-    let updatedProject = Object.assign({}, this.state.project)
-    console.log(event.target.id +' = '+event.target.value)
-    updatedProject[event.target.id] = event.target.value
+  componentWillRecieveProps = (nextProps) => {
     this.setState({
-      project: updatedProject
+      _id: nextProps.project._id,
+      name: nextProps.project.name,
+      deadline: moment(nextProps.project.deadline),
+      customer: nextProps.project.customer,
+      status: nextProps.project.status,
+      description: nextProps.project.description
     })
   }
 
+  handleChange = (e) => {
+    //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
+
+    if (!!this.state.errors[e.target.name]) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[e.target.name]
+
+      this.setState({
+        [e.target.name]: e.target.value,
+        errors
+      })
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      })
+    }
+  }
+
+  isValid() {
+    const { errors, isValid } = Validation.validateSaleInput(this.state)
+
+    if (!isValid) {
+      this.setState({ errors })
+    }
+
+    return isValid;
+  }
+
   submitProject(event) {
-    this.props.onCreate(this.state.project)
+     e.preventDefault()
+
+    // Validation
+    if (this.isValid) { 
+      const { _id, name, deadline, customer, status, description } = this.state
+      this.setState({ isLoading: true })
+      this.props.saveProject({ _id, name, customer, deadline, status, description })
+        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+    }
   }
 
   render() {
+
+    const { name, deadline, customer, status, description, errors, isLoading } = this.state
+
     return (
-      <div className="form-horizontal">
-        <div className="form-group">
-          <div className="col-sm-offset-2 col-sm-10">
-            <h1>New Project</h1> 
-            {/* <p>Name: {this.state.project.name}</p> We only update this part */}
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="name">Name:</label>
-          <div className="col-sm-10">
-            <input type="text" onChange={this.updateProject.bind(this)} id="name" name="name" className="form-control name-input" placeholder="Enter name"/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="date">Date:</label>
-          <div className="col-sm-10">
-            <input type="date" onChange={this.updateProject.bind(this)} id="date" name="date" className="form-control date-input" placeholder="Enter date"/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="name">Status:</label>
-          <div className="col-sm-10">
-            <input type="text" onChange={this.updateProject.bind(this)} id="status" name="status" className="form-control name-input" placeholder="Enter name"/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="description">Description:</label>
-          <div className="col-sm-10">
-            <textarea type="textarea" onChange={this.updateProject.bind(this)} id="description" name="description" className="form-control description-input" placeholder="Enter description"></textarea>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="col-sm-offset-2 col-sm-2">
-            <button onClick={this.submitProject.bind(this)} className="btn btn-primary create-project"><i className="fa fa-check-circle" aria-hidden="true"></i>&nbsp;Create project</button>
-          </div>
+       <div>
+        <div className="ui stackable grid">
+          <div className="eight wide column ui segment">  
+
+            <div className="column row">  
+              <h1 className="ui header">Create new Project</h1>
+            </div>
+
+            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitSale.bind(this)}>
+
+              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+
+              <FormField
+                label="Name"
+                name="name" 
+                value={name} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Name"
+                error={errors.name}
+              />
+              <div  className={classnames("field", { error: !!errors.deadline })}>
+                <label className="" htmlFor="date">Deadline:</label>
+                <DatePicker
+                  dateFormat="DD/MM/YYYY"
+                  selected={deadline}
+                  onChange={this.handleChangeDate.bind(this)}
+                />
+                <span>{errors.password}</span>
+              </div>
+              <FormField
+                formType="select"
+                label="customer"
+                name="customer"
+                type="select"
+                value={status} 
+                onChange={this.handleChange.bind(this)} 
+                error={errors.status}
+
+                options={[
+                  <option key="default" value="" disabled>Set Customer</option>,
+                  <option key="1" value="1">Customer 1</option>,
+                  <option key="2" value="2">Customer 2</option>
+                ]}
+              />
+              <FormField
+                formType="select"
+                label="status"
+                name="status"
+                type="select"
+                value={status} 
+                onChange={this.handleChange.bind(this)} 
+                error={errors.status}
+
+                options={[
+                  <option key="default" value="" disabled>Set Status</option>,
+                  <option key="new" value="new">NEW</option>,
+                  <option key="in progress" value="in progress">IN PROGRESS</option>,
+                  <option key="ready" value="ready">READY</option>,
+                  <option key="delivered" value="delivered">DELIVERED</option>
+                  ]
+                }
+              />
+
+              {/*
+              <div className={classnames("field", { error: !!error.status })}>
+                <label htmlFor="status">Status</label>
+                <Dropdown 
+                  placeholder='Status' 
+                  search selection options={statusOptions}   
+                  value={status} 
+                  onChange={this.handleChange.bind(this)} 
+                  error={errors.status} />
+              </div>      
+              */}
+              <FormField
+                formType="textarea"
+                label="Description"
+                name="description" 
+                value={description} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Description"
+              />
+
+              <div className="filed">    
+                <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;Add Sale</button>
+              </div>  
+            </form> 
+          </div>  
         </div>
       </div>
     )
   }
 }
 
-export default Create
+export default Form

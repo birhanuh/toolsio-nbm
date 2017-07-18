@@ -78,8 +78,13 @@ a {
   color: $turquoise !important;
 }
 
+// Menu
 .menu.transition .ui.inverted.button:hover, .ui.inverted.button:active, .ui.inverted.button:focus {
   color: $white;
+}
+
+.ui.inverted.menu {
+  background: $turquoise;
 }
 
 // Container
