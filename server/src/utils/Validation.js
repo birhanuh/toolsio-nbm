@@ -59,8 +59,33 @@ export default {
     if (!data.name) {
       errors.name = 'Name is required'
     }
-    if (!data.date) {
-      errors.date = 'Date is required'
+    if (!data.deadline) {
+      errors.deadline = 'Deadline is required'
+    }
+    if (!data.customer) {
+      errors.customer = 'Customer is required'
+    }
+    if (!data.status) {
+      errors.status = 'Status is required'
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
+  validateProjectInput: (data) => {
+    let errors = {}
+
+    if (!data.name) {
+      errors.name = 'Name is required'
+    }
+    if (!data.deadline) {
+      errors.deadline = 'Deadline is required'
+    }
+    if (!data.customer) {
+      errors.customer = 'Customer is required'
     }
     if (!data.status) {
       errors.status = 'Status is required'

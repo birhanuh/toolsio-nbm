@@ -60,7 +60,7 @@ export default {
       errors.name = 'Name is required'
     }
     if (!data.deadline) {
-      errors.date = 'Deadline is required'
+      errors.deadline = 'Deadline is required'
     }
     if (!data.customer) {
       errors.customer = 'Customer is required'

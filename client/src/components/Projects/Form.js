@@ -7,22 +7,25 @@ import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
 
+// Localization 
+import T from 'i18n-react'
+
 class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.project._id ? this.props.project._id : null,
-      name: this.props.project.name ? this.props.project.name : '',
-      deadline: this.props.project.deadline ? moment(this.props.project.deadline) : moment(),
-      customer: this.props.project.customer ? this.props.project.customer : '',
-      status: this.props.project.status ? this.props.project.status : '',
-      description: this.props.project.description ? this.props.project.description : '',
+      _id: this.props.project ? this.props.project._id : null,
+      name: this.props.project ? this.props.project.name : '',
+      deadline: this.props.project ? moment(this.props.project.deadline) : moment(),
+      customer: this.props.project ? this.props.project.customer : '',
+      status: this.props.project ? this.props.project.status : '',
+      description: this.props.project ? this.props.project.description : '',
       errors: {},
       isLoading: false
     }
   }
 
-  componentWillRecieveProps = (nextProps) => {
+  componentWillReceiveProps = (nextProps) => {
     this.setState({
       _id: nextProps.project._id,
       name: nextProps.project.name,
@@ -53,7 +56,7 @@ class Form extends Component {
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateSaleInput(this.state)
+    const { errors, isValid } = Validation.validateProjectInput(this.state)
 
     if (!isValid) {
       this.setState({ errors })
@@ -63,7 +66,7 @@ class Form extends Component {
   }
 
   submitProject(event) {
-     e.preventDefault()
+     event.preventDefault()
 
     // Validation
     if (this.isValid) { 
@@ -74,25 +77,31 @@ class Form extends Component {
     }
   }
 
+  handleChangeDate(deadline) {
+    this.setState({
+      deadline: deadline
+    });
+  } 
+
   render() {
 
     const { name, deadline, customer, status, description, errors, isLoading } = this.state
 
     return (
        <div>
-        <div className="ui stackable grid">
+        <div className="ui stackable centered grid">
           <div className="eight wide column ui segment">  
 
             <div className="column row">  
-              <h1 className="ui header">Create new Project</h1>
+              <h1 className="ui header">{T.translate("projects.new.header")}</h1>
             </div>
 
-            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitSale.bind(this)}>
+            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitProject.bind(this)}>
 
-              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+              { !!errors.global && <div className="ui negative message"><p>{errors.global}</p></div> }
 
               <FormField
-                label="Name"
+                label={T.translate("projects.new.name")}
                 name="name" 
                 value={name} 
                 onChange={this.handleChange.bind(this)} 
@@ -100,7 +109,7 @@ class Form extends Component {
                 error={errors.name}
               />
               <div  className={classnames("field", { error: !!errors.deadline })}>
-                <label className="" htmlFor="date">Deadline:</label>
+                <label className="" htmlFor="date">{T.translate("projects.new.deadline")}</label>
                 <DatePicker
                   dateFormat="DD/MM/YYYY"
                   selected={deadline}
@@ -110,22 +119,22 @@ class Form extends Component {
               </div>
               <FormField
                 formType="select"
-                label="customer"
+                label={T.translate("projects.new.customer")}
                 name="customer"
                 type="select"
-                value={status} 
+                value={customer} 
                 onChange={this.handleChange.bind(this)} 
-                error={errors.status}
+                error={errors.customer}
 
                 options={[
-                  <option key="default" value="" disabled>Set Customer</option>,
+                  <option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
                   <option key="1" value="1">Customer 1</option>,
                   <option key="2" value="2">Customer 2</option>
                 ]}
               />
               <FormField
                 formType="select"
-                label="status"
+                label={T.translate("projects.new.status")}
                 name="status"
                 type="select"
                 value={status} 
@@ -133,7 +142,7 @@ class Form extends Component {
                 error={errors.status}
 
                 options={[
-                  <option key="default" value="" disabled>Set Status</option>,
+                  <option key="default" value="" disabled>{T.translate("projects.new.select_status")}</option>,
                   <option key="new" value="new">NEW</option>,
                   <option key="in progress" value="in progress">IN PROGRESS</option>,
                   <option key="ready" value="ready">READY</option>,
@@ -155,15 +164,15 @@ class Form extends Component {
               */}
               <FormField
                 formType="textarea"
-                label="Description"
+                label={T.translate("projects.new.description")}
                 name="description" 
                 value={description} 
                 onChange={this.handleChange.bind(this)} 
-                placeholder="Description"
+                placeholder={T.translate("projects.new.description")}
               />
 
               <div className="filed">    
-                <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;Add Sale</button>
+                <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>
               </div>  
             </form> 
           </div>  

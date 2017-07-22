@@ -38,7 +38,7 @@ export function projectDeleted(id) {
 
 export function createProject(project) {
   return dispatch => {
-    return axios.post('api/projects', project).then(res => {
+    return axios.post('/api/projects', project).then(res => {
       dispatch(addProject(res.data.result))
     })
   }

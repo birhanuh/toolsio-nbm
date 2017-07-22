@@ -183,7 +183,6 @@
       "status": "Status",
       "user": "User",
       "customer": "Customer",
-      "progress": "Progress",
       "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Projects are shown here."
@@ -191,10 +190,15 @@
     "new": {
       "header": "New Project",
       "notice_create": "Project created!",
+      "name": "Name",
+      "deadline": "Deadline",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "description": "Description",
+      "select_status": "-Select status-",
       "select_customer": "-Select Customer-",
       "select_user": "-Select User-",
-      "select_project": "-Select Project-",
-      "no_select_project": "-No Project to select-",
       "select_or_add_new_customer": "Select Customer if exists or add new"
     },
     "show": {
@@ -374,7 +378,7 @@
     "index": {
       "header": "Sales",
       "empty_sales": "There are no sales yet",
-      "add_new_sale": "Add new sale",
+      "create_new_sale": "Create new sale",
       "status": "Status",
       "user": "User",
       "customer": "Customer",
@@ -385,10 +389,14 @@
     "new": {
       "header": "New Sale",
       "notice_create": "Sale created!",
-      "select_customer": "-Select Customer-",
-      "select_user": "-Select User-",
-      "select_sale": "-Select Sale-",
-      "no_select_sale": "-No Sale to select-"
+      "name": "Name",
+      "deadline": "Deadline",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "description": "Description",
+      "select_status": "-Select status-",
+      "select_customer": "-Select Customer-"
     },
     "create": {
       "notice_create": "Sale created!"

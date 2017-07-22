@@ -17,7 +17,7 @@ class FormPage  extends Component {
     } else {}
   }
 
-  saveSale = ({ _id, name, customer, deadline, status, description }) => {
+  saveProject = ({ _id, name, customer, deadline, status, description }) => {
     if (_id) {
       return this.props.updateProject({ _id, name, customer, deadline, status, description }).then(
         () => { this.setState({ redirect: true }) } )   
@@ -32,8 +32,8 @@ class FormPage  extends Component {
       <div>
         {
           this.state.redirect ? 
-          <Redirect to="/sales" /> : 
-          <Form project={this.props.sale} saveProject={this.saveProject} />
+          <Redirect to="/projects" /> : 
+          <Form project={this.props.project} saveProject={this.saveProject} />
         }
       </div>
     )
