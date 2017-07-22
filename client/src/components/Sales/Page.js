@@ -19,7 +19,7 @@ class Page extends Component {
         <div className="row column">  
           <Link className="ui right floated primary button" to="/sales/new">
             <i className="add circle icon"></i>
-            Create new Sale
+            {T.translate("sales.index.create_new_sale")}
           </Link>
           <h1 className="ui header m-t-n">{T.translate("sales.index.header")}</h1>   
 

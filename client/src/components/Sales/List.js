@@ -6,7 +6,7 @@ import T from 'i18n-react'
 
 export default function List({ sales, deleteSale }) {
   const emptyMessage = (
-    <p>{T.translate("sales.index.empty_sales")}</p>
+    <p className="ui info message">{T.translate("sales.index.empty_sales")}</p>
   )
 
   const salesList = (

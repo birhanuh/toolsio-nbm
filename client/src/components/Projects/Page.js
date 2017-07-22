@@ -17,17 +17,17 @@ class Page extends Component {
     return (
       <div>
         <div className="row column">  
-          <Link className="ui right floated primary button" to="/sales/new">
+          <Link className="ui right floated primary button" to="/projects/new">
             <i className="add circle icon"></i>
-            Create new Sale
+            {T.translate("projects.index.create_new_project")}
           </Link>
-          <h1 className="ui header m-t-n">{T.translate("sales.index.header")}</h1>   
+          <h1 className="ui header m-t-n">{T.translate("projects.index.header")}</h1>   
 
           <div className="ui divider"></div>  
         </div>
         
         <div className="row column">     
-          <List sales={this.props.projects} deleteProject={deleteProject} />   
+          <List projects={this.props.projects} deleteProject={deleteProject} />  
         </div>       
       </div>   
     )

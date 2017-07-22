@@ -125,7 +125,7 @@ class Form extends Component {
                 label="customer"
                 name="customer"
                 type="select"
-                value={status} 
+                value={customer} 
                 onChange={this.handleChange.bind(this)} 
                 error={errors.status}
 

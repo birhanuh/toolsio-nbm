@@ -46,7 +46,7 @@ export function createProject(project) {
 
 export function updateProject(project) {
   return dispatch => {
-    axios.put(`/api/projects/${project._id}`, project).then(res => {
+    return axios.put(`/api/projects/${project._id}`, project).then(res => {
       dispatch(projectUpdated(res.data.result))
     })
   }
@@ -54,7 +54,7 @@ export function updateProject(project) {
 
 export function deleteProject(id) {
   return dispatch => {
-    axios.put(`/api/projects/${id}`).then(res => {
+    return axios.delete(`/api/projects/${id}`).then(res => {
       dispatch(projectDeleted(id))
     })    
   }
@@ -62,8 +62,16 @@ export function deleteProject(id) {
 
 export function fetchProjects() {
   return dispatch => {
-    return axios.get('api/projects').then(res => {
+    return axios.get('/api/projects').then(res => {
       dispatch(setProjects(res.data.results))
+    })
+  }
+}
+
+export function fetchProject(id) {
+  return dispatch => {
+    return axios.get(`/api/projects/${id}`).then(res => {
+      dispatch(projectFetched(res.data.results))
     })
   }
 }

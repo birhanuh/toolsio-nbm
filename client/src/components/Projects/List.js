@@ -6,7 +6,7 @@ import T from 'i18n-react'
 
 export default function List({ projects }) {
   const emptyMessage = (
-    <p>{T.translate("projects.index.empty_projects")}</p>
+    <p className="ui info message">{T.translate("projects.index.empty_projects")}</p>
   )
 
   const projectsList = (
