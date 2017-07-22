@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Tr({project, deleteproject}) {
+export default function Tr({project, deleteProject}) {
   
   return (
     <tr>

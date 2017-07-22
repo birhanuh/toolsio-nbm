@@ -29,10 +29,10 @@ export function saleUpdated(sale) {
   }
 }
 
-export function saleDeleted(saleId) {
+export function saleDeleted(id) {
   return {
     type: SALE_DELETED,
-    saleId
+    id
   }
 }
 

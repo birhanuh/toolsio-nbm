@@ -8,11 +8,55 @@ export function setProjects(projects) {
   }
 }
 
+export function addProject(project) {
+  return {
+    type: ADD_PROJECT,
+    project
+  }
+}
+
+export function projectFetched(project) {
+  return {
+    type: PROJECT_FETCHED,
+    project
+  }
+}
+
+export function projectUpdated(project) {
+  return {
+    type: PROJECT_UPDATED,
+    project
+  }
+}
+
+export function projectDeleted(id) {
+  return {
+    type: PROJECT_DELETED,
+    id
+  }  
+}
+
 export function createProject(project) {
   return dispatch => {
     return axios.post('api/projects', project).then(res => {
       dispatch(addProject(res.data.result))
     })
+  }
+}
+
+export function updateProject(project) {
+  return dispatch => {
+    axios.put(`/api/projects/${project._id}`, project).then(res => {
+      dispatch(projectUpdated(res.data.result))
+    })
+  }
+}
+
+export function deleteProject(id) {
+  return dispatch => {
+    axios.put(`/api/projects/${id}`).then(res => {
+      dispatch(projectDeleted(id))
+    })    
   }
 }
 
