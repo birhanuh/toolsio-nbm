@@ -1,5 +1,5 @@
 import Project from '../models/Project'
-import Validation from '../utils'
+import { Validation } from '../utils'
 
 export default {
   
@@ -26,27 +26,39 @@ export default {
   },
 
   create: (params, callback) => {
-    Project.create(params, function(err, project) {
-      if (err) {
-        callback(err, null)
-        return
-      }
-      callback(null, project)
-    })
+    const { errors, isValid } = Validation.validateProjectInput(params)
+
+    if (isValid) {
+      Project.create(params, function(err, project) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, project)
+      })
+    } else {
+      callback(errors, null, null)
+    }
   },
 
-  update: (id, params, callback) => {
-    Project.findByIdAndUpdate(id, params, {new: true}, function(err, project) {
-      if (err) {
-        callback(err, null)
-        return
-      }
+  findByIdAndUpdate: (id, params, callback) => {
+    const { errors, isValid } = Validation.validateProjectInput(params)
 
-      callback(null, project)
-    })
+    if (isValid) {
+      Project.findByIdAndUpdate(id, params, {new: true}, function(err, project) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+
+        callback(null, project)
+      })
+    } else {
+      callback(errors, null, null)
+    }
   },
 
-  delete: (id, callback) => {
+  findByIdAndRemove: (id, callback) => {
     Project.findByIdAndRemove(id, function(err, project) {
       if (err) {
         callback(err, null)

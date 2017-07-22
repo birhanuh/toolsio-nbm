@@ -11,7 +11,6 @@
   }
 }
 
-
 //Checkbox
 .icheckbox_minimal-grey, .iradio_minimal-grey {
   display: inline-block;
@@ -29,10 +28,9 @@
   background-position: 0 0;
 }
 
-// Customize date dropdowns take auto width
-.date > .col-sm-9 .form-control {
-  display: inline-block;
-  width: auto;
+// Customize error block span 
+.ui.form .field.error span {
+  color: #9F3A38;
 }
 
 // Buttons

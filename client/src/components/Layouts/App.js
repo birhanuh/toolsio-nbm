@@ -6,7 +6,8 @@ import Dashboard from '../Dashboard/Page'
 import Landing from './Landing'
 import Signup from '../Signup/Page'
 import Login from '../Login/Page'
-import Projects from '../Projects/Projects'
+import Projects from '../Projects/Page'
+import ProjectFormPage from '../Projects/FormPage'
 import Sales from '../Sales/Page'
 import SaleFormPage from '../Sales/FormPage'
 import requireAuth from '../../utils/requireAuth'
@@ -53,6 +54,8 @@ class App extends Component {
                 <Route path="/login" component={Login} />
                 <Route path="/dashboard" component={requireAuth(Dashboard)} />
                 <Route exact path="/projects" component={requireAuth(Projects)} />
+                <Route exact path="/projects/:id" component={requireAuth(ProjectFormPage)} />
+                <Route exact path="/projects/new" component={requireAuth(ProjectFormPage)} />
                 <Route exact path="/sales" component={requireAuth(Sales)} />
                 <Route exact path="/sales/:id" component={requireAuth(SaleFormPage)} /> 
                 <Route exact path="/sales/new" component={requireAuth(SaleFormPage)} />

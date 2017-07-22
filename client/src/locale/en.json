@@ -178,12 +178,11 @@
   "projects": {
     "index": {
       "header": "Projects",
-      "empty_projects": "You have no projects yet",
+      "empty_projects": "There are no projects yet",
       "create_new_project": "Create new project",
       "status": "Status",
       "user": "User",
       "customer": "Customer",
-      "progress": "Progress",
       "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Projects are shown here."
@@ -191,10 +190,15 @@
     "new": {
       "header": "New Project",
       "notice_create": "Project created!",
+      "name": "Name",
+      "deadline": "Deadline",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "description": "Description",
+      "select_status": "-Select status-",
       "select_customer": "-Select Customer-",
       "select_user": "-Select User-",
-      "select_project": "-Select Project-",
-      "no_select_project": "-No Project to select-",
       "select_or_add_new_customer": "Select Customer if exists or add new"
     },
     "show": {
@@ -267,7 +271,7 @@
     "index": {
       "header": "Customers",
       "add_new_customer_button": "Add new customer",
-      "empty_customers": "You have no customers yet",
+      "empty_customers": "There are no customers yet",
       "description": "All added Customers are shown here."
     },
     "new": {
@@ -299,7 +303,7 @@
     "index": {
       "header": "Invoices",
       "are_you_sure": "Are you sure?",
-      "empty_invoices": "You have no invoices yet",
+      "empty_invoices": "There are no invoices yet",
       "create_invoice": "Create new Invoice",
       "description": "All created Invoices are shown here."
     },
@@ -373,8 +377,8 @@
   "sales": {
     "index": {
       "header": "Sales",
-      "empty_sales": "You have no sales yet",
-      "add_new_sale": "Add new sale",
+      "empty_sales": "There are no sales yet",
+      "create_new_sale": "Create new sale",
       "status": "Status",
       "user": "User",
       "customer": "Customer",
@@ -385,10 +389,14 @@
     "new": {
       "header": "New Sale",
       "notice_create": "Sale created!",
-      "select_customer": "-Select Customer-",
-      "select_user": "-Select User-",
-      "select_sale": "-Select Sale-",
-      "no_select_sale": "-No Sale to select-"
+      "name": "Name",
+      "deadline": "Deadline",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "description": "Description",
+      "select_status": "-Select status-",
+      "select_customer": "-Select Customer-"
     },
     "create": {
       "notice_create": "Sale created!"
@@ -433,7 +441,7 @@
         "total": "Total"
       },
       "create": {
-        "empty_items": "You have no items yet",
+        "empty_items": "There are no items yet",
         "add_new_item_button": "Add new item",
         "notice_create": "Item created!"
       },

@@ -2,6 +2,11 @@ import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED, SALE_DELETED } from '.
 
 export default function sales(state = [], action = {}) {
   switch(action.type) {
+    
+
+    case SET_SALES:
+      return action.sales
+      
     case ADD_SALE:
       return [
         ...state, 
@@ -30,9 +35,7 @@ export default function sales(state = [], action = {}) {
           action.sale
         ]
       }
-
-    case SET_SALES:
-      return action.sales
+      
     default: return state
   }
 }

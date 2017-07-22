@@ -10,19 +10,16 @@ import 'react-datepicker/dist/react-datepicker.css'
 // Localization 
 import T from 'i18n-react'
 
-// Semantic UI JS
-//import { Dropdown, Input } from 'semantic-ui-react'
-
 class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.sale ? this.props.sale._id : null,
-      name: this.props.sale ? this.props.sale.name : '',
-      deadline: this.props.sale ? moment(this.props.sale.deadline) : moment(),
-      customer: this.props.sale ? this.props.sale.customer : '',
-      status: this.props.sale ? this.props.sale.status : '',
-      description: this.props.sale ? this.props.sale.description : '',
+      _id: this.props.project ? this.props.project._id : null,
+      name: this.props.project ? this.props.project.name : '',
+      deadline: this.props.project ? moment(this.props.project.deadline) : moment(),
+      customer: this.props.project ? this.props.project.customer : '',
+      status: this.props.project ? this.props.project.status : '',
+      description: this.props.project ? this.props.project.description : '',
       errors: {},
       isLoading: false
     }
@@ -30,16 +27,18 @@ class Form extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({
-      _id: nextProps.sale._id,
-      name: nextProps.sale.name,
-      deadline: moment(nextProps.sale.deadline),
-      customer: nextProps.sale.customer,
-      status: nextProps.sale.status,
-      description: nextProps.sale.description
+      _id: nextProps.project._id,
+      name: nextProps.project.name,
+      deadline: moment(nextProps.project.deadline),
+      customer: nextProps.project.customer,
+      status: nextProps.project.status,
+      description: nextProps.project.description
     })
   }
 
   handleChange = (e) => {
+    //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
+
     if (!!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
@@ -54,11 +53,10 @@ class Form extends Component {
         [e.target.name]: e.target.value
       })
     }
-   
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateSaleInput(this.state)
+    const { errors, isValid } = Validation.validateProjectInput(this.state)
 
     if (!isValid) {
       this.setState({ errors })
@@ -67,14 +65,14 @@ class Form extends Component {
     return isValid;
   }
 
-  submitSale = (e) => {
-    e.preventDefault()
+  submitProject(event) {
+     event.preventDefault()
 
     // Validation
     if (this.isValid) { 
       const { _id, name, deadline, customer, status, description } = this.state
       this.setState({ isLoading: true })
-      this.props.saveSale({ _id, name, customer, deadline, status, description })
+      this.props.saveProject({ _id, name, customer, deadline, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -86,28 +84,24 @@ class Form extends Component {
   } 
 
   render() {
-    const { name, deadline, customer, status, description, errors, isLoading } = this.state
-    
-    //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
-    //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
-    //    { key: 'ready', value: 'ready', text: 'READY' } ,
-    //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
 
-    return (  
-      <div>
+    const { name, deadline, customer, status, description, errors, isLoading } = this.state
+
+    return (
+       <div>
         <div className="ui stackable centered grid">
           <div className="eight wide column ui segment">  
 
             <div className="column row">  
-              <h1 className="ui header">{T.translate("sales.new.header")}</h1>
+              <h1 className="ui header">{T.translate("projects.new.header")}</h1>
             </div>
 
-            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitSale.bind(this)}>
+            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitProject.bind(this)}>
 
-              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+              { !!errors.global && <div className="ui negative message"><p>{errors.global}</p></div> }
 
               <FormField
-                label={T.translate("sales.new.name")}
+                label={T.translate("projects.new.name")}
                 name="name" 
                 value={name} 
                 onChange={this.handleChange.bind(this)} 
@@ -115,7 +109,7 @@ class Form extends Component {
                 error={errors.name}
               />
               <div  className={classnames("field", { error: !!errors.deadline })}>
-                <label className="" htmlFor="date">{T.translate("sales.new.deadline")}</label>
+                <label className="" htmlFor="date">{T.translate("projects.new.deadline")}</label>
                 <DatePicker
                   dateFormat="DD/MM/YYYY"
                   selected={deadline}
@@ -125,7 +119,7 @@ class Form extends Component {
               </div>
               <FormField
                 formType="select"
-                label={T.translate("sales.new.customer")}
+                label={T.translate("projects.new.customer")}
                 name="customer"
                 type="select"
                 value={customer} 
@@ -133,14 +127,14 @@ class Form extends Component {
                 error={errors.customer}
 
                 options={[
-                  <option key="default" value="" disabled>{T.translate("sales.new.select_customer")}</option>,
+                  <option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
                   <option key="1" value="1">Customer 1</option>,
                   <option key="2" value="2">Customer 2</option>
                 ]}
               />
               <FormField
                 formType="select"
-                label={T.translate("sales.new.status")}
+                label={T.translate("projects.new.status")}
                 name="status"
                 type="select"
                 value={status} 
@@ -148,7 +142,7 @@ class Form extends Component {
                 error={errors.status}
 
                 options={[
-                  <option key="default" value="" disabled>{T.translate("sales.new.select_status")}</option>,
+                  <option key="default" value="" disabled>{T.translate("projects.new.select_status")}</option>,
                   <option key="new" value="new">NEW</option>,
                   <option key="in progress" value="in progress">IN PROGRESS</option>,
                   <option key="ready" value="ready">READY</option>,
@@ -170,7 +164,7 @@ class Form extends Component {
               */}
               <FormField
                 formType="textarea"
-                label={T.translate("sales.new.description")}
+                label={T.translate("projects.new.description")}
                 name="description" 
                 value={description} 
                 onChange={this.handleChange.bind(this)} 
@@ -189,4 +183,3 @@ class Form extends Component {
 }
 
 export default Form
-

@@ -1,9 +1,12 @@
 import React from 'react'
 import Tr from './Tr'
 
+// Localization 
+import T from 'i18n-react'
+
 export default function List({ sales, deleteSale }) {
   const emptyMessage = (
-    <p>There are no games yet in your collection.</p>
+    <p className="ui info message">{T.translate("sales.index.empty_sales")}</p>
   )
 
   const salesList = (

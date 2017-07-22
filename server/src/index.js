@@ -44,6 +44,13 @@ if (app.get('env') === 'development') {
 app.use('/users', users)
 app.use('/api', api)
 //app.use('/', routes)
+app.use((req, res) => {
+  res.status(404).json({
+    errors: {
+      global: "Route not yet implemented"
+    }
+  })
+})
 
 // Set port
 app.set('port', (process.env.PORT || 8080))
