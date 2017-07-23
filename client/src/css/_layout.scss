@@ -769,22 +769,12 @@ dt {
   @include animation-duration(1s);
 }
 
-/* Very extra small devices (phones, less than 480px) */
-@media (max-width: $screen-xxs) {
- 
-}
-
-/* Extra small devices (phones, 320px, and upto small phones, 480px) */
-@media (min-width: $screen-xs) and (max-width: $screen-xs) {
-  
-}
-
-/* Extra small devices (phones, less than 480px) */
+/* Extra small devices (phones, less than 433px) */
 @media (max-width: $screen-xs) {
 
 }
 
-/* Small devices (phones, 480px, and upto large phones, 768px) */
+/* Small devices (phones, 433px, and upto large phones, 768px) */
 @media (min-width: $screen-xs) and (max-width: $screen-sm) {
   
 }

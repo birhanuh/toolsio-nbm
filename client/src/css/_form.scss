@@ -216,14 +216,35 @@ select.date {
   margin-left: 17% !important;
 }
 
-/* Small devices (phones, less than 768px) */
-@media (max-width: $screen-sm) {
-  .btn {
-    
+/* Extra mall devices (phones, less than 433px) */
+@media (max-width: $screen-xs) {
+  .ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
+    text-align: left;
+  }
+  .react-datepicker__input-container {
+    position: inherit;
+    display: table-cell;
+  }
+  .ui.form .inline.field>button, .ui.form .inline.field> .header {
+    margin-left: 0 !important;
+  }   
+}
+
+/* Small medium devices (tablets, 768px and upto desktops, 992px) */
+@media (min-width: $screen-sm) and (max-width: $screen-md) {
+  .ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
+    text-align: left;
+  }
+  .react-datepicker__input-container {
+    position: inherit;
+    display: table-cell;
+  }
+  .ui.form .inline.field>button, .ui.form .inline.field> .header {
+    margin-left: 0 !important;
   }
 }
 
-/* Medium and large devices (tablets, 768px and upto large desktops, 1200px and up) */
-@media (min-width: $screen-sm) {
+/* Small devices (phones, less than 768px) */
+@media (max-width: $screen-sm) {
   
 }
