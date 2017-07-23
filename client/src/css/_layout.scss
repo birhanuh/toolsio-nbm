@@ -208,9 +208,9 @@ a {
   width: 100%;
 }
 
-// UI form
-.ui.form .field > label {
-  text-align: left;
+// Message
+.ui.message {
+  background: #ffffff;
 }
 
 // UI message
@@ -323,75 +323,28 @@ a {
   border: 1px solid $light-grey;
 }
 
-.panel-heading, .panel-footer {
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
+.ui.segment.transparent {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
-.panel-default {
+.ui.attached.segment {
   border: 1px solid $light-grey;
 }
 
-.panel-default > .panel-heading {
-  color: inherit;
-  background-color: $white;
-}
-
-.panel-title {
-  font-size: 13px;
-  font-weight: bold;
-  line-height: 18px;
-}
-
-.panel-body {
-  padding: 20px;
-}
-
-.panel-footer {
-  background: $xx-light-grey;
-}
-
 .panel-transparent-header {
-  background: none;
-  border: none;
-  .panel-heading {
-    background: transparent;
-    padding: 10px 0;
+  .ui.top.attached.header {
+    padding: 0.78571429rem 0;
+    background: none;
+    border: none;
   }
-  .panel-body {
-    background: $white;
-    border-left: 1px solid $light-grey;
-    border-right: 1px solid $light-grey;
-    border-bottom: 1px solid $light-grey;
+  .ui.bottom.attached.segment {
+    border-top: 1px solid $light-grey;
+    @include border-radius(3px);
   }
-}
-
-.panel-dark-header-outline {
-  .panel-heading {
-    border-bottom: 1px solid $black;
-  }
-}
-
-.panel-turqouise-header-outline {
-  .panel-heading {
-    border-bottom: 1px solid $turquoise;
-  }
-}
-
-.panel-success-bottom-outline {
-  border-bottom: 2px solid $grass;
-}
-
-.panel-info-bottom-outline {
-  border-bottom: 2px solid $blue;
-}
-
-.panel-warning-bottom-outline {
-  border-bottom: 2px solid $orange;
-}
-
-.panel-danger-bottom-outline {
-  border-bottom: 2px solid $red;
 }
 
 .sub-header {
@@ -436,16 +389,6 @@ a {
 
 .progress .progress-bar.progress-bar-warning {
   background-color: $orange !important;
-}
-
-// Well
-.well {
-  position: relative;
-  background-color: $white;
-  border: 1px solid $light-grey;
-  @include border-radius(3px);
-  box-shdow: none;
-  //box-shadow: 0 1px 2px rgba(0,0,0,.1);
 }
 
 // Dropdown

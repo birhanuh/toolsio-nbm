@@ -83,61 +83,61 @@ class Form extends Component {
   render() {
     const { errors, isLoading, invalid } = this.state
     return (            
-        <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
-          <div className="ui stacked segment">
-            <InputField
-              label={T.translate("sign_up.first_name")}
-              name="firstName" 
-              value={this.state.user.firstName} 
-              onChange={this.onChange.bind(this)} 
-              placeholder={T.translate("sign_up.first_name")}
-              error={errors.firstName}
-              formClass="field"
-            />
-            <InputField
-              label={T.translate("sign_up.last_name")}
-              name="lastName" 
-              value={this.state.user.lastName} 
-              onChange={this.onChange.bind(this)} 
-              placeholder={T.translate("sign_up.last_name")}
-              error={errors.lastName}
-              formClass="field"
-            />
-            <InputField
-              label={T.translate("sign_up.email")}
-              name="email" 
-              type="email"
-              value={this.state.user.email} 
-              onChange={this.onChange.bind(this)} 
-              checkUserExists={this.checkUserExists.bind(this)} 
-              placeholder={T.translate("sign_up.email")}
-              error={errors.email}
-              formClass="field"
-            />
-            <InputField
-              label={T.translate("sign_up.password")}
-              name="password" 
-              type="password"
-              value={this.state.user.password} 
-              onChange={this.onChange.bind(this)} 
-              placeholder={T.translate("sign_up.password")}
-              error={errors.password}
-              formClass="field"
-            />
-            <InputField
-              label={T.translate("sign_up.confirm_password")}
-              name="confirmPassword" 
-              type="password"
-              value={this.state.user.confirmPassword} 
-              onChange={this.onChange.bind(this)} 
-              placeholder={T.translate("sign_up.confirm_password")}
-              error={errors.confirmPassword}
-              formClass="field"
-            />
-            
-            <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
-          </div>
-        </form>         
+      <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
+        <div className="ui stacked segment">
+          <InputField
+            label={T.translate("sign_up.first_name")}
+            name="firstName" 
+            value={this.state.user.firstName} 
+            onChange={this.onChange.bind(this)} 
+            placeholder={T.translate("sign_up.first_name")}
+            error={errors.firstName}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("sign_up.last_name")}
+            name="lastName" 
+            value={this.state.user.lastName} 
+            onChange={this.onChange.bind(this)} 
+            placeholder={T.translate("sign_up.last_name")}
+            error={errors.lastName}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("sign_up.email")}
+            name="email" 
+            type="email"
+            value={this.state.user.email} 
+            onChange={this.onChange.bind(this)} 
+            checkUserExists={this.checkUserExists.bind(this)} 
+            placeholder={T.translate("sign_up.email")}
+            error={errors.email}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("sign_up.password")}
+            name="password" 
+            type="password"
+            value={this.state.user.password} 
+            onChange={this.onChange.bind(this)} 
+            placeholder={T.translate("sign_up.password")}
+            error={errors.password}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("sign_up.confirm_password")}
+            name="confirmPassword" 
+            type="password"
+            value={this.state.user.confirmPassword} 
+            onChange={this.onChange.bind(this)} 
+            placeholder={T.translate("sign_up.confirm_password")}
+            error={errors.confirmPassword}
+            formClass="field"
+          />
+          
+          <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
+        </div>
+      </form>         
 
     )
   }

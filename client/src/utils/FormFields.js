@@ -5,7 +5,7 @@ export const InputField = ({ type, options, name, field, value, label,
   error, placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>
-      <label htmlFor={name} className={labelHorizontal}>{label}</label>
+      <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label>
       <input 
         type={type}
         name={name} 
@@ -14,7 +14,7 @@ export const InputField = ({ type, options, name, field, value, label,
         onBlur={checkUserExists}
         placeholder={placeholder} 
       />
-      <span>{error}</span>
+      <span className={classnames({red: !!error})}>{error}</span>
     </div>
   )
 }  
@@ -23,7 +23,7 @@ export const TextAreaField = ({ type, options, name, field, value, label, error,
   placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {  
   return (
     <div className={classnames(formClass, { error: !!error })}>
-      <label htmlFor={name} className={labelHorizontal}>{label}</label>
+      <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label>
       <textarea  
         type={type}
         name={name} 
@@ -32,7 +32,7 @@ export const TextAreaField = ({ type, options, name, field, value, label, error,
         onBlur={checkUserExists}
         placeholder={placeholder}>
       </textarea>
-      <span>{error}</span>
+      <span className={classnames({red: !!error})}>{error}</span>
     </div>
   )
 } 
@@ -41,7 +41,7 @@ export const SelectField = ({ type, options, name, field, value, label, error,
   placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>
-      <label htmlFor={name} className={labelHorizontal}>{label}</label>
+      <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label>
       <select  
         className="ui dropdown"
         type={type}
@@ -51,11 +51,10 @@ export const SelectField = ({ type, options, name, field, value, label, error,
       >
         {options}
       </select>  
-      <span>{error}</span>
+      <span className={classnames({red: !!error})}>{error}</span>
     </div>
   )
 }  
-
 
 InputField.propTypes = TextAreaField.propTypes = SelectField.propTypes = {  
   type: React.PropTypes.string.isRequired, 
