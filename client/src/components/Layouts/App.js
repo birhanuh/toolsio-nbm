@@ -31,36 +31,28 @@ class App extends Component {
 
     let internalPages = (landingPage || authPages) ? false : true 
 
-    document.body.className = ''
-
-    if (internalPages) {
-      document.body.className = 'internal-page'
-    }  
-
     return (
-      <div className={classnames({'pusher': landingPage, 'ui middle aligned center aligned grid': authPages})}>
+      <div className="pusher">
         
         { !authPages && <NavigationBar /> }
       
-        <section className={classnames({'ui middle aligned container internal': internalPages, 'auth column row': authPages})}>   
-          <div className={classnames({'ui stackable grid': internalPages})}>
-            <div className="sixteen wide column">
-              <FlashMessagesList />
-            </div>
-            <div className={classnames({'sixteen wide column': internalPages})}>
-              <Switch>
-                <Route exact path="/" component={Landing} />
-                <Route path="/signup" component={Signup} />
-                <Route path="/login" component={Login} />
-                <Route path="/dashboard" component={requireAuth(Dashboard)} />
-                <Route exact path="/projects" component={requireAuth(Projects)} />
-                <Route exact path="/projects/:id" component={requireAuth(ProjectFormPage)} />
-                <Route exact path="/projects/new" component={requireAuth(ProjectFormPage)} />
-                <Route exact path="/sales" component={requireAuth(Sales)} />
-                <Route exact path="/sales/:id" component={requireAuth(SaleFormPage)} /> 
-                <Route exact path="/sales/new" component={requireAuth(SaleFormPage)} />
-              </Switch>
-            </div>
+        <section className={classnames({'ui middle aligned stackable container internal-page': internalPages, 'ui stackable centered grid': authPages})}>          
+          <div className="sixteen wide column">
+            <FlashMessagesList />
+          </div>
+          <div className={classnames({'sixteen wide column': internalPages, 'six wide column': authPages})}>
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/login" component={Login} />
+              <Route path="/dashboard" component={requireAuth(Dashboard)} />
+              <Route exact path="/projects" component={requireAuth(Projects)} />
+              <Route exact path="/projects/:id" component={requireAuth(ProjectFormPage)} />
+              <Route exact path="/projects/new" component={requireAuth(ProjectFormPage)} />
+              <Route exact path="/sales" component={requireAuth(Sales)} />
+              <Route exact path="/sales/:id" component={requireAuth(SaleFormPage)} /> 
+              <Route exact path="/sales/new" component={requireAuth(SaleFormPage)} />
+            </Switch>
           </div>
         </section>
         

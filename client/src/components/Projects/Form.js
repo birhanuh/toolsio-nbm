@@ -88,95 +88,99 @@ class Form extends Component {
     const { name, deadline, customer, status, description, errors, isLoading } = this.state
 
     return (
-       <div>
-        <div className="ui stackable centered grid">
-          <div className="eight wide column ui segment">  
+      <div className="ui stackable centered grid">
+        <div className="eight wide column ui segment">  
 
-            <div className="column row">  
+          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitProject.bind(this)}>
+            <div className="inline field"> 
               <h1 className="ui header">{T.translate("projects.new.header")}</h1>
-            </div>
-
-            <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitProject.bind(this)}>
-
               { !!errors.global && <div className="ui negative message"><p>{errors.global}</p></div> }
-
-              <FormField
-                label={T.translate("projects.new.name")}
-                name="name" 
-                value={name} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder="Name"
-                error={errors.name}
+            </div>
+            
+            <FormField
+              label={T.translate("projects.new.name")}
+              name="name" 
+              value={name} 
+              onChange={this.handleChange.bind(this)} 
+              placeholder="Name"
+              error={errors.name}
+              formClass="inline field"
+            />
+                          
+            <div  className={classnames("inline field", { error: !!errors.deadline })}>
+              <label className="" htmlFor="date">{T.translate("projects.new.deadline")}</label>
+              <DatePicker
+                dateFormat="DD/MM/YYYY"
+                selected={deadline}
+                onChange={this.handleChangeDate.bind(this)}
               />
-              <div  className={classnames("field", { error: !!errors.deadline })}>
-                <label className="" htmlFor="date">{T.translate("projects.new.deadline")}</label>
-                <DatePicker
-                  dateFormat="DD/MM/YYYY"
-                  selected={deadline}
-                  onChange={this.handleChangeDate.bind(this)}
-                />
-                <span>{errors.password}</span>
-              </div>
-              <FormField
-                formType="select"
-                label={T.translate("projects.new.customer")}
-                name="customer"
-                type="select"
-                value={customer} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.customer}
+              <span>{errors.password}</span>
+            </div>
+            
+            <FormField
+              formType="select"
+              label={T.translate("projects.new.customer")}
+              name="customer"
+              type="select"
+              value={customer} 
+              onChange={this.handleChange.bind(this)} 
+              error={errors.customer}
+              formClass="inline field"
 
-                options={[
-                  <option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
-                  <option key="1" value="1">Customer 1</option>,
-                  <option key="2" value="2">Customer 2</option>
-                ]}
-              />
-              <FormField
-                formType="select"
-                label={T.translate("projects.new.status")}
-                name="status"
-                type="select"
+              options={[
+                <option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
+                <option key="1" value="1">Customer 1</option>,
+                <option key="2" value="2">Customer 2</option>
+              ]}
+            />
+            
+            <FormField
+              formType="select"
+              label={T.translate("projects.new.status")}
+              name="status"
+              type="select"
+              value={status} 
+              onChange={this.handleChange.bind(this)} 
+              error={errors.status}
+              formClass="inline field"
+
+              options={[
+                <option key="default" value="" disabled>{T.translate("projects.new.select_status")}</option>,
+                <option key="new" value="new">NEW</option>,
+                <option key="in progress" value="in progress">IN PROGRESS</option>,
+                <option key="ready" value="ready">READY</option>,
+                <option key="delivered" value="delivered">DELIVERED</option>
+                ]
+              }
+            />
+              
+            {/*
+            <div className={classnames("field", { error: !!error.status })}>
+              <label htmlFor="status">Status</label>
+              <Dropdown 
+                placeholder='Status' 
+                search selection options={statusOptions}   
                 value={status} 
                 onChange={this.handleChange.bind(this)} 
-                error={errors.status}
+                error={errors.status} />
+            </div>      
+            */}
 
-                options={[
-                  <option key="default" value="" disabled>{T.translate("projects.new.select_status")}</option>,
-                  <option key="new" value="new">NEW</option>,
-                  <option key="in progress" value="in progress">IN PROGRESS</option>,
-                  <option key="ready" value="ready">READY</option>,
-                  <option key="delivered" value="delivered">DELIVERED</option>
-                  ]
-                }
-              />
+            <FormField
+              formType="textarea"
+              label={T.translate("projects.new.description")}
+              name="description" 
+              value={description} 
+              onChange={this.handleChange.bind(this)} 
+              placeholder={T.translate("projects.new.description")}
+              formClass="inline field"
+            /> 
 
-              {/*
-              <div className={classnames("field", { error: !!error.status })}>
-                <label htmlFor="status">Status</label>
-                <Dropdown 
-                  placeholder='Status' 
-                  search selection options={statusOptions}   
-                  value={status} 
-                  onChange={this.handleChange.bind(this)} 
-                  error={errors.status} />
-              </div>      
-              */}
-              <FormField
-                formType="textarea"
-                label={T.translate("projects.new.description")}
-                name="description" 
-                value={description} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder={T.translate("projects.new.description")}
-              />
-
-              <div className="filed">    
-                <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>
-              </div>  
-            </form> 
-          </div>  
-        </div>
+            <div className="inline field">    
+              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>
+            </div>  
+          </form> 
+        </div>  
       </div>
     )
   }

@@ -155,11 +155,12 @@
 // dropdown-select
 select {
   @include web-appearance(none);
-  text-indent: 0.01px;
-  text-overflow: '';
-  background-image: asset-url('up-down-arrow') !important;
-  background-position: 98% 50%;
-  background-repeat: no-repeat;
+  background: url('../images/up-down-arrow.png') no-repeat 98% 50% !important;
+}
+
+.ui.form .field.error select {
+  @include web-appearance(none);
+  background: url('../images/up-down-arrow-error.png') no-repeat 98% 50% !important;
 }
 
 select.date {
@@ -174,6 +175,45 @@ select.date {
   font: inherit;
   /*border is optional*/
   cursor: pointer;
+}
+
+// Horizontal form
+.ui.form .inline.field>label {
+  width: 15%;
+}
+
+.ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
+  text-align: right;
+}
+
+.ui.form .inline.field>select, .ui.form .inline.field>input {
+  width: 82%;
+}
+
+.ui.form .inline.field>textarea, .ui.form .inline.field>div>input  {
+  width: 82%;
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+  font-size: 1em;
+}
+
+.ui.form .inline.field>button, .ui.form .inline.field> .header {
+  display: inline-block;
+  margin-left: 17% !important;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.ui.form .field.error span {
+  display: inherit;
+  text-align: left;
+}
+
+.ui.form .inline.field.error>span {
+  margin-left: 17% !important;
 }
 
 /* Small devices (phones, less than 768px) */

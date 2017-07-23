@@ -1,56 +1,50 @@
 import React from 'react' 
 import classnames from 'classnames'
 
-const FormField = ({ type, formType, options, name, field, value, label, error, placeholder, onChange, checkUserExists, labelHorizontal, inputHorizontal}) => {
+const FormField = ({ type, formType, options, name, field, value, label, error, placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
   if (formType === 'textarea') {
     return (
-      <div className={classnames("field", { error: !!error })}>
+      <div className={classnames(formClass, { error: !!error })}>
         <label htmlFor={name} className={labelHorizontal}>{label}</label>
-        <div className={inputHorizontal}>
-          <textarea  
-            type={type}
-            name={name} 
-            value={value} 
-            onChange={onChange} 
-            onBlur={checkUserExists}
-            placeholder={placeholder}>
-          </textarea>
-        </div>
+        <textarea  
+          type={type}
+          name={name} 
+          value={value} 
+          onChange={onChange} 
+          onBlur={checkUserExists}
+          placeholder={placeholder}>
+        </textarea>
         <span>{error}</span>
       </div>
     )
   } else if (formType === 'select') {
     return (
-      <div className={classnames("field", { error: !!error })}>
+      <div className={classnames(formClass, { error: !!error })}>
         <label htmlFor={name} className={labelHorizontal}>{label}</label>
-        <div className={inputHorizontal}>
-          <select  
-            className="ui dropdown"
-            type={type}
-            name={name} 
-            value={value} 
-            onChange={onChange}  
-          >
-            {options}
-          </select>  
-        </div>
+        <select  
+          className="ui dropdown"
+          type={type}
+          name={name} 
+          value={value} 
+          onChange={onChange}  
+        >
+          {options}
+        </select>  
         <span>{error}</span>
       </div>
     )
   } else {
     return (
-      <div className={classnames("field", { error: !!error })}>
+      <div className={classnames(formClass, { error: !!error })}>
         <label htmlFor={name} className={labelHorizontal}>{label}</label>
-        <div className={inputHorizontal}>
-          <input 
-            type={type}
-            name={name} 
-            value={value} 
-            onChange={onChange} 
-            onBlur={checkUserExists}
-            placeholder={placeholder} 
-          />
-        </div>
+        <input 
+          type={type}
+          name={name} 
+          value={value} 
+          onChange={onChange} 
+          onBlur={checkUserExists}
+          placeholder={placeholder} 
+        />
         <span>{error}</span>
       </div>
     )

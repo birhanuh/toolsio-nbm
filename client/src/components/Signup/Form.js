@@ -92,6 +92,7 @@ class Form extends Component {
               onChange={this.onChange.bind(this)} 
               placeholder={T.translate("sign_up.first_name")}
               error={errors.firstName}
+              formClass="field"
             />
             <FormField
               label={T.translate("sign_up.last_name")}
@@ -100,6 +101,7 @@ class Form extends Component {
               onChange={this.onChange.bind(this)} 
               placeholder={T.translate("sign_up.last_name")}
               error={errors.lastName}
+              formClass="field"
             />
             <FormField
               label={T.translate("sign_up.email")}
@@ -110,6 +112,7 @@ class Form extends Component {
               checkUserExists={this.checkUserExists.bind(this)} 
               placeholder={T.translate("sign_up.email")}
               error={errors.email}
+              formClass="field"
             />
             <FormField
               label={T.translate("sign_up.password")}
@@ -119,6 +122,7 @@ class Form extends Component {
               onChange={this.onChange.bind(this)} 
               placeholder={T.translate("sign_up.password")}
               error={errors.password}
+              formClass="field"
             />
             <FormField
               label={T.translate("sign_up.confirm_password")}
@@ -128,6 +132,7 @@ class Form extends Component {
               onChange={this.onChange.bind(this)} 
               placeholder={T.translate("sign_up.confirm_password")}
               error={errors.confirmPassword}
+              formClass="field"
             />
             
             <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
