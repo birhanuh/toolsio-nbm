@@ -1,7 +1,7 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import FormField from '../../utils/FormField'
+import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
 
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -105,7 +105,7 @@ class Form extends Component {
               { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
             </div>
 
-            <FormField
+            <InputField
               label={T.translate("sales.new.name")}
               name="name" 
               value={name} 
@@ -123,8 +123,7 @@ class Form extends Component {
               />
               <span>{errors.password}</span>
             </div>
-            <FormField
-              formType="select"
+            <SelectField
               label={T.translate("sales.new.customer")}
               name="customer"
               type="select"
@@ -139,8 +138,7 @@ class Form extends Component {
                 <option key="2" value="2">Customer 2</option>
               ]}
             />
-            <FormField
-              formType="select"
+            <SelectField
               label={T.translate("sales.new.status")}
               name="status"
               type="select"
@@ -170,8 +168,7 @@ class Form extends Component {
                 error={errors.status} />
             </div>      
             */}
-            <FormField
-              formType="textarea"
+            <TextAreaField
               label={T.translate("sales.new.description")}
               name="description" 
               value={description} 

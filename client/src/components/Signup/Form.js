@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import { Validation } from '../../utils'
-import FormField from '../../utils/FormField'
+import { InputField } from '../../utils/FormFields'
 
 // Localization 
 import T from 'i18n-react'
@@ -85,7 +85,7 @@ class Form extends Component {
     return (            
         <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
           <div className="ui stacked segment">
-            <FormField
+            <InputField
               label={T.translate("sign_up.first_name")}
               name="firstName" 
               value={this.state.user.firstName} 
@@ -94,7 +94,7 @@ class Form extends Component {
               error={errors.firstName}
               formClass="field"
             />
-            <FormField
+            <InputField
               label={T.translate("sign_up.last_name")}
               name="lastName" 
               value={this.state.user.lastName} 
@@ -103,7 +103,7 @@ class Form extends Component {
               error={errors.lastName}
               formClass="field"
             />
-            <FormField
+            <InputField
               label={T.translate("sign_up.email")}
               name="email" 
               type="email"
@@ -114,7 +114,7 @@ class Form extends Component {
               error={errors.email}
               formClass="field"
             />
-            <FormField
+            <InputField
               label={T.translate("sign_up.password")}
               name="password" 
               type="password"
@@ -124,7 +124,7 @@ class Form extends Component {
               error={errors.password}
               formClass="field"
             />
-            <FormField
+            <InputField
               label={T.translate("sign_up.confirm_password")}
               name="confirmPassword" 
               type="password"
