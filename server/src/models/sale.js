@@ -11,7 +11,7 @@ let saleSchema = new mongoose.Schema({
   customer: { type: ObjectId, required: true },
   status: { type: String, required: true },
   description: { type: String, default: '' },
-  items: { type: [items], required: true }
+  items: { type: [items], required: false }
 })
 
 saleSchema.methods.addItems = function(items) {
