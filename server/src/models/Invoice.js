@@ -23,8 +23,21 @@ invoiceSchema.methods.allUnpaidInvoicesByStatus = function() {
 invoiceSchema.methods.unpaidInvoicesByInvitedUsers = function() {
 }
 
-invoiceSchema.methods.xorDeadlinePaymentTerm = function() {
-}
+customerSchema.pre('validate', function(next) {
+  if (this.deadline && this.payment_term) {
+    next(Error('Only Deadline or Payment term should be filled, not both'))
+  } else {
+    next()
+  }
+})
+
+customerSchema.pre('validate', function(next) {
+  if (this.project && this.sale) {
+    next(Error('Only Project or Sale should be selected, not both'))
+  } else {
+    next()
+  }
+})
 
 invoiceSchema.methods.xorSaleProject = function() {
 }
