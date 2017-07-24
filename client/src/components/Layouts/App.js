@@ -10,6 +10,8 @@ import Projects from '../Projects/Page'
 import ProjectFormPage from '../Projects/FormPage'
 import Sales from '../Sales/Page'
 import SaleFormPage from '../Sales/FormPage'
+import Customers from '../Customers/Page'
+import CustomerFormPage from '../Customers/FormPage'
 import requireAuth from '../../utils/requireAuth'
 
 import NavigationBar from './NavigationBar'
@@ -36,7 +38,7 @@ class App extends Component {
         
         { !authPages && <NavigationBar /> }
       
-        <section className={classnames({'ui middle aligned stackable container internal-page': internalPages, 'ui stackable centered grid': authPages})}>          
+        <section className={classnames({'ui middle aligned stackable container internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
           <div className="sixteen wide column">
             <FlashMessagesList />
           </div>
@@ -52,6 +54,9 @@ class App extends Component {
               <Route exact path="/sales" component={requireAuth(Sales)} />
               <Route exact path="/sales/:id" component={requireAuth(SaleFormPage)} /> 
               <Route exact path="/sales/new" component={requireAuth(SaleFormPage)} />
+              <Route exact path="/customers" component={requireAuth(Customers)} />
+              <Route exact path="/customers/:id" component={requireAuth(CustomerFormPage)} /> 
+              <Route exact path="/customers/new" component={requireAuth(CustomerFormPage)} />
             </Switch>
           </div>
         </section>
