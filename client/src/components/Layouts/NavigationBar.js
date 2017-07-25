@@ -33,6 +33,7 @@ class NavigationBar extends Component {
           <ActiveLink activeOnlyWhenExact to="/dashboard" label={T.translate("dashboards.header")} />
           <ActiveLink activeOnlyWhenExact to="/projects" label={T.translate("projects.index.header")} />
           <ActiveLink activeOnlyWhenExact to="/sales" label={T.translate("sales.index.header")} />
+          <ActiveLink activeOnlyWhenExact to="/customers" label={T.translate("customers.index.header")}/>
           <ActiveLink activeOnlyWhenExact to="/invoices" label={T.translate("invoices.index.header")}/>
      
           <div className="right item">      

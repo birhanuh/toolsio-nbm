@@ -16,12 +16,6 @@ let invoiceSchema = new Schema({
   sale: { type: ObjectId },
   billed: { type: Boolean, required: true, default: false }
 })
- 
-invoiceSchema.methods.allUnpaidInvoicesByStatus = function() {
-}
-
-invoiceSchema.methods.unpaidInvoicesByInvitedUsers = function() {
-}
 
 customerSchema.pre('validate', function(next) {
   if (this.deadline && this.payment_term) {
@@ -39,7 +33,10 @@ customerSchema.pre('validate', function(next) {
   }
 })
 
-invoiceSchema.methods.xorSaleProject = function() {
+invoiceSchema.methods.allUnpaidInvoicesByStatus = function() {
+}
+
+invoiceSchema.methods.unpaidInvoicesByInvitedUsers = function() {
 }
 
 let Invoice = module.exports mongoose.model('Invoice', invoiceSchema)

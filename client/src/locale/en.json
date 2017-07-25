@@ -270,13 +270,14 @@
   "customers": {
     "index": {
       "header": "Customers",
-      "add_new_customer_button": "Add new customer",
+      "add_new_customer": "Add new customer",
       "empty_customers": "There are no customers yet",
       "description": "All added Customers are shown here."
     },
     "new": {
       "header": "New customer",
-      "notice_add": "Customer added"
+      "notice_add": "Customer added",
+      "select_country": "-Select country-"
     },
     "edit": {
       "header": "Edit customer"
@@ -284,9 +285,19 @@
     "show": {
       "header": "Customer",
       "name": "Name",
-      "phone_number": "Phone number",
-      "email": "Email",
-      "address": "Address"
+      "vat_number": "Vat number",
+      "contact": {
+        "header": "Contact",
+        "phone_number": "Phone number",
+        "email": "Email"
+      },
+      "address": {
+        "header": "Address",
+        "street": "Street",
+        "postal_code": "Postal code",
+        "city": "City",
+        "country": "Country"
+      }
     },
     "update": {
       "success_update": "Customer updated"

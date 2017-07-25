@@ -21,9 +21,9 @@ class Form extends Component {
     }
   }
 
-  onChange(event) {
+  handleChange(e) {
     let updatedUser = Object.assign({}, this.state.user)
-    updatedUser[event.target.name] = event.target.value
+    updatedUser[e.target.name] = e.target.value
     this.setState({
       user: updatedUser
     })
@@ -39,8 +39,8 @@ class Form extends Component {
     return isValid;
   }
 
-  onSubmit(event) {
-    event.preventDefault()
+  handleSubmit(e) {
+    e.preventDefault()
     
     if (this.isValid()) {
       this.setState({ errros: {}, isLoading: true })
@@ -61,7 +61,7 @@ class Form extends Component {
     const { errors, isLoading } = this.state
    
     return (  
-        <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
+        <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
             { errors.form && <div className="ui negative message"><p>{errors.form}</p></div> }
@@ -70,7 +70,7 @@ class Form extends Component {
               <div className="ui right icon input">
                 <i className="user icon"></i>
                 <input type="text" name="email" placeholder={T.translate("sign_in.email")} 
-                  value={this.state.user.email} onChange={this.onChange.bind(this)} />
+                  value={this.state.user.email} onChange={this.handleChange.bind(this)} />
                 <span>{errors.email}</span>
               </div>
             </div>  
@@ -78,7 +78,7 @@ class Form extends Component {
               <div className="ui right icon input">
                 <i className="lock icon"></i>
                 <input type="password" name="password" placeholder={T.translate("sign_in.password")}
-                  value={this.state.user.password} onChange={this.onChange.bind(this)} />
+                  value={this.state.user.password} onChange={this.handleChange.bind(this)} />
                 <span>{errors.password}</span>
               </div>
             </div>

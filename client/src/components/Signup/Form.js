@@ -22,17 +22,17 @@ class Form extends Component {
     }
   }
   
-  onChange(event) {
+  onChange(e) {
     let updatedUser = Object.assign({}, this.state.user)
-    updatedUser[event.target.name] = event.target.value
+    updatedUser[e.target.name] = e.target.value
     this.setState({
       user: updatedUser
     })
   }
 
-  checkUserExists(event) {
-    const field = event.target.name
-    const val = event.target.value
+  checkUserExists(e) {
+    const field = e.target.name
+    const val = e.target.value
     if (val !== '') {
       this.props.isUserExists(val).then(res => {
         let errors = this.state.errors
@@ -59,7 +59,7 @@ class Form extends Component {
     return isValid;
   }
 
-  onSubmit(e) {
+  handleSubmit(e) {
     e.preventDefault()
 
     if (this.isValid()) { 
@@ -83,7 +83,7 @@ class Form extends Component {
   render() {
     const { errors, isLoading, invalid } = this.state
     return (            
-      <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
+      <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
           <InputField
             label={T.translate("sign_up.first_name")}

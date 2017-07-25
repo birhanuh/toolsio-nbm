@@ -67,7 +67,7 @@ class Form extends Component {
     return isValid;
   }
 
-  submitSale = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault()
 
     // Validation
@@ -97,7 +97,7 @@ class Form extends Component {
       <div className="ui stackable centered grid">
         <div className="eight wide column ui segment">  
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitSale.bind(this)}>
+          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
               <h1 className="ui header">{T.translate("sales.new.header")}</h1>
@@ -126,7 +126,6 @@ class Form extends Component {
             <SelectField
               label={T.translate("sales.new.customer")}
               name="customer"
-              type="select"
               value={customer} 
               onChange={this.handleChange.bind(this)} 
               error={errors.customer}

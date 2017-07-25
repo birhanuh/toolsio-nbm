@@ -1,10 +1,8 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
+import { InputField, SelectField } from '../../utils/FormFields'
 
-import DatePicker from 'react-datepicker'
-import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
 
 // Localization 
@@ -19,10 +17,17 @@ class Form extends Component {
     this.state = {
       _id: this.props.customer ? this.props.customer._id : null,
       name: this.props.customer ? this.props.customer.name : '',
-      deadline: this.props.customer ? moment(this.props.customer.deadline) : moment(),
-      customer: this.props.customer ? this.props.customer.customer : '',
-      status: this.props.customer ? this.props.customer.status : '',
-      description: this.props.customer ? this.props.customer.description : '',
+      address: {
+        street: this.props.customer ? this.props.customer.address.street: '',
+        postalCode: this.props.customer ? this.props.customer.address.postalCode : '',
+        city: this.props.customer ? this.props.customer.address.city : '',
+        country: this.props.customer ? this.props.customer.address.country : ''
+      },
+      vatNumber: this.props.customer ? this.props.customer.vatNumber : '',
+      contact: {
+        phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
+        email: this.props.customer ? this.props.customer.contact.email : ''
+      },
       errors: {},
       isLoading: false
     }
@@ -32,10 +37,17 @@ class Form extends Component {
     this.setState({
       _id: nextProps.customer._id,
       name: nextProps.customer.name,
-      deadline: moment(nextProps.customer.deadline),
-      customer: nextProps.customer.customer,
-      status: nextProps.customer.status,
-      description: nextProps.customer.description
+      address: {
+        street: nextProps.customer.address.street,
+        postalCode: nextProps.customer.address.postalCode,
+        city: nextProps.customer.address.city,
+        country: nextProps.customer.address.country
+      },
+      vatNumber: nextProps.customer.vatNumber,
+      contact: {
+        phoneNumber: nextProps.customer.contact.phoneNumber,
+        email: nextProps.customer.contact.email
+      }
     })
   }
 
@@ -67,7 +79,7 @@ class Form extends Component {
     return isValid;
   }
 
-  submitCustomer = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault()
 
     // Validation
@@ -79,14 +91,8 @@ class Form extends Component {
     }
   }
 
-  handleChangeDate(deadline) {
-    this.setState({
-      deadline: deadline
-    });
-  } 
-
   render() {
-    const { name, deadline, customer, status, description, errors, isLoading } = this.state
+    const { name, vatNumber, contact, address, errors, isLoading } = this.state
     
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
     //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
@@ -97,7 +103,7 @@ class Form extends Component {
       <div className="ui stackable centered grid">
         <div className="eight wide column ui segment">  
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.submitCustomer.bind(this)}>
+          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
               <h1 className="ui header">{T.translate("customers.new.header")}</h1>
@@ -106,7 +112,7 @@ class Form extends Component {
             </div>
 
             <InputField
-              label={T.translate("customers.new.name")}
+              label={T.translate("customers.show.name")}
               name="name" 
               value={name} 
               onChange={this.handleChange.bind(this)} 
@@ -114,68 +120,92 @@ class Form extends Component {
               error={errors.name}
               formClass="inline field"
             />
-            <div  className={classnames("inline field", { error: !!errors.deadline })}>
-              <label className="" htmlFor="date">{T.translate("customers.new.deadline")}</label>
-              <DatePicker
-                dateFormat="DD/MM/YYYY"
-                selected={deadline}
-                onChange={this.handleChangeDate.bind(this)}
-              />
-              <span>{errors.password}</span>
-            </div>
-            <SelectField
-              label={T.translate("customers.new.customer")}
-              name="customer"
-              type="select"
-              value={customer} 
+            <InputField
+              label={T.translate("customers.show.vat_number")}
+              name="vat_number" 
+              value={vatNumber} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.customer}
+              placeholder="Vat number"
+              error={errors.vatNumber}
               formClass="inline field"
-
-              options={[
-                <option key="default" value="" disabled>{T.translate("customers.new.select_customer")}</option>,
-                <option key="1" value="1">Customer 1</option>,
-                <option key="2" value="2">Customer 2</option>
-              ]}
             />
-            <SelectField
-              label={T.translate("customers.new.status")}
-              name="status"
-              type="select"
-              value={status} 
-              onChange={this.handleChange.bind(this)} 
-              error={errors.status}
-              formClass="inline field"
-
-              options={[
-                <option key="default" value="" disabled>{T.translate("customers.new.select_status")}</option>,
-                <option key="new" value="new">NEW</option>,
-                <option key="in progress" value="in progress">IN PROGRESS</option>,
-                <option key="ready" value="ready">READY</option>,
-                <option key="delivered" value="delivered">DELIVERED</option>
-                ]
-              }
-            />
-
-            {/*
-            <div className={classnames("field", { error: !!error.status })}>
-              <label htmlFor="status">Status</label>
-              <Dropdown 
-                placeholder='Status' 
-                search selection options={statusOptions}   
-                value={status} 
+             <fieldset className="custom-fieldset">
+              <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
+              <InputField
+                label={T.translate("customers.show.contact.phone_number")}
+                name="phone_number" 
+                value={contact.phoneNumber} 
                 onChange={this.handleChange.bind(this)} 
-                error={errors.status} />
-            </div>      
-            */}
-            <TextAreaField
-              label={T.translate("customers.new.description")}
-              name="description" 
-              value={description} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("projects.new.description")}
-              formClass="inline field"
-            />
+                placeholder="Phone number"
+                error={errors.phoneNumber}
+                formClass="inline field"
+              />
+              <InputField
+                label={T.translate("customers.show.contact.email")}
+                name="email" 
+                value={contact.email} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Email"
+                error={errors.email}
+                formClass="inline field"
+              />
+            </fieldset>
+            <fieldset className="custom-fieldset">
+              <legend className="custom-legend">{T.translate("customers.show.address.header")}</legend>
+              <InputField
+                label={T.translate("customers.show.address.street")}
+                name="street" 
+                value={address.street} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Street"
+                error={errors.street}
+                formClass="inline field"
+              />
+              <InputField
+                label={T.translate("customers.show.address.postal_code")}
+                name="postal_code" 
+                value={address.postalCode} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Street"
+                error={errors.street}
+                formClass="inline field"
+              />
+              <InputField
+                label={T.translate("customers.show.address.city")}
+                name="city" 
+                value={address.city} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Street"
+                error={errors.city}
+                formClass="inline field"
+              />
+              <SelectField
+                label={T.translate("customers.show.address.country")}
+                name="country"
+                value={address.country} 
+                onChange={this.handleChange.bind(this)} 
+                error={errors.country}
+                formClass="inline field"
+
+                options={[
+                  <option key="default" value="" disabled>{T.translate("customers.new.select_country")}</option>,
+                  <option key="1" value="1">Customer 1</option>,
+                  <option key="2" value="2">Customer 2</option>
+                ]}
+              />
+
+              {/*
+              <div className={classnames("field", { error: !!error.status })}>
+                <label htmlFor="status">Status</label>
+                <Dropdown 
+                  placeholder='Status' 
+                  search selection options={statusOptions}   
+                  value={status} 
+                  onChange={this.handleChange.bind(this)} 
+                  error={errors.status} />
+              </div>      
+              */}
+            </fieldset>
 
             <div className="inline field">    
               <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>

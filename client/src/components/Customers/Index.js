@@ -19,7 +19,7 @@ class Page extends Component {
         <div className="ui clearing segment transparent">
           <Link className="ui right floated primary button" to="/customers/new">
             <i className="add circle icon"></i>
-            {T.translate("customers.index.create_new_customer")}
+            {T.translate("customers.index.add_new_customer")}
           </Link>
           <h1 className="ui left floated header m-t-n">{T.translate("customers.index.header")}</h1>   
         </div>  
