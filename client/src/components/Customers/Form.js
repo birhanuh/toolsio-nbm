@@ -57,14 +57,48 @@ class Form extends Component {
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
 
-      this.setState({
-        [e.target.name]: e.target.value,
-        errors
-      })
+      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+        let updatedContact = Object.assign({}, this.state.contact)
+        updatedContact[e.target.name] = e.target.value
+         this.setState({
+          contact: updatedContact,
+          errors
+        })
+      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "city"
+        || e.target.name === "country") {
+        let updatedAddress = Object.assign({}, this.state.address)
+        updatedAddress[e.target.name] = e.target.value
+         this.setState({
+          address: updatedAddress,
+          errors
+        })
+      } else {
+        this.setState({
+          [e.target.name]: e.target.value,
+          errors
+        })
+      }
     } else {
-      this.setState({
-        [e.target.name]: e.target.value
-      })
+
+      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+        let updatedContact = Object.assign({}, this.state.contact)
+        updatedContact[e.target.name] = e.target.value
+         this.setState({
+          contact: updatedContact
+        })
+      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "city"
+        || e.target.name === "country") {
+        let updatedAddress = Object.assign({}, this.state.address)
+        updatedAddress[e.target.name] = e.target.value
+         this.setState({
+          address: updatedAddress
+        })
+      } else {
+        this.setState({
+          [e.target.name]: e.target.value
+        })
+      }
+
     }
    
   }
@@ -122,7 +156,7 @@ class Form extends Component {
             />
             <InputField
               label={T.translate("customers.show.vat_number")}
-              name="vat_number" 
+              name="vatNumber" 
               value={vatNumber} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Vat number"
@@ -133,7 +167,7 @@ class Form extends Component {
               <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
               <InputField
                 label={T.translate("customers.show.contact.phone_number")}
-                name="phone_number" 
+                name="phoneNumber" 
                 value={contact.phoneNumber} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Phone number"
@@ -163,7 +197,7 @@ class Form extends Component {
               />
               <InputField
                 label={T.translate("customers.show.address.postal_code")}
-                name="postal_code" 
+                name="postalCode" 
                 value={address.postalCode} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Street"
