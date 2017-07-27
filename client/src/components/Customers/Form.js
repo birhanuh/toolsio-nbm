@@ -1,15 +1,15 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { InputField, SelectField } from '../../utils/FormFields'
+import { InputField } from '../../utils/FormFields'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
 // Localization 
 import T from 'i18n-react'
 
-// Semantic UI JS
-//import { Dropdown, Input } from 'semantic-ui-react'
+// Country region selector 
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 
 class Form extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Form extends Component {
       address: {
         street: this.props.customer ? this.props.customer.address.street: '',
         postalCode: this.props.customer ? this.props.customer.address.postalCode : '',
-        city: this.props.customer ? this.props.customer.address.city : '',
+        region: this.props.customer ? this.props.customer.address.region : '',
         country: this.props.customer ? this.props.customer.address.country : ''
       },
       vatNumber: this.props.customer ? this.props.customer.vatNumber : '',
@@ -40,7 +40,7 @@ class Form extends Component {
       address: {
         street: nextProps.customer.address.street,
         postalCode: nextProps.customer.address.postalCode,
-        city: nextProps.customer.address.city,
+        region: nextProps.customer.address.region,
         country: nextProps.customer.address.country
       },
       vatNumber: nextProps.customer.vatNumber,
@@ -64,7 +64,7 @@ class Form extends Component {
           contact: updatedContact,
           errors
         })
-      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "city"
+      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
         || e.target.name === "country") {
         let updatedAddress = Object.assign({}, this.state.address)
         updatedAddress[e.target.name] = e.target.value
@@ -86,7 +86,7 @@ class Form extends Component {
          this.setState({
           contact: updatedContact
         })
-      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "city"
+      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
         || e.target.name === "country") {
         let updatedAddress = Object.assign({}, this.state.address)
         updatedAddress[e.target.name] = e.target.value
@@ -123,6 +123,18 @@ class Form extends Component {
       this.props.saveCustomer({ _id, name, customer, deadline, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
+  }
+
+  selectCountry (val) {
+    let updatedAddress = Object.assign({}, this.state.address)
+    updatedAddress["country"] = val
+    this.setState({ address: updatedAddress })
+  }
+
+  selectRegion (val) {
+    let updatedAddress = Object.assign({}, this.state.address)
+    updatedAddress["region"] = val
+    this.setState({ address: updatedAddress })
   }
 
   render() {
@@ -204,41 +216,23 @@ class Form extends Component {
                 error={errors.street}
                 formClass="inline field"
               />
-              <InputField
-                label={T.translate("customers.show.address.city")}
-                name="city" 
-                value={address.city} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder="Street"
-                error={errors.city}
-                formClass="inline field"
-              />
-              <SelectField
-                label={T.translate("customers.show.address.country")}
-                name="country"
-                value={address.country} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.country}
-                formClass="inline field"
-
-                options={[
-                  <option key="default" value="" disabled>{T.translate("customers.new.select_country")}</option>,
-                  <option key="1" value="1">Customer 1</option>,
-                  <option key="2" value="2">Customer 2</option>
-                ]}
-              />
-
-              {/*
-              <div className={classnames("field", { error: !!error.status })}>
-                <label htmlFor="status">Status</label>
-                <Dropdown 
-                  placeholder='Status' 
-                  search selection options={statusOptions}   
-                  value={status} 
-                  onChange={this.handleChange.bind(this)} 
-                  error={errors.status} />
-              </div>      
-              */}
+              <div className="inline field">              
+                <label>{T.translate("customers.show.address.country")}</label>
+                <CountryDropdown
+                  defaultOptionLabel={T.translate("customers.new.select_country")}
+                  value={address.country}
+                  onChange={(val) => this.selectCountry(val)} />
+              </div>  
+              <div className="inline field">              
+                <label>{T.translate("customers.show.address.region")}</label> 
+                <RegionDropdown
+                  defaultOptionLabel={T.translate("customers.new.select_region")}
+                  disabled={address.country === ''}
+                  country={address.country}
+                  value={address.region}
+                  onChange={(val) => this.selectRegion(val)} />
+              </div>
+              
             </fieldset>
 
             <div className="inline field">    

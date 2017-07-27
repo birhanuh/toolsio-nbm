@@ -1,14 +1,22 @@
-// Input fields
-.ui.form input:not([type]), .ui.form input[type=date], .ui.form input[type=datetime-local], .ui.form input[type=email], .ui.form input[type=file], .ui.form input[type=number], .ui.form input[type=password], .ui.form input[type=search], .ui.form input[type=tel], .ui.form input[type=text], .ui.form input[type=time], .ui.form input[type=url]  {
+// Customize input fields
+.ui.form input:not([type]), .ui.form input[type=text], .ui.form input[type=email], 
+  .ui.form input[type=search], .ui.form input[type=password], .ui.form input[type=date], 
+  .ui.form input[type=datetime-local], .ui.form input[type=tel], .ui.form input[type=time], 
+  .ui.form input[type=file], .ui.form input[type=url], .ui.form input[type=number] {
+  padding: .567857143em 1em;
   border: 1px solid $light-grey;
   @include border-radius(3px);
   box-shadow: none;
   font-size: 14px;
-  height: 34px;
   &:focus {
     border-color: $turquoise;
     box-shadow: none;
   }
+}
+
+// Customize input and select fields
+.ui.form select {
+  padding: .4em 1em;
 }
 
 //Checkbox

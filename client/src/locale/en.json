@@ -277,7 +277,8 @@
     "new": {
       "header": "New customer",
       "notice_add": "Customer added",
-      "select_country": "-Select country-"
+      "select_country": "-Select Country-",
+      "select_region": "-Select Region-"
     },
     "edit": {
       "header": "Edit customer"
@@ -295,7 +296,7 @@
         "header": "Address",
         "street": "Street",
         "postal_code": "Postal code",
-        "city": "City",
+        "region": "Region",
         "country": "Country"
       }
     },
