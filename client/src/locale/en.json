@@ -292,6 +292,7 @@
         "phone_number": "Phone number",
         "email": "Email"
       },
+      "include_address_on_inoivce": "Include address on invoice",
       "address": {
         "header": "Address",
         "street": "Street",

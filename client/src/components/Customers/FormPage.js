@@ -17,12 +17,12 @@ class FormPage  extends Component {
     } else {}
   }
 
-  saveCustomer = ({ _id, name, customer, deadline, status, description }) => {
+  saveCustomer = ({ _id, name, vatNumber, contact, includeContactOnInvoice, address }) => {
     if (_id) {
-      return this.props.updateCustomer({ _id, name, customer, deadline, status, description }).then(
+      return this.props.updateCustomer({ _id, name, vatNumber, contact, includeContactOnInvoice, address }).then(
         () => { this.setState({ redirect: true }) } )   
     } else {        
-      return this.props.createCustomer({ _id, name, customer, deadline, status, description }).then(
+      return this.props.createCustomer({ _id, name, vatNumber, contact, includeContactOnInvoice, address }).then(
         () => { this.setState({ redirect: true }) } )   
     }
   }

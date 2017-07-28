@@ -5,7 +5,7 @@ let customerSchema = new mongoose.Schema({
   address: {
     street: { type: String, required: true },
     postalCode: { type: String, required: true },
-    city: { type: String, required: true },
+    region: { type: String, required: true },
     country: String
   },
   vatNumber: { type: String, required: true },
@@ -24,4 +24,4 @@ customerSchema.pre('validate', function(next) {
   }
 })
 
-let Customer = mongoose.model('Customer', customerSchema)
+let Customer = module.exports = mongoose.model('Customer', customerSchema)

@@ -11,6 +11,9 @@ import T from 'i18n-react'
 // Country region selector 
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 
+import $ from 'jquery'
+$.fn.checkbox = require('semantic-ui-checkbox')
+
 class Form extends Component {
   constructor(props) {
     super(props)
@@ -24,6 +27,7 @@ class Form extends Component {
         country: this.props.customer ? this.props.customer.address.country : ''
       },
       vatNumber: this.props.customer ? this.props.customer.vatNumber : '',
+      includeContactOnInvoice: this.props.customer ? this.props.customer.includeContactOnInvoice : false,
       contact: {
         phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
         email: this.props.customer ? this.props.customer.contact.email : ''
@@ -44,11 +48,34 @@ class Form extends Component {
         country: nextProps.customer.address.country
       },
       vatNumber: nextProps.customer.vatNumber,
+      includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
       contact: {
         phoneNumber: nextProps.customer.contact.phoneNumber,
         email: nextProps.customer.contact.email
       }
     })
+  }
+
+  componentDidMount = () => {
+    let classContextThis = this
+    
+    if (this.state.includeContactOnInvoice === true) {
+      $('.ui.toggle.checkbox').checkbox('check')
+    }
+
+    $('.ui.toggle.checkbox').checkbox({
+      onChecked: function() {
+         classContextThis.setState({
+          includeContactOnInvoice: true
+        })
+      },
+      onUnchecked: function() {
+        classContextThis.setState({
+          includeContactOnInvoice: false
+        })
+      }
+    })
+
   }
 
   handleChange = (e) => {
@@ -118,9 +145,9 @@ class Form extends Component {
 
     // Validation
     if (this.isValid) { 
-      const { _id, name, deadline, customer, status, description } = this.state
+      const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
       this.setState({ isLoading: true })
-      this.props.saveCustomer({ _id, name, customer, deadline, status, description })
+      this.props.saveCustomer({ _id, name, vatNumber, includeContactOnInvoice, contact, address })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -138,7 +165,7 @@ class Form extends Component {
   }
 
   render() {
-    const { name, vatNumber, contact, address, errors, isLoading } = this.state
+    const { name, vatNumber, contact, includeContactOnInvoice, address, errors, isLoading } = this.state
     
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
     //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
@@ -196,6 +223,16 @@ class Form extends Component {
                 formClass="inline field"
               />
             </fieldset>
+            <div className="inline field">              
+              <label>{T.translate("customers.show.include_address_on_inoivce")}</label> 
+              <div className="ui toggle checkbox">
+                <input 
+                  type="checkbox" 
+                  name="includeContactOnInvoice" 
+                  onChange={this.handleChange.bind(this)} />
+                <label></label>
+              </div>
+            </div>
             <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.address.header")}</legend>
               <InputField

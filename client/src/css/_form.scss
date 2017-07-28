@@ -206,7 +206,7 @@ select.date {
   font-size: 1em;
 }
 
-.ui.form .inline.field>button, .ui.form .inline.field> .header {
+.ui.form .inline.field>button {
   display: inline-block;
   margin-left: 23% !important;
   margin-top: 0;
@@ -214,6 +214,13 @@ select.date {
   vertical-align: middle;
 }
 
+.ui.form .inline.field> .header {
+  display: inline-block;
+  margin-left: 22% !important;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
 .ui.form .field.error span {
   display: inherit;
   text-align: left;
