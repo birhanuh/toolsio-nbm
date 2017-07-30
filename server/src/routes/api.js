@@ -90,12 +90,12 @@ router.post('/:resource', authenticate, function(req, res) {
     return
   }
 
-  controller.create(req.body, function(dbError, result) {
-    if (dbError) {
+  controller.create(req.body, function(err, result) {
+    if (err) {
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
-          message: dbError.errors
+          message: err
         }
       })
       return

@@ -38,7 +38,13 @@ class Form extends Component {
         let errors = this.state.errors
         let invalid
         if (res.data.user[0]) {
-          errors[field] = 'There is user with such '+ field
+          errors['message'] = {
+            errors: {
+              email: {
+                message: 'There is user with such '+field+ '.'
+              }  
+            }  
+          }
           invalid = true
         } else {
           errors[field] = ''
@@ -62,7 +68,7 @@ class Form extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    if (this.isValid()) { 
+    if (true) { 
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoading: true })
       
@@ -75,13 +81,14 @@ class Form extends Component {
           })
           this.context.histrory.push('/dashboard')
         },
-        ({ response }) => this.setState({ errors: response.data, isLoading: false })
+        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )
     }  
   }
 
   render() {
     const { errors, isLoading, invalid } = this.state
+    
     return (            
       <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
@@ -91,7 +98,6 @@ class Form extends Component {
             value={this.state.user.firstName} 
             onChange={this.onChange.bind(this)} 
             placeholder={T.translate("sign_up.first_name")}
-            error={errors.firstName}
             formClass="field"
           />
           <InputField
@@ -100,7 +106,6 @@ class Form extends Component {
             value={this.state.user.lastName} 
             onChange={this.onChange.bind(this)} 
             placeholder={T.translate("sign_up.last_name")}
-            error={errors.lastName}
             formClass="field"
           />
           <InputField
@@ -111,7 +116,7 @@ class Form extends Component {
             onChange={this.onChange.bind(this)} 
             checkUserExists={this.checkUserExists.bind(this)} 
             placeholder={T.translate("sign_up.email")}
-            error={errors.email}
+            error={errors.message && errors.message.errors && errors.message.errors['email'] && errors.message.errors['email'].message}
             formClass="field"
           />
           <InputField
@@ -121,7 +126,7 @@ class Form extends Component {
             value={this.state.user.password} 
             onChange={this.onChange.bind(this)} 
             placeholder={T.translate("sign_up.password")}
-            error={errors.password}
+            error={errors.message && errors.message.errors && errors.message.errors['password'] && errors.message.errors['password'].message}
             formClass="field"
           />
           <InputField

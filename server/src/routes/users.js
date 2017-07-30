@@ -7,24 +7,9 @@ import config from '../config'
 
 import User from '../models/User'
 
-let router = express.Router();
+let router = express.Router()
 
-function validateRegistrationInput(data, otherValidation) {
-  let { errors } = otherValidation(data)
-
-  return User.findAsync({ email: data.email }).then(user => {
-    if (user[0]) { 
-      if (user[0].email === data.email) { errors.email = 'Email is already taken' }
-    }
-
-    return {
-      errors,
-      isValid: isEmpty(errors)
-    }
-  })
-}
-
-// Get user
+// Get regisetred user
 router.get('/:identifier', (req, res) => {
   User.findAsync({ email: req.params.identifier }).then(user => {
     res.json( { user }) 
@@ -33,28 +18,19 @@ router.get('/:identifier', (req, res) => {
 
 // Register User
 router.post('/register', function(req, res) {
-  validateRegistrationInput(req.body, Validation.validateRegistrationInput).then(({ errors, isValid }) => {
-    if (isValid) {
-      //res.json({ success: true })
-      const { firstName, lastName, email, password } = req.body
-      const password_digest = bcrypt.hashSync(password, 10)
 
-      var newUser = new User({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password_digest
-      });
+  User.create(req.body)
+    .then(user => 
+      res.json({ success: true })
+    ).catch(err => 
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
+      })
+    )
 
-      newUser.save()
-        .then(user => res.json({ success: true }))
-        .catch(err => res.status(500).json({ error: err }))
-
-    } else {  
-      res.status(400).json(errors)
-    } 
-  })
-  
 })
 
 // Login User

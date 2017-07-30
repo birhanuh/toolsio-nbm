@@ -22,7 +22,6 @@ function contactValidator() {
   } else {
     return true
   }
-
 }
 
 let Customer = module.exports = mongoose.model('Customer', customerSchema)

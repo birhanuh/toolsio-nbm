@@ -190,7 +190,7 @@ class Form extends Component {
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.message && errors.message.name && errors.message['name'].message}
+              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message.errors['name'].message}
               formClass="inline field"
             />
             <InputField
@@ -199,7 +199,7 @@ class Form extends Component {
               value={vatNumber} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Vat number"
-              error={errors.message && errors.message.vatNumber && errors.message['vatNumber'].message}
+              error={errors.message && errors.message.errors && errors.message.errors.vatNumber && errors.message.errors['vatNumber'].message}
               formClass="inline field"
             />
              <fieldset className="custom-fieldset">
@@ -210,7 +210,7 @@ class Form extends Component {
                 value={contact.phoneNumber} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Phone number"
-                error={errors.message && errors.message['contact.phoneNumber'] && errors.message['contact.phoneNumber'].message}
+                error={errors.message && errors.message.errors && errors.message.errors['contact.phoneNumber'] && errors.message.errors['contact.phoneNumber'].message}
                 formClass="inline field"
               />
               <InputField
@@ -219,7 +219,7 @@ class Form extends Component {
                 value={contact.email} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Email"
-                error={errors.message && errors.message['contact.email'] && errors.message['contact.email'].message}
+                error={errors.message && errors.message.errors && errors.message.errors['contact.email'] && errors.message.errors['contact.email'].message}
                 formClass="inline field"
               />
             </fieldset>
@@ -241,7 +241,7 @@ class Form extends Component {
                 value={address.street} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Street"
-                error={errors.message && errors.message['address.street'] && errors.message['address.street'].message}
+                error={errors.message && errors.message.errors && errors.message.errors['address.street'] && errors.message.errors['address.street'].message}
                 formClass="inline field"
               />
               <InputField
@@ -250,7 +250,7 @@ class Form extends Component {
                 value={address.postalCode} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Postal code"
-                error={errors.message && errors.message['address.postalCode'] && errors.message['address.postalCode'].message}
+                error={errors.message && errors.message.errors && errors.message.errors['address.postalCode'] && errors.message.errors['address.postalCode'].message}
                 formClass="inline field"
               />
               <div className="inline field">              
@@ -259,7 +259,7 @@ class Form extends Component {
                   defaultOptionLabel={T.translate("customers.new.select_country")}
                   value={address.country}
                   onChange={(val) => this.selectCountry(val)} 
-                  error={errors.message && errors.message['address.country'] && errors.message['address.country'].message} />
+                  error={errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message} />
               </div>  
               <div className="inline field">              
                 <label>{T.translate("customers.show.address.region")}</label> 
@@ -269,7 +269,7 @@ class Form extends Component {
                   country={address.country}
                   value={address.region}
                   onChange={(val) => this.selectRegion(val)} 
-                  error={errors.message && errors.message['address.region'] && errors.message['address.region'].message}/>
+                  error={errors.message && errors.message.errors && errors.message.errors['address.region'] && errors.message.errors['address.region'].message}/>
               </div>
               
             </fieldset>
