@@ -39,7 +39,8 @@ app.use('/api', api)
 app.use((req, res) => {
   res.status(404).json({
     errors: {
-      global: "Route not yet implemented"
+      confirmation: 'fail',
+      message: "Route not yet implemented"
     }
   })
 })

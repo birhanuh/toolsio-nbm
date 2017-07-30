@@ -179,10 +179,10 @@ class Form extends Component {
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
-              <h1 className="ui header">{T.translate("customers.new.header")}</h1>
-        
-               { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+              <h1 className="ui header">{T.translate("customers.new.header")}</h1> 
             </div>
+
+            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
 
             <InputField
               label={T.translate("customers.show.name")}

@@ -100,18 +100,18 @@ class Form extends Component {
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
-              <h1 className="ui header">{T.translate("sales.new.header")}</h1>
-        
-              { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+              <h1 className="ui header">{T.translate("sales.new.header")}</h1>              
             </div>
 
+            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            
             <InputField
               label={T.translate("sales.new.name")}
               name="name" 
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.message && errors.message.name && errors.message['name'].message}
+              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message['name'].message}
               formClass="inline field"
             />
             <div  className={classnames("inline field", { error: !!errors.deadline })}>
@@ -128,7 +128,7 @@ class Form extends Component {
               name="customer"
               value={customer} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.customer && errors.message['customer'].message}
+              error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"
 
               options={[
@@ -143,7 +143,7 @@ class Form extends Component {
               type="select"
               value={status} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.status && errors.message['status'].message}
+              error={errors.message && errors.message.errors && errors.message.errors.status && errors.message.errors.status.message}
               formClass="inline field"
 
               options={[

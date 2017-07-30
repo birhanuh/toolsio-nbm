@@ -92,6 +92,9 @@ class Form extends Component {
     return (            
       <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
+           
+          { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+          
           <InputField
             label={T.translate("sign_up.first_name")}
             name="firstName" 

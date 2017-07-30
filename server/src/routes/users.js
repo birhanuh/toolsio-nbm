@@ -1,7 +1,5 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
-import { Validation } from '../utils'
-import isEmpty from 'lodash/isEmpty'
 import jwt from 'jsonwebtoken'
 import config from '../config'
 
@@ -46,10 +44,10 @@ router.post('/login', (req, res) => {
         }, config.jwtSecret)
         res.json({ token })
       } else {
-        res.status(401).json({ errors: { form: 'Invalid Credentials' } }) 
+        res.status(401).json({ errors: { form: 'Invalid Credentials.' } }) 
       }
     } else {
-      res.status(401).json({ errors: { form: 'Invalid Credentials' } }) 
+      res.status(401).json({ errors: { form: 'Invalid Credentials.' } }) 
     }  
   })
 })
