@@ -6,10 +6,10 @@ let items = []
 
 // User Schema 
 let saleSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  deadline: { type: Date, required: true },  
-  customer: { type: ObjectId, required: true },
-  status: { type: String, required: true },
+  name: { type: String, required: [true, "Name is required."] },
+  deadline: { type: Date, required: [true, "Deadline is required."] },  
+  customer: { type: ObjectId, required: [true, "Customer is required."] },
+  status: { type: String, required: [true, "Status is required."] },
   description: { type: String, default: '' },
   items: { type: [items], required: false }
 })

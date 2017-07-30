@@ -25,7 +25,6 @@ export default {
   },
 
   create: (params, callback) => {  
-    console.log('customers: ', params)
     Customer.create(params, function(err, customer) {
       if (err) {
         callback(err, null)

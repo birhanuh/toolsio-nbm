@@ -1,5 +1,4 @@
 import Sale from '../models/Sale'
-import { Validation } from '../utils'
 
 export default {
   
@@ -26,37 +25,25 @@ export default {
   },
 
   create: (params, callback) => {
-    const { errors, isValid } = Validation.validateSaleInput(params)
-
-    if (isValid) {
-      Sale.create(params, function(err, sale) {
-        if (err) {
-          callback(null, err, null)
-          return
-        }
-        
-        callback(null, null, sale)
-      })
-    } else {
-      callback(errors, null, null)
-    }
+    Sale.create(params, function(err, sale) {
+      if (err) {
+        callback(err, null)
+        return
+      }
+      
+      callback(null, sale)
+    })
   },
 
   findByIdAndUpdate: (id, params, callback) => {
-    const { errors, isValid } = Validation.validateSaleInput(params)
-
-    if (isValid) {
-      Sale.findByIdAndUpdate(id, params, {new: true}, function(err, sale) {
-        if (err) {
-          callback(null, err, null)
-          return
-        }
-      
-        callback(null, null, sale)
-      })
-    } else {
-      callback(errors, null, null)
-    }
+    Sale.findByIdAndUpdate(id, params, {new: true}, function(err, sale) {
+      if (err) {
+        callback(err, null)
+        return
+      }
+    
+      callback(null, sale)
+    })
 
   },
 

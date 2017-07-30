@@ -6,10 +6,10 @@ let tasks = []
 
 // User Schema 
 let projectSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  deadline: { type: Date, default: Date.now, required: true },
-  customer: { type: ObjectId, required: true },
-  status: { type: String, default: 'NEW', required: true },
+  name: { type: String, required: [true, "Name is required."] },
+  deadline: { type: Date, required: [true, "Deadline is required."] },
+  customer: { type: ObjectId, required: [true, "Customer is required."] },
+  status: { type: String, required: [true, "Status is required."] },
   description: { type: String, default: '' },
   items: [tasks]
 })

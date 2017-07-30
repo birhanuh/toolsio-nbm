@@ -84,7 +84,6 @@ class Form extends Component {
   } 
 
   render() {
-
     const { name, deadline, customer, status, description, errors, isLoading } = this.state
 
     return (
@@ -94,7 +93,7 @@ class Form extends Component {
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
             <div className="inline field"> 
               <h1 className="ui header">{T.translate("projects.new.header")}</h1>
-              { !!errors.global && <div className="ui negative message"><p>{errors.global}</p></div> }
+              { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
             </div>
             
             <InputField
@@ -103,11 +102,11 @@ class Form extends Component {
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.name}
+              error={errors.message && errors.message.name && errors.message['name'].message}
               formClass="inline field"
             />
                           
-            <div  className={classnames("inline field", { error: !!errors.deadline })}>
+            <div  className={classnames("inline field", { error: !!errors['deadline'] })}>
               <label className="" htmlFor="date">{T.translate("projects.new.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
@@ -122,7 +121,7 @@ class Form extends Component {
               name="customer"
               value={customer} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.customer}
+              error={errors.message && errors.message.customer && errors.message['customer'].message}
               formClass="inline field"
 
               options={[
@@ -138,7 +137,7 @@ class Form extends Component {
               type="select"
               value={status} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.status}
+              error={errors.message && errors.message.status && errors.message['status'].message}
               formClass="inline field"
 
               options={[

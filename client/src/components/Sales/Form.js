@@ -102,7 +102,7 @@ class Form extends Component {
             <div className="inline field">  
               <h1 className="ui header">{T.translate("sales.new.header")}</h1>
         
-              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+              { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
             </div>
 
             <InputField
@@ -111,7 +111,7 @@ class Form extends Component {
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.name}
+              error={errors.message && errors.message.name && errors.message['name'].message}
               formClass="inline field"
             />
             <div  className={classnames("inline field", { error: !!errors.deadline })}>
@@ -128,7 +128,7 @@ class Form extends Component {
               name="customer"
               value={customer} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.customer}
+              error={errors.message && errors.message.customer && errors.message['customer'].message}
               formClass="inline field"
 
               options={[
@@ -143,7 +143,7 @@ class Form extends Component {
               type="select"
               value={status} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.status}
+              error={errors.message && errors.message.status && errors.message['status'].message}
               formClass="inline field"
 
               options={[
