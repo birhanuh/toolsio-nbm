@@ -3,7 +3,7 @@ import Promise from 'bluebird'
 
 export default {
   connect: function(mongoURI) { 
-    mongoose.connect(mongoURI, function(err, res) {
+    mongoose.connect(mongoURI, {useMongoClient: true}, function(err, res) {
       if (err) {
         console.log('DB CONNECTION FAILED: '+err)
       } else {
@@ -13,7 +13,7 @@ export default {
   },
 
   drop: function(collectionName, mongoURI) {   
-    mongoose.createConnection(mongoURI, function(err, db) {    
+    mongoose.createConnection(mongoURI, {useMongoClient: true}, function(err, db) {    
       /* Drop the DB */
       //mongoose.connection.db.dropDatabase();
 
@@ -28,7 +28,7 @@ export default {
   },
 
   fixtures: function(mongoURI, schema, data) {
-    mongoose.createConnection(mongoURI, function(err, db) {    
+    mongoose.createConnection(mongoURI, {useMongoClient: true}, function(err, db) {    
       schema.collection.insertMany(data, function(err,r) {
         console.log('collection inserted')
       })    
