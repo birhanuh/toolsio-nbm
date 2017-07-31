@@ -10,8 +10,8 @@ let customerSchema = new mongoose.Schema({
   },
   vatNumber: { type: String, required: [true, "Vat number is required."] },
   contact: {
-    phoneNumber: { type: String, validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} },
-    email: { type: String, validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} }
+    phoneNumber: { type: String, match: [/\d{6,14}/, "Wrong Phone number fromat."], validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} },
+    email: { type: String, match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Wrong Email fromat."], validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} }
   },
   includeContactOnInvoice: { type: Boolean, default: false }
 })

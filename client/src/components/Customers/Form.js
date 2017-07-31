@@ -253,15 +253,17 @@ class Form extends Component {
                 error={errors.message && errors.message.errors && errors.message.errors['address.postalCode'] && errors.message.errors['address.postalCode'].message}
                 formClass="inline field"
               />
-              <div className="inline field">              
+              <div className={classnames("inline field", {error: errors.message && errors.message.errors && errors.message.errors['address.country']})}>              
                 <label>{T.translate("customers.show.address.country")}</label>
                 <CountryDropdown
                   defaultOptionLabel={T.translate("customers.new.select_country")}
                   value={address.country}
                   onChange={(val) => this.selectCountry(val)} 
                   error={errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message} />
+                
+                <span className={classnames({red: errors.message && errors.message.errors && errors.message.errors['address.country']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message}</span>  
               </div>  
-              <div className="inline field">              
+              <div className={classnames("inline field", {error: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>              
                 <label>{T.translate("customers.show.address.region")}</label> 
                 <RegionDropdown
                   defaultOptionLabel={T.translate("customers.new.select_region")}
@@ -270,6 +272,8 @@ class Form extends Component {
                   value={address.region}
                   onChange={(val) => this.selectRegion(val)} 
                   error={errors.message && errors.message.errors && errors.message.errors['address.region'] && errors.message.errors['address.region'].message}/>
+                
+                <span className={classnames({red: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.region'].message}</span>  
               </div>
               
             </fieldset>
