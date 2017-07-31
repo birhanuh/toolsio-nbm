@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
+import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
 
@@ -26,14 +27,16 @@ class Form extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      _id: nextProps.project._id,
-      name: nextProps.project.name,
-      deadline: moment(nextProps.project.deadline),
-      customer: nextProps.project.customer,
-      status: nextProps.project.status,
-      description: nextProps.project.description
-    })
+    if (nextProps.project !== null) {
+      this.setState({
+        _id: nextProps.project._id,
+        name: nextProps.project.name,
+        deadline: moment(nextProps.project.deadline),
+        customer: nextProps.project.customer,
+        status: nextProps.project.status,
+        description: nextProps.project.description
+      })
+    }
   }
 
   handleChange = (e) => {
@@ -85,7 +88,14 @@ class Form extends Component {
 
   render() {
     const { name, deadline, customer, status, description, errors, isLoading } = this.state
+    
+    const customersOptions = map(this.props.customers, (customer) => 
+      <option key={customer._id} value={customer.name}>{customer.name}</option>
+    )
 
+    // const customersOptions = ["<option key=\"1\" value=\"1\">Customer 1</option>",
+    //             "<option key=\"2\" value=\"2\">Customer 2</option>"]
+    console.log('customers: ', customersOptions)
     return (
       <div className="ui stackable centered grid">
         <div className="eight wide column ui segment">  
@@ -125,11 +135,8 @@ class Form extends Component {
               error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"
 
-              options={[
-                <option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
-                <option key="1" value="1">Customer 1</option>,
-                <option key="2" value="2">Customer 2</option>
-              ]}
+              options={[<option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
+                customersOptions]}
             />
             
             <SelectField

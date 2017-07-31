@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { createSale, fetchSale, updateSale } from '../../actions/saleActions'
+import { fetchCustomers } from '../../actions/customerActions'
 import Form from './Form'
 
 class FormPage  extends Component {
@@ -11,10 +12,14 @@ class FormPage  extends Component {
   }
 
   componentDidMount = () => {
+    // Fetch Project when id is present in params
     const { match } = this.props
     if (match.params._id) {
       this.props.fetchSale(match.params._id)
-    } else {}
+    } 
+
+    // Fetch Customers
+    this.props.fetchCustomers()
   }
 
   saveSale = ({ _id, name, customer, deadline, status, description }) => {
@@ -43,7 +48,8 @@ class FormPage  extends Component {
 FormPage.propTypes = {
   createSale: React.PropTypes.func.isRequired,
   fetchSale: React.PropTypes.func.isRequired,
-  updateSale: React.PropTypes.func.isRequired
+  updateSale: React.PropTypes.func.isRequired,
+  fetchCustomers: React.PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, props) {
@@ -53,9 +59,12 @@ function mapStateToProps(state, props) {
       sale: state.sales.find(item => item._id === match.params._id)
     }
   } 
-  return { sale: null }
+  return { 
+    sale: null,
+    customers: state.customers
+  }
 }
 
-export default connect(mapStateToProps, { createSale, fetchSale, updateSale })(FormPage)
+export default connect(mapStateToProps, { createSale, fetchSale, updateSale, fetchCustomers })(FormPage)
 
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
+import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
 
@@ -29,14 +30,16 @@ class Form extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      _id: nextProps.sale._id,
-      name: nextProps.sale.name,
-      deadline: moment(nextProps.sale.deadline),
-      customer: nextProps.sale.customer,
-      status: nextProps.sale.status,
-      description: nextProps.sale.description
-    })
+    if (nextProps.project !== null) {
+      this.setState({
+        _id: nextProps.sale._id,
+        name: nextProps.sale.name,
+        deadline: moment(nextProps.sale.deadline),
+        customer: nextProps.sale.customer,
+        status: nextProps.sale.status,
+        description: nextProps.sale.description
+      })
+    }
   }
 
   handleChange = (e) => {
@@ -88,6 +91,10 @@ class Form extends Component {
   render() {
     const { name, deadline, customer, status, description, errors, isLoading } = this.state
     
+    const customersOptions = map(this.props.customers, (customer) => 
+      <option key={customer._id} value={customer.name}>{customer.name}</option>
+    )
+
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
     //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
     //    { key: 'ready', value: 'ready', text: 'READY' } ,
@@ -146,14 +153,8 @@ class Form extends Component {
               error={errors.message && errors.message.errors && errors.message.errors.status && errors.message.errors.status.message}
               formClass="inline field"
 
-              options={[
-                <option key="default" value="" disabled>{T.translate("sales.new.select_status")}</option>,
-                <option key="new" value="new">NEW</option>,
-                <option key="in progress" value="in progress">IN PROGRESS</option>,
-                <option key="ready" value="ready">READY</option>,
-                <option key="delivered" value="delivered">DELIVERED</option>
-                ]
-              }
+              options={[<option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
+                customersOptions]}
             />
 
             {/*
