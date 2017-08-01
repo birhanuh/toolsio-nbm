@@ -12,8 +12,8 @@ class FormPage  extends Component {
 
   componentDidMount = () => {
     const { match } = this.props
-    if (match.params._id) {
-      this.props.fetchCustomer(match.params._id)
+    if (match.params.id) {
+      this.props.fetchCustomer(match.params.id)
     } else {}
   }
 
@@ -48,9 +48,9 @@ FormPage.propTypes = {
 
 function mapStateToProps(state, props) {
   const { match } = props
-  if (match.params._id) {
+  if (match.params.id) {
     return {
-      customer: state.customers.find(item => item._id === match.params._id)
+      customer: state.customers.find(item => item._id === match.params.id)
     }
   } 
   return { customer: null }

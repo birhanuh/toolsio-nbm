@@ -56,7 +56,8 @@ function mapStateToProps(state, props) {
   const { match } = props
   if (match.params.id) {
     return {
-      project: state.projects.find(item => item._id === match.params.id)
+      project: state.projects.find(item => item._id === match.params.id),
+      customers: state.customers
     }
   } 
   return { 

@@ -71,11 +71,11 @@
 }
 
 .ui.positive.button {
-  background: $grass;
-  border-color: $grass;
+  background: $green;
+  border-color: $green;
   &:hover, &.focus {
-    background-color: $dark-grass;
-    border-color: $dark-grass;
+    background-color: $dark-green;
+    border-color: $dark-green;
   }
 }
 
@@ -117,10 +117,10 @@
 }
 
 .ui.positive.basic.button {
-  color: $grass;
+  color: $green;
   &:hover {
     color: $white;
-    background: $grass !important;
+    background: $green !important;
   }
 }
 
@@ -135,6 +135,38 @@
 
 .ui.teal.button {
   @extend .ui.primary.button;
+}
+
+.ui.basic.green.button, .ui.basic.green.buttons .button {
+  box-shadow: 0 0 0 1px $green inset!important;
+  color: $green!important;
+  &:hover {
+    box-shadow: 0 0 0 1px $dark-green inset!important;
+    color: $dark-green!important;
+  }
+}
+
+.ui.basic.blue.button, .ui.basic.blue.buttons .button {
+  box-shadow: 0 0 0 1px $blue inset!important;
+  color: $blue!important;
+  &:hover {
+    box-shadow: 0 0 0 1px $dark-blue inset!important;
+    color: $dark-blue!important;
+  }
+}
+
+.ui.basic.red.button, .ui.basic.red.buttons .button {
+  box-shadow: 0 0 0 1px $red inset!important;
+  color: $red!important;
+  &:hover {
+    box-shadow: 0 0 0 1px $dark-red inset!important;
+    color: $dark-red!important;
+  }
+}
+
+.ui.basic.orange.button, .ui.basic.orange.buttons .button {
+  box-shadow: 0 0 0 1px $orange inset!important;
+  color: $orange!important;
 }
 
 // Button icons

@@ -128,7 +128,7 @@
     "toolsio": "Toolsio",
     "see_all_messages": "See all messages",
     "admin_options": "Admin options",
-    "profile": "Profile",
+    "settings": "Settings",
     "calender": "Calender",
     "inbox": "Inbox",
     "tasks": "Tasks",
@@ -196,7 +196,7 @@
       "user": "User",
       "customer": "Customer",
       "description": "Description",
-      "select_status": "-Select status-",
+      "select_status": "-Select Status-",
       "select_customer": "-Select Customer-",
       "select_user": "-Select User-",
       "select_or_add_new_customer": "Select Customer if exists or add new"
@@ -292,14 +292,15 @@
         "phone_number": "Phone number",
         "email": "Email"
       },
-      "include_address_on_inoivce": "Include address on invoice",
+      "include_contact_on_invoice": "Include address on invoice",
       "address": {
         "header": "Address",
         "street": "Street",
         "postal_code": "Postal code",
         "region": "Region",
         "country": "Country"
-      }
+      },
+      "active_projects_sales": "Active Projects/Sales"
     },
     "update": {
       "success_update": "Customer updated"
@@ -327,9 +328,9 @@
       "confirmation": "Confirmation",
       "invoice_details": "Invoice details",
       "sale_and_project_details": "Sale and Project details",
-      "select_customer": "-Select customer-",
-      "select_user": "-Select user-",
-      "select_status": "-Select status-",
+      "select_customer": "-Select Customer-",
+      "select_user": "-Select User-",
+      "select_status": "-Select Status-",
       "select_days": "-Select days-",
       "select_sale_or_project": "Select Sale or Project",
       "select_payment_term_or_deadline": "Select either a Payment term or Deadline",
@@ -408,7 +409,7 @@
       "user": "User",
       "customer": "Customer",
       "description": "Description",
-      "select_status": "-Select status-",
+      "select_status": "-Select Status-",
       "select_customer": "-Select Customer-"
     },
     "create": {

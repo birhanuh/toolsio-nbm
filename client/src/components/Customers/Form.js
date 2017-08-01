@@ -224,7 +224,7 @@ class Form extends Component {
               />
             </fieldset>
             <div className="inline field">              
-              <label>{T.translate("customers.show.include_address_on_inoivce")}</label> 
+              <label>{T.translate("customers.show.include_contact_on_invoice")}</label> 
               <div className="ui toggle checkbox">
                 <input 
                   type="checkbox" 

@@ -13,10 +13,10 @@ export default function List({ customers, deleteCustomer }) {
     <table className="ui striped selectable small table">
        <thead>
           <tr>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Description</th>
+            <th>{T.translate("customers.show.name")}</th>
+            <th>{T.translate("customers.show.vat_number")}</th>
+            <th>{T.translate("customers.show.contact.header")}</th>
+            <th>{T.translate("customers.show.active_projects_sales")}</th>
             <th>Actions</th>
           </tr>
         </thead>

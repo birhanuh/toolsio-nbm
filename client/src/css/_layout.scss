@@ -78,12 +78,26 @@ a {
 }
 
 // Menu
-.menu.transition .ui.inverted.button:hover, .ui.inverted.button:active, .ui.inverted.button:focus {
+.ui.menu .item, .ui.menu .active.item,
+.ui.menu .active.item:hover, .ui.vertical.menu .active.item:hover,
+.ui.link.menu .item:hover, .ui.menu .dropdown.item:hover, .ui.menu .link.item:hover, .ui.menu a.item:hover {
   color: $white;
 }
 
-.ui.inverted.menu {
+.ui.menu {
   background: $turquoise;
+
+  .ui.dropdown .ui.avatar.image {
+    width: 1.4em;
+    height: 1.4em;
+  }
+
+  .label.envelop {
+    position: absolute;
+    right: 3px;
+    top: 5px;
+    padding: .3em .561429em;
+  }
 }
 
 // Container
@@ -224,9 +238,9 @@ a {
 }
 
 .alert-success {
-  color: $dark-grass;
-  background: $white-grass;
-  border-color: $x-light-grass;
+  color: $dark-green;
+  background: $white-green;
+  border-color: $x-light-green;
 }
 
 .alert-warning {
@@ -293,17 +307,25 @@ body .auth-pages {
   height: 28px;
 }
 
-// Badge
-.badge {
-  border-radius: 2px;
-}
-
-.badge-light-blue, .label-light-blue {
-  background-color: $light-blue !important;
-}
-
-.badge-orange, .label-orange {
+// Label
+.ui.orange.label, .ui.orange.labels .label {
   background-color: $orange !important;
+  border-color: $orange !important;
+}
+
+.ui.blue.label, .ui.blue.labels .label {
+  background-color: $blue !important;
+  border-color: $blue !important;
+}
+
+.ui.green.label, .ui.green.labels .label {
+  background-color: $green !important;
+  border-color: $green !important;
+}
+
+.ui.red.label, .ui.red.labels .label {
+  background-color: $red !important;
+  border-color: $red !important;
 }
 
 // Line break
@@ -380,7 +402,7 @@ body .auth-pages {
 }
 
 .progress .progress-bar.progress-bar-success {
-  background-color: $grass !important;
+  background-color: $green !important;
 }
 
 .progress .progress-bar.progress-bar-info {
@@ -435,9 +457,9 @@ dt {
 }
 
 .bs-callout-success {
-  border-left-color: $grass;
+  border-left-color: $green;
   .heading {
-    color: $grass;
+    color: $green;
   }
 }
 

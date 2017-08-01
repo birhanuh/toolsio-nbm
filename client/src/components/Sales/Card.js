@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 
 export default function Card({sale, deleteSale}) {
@@ -7,7 +8,9 @@ export default function Card({sale, deleteSale}) {
     <div className="card">
       <div className="content">
         <div className="right floated mini ui">
-          {sale.status}
+          <div className={classnames("ui label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready' })}> 
+            {sale.status}
+          </div>
         </div>
         <div className="header">
           {sale.name}
@@ -21,9 +24,10 @@ export default function Card({sale, deleteSale}) {
       </div>
 
       <div className="extra content">
-        <div className="ui two buttons">
+        <div className="ui three buttons">          
           <button className="ui icon basic red button" onClick={deleteSale(sale._id)}><i className="delete icon"></i></button>
-          <Link to={`/sales/${sale._id}`} className="ui icon basic green button"><i className="edit icon"></i></Link>
+          <Link to={`/sales/edit/${sale._id}`} className="ui icon basic green button"><i className="edit icon"></i></Link>
+          <Link to={`/sales/show/${sale._id}`} className="ui icon basic blue button"><i className="unhide icon"></i></Link>
         </div>
       </div>
     </div>

@@ -92,10 +92,7 @@ class Form extends Component {
     const customersOptions = map(this.props.customers, (customer) => 
       <option key={customer._id} value={customer._id}>{customer.name}</option>
     )
-
-    // const customersOptions = ["<option key=\"1\" value=\"1\">Customer 1</option>",
-    //             "<option key=\"2\" value=\"2\">Customer 2</option>"]
-    console.log('customers: ', customersOptions)
+    
     return (
       <div className="ui stackable centered grid">
         <div className="eight wide column ui segment">  

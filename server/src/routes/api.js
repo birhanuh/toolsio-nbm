@@ -123,12 +123,12 @@ router.put('/:resource/:id', authenticate, function(req, res) {
     })
   } 
 
-  controller.update(req.params.id, req.body, function(dbError, result) {
-    if (dbError) {
+  controller.findByIdAndUpdate(req.params.id, req.body, function(err, result) {
+    if (err) {
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
-          message: dbError
+          message: err
         }
       })
       return

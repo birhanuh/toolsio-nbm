@@ -18,12 +18,12 @@ import NavigationBar from './NavigationBar'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
 // Semantic CSS
-import 'semantic-ui-css/semantic.min.css';
+import 'semantic-ui-css/semantic.min.css'
 
 // CSS
 import '../../css/app.css'
 
-import logo from '../../images/logo-square.png'; 
+import logo from '../../images/logo-square.png' 
 
 class App extends Component {
   render() {
@@ -49,13 +49,13 @@ class App extends Component {
               <Route path="/login" component={Login} />
               <Route path="/dashboard" component={requireAuth(Dashboard)} />
               <Route exact path="/projects" component={requireAuth(Projects)} />
-              <Route exact path="/projects/:id" component={requireAuth(ProjectFormPage)} />
+              <Route exact path="/projects/edit/:id" component={requireAuth(ProjectFormPage)} />
               <Route exact path="/projects/new" component={requireAuth(ProjectFormPage)} />
               <Route exact path="/sales" component={requireAuth(Sales)} />
-              <Route exact path="/sales/:id" component={requireAuth(SaleFormPage)} /> 
+              <Route exact path="/sales/edit/:id" component={requireAuth(SaleFormPage)} /> 
               <Route exact path="/sales/new" component={requireAuth(SaleFormPage)} />
               <Route exact path="/customers" component={requireAuth(Customers)} />
-              <Route exact path="/customers/:id" component={requireAuth(CustomerFormPage)} /> 
+              <Route exact path="/customers/edit/:id" component={requireAuth(CustomerFormPage)} /> 
               <Route exact path="/customers/new" component={requireAuth(CustomerFormPage)} />
             </Switch>
           </div>
