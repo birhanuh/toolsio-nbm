@@ -30,7 +30,7 @@ class Form extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.project !== null) {
+    if (nextProps.sale !== null) {
       this.setState({
         _id: nextProps.sale._id,
         name: nextProps.sale.name,
@@ -92,7 +92,7 @@ class Form extends Component {
     const { name, deadline, customer, status, description, errors, isLoading } = this.state
     
     const customersOptions = map(this.props.customers, (customer) => 
-      <option key={customer._id} value={customer.name}>{customer.name}</option>
+      <option key={customer._id} value={customer._id}>{customer.name}</option>
     )
 
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
@@ -137,12 +137,9 @@ class Form extends Component {
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"
-
-              options={[
-                <option key="default" value="" disabled>{T.translate("sales.new.select_customer")}</option>,
-                <option key="1" value="1">Customer 1</option>,
-                <option key="2" value="2">Customer 2</option>
-              ]}
+              
+              options={[<option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
+                customersOptions]}
             />
             <SelectField
               label={T.translate("sales.new.status")}
@@ -153,8 +150,14 @@ class Form extends Component {
               error={errors.message && errors.message.errors && errors.message.errors.status && errors.message.errors.status.message}
               formClass="inline field"
 
-              options={[<option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
-                customersOptions]}
+              options={[
+                <option key="default" value="" disabled>{T.translate("projects.new.select_status")}</option>,
+                <option key="new" value="new">NEW</option>,
+                <option key="in progress" value="in progress">IN PROGRESS</option>,
+                <option key="ready" value="ready">READY</option>,
+                <option key="delivered" value="delivered">DELIVERED</option>
+                ]
+              }
             />
 
             {/*

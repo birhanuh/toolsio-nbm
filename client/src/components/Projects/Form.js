@@ -90,7 +90,7 @@ class Form extends Component {
     const { name, deadline, customer, status, description, errors, isLoading } = this.state
     
     const customersOptions = map(this.props.customers, (customer) => 
-      <option key={customer._id} value={customer.name}>{customer.name}</option>
+      <option key={customer._id} value={customer._id}>{customer.name}</option>
     )
 
     // const customersOptions = ["<option key=\"1\" value=\"1\">Customer 1</option>",

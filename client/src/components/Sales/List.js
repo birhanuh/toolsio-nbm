@@ -1,5 +1,5 @@
 import React from 'react'
-import Tr from './Tr'
+import Card from './Card'
 
 // Localization 
 import T from 'i18n-react'
@@ -10,20 +10,9 @@ export default function List({ sales, deleteSale }) {
   )
 
   const salesList = (
-    <table className="ui striped selectable small table">
-       <thead>
-          <tr>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          { sales.map(sale => <Tr sale={sale} key={sale._id} deleteSale={deleteSale} />) }
-        </tbody>
-    </table>
+    <div className="ui cards">
+      { sales.map(sale => <Card sale={sale} key={sale._id} deleteSale={deleteSale} />) }
+    </div>
   )
 
   return (

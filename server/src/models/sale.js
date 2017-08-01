@@ -1,6 +1,4 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+import mongoose from 'mongoose'
 
 let items = []
 
@@ -8,7 +6,7 @@ let items = []
 let saleSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Name is required."] },
   deadline: { type: Date, required: [true, "Deadline is required."] },  
-  customer: { type: ObjectId, required: [true, "Customer is required."] },
+  customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: [true, "Customer is required."] },
   status: { type: String, required: [true, "Status is required."] },
   description: { type: String, default: '' },
   items: { type: [items], required: false }

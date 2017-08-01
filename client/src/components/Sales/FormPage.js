@@ -14,8 +14,8 @@ class FormPage  extends Component {
   componentDidMount = () => {
     // Fetch Project when id is present in params
     const { match } = this.props
-    if (match.params._id) {
-      this.props.fetchSale(match.params._id)
+    if (match.params.id) {
+      this.props.fetchSale(match.params.id)
     } 
 
     // Fetch Customers
@@ -38,7 +38,7 @@ class FormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/sales" /> : 
-          <Form sale={this.props.sale} saveSale={this.saveSale} />
+          <Form sale={this.props.sale} saveSale={this.saveSale} customers={this.props.customers} />
         }
       </div>
     )
@@ -54,9 +54,9 @@ FormPage.propTypes = {
 
 function mapStateToProps(state, props) {
   const { match } = props
-  if (match.params._id) {
+  if (match.params.id) {
     return {
-      sale: state.sales.find(item => item._id === match.params._id)
+      sale: state.sales.find(item => item._id === match.params.id)
     }
   } 
   return { 

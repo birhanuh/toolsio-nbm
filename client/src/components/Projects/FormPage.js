@@ -14,8 +14,8 @@ class FormPage  extends Component {
   componentDidMount = () => {
     // Fetch Project when id is present in params
     const { match } = this.props
-    if (match.params._id) {
-      this.props.fetchProject(match.params._id)
+    if (match.params.id) {
+      this.props.fetchProject(match.params.id)
     } 
 
     // Fetch Customers
@@ -54,9 +54,9 @@ FormPage.propTypes = {
 
 function mapStateToProps(state, props) {
   const { match } = props
-  if (match.params._id) {
+  if (match.params.id) {
     return {
-      project: state.projects.find(item => item._id === match.params._id)
+      project: state.projects.find(item => item._id === match.params.id)
     }
   } 
   return { 
