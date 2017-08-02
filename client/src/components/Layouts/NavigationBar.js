@@ -79,9 +79,15 @@ class NavigationBar extends Component {
               <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
               Birhanu <i className="dropdown icon"></i>
               <div className="menu">
-                <a className="item">{T.translate("internal_navigation.settings")}</a>
+                <a className="item">
+                  <i className="settings icon"></i>
+                  {T.translate("internal_navigation.settings")}
+                </a>
                 <div className="divider"></div>
-                <a className="item" to="#" onClick={this.logout.bind(this)} >{T.translate("internal_navigation.sign_out")}</a>   
+                <a className="item" to="#" onClick={this.logout.bind(this)} >
+                  <i className="sign out icon"></i>
+                  {T.translate("internal_navigation.sign_out")}
+                </a>   
               </div>
             </div>
           </div>
