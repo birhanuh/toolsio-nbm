@@ -30,7 +30,7 @@ class Form extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.sale !== null) {
+    if (nextProps.sale) {
       this.setState({
         _id: nextProps.sale._id,
         name: nextProps.sale.name,
@@ -133,7 +133,7 @@ class Form extends Component {
             <SelectField
               label={T.translate("sales.new.customer")}
               name="customer"
-              value={customer} 
+              value={customer && customer._id} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"

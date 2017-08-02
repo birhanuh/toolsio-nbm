@@ -3,7 +3,7 @@ import Project from '../models/Project'
 export default {
   
   find: (params, callback) => {
-    Project.find(params, function(err, projects) {
+    Project.find(params).populate('customer').exec(function(err, projects) {
       if (err) {
         callback(err, null)
         return
@@ -14,7 +14,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Project.findById(id, function(err, project) {
+    Project.findById(id).populate('customer').exec(function(err, project) {
       if (err) {
         callback(err, null)
         return

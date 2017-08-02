@@ -8,7 +8,7 @@ export default function Card({project, deleteProject}) {
     <div className="card">
       <div className="content">
         <div className="right floated mini ui">
-          <div className={classnames("ui label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'ready' })}> 
+          <div className={classnames("ui uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'ready' })}> 
             {project.status}
           </div>
         </div>

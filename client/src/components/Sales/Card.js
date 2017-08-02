@@ -8,7 +8,7 @@ export default function Card({sale, deleteSale}) {
     <div className="card">
       <div className="content">
         <div className="right floated mini ui">
-          <div className={classnames("ui label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready' })}> 
+          <div className={classnames("ui uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready' })}> 
             {sale.status}
           </div>
         </div>

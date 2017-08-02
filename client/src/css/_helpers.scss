@@ -56,6 +56,11 @@
   color: $xx-light-grey;
 }
 
+// Text 
+.uppercase {
+  text-transform: uppercase !important;
+}
+
 // Display
 .visible-all-inline-block {
   display: inline-block !important;
