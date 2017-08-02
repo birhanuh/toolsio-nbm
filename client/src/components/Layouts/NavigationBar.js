@@ -10,7 +10,7 @@ $.fn.dropdown = require('semantic-ui-dropdown')
 import T from 'i18n-react'
 
 // Images
-import logo from '../../images/logo-square.png'
+import logoInverted from '../../images/logo-inverted.png'
 import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
 
 const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
@@ -21,7 +21,7 @@ const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
 
 class NavigationBar extends Component {
   
-  componentDidMount() {
+  componentDidMount = () => {
     $('.ui.dropdown.item').dropdown({
       // you can use any ui transition
       transition: 'vertical flip'
@@ -39,14 +39,14 @@ class NavigationBar extends Component {
     const userLinks = (
       <nav className="ui fixed stackable menu">
         <div className="ui container">
-          <Link className="header item" to="/dashboard">
-            <img className="logo" src={logo} alt="logo-square" />
-          </Link>
-          <ActiveLink activeOnlyWhenExact to="/dashboard" label={T.translate("dashboards.header")} />
-          <ActiveLink activeOnlyWhenExact to="/projects" label={T.translate("projects.index.header")} />
-          <ActiveLink activeOnlyWhenExact to="/sales" label={T.translate("sales.index.header")} />
-          <ActiveLink activeOnlyWhenExact to="/customers" label={T.translate("customers.index.header")}/>
-          <ActiveLink activeOnlyWhenExact to="/invoices" label={T.translate("invoices.index.header")}/>
+          <div className="left menu">
+            <Link className="header" to="/dashboard">
+              <img className="logo" src={logoInverted} alt="logo-inverted" />
+            </Link>
+            <div className="item">
+              <i className="sidebar icon"></i>
+            </div>
+          </div>
           
           <div className="right menu">
             <div className="ui dropdown item">

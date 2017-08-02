@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Link } from 'react-router-dom'
 import classnames from 'classnames'
 
 import Dashboard from '../Dashboard/Index'
@@ -22,12 +22,33 @@ import FlashMessagesList from '../../flash/FlashMessagesList'
 // Semantic CSS
 import 'semantic-ui-css/semantic.min.css'
 
-// CSS
+// CSS entry
 import '../../css/app.css'
 
+// Logo
 import logo from '../../images/logo-square.png' 
 
+// Jquery
+import $ from 'jquery'
+
+// Sidebar
+$.fn.sidebar = require('semantic-ui-sidebar')
+
+// Localization 
+import T from 'i18n-react'
+
+const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
+  <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
+    <Link className={match ? 'active item' : 'item' } to={to}>{label}</Link>
+  )} />
+)
+
 class App extends Component {
+  
+  componentDidMount = () => {
+    //$('.sidebar.icon').sidebar('toggle')
+  }
+
   render() {
     let landingPage = window.location.pathname === '/' ? true : false
     let authPages = window.location.pathname === '/login' || window.location.pathname === '/signup'
@@ -41,6 +62,15 @@ class App extends Component {
         { !authPages && <NavigationBar /> }
       
         <section className={classnames({'ui middle aligned stackable container internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
+          { internalPages && 
+            <div className="ui visible sidebar vertical menu">
+              <ActiveLink activeOnlyWhenExact to="/dashboard" label={T.translate("dashboards.header")} />
+              <ActiveLink activeOnlyWhenExact to="/projects" label={T.translate("projects.index.header")} />
+              <ActiveLink activeOnlyWhenExact to="/sales" label={T.translate("sales.index.header")} />
+              <ActiveLink activeOnlyWhenExact to="/customers" label={T.translate("customers.index.header")}/>
+              <ActiveLink activeOnlyWhenExact to="/invoices" label={T.translate("invoices.index.header")}/>
+            </div>
+          }
           <div className="sixteen wide column">
             <FlashMessagesList />
           </div>
