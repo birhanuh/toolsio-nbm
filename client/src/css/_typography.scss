@@ -45,6 +45,18 @@ p, span, label, a {
   font-size: 0.875em;
 }
 
+.ui.table {
+  font-size: 0.875em;
+}
+
+.ui.label, .ui.labels .label {
+  font-size: 75%;
+}
+
+.ui.menu .ui.dropdown .menu>.item {
+  font-size: 0.875em!important;
+}
+
 // Labels
 .label-success {
   background: $green;

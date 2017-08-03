@@ -2,39 +2,54 @@ import React from 'react'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 
-export default function Card({sale, deleteSale}) {
+// Localization 
+import T from 'i18n-react'
+
+export default function Card({sale}) {
   
   return (
-    <div className="card">
-      <div className="content">
-        <div className="right floated mini ui">
-          <div className={classnames("ui uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready' })}> 
+    <div className="eight wide column">
+      <div className="ui segment">
+        <div className="ui clearing segment transparent">
+         <div className={classnames("ui right floated uppercase label", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
             {sale.status}
           </div>
+          
+          <Link to={`/sales/show/${sale._id}`} className="ui left floated header">
+            <h4 className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+              {sale.name}
+            </h4>
+          </Link>
         </div>
-        <div className="header">
-          {sale.name}
-        </div>
-        <div className="meta">
-         {sale.deadline}
-        </div>
-        <div className="description">
-         {sale.description}
-        </div>
-      </div>
 
-      <div className="extra content">
-        <div className="ui three buttons">          
-          <button className="ui icon basic red button" onClick={deleteSale(sale._id)}><i className="delete icon"></i></button>
-          <Link to={`/sales/edit/${sale._id}`} className="ui icon basic green button"><i className="edit icon"></i></Link>
-          <Link to={`/sales/show/${sale._id}`} className="ui icon basic blue button"><i className="unhide icon"></i></Link>
-        </div>
+        <p className="m-t-m">{sale.description}</p>
+
+        <table className="ui very basic center aligned table sale">
+          <thead>
+            <tr>
+              <th>{T.translate("sales.show.user")}</th>
+              <th>{T.translate("sales.index.deadline")}</th>
+              <th>{T.translate("sales.index.customer")}</th>
+              <th>{T.translate("sales.index.invoiced")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John</td>
+              <td>{sale.deadline}</td>
+              <td>{sale.customer.name}</td>
+              <td>
+                <i className={classnames("check circle outline icon", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
     </div>
   )
 }
 
 Card.propTypes = {
-  sale: React.PropTypes.object.isRequired,
-  deleteSale: React.PropTypes.func.isRequired
+  sale: React.PropTypes.object.isRequired
 }

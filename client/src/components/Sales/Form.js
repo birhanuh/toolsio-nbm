@@ -89,7 +89,7 @@ class Form extends Component {
   } 
 
   render() {
-    const { name, deadline, customer, status, description, errors, isLoading } = this.state
+    const { _id, name, deadline, customer, status, description, errors, isLoading } = this.state
     
     const customersOptions = map(this.props.customers, (customer) => 
       <option key={customer._id} value={customer._id}>{customer.name}</option>
@@ -141,24 +141,27 @@ class Form extends Component {
               options={[<option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
                 customersOptions]}
             />
-            <SelectField
-              label={T.translate("sales.new.status")}
-              name="status"
-              type="select"
-              value={status} 
-              onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.errors && errors.message.errors.status && errors.message.errors.status.message}
-              formClass="inline field"
 
-              options={[
-                <option key="default" value="" disabled>{T.translate("projects.new.select_status")}</option>,
-                <option key="new" value="new">NEW</option>,
-                <option key="in progress" value="in progress">IN PROGRESS</option>,
-                <option key="ready" value="ready">READY</option>,
-                <option key="delivered" value="delivered">DELIVERED</option>
-                ]
-              }
-            />
+            { _id &&
+              <SelectField
+                label={T.translate("sales.new.status")}
+                name="status"
+                type="select"
+                value={status} 
+                onChange={this.handleChange.bind(this)} 
+                error={errors.message && errors.message.errors && errors.message.errors.status && errors.message.errors.status.message}
+                formClass="inline field"
+
+                options={[
+                  <option key="default" value="new" disabled>NEW</option>,
+                  <option key="on going" value="on going">ON GOING</option>,
+                  <option key="ready" value="ready">READY</option>,
+                  <option key="delayed" value="delayed">DELAYED</option>,
+                  <option key="delivered" value="delivered">DELIVERED</option>
+                  ]
+                }
+              />
+            }
 
             {/*
             <div className={classnames("field", { error: !!error.status })}>

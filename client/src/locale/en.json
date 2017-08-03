@@ -178,11 +178,13 @@
   "projects": {
     "index": {
       "header": "Projects",
-      "empty_projects": "There are no projects yet",
+      "empty_projects_header": "There are no projects",
+      "empty_projects_header": "Click Projects links on the left sidebar menu to go to Projects page and create your first Project.",
       "create_new_project": "Create new project",
       "status": "Status",
       "user": "User",
       "customer": "Customer",
+      "progress": "Progress",
       "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Projects are shown here."
@@ -391,12 +393,13 @@
   "sales": {
     "index": {
       "header": "Sales",
-      "empty_sales": "There are no sales yet",
+      "empty_sales_header": "There are no sales",
+      "empty_projects_header": "Click Projects links on the left sidebar menu to go to Sales page and create your first Sale.",
       "create_new_sale": "Create new sale",
       "status": "Status",
       "user": "User",
       "customer": "Customer",
-      "date": "Date",
+      "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Sales are shown here."
     },

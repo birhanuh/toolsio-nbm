@@ -38,60 +38,60 @@ class NavigationBar extends Component {
 
     const userLinks = (
       <nav className="ui fixed stackable menu">
-        <div className="ui container">
-          <div className="left menu">
-            <Link className="header" to="/dashboard">
-              <img className="logo" src={logoInverted} alt="logo-inverted" />
+        <div className="left menu">
+          <div className="logo item">
+            <Link to="/dashboard">
+              <img src={logoInverted} alt="logo-inverted" />
             </Link>
-            <div className="item">
-              <i className="sidebar icon"></i>
+          </div>
+          <div className="item">
+            <i className="sidebar icon"></i>
+          </div>
+        </div>
+        
+        <div className="right menu">
+          <div className="ui dropdown item">
+            <i className="alarm icon"></i>
+            <div className="menu">
+              <a className="item">
+                <div className="ui label orange">WAR</div> 
+                It is a long established.
+              </a>
+              <a className="item">
+                <div className="ui label blue">NEW</div> 
+                NEW
+              </a>
+              <a className="item">
+                <div className="ui label green">SENT</div> 
+                SENT
+              </a>
             </div>
           </div>
-          
-          <div className="right menu">
-            <div className="ui dropdown item">
-              <i className="alarm icon"></i>
-              <div className="menu">
-                <a className="item">
-                  <div className="ui label orange">WAR</div> 
-                  It is a long established.
-                </a>
-                <a className="item">
-                  <div className="ui label blue">NEW</div> 
-                  NEW
-                </a>
-                <a className="item">
-                  <div className="ui label green">SENT</div> 
-                  SENT
-                </a>
-              </div>
-            </div>
-            <div className="ui dropdown item">
-              <i className="mail envelop icon"></i>
-              <div className="ui small blue label envelop">1</div>
-              <div className="menu">
-                <a className="item"><strong>Okay, right back at you in...</strong></a>
-                <a className="item"><strong>Hi, I have sent you...</strong></a>                
-                <a className="item">{T.translate("internal_navigation.notifications")}</a>
-              </div>
-            </div>
-            <div className="ui dropdown item">
-              <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-              Birhanu <i className="dropdown icon"></i>
-              <div className="menu">
-                <a className="item">
-                  <i className="settings icon"></i>
-                  {T.translate("internal_navigation.settings")}
-                </a>
-                <div className="divider"></div>
-                <a className="item" to="#" onClick={this.logout.bind(this)} >
-                  <i className="sign out icon"></i>
-                  {T.translate("internal_navigation.sign_out")}
-                </a>   
-              </div>
+          <div className="ui dropdown item">
+            <i className="mail envelop icon"></i>
+            <div className="ui small blue label envelop">1</div>
+            <div className="menu">
+              <a className="item"><strong>Okay, right back at you in...</strong></a>
+              <a className="item"><strong>Hi, I have sent you...</strong></a>                
+              <a className="item">{T.translate("internal_navigation.notifications")}</a>
             </div>
           </div>
-        </div>  
+          <div className="ui dropdown item">
+            <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
+            Birhanu <i className="dropdown icon"></i>
+            <div className="menu">
+              <a className="item">
+                <i className="settings icon"></i>
+                {T.translate("internal_navigation.settings")}
+              </a>
+              <div className="divider"></div>
+              <a className="item" to="#" onClick={this.logout.bind(this)} >
+                <i className="sign out icon"></i>
+                {T.translate("internal_navigation.sign_out")}
+              </a>   
+            </div>
+          </div>
+        </div>
       </nav>
     )
 

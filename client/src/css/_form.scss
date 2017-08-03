@@ -176,15 +176,11 @@
   }
 }
 
-// Search button
-.search-button {
-  padding: 0;
-  button {
-    background-color: $light-medium-grey;
-    border-width: 8px;
-    border: none;
-    padding: 9px 13px;
-  }
+// Right floated input field
+.ui[class*="right floated"].input {
+  float: right;
+  margin-right: 0;
+  margin-left: .25em;
 }
 
 // dropdown-select

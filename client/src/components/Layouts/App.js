@@ -25,8 +25,9 @@ import 'semantic-ui-css/semantic.min.css'
 // CSS entry
 import '../../css/app.css'
 
-// Logo
+// Images
 import logo from '../../images/logo-square.png' 
+import logoPlaceholderMedium from '../../images/logo-placeholder-medium.png'
 
 // Jquery
 import $ from 'jquery'
@@ -37,9 +38,12 @@ $.fn.sidebar = require('semantic-ui-sidebar')
 // Localization 
 import T from 'i18n-react'
 
-const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
+const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
   <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
-    <Link className={match ? 'active item' : 'item' } to={to}>{label}</Link>
+    <Link className={match ? 'active item' : 'item' } to={to}>
+      <i className={icon}></i>
+      {label}
+    </Link>
   )} />
 )
 
@@ -56,24 +60,78 @@ class App extends Component {
 
     let internalPages = (landingPage || authPages) ? false : true 
 
+    const currentPage = window.location.pathname
+    let currentPageTitle
+
+    switch(currentPage) {
+      case '/dashboard': 
+        currentPageTitle = "dashboard.index.header"
+        break
+      case '/settings': 
+        currentPageTitle = "settings.index.header"
+        break
+      case '/customers': 
+        currentPageTitle = "customers.index.header"
+        break
+      case '/projects': 
+        currentPageTitle = "projects.index.header"
+        break
+      case '/sales': 
+        currentPageTitle = "sales.index.header"
+        break  
+      case '/invoices': 
+        currentPageTitle = "invoices.index.header"
+        break
+      default:
+        currentPageTitle = "No page title"
+    }
+    console.log('currentPage: ', currentPageTitle)
     return (
       <div className="pusher">
         
         { !authPages && <NavigationBar /> }
-      
-        <section className={classnames({'ui middle aligned stackable container internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
-          { internalPages && 
-            <div className="ui visible sidebar vertical menu">
-              <ActiveLink activeOnlyWhenExact to="/dashboard" label={T.translate("dashboards.header")} />
-              <ActiveLink activeOnlyWhenExact to="/projects" label={T.translate("projects.index.header")} />
-              <ActiveLink activeOnlyWhenExact to="/sales" label={T.translate("sales.index.header")} />
-              <ActiveLink activeOnlyWhenExact to="/customers" label={T.translate("customers.index.header")}/>
-              <ActiveLink activeOnlyWhenExact to="/invoices" label={T.translate("invoices.index.header")}/>
+
+        { internalPages && 
+          <div className="ui visible sidebar vertical menu">
+            <div className="ui segment account">
+              <a href="/settings">
+                <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
+              </a>
+              <div className="ui center aligned segment">
+                <p>Birhanu (Admin)</p>
+              </div>
             </div>
-          }
-          <div className="sixteen wide column">
-            <FlashMessagesList />
+            <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboards.header")} />
+            <ActiveLink activeOnlyWhenExact to="/projects" icon="suitcase icon" label={T.translate("projects.index.header")} />
+            <ActiveLink activeOnlyWhenExact to="/sales" icon="cart icon" label={T.translate("sales.index.header")} />
+            <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.index.header")}/>
+            <ActiveLink activeOnlyWhenExact to="/invoices" icon="file text outline  icon" label={T.translate("invoices.index.header")}/>
           </div>
+        }
+
+        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
+          { internalPages && 
+            <div className="sixteen wide column">
+              <div className="ui clearing segment header-breadcrumb">
+                <div className="ui right floated segment transparent m-t-xs">
+                  <div className="ui breadcrumb">
+                    <a className="section">Dashboard</a>
+                    <div className="divider"> / </div>
+                    <a className="section">Sales</a>
+                    <div className="divider"> / </div>
+                    <div className="active section">New</div>
+                  </div>
+                </div>
+                <div className="ui left floated segment transparent m-t-xs">
+                  <h2 className="ui header m-b-n">{T.translate('"'+currentPageTitle+'"')}</h2>
+                  <small>{T.translate('"'+currentPageTitle+'"')}</small>              
+                </div>
+              </div>
+            </div>
+          }  
+                   
+          <FlashMessagesList />
+          
           <div className={classnames({'sixteen wide column': internalPages, 'six wide column': authPages})}>
             <Switch>
               <Route exact path="/" component={Landing} />
@@ -96,7 +154,7 @@ class App extends Component {
         </section>
         
         { internalPages &&
-          <footer className="ui inverted vertical footer segment">
+          <footer className="ui vertical footer segment">
             <div className="ui middle aligned container">
               <div className="ui stackable inverted grid">      
                 <div className="ten wide column">

@@ -6,11 +6,16 @@ import T from 'i18n-react'
 
 export default function List({ projects, deleteProject }) {
   const emptyMessage = (
-    <p className="ui info message">{T.translate("projects.index.empty_projects")}</p>
+    <div className="ui info message">
+      <div className="header">
+        {T.translate("sales.index.empty_projects_header")}
+      </div>
+      <p>{T.translate("sales.index.empty_projects_message")}</p>
+    </div>
   )
 
   const projectsList = (
-    <div className="ui cards">
+    <div className="ui grid">
       { projects.map(project => <Card project={project} key={project._id} deleteProject={deleteProject} />) }
     </div>
   )
