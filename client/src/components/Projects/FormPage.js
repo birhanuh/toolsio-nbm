@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { createProject, fetchProject, updateProject } from '../../actions/projectActions'
+import { fetchCustomers } from '../../actions/customerActions'
 import Form from './Form'
 
 class FormPage  extends Component {
@@ -11,10 +12,14 @@ class FormPage  extends Component {
   }
 
   componentDidMount = () => {
+    // Fetch Project when id is present in params
     const { match } = this.props
-    if (match.params._id) {
-      this.props.fetchSale(match.params._id)
-    } else {}
+    if (match.params.id) {
+      this.props.fetchProject(match.params.id)
+    } 
+
+    // Fetch Customers
+    this.props.fetchCustomers()
   }
 
   saveProject = ({ _id, name, customer, deadline, status, description }) => {
@@ -33,7 +38,7 @@ class FormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/projects" /> : 
-          <Form project={this.props.project} saveProject={this.saveProject} />
+          <Form project={this.props.project} saveProject={this.saveProject} customers={this.props.customers}/>
         }
       </div>
     )
@@ -43,18 +48,23 @@ class FormPage  extends Component {
 FormPage.propTypes = {
   createProject: React.PropTypes.func.isRequired,
   fetchProject: React.PropTypes.func.isRequired,
-  updateProject: React.PropTypes.func.isRequired
+  updateProject: React.PropTypes.func.isRequired,
+  fetchCustomers: React.PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, props) {
   const { match } = props
-  if (match.params._id) {
+  if (match.params.id) {
     return {
-      project: state.projects.find(item => item._id === match.params._id)
+      project: state.projects.find(item => item._id === match.params.id),
+      customers: state.customers
     }
   } 
-  return { project: null }
+  return { 
+    project: null,
+    customers: state.customers
+  }
 }
 
-export default connect(mapStateToProps, { createProject, fetchProject, updateProject })(FormPage)
+export default connect(mapStateToProps, { createProject, fetchProject, updateProject, fetchCustomers })(FormPage)
 

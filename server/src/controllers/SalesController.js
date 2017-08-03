@@ -1,10 +1,9 @@
 import Sale from '../models/Sale'
-import { Validation } from '../utils'
 
 export default {
   
   find: (params, callback) => {
-    Sale.find(params, function(err, sales) {
+    Sale.find(params).populate('customer').exec(function(err, sales) {
       if (err) {
         callback(err, null)
         return
@@ -15,7 +14,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Sale.findById(id, function(err, sale) {
+    Sale.findById(id).populate('customer').exec(function(err, sale) {
       if (err) {
         callback(err, null)
         return
@@ -26,37 +25,25 @@ export default {
   },
 
   create: (params, callback) => {
-    const { errors, isValid } = Validation.validateSaleInput(params)
-
-    if (isValid) {
-      Sale.create(params, function(err, sale) {
-        if (err) {
-          callback(null, err, null)
-          return
-        }
-        
-        callback(null, null, sale)
-      })
-    } else {
-      callback(errors, null, null)
-    }
+    Sale.create(params, function(err, sale) {
+      if (err) {
+        callback(err, null)
+        return
+      }
+      
+      callback(null, sale)
+    })
   },
 
   findByIdAndUpdate: (id, params, callback) => {
-    const { errors, isValid } = Validation.validateSaleInput(params)
-
-    if (isValid) {
-      Sale.findByIdAndUpdate(id, params, {new: true}, function(err, sale) {
-        if (err) {
-          callback(null, err, null)
-          return
-        }
-      
-        callback(null, null, sale)
-      })
-    } else {
-      callback(errors, null, null)
-    }
+    Sale.findByIdAndUpdate(id, params, {new: true}, function(err, sale) {
+      if (err) {
+        callback(err, null)
+        return
+      }
+    
+      callback(null, sale)
+    })
 
   },
 

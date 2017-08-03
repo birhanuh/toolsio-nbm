@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { createSale, fetchSale, updateSale } from '../../actions/saleActions'
+import { fetchCustomers } from '../../actions/customerActions'
 import Form from './Form'
 
 class FormPage  extends Component {
@@ -11,10 +12,14 @@ class FormPage  extends Component {
   }
 
   componentDidMount = () => {
+    // Fetch Project when id is present in params
     const { match } = this.props
-    if (match.params._id) {
-      this.props.fetchSale(match.params._id)
-    } else {}
+    if (match.params.id) {
+      this.props.fetchSale(match.params.id)
+    } 
+
+    // Fetch Customers
+    this.props.fetchCustomers()
   }
 
   saveSale = ({ _id, name, customer, deadline, status, description }) => {
@@ -33,7 +38,7 @@ class FormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/sales" /> : 
-          <Form sale={this.props.sale} saveSale={this.saveSale} />
+          <Form sale={this.props.sale} saveSale={this.saveSale} customers={this.props.customers} />
         }
       </div>
     )
@@ -43,19 +48,24 @@ class FormPage  extends Component {
 FormPage.propTypes = {
   createSale: React.PropTypes.func.isRequired,
   fetchSale: React.PropTypes.func.isRequired,
-  updateSale: React.PropTypes.func.isRequired
+  updateSale: React.PropTypes.func.isRequired,
+  fetchCustomers: React.PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, props) {
   const { match } = props
-  if (match.params._id) {
+  if (match.params.id) {
     return {
-      sale: state.sales.find(item => item._id === match.params._id)
+      sale: state.sales.find(item => item._id === match.params.id),
+      customers: state.customers
     }
   } 
-  return { sale: null }
+  return { 
+    sale: null,
+    customers: state.customers
+  }
 }
 
-export default connect(mapStateToProps, { createSale, fetchSale, updateSale })(FormPage)
+export default connect(mapStateToProps, { createSale, fetchSale, updateSale, fetchCustomers })(FormPage)
 
 

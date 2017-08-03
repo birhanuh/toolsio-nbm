@@ -15,16 +15,18 @@ class Page extends Component {
 
   render() {
     return (
-      <div>
-        <div className="row column">  
-          <Link className="ui right floated primary button" to="/projects/new">
+      <div className="row column">  
+        <div className="ui clearing segment transparent">
+          <div className="ui right floated action input">
+            <input type="text" placeholder="Search..." />
+            <button className="ui button">Search</button>
+          </div>
+
+          <Link className="ui left floated primary button" to="/projects/new">
             <i className="add circle icon"></i>
             {T.translate("projects.index.create_new_project")}
-          </Link>
-          <h1 className="ui header m-t-n">{T.translate("projects.index.header")}</h1>   
-
-          <div className="ui divider"></div>  
-        </div>
+          </Link>   
+        </div> 
         
         <div className="row column">     
           <List projects={this.props.projects} deleteProject={deleteProject} />  

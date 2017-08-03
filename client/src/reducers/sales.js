@@ -23,7 +23,7 @@ export default function sales(state = [], action = {}) {
       })
 
     case SALE_FETCHED: 
-      const index = state.findIndex(item => item.id === action.sale._id)
+      const index = state.findIndex(item => item._id === action.sale._id)
       if (index > -1) {
         return state.map(item => {
           if (item._id === action.sale._id) return action.sale

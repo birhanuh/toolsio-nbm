@@ -1,8 +1,8 @@
 import { SET_PROJECTS, ADD_PROJECT, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED } from '../actions/types'
 
 export default function projects(state = [], action = {}) {
-  switch(action.type) {
-    
+  switch(action.type) {    
+
     case SET_PROJECTS:
       return action.projects
       
@@ -22,7 +22,7 @@ export default function projects(state = [], action = {}) {
       })
 
     case PROJECT_FETCHED: 
-      const index = state.findIndex(item => item.id === action.project._id)
+      const index = state.findIndex(item => item._id === action.project._id)
       if (index > -1) {
         return state.map(item => {
           if (item._id === action.project._id) return action.project

@@ -1,17 +1,15 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+import mongoose from 'mongoose'
 
 let items = []
 
 // User Schema 
 let saleSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  deadline: { type: Date, required: true },  
-  customer: { type: ObjectId, required: true },
-  status: { type: String, required: true },
+  name: { type: String, required: [true, "Name is required."] },
+  deadline: { type: Date, required: [true, "Deadline is required."] },  
+  customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: [true, "Customer is required."] },
+  status: { type: String, default: "NEW" },
   description: { type: String, default: '' },
-  items: { type: [items], required: true }
+  items: { type: [items], required: false }
 })
 
 saleSchema.methods.addItems = function(items) {

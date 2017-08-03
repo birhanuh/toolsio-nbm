@@ -128,7 +128,7 @@
     "toolsio": "Toolsio",
     "see_all_messages": "See all messages",
     "admin_options": "Admin options",
-    "profile": "Profile",
+    "settings": "Settings",
     "calender": "Calender",
     "inbox": "Inbox",
     "tasks": "Tasks",
@@ -178,11 +178,13 @@
   "projects": {
     "index": {
       "header": "Projects",
-      "empty_projects": "There are no projects yet",
+      "empty_projects_header": "There are no projects",
+      "empty_projects_header": "Click Projects links on the left sidebar menu to go to Projects page and create your first Project.",
       "create_new_project": "Create new project",
       "status": "Status",
       "user": "User",
       "customer": "Customer",
+      "progress": "Progress",
       "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Projects are shown here."
@@ -196,7 +198,7 @@
       "user": "User",
       "customer": "Customer",
       "description": "Description",
-      "select_status": "-Select status-",
+      "select_status": "-Select Status-",
       "select_customer": "-Select Customer-",
       "select_user": "-Select User-",
       "select_or_add_new_customer": "Select Customer if exists or add new"
@@ -270,13 +272,15 @@
   "customers": {
     "index": {
       "header": "Customers",
-      "add_new_customer_button": "Add new customer",
+      "add_new_customer": "Add new customer",
       "empty_customers": "There are no customers yet",
       "description": "All added Customers are shown here."
     },
     "new": {
       "header": "New customer",
-      "notice_add": "Customer added"
+      "notice_add": "Customer added",
+      "select_country": "-Select Country-",
+      "select_region": "-Select Region-"
     },
     "edit": {
       "header": "Edit customer"
@@ -284,9 +288,21 @@
     "show": {
       "header": "Customer",
       "name": "Name",
-      "phone_number": "Phone number",
-      "email": "Email",
-      "address": "Address"
+      "vat_number": "Vat number",
+      "contact": {
+        "header": "Contact",
+        "phone_number": "Phone number",
+        "email": "Email"
+      },
+      "include_contact_on_invoice": "Include address on invoice",
+      "address": {
+        "header": "Address",
+        "street": "Street",
+        "postal_code": "Postal code",
+        "region": "Region",
+        "country": "Country"
+      },
+      "active_projects_sales": "Active Projects/Sales"
     },
     "update": {
       "success_update": "Customer updated"
@@ -314,9 +330,9 @@
       "confirmation": "Confirmation",
       "invoice_details": "Invoice details",
       "sale_and_project_details": "Sale and Project details",
-      "select_customer": "-Select customer-",
-      "select_user": "-Select user-",
-      "select_status": "-Select status-",
+      "select_customer": "-Select Customer-",
+      "select_user": "-Select User-",
+      "select_status": "-Select Status-",
       "select_days": "-Select days-",
       "select_sale_or_project": "Select Sale or Project",
       "select_payment_term_or_deadline": "Select either a Payment term or Deadline",
@@ -377,12 +393,13 @@
   "sales": {
     "index": {
       "header": "Sales",
-      "empty_sales": "There are no sales yet",
+      "empty_sales_header": "There are no sales",
+      "empty_projects_header": "Click Projects links on the left sidebar menu to go to Sales page and create your first Sale.",
       "create_new_sale": "Create new sale",
       "status": "Status",
       "user": "User",
       "customer": "Customer",
-      "date": "Date",
+      "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Sales are shown here."
     },
@@ -395,7 +412,7 @@
       "user": "User",
       "customer": "Customer",
       "description": "Description",
-      "select_status": "-Select status-",
+      "select_status": "-Select Status-",
       "select_customer": "-Select Customer-"
     },
     "create": {

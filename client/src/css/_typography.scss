@@ -45,9 +45,21 @@ p, span, label, a {
   font-size: 0.875em;
 }
 
+.ui.table {
+  font-size: 0.875em;
+}
+
+.ui.label, .ui.labels .label {
+  font-size: 75%;
+}
+
+.ui.menu .ui.dropdown .menu>.item {
+  font-size: 0.875em!important;
+}
+
 // Labels
 .label-success {
-  background: $grass;
+  background: $green;
 }
 
 .label-info {
@@ -68,7 +80,7 @@ p, span, label, a {
 }
 
 .text-success {
-  color: $grass;
+  color: $green;
 }
 
 .text-info {
@@ -97,7 +109,7 @@ p, span, label, a {
 
 // Links
 a.text-success:hover, a.text-success:focus {
-  color: $dark-grass;
+  color: $dark-green;
 }
 
 a.text-info:hover, a.text-info:focus {

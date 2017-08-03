@@ -1,14 +1,22 @@
-// Input fields
-.ui.form input:not([type]), .ui.form input[type=date], .ui.form input[type=datetime-local], .ui.form input[type=email], .ui.form input[type=file], .ui.form input[type=number], .ui.form input[type=password], .ui.form input[type=search], .ui.form input[type=tel], .ui.form input[type=text], .ui.form input[type=time], .ui.form input[type=url]  {
+// Customize input fields
+.ui.form input:not([type]), .ui.form input[type=text], .ui.form input[type=email], 
+  .ui.form input[type=search], .ui.form input[type=password], .ui.form input[type=date], 
+  .ui.form input[type=datetime-local], .ui.form input[type=tel], .ui.form input[type=time], 
+  .ui.form input[type=file], .ui.form input[type=url], .ui.form input[type=number] {
+  padding: .567857143em 1em;
   border: 1px solid $light-grey;
   @include border-radius(3px);
   box-shadow: none;
   font-size: 14px;
-  height: 34px;
   &:focus {
     border-color: $turquoise;
     box-shadow: none;
   }
+}
+
+// Customize input and select fields
+.ui.form select {
+  padding: .4em 1em;
 }
 
 //Checkbox
@@ -26,11 +34,6 @@
 
 .icheckbox_minimal-grey {
   background-position: 0 0;
-}
-
-// Customize error block span 
-.ui.form .field.error span {
-  color: #9F3A38;
 }
 
 // Buttons
@@ -68,11 +71,11 @@
 }
 
 .ui.positive.button {
-  background: $grass;
-  border-color: $grass;
+  background: $green;
+  border-color: $green;
   &:hover, &.focus {
-    background-color: $dark-grass;
-    border-color: $dark-grass;
+    background-color: $dark-green;
+    border-color: $dark-green;
   }
 }
 
@@ -114,10 +117,10 @@
 }
 
 .ui.positive.basic.button {
-  color: $grass;
+  color: $green;
   &:hover {
     color: $white;
-    background: $grass !important;
+    background: $green !important;
   }
 }
 
@@ -134,6 +137,38 @@
   @extend .ui.primary.button;
 }
 
+.ui.basic.green.button, .ui.basic.green.buttons .button {
+  box-shadow: 0 0 0 1px $green inset!important;
+  color: $green!important;
+  &:hover {
+    box-shadow: 0 0 0 1px $dark-green inset!important;
+    color: $dark-green!important;
+  }
+}
+
+.ui.basic.blue.button, .ui.basic.blue.buttons .button {
+  box-shadow: 0 0 0 1px $blue inset!important;
+  color: $blue!important;
+  &:hover {
+    box-shadow: 0 0 0 1px $dark-blue inset!important;
+    color: $dark-blue!important;
+  }
+}
+
+.ui.basic.red.button, .ui.basic.red.buttons .button {
+  box-shadow: 0 0 0 1px $red inset!important;
+  color: $red!important;
+  &:hover {
+    box-shadow: 0 0 0 1px $dark-red inset!important;
+    color: $dark-red!important;
+  }
+}
+
+.ui.basic.orange.button, .ui.basic.orange.buttons .button {
+  box-shadow: 0 0 0 1px $orange inset!important;
+  color: $orange!important;
+}
+
 // Button icons
 .ui.icon.primary.button {
   i {
@@ -141,25 +176,22 @@
   }
 }
 
-// Search button
-.search-button {
-  padding: 0;
-  button {
-    background-color: $light-medium-grey;
-    border-width: 8px;
-    border: none;
-    padding: 9px 13px;
-  }
+// Right floated input field
+.ui[class*="right floated"].input {
+  float: right;
+  margin-right: 0;
+  margin-left: .25em;
 }
 
 // dropdown-select
 select {
   @include web-appearance(none);
-  text-indent: 0.01px;
-  text-overflow: '';
-  background-image: asset-url('up-down-arrow') !important;
-  background-position: 98% 50%;
-  background-repeat: no-repeat;
+  background: url('../images/up-down-arrow.png') no-repeat 98% 50% !important;
+}
+
+.ui.form .field.error select {
+  @include web-appearance(none);
+  background: url('../images/up-down-arrow-error.png') no-repeat 98% 50% !important;
 }
 
 select.date {
@@ -176,14 +208,85 @@ select.date {
   cursor: pointer;
 }
 
-/* Small devices (phones, less than 768px) */
-@media (max-width: $screen-sm) {
-  .btn {
-    
+// Horizontal form
+.ui.form .inline.field>label {
+  width: 20%;
+}
+
+.ui.form .field > label {
+  text-align: left;
+}
+
+.ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
+  text-align: right;
+}
+
+.ui.form .inline.field>select, .ui.form .inline.field>input {
+  width: 77%;
+}
+
+.ui.form .inline.field>textarea, .ui.form .inline.field>div>input  {
+  width: 77%;
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+  font-size: 1em;
+}
+
+.ui.form .inline.field>button {
+  display: inline-block;
+  margin-left: 23% !important;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.ui.form .inline.field> .header {
+  display: inline-block;
+  margin-left: 22% !important;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+.ui.form .field.error span {
+  display: inherit;
+  text-align: left;
+}
+
+.ui.form .inline.field.error>span {
+  margin-left: 22% !important;
+}
+
+/* Extra mall devices (phones, less than 433px) */
+@media (max-width: $screen-xs) {
+  .ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
+    text-align: left;
+  }
+  .react-datepicker__input-container {
+    position: inherit;
+    display: table-cell;
+  }
+  .ui.form .inline.field>button, .ui.form .inline.field> .header {
+    margin-left: 0 !important;
+  }   
+}
+
+/* Small medium devices (tablets, 768px and upto desktops, 991px) */
+@media (min-width: $screen-sm) and (max-width: $screen-md) {
+  .ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
+    text-align: left;
+  }
+  .react-datepicker__input-container {
+    position: inherit;
+    display: table-cell;
+  }
+  .ui.form .inline.field>button, .ui.form .inline.field> .header {
+    margin-left: 0 !important;
   }
 }
 
-/* Medium and large devices (tablets, 768px and upto large desktops, 1200px and up) */
-@media (min-width: $screen-sm) {
+/* Small devices (phones, less than 768px) */
+@media (max-width: $screen-sm) {
   
 }

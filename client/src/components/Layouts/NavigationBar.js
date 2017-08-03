@@ -3,10 +3,15 @@ import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/authentication'
 
+import $ from 'jquery'
+$.fn.dropdown = require('semantic-ui-dropdown')
+
 // Localization 
 import T from 'i18n-react'
 
-import logo from '../../images/logo-square.png'; 
+// Images
+import logoInverted from '../../images/logo-inverted.png'
+import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
 
 const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
   <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
@@ -15,6 +20,14 @@ const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
 )
 
 class NavigationBar extends Component {
+  
+  componentDidMount = () => {
+    $('.ui.dropdown.item').dropdown({
+      // you can use any ui transition
+      transition: 'vertical flip'
+    })
+  }
+
   logout(e) {
     e.preventDefault()
     this.props.logout()
@@ -24,21 +37,61 @@ class NavigationBar extends Component {
     const { isAuthenticated } = this.props.auth
 
     const userLinks = (
-      <nav className="ui fixed inverted menu">
-        <div className="ui container">
-          <Link className="header item" to="/dashboard">
-            <img className="logo" src={logo} alt="logo-square" />
-            Toolsio
-          </Link>
-          <ActiveLink activeOnlyWhenExact to="/dashboard" label={T.translate("dashboards.header")} />
-          <ActiveLink activeOnlyWhenExact to="/projects" label={T.translate("projects.index.header")} />
-          <ActiveLink activeOnlyWhenExact to="/sales" label={T.translate("sales.index.header")} />
-          <ActiveLink activeOnlyWhenExact to="/invoices" label={T.translate("invoices.index.header")}/>
-     
-          <div className="right item">      
-            <a className="ui inverted button" to="#" onClick={this.logout.bind(this)} >{T.translate("internal_navigation.sign_out")}</a>   
+      <nav className="ui fixed stackable menu">
+        <div className="left menu">
+          <div className="logo item">
+            <Link to="/dashboard">
+              <img src={logoInverted} alt="logo-inverted" />
+            </Link>
           </div>
-        </div>  
+          <div className="item">
+            <i className="sidebar icon"></i>
+          </div>
+        </div>
+        
+        <div className="right menu">
+          <div className="ui dropdown item">
+            <i className="alarm icon"></i>
+            <div className="menu">
+              <a className="item">
+                <div className="ui label orange">WAR</div> 
+                It is a long established.
+              </a>
+              <a className="item">
+                <div className="ui label blue">NEW</div> 
+                NEW
+              </a>
+              <a className="item">
+                <div className="ui label green">SENT</div> 
+                SENT
+              </a>
+            </div>
+          </div>
+          <div className="ui dropdown item">
+            <i className="mail envelop icon"></i>
+            <div className="ui small blue label envelop">1</div>
+            <div className="menu">
+              <a className="item"><strong>Okay, right back at you in...</strong></a>
+              <a className="item"><strong>Hi, I have sent you...</strong></a>                
+              <a className="item">{T.translate("internal_navigation.notifications")}</a>
+            </div>
+          </div>
+          <div className="ui dropdown item">
+            <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
+            Birhanu <i className="dropdown icon"></i>
+            <div className="menu">
+              <a className="item">
+                <i className="settings icon"></i>
+                {T.translate("internal_navigation.settings")}
+              </a>
+              <div className="divider"></div>
+              <a className="item" to="#" onClick={this.logout.bind(this)} >
+                <i className="sign out icon"></i>
+                {T.translate("internal_navigation.sign_out")}
+              </a>   
+            </div>
+          </div>
+        </div>
       </nav>
     )
 

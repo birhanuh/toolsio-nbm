@@ -15,21 +15,21 @@ class Page extends Component {
 
   render() {
     return (
-      <div>
-        <div className="row column">  
-          <Link className="ui right floated primary button" to="/sales/new">
+      <div className="row column">  
+        <div className="ui clearing segment transparent">
+          <div className="ui right floated action input">
+            <input type="text" placeholder="Search..." />
+            <button className="ui button">Search</button>
+          </div>
+
+          <Link className="ui left floated primary button" to="/sales/new">
             <i className="add circle icon"></i>
             {T.translate("sales.index.create_new_sale")}
-          </Link>
-          <h1 className="ui header m-t-n">{T.translate("sales.index.header")}</h1>   
+          </Link>   
+        </div>   
 
-          <div className="ui divider"></div>  
-        </div>
-        
-        <div className="row column">     
-          <List sales={this.props.sales} deleteSale={deleteSale} />   
-        </div>       
-      </div>   
+        <List sales={this.props.sales} deleteSale={deleteSale} />   
+      </div>  
     )
   }
 }

@@ -90,18 +90,12 @@ router.post('/:resource', authenticate, function(req, res) {
     return
   }
 
-  controller.create(req.body, function(valdiationErr, dbError, result) {
-    if (valdiationErr) {
-      res.status(400).json({ 
-        errors: valdiationErr 
-      })
-      return
-    }
-    if (dbError) {
+  controller.create(req.body, function(err, result) {
+    if (err) {
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
-          message: dbError
+          message: err
         }
       })
       return
@@ -129,18 +123,12 @@ router.put('/:resource/:id', authenticate, function(req, res) {
     })
   } 
 
-  controller.update(req.params.id, req.body, function(valdiationErr, dbError, result) {
-    if (valdiationErr) {
-      res.status(400).json({ 
-        errors: valdiationErr 
-      })
-      return
-    }
-    if (dbError) {
+  controller.findByIdAndUpdate(req.params.id, req.body, function(err, result) {
+    if (err) {
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
-          message: dbError
+          message: err
         }
       })
       return
@@ -187,4 +175,5 @@ router.delete('/:resource/:id', authenticate, function(req, res) {
   })
 
 })
+
 export default router

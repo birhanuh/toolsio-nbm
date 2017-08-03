@@ -1,52 +1,52 @@
-import Project from '../models/Project'
+import Customer from '../models/Customer'
 
 export default {
   
   find: (params, callback) => {
-    Project.find(params).populate('customer').exec(function(err, projects) {
+    Customer.find(params, function(err, customers) {
       if (err) {
         callback(err, null)
         return
       }
 
-      callback(null, projects)
+      callback(null, customers)
     })
   },
 
   findById: (id, callback) => {
-    Project.findById(id).populate('customer').exec(function(err, project) {
+    Customer.findById(id, function(err, customer) {
       if (err) {
         callback(err, null)
         return
       }
 
-      callback(null, project)
+      callback(null, customer)
     })
   },
 
-  create: (params, callback) => {
-    Project.create(params, function(err, project) {
+  create: (params, callback) => {  
+    Customer.create(params, function(err, customer) {
       if (err) {
         callback(err, null)
         return
       }
-      callback(null, project)
+      callback(null, customer)
     })
   },
 
   findByIdAndUpdate: (id, params, callback) => {
-    Project.findByIdAndUpdate(id, params, {new: true}, function(err, project) {
+    Customer.findByIdAndUpdate(id, params, {new: true}, function(err, customer) {
       if (err) {
         callback(err, null)
         return
       }
 
-      callback(null, project)
+      callback(null, customer)
     })
   },
 
   findByIdAndRemove: (id, callback) => {
-    Project.findByIdAndRemove(id, function(err, project) {
+    Customer.findByIdAndRemove(id, function(err, customer) {
       if (err) {
         callback(err, null)
         return

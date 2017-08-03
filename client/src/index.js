@@ -43,9 +43,9 @@ if (language.length > 2) {
 T.setTexts(require("./locale/" +language+ ".json"))
 
 render(
-  <Provider store={store}>
-    <BrowserRouter>
+  <BrowserRouter>
+    <Provider store={store}>
       <App />
-    </BrowserRouter>
-  </Provider>, document.getElementById('app'))
+    </Provider>
+  </BrowserRouter>, document.getElementById('app'))
 

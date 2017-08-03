@@ -1,29 +1,23 @@
 import React from 'react'
-import Tr from './Tr'
+import Card from './Card'
 
 // Localization 
 import T from 'i18n-react'
 
 export default function List({ sales, deleteSale }) {
   const emptyMessage = (
-    <p className="ui info message">{T.translate("sales.index.empty_sales")}</p>
+    <div className="ui info message">
+      <div className="header">
+        {T.translate("sales.index.empty_sales_header")}
+      </div>
+      <p>{T.translate("sales.index.empty_sales_message")}</p>
+    </div>
   )
 
   const salesList = (
-    <table className="ui striped selectable small table">
-       <thead>
-          <tr>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          { sales.map(sale => <Tr sale={sale} key={sale._id} deleteSale={deleteSale} />) }
-        </tbody>
-    </table>
+    <div className="ui grid">
+      { sales.map(sale => <Card sale={sale} key={sale._id} deleteSale={deleteSale} />) }
+    </div>
   )
 
   return (

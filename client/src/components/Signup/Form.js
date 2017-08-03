@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import { Validation } from '../../utils'
-import FormField from '../../utils/FormField'
+import { InputField } from '../../utils/FormFields'
 
 // Localization 
 import T from 'i18n-react'
@@ -22,23 +22,29 @@ class Form extends Component {
     }
   }
   
-  onChange(event) {
+  onChange(e) {
     let updatedUser = Object.assign({}, this.state.user)
-    updatedUser[event.target.name] = event.target.value
+    updatedUser[e.target.name] = e.target.value
     this.setState({
       user: updatedUser
     })
   }
 
-  checkUserExists(event) {
-    const field = event.target.name
-    const val = event.target.value
+  checkUserExists(e) {
+    const field = e.target.name
+    const val = e.target.value
     if (val !== '') {
       this.props.isUserExists(val).then(res => {
         let errors = this.state.errors
         let invalid
         if (res.data.user[0]) {
-          errors[field] = 'There is user with such '+ field
+          errors['message'] = {
+            errors: {
+              email: {
+                message: 'There is user with such '+field+ '.'
+              }  
+            }  
+          }
           invalid = true
         } else {
           errors[field] = ''
@@ -59,10 +65,10 @@ class Form extends Component {
     return isValid;
   }
 
-  onSubmit(e) {
+  handleSubmit(e) {
     e.preventDefault()
 
-    if (this.isValid()) { 
+    if (true) { 
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoading: true })
       
@@ -75,64 +81,71 @@ class Form extends Component {
           })
           this.context.histrory.push('/dashboard')
         },
-        ({ response }) => this.setState({ errors: response.data, isLoading: false })
+        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )
     }  
   }
 
   render() {
     const { errors, isLoading, invalid } = this.state
+    
     return (            
-        <form className="ui large form" onSubmit={this.onSubmit.bind(this)}>
-          <div className="ui stacked segment">
-            <FormField
-              label={T.translate("sign_up.first_name")}
-              name="firstName" 
-              value={this.state.user.firstName} 
-              onChange={this.onChange.bind(this)} 
-              placeholder={T.translate("sign_up.first_name")}
-              error={errors.firstName}
-            />
-            <FormField
-              label={T.translate("sign_up.last_name")}
-              name="lastName" 
-              value={this.state.user.lastName} 
-              onChange={this.onChange.bind(this)} 
-              placeholder={T.translate("sign_up.last_name")}
-              error={errors.lastName}
-            />
-            <FormField
-              label={T.translate("sign_up.email")}
-              name="email" 
-              type="email"
-              value={this.state.user.email} 
-              onChange={this.onChange.bind(this)} 
-              checkUserExists={this.checkUserExists.bind(this)} 
-              placeholder={T.translate("sign_up.email")}
-              error={errors.email}
-            />
-            <FormField
-              label={T.translate("sign_up.password")}
-              name="password" 
-              type="password"
-              value={this.state.user.password} 
-              onChange={this.onChange.bind(this)} 
-              placeholder={T.translate("sign_up.password")}
-              error={errors.password}
-            />
-            <FormField
-              label={T.translate("sign_up.confirm_password")}
-              name="confirmPassword" 
-              type="password"
-              value={this.state.user.confirmPassword} 
-              onChange={this.onChange.bind(this)} 
-              placeholder={T.translate("sign_up.confirm_password")}
-              error={errors.confirmPassword}
-            />
-            
-            <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
-          </div>
-        </form>         
+      <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
+        <div className="ui stacked segment">
+           
+          { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+          
+          <InputField
+            label={T.translate("sign_up.first_name")}
+            name="firstName" 
+            value={this.state.user.firstName} 
+            onChange={this.onChange.bind(this)} 
+            placeholder={T.translate("sign_up.first_name")}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("sign_up.last_name")}
+            name="lastName" 
+            value={this.state.user.lastName} 
+            onChange={this.onChange.bind(this)} 
+            placeholder={T.translate("sign_up.last_name")}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("sign_up.email")}
+            name="email" 
+            type="email"
+            value={this.state.user.email} 
+            onChange={this.onChange.bind(this)} 
+            checkUserExists={this.checkUserExists.bind(this)} 
+            placeholder={T.translate("sign_up.email")}
+            error={errors.message && errors.message.errors && errors.message.errors['email'] && errors.message.errors['email'].message}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("sign_up.password")}
+            name="password" 
+            type="password"
+            value={this.state.user.password} 
+            onChange={this.onChange.bind(this)} 
+            placeholder={T.translate("sign_up.password")}
+            error={errors.message && errors.message.errors && errors.message.errors['password'] && errors.message.errors['password'].message}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("sign_up.confirm_password")}
+            name="confirmPassword" 
+            type="password"
+            value={this.state.user.confirmPassword} 
+            onChange={this.onChange.bind(this)} 
+            placeholder={T.translate("sign_up.confirm_password")}
+            error={errors.confirmPassword}
+            formClass="field"
+          />
+          
+          <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
+        </div>
+      </form>         
 
     )
   }
