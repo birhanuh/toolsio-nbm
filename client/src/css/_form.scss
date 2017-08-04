@@ -16,7 +16,8 @@
 
 // Customize input and select fields
 .ui.form select {
-  padding: .4em 1em;
+  padding: .43em 1em;
+  height: inherit;
 }
 
 //Checkbox
@@ -167,6 +168,19 @@
 .ui.basic.orange.button, .ui.basic.orange.buttons .button {
   box-shadow: 0 0 0 1px $orange inset!important;
   color: $orange!important;
+  &:hover {
+    box-shadow: 0 0 0 1px $dark-orange inset!important;
+    color: $dark-orange!important;
+  }
+}
+
+.ui.basic.turquoise.button, .ui.basic.turquoise.buttons .button {
+  box-shadow: 0 0 0 1px $turquoise inset!important;
+  color: $turquoise!important;
+  &:hover {
+    box-shadow: 0 0 0 1px $dark-turquoise inset!important;
+    color: $dark-turquoise!important;
+  }
 }
 
 // Button icons

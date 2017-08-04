@@ -233,9 +233,11 @@
         "name": "Name",
         "hours": "Hours",
         "payment_type": "Payment type",
+        "select_payment_type": "-Select Payment type-",
         "price": "Price",
         "vat": "Vat (in %)",
-        "total": "Total"
+        "total": "Total",
+        "actions": "Actions"
       },
       "new": {
         "add_task": "Add Task"
@@ -453,9 +455,11 @@
         "name": "Name",
         "quantity": "Quantity",
         "unit": "Unit",
-        "unit_price": "Unit price",
+        "select_unit": "-Select unit-",
+        "price": "Price",
         "vat": "Vat (in %)",
-        "total": "Total"
+        "total": "Total",
+        "actions": "Actions"
       },
       "create": {
         "empty_items": "There are no items yet",

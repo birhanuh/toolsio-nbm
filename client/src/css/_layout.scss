@@ -214,7 +214,7 @@ nav.ui.menu {
 
 // Sidebar 
 .ui.visible.sidebar {
-  width: 200px;
+  width: 190px;
   background: $dark-mid-night-blue;
   border: none;
   .item {    
@@ -376,7 +376,7 @@ nav.ui.menu .item>a>img:not(.ui) {
 }
 
 nav.ui.menu .logo.item {
-  width: 200px;
+  width: 190px;
   padding: 5px;
 }
 
@@ -525,15 +525,6 @@ dt {
   border-radius: 3px;
 }
 
-// Table
-.ui.table.project thead th, .ui.table.sale thead th {
-  padding: .22857143em .78571429em;
-}
-
-.ui.table.project td, .ui.table.sale td {
-  padding: .58571429em;
-}
-
 // Custome note box
 .bs-callout {
   padding: 20px;
@@ -653,6 +644,20 @@ dt {
 // Pagination
 .pagination {
   margin: 20px 15px;
+}
+
+// Animation
+.animation-delay-1 {
+  @include animation-delay(.1s);
+}
+
+.fadeInRightBig {
+  -webkit-animation-name: fadeInRightBig;
+          animation-name: fadeInRightBig;
+}
+
+.animated {
+  @include animation-duration(1s);
 }
 
 // Sprite
@@ -816,19 +821,19 @@ dt {
   }
 }
 
-// Animation
-.animation-delay-1 {
-  @include animation-delay(.1s);
+// Projects & Sales
+.ui.table.project thead th, .ui.table.sale thead th {
+  padding: .22857143em .78571429em;
 }
 
-.fadeInRightBig {
-  -webkit-animation-name: fadeInRightBig;
-          animation-name: fadeInRightBig;
+.ui.table.project td, .ui.table.sale td {
+  padding: .58571429em;
 }
 
-.animated {
-  @include animation-duration(1s);
+table.task .actions, table.item .actions {
+  width: 105px;
 }
+
 
 /* Extra small devices (phones, less than 433px) */
 @media (max-width: $screen-xs) {
@@ -901,13 +906,13 @@ dt {
 /* Medium devices (desktops, 992px and upto large desktops, 1200px) */
 @media (min-width: $screen-md) and (max-width: $screen-lg) {
   .ui.internal-page {
-    margin-left: 200px;
+    margin-left: 190px;
   }
 }
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: $screen-lg) {
   .ui.internal-page {
-     margin-left: 200px;
+     margin-left: 190px;
   }
 }

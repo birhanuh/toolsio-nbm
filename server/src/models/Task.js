@@ -1,11 +1,14 @@
 import mongoose from 'mongoose'
 
 let taskSchema = new mongoose.Schema({
-  name: { type: String,required: true },
-  date: { type: Date, required: true },
+  name: { type: String, required: true },
   hours: { type: Number, min: 1, max: 8, required: true },
-  price_per_hour: { type: Number, required: true },
-  vat: { type: Number, min: 1, max: 100, required: true }
+  payment_type: { type: String, required: true },
+  price: { type: Number, required: true },
+  vat: { type: Number, min: 1, max: 100, required: true },
+
+  created_at: Date,
+  updated_at: Date
 })
 
 let Task = module.exports = mongoose.model('Task', taskSchema)
