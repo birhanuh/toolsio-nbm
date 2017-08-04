@@ -69,17 +69,22 @@ class NavigationBar extends Component {
           </div>
           <div className="ui dropdown item">
             <i className="mail envelop icon"></i>
-            <div className="ui small blue label envelop">1</div>
+            <div className="ui tiny blue label envelop">1</div>
             <div className="menu">
               <a className="item"><strong>Okay, right back at you in...</strong></a>
               <a className="item"><strong>Hi, I have sent you...</strong></a>                
               <a className="item">{T.translate("internal_navigation.notifications")}</a>
             </div>
           </div>
-          <div className="ui dropdown item">
+          <div className="ui medium dropdown item">
             <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
             Birhanu <i className="dropdown icon"></i>
             <div className="menu">
+              <a className="item">
+                <i className="tasks icon"></i>
+                {T.translate("internal_navigation.tasks")}
+                <div className="ui right floated blue label">1</div>
+              </a>
               <a className="item">
                 <i className="settings icon"></i>
                 {T.translate("internal_navigation.settings")}

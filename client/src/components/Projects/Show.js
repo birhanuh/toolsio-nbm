@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
+import { fetchProject, deleteProject, createTask } from '../../actions/projectActions'
 import { InputField, SelectField } from '../../utils/FormFields'
 
 // Localization 
@@ -21,12 +21,18 @@ class Show extends Component {
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
       task: {
+        _id: null,
+        _creator: null,
         name: "",
-        paymentType: "",
+        payment_type: "",
         hours: "",
         price: "",
         vat: "",
-        errors: {},
+        errors: {
+          message: {
+            errors: {}
+          }
+        },
         isLoading: false
       }
     }
@@ -52,9 +58,9 @@ class Show extends Component {
   }
 
   handleChange = (e) => {
-    if (!!this.state.task.errors[e.target.name]) {
-      let errors = Object.assign({}, this.state.task.errors)
-      delete errors[e.target.name]
+    if (!!this.state.task.errors.message.errors[e.target.name]) {
+      let errors = Object.assign({}, this.state.task)
+      delete errors.message.errors[e.target.name]
 
       let updatedTask = Object.assign({}, this.state.task)
       updatedTask[e.target.name] = e.target.value
@@ -75,10 +81,10 @@ class Show extends Component {
 
   isValid() {
     const { errors, isValid } = Validation.validateTaskInput(this.state.task)
-
+    
     if (!isValid) {
       let updatedTask = Object.assign({}, this.state.task)
-      updatedTask.errors = errors
+      updatedTask.errors.message.errors = errors
       this.setState({
         task: updatedTask
       })
@@ -89,16 +95,16 @@ class Show extends Component {
 
   handleSubmit(event) {
      event.preventDefault()
-
+     console.log('task: ', this.isValid())
     // Validation
-    if (this.isValid) { 
-      const { _id, name, paymentType, hours, price, vat } = this.state
+    if (this.isValid()) { 
+      const { _id, _creator, name, payment_type, hours, price, vat } = this.state.task
       let updatedisLoading = Object.assign({}, this.state.task)
       updatedisLoading.isLoading = true
        this.setState({
-        contact: updatedisLoading
+        task: updatedisLoading
       })
-      this.props.saveTask({ _id, name, paymentType, hours, price, vat })
+      this.props.createTask({ _id, _creator, name, payment_type, hours, price, vat })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -153,23 +159,25 @@ class Show extends Component {
                         value={task.name} 
                         onChange={this.handleChange.bind(this)}  
                         placeholder="Name"
-                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.task && task.errors.message.errors.task.name && task.errors.message.errors.name.message}
+                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.name && task.errors.message.errors.name.message}
+                        formClass="field"
                       />
                     </td>
                     <td>
                       <SelectField
-                        name="payment type"
+                        name="payment_type"
                         type="select"
-                        value={task.paymentType} 
+                        value={task.payment_type} 
                         onChange={this.handleChange.bind(this)}  
-                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.task && task.errors.message.errors.task.paymentType && task.errors.message.errors.paymentType.message}
-
+                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.payment_type && task.errors.message.errors.payment_type.message}
+                        formClass="field"
                         options={[
                           <option key="default" value="" disabled>{T.translate("projects.tasks.new.select_payment_type")}</option>,
                           <option key="per hour" value="per hour">Per task</option>,
                           <option key="per task" value="per task">Per hour</option>
                           ]
                         }
+                        formClass="field"
                       />
                     </td>
                     <td>
@@ -178,7 +186,8 @@ class Show extends Component {
                         value={task.hours} 
                         onChange={this.handleChange.bind(this)}  
                         placeholder="0.00"
-                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.task && task.errors.message.errors.task.hours && task.errors.message.errors.hours.message}
+                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.hours && task.errors.message.errors.hours.message}
+                        formClass="field"
                       />
                     </td>
                     <td>
@@ -187,7 +196,8 @@ class Show extends Component {
                         value={task.price} 
                         onChange={this.handleChange.bind(this)} 
                         placeholder="0.00"
-                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.task && task.errors.message.errors.task.price && task.errors.message.errors.price.message}
+                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.price && task.errors.message.errors.price.message}
+                        formClass="field"
                       />
                     </td>
                     <td>
@@ -196,7 +206,8 @@ class Show extends Component {
                         value={task.vat} 
                         onChange={this.handleChange.bind(this)} 
                         placeholder="0%"
-                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.task && task.errors.message.errors.task.vat && task.errors.message.errors.vat.message}
+                        error={task.errors.message && task.errors.message.errors && task.errors.message.errors.vat && task.errors.message.errors.vat.message}
+                        formClass="field"
                       />
                     </td>
                     {/*<td>
@@ -226,7 +237,8 @@ class Show extends Component {
 
 Show.propTypes = {
   fetchProject: React.PropTypes.func.isRequired,
-  deleteProject: React.PropTypes.func.isRequired
+  deleteProject: React.PropTypes.func.isRequired,
+  createTask: React.PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state, props) {
@@ -238,4 +250,4 @@ function mapStateToProps(state, props) {
   } 
 }
 
-export default connect(mapStateToProps, { fetchProject, updateProject, deleteProject } )(Show)
+export default connect(mapStateToProps, { fetchProject, deleteProject, createTask } )(Show)

@@ -22,7 +22,7 @@ export default function Card({sale}) {
           </Link>
         </div>
 
-        <p className="m-t-m">{sale.description}</p>
+        <p>{sale.description}</p>
 
         <table className="ui very basic center aligned table sale">
           <thead>

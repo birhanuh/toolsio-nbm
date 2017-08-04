@@ -24,7 +24,11 @@ class Form extends Component {
       customer: this.props.sale ? this.props.sale.customer : '',
       status: this.props.sale ? this.props.sale.status : '',
       description: this.props.sale ? this.props.sale.description : '',
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false
     }
   }
@@ -43,10 +47,10 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
-    if (!!this.state.errors[e.target.name]) {
+    if (!!this.state.errors.message.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors.message.errors[e.target.name]
 
       this.setState({
         [e.target.name]: e.target.value,
@@ -63,8 +67,11 @@ class Form extends Component {
   isValid() {
     const { errors, isValid } = Validation.validateSaleInput(this.state)
 
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ errors: updatedErrors })
     }
 
     return isValid;
@@ -74,7 +81,7 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid) { 
+    if (this.isValid()) { 
       const { _id, name, deadline, customer, status, description } = this.state
       this.setState({ isLoading: true })
       this.props.saveSale({ _id, name, customer, deadline, status, description })
@@ -118,7 +125,7 @@ class Form extends Component {
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message['name'].message}
+              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message.errors.name.message}
               formClass="inline field"
             />
             <div  className={classnames("inline field", { error: !!errors.deadline })}>

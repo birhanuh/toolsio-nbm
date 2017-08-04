@@ -88,16 +88,22 @@ nav.ui.menu {
   background: $turquoise;
   border: 1px solid rgba(22,91,97,.15);
   box-shadow: 0 1px 2px 0 rgba(22,91,97,.15);
+  .ui.dropdown > .menu {
+    min-width: 200px;
+    left: inherit;
+    right: 0;
+  }
   .ui.dropdown .ui.avatar.image {
     width: 1.4em;
     height: 1.4em;
   }
-
+  .ui.dropdown .menu>.item {
+    padding: .98571429em 1.14285714em!important;
+  }
   .label.envelop {
     position: absolute;
     right: 3px;
     top: 5px;
-    padding: .3em .561429em;
   }
 }
 
@@ -823,8 +829,16 @@ dt {
 }
 
 // Projects & Sales
-.ui.table.project thead th, .ui.table.sale thead th {
-  padding: .22857143em .78571429em;
+.ui.table.project thead th, .ui.table.sale thead th  {
+  padding: .32857143em .78571429em;
+}
+
+.ui.table.task thead th, .ui.table.item thead th  {
+  padding: .42857143em .78571429em;
+}
+
+form .ui.table.task td, form .ui.table.item td  {
+  vertical-align: top;
 }
 
 .ui.table.project td, .ui.table.sale td {
@@ -833,6 +847,7 @@ dt {
 
 table.task .actions, table.item .actions {
   width: 105px;
+  padding-top: 13px
 }
 
 

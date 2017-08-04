@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { fetchSale, updateSale, deleteSale } from '../../actions/saleActions'
+import { fetchSale, deleteSale, addItem } from '../../actions/saleActions'
 import { InputField, SelectField } from '../../utils/FormFields'
 
 // Localization 
@@ -21,12 +21,18 @@ class Show extends Component {
       status: this.props.sale ? this.props.sale.status : '',
       description: this.props.sale ? this.props.sale.description : '',
       item: {
+        _id: null,
+        _creator: null,
         name: "",
         unit: "",
         quantity: "",
         price: "",
         vat: "",
-        errors: {},
+        errors: {
+          message: {
+            errors: {}
+          }
+        },
         isLoading: false
       }
     }
@@ -52,9 +58,9 @@ class Show extends Component {
   }
 
   handleChange = (e) => {
-    if (!!this.state.item.errors[e.target.name]) {
-      let errors = Object.assign({}, this.state.item.errors)
-      delete errors[e.target.name]
+    if (!!this.state.item.errors.message.errors[e.target.name]) {
+      let errors = Object.assign({}, this.state.item)
+      delete errors.message.errors[e.target.name]
 
       let updatedItem = Object.assign({}, this.state.item)
       updatedItem[e.target.name] = e.target.value
@@ -78,7 +84,7 @@ class Show extends Component {
 
     if (!isValid) {
       let updatedItem = Object.assign({}, this.state.item)
-      updatedItem.errors = errors
+      updatedItem.errors.message.errors = errors
       this.setState({
         item: updatedItem
       })
@@ -91,14 +97,14 @@ class Show extends Component {
      event.preventDefault()
 
     // Validation
-    if (this.isValid) { 
-      const { _id, name, unit, quantity, price, vat } = this.state
+    if (this.isValid()) { 
+      const { _id, _creator, name, unit, quantity, price, vat } = this.state.item
       let updatedisLoading = Object.assign({}, this.state.item)
       updatedisLoading.isLoading = true
        this.setState({
-        contact: updatedisLoading
+        task: updatedisLoading
       })
-      this.props.saveItem({ _id, name, unit, quantity, price, vat })
+      this.props.saveItem({ _id, _creator, name, unit, quantity, price, vat })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -153,17 +159,18 @@ class Show extends Component {
                         value={item.name} 
                         onChange={this.handleChange.bind(this)}  
                         placeholder="Name"
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.item && item.errors.message.errors.item.name && item.errors.message.errors.name.message}
+                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.name && item.errors.message.errors.name.message}
+                        formClass="field"
                       />
                     </td>
                     <td>
                       <SelectField
                         name="unit"
                         type="select"
-                        value={item.paymentType} 
+                        value={item.unit} 
                         onChange={this.handleChange.bind(this)}  
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.item && item.errors.message.errors.item.paymentType && item.errors.message.errors.paymentType.message}
-
+                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.unit && item.errors.message.errors.unit.message}
+                        formClass="field"
                         options={[
                           <option key="default" value="" disabled>{T.translate("sales.items.new.select_unit")}</option>,
                           <option key="piece" value="piece">Piece</option>,
@@ -177,10 +184,11 @@ class Show extends Component {
                     <td>
                       <InputField
                         name="quantity" 
-                        value={item.hours} 
+                        value={item.quantity} 
                         onChange={this.handleChange.bind(this)}  
                         placeholder="0"
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.item && item.errors.message.errors.item.hours && item.errors.message.errors.hours.message}
+                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.quantity && item.errors.message.errors.quantity.message}
+                        formClass="field"
                       />
                     </td>
                     <td>
@@ -189,7 +197,8 @@ class Show extends Component {
                         value={item.price} 
                         onChange={this.handleChange.bind(this)} 
                         placeholder="0.00"
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.item && item.errors.message.errors.item.price && item.errors.message.errors.price.message}
+                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.price && item.errors.message.errors.price.message}
+                        formClass="field"
                       />
                     </td>
                     <td>
@@ -198,7 +207,8 @@ class Show extends Component {
                         value={item.vat} 
                         onChange={this.handleChange.bind(this)} 
                         placeholder="0%"
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.item && item.errors.message.errors.item.vat && item.errors.message.errors.vat.message}
+                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.vat && item.errors.message.errors.vat.message}
+                        formClass="field"
                       />
                     </td>
                     {/*<td>
@@ -228,7 +238,8 @@ class Show extends Component {
 
 Show.propTypes = {
   fetchSale: React.PropTypes.func.isRequired,
-  deleteSale: React.PropTypes.func.isRequired
+  deleteSale: React.PropTypes.func.isRequired,
+  addItem: React.PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, props) {
@@ -240,4 +251,4 @@ function mapStateToProps(state, props) {
   } 
 }
 
-export default connect(mapStateToProps, { fetchSale, updateSale, deleteSale } )(Show)
+export default connect(mapStateToProps, { fetchSale, deleteSale, addItem } )(Show)

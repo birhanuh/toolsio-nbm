@@ -38,10 +38,14 @@ export default {
     let errors = {}
 
     if (!data.email) {
-      errors.email = T.translate("sign_in.email_required")
+      errors["email"] = {
+        message: T.translate("sign_in.email_required")
+      }
     }
     if (!data.password) {
-      errors.password = T.translate("sign_in.password_required")
+      errors["password"] = {
+        message: T.translate("sign_in.password_required")
+      }
     }
     
     return {
@@ -54,13 +58,19 @@ export default {
     let errors = {}
 
     if (!data.name) {
-      errors.name = T.translate("sales.new.name_required")
+      errors['name'] = {
+        message: T.translate("projects.new.name_required")
+      }
     }
     if (!data.deadline) {
-      errors.deadline = T.translate("sales.new.deadline_required")
+      errors['deadline'] = {
+        message: T.translate("projects.new.deadline_required")
+      }
     }
     if (!data.customer) {
-      errors.customer = T.translate("sales.new.customer_required")
+      errors['customer'] = {
+        message: T.translate("projects.new.customer_required")
+      }
     }
     
     return {
@@ -73,13 +83,19 @@ export default {
     let errors = {}
 
     if (!data.name) {
-      errors.name = T.translate("sales.new.name_required")
+      errors['name'] = {
+        message: T.translate("sales.new.name_required")
+      }
     }
     if (!data.deadline) {
-      errors.deadline = T.translate("sales.new.deadline_required")
+      errors['deadline'] = {
+        message: T.translate("sales.new.deadline_required")
+      }
     }
     if (!data.customer) {
-      errors.customer = T.translate("sales.new.customer_required")
+      errors['customer'] = {
+        message: T.translate("sales.new.customer_required")
+      }
     }
     
     return {
@@ -92,16 +108,24 @@ export default {
     let errors = {}
 
     if (!data.name) {
-      errors.name = T.translate("projects.tasks.new.name_required")
+      errors['name'] = {
+        message: T.translate("projects.tasks.new.name_required")
+      }
     }
-    if (!data.paymentType) {
-      errors.paymentType = T.translate("projects.tasks.new.payment_type_required")
+    if (!data.payment_type) {
+      errors['payment_type'] = {
+        message: T.translate("projects.tasks.new.payment_type_required")
+      }
     }
     if (!data.hours) {
-      errors.hours = T.translate("projects.tasks.new.hours_required")
+      errors['hours'] = {
+        message: T.translate("projects.tasks.new.hours_required")
+      }
     }
     if (!data.price) {
-      errors.price = T.translate("projects.tasks.new.price_required")
+      errors['price'] = {
+        message: T.translate("projects.tasks.new.price_required")
+      }
     }
     
     return {
@@ -114,16 +138,24 @@ export default {
     let errors = {}
 
     if (!data.name) {
-      errors.name = T.translate("sales.items.new.name_required")
+      errors['name'] = {
+        message: T.translate("sales.items.new.name_required")
+      }
     }
     if (!data.unit) {
-      errors.unit = T.translate("sales.items.new.unit_required")
+      errors['unit'] = {
+        message: T.translate("sales.items.new.unit_required")
+      }
     }
     if (!data.quantity) {
-      errors.quantity = T.translate("sales.items.new.quantity_required")
+      errors['quantity'] = {
+        message: T.translate("sales.items.new.quantity_required")
+      }
     }
     if (!data.price) {
-      errors.price = T.translate("sales.items.new.price_required")
+      errors['price'] = {
+        message: T.translate("sales.items.new.price_required")
+      }
     }
     
     return {

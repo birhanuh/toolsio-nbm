@@ -205,7 +205,7 @@ select {
 
 .ui.form .field.error select {
   @include web-appearance(none);
-  background: url('../images/up-down-arrow-error.png') no-repeat 98% 50% !important;
+  background: url('../images/up-down-arrow-error.png') #FFF6F6 no-repeat 98% 50% !important;
 }
 
 select.date {
@@ -248,15 +248,7 @@ select.date {
   font-size: 1em;
 }
 
-.ui.form .inline.field>button {
-  display: inline-block;
-  margin-left: 23% !important;
-  margin-top: 0;
-  margin-bottom: 0;
-  vertical-align: middle;
-}
-
-.ui.form .inline.field> .header {
+.ui.form .inline.field> .header, .ui.form .inline.field>button {
   display: inline-block;
   margin-left: 22% !important;
   margin-top: 0;

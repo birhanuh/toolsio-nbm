@@ -21,7 +21,11 @@ class Form extends Component {
       customer: this.props.project ? this.props.project.customer : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false
     }
   }
@@ -42,10 +46,10 @@ class Form extends Component {
   handleChange = (e) => {
     //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
 
-    if (!!this.state.errors[e.target.name]) {
+    if (!!this.state.errors.message.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors.message.errors[e.target.name]
 
       this.setState({
         [e.target.name]: e.target.value,
@@ -61,8 +65,11 @@ class Form extends Component {
   isValid() {
     const { errors, isValid } = Validation.validateProjectInput(this.state)
 
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ errors: updatedErrors })
     }
 
     return isValid;
@@ -72,7 +79,7 @@ class Form extends Component {
      event.preventDefault()
 
     // Validation
-    if (this.isValid) { 
+    if (this.isValid()) { 
       const { _id, name, deadline, customer, status, description } = this.state
       this.setState({ isLoading: true })
       this.props.saveProject({ _id, name, customer, deadline, status, description })

@@ -22,7 +22,7 @@ export default function Card({project}) {
           </Link>
         </div>
 
-        <p className="m-t-m">{project.description}</p>
+        <p>{project.description}</p>
 
         <table className="ui very basic center aligned table project">
           <thead>
