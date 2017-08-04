@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { Validation } from '../../utils'
 import { fetchSale, updateSale, deleteSale } from '../../actions/saleActions'
 import { InputField, SelectField } from '../../utils/FormFields'
 
@@ -51,11 +52,39 @@ class Show extends Component {
   }
 
   handleChange = (e) => {
+    if (!!this.state.item.errors[e.target.name]) {
+      let errors = Object.assign({}, this.state.item.errors)
+      delete errors[e.target.name]
 
+      let updatedItem = Object.assign({}, this.state.item)
+      updatedItem[e.target.name] = e.target.value
+
+      this.setState({
+        item: updatedItem,
+        errors
+      })
+    } else {
+      let updatedItem = Object.assign({}, this.state.item)
+      updatedItem[e.target.name] = e.target.value
+
+      this.setState({
+        item: updatedItem
+      })
+    }
   }
 
   isValid() {
-    
+    const { errors, isValid } = Validation.validateItemInput(this.state.item)
+
+    if (!isValid) {
+      let updatedItem = Object.assign({}, this.state.item)
+      updatedItem.errors = errors
+      this.setState({
+        item: updatedItem
+      })
+    }
+
+    return isValid
   }
 
   handleSubmit(event) {
@@ -108,12 +137,12 @@ class Show extends Component {
               <table className="ui very basic table item">
                 <thead>
                   <tr>
-                    <th>{T.translate("sales.items.show.name")}</th>
-                    <th>{T.translate("sales.items.show.unit")}</th>
-                    <th>{T.translate("sales.items.show.quantity")}</th>
-                    <th>{T.translate("sales.items.show.price")}</th>
-                    <th>{T.translate("sales.items.show.vat")}</th>
-                    <th>{T.translate("sales.items.show.actions")}</th>
+                    <th>{T.translate("sales.items.new.name")}</th>
+                    <th>{T.translate("sales.items.new.unit")}</th>
+                    <th>{T.translate("sales.items.new.quantity")}</th>
+                    <th>{T.translate("sales.items.new.price")}</th>
+                    <th>{T.translate("sales.items.new.vat")}</th>
+                    <th>{T.translate("sales.items.new.actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -136,7 +165,7 @@ class Show extends Component {
                         error={item.errors.message && item.errors.message.errors && item.errors.message.errors.item && item.errors.message.errors.item.paymentType && item.errors.message.errors.paymentType.message}
 
                         options={[
-                          <option key="default" value="" disabled>{T.translate("sales.items.show.select_unit")}</option>,
+                          <option key="default" value="" disabled>{T.translate("sales.items.new.select_unit")}</option>,
                           <option key="piece" value="piece">Piece</option>,
                           <option key="meter" value="meter">Meter</option>,
                           <option key="kilo gram" value="kilo gram">Kilo gram</option>,
@@ -173,10 +202,10 @@ class Show extends Component {
                       />
                     </td>
                     {/*<td>
-                      <button className="ui icon basic red button" onClick={deleteTask(item._id)}><i className="delete icon"></i></button>
+                      <button className="ui icon basic red button" onClick={deleteItem(item._id)}><i className="delete icon"></i></button>
                     </td>
                     <td>
-                      <Link className="ui icon basic green button" onClick={updateTask(item._id)}><i className="edit icon"></i></Link>
+                      <Link className="ui icon basic green button" onClick={updateItem(item._id)}><i className="edit icon"></i></Link>
                     </td>*/}
                     <td className="actions">
                       <button disabled={item.isLoading} className="small ui icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.items.new.add_item")}</button>

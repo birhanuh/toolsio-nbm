@@ -87,6 +87,7 @@ class Form extends Component {
       if (e.target.name === "email" || e.target.name === "phoneNumber") {
         let updatedContact = Object.assign({}, this.state.contact)
         updatedContact[e.target.name] = e.target.value
+
          this.setState({
           contact: updatedContact,
           errors
@@ -95,6 +96,7 @@ class Form extends Component {
         || e.target.name === "country") {
         let updatedAddress = Object.assign({}, this.state.address)
         updatedAddress[e.target.name] = e.target.value
+
          this.setState({
           address: updatedAddress,
           errors
@@ -110,6 +112,7 @@ class Form extends Component {
       if (e.target.name === "email" || e.target.name === "phoneNumber") {
         let updatedContact = Object.assign({}, this.state.contact)
         updatedContact[e.target.name] = e.target.value
+
          this.setState({
           contact: updatedContact
         })
@@ -117,6 +120,7 @@ class Form extends Component {
         || e.target.name === "country") {
         let updatedAddress = Object.assign({}, this.state.address)
         updatedAddress[e.target.name] = e.target.value
+        
          this.setState({
           address: updatedAddress
         })

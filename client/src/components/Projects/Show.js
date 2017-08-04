@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { Validation } from '../../utils'
 import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
 import { InputField, SelectField } from '../../utils/FormFields'
 
@@ -51,10 +52,39 @@ class Show extends Component {
   }
 
   handleChange = (e) => {
+    if (!!this.state.task.errors[e.target.name]) {
+      let errors = Object.assign({}, this.state.task.errors)
+      delete errors[e.target.name]
 
+      let updatedTask = Object.assign({}, this.state.task)
+      updatedTask[e.target.name] = e.target.value
+
+      this.setState({
+        task: updatedTask,
+        errors
+      })
+    } else {
+      let updatedTask = Object.assign({}, this.state.task)
+      updatedTask[e.target.name] = e.target.value
+
+      this.setState({
+        task: updatedTask
+      })
+    }
   }
 
   isValid() {
+    const { errors, isValid } = Validation.validateTaskInput(this.state.task)
+
+    if (!isValid) {
+      let updatedTask = Object.assign({}, this.state.task)
+      updatedTask.errors = errors
+      this.setState({
+        task: updatedTask
+      })
+    }
+
+    return isValid
   }
 
   handleSubmit(event) {
@@ -107,12 +137,12 @@ class Show extends Component {
               <table className="ui very basic table task">
                 <thead>
                   <tr>
-                    <th>{T.translate("projects.tasks.show.name")}</th>
-                    <th>{T.translate("projects.tasks.show.payment_type")}</th>
-                    <th>{T.translate("projects.tasks.show.hours")}</th>
-                    <th>{T.translate("projects.tasks.show.price")}</th>
-                    <th>{T.translate("projects.tasks.show.vat")}</th>
-                    <th>{T.translate("projects.tasks.show.actions")}</th>
+                    <th>{T.translate("projects.tasks.new.name")}</th>
+                    <th>{T.translate("projects.tasks.new.payment_type")}</th>
+                    <th>{T.translate("projects.tasks.new.hours")}</th>
+                    <th>{T.translate("projects.tasks.new.price")}</th>
+                    <th>{T.translate("projects.tasks.new.vat")}</th>
+                    <th>{T.translate("projects.tasks.new.actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -135,7 +165,7 @@ class Show extends Component {
                         error={task.errors.message && task.errors.message.errors && task.errors.message.errors.task && task.errors.message.errors.task.paymentType && task.errors.message.errors.paymentType.message}
 
                         options={[
-                          <option key="default" value="" disabled>{T.translate("projects.tasks.show.select_payment_type")}</option>,
+                          <option key="default" value="" disabled>{T.translate("projects.tasks.new.select_payment_type")}</option>,
                           <option key="per hour" value="per hour">Per task</option>,
                           <option key="per task" value="per task">Per hour</option>
                           ]

@@ -60,14 +60,14 @@ InputField.propTypes = TextAreaField.propTypes = SelectField.propTypes = {
   type: React.PropTypes.string.isRequired, 
   name: React.PropTypes.string.isRequired, 
   value: React.PropTypes.string.isRequired, 
-  label: React.PropTypes.string.isRequired, 
+  label: React.PropTypes.string, 
   error: React.PropTypes.string, 
   placeholder: React.PropTypes.string, 
   onChange: React.PropTypes.func.isRequired,
   checkUserExists: React.PropTypes.func
 }
 
-InputField.defaultProps = TextAreaField.defaultProps = SelectField.defaultProps = {
+InputField.defaultProps = {
   type: 'text'
 }
 

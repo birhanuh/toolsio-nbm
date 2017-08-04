@@ -85,14 +85,21 @@
       "continue_button": "Continue",
       "error": "can't be blank",
       "dont_have_an_account": "Don't have an account? Sign up for free now!"
-    }
+    },
+    "email_required": "Email is required",
+    "email_format_required": "Wrong Email format",
+    "password_required:": "Password is required",
+    "password_confirmation_required": "Password confirmation is required",
+    "password_match_required": "Password doesn't match"
   },  
   "sign_in": {
     "header": "Log-in to your account",
     "email": "E-mail address",
     "password": "Password",
     "sign_in": "Sign in",
-    "new_to_us": "New to us?"
+    "new_to_us": "New to us?",
+    "email_required": "Email is required",
+    "password_required:": "Password is required"
   },
   "account": {
     "edit": {
@@ -122,6 +129,18 @@
     },
     "update": {
       "success_update": "Account updated!"
+    }
+  },
+  "users": {
+    "index": {
+      "header": "Users",
+      "authorized_user": "Authorized user",
+      "invite_user": "Invite User",
+      "email": "Email",
+      "description": "Invited users and send new invitation form are availble here."
+    },
+    "edit": {
+      "header": "Edit user"
     }
   },
   "internal_navigation": {
@@ -201,7 +220,10 @@
       "select_status": "-Select Status-",
       "select_customer": "-Select Customer-",
       "select_user": "-Select User-",
-      "select_or_add_new_customer": "Select Customer if exists or add new"
+      "select_or_add_new_customer": "Select Customer if exists or add new",
+      "name_required": "Name is required",
+      "deadline_required": "Unit is required",
+      "customer_required": "Quantity is required"
     },
     "show": {
       "header": "Project",
@@ -228,7 +250,8 @@
     },
     "tasks": {
       "header": "Tasks",
-      "show": {
+      "new": {
+        "add_task": "Add Task",
         "header": "Task",
         "name": "Name",
         "hours": "Hours",
@@ -237,16 +260,16 @@
         "price": "Price",
         "vat": "Vat (in %)",
         "total": "Total",
-        "actions": "Actions"
-      },
-      "new": {
-        "add_task": "Add Task"
+        "actions": "Actions",
+        "name_required": "Name is required",
+        "payment_type_required": "Payment type is required",
+        "hours_required": "Hours is required",
+        "price_required": "Price is required"
       },
       "edit": {
         "edit_task": "Edit Task"
       },
       "create": {
-        "add_new_task_button": "Add new task",
         "notice_create": "Task created!"
       },
       "update": {
@@ -259,16 +282,92 @@
       }
     }
   },
-  "users": {
+  "sales": {
     "index": {
-      "header": "Users",
-      "authorized_user": "Authorized user",
-      "invite_user": "Invite User",
-      "email": "Email",
-      "description": "Invited users and send new invitation form are availble here."
+      "header": "Sales",
+      "empty_sales_header": "There are no sales",
+      "empty_projects_header": "Click Projects links on the left sidebar menu to go to Sales page and create your first Sale.",
+      "create_new_sale": "Create new sale",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "deadline": "Deadline",
+      "invoiced": "Invoiced",
+      "description": "All created Sales are shown here."
+    },
+    "new": {
+      "header": "New Sale",
+      "notice_create": "Sale created!",
+      "name": "Name",
+      "deadline": "Deadline",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "description": "Description",
+      "select_status": "-Select Status-",
+      "select_customer": "-Select Customer-",
+      "name_required": "Name is required",
+      "deadline_required": "Unit is required",
+      "customer_required": "Quantity is required"
+    },
+    "create": {
+      "notice_create": "Sale created!"
+    },
+    "show": {
+      "header": "Sale",
+      "id": "Id",
+      "customer": "Customer",
+      "date": "Date",
+      "user": "User",
+      "status": "Status",
+      "description": "Description",
+      "no_items": "The Sale in this invoice has no items"
     },
     "edit": {
-      "header": "Edit user"
+      "header": "Edit Sale"
+    },
+    "update": {
+      "header": "Update Sale",
+      "success_update": "Sale updated!"
+    },
+    "destroy": {
+      "confirmation_msg": "Are you sure to delete this sale?",
+      "success_delete": "Sale (%{sale_date}) is deleted!",
+      "error_delete": "Invoice couldn't be deleted, try again after refreshing the page"
+    },
+    "items": {
+      "header": "Items",
+      "new": {
+        "add_item": "Add Item",        
+        "name": "Name",
+        "quantity": "Quantity",
+        "unit": "Unit",
+        "select_unit": "-Select unit-",
+        "price": "Price",
+        "vat": "Vat (in %)",
+        "total": "Total",
+        "actions": "Actions",
+        "name_required": "Name is required",
+        "unit_required": "Unit is required",
+        "quantity_required": "Quantity is required",
+        "price_required": "Price is required"
+      },
+      "edit": {
+        "header": "Edit Item"
+      },
+      "create": {
+        "notice_create": "Item created!"
+      },
+      "update": {
+        "update_item": "Update item",
+        "success_update": "Item updated!"
+      },
+      "destroy": {
+        "success_delete": "%{name} is deleted",
+        "error_delete": "Item couldn't be deleted, try again after refreshing the page",
+        "confirmation_msg": "Are you sure to delete this item?",
+        "warning_msg": "If you click delete, the item will be deleted."
+      }
     }
   },
   "customers": {
@@ -390,92 +489,6 @@
     "create": {
       "no_file_selected": "No file selected",
       "success_import": "Invoice imported"
-    }
-  },
-  "sales": {
-    "index": {
-      "header": "Sales",
-      "empty_sales_header": "There are no sales",
-      "empty_projects_header": "Click Projects links on the left sidebar menu to go to Sales page and create your first Sale.",
-      "create_new_sale": "Create new sale",
-      "status": "Status",
-      "user": "User",
-      "customer": "Customer",
-      "deadline": "Deadline",
-      "invoiced": "Invoiced",
-      "description": "All created Sales are shown here."
-    },
-    "new": {
-      "header": "New Sale",
-      "notice_create": "Sale created!",
-      "name": "Name",
-      "deadline": "Deadline",
-      "status": "Status",
-      "user": "User",
-      "customer": "Customer",
-      "description": "Description",
-      "select_status": "-Select Status-",
-      "select_customer": "-Select Customer-"
-    },
-    "create": {
-      "notice_create": "Sale created!"
-    },
-    "show": {
-      "header": "Sale",
-      "id": "Id",
-      "customer": "Customer",
-      "date": "Date",
-      "user": "User",
-      "status": "Status",
-      "description": "Description",
-      "no_items": "The Sale in this invoice has no items"
-    },
-    "edit": {
-      "header": "Edit Sale"
-    },
-    "update": {
-      "header": "Update Sale",
-      "success_update": "Sale updated!"
-    },
-    "destroy": {
-      "confirmation_msg": "Are you sure to delete this sale?",
-      "success_delete": "Sale (%{sale_date}) is deleted!",
-      "error_delete": "Invoice couldn't be deleted, try again after refreshing the page"
-    },
-    "items": {
-      "header": "Items",
-      "new": {
-        "add_item": "Add Item"
-      },
-      "edit": {
-        "header": "Edit Item"
-      },
-      "show": {
-        "header": "View Item",
-        "name": "Name",
-        "quantity": "Quantity",
-        "unit": "Unit",
-        "select_unit": "-Select unit-",
-        "price": "Price",
-        "vat": "Vat (in %)",
-        "total": "Total",
-        "actions": "Actions"
-      },
-      "create": {
-        "empty_items": "There are no items yet",
-        "add_new_item_button": "Add new item",
-        "notice_create": "Item created!"
-      },
-      "update": {
-        "update_item": "Update item",
-        "success_update": "Item updated!"
-      },
-      "destroy": {
-        "success_delete": "%{name} is deleted",
-        "error_delete": "Item couldn't be deleted, try again after refreshing the page",
-        "confirmation_msg": "Are you sure to delete this item?",
-        "warning_msg": "If you click delete, the item will be deleted."
-      }
     }
   },
   "messages": {
