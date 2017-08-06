@@ -1,4 +1,4 @@
-import { SET_PROJECTS, ADD_PROJECT, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED } from '../actions/types'
+import { ADD_PROJECT, SET_PROJECTS, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED, ADD_TASK, SET_TASKS } from '../actions/types'
 
 export default function projects(state = [], action = {}) {
   switch(action.type) {    
@@ -34,6 +34,16 @@ export default function projects(state = [], action = {}) {
           action.project
         ]
       }
+
+    case SET_TASKS:
+      return action.tasks
+
+    case ADD_TASK:
+      return [
+        ...state,
+        action.project
+      ]
+      
       
     default: return state
   }

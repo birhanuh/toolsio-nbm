@@ -1,7 +1,5 @@
 import mongoose from 'mongoose' 
 
-let tasks = []
-
 // User Schema 
 let projectSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Name is required."] },
@@ -9,7 +7,10 @@ let projectSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: [true, "Customer is required."] },
   status: { type: String, default: "NEW" },
   description: { type: String, default: '' },
-  items: [tasks]
+  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+
+  created_at: Date,
+  updated_at: Date
 })
 
 projectSchema.methods.addItems = function(items) {

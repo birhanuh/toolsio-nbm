@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 let taskSchema = new mongoose.Schema({
+  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
   name: { type: String, required: true },
   hours: { type: Number, min: 1, max: 8, required: true },
   payment_type: { type: String, required: true },

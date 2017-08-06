@@ -1,17 +1,17 @@
 import axios from 'axios'
-import { SET_PROJECTS, ADD_PROJECT, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED } from './types'
-
-export function setProjects(projects) {
-  return {
-    type: SET_PROJECTS,
-    projects
-  }
-}
+import { SET_PROJECTS, ADD_PROJECT, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED, ADD_TASK } from './types'
 
 export function addProject(project) {
   return {
     type: ADD_PROJECT,
     project
+  }
+}
+
+export function setProjects(projects) {
+  return {
+    type: SET_PROJECTS,
+    projects
   }
 }
 
@@ -36,10 +36,31 @@ export function projectDeleted(id) {
   }
 }
 
+export function addTtask(task) {
+  type: ADD_TASK,
+  task
+}
+
 export function createProject(project) {
   return dispatch => {
     return axios.post('/api/projects', project).then(res => { 
-      dispatch(addProject(res.data.result)) 
+      dispatch(addProject(project)) 
+    })
+  }
+}
+
+export function fetchProjects() {
+  return dispatch => {
+    return axios.get('/api/projects').then(res => {
+      dispatch(setProjects(res.data.results))
+    })
+  }
+}
+
+export function fetchProject(id) {
+  return dispatch => {
+    return axios.get(`/api/projects/${id}`).then(res => {
+      dispatch(projectFetched(res.data.result))
     })
   }
 }
@@ -60,18 +81,20 @@ export function deleteProject(id) {
   }
 }
 
-export function fetchProjects() {
+export function createTask(data) {
   return dispatch => {
-    return axios.get('/api/projects').then(res => {
-      dispatch(setProjects(res.data.results))
+    console.log('called')
+    return axios.post('/api/tasks', data).then(res => {
+      dispatch(addTtask(res.data.result))
     })
   }
 }
 
-export function fetchProject(id) {
-  return dispatch => {
-    return axios.get(`/api/projects/${id}`).then(res => {
-      dispatch(projectFetched(res.data.result))
-    })
-  }
+export function updateTask(task) {
+  
 }
+
+export function deleteTask(id) {
+  
+}
+

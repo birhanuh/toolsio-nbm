@@ -14,7 +14,10 @@ let invoiceSchema = new Schema({
   description: { type: String },
   project: { type: ObjectId },
   sale: { type: ObjectId },
-  billed: { type: Boolean, required: true, default: false }
+  billed: { type: Boolean, required: true, default: false },
+
+  created_at: Date,
+  updated_at: Date
 })
 
 customerSchema.pre('validate', function(next) {

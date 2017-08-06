@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 let itemSchema = new mongoose.Schema({
+  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "Sale" },
   name: { type: String,required: true },
   unit: { type: Number, required: true },
   quantity: { type: Number, required: true },

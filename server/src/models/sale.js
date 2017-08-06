@@ -1,7 +1,5 @@
 import mongoose from 'mongoose'
 
-let items = []
-
 // User Schema 
 let saleSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Name is required."] },
@@ -9,7 +7,10 @@ let saleSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: [true, "Customer is required."] },
   status: { type: String, default: "NEW" },
   description: { type: String, default: '' },
-  items: { type: [items], required: false }
+  items: { type: mongoose.Schema.Types.ObjectId, ref: "Item" },
+
+  created_at: Date,
+  updated_at: Date
 })
 
 saleSchema.methods.addItems = function(items) {

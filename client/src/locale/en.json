@@ -264,7 +264,8 @@
         "name_required": "Name is required",
         "payment_type_required": "Payment type is required",
         "hours_required": "Hours is required",
-        "price_required": "Price is required"
+        "price_required": "Price is required",
+        "vat_required": "Vat is required"
       },
       "edit": {
         "edit_task": "Edit Task"
@@ -350,7 +351,8 @@
         "name_required": "Name is required",
         "unit_required": "Unit is required",
         "quantity_required": "Quantity is required",
-        "price_required": "Price is required"
+        "price_required": "Price is required",
+        "vat_required": "Vat is required"
       },
       "edit": {
         "header": "Edit Item"

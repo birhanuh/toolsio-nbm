@@ -36,6 +36,8 @@ if (app.get('env') === 'development') {
 app.use('/users', users)
 app.use('/api', api)
 //app.use('/', routes)
+
+// Middleware function
 app.use((req, res) => {
   res.status(404).json({
     errors: {

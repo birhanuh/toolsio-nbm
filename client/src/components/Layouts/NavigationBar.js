@@ -69,7 +69,7 @@ class NavigationBar extends Component {
           </div>
           <div className="ui dropdown item">
             <i className="mail envelop icon"></i>
-            <div className="ui tiny blue label envelop">1</div>
+            <div className="ui mini blue label envelop">1</div>
             <div className="menu">
               <a className="item"><strong>Okay, right back at you in...</strong></a>
               <a className="item"><strong>Hi, I have sent you...</strong></a>                

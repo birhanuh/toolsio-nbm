@@ -59,10 +59,11 @@ class Show extends Component {
 
   handleChange = (e) => {
     if (!!this.state.item.errors.message.errors[e.target.name]) {
-      let errors = Object.assign({}, this.state.item)
+      let errors = Object.assign({}, this.state.item.errors)
       delete errors.message.errors[e.target.name]
 
       let updatedItem = Object.assign({}, this.state.item)
+      updatedItem._creator = this.state._id
       updatedItem[e.target.name] = e.target.value
 
       this.setState({
@@ -71,6 +72,7 @@ class Show extends Component {
       })
     } else {
       let updatedItem = Object.assign({}, this.state.item)
+      updatedItem._creator = this.state._id
       updatedItem[e.target.name] = e.target.value
 
       this.setState({
@@ -99,10 +101,10 @@ class Show extends Component {
     // Validation
     if (this.isValid()) { 
       const { _id, _creator, name, unit, quantity, price, vat } = this.state.item
-      let updatedisLoading = Object.assign({}, this.state.item)
-      updatedisLoading.isLoading = true
+      let updatedItem = Object.assign({}, this.state.item)
+      updatedItem.isLoading = true
        this.setState({
-        task: updatedisLoading
+        task: updatedItem
       })
       this.props.saveItem({ _id, _creator, name, unit, quantity, price, vat })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
@@ -206,7 +208,7 @@ class Show extends Component {
                         name="vat" 
                         value={item.vat} 
                         onChange={this.handleChange.bind(this)} 
-                        placeholder="0%"
+                        placeholder="0"
                         error={item.errors.message && item.errors.message.errors && item.errors.message.errors.vat && item.errors.message.errors.vat.message}
                         formClass="field"
                       />

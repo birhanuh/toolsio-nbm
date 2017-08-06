@@ -127,7 +127,12 @@ export default {
         message: T.translate("projects.tasks.new.price_required")
       }
     }
-    
+    if (!data.vat) {
+      errors['vat'] = {
+        message: T.translate("projects.tasks.new.vat_required")
+      }
+    }
+
     return {
       errors,
       isValid: isEmpty(errors)
@@ -157,7 +162,12 @@ export default {
         message: T.translate("sales.items.new.price_required")
       }
     }
-    
+    if (!data.vat) {
+      errors['vat'] = {
+        message: T.translate("sales.items.new.vat_required")
+      }
+    }
+
     return {
       errors,
       isValid: isEmpty(errors)
