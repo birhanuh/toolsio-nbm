@@ -17,9 +17,9 @@ class Page extends Component {
     return (
       <div className="row column">  
         <div className="ui clearing segment transparent">
-          <div className="ui right floated action input">
+          <div className="ui right floated icon input">
             <input type="text" placeholder="Search..." />
-            <button className="ui button">Search</button>
+            <i className="inverted circular search link icon"></i>
           </div>
 
           <Link className="ui left floated primary button" to="/projects/new">
