@@ -87,7 +87,7 @@ class Task extends Component {
             text: 'Task added'
           })
         },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
+        ({ response }) => { console.log('response: ', response)  }
       )  
     }
   }
@@ -103,10 +103,10 @@ class Task extends Component {
           <td>{task.payment_type}</td>
           <td>{task.hours}</td>
           <td>{task.price}</td>
-          <td>{task.hours}</td>
+          <td>{task.vat}</td>
           <td>
-            <button className="ui icon basic button red" onClick={deleteTask(task._id)}><i className="delete icon"></i></button>
-            <button className="ui icon basic button green" onClick={updateTask(task._id)}><i className="edit icon"></i></button>
+            <button className="ui small icon basic button red" onClick={deleteTask(task._id)}><i className="delete icon"></i></button>
+            <button className="ui small icon basic button green" onClick={updateTask(task._id)}><i className="edit icon"></i></button>
           </td>
         </tr>
       )
@@ -188,7 +188,7 @@ class Task extends Component {
                 />
               </td>
               <td className="actions">
-                <button disabled={task.isLoading} className="small ui icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.new.add_task")}</button>
+                <button disabled={task.isLoading} className="ui small icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.new.add_task")}</button>
               </td>
             </tr>
           </tbody>

@@ -18,7 +18,7 @@ class Form extends Component {
       _id: this.props.project ? this.props.project._id : null,
       name: this.props.project ? this.props.project.name : '',
       deadline: this.props.project ? moment(this.props.project.deadline) : moment(),
-      customer: this.props.project ? this.props.project.customer : '',
+      customer: this.props.project ? this.props.project.customer._id : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
       errors: {
@@ -36,7 +36,7 @@ class Form extends Component {
         _id: nextProps.project._id,
         name: nextProps.project.name,
         deadline: moment(nextProps.project.deadline),
-        customer: nextProps.project.customer,
+        customer: nextProps.project.customer._id,
         status: nextProps.project.status,
         description: nextProps.project.description
       })
@@ -81,7 +81,7 @@ class Form extends Component {
     // Validation
     if (this.isValid()) { 
       const { _id, name, deadline, customer, status, description } = this.state
-      this.setState({ isLoading: true })
+      
       this.props.saveProject({ _id, name, customer, deadline, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
@@ -90,12 +90,12 @@ class Form extends Component {
   handleChangeDate(deadline) {
     this.setState({
       deadline: deadline
-    });
+    })
   } 
 
   render() {
     const { _id, name, deadline, customer, status, description, errors, isLoading } = this.state
-    
+    console.log('customer: ', customer)
     const customersOptions = map(this.props.customers, (customer) => 
       <option key={customer._id} value={customer._id}>{customer.name}</option>
     )
@@ -134,7 +134,7 @@ class Form extends Component {
             <SelectField
               label={T.translate("projects.new.customer")}
               name="customer"
-              value={customer && customer._id} 
+              value={typeof customer === 'object' ? customer._id : customer} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"
@@ -193,6 +193,10 @@ class Form extends Component {
       </div>
     )
   }
+}
+
+Form.propTypes = {
+  customers: React.PropTypes.array.isRequired
 }
 
 export default Form

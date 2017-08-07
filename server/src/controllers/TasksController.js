@@ -38,9 +38,9 @@ export default {
           callback(err, null)
           return
         }
-
-        callback(null, task)
       })
+
+      callback(null, task)
 
     })
   },

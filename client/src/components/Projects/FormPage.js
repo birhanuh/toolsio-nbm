@@ -47,7 +47,6 @@ class FormPage  extends Component {
 
 FormPage.propTypes = {
   createProject: React.PropTypes.func.isRequired,
-  project: React.PropTypes.object.isRequired,
   fetchProject: React.PropTypes.func.isRequired,
   updateProject: React.PropTypes.func.isRequired,
   fetchCustomers: React.PropTypes.func.isRequired,
