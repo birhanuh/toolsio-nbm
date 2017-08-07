@@ -45,7 +45,6 @@ class Show extends Component {
   }
 
   render() {
-    console.log('project: ', this.state)
     const { _id, name, deadline, customer, status, description, tasks } = this.state
       
     return (

@@ -11,14 +11,14 @@ export default function Card({sale}) {
     <div className="eight wide column">
       <div className="ui segment">
         <div className="ui clearing segment transparent">
-         <div className={classnames("ui right floated uppercase label", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+         <div className={classnames("ui right floated uppercase tiny label", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
             {sale.status}
           </div>
           
           <Link to={`/sales/show/${sale._id}`} className="ui left floated header">
-            <h4 className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+            <h3 className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
               {sale.name}
-            </h4>
+            </h3>
           </Link>
         </div>
 

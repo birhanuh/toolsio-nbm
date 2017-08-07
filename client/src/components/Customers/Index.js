@@ -16,15 +16,12 @@ class Page extends Component {
   render() {
     return (
       <div className="row column">  
-        <div className="ui clearing segment transparent">
-          <Link className="ui right floated primary button" to="/customers/new">
+        <div className="ui segment transparent">
+          <Link className="ui primary button" to="/customers/new">
             <i className="add circle icon"></i>
             {T.translate("customers.index.add_new_customer")}
           </Link>
-          <h1 className="ui left floated header m-t-n">{T.translate("customers.index.header")}</h1>   
         </div>  
-        
-        <div className="ui divider"></div>  
 
         <List customers={this.props.customers} deleteCustomer={deleteCustomer} />   
       </div>  

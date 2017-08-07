@@ -3,7 +3,7 @@ import Sale from '../models/Sale'
 export default {
   
   find: (params, callback) => {
-    Sale.find(params).populate('customer').exec(function(err, sales) {
+     Sale.find(params).populate('customer').populate('items').exec(function(err, sales) {
       if (err) {
         callback(err, null)
         return
@@ -14,7 +14,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Sale.findById(id).populate('customer').exec(function(err, sale) {
+    Sale.findById(id).populate('customer').populate('items').exec(function(err, sale) {
       if (err) {
         callback(err, null)
         return

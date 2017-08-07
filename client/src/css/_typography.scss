@@ -41,12 +41,16 @@ h6, h6.ui.header {
   font-weight: 500;
 }
 
-p, span, label, a {
-  font-size: 0.875em;
+p, span, label, a, .ui.table, .ui.form .inline.field > textarea, .ui.form .inline.field > div > input, .ui.message .header:not(.ui)  {
+  font-size: 0.875em !important;
 }
 
-.ui.table {
-  font-size: 0.875em;
+.ui.clearing.segment.header-breadcrumb .ui.breadcrumb .active.section, .ui.clearing.segment.header-breadcrumb .ui.breadcrumb a {
+  font-size: 80% !important;
+}
+
+.ui.button, .ui.buttons .button, .ui.buttons .or {
+  font-size: 1rem !important;
 }
 
 .ui.label, .ui.labels .label {

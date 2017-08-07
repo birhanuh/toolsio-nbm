@@ -95,7 +95,7 @@ class Form extends Component {
 
   render() {
     const { _id, name, deadline, customer, status, description, errors, isLoading } = this.state
-    console.log('customer: ', customer)
+ 
     const customersOptions = map(this.props.customers, (customer) => 
       <option key={customer._id} value={customer._id}>{customer.name}</option>
     )

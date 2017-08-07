@@ -198,7 +198,7 @@
     "index": {
       "header": "Projects",
       "empty_projects_header": "There are no projects",
-      "empty_projects_header": "Click Projects links on the left sidebar menu to go to Projects page and create your first Project.",
+      "empty_projects_message": "Click Projects links on the left sidebar menu to go to Projects page and create your first Project.",
       "create_new_project": "Create new project",
       "status": "Status",
       "user": "User",
@@ -287,7 +287,7 @@
     "index": {
       "header": "Sales",
       "empty_sales_header": "There are no sales",
-      "empty_projects_header": "Click Projects links on the left sidebar menu to go to Sales page and create your first Sale.",
+      "empty_sales_message": "Click Projects links on the left sidebar menu to go to Sales page and create your first Sale.",
       "create_new_sale": "Create new sale",
       "status": "Status",
       "user": "User",

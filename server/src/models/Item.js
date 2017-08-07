@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 let itemSchema = new mongoose.Schema({
   _creator: { type: mongoose.Schema.Types.ObjectId, ref: "Sale" },
-  name: { type: String,required: true },
+  name: { type: String, required: true },
   unit: { type: Number, required: true },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
@@ -12,4 +12,5 @@ let itemSchema = new mongoose.Schema({
   updated_at: Date
 })
 
-let Task = module.exports = mongoose.model('Task', taskSchema)
+let Item = module.exports = mongoose.model('Item', itemSchema)
+

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose' 
 
-// User Schema 
 let projectSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Name is required."] },
   deadline: { type: Date, required: [true, "Deadline is required."] },
@@ -18,8 +17,4 @@ projectSchema.pre('validate', function (next) {
   next()
 }) 
 
-projectSchema.methods.addItems = function(task) {
-  this.tasks.push(task)
-}
-
-let Project = module.exports = mongoose.model('Project', projectSchema);
+let Project = module.exports = mongoose.model('Project', projectSchema)
