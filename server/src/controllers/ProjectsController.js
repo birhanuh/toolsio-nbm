@@ -2,8 +2,8 @@ import Project from '../models/Project'
 
 export default {
   
-  find: (params, callback) => {
-    Project.find(params).populate('customer').populate('tasks').exec(function(err, projects) {
+  find: (callback) => {
+    Project.find().populate({ path: 'customer', select: 'name' }).exec(function(err, projects) {
       if (err) {
         callback(err, null)
         return
@@ -14,7 +14,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Project.findById(id).populate('customer').populate('tasks').exec(function(err, project) {
+    Project.findById(id).populate([{ path: 'customer', select: 'name'}, { path: 'tasks' }]).exec(function(err, project) {
       if (err) {
         callback(err, null)
         return
