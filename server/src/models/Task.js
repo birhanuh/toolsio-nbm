@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Project from './Project'
 
 let taskSchema = new mongoose.Schema({
   _creator: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
@@ -10,6 +11,21 @@ let taskSchema = new mongoose.Schema({
 
   created_at: Date,
   updated_at: Date
+})
+
+taskSchema.post('save', function(doc, next) {
+  // Update related Project after saving Task
+  Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id} }, { new: true }, function(err, project) {
+    if (err) {
+      errors: {
+        vatNumber: {
+          message: err
+        } 
+      }
+    }
+  })
+
+  next()
 })
 
 let Task = module.exports = mongoose.model('Task', taskSchema)

@@ -155,7 +155,7 @@ nav.ui.menu {
     color: #ffffff;
     text-shadow: 0 1px 0 rgba(0,0,0,0.4);
   }
-  h5 {
+  h3 {
     color: $medium-grey;
     text-shadow: 0 1px 0 rgba(0,0,0,0.4);
     margin-top: 0;
@@ -300,39 +300,38 @@ nav.ui.menu {
   margin-top: 0;
 }
 
-// Flash
-.alert {
+// Message
+.ui.message {
   border-radius: (3px);
 }
 
-.alert-success {
+.ui.success.message {
   color: $dark-green;
   background: $white-green;
-  border-color: $x-light-green;
+  box-shadow: 0 0 0 1px $green inset, 0 0 0 0 transparent;
 }
 
-.alert-warning {
+.ui.warning.message {
   color: $dark-orange;
   background: $white-orange;
-  border-color: $x-light-orange;
+  box-shadow: 0 0 0 1px $orange inset, 0 0 0 0 transparent;
 }
 
-.alert-danger {
+.ui.negative.message {
   color: $dark-red;
   background: $white-red;
-  border-color: $x-light-red;
+  box-shadow: 0 0 0 1px $red inset, 0 0 0 0 transparent;
 }
 
-.alert-notice {
-  @extend .alert-success;
+.ui.info.message {
+  color: $blue;
+  background: $white-blue;
+  box-shadow: 0 0 0 1px $blue inset, 0 0 0 0 transparent;
 }
 
-.alert-alert {
-  @extend .alert-danger;
-}
-
-.flash_warning {
-  @extend .alert-warning;
+.sixteen.wide.column.flash-message {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
@@ -841,12 +840,6 @@ form .ui.table.task td, form .ui.table.item td  {
 .ui.table.project td, .ui.table.sale td {
   padding: .58571429em;
 }
-
-table.task .actions, table.item .actions {
-  width: 110px;
-  padding-top: 13px
-}
-
 
 /* Extra small devices (phones, less than 433px) */
 @media (max-width: $screen-xs) {

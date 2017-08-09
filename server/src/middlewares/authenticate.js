@@ -17,7 +17,7 @@ export default (req, res, next) => {
       if (err) {
         res.status(401).json({ error: 'Failed to authenticate' })
       } else {
-        User.findAsync({ id: decoded.id }).then(user => {
+        User.find({ id: decoded.id }).then(user => {
           if (!user) {
             res.status(404).json({ error: 'No such user' })
           } else {

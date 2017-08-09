@@ -61,7 +61,7 @@ class Show extends Component {
               <dd>{deadline}</dd>
               <dt>{T.translate("projects.show.status")}</dt>
               <dd>
-                <div className={classnames("ui uppercase label", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}> 
+                <div className={classnames("ui small uppercase label", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}> 
                   {status}
                 </div>
               </dd>

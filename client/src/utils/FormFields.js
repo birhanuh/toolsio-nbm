@@ -42,7 +42,7 @@ export const SelectField = ({ options, name, field, value, label, error,
     <div className={classnames(formClass, { error: !!error })}>
       <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label>
       <select  
-        className="ui dropdown"
+        className="ui selection dropdown"
         name={name} 
         value={value} 
         onChange={onChange}  

@@ -9,7 +9,7 @@ let router = express.Router()
 
 // Get regisetred user
 router.get('/:identifier', (req, res) => {
-  User.findAsync({ email: req.params.identifier }).then(user => {
+  User.find({ email: req.params.identifier }).then(user => {
     res.json( { user }) 
   })
 })
@@ -34,7 +34,7 @@ router.post('/register', function(req, res) {
 router.post('/login', (req, res) => {
   const { email, password } = req.body
 
-  User.findAsync({ email: email }).then(user => {
+  User.find({ email: email }).then(user => {
     if (user[0]) {
       if (bcrypt.compareSync(password, user[0].password)) {
         const token = jwt.sign({

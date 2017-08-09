@@ -32,16 +32,7 @@ export default {
         return
       }
 
-      // Update related Project after saving Task
-      Project.findByIdAndUpdate(params._id, { $push: { tasks: task._id} }, { new: true }, function(err, project) {
-        if (err) {
-          callback(err, null)
-          return
-        }
-      })
-
       callback(null, task)
-
     })
   },
 

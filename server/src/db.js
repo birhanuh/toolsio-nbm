@@ -1,6 +1,9 @@
 import mongoose from 'mongoose'
 import Promise from 'bluebird'
 
+// Promisify mongoose with bluebird
+mongoose.Promise = require('bluebird')
+
 export default {
   connect: function(mongoURI) { 
     mongoose.connect(mongoURI, {useMongoClient: true}, function(err, res) {
@@ -37,5 +40,4 @@ export default {
 
 }
 
-// Promisify mongoose with bluebird
-Promise.promisifyAll(mongoose)
+

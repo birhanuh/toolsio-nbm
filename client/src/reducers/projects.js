@@ -34,16 +34,6 @@ export default function projects(state = [], action = {}) {
           action.project
         ]
       }
-
-    case SET_TASKS:
-      return action.tasks
-
-    case ADD_TASK:
-      return [
-        ...state,
-        action.project
-      ]
-      
       
     default: return state
   }

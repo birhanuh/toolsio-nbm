@@ -82,12 +82,23 @@ class Task extends Component {
       })
       this.props.createTask({ _id, task }).then(
         () => {
+          let updatedTask = Object.assign({}, this.state.task)
+          updatedTask.isLoading = false
+           this.setState({
+            task: updatedTask
+          })
+           
           this.props.addFlashMessage({
             type: 'success',
             text: 'Task added'
           })
         },
-        ({ response }) => { console.log('response: ', response)  }
+        ({ response }) => {
+          let updatedTask = Object.assign({}, this.state.task)
+          updatedTask.errors.message.errors = response.data.errors.message.errors
+          updatedTask.isLoading = false
+          this.setState({ task: updatedTask })
+        }
       )  
     }
   }
@@ -114,7 +125,7 @@ class Task extends Component {
 
     return(
       <form className={classnames("ui form", { loading: task.isLoading })} onSubmit={this.handleSubmit.bind(this)}>
-        <table className="ui very basic table task">
+        <table className="ui small very basic table task">
           <thead>
             <tr>
               <th>{T.translate("projects.tasks.new.name")}</th>
@@ -137,7 +148,7 @@ class Task extends Component {
                   onChange={this.handleChange.bind(this)}  
                   placeholder="Name"
                   error={task.errors.message && task.errors.message.errors && task.errors.message.errors.name && task.errors.message.errors.name.message}
-                  formClass="field"
+                  formClass="ui small input"
                 />
               </td>
               <td>
@@ -147,14 +158,13 @@ class Task extends Component {
                   value={task.payment_type} 
                   onChange={this.handleChange.bind(this)}  
                   error={task.errors.message && task.errors.message.errors && task.errors.message.errors.payment_type && task.errors.message.errors.payment_type.message}
-                  formClass="field"
+                  formClass="ui small input"
                   options={[
                     <option key="default" value="" disabled>{T.translate("projects.tasks.new.select_payment_type")}</option>,
                     <option key="per hour" value="per hour">Per task</option>,
                     <option key="per task" value="per task">Per hour</option>
                     ]
                   }
-                  formClass="field"
                 />
               </td>
               <td>
@@ -164,7 +174,7 @@ class Task extends Component {
                   onChange={this.handleChange.bind(this)}  
                   placeholder="0.00"
                   error={task.errors.message && task.errors.message.errors && task.errors.message.errors.hours && task.errors.message.errors.hours.message}
-                  formClass="field"
+                  formClass="ui small input"
                 />
               </td>
               <td>
@@ -174,7 +184,7 @@ class Task extends Component {
                   onChange={this.handleChange.bind(this)} 
                   placeholder="0.00"
                   error={task.errors.message && task.errors.message.errors && task.errors.message.errors.price && task.errors.message.errors.price.message}
-                  formClass="field"
+                  formClass="ui small input"
                 />
               </td>
               <td>
@@ -184,10 +194,10 @@ class Task extends Component {
                   onChange={this.handleChange.bind(this)} 
                   placeholder="0"
                   error={task.errors.message && task.errors.message.errors && task.errors.message.errors.vat && task.errors.message.errors.vat.message}
-                  formClass="field"
+                  formClass="ui small input"
                 />
               </td>
-              <td className="actions">
+              <td width="110px" className="actions">
                 <button disabled={task.isLoading} className="ui small icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.new.add_task")}</button>
               </td>
             </tr>

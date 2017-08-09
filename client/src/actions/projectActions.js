@@ -37,8 +37,10 @@ export function projectDeleted(id) {
 }
 
 export function addTtask(task) {
-  type: ADD_TASK,
-  task
+  return {
+    type: ADD_TASK,
+    task  
+  }
 }
 
 export function createProject(project) {
@@ -81,11 +83,10 @@ export function deleteProject(id) {
   }
 }
 
-export function createTask(data) {
+export function createTask(task) {
   return dispatch => {
-    console.log('called')
-    return axios.post('/api/tasks', data).then(res => {
-      dispatch(addTtask(res.data.result))
+    return axios.post('/api/tasks', task).then(res => {
+      dispatch(addTtask(task))
     })
   }
 }

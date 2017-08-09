@@ -3,21 +3,13 @@
   .ui.form input[type=search], .ui.form input[type=password], .ui.form input[type=date], 
   .ui.form input[type=datetime-local], .ui.form input[type=tel], .ui.form input[type=time], 
   .ui.form input[type=file], .ui.form input[type=url], .ui.form input[type=number] {
-  padding: .567857143em 1em;
   border: 1px solid $light-grey;
   @include border-radius(3px);
   box-shadow: none;
-  font-size: 14px;
   &:focus {
     border-color: $turquoise;
     box-shadow: none;
   }
-}
-
-// Customize input and select fields
-.ui.form select {
-  padding: .43em 1em;
-  height: inherit;
 }
 
 //Checkbox
@@ -198,14 +190,19 @@
 }
 
 // dropdown-select
+select.ui.dropdown, .ui.selection.dropdown {
+  height: auto;
+  padding: .8471429em 1em;
+}
+
 select {
   @include web-appearance(none);
-  background: url('../images/up-down-arrow.png') no-repeat 98% 50% !important;
+  background: url('../images/up-down-arrow.png') no-repeat 95% 50% !important;
 }
 
 .ui.form .field.error select {
   @include web-appearance(none);
-  background: url('../images/up-down-arrow-error.png') #FFF6F6 no-repeat 98% 50% !important;
+  background: url('../images/up-down-arrow-error.png') #FFF6F6 no-repeat 95% 50% !important;
 }
 
 select.date {
@@ -255,7 +252,7 @@ select.date {
   margin-bottom: 0;
   vertical-align: middle;
 }
-.ui.form .field.error span {
+.ui.form .field.error span, .ui.form .input.error span  {
   display: inherit;
   text-align: left;
 }
