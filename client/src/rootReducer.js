@@ -4,7 +4,6 @@ import auth from './reducers/auth'
 import sales from './reducers/sales'
 import projects from './reducers/projects'
 import customers from './reducers/customers'
-import tasks from './reducers/tasks'
 
 // combineReducers combines all passed reducers in to one state object
 export default combineReducers({
@@ -12,6 +11,5 @@ export default combineReducers({
   auth,
   sales,
   projects,
-  customers,
-  tasks
+  customers
 })

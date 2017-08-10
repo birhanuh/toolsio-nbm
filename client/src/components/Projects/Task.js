@@ -14,6 +14,7 @@ class Task extends Component {
     super(props)
     this.state = {
       _id: this.props.project._id,
+      tasks: this.props.project.tasks,
       task: {
         _creator: null,
         name: "",
@@ -29,6 +30,13 @@ class Task extends Component {
         isLoading: false
       }
     }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      __id: nextProps.project._id,
+      tasks: nextProps.project.tasks
+    })
   }
 
   handleChange = (e) => {
@@ -83,11 +91,17 @@ class Task extends Component {
       this.props.createTask({ _id, task }).then(
         () => {
           let updatedTask = Object.assign({}, this.state.task)
+          updatedTask._creator = null
+          updatedTask.name = ""
+          updatedTask.payment_type = ""
+          updatedTask.hours = ""
+          updatedTask.price = ""
+          updatedTask.vat = ""
           updatedTask.isLoading = false
            this.setState({
             task: updatedTask
           })
-           
+
           this.props.addFlashMessage({
             type: 'success',
             text: 'Task added'
@@ -105,8 +119,8 @@ class Task extends Component {
 
   render() {
     const { task } = this.state
-    let tasks = this.props.project.tasks
-
+    let tasks = this.state.tasks
+    console.log('tasks: ', tasks)
     const tasksList = (
       tasks.map(task => 
         <tr key={task._id}>

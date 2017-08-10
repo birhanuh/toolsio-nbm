@@ -34,7 +34,26 @@ export default function projects(state = [], action = {}) {
           action.project
         ]
       }
-      
+    
+    case SET_TASKS:
+      return action.tasks
+
+    case ADD_TASK:
+      const creatorIndex = state.findIndex(item => item._id === action.task._id)
+      if (creatorIndex > -1) {
+        return state.map(item => {
+          if (item._id === action.task._id) {
+            return {
+              ...item,
+              tasks: [...item.tasks, action.task.task]     
+            }  
+          }
+          return item 
+        })
+      } else {
+        return [...state]
+      }
+
     default: return state
   }
 }

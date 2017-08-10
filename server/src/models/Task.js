@@ -18,7 +18,7 @@ taskSchema.post('save', function(doc, next) {
   Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id} }, { new: true }, function(err, project) {
     if (err) {
       errors: {
-        vatNumber: {
+        cant_update_project: {
           message: err
         } 
       }
