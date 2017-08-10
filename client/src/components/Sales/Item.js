@@ -122,8 +122,10 @@ class Item extends Component {
           <td>{item.price}</td>
           <td>{item.vat}</td>
           <td>
-            <button className="ui small icon basic button red" onClick={deleteItem(item._id)}><i className="delete icon"></i></button>
-            <button className="ui small icon basic button green" onClick={updateItem(item._id)}><i className="edit icon"></i></button>
+            <div className="ui fluid small buttons">
+              <button className="ui small icon basic button red" onClick={deleteItem(item._id)}><i className="delete icon"></i></button>
+              <button className="ui small icon basic button green" onClick={updateItem(item._id)}><i className="edit icon"></i></button>
+            </div>
           </td>
         </tr>
       )
@@ -146,7 +148,7 @@ class Item extends Component {
 
             { items.length !== 0 && itemsList }
             
-            <tr>
+            <tr className="form-tr">
               <td>
                 <InputField
                   name="name" 
@@ -205,8 +207,8 @@ class Item extends Component {
                   formClass="ui small input"
                 />
               </td>
-              <td width="110px" className="actions">
-                <button disabled={item.isLoading} className="ui small icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.items.new.add_item")}</button>
+              <td className="actions">
+                <button disabled={item.isLoading} className="ui fluid small icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.items.new.add_item")}</button>
               </td>
             </tr>
           </tbody>

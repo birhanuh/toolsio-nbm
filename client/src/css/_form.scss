@@ -200,7 +200,7 @@ select {
   background: url('../images/up-down-arrow.png') no-repeat 95% 50% !important;
 }
 
-.ui.form .field.error select {
+.ui.form .field.error select, .ui.input.error select {
   @include web-appearance(none);
   background: url('../images/up-down-arrow-error.png') #FFF6F6 no-repeat 95% 50% !important;
 }
@@ -259,6 +259,19 @@ select.date {
 
 .ui.form .inline.field.error>span {
   margin-left: 22% !important;
+}
+
+.ui.input.error {
+  display: block;
+  input {
+    background: #FFF6F6 !important;
+    border-color: #E0B4B4 !important;
+    color: #9F3A38 !important;
+  }
+  select {
+    border-color: #E0B4B4 !important;
+    color: #9F3A38 !important;
+  }
 }
 
 /* Extra mall devices (phones, less than 433px) */

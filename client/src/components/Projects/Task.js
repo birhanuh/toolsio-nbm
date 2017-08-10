@@ -122,8 +122,10 @@ class Task extends Component {
           <td>{task.price}</td>
           <td>{task.vat}</td>
           <td>
-            <button className="ui small icon basic button red" onClick={deleteTask(task._id)}><i className="delete icon"></i></button>
-            <button className="ui small icon basic button green" onClick={updateTask(task._id)}><i className="edit icon"></i></button>
+            <div className="ui fluid small buttons">
+              <button className="ui small icon basic button red" onClick={deleteTask(task._id)}><i className="delete icon"></i></button>
+              <button className="ui small icon basic button green" onClick={updateTask(task._id)}><i className="edit icon"></i></button>
+            </div>
           </td>
         </tr>
       )
@@ -146,7 +148,7 @@ class Task extends Component {
 
             { tasks.length !== 0 && tasksList }
             
-            <tr>
+            <tr className="form-tr">
               <td>
                 <InputField
                   name="name" 
@@ -203,8 +205,8 @@ class Task extends Component {
                   formClass="ui small input"
                 />
               </td>
-              <td width="110px" className="actions">
-                <button disabled={task.isLoading} className="ui small icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.new.add_task")}</button>
+              <td className="actions">
+                <button disabled={task.isLoading} className="ui fluid small icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.new.add_task")}</button>
               </td>
             </tr>
           </tbody>

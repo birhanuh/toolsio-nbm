@@ -5,7 +5,7 @@ export const InputField = ({ type, options, name, field, value, label,
   error, placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>
-      <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label>
+      { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }
       <input 
         type={type}
         name={name} 
@@ -23,7 +23,7 @@ export const TextAreaField = ({ options, name, field, value, label, error,
   placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {  
   return (
     <div className={classnames(formClass, { error: !!error })}>
-      <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label>
+      { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }
       <textarea  
         name={name} 
         value={value} 
@@ -40,7 +40,7 @@ export const SelectField = ({ options, name, field, value, label, error,
   placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>
-      <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label>
+      { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }
       <select  
         className="ui selection dropdown"
         name={name} 
