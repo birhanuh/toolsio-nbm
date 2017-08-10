@@ -6,6 +6,7 @@
   border: 1px solid $light-grey;
   @include border-radius(3px);
   box-shadow: none;
+  padding: .7571429em;
   &:focus {
     border-color: $turquoise;
     box-shadow: none;
@@ -192,7 +193,8 @@
 // dropdown-select
 select.ui.dropdown, .ui.selection.dropdown {
   height: auto;
-  padding: .8471429em 1em;
+  line-height: 1.2;
+  padding: .7571429em 1em;
 }
 
 select {

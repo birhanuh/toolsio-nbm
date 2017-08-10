@@ -141,7 +141,7 @@ class Item extends Component {
               <th>{T.translate("sales.items.new.quantity")}</th>
               <th>{T.translate("sales.items.new.price")}</th>
               <th>{T.translate("sales.items.new.vat")}</th>
-              <th>{T.translate("sales.items.new.actions")}</th>
+              <th width="110px">{T.translate("sales.items.new.actions")}</th>
             </tr>
           </thead>
           <tbody>

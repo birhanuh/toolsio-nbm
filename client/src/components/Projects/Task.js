@@ -109,6 +109,44 @@ class Task extends Component {
     }
   }
 
+  editTask(event) {
+    event.preventDefault()
+
+  }
+
+  handleUpdate(event) {
+     event.preventDefault()
+     
+    // Validation
+    if (this.isValid()) { 
+      const { _id, task } = this.state
+      let updatedTask = Object.assign({}, this.state.task)
+      updatedTask.isLoading = true
+       this.setState({
+        task: updatedTask
+      })
+      this.props.updateTask({ _id, task }).then(
+        () => {
+          let updatedTask = Object.assign({}, this.state.task)
+          updatedTask.isLoading = false
+           this.setState({
+            task: updatedTask
+          })
+
+          this.props.addFlashMessage({
+            type: 'success',
+            text: 'Task updated'
+          })
+        },
+        ({ response }) => {
+          let updatedTask = Object.assign({}, this.state.task)
+          updatedTask.errors.message.errors = response.data.errors.message.errors
+          updatedTask.isLoading = false
+          this.setState({ task: updatedTask })
+        }
+      )  
+    }
+  }
   render() {
     const { task } = this.state
     let tasks = this.props.project.tasks
@@ -124,7 +162,7 @@ class Task extends Component {
           <td>
             <div className="ui fluid small buttons">
               <button className="ui small icon basic button red" onClick={deleteTask(task._id)}><i className="delete icon"></i></button>
-              <button className="ui small icon basic button green" onClick={updateTask(task._id)}><i className="edit icon"></i></button>
+              <button className="ui small icon basic button green" onClick={this.editTask(task._id).bind(this)}><i className="edit icon"></i></button>
             </div>
           </td>
         </tr>
@@ -141,7 +179,7 @@ class Task extends Component {
               <th>{T.translate("projects.tasks.new.hours")}</th>
               <th>{T.translate("projects.tasks.new.price")}</th>
               <th>{T.translate("projects.tasks.new.vat")}</th>
-              <th>{T.translate("projects.tasks.new.actions")}</th>
+              <th width="110px">{T.translate("projects.tasks.new.actions")}</th>
             </tr>
           </thead>
           <tbody>
