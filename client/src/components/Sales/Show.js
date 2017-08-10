@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { Validation } from '../../utils'
-import { fetchSale, deleteSale, addItem } from '../../actions/saleActions'
-import { InputField, SelectField } from '../../utils/FormFields'
+import { fetchSale, deleteSale } from '../../actions/saleActions'
+
+import Item from './Item'
 
 // Localization 
 import T from 'i18n-react'
@@ -20,21 +20,7 @@ class Show extends Component {
       customer: this.props.sale ? this.props.sale.customer : '',
       status: this.props.sale ? this.props.sale.status : '',
       description: this.props.sale ? this.props.sale.description : '',
-      item: {
-        _id: null,
-        _creator: null,
-        name: "",
-        unit: "",
-        quantity: "",
-        price: "",
-        vat: "",
-        errors: {
-          message: {
-            errors: {}
-          }
-        },
-        isLoading: false
-      }
+      items: this.props.sale ? this.props.sale.items : null
     }
   }
 
@@ -53,62 +39,9 @@ class Show extends Component {
       deadline: nextProps.sale.deadline,
       customer: nextProps.sale.customer,
       status: nextProps.sale.status,
-      description: nextProps.sale.description
+      description: nextProps.sale.description,
+      items: nextProps.sale.items
     })
-  }
-
-  handleChange = (e) => {
-    if (!!this.state.item.errors.message.errors[e.target.name]) {
-      let errors = Object.assign({}, this.state.item.errors)
-      delete errors.message.errors[e.target.name]
-
-      let updatedItem = Object.assign({}, this.state.item)
-      updatedItem._creator = this.state._id
-      updatedItem[e.target.name] = e.target.value
-
-      this.setState({
-        item: updatedItem,
-        errors
-      })
-    } else {
-      let updatedItem = Object.assign({}, this.state.item)
-      updatedItem._creator = this.state._id
-      updatedItem[e.target.name] = e.target.value
-
-      this.setState({
-        item: updatedItem
-      })
-    }
-  }
-
-  isValid() {
-    const { errors, isValid } = Validation.validateItemInput(this.state.item)
-
-    if (!isValid) {
-      let updatedItem = Object.assign({}, this.state.item)
-      updatedItem.errors.message.errors = errors
-      this.setState({
-        item: updatedItem
-      })
-    }
-
-    return isValid
-  }
-
-  handleSubmit(event) {
-     event.preventDefault()
-
-    // Validation
-    if (this.isValid()) { 
-      const { _id, _creator, name, unit, quantity, price, vat } = this.state.item
-      let updatedItem = Object.assign({}, this.state.item)
-      updatedItem.isLoading = true
-       this.setState({
-        task: updatedItem
-      })
-      this.props.saveItem({ _id, _creator, name, unit, quantity, price, vat })
-        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
-    }
   }
 
   render() {
@@ -118,7 +51,7 @@ class Show extends Component {
       <div className="ui stackable grid">
         <div className="twelve wide column">
           <div className="ui segment">   
-            <h1 className="ui header">{name}</h1> 
+            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'on going', red: status === 'delayed', green: status === 'delivered'})}>{name}</h1> 
             <dl className="dl-horizontal">
               <dt>{T.translate("sales.show.customer")}</dt>
               <dd>{customer.name}</dd>
@@ -141,91 +74,7 @@ class Show extends Component {
 
              <h3 className="ui header">{T.translate("sales.items.header")}</h3>
 
-            <form className={classnames("ui form", { loading: item.isLoading })} onSubmit={this.handleSubmit.bind(this)}>
-              <table className="ui very basic table item">
-                <thead>
-                  <tr>
-                    <th>{T.translate("sales.items.new.name")}</th>
-                    <th>{T.translate("sales.items.new.unit")}</th>
-                    <th>{T.translate("sales.items.new.quantity")}</th>
-                    <th>{T.translate("sales.items.new.price")}</th>
-                    <th>{T.translate("sales.items.new.vat")}</th>
-                    <th>{T.translate("sales.items.new.actions")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <InputField
-                        name="name" 
-                        value={item.name} 
-                        onChange={this.handleChange.bind(this)}  
-                        placeholder="Name"
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.name && item.errors.message.errors.name.message}
-                        formClass="field"
-                      />
-                    </td>
-                    <td>
-                      <SelectField
-                        name="unit"
-                        type="select"
-                        value={item.unit} 
-                        onChange={this.handleChange.bind(this)}  
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.unit && item.errors.message.errors.unit.message}
-                        formClass="field"
-                        options={[
-                          <option key="default" value="" disabled>{T.translate("sales.items.new.select_unit")}</option>,
-                          <option key="piece" value="piece">Piece</option>,
-                          <option key="meter" value="meter">Meter</option>,
-                          <option key="kilo gram" value="kilo gram">Kilo gram</option>,
-                          <option key="liter" value="liter">Liter</option>
-                          ]
-                        }
-                      />
-                    </td>
-                    <td>
-                      <InputField
-                        name="quantity" 
-                        value={item.quantity} 
-                        onChange={this.handleChange.bind(this)}  
-                        placeholder="0"
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.quantity && item.errors.message.errors.quantity.message}
-                        formClass="field"
-                      />
-                    </td>
-                    <td>
-                      <InputField
-                        name="price" 
-                        value={item.price} 
-                        onChange={this.handleChange.bind(this)} 
-                        placeholder="0.00"
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.price && item.errors.message.errors.price.message}
-                        formClass="field"
-                      />
-                    </td>
-                    <td>
-                      <InputField
-                        name="vat" 
-                        value={item.vat} 
-                        onChange={this.handleChange.bind(this)} 
-                        placeholder="0"
-                        error={item.errors.message && item.errors.message.errors && item.errors.message.errors.vat && item.errors.message.errors.vat.message}
-                        formClass="field"
-                      />
-                    </td>
-                    {/*<td>
-                      <button className="ui icon basic red button" onClick={deleteItem(item._id)}><i className="delete icon"></i></button>
-                    </td>
-                    <td>
-                      <Link className="ui icon basic green button" onClick={updateItem(item._id)}><i className="edit icon"></i></Link>
-                    </td>*/}
-                    <td className="actions">
-                      <button disabled={item.isLoading} className="small ui icon basic turquoise button"><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.items.new.add_item")}</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </form>
+            { this.props.sale && <Item sale={this.props.sale} /> }
 
             <div className="ui divider"></div>
 
@@ -240,8 +89,7 @@ class Show extends Component {
 
 Show.propTypes = {
   fetchSale: React.PropTypes.func.isRequired,
-  deleteSale: React.PropTypes.func.isRequired,
-  addItem: React.PropTypes.func.isRequired
+  deleteSale: React.PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, props) {
@@ -253,4 +101,4 @@ function mapStateToProps(state, props) {
   } 
 }
 
-export default connect(mapStateToProps, { fetchSale, deleteSale, addItem } )(Show)
+export default connect(mapStateToProps, { fetchSale, deleteSale } )(Show)

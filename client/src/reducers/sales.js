@@ -1,4 +1,4 @@
-import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED, SALE_DELETED } from '../actions/types'
+import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED, SALE_DELETED, ADD_ITEM, ITEM_UPDATED, ITEM_DELETED  } from '../actions/types'
 
 export default function sales(state = [], action = {}) {
   switch(action.type) {
@@ -34,6 +34,22 @@ export default function sales(state = [], action = {}) {
           ...state,
           action.sale
         ]
+      }
+
+    case ADD_ITEM:
+      const creatorIndex = state.findIndex(item => item._id === action.item._id)
+      if (creatorIndex > -1) {
+        return state.map(item => {
+          if (item._id === action.item._id) {
+            return {
+              ...item,
+              items: [...item.items, action.item.item]     
+            }  
+          }
+          return item 
+        })
+      } else {
+        return [...state]
       }
       
     default: return state

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { SET_PROJECTS, ADD_PROJECT, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED, ADD_TASK } from './types'
+import { ADD_PROJECT, SET_PROJECTS, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED, ADD_TASK } from './types'
 
 export function addProject(project) {
   return {
@@ -36,7 +36,7 @@ export function projectDeleted(id) {
   }
 }
 
-export function addTtask(task) {
+export function addTask(task) {
   return {
     type: ADD_TASK,
     task  
@@ -86,7 +86,7 @@ export function deleteProject(id) {
 export function createTask(task) {
   return dispatch => {
     return axios.post('/api/tasks', task).then(res => {
-      dispatch(addTtask(task))
+      dispatch(addTask(task))
     })
   }
 }

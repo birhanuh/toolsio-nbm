@@ -51,7 +51,7 @@ class Show extends Component {
       <div className="ui stackable grid">
         <div className="twelve wide column">
           <div className="ui segment">    
-            <h1 className="ui header">{name}</h1> 
+            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
             <dl className="dl-horizontal">
               <dt>{T.translate("projects.show.customer")}</dt>
               <dd>{customer.name}</dd>

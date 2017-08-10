@@ -31,15 +31,7 @@ export default {
         callback(err, null)
         return
       }
-
-      // Update related Sale after saving Item
-      Sale.findByIdAndUpdate(params._id, { $push: { items: item._id} }, { new: true }, function(err, sale) {
-        if (err) {
-          callback(err, null)
-          return
-        }
-      })
-
+      
       callback(null, item)
 
     })

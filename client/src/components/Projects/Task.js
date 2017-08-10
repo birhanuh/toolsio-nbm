@@ -14,7 +14,6 @@ class Task extends Component {
     super(props)
     this.state = {
       _id: this.props.project._id,
-      tasks: this.props.project.tasks,
       task: {
         _creator: null,
         name: "",
@@ -30,13 +29,6 @@ class Task extends Component {
         isLoading: false
       }
     }
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      __id: nextProps.project._id,
-      tasks: nextProps.project.tasks
-    })
   }
 
   handleChange = (e) => {
@@ -119,8 +111,8 @@ class Task extends Component {
 
   render() {
     const { task } = this.state
-    let tasks = this.state.tasks
-    console.log('tasks: ', tasks)
+    let tasks = this.props.project.tasks
+  
     const tasksList = (
       tasks.map(task => 
         <tr key={task._id}>
