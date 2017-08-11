@@ -154,13 +154,11 @@ class App extends Component {
         </section>
         
         { internalPages &&
-          <footer className="ui vertical footer segment">
-            <div className="ui middle aligned container">
-              <div className="ui stackable inverted grid">      
-                <div className="ten wide column">
-                  <h4 className="ui inverted header">Footer Header</h4>
-                  <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-                </div>
+          <footer className="ui vertical footer segment internal-footer">
+            <div className="ui stackable inverted grid">      
+              <div className="ten wide column">
+                <h4 className="ui inverted header">Footer Header</h4>
+                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
               </div>
             </div>
           </footer>

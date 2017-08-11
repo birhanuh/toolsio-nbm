@@ -36,7 +36,7 @@ class Form extends Component {
         _id: nextProps.project._id,
         name: nextProps.project.name,
         deadline: moment(nextProps.project.deadline),
-        customer: nextProps.project.customer._id,
+        customer: nextProps.project.customer,
         status: nextProps.project.status,
         description: nextProps.project.description
       })

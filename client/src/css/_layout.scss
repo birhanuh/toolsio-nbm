@@ -22,11 +22,10 @@ body {
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
           text-size-adjust: 100%;
-  margin-bottom: 360px;
 }
 
-body .internal-page {
-  margin-bottom: -140px;
+body .internal-page {  
+  margin-bottom: 120px !important;
 }
 
 // Anchor 
@@ -280,14 +279,17 @@ nav.ui.menu {
 }
 
 // Footer 
-.ui.footer.segment {
+.ui.footer.segment {  
+  width: 100%;
   background-color: $x-dark-mid-night-blue;
   color: $dark-medium-grey;
-  margin: 5em 0em 0em;
-  padding: 5em 0em;
+  padding: 5em 1em;
+}
+
+.ui.footer.segment.internal-footer {
+  padding: 2em 1em;
   position: absolute;
   bottom: 0;
-  width: 100%;
 }
 
 // Message
@@ -837,8 +839,16 @@ form .ui.table tr.form-tr td  {
   vertical-align: top;
 }
 
+form .ui.table tr.form-tr td.edit  {
+  display: none;
+}
+
 .ui.table.project td, .ui.table.sale td {
   padding: .58571429em;
+}
+
+.ui.table.task td:last-child, .ui.table.item td:last-child {
+  padding-right: 10px !important;
 }
 
 /* Extra small devices (phones, less than 433px) */
@@ -911,14 +921,14 @@ form .ui.table tr.form-tr td  {
 
 /* Medium devices (desktops, 992px and upto large desktops, 1200px) */
 @media (min-width: $screen-md) and (max-width: $screen-lg) {
-  .ui.internal-page {
+  .ui.internal-page, .ui.footer.segment.internal-footer {
     margin-left: 190px;
   }
 }
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: $screen-lg) {
-  .ui.internal-page {
+  .ui.internal-page, .ui.footer.segment.internal-footer {
      margin-left: 190px;
   }
 }
