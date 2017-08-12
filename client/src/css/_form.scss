@@ -82,6 +82,15 @@
   }
 }
 
+.ui.warning.button {
+  background: $light-orange;
+  border-color: $light-orange;
+  &:hover, &.focus {
+    background-color: $orange;
+    border-color: $orange;
+  }
+}
+
 .ui.black.button {
   @extend .ui.button;
   color: $white;
@@ -94,44 +103,29 @@
   }
 }
 
-.ui.primary.basic.button {
-  color: $turquoise;
-  &:hover {
-    color: $white;
-    background: $turquoise !important;
-  }
-}
-
-.ui.negative.basic.button {
-  color: $red;
-  &:hover {
-    color: $white;
-    background: $red !important;
-  }
-}
-
-.ui.positive.basic.button {
-  color: $green;
-  &:hover {
-    color: $white;
-    background: $green !important;
-  }
-}
-
-.ui.inverted.button {
-  box-shadow: 0 0 0 2px $turquoise inset !important;
-  color: $turquoise;
-  &:hover, &:active, &:focus, {
-    box-shadow: 0 0 0 2px $turquoise inset !important;
-    background: $turquoise;
-  }
-}
-
 .ui.teal.button {
   @extend .ui.primary.button;
 }
 
-.ui.basic.green.button, .ui.basic.green.buttons .button {
+.ui.basic.button {
+  color: $x-light-dark-grey !important;
+  box-shadow: 0 0 0 1px $x-light-dark-grey inset!important;
+  &:hover {
+    color: $dark-grey !important;
+    box-shadow: 0 0 0 1px $dark-grey inset!important;
+  }
+}
+
+.ui.primary.basic.button {
+  color: $turquoise !important;
+  box-shadow: 0 0 0 1px $turquoise inset!important;
+  &:hover {
+    color: $dark-turquoise !important;
+    box-shadow: 0 0 0 1px $dark-turquoise inset!important;
+  }
+}
+
+.ui.positive.basic.button , .ui.basic.green.button, .ui.basic.green.buttons .button {
   box-shadow: 0 0 0 1px $green inset!important;
   color: $green!important;
   &:hover {
@@ -140,7 +134,7 @@
   }
 }
 
-.ui.basic.blue.button, .ui.basic.blue.buttons .button {
+.ui.neutral.basic.button, .ui.basic.blue.button, .ui.basic.blue.buttons .button {
   box-shadow: 0 0 0 1px $blue inset!important;
   color: $blue!important;
   &:hover {
@@ -149,7 +143,7 @@
   }
 }
 
-.ui.basic.red.button, .ui.basic.red.buttons .button {
+.ui.negative.basic.button, .ui.basic.red.button, .ui.basic.red.buttons .button {
   box-shadow: 0 0 0 1px $red inset!important;
   color: $red!important;
   &:hover {
@@ -158,7 +152,7 @@
   }
 }
 
-.ui.basic.orange.button, .ui.basic.orange.buttons .button {
+.ui.basic.warning.button, .ui.basic.orange.button, .ui.basic.orange.buttons .button {
   box-shadow: 0 0 0 1px $orange inset!important;
   color: $orange!important;
   &:hover {
@@ -167,13 +161,17 @@
   }
 }
 
-.ui.basic.turquoise.button, .ui.basic.turquoise.buttons .button {
+.ui.basic.turquoise.button, .ui.basic.turquoise.button, .ui.basic.turquoise.buttons .button {
   box-shadow: 0 0 0 1px $turquoise inset!important;
   color: $turquoise!important;
   &:hover {
     box-shadow: 0 0 0 1px $dark-turquoise inset!important;
     color: $dark-turquoise!important;
   }
+}
+
+.ui.buttons:not(.vertical)>.basic.button:not(:first-child) {
+  margin-left: -1px;
 }
 
 // Button icons

@@ -81,7 +81,8 @@ class Form extends Component {
     // Validation
     if (this.isValid()) { 
       const { _id, name, deadline, customer, status, description } = this.state
-      
+      this.setState({ isLoading: true })
+
       this.props.saveProject({ _id, name, customer, deadline, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }

@@ -835,11 +835,11 @@ dt {
   padding: .42857143em .78571429em;
 }
 
-form .ui.table tr.form-tr td  {
+form .ui.table tr.form-tr.input td, form .ui.table tr.form-tr td .edit-item {
   vertical-align: top;
 }
 
-form .ui.table tr.form-tr td.edit  {
+form .ui.table tr.form-tr td .edit-item  {
   display: none;
 }
 

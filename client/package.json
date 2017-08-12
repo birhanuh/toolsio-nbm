@@ -21,7 +21,7 @@
     "redux-devtools-extension": "^2.13.0",
     "redux-thunk": "^2.2.0",
     "semantic-ui-checkbox": "^2.2.11",
-    "semantic-ui-css": "^2.2.10",
+    "semantic-ui-css": "^2.2.12",
     "semantic-ui-dropdown": "^2.2.11",
     "semantic-ui-react": "^0.68.3",
     "semantic-ui-sidebar": "^2.2.10",

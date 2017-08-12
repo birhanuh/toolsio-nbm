@@ -46,7 +46,7 @@ class Show extends Component {
 
   render() {
     const { _id, name, deadline, customer, status, description, tasks } = this.state
-      
+    console.log('tasks: ', tasks)
     return (
       <div className="ui stackable grid">
         <div className="twelve wide column">
@@ -74,7 +74,7 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
 
-            { this.props.project && <Task project={this.props.project} /> }
+            { this.state.tasks && <Task tasks={this.state.tasks} /> }
             
             <div className="ui divider"></div>
 
