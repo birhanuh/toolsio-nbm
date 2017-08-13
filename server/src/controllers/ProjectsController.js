@@ -3,7 +3,7 @@ import Project from '../models/Project'
 export default {
   
   find: (callback) => {
-    Project.find().select('-tasks').populate({ path: 'customer', select: 'name' }).exec(function(err, projects) {
+    Project.find({}).select('-tasks').populate({ path: 'customer', select: 'name' }).exec(function(err, projects) {
       if (err) {
         callback(err, null)
         return

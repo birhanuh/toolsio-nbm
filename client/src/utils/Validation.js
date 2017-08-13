@@ -112,8 +112,8 @@ export default {
         message: T.translate("projects.tasks.new.name_required")
       }
     }
-    if (!data.payment_type) {
-      errors['payment_type'] = {
+    if (!data.paymentType) {
+      errors['paymentType'] = {
         message: T.translate("projects.tasks.new.payment_type_required")
       }
     }

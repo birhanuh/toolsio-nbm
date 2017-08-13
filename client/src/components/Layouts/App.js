@@ -2,17 +2,17 @@ import React, { Component } from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import classnames from 'classnames'
 
-import Dashboard from '../Dashboard/Index'
+import Dashboard from '../Dashboard/Page'
 import Landing from './Landing'
-import Signup from '../Signup/Index'
-import Login from '../Login/Index'
-import ProjectsIndex from '../Projects/Index'
+import Signup from '../Signup/Page'
+import Login from '../Login/Page'
+import ProjectsPage from '../Projects/Page'
 import ProjectsFormPage from '../Projects/FormPage'
 import ProjectsShow from '../Projects/Show'
-import SalesIndex from '../Sales/Index'
+import SalesPage from '../Sales/Page'
 import SalesFormPage from '../Sales/FormPage'
 import SalesShow from '../Sales/Show'
-import CustomersIndex from '../Customers/Index'
+import CustomersPage from '../Customers/Page'
 import CustomersFormPage from '../Customers/FormPage'
 import requireAuth from '../../utils/requireAuth'
 
@@ -138,15 +138,15 @@ class App extends Component {
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
               <Route path="/dashboard" component={requireAuth(Dashboard)} />
-              <Route exact path="/projects" component={requireAuth(ProjectsIndex)} />
+              <Route exact path="/projects" component={requireAuth(ProjectsPage)} />
               <Route exact path="/projects/edit/:id" component={requireAuth(ProjectsFormPage)} /> 
               <Route exact path="/projects/show/:id" component={requireAuth(ProjectsShow)} />
               <Route exact path="/projects/new" component={requireAuth(ProjectsFormPage)} />
-              <Route exact path="/sales" component={requireAuth(SalesIndex)} />
+              <Route exact path="/sales" component={requireAuth(SalesPage)} />
               <Route exact path="/sales/edit/:id" component={requireAuth(SalesFormPage)} /> 
               <Route exact path="/sales/new" component={requireAuth(SalesFormPage)} />
               <Route exact path="/sales/show/:id" component={requireAuth(SalesShow)} />
-              <Route exact path="/customers" component={requireAuth(CustomersIndex)} />
+              <Route exact path="/customers" component={requireAuth(CustomersPage)} />
               <Route exact path="/customers/edit/:id" component={requireAuth(CustomersFormPage)} /> 
               <Route exact path="/customers/new" component={requireAuth(CustomersFormPage)} />
             </Switch>

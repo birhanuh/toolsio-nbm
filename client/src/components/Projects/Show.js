@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { fetchProject, deleteProject } from '../../actions/projectActions'
 
-import Task from './Task'
+import TaskIndex from './Tasks/Page'
 
 // Localization 
 import T from 'i18n-react'
@@ -74,7 +74,7 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
 
-            { this.state.tasks && <Task tasks={this.state.tasks} /> }
+            { this.state.tasks && <TaskIndex tasks={this.state.tasks} /> }
             
             <div className="ui divider"></div>
 

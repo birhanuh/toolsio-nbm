@@ -841,6 +841,9 @@ form .ui.table tr.form-tr.input td, form .ui.table tr.form-tr td .edit-item {
 
 form .ui.table tr.form-tr td .edit-item  {
   display: none;
+  button {
+    width: 50%;
+  }
 }
 
 .ui.table.project td, .ui.table.sale td {
