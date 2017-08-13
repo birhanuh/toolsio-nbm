@@ -36,13 +36,29 @@ export default function projects(state = [], action = {}) {
       }
 
     case ADD_TASK:
-      const creatorIndex = state.findIndex(item => item._id === action.task._id)
-      if (creatorIndex > -1) {
+      const creatorIndexAddTask = state.findIndex(item => item._id === action.task._creator)
+      if (creatorIndexAddTask > -1) {
         return state.map(item => {
-          if (item._id === action.task._id) {
+          if (item._id === action.task._creator) {
             return {
               ...item,
-              tasks: [...item.tasks, action.task.task]     
+              tasks: [...item.tasks, action.task]     
+            }  
+          }
+          return item 
+        })
+      } else {
+        return [...state]
+      }
+
+    case TASK_UPDATED:
+      const creatorIndexUpdateTask = state.findIndex(item => item._id === action.task._creator)
+      if (creatorIndexUpdateTask > -1) {
+        return state.map(item => {
+          if (item._id === action.task._creator) {
+            return {
+              ...item,
+              tasks: [...item.tasks, action.task]     
             }  
           }
           return item 

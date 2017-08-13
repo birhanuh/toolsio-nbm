@@ -6,7 +6,8 @@
   border: 1px solid $light-grey;
   @include border-radius(3px);
   box-shadow: none;
-  padding: .7571429em;
+  padding: .78571429em .78571429em .78571429em;
+  line-height: 1em;
   &:focus {
     border-color: $turquoise;
     box-shadow: none;

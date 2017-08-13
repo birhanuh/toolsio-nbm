@@ -517,9 +517,14 @@ i.orange.icon {
 }
 
 // Description list
-dt {
-  font-weight: bold;
-}
+dl.dl-horizontal {
+  dd, dt {
+    padding: 2px 0;
+  }
+  dt {
+    font-weight: bold;
+  }
+} 
 
 //Image
 .img-circle {

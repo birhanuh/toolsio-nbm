@@ -3,11 +3,11 @@ import Project from './Project'
 
 let taskSchema = new mongoose.Schema({
   _creator: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
-  name: { type: String, required: true },
-  hours: { type: Number, min: 1, max: 8, required: true },
-  paymentType: { type: String, required: true },
-  price: { type: Number, required: true },
-  vat: { type: Number, min: 1, max: 100, required: true },
+  name: { type: String, required: [true, "Name is required."] },
+  hours: { type: Number, min: 1, max: 8, required: [true, "Hours is required."] },
+  paymentType: { type: String, required: [true, "Payment type is required."] },
+  price: { type: Number, required: [true, "Price is required."] },
+  vat: { type: Number, min: 1, max: 100, required: [true, "Vat is required."] },
 
   created_at: Date,
   updated_at: Date

@@ -26,7 +26,7 @@ export default {
   },
 
   create: (params, callback) => {  
-    Task.create(params.task, function(err, task) {
+    Task.create(params, function(err, task) {
       if (err) {
         callback(err, null)
         return
