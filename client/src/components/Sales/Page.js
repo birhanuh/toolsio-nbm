@@ -16,7 +16,7 @@ class Page extends Component {
   render() {
     return (
       <div className="row column">  
-        <div className="ui clearing segment transparent">
+        <div className="ui clearing vertical segment border-bottom-none">
           <div className="ui right floated icon input">
             <input type="text" placeholder="Search..." />
             <i className="inverted circular search link icon"></i>

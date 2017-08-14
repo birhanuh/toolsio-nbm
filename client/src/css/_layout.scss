@@ -245,11 +245,7 @@ nav.ui.menu {
     margin: 0 .5em 0 0;
   }  
   .ui.segment {
-    background: $dark-mid-night-blue;
     color: #d9d9d9;
-    border: none;
-    margin-top: 0;
-    margin-bottom: 0;
   }  
   .ui.segment.account {
     border-bottom: 1px solid $light-dark-grey;
@@ -266,15 +262,26 @@ nav.ui.menu {
 }
 
 // Header breadcrumb
-.ui.clearing.segment.header-breadcrumb {
-  position: relative;
+.ui.fixed.menu.header-breadcrumb {
+  margin-top: 50px;
   overflow: hidden;
-  padding: 5px 20px;
+  padding: 5px 1rem;
+  box-shadow: none;
   @include border-radius(0);
   h2 {
     font-size: 0.875em;
     text-transform: uppercase;
     font-weight: 700;
+  }
+  .sub.header {
+    margin-top: 2px;
+    font-size: 0.875em;
+  }
+  .item {
+    padding: 5px 0;
+  }
+  .item:before {
+    background: none;
   }
 }
 
@@ -430,18 +437,10 @@ nav.ui.menu .item>a {
   @include border-radius(0);
 }
 
-// Panel
-.ui.segments > .segment, .ui.segment, .ui.message {
+// Segment
+.ui.segments > .segment, .ui.segment, .ui.message, .ui.card, .ui.cards>.card {
   @include border-radius(3px);
-  box-shadow: none;
-  border: 1px solid $light-grey;
-}
-
-.ui.segment.transparent {
-  background: transparent;
-  box-shadow: none;
-  border: none;
-  padding: 0;
+  box-shadow: 0 1px 2px 0 rgba(224,224,224,1);
 }
 
 .ui.attached.segment {
@@ -832,11 +831,11 @@ dl.dl-horizontal {
 }
 
 // Projects & Sales
-.ui.table.project thead th, .ui.table.sale thead th  {
+.ui.table.projects thead th, .ui.table.sales thead th  {
   padding: .32857143em .78571429em;
 }
 
-.ui.table.task thead th, .ui.table.item thead th  {
+.ui.table.tasks thead th, .ui.table.items thead th  {
   padding: .42857143em .78571429em;
 }
 
@@ -857,6 +856,12 @@ form .ui.table tr.form-tr td .edit-item  {
 
 .ui.table.task td:last-child, .ui.table.item td:last-child {
   padding-right: 10px !important;
+}
+
+.ui.two.cards.sales, .ui.two.cards.projects {
+  .card a.ui.header {
+    margin-top: -20px;
+  }
 }
 
 /* Extra small devices (phones, less than 433px) */
@@ -915,7 +920,7 @@ form .ui.table tr.form-tr td .edit-item  {
     }
   }
   .ui.internal-page {
-    margin-top: 48px;
+    margin-top: 100px;
   }
   .ui.visible.sidebar {
     margin-top: 48px !important;
@@ -929,14 +934,20 @@ form .ui.table tr.form-tr td .edit-item  {
 
 /* Medium devices (desktops, 992px and upto large desktops, 1200px) */
 @media (min-width: $screen-md) and (max-width: $screen-lg) {
-  .ui.internal-page, .ui.footer.segment.internal-footer {
+  .ui.internal-page, .ui.footer.segment.internal-footer, .ui.fixed.menu.header-breadcrumb {
     margin-left: 190px;
+  }
+  .ui.fixed.menu.header-breadcrumb .right.menu {
+    margin-right: 190px;
   }
 }
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: $screen-lg) {
-  .ui.internal-page, .ui.footer.segment.internal-footer {
-     margin-left: 190px;
+  .ui.internal-page, .ui.footer.segment.internal-footer, .ui.fixed.menu.header-breadcrumb {
+    margin-left: 190px;
+  }
+  .ui.fixed.menu.header-breadcrumb .right.menu {
+    margin-right: 190px;
   }
 }

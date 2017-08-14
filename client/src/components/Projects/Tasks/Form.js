@@ -252,7 +252,7 @@ class Task extends Component {
 
     return(
       <form className={classnames("ui small form", { loading: newTask.isLoading || editTask.isRequired })}>
-        <table className="ui very basic table task">
+        <table className="ui very basic table tasks">
           <thead>
             <tr>
               <th>{T.translate("projects.tasks.new.name")}</th>

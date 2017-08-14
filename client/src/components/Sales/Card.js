@@ -8,23 +8,21 @@ import T from 'i18n-react'
 export default function Card({sale}) {
   
   return (
-    <div className="eight wide column">
-      <div className="ui segment">
-        <div className="ui clearing segment transparent">
-         <div className={classnames("ui right floated uppercase tiny label", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
-            {sale.status}
-          </div>
-          
-          <Link to={`/sales/show/${sale._id}`} className="ui left floated header">
-            <h3 className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
-              {sale.name}
-            </h3>
-          </Link>
+    <div className="card">
+      <div className="content">        
+        <div className={classnames("ui uppercase tiny right ribbon label", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+          {sale.status}
         </div>
+        
+        <Link to={`/sales/show/${sale._id}`}>
+          <h3 className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+            {sale.name}
+          </h3>
+        </Link>
+  
+        <div className="description">{sale.description}</div>
 
-        <p>{sale.description}</p>
-
-        <table className="ui very basic center aligned table sale">
+        <table className="ui very basic center aligned table sales">
           <thead>
             <tr>
               <th>{T.translate("sales.show.user")}</th>
@@ -45,7 +43,8 @@ export default function Card({sale}) {
           </tbody>
         </table>
 
-      </div>
+      </div>  
+   
     </div>
   )
 }

@@ -44,6 +44,12 @@ class Show extends Component {
     })
   }
 
+  handleDelete(id, event) {
+    event.preventDefault()
+
+    
+  }
+
   render() {
     const { _id, name, deadline, customer, status, description, tasks } = this.state
     console.log('tasks: ', tasks)
@@ -78,7 +84,7 @@ class Show extends Component {
             
             <div className="ui divider"></div>
 
-            <button className="ui negative button" onClick={deleteProject(_id)}><i className="delete icon"></i>{T.translate("button.delete")}</button>
+            <button className="ui negative button" onClick={() => this.props.deleteProject(_id)}><i className="delete icon"></i>{T.translate("button.delete")}</button>
             <Link to={`/projects/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("button.edit")}</Link>
           </div>    
         </div>

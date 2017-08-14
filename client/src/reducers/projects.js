@@ -13,7 +13,7 @@ export default function projects(state = [], action = {}) {
       ]
 
     case PROJECT_DELETED:
-      return state.filter(item => item._id !== action.projectId)
+      return state.filter(item => item._id !== action.id)
     
     case PROJECT_UPDATED:
       return state.map(item => {

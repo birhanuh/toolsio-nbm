@@ -15,7 +15,7 @@ export default function List({ sales, deleteSale }) {
   )
 
   const salesList = (
-    <div className="ui grid">
+    <div className="ui two cards sales">
       { sales.map(sale => <Card sale={sale} key={sale._id} deleteSale={deleteSale} />) }
     </div>
   )

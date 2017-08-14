@@ -60,32 +60,6 @@ class App extends Component {
 
     let internalPages = (landingPage || authPages) ? false : true 
 
-    const currentPage = window.location.pathname
-    let currentPageTitle
-
-    switch(currentPage) {
-      case '/dashboard': 
-        currentPageTitle = "dashboard.index.header"
-        break
-      case '/settings': 
-        currentPageTitle = "settings.index.header"
-        break
-      case '/customers': 
-        currentPageTitle = "customers.index.header"
-        break
-      case '/projects': 
-        currentPageTitle = "projects.index.header"
-        break
-      case '/sales': 
-        currentPageTitle = "sales.index.header"
-        break  
-      case '/invoices': 
-        currentPageTitle = "invoices.index.header"
-        break
-      default:
-        currentPageTitle = "No page title"
-    }
-    console.log('currentPage: ', currentPageTitle)
     return (
       <div className="pusher">
         
@@ -93,13 +67,11 @@ class App extends Component {
 
         { internalPages && 
           <div className="ui visible sidebar vertical menu">
-            <div className="ui segment account">
+            <div className="ui center aligned vertical segment account">
               <a href="/settings">
                 <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
               </a>
-              <div className="ui center aligned segment">
-                <p>Birhanu (Admin)</p>
-              </div>
+              <p className="m-t-s">Birhanu (Admin)</p>
             </div>
             <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboards.header")} />
             <ActiveLink activeOnlyWhenExact to="/projects" icon="suitcase icon" label={T.translate("projects.index.header")} />
@@ -110,25 +82,6 @@ class App extends Component {
         }
 
         <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
-          { internalPages && 
-            <div className="sixteen wide column">
-              <div className="ui clearing segment header-breadcrumb">
-                <div className="ui right floated segment transparent m-t-xs">
-                  <div className="ui breadcrumb">
-                    <a className="section">Dashboard</a>
-                    <div className="divider"> / </div>
-                    <a className="section">Sales</a>
-                    <div className="divider"> / </div>
-                    <div className="active section">New</div>
-                  </div>
-                </div>
-                <div className="ui left floated segment transparent m-t-xs">
-                  <h2 className="ui header m-b-n">{T.translate('"'+currentPageTitle+'"')}</h2>
-                  <small>{T.translate('"'+currentPageTitle+'"')}</small>              
-                </div>
-              </div>
-            </div>
-          }  
                    
           <FlashMessagesList />
           

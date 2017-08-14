@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { connect } from 'react-redux'
-import { fetchProjects, deleteProject } from '../../actions/projectActions'
+import { fetchProjects } from '../../actions/projectActions'
 
 // Localization 
 import T from 'i18n-react'
@@ -16,7 +16,7 @@ class Page extends Component {
   render() {
     return (
       <div className="row column">  
-        <div className="ui clearing segment transparent">
+        <div className="ui clearing vertical segment border-bottom-none">
           <div className="ui right floated icon input">
             <input type="text" placeholder="Search..." />
             <i className="inverted circular search link icon"></i>
@@ -29,7 +29,7 @@ class Page extends Component {
         </div> 
         
         <div className="row column">     
-          <List projects={this.props.projects} deleteProject={deleteProject} />  
+          <List projects={this.props.projects} />  
         </div>       
       </div>   
     )
@@ -37,9 +37,7 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  projects: React.PropTypes.array.isRequired,
-  fetchProjects: React.PropTypes.func.isRequired,
-  deleteProject: React.PropTypes.func.isRequired
+  fetchProjects: React.PropTypes.func.isRequired
 }
 
 function mapSateToProps(state) {
@@ -48,4 +46,4 @@ function mapSateToProps(state) {
   }
 }
 
-export default connect(mapSateToProps, { fetchProjects, deleteProject })(Page)
+export default connect(mapSateToProps, { fetchProjects })(Page)
