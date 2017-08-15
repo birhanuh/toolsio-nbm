@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { createTask, updateTask, deleteTask } from '../../../actions/projectActions'
 import { addFlashMessage } from '../../../actions/flashMessages'
-import { NewForm, EditForm } from './InputRow'
+import { AddElement, ShowEditElement } from './TrElement'
 
 // Localization 
 import T from 'i18n-react'
@@ -156,8 +156,8 @@ class Task extends Component {
     event.preventDefault()
 
     //Hide show tr and show edit tr
-    $('#'+task._id+' td .show-item').hide()
-    $('#'+task._id+' td .edit-item').show()
+    $('#'+task._id+' td.show-task').hide()
+    $('#'+task._id+' td.edit-task').show()
     
     let updatedTask = Object.assign({}, this.state.editTask)
     updatedTask._id = task._id
@@ -176,8 +176,8 @@ class Task extends Component {
     event.preventDefault()
 
     // Hide edit tr and show show tr
-    $('#'+task._id+' td .edit-item').hide()
-    $('#'+task._id+' td .show-item').show()    
+    $('#'+task._id+' td.edit-task').hide()
+    $('#'+task._id+' td.show-task').show()    
   }
 
   handleDelete(task, event) {
@@ -226,8 +226,8 @@ class Task extends Component {
           })
 
           // Hide edit tr and show show tr
-          $('#'+_id+' td .edit-item').hide()
-          $('#'+_id+' td .show-item').show()   
+          $('#'+_id+' td .edit-task').hide()
+          $('#'+_id+' td .show-task').show()   
         },
         ({ response }) => {
           let updatedTask = Object.assign({}, this.state.editTask)
@@ -245,9 +245,17 @@ class Task extends Component {
     let tasks = this.props.tasks   
     
     const tasksList = (
-      tasks.map(task => <EditForm key={task._id} task={task} editTask={editTask} handleEdit={this.handleEdit.bind(this, task)} 
-        handleCancelEdit={this.handleCancelEdit.bind(this, task)} handleDelete={this.handleDelete.bind(this, task)}
-        handleUpdate={this.handleUpdate.bind(this)} handleEditTaskChange={this.handleEditTaskChange.bind(this, task)} />)
+      tasks.map(task => 
+        <ShowEditElement 
+          key={task._id}
+          task={task} 
+          editTask={editTask}
+          handleCancelEdit={this.handleCancelEdit.bind(this, task)}
+          handleNewTaskChange={this.handleNewTaskChange.bind(this)} 
+          handleUpdate={this.handleUpdate.bind(this)}
+          handleEdit={this.handleEdit.bind(this, task)}
+          handleDelete={this.handleDelete.bind(this, task)}/> 
+        )
     )
 
     return(
@@ -267,7 +275,10 @@ class Task extends Component {
 
             { tasks.length !== 0 && tasksList }
             
-            <NewForm newTask={newTask} handleNewTaskChange={this.handleNewTaskChange} handleCreate={this.handleCreate.bind(this)} /> 
+            <AddElement 
+              task={newTask} 
+              handleNewTaskChange={this.handleNewTaskChange.bind(this)} 
+              handleCreate={this.handleCreate.bind(this)} /> 
             
           </tbody>
         </table>

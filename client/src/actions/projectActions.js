@@ -53,7 +53,7 @@ export function taskUpdated(task) {
 export function createProject(project) {
   return dispatch => {
     return axios.post('/api/projects', project).then(res => { 
-      dispatch(addProject(project)) 
+      dispatch(addProject(res.data.result)) 
     })
   }
 }

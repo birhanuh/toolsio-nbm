@@ -230,7 +230,7 @@ nav.ui.menu {
     font-weight: 600;
     text-transform: uppercase !important;
   }
-  .active.item {
+  .active.item, .active.item:hover, .active.item:focus {
     background: $body-background-color;
     color: $dark-mid-night-blue;
   }
@@ -263,7 +263,7 @@ nav.ui.menu {
 
 // Header breadcrumb
 .ui.fixed.menu.header-breadcrumb {
-  margin-top: 50px;
+  margin-top: 49px;
   overflow: hidden;
   padding: 5px 1rem;
   box-shadow: none;
@@ -339,8 +339,8 @@ nav.ui.menu {
 }
 
 .sixteen.wide.column.flash-message {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
@@ -839,11 +839,11 @@ dl.dl-horizontal {
   padding: .42857143em .78571429em;
 }
 
-form .ui.table tr.form-tr.input td, form .ui.table tr.form-tr td .edit-item {
+form .ui.table tr td.add-task, form .ui.table tr td.edit-task {
   vertical-align: top;
 }
 
-form .ui.table tr.form-tr td .edit-item  {
+form .ui.table tr td.edit-task {
   display: none;
   button {
     width: 50%;

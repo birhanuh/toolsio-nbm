@@ -58,7 +58,7 @@ export default function projects(state = [], action = {}) {
           if (item._id === action.task._creator) {
             return {
               ...item,
-              tasks: [...item.tasks, action.task]     
+              tasks: [...item.tasks.filter(taskItem => taskItem._id !== action.task._id), action.task]     
             }  
           }
           return item 

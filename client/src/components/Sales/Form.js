@@ -109,8 +109,8 @@ class Form extends Component {
     //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
 
     return (  
-      <div className="ui stackable centered grid">
-        <div className="eight wide column ui segment">  
+      <div className="row">
+        <div className="ui text container ui segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
