@@ -85,7 +85,7 @@ export function updateProject(project) {
 export function deleteProject(id) {
   return dispatch => {
     return axios.delete(`/api/projects/${id}`).then(res => { 
-      dispatch(projectDeleted(id)) 
+      dispatch(projectDeleted(res.data.result)) 
     })
   }
 }

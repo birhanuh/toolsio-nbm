@@ -19,7 +19,7 @@ class Page extends Component {
         <div className="ui segment transparent">
           <Link className="ui primary button" to="/customers/new">
             <i className="add circle icon"></i>
-            {T.translate("customers.index.add_new_customer")}
+            {T.translate("customers.page.add_new_customer")}
           </Link>
         </div>  
 

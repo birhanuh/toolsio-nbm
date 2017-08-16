@@ -14,8 +14,8 @@ export default function Card({sale}) {
           {sale.status}
         </div>
         
-        <Link to={`/sales/show/${sale._id}`}>
-          <h3 className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+        <Link to={`/sales/show/${sale._id}`} className="ui header">
+          <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
             {sale.name}
           </h3>
         </Link>
@@ -26,9 +26,9 @@ export default function Card({sale}) {
           <thead>
             <tr>
               <th>{T.translate("sales.show.user")}</th>
-              <th>{T.translate("sales.index.deadline")}</th>
-              <th>{T.translate("sales.index.customer")}</th>
-              <th>{T.translate("sales.index.invoiced")}</th>
+              <th>{T.translate("sales.page.deadline")}</th>
+              <th>{T.translate("sales.page.customer")}</th>
+              <th>{T.translate("sales.page.invoiced")}</th>
             </tr>
           </thead>
           <tbody>

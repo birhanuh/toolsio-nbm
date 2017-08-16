@@ -26,10 +26,10 @@ export default function Card({project}) {
           <thead>
             <tr>
               <th>{T.translate("projects.show.user")}</th>
-              <th>{T.translate("projects.index.deadline")}</th>
-              <th>{T.translate("projects.index.customer")}</th>
-              <th>{T.translate("projects.index.progress")}</th>
-              <th>{T.translate("projects.index.invoiced")}</th>
+              <th>{T.translate("projects.page.deadline")}</th>
+              <th>{T.translate("projects.page.customer")}</th>
+              <th>{T.translate("projects.page.progress")}</th>
+              <th>{T.translate("projects.page.invoiced")}</th>
             </tr>
           </thead>
           <tbody>

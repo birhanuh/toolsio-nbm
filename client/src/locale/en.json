@@ -195,10 +195,10 @@
     "first_customer": "Add your fisrt customer"
   },
   "projects": {
-    "index": {
+    "page": {
       "header": "Projects",
       "empty_projects_header": "There are no projects",
-      "empty_projects_message": "Click Projects links on the left sidebar menu to go to Projects page and create your first Project.",
+      "empty_projects_message": "Click Create new Project button above to create your first Project.",
       "create_new_project": "Create new project",
       "status": "Status",
       "user": "User",
@@ -208,9 +208,9 @@
       "invoiced": "Invoiced",
       "description": "All created Projects are shown here."
     },
-    "new": {
-      "header": "New Project",
-      "notice_create": "Project created!",
+    "form": {
+      "new_project": "New Project",
+      "edit_project": "Edit Project",
       "name": "Name",
       "deadline": "Deadline",
       "status": "Status",
@@ -223,7 +223,11 @@
       "select_or_add_new_customer": "Select Customer if exists or add new",
       "name_required": "Name is required",
       "deadline_required": "Deadline is required",
-      "customer_required": "Customer is required"
+      "customer_required": "Customer is required",
+      "flash": {
+        "success_create": "Project {name} is created!",
+        "success_update": "Project {name} is updated!"
+      }
     },
     "show": {
       "header": "Project",
@@ -233,25 +237,16 @@
       "status": "Status",
       "archived": "Archived",
       "description": "Description",
-      "no_items": "The Project in this invoice has no tasks"
-    },
-    "edit": {
-      "new": null,
-      "header": "Edit Project"
-    },
-    "update": {
-      "header": "Update Project",
-      "success_update": "Project updated!"
-    },
-    "destroy": {
+      "no_items": "The Project in this invoice has no tasks",
       "confirmation_msg": "Are you sure to delete this project?",
-      "success_delete": "Project (%{project_name}) is deleted!",
-      "error_delete": "Project couldn't be deleted, try again after refreshing the page"
+      "flash": {
+        "success_delete": "Project {name} is deleted",
+        "error_delete": "Project {name} couldn't be deleted, try again after refreshing the page"
+      }
     },
     "tasks": {
       "header": "Tasks",
-      "new": {
-        "add_task": "Add Task",
+      "form": {
         "header": "Task",
         "name": "Name",
         "hours": "Hours",
@@ -265,29 +260,24 @@
         "payment_type_required": "Payment type is required",
         "hours_required": "Hours is required",
         "price_required": "Price is required",
-        "vat_required": "Vat is required"
-      },
-      "edit": {
-        "edit_task": "Edit Task"
-      },
-      "create": {
-        "notice_create": "Task created!"
-      },
-      "update": {
-        "success_update": "Task updated!",
-        "update_task": "Update task"
-      },
-      "destroy": {
-        "success_delete": "%{name} is deleted",
-        "error_delete": "Task couldn't be deleted, try again after refreshing the page"
+        "vat_required": "Vat is required",
+        "edit_task": "Edit Task",
+        "update_task": "Update task",
+        "add_task": "Add Task",
+        "flash": {
+          "success_create": "Task {name} is created!",
+          "success_update": "Task {name} is updated!",
+          "success_delete": "Task {name} is deleted!",
+          "error_delete": "Task {name} couldn't be deleted, try again after refreshing the page"
+        }
       }
     }
   },
   "sales": {
-    "index": {
+    "page": {
       "header": "Sales",
       "empty_sales_header": "There are no sales",
-      "empty_sales_message": "Click Projects links on the left sidebar menu to go to Sales page and create your first Sale.",
+      "empty_sales_message": "Click Create new Sale button above to create your first Sale.",
       "create_new_sale": "Create new sale",
       "status": "Status",
       "user": "User",
@@ -296,8 +286,9 @@
       "invoiced": "Invoiced",
       "description": "All created Sales are shown here."
     },
-    "new": {
-      "header": "New Sale",
+    "form": {
+      "new_sale": "New Sale",
+      "edit_sale": "Edit Sale",
       "notice_create": "Sale created!",
       "name": "Name",
       "deadline": "Deadline",
@@ -309,11 +300,13 @@
       "select_customer": "-Select Customer-",
       "name_required": "Name is required",
       "deadline_required": "Deadline is required",
-      "customer_required": "Customer is required"
+      "customer_required": "Customer is required",
+      "flash": {
+        "success_create": "Sale {name} is created!",
+        "success_update": "Sale {name} is updated!"
+      }
     },
-    "create": {
-      "notice_create": "Sale created!"
-    },
+    
     "show": {
       "header": "Sale",
       "id": "Id",
@@ -322,24 +315,16 @@
       "user": "User",
       "status": "Status",
       "description": "Description",
-      "no_items": "The Sale in this invoice has no items"
-    },
-    "edit": {
-      "header": "Edit Sale"
-    },
-    "update": {
-      "header": "Update Sale",
-      "success_update": "Sale updated!"
-    },
-    "destroy": {
+      "no_items": "The Sale in this invoice has no items",
       "confirmation_msg": "Are you sure to delete this sale?",
-      "success_delete": "Sale (%{sale_date}) is deleted!",
-      "error_delete": "Invoice couldn't be deleted, try again after refreshing the page"
+      "flash": {
+        "success_delete": "Sale {name} is deleted!",
+        "error_delete": "Sale {name} couldn't be deleted, try again after refreshing the page"
+      }
     },
     "items": {
       "header": "Items",
-      "new": {
-        "add_item": "Add Item",        
+      "form": {        
         "name": "Name",
         "quantity": "Quantity",
         "unit": "Unit",
@@ -352,41 +337,37 @@
         "unit_required": "Unit is required",
         "quantity_required": "Quantity is required",
         "price_required": "Price is required",
-        "vat_required": "Vat is required"
-      },
-      "edit": {
-        "header": "Edit Item"
-      },
-      "create": {
-        "notice_create": "Item created!"
-      },
-      "update": {
-        "update_item": "Update item",
-        "success_update": "Item updated!"
-      },
-      "destroy": {
-        "success_delete": "%{name} is deleted",
-        "error_delete": "Item couldn't be deleted, try again after refreshing the page",
+        "vat_required": "Vat is required",
+        "add_item": "Add Item",
+        "edit_item": "Edit Item", 
+        "update_item": "Update Item",       
         "confirmation_msg": "Are you sure to delete this item?",
-        "warning_msg": "If you click delete, the item will be deleted."
+        "flash": {
+          "notice_create": "Item is created!",
+          "success_update": "Item is updated!",
+          "success_delete": "Item {name} is deleted!",
+          "error_delete": "Item {name} couldn't be deleted, try again after refreshing the page"
+        }
       }
     }
   },
   "customers": {
-    "index": {
+    "page": {
       "header": "Customers",
       "add_new_customer": "Add new customer",
       "empty_customers": "There are no customers yet",
       "description": "All added Customers are shown here."
     },
-    "new": {
-      "header": "New customer",
+    "form": {
+      "new_customer": "New Customer",
+      "edit_customer": "Edit Customer",
       "notice_add": "Customer added",
       "select_country": "-Select Country-",
-      "select_region": "-Select Region-"
-    },
-    "edit": {
-      "header": "Edit customer"
+      "select_region": "-Select Region-",      
+      "flash": {
+        "success_create": "Customer {name} is created!",
+        "success_update": "Customer {name} is updated!"
+      }
     },
     "show": {
       "header": "Customer",
@@ -407,27 +388,23 @@
       },
       "active_projects_sales": "Active Projects/Sales"
     },
-    "update": {
-      "success_update": "Customer updated"
-    },
-    "destroy": {
-      "success_delete": "Customer %{name} is deleted",
-      "confirmation_msg": "Are you sure to delete this customer?"
-    },
-    "create": {
-      "notice_create": "Customer created"
+    "confirmation_msg": "Are you sure to delete this customer?",
+    "flash": {
+      "success_delete": "Customer {name} is deleted!",
+      "error_delete": "Customer {name} couldn't be deleted, try again after refreshing the page"
     }
   },
   "invoices": {
-    "index": {
+    "page": {
       "header": "Invoices",
       "are_you_sure": "Are you sure?",
       "empty_invoices": "There are no invoices yet",
       "create_invoice": "Create new Invoice",
       "description": "All created Invoices are shown here."
     },
-    "new": {
-      "header": "New Invoice",
+    "form": {
+      "new_invoice": "New Invoice",
+      "edit_invoice": "Edit Invoice",
       "create_invoice": "Create Invoice",
       "user": "User",
       "confirmation": "Confirmation",
@@ -442,10 +419,11 @@
       "sale": "Sale",
       "project": "Project",
       "sale_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
-      "project_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project."
-    },
-    "edit": {
-      "header": "Edit Invoice"
+      "project_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
+      "flash": {
+        "success_create": "Invoice {name} created!",
+        "success_update": "Invoice {name} is updated!"
+      }
     },
     "show": {
       "header": "Invoice",
@@ -466,31 +444,21 @@
       "interest_in_arrears": "Interest in arrears",
       "reference_number": "Reference number",
       "edit_project": "Edit Project",
-      "edit_sale": "Edit Sale"
-    },
-    "create": {
-      "notice_create": "Invoice created!"
-    },
-    "update": {
-      "success_update": "Invoice updated!"
-    },
-    "destroy": {
-      "success_delete": "Invoice deleted",
-      "error_delete": "Invoice couldn't be deleted, try again after refreshing the page",
-      "confirmation_msg": "Are you sure to delete this invoice?",
-      "warning_msg": "If you click delete, the invoice will be deleted."
-    },
-    "import": {
-      "notice_import": "Invoices imported"
+      "edit_sale": "Edit Sale",
+      "confirmation_msg": "Are you sure to delete this invoice?",      
+      "flash": {
+        "success_delete": "Invoice {name} is deleted!",
+        "error_delete": "Invoice {name} couldn't be deleted, try again after refreshing the page"
+      }
     }
   },
   "invoice_imports": {
-    "index": {
+    "page": {
       "header": "Invoice import"
     },
-    "create": {
+    "flash": {
       "no_file_selected": "No file selected",
-      "success_import": "Invoice imported"
+      "success_import": "Invoice is imported!"
     }
   },
   "messages": {
@@ -502,7 +470,7 @@
     }
   },
   "conversations": {
-    "index": {
+    "page": {
       "header": "Conversations",
       "new_message": "New message",
       "empty_inbox": "Inbox is empty",

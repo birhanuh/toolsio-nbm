@@ -2,12 +2,19 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { addFlashMessage } from '../../actions/flashMessages'
 import { fetchProject, deleteProject } from '../../actions/projectActions'
 
 import TaskForm from './Tasks/Form'
 
 // Localization 
 import T from 'i18n-react'
+
+import $ from 'jquery'
+
+// Modal
+$.fn.modal = require('semantic-ui-modal')
+$.fn.dimmer = require('semantic-ui-dimmer')
 
 class Show extends Component {
   
@@ -20,7 +27,7 @@ class Show extends Component {
       customer: this.props.project ? this.props.project.customer : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
-      tasks: this.props.project ? this.props.project.tasks : null
+      tasks: this.props.project ? this.props.project.tasks : []
     }
   }
 
@@ -34,20 +41,49 @@ class Show extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({
-      _id: nextProps.project._id,
-      name: nextProps.project.name,
-      deadline: nextProps.project.deadline,
-      customer: nextProps.project.customer,
-      status: nextProps.project.status,
-      description: nextProps.project.description,
-      tasks: nextProps.project.tasks
+      _id: nextProps.project ? nextProps.project._id : null,
+      name: nextProps.project ? nextProps.project.name : '',
+      deadline: nextProps.project ? nextProps.project.deadline : '',
+      customer: nextProps.project ? nextProps.project.customer : '',
+      status: nextProps.project ? nextProps.project.status : '',
+      description: nextProps.project ? nextProps.project.description : '',
+      tasks: nextProps.project ? nextProps.project.tasks : []
     })
+  }
+
+  showConfirmationModal(event) {
+    event.preventDefault()
+
+    // Show modal
+    $('.small.modal').modal('show')
+
   }
 
   handleDelete(id, event) {
     event.preventDefault()
-
     
+    let projectName = this.props.project.name
+
+    this.props.deleteProject(id).then(
+      () => {
+        this.props.addFlashMessage({
+          type: 'success',
+          text: T.translate("projects.show.success_delete", { project_name: projectName})
+        })  
+        this.context.router.history.push('/projects')
+      },
+      ({ response }) => {
+      }
+    ) 
+    
+  }
+
+  hideConfirmationModal(event) {
+    event.preventDefault()
+
+    // Show modal
+    $('.small.modal').modal('hide')
+
   }
 
   render() {
@@ -80,13 +116,24 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
 
-            { this.state.tasks && <TaskForm creator={this.state._id} tasks={this.state.tasks} /> }
+            { this.state.tasks && this.state._id && <TaskForm creator={this.state._id} tasks={this.state.tasks} /> }
             
             <div className="ui divider"></div>
 
-            <button className="ui negative button" onClick={() => this.props.deleteProject(_id)}><i className="delete icon"></i>{T.translate("button.delete")}</button>
+            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("button.delete")}</button>
             <Link to={`/projects/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("button.edit")}</Link>
           </div>    
+        </div>
+
+        <div className="ui small modal">
+          <div className="header">Confirmation</div>
+          <div className="content">
+            <p>{T.translate("projects.show.confirmation_msg")}</p>
+          </div>
+          <div className="actions">
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>Cancel</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>Approve</button>
+          </div>
         </div>
       </div>
     )
@@ -95,7 +142,12 @@ class Show extends Component {
 
 Show.propTypes = {
   fetchProject: React.PropTypes.func.isRequired,
-  deleteProject: React.PropTypes.func.isRequired
+  deleteProject: React.PropTypes.func.isRequired,
+  addFlashMessage: React.PropTypes.func.isRequired
+}
+
+Show.contextTypes = {
+  router: React.PropTypes.object.isRequired
 }
 
 function mapStateToProps(state, props) {
@@ -107,4 +159,4 @@ function mapStateToProps(state, props) {
   } 
 }
 
-export default connect(mapStateToProps, { fetchProject, deleteProject } )(Show)
+export default connect(mapStateToProps, { fetchProject, deleteProject, addFlashMessage } )(Show)

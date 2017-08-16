@@ -24,7 +24,7 @@ class Page extends Component {
 
           <Link className="ui left floated primary button" to="/projects/new">
             <i className="add circle icon"></i>
-            {T.translate("projects.index.create_new_project")}
+            {T.translate("projects.page.create_new_project")}
           </Link>   
         </div> 
         

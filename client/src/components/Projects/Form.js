@@ -107,13 +107,13 @@ class Form extends Component {
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
             <div className="inline field"> 
-              <h1 className="ui header">{T.translate("projects.new.header")}</h1>
+              {_id ? <h1 className="ui header">{T.translate("projects.form.edit_project")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}
             </div>
             
             { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             <InputField
-              label={T.translate("projects.new.name")}
+              label={T.translate("projects.form.name")}
               name="name" 
               value={name} 
               onChange={this.handleChange.bind(this)} 
@@ -123,7 +123,7 @@ class Form extends Component {
             />
                           
             <div  className={classnames("inline field", { error: !!errors['deadline'] })}>
-              <label className="" htmlFor="date">{T.translate("projects.new.deadline")}</label>
+              <label className="" htmlFor="date">{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
@@ -133,20 +133,20 @@ class Form extends Component {
             </div>
             
             <SelectField
-              label={T.translate("projects.new.customer")}
+              label={T.translate("projects.form.customer")}
               name="customer"
               value={typeof customer === 'object' ? customer._id : customer} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"
 
-              options={[<option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
+              options={[<option key="default" value="" disabled>{T.translate("projects.form.select_customer")}</option>,
                 customersOptions]}
             />
             
             { _id &&
               <SelectField
-                label={T.translate("projects.new.status")}
+                label={T.translate("projects.form.status")}
                 name="status"
                 type="select"
                 value={status} 
@@ -178,11 +178,11 @@ class Form extends Component {
             */}
 
             <TextAreaField
-              label={T.translate("projects.new.description")}
+              label={T.translate("projects.form.description")}
               name="description" 
               value={description} 
               onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("projects.new.description")}
+              placeholder={T.translate("projects.form.description")}
               formClass="inline field"
             /> 
 

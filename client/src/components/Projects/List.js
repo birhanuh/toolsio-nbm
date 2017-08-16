@@ -8,9 +8,9 @@ export default function List({ projects }) {
   const emptyMessage = (
     <div className="ui info message">
       <div className="header">
-        {T.translate("projects.index.empty_projects_header")}
+        {T.translate("projects.page.empty_projects_header")}
       </div>
-      <p>{T.translate("projects.index.empty_projects_message")}</p>
+      <p>{T.translate("projects.page.empty_projects_message")}</p>
     </div>
   )
 

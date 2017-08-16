@@ -5,6 +5,9 @@ import { createProject, fetchProject, updateProject } from '../../actions/projec
 import { fetchCustomers } from '../../actions/customerActions'
 import Form from './Form'
 
+// Localization 
+import T from 'i18n-react'
+
 class FormPage  extends Component {
   
   state = {
@@ -24,11 +27,29 @@ class FormPage  extends Component {
 
   saveProject = ({ _id, name, customer, deadline, status, description }) => {
     if (_id) {
-      return this.props.updateProject({ _id, name, customer, deadline, status, description }).then(
-        () => { this.setState({ redirect: true }) } )   
+      return this.props.updateProject({ _id, name, customer, deadline, status, description })
+        .then(() => 
+          { 
+            this.setState({ redirect: true }) 
+
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.form.flash.success_update", { name: name})
+            })  
+            this.context.router.history.push('/projects')
+        })   
     } else {        
-      return this.props.createProject({ _id, name, customer, deadline, status, description }).then(
-        () => { this.setState({ redirect: true }) } )   
+      return this.props.createProject({ _id, name, customer, deadline, status, description })
+        .then(() => 
+          { 
+            this.setState({ redirect: true }) 
+
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.form.flash.success_create", { name: name})
+            })  
+            this.context.router.history.push('/projects')
+          })   
     }
   }
 
@@ -65,6 +86,10 @@ function mapStateToProps(state, props) {
     project: null,
     customers: state.customers
   }
+}
+
+FormPage.contextTypes = {
+  router: React.PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps, { createProject, fetchProject, updateProject, fetchCustomers })(FormPage)

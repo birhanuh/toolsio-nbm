@@ -525,15 +525,6 @@ dl.dl-horizontal {
   }
 } 
 
-//Image
-.img-circle {
-  border-radius: 50% !important;
-}
-
-.img-rounded {
-  border-radius: 3px;
-}
-
 // Custome note box
 .bs-callout {
   padding: 20px;
@@ -595,30 +586,14 @@ dl.dl-horizontal {
   }
 }
 
-.well-left-text {
-  .pull-left h3, h4, h5 {
-    margin-left: 25px;
+// Modal
+.ui.modal {
+  >.header {
+    padding: .8rem 1.5rem; 
   }
-  .row {
-    margin-left: 10px;
-  }
-}
-
-.well-text-container {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 100%;
-  width: 20px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  span {
-    color: $white;
-    transform: rotate(-90deg);
-    position: absolute;
-    bottom: 7px;
-    width: 100%;
-  }
+  >.actions {
+    padding: 0.7rem 1rem;
+  }  
 }
 
 // Custome fieldset and legend
@@ -634,12 +609,6 @@ dl.dl-horizontal {
   }
 }
 
-// Padding
-.no-gutter > [class*='col-'] {
-  padding-right:0;
-  padding-left:0;
-}
-
 // Pagination
 .pagination > li > a, .pagination > li > span {
   color: $turquoise;
@@ -650,7 +619,6 @@ dl.dl-horizontal {
   border-color: $dark-turquoise;
 }
 
-// Pagination
 .pagination {
   margin: 20px 15px;
 }
