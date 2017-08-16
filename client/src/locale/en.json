@@ -225,8 +225,8 @@
       "deadline_required": "Deadline is required",
       "customer_required": "Customer is required",
       "flash": {
-        "success_create": "Project {name} is created!",
-        "success_update": "Project {name} is updated!"
+        "success_create": "Project *{name}* is created!",
+        "success_update": "Project *{name}* is updated!"
       }
     },
     "show": {
@@ -237,11 +237,10 @@
       "status": "Status",
       "archived": "Archived",
       "description": "Description",
-      "no_items": "The Project in this invoice has no tasks",
-      "confirmation_msg": "Are you sure to delete this project?",
+      "confirmation_msg": "Are you sure to delete this Project?",
       "flash": {
-        "success_delete": "Project {name} is deleted",
-        "error_delete": "Project {name} couldn't be deleted, try again after refreshing the page"
+        "success_delete": "Project *{name}* is deleted",
+        "error_delete": "Project *{name}* couldn't be deleted, try again after refreshing the page"
       }
     },
     "tasks": {
@@ -264,11 +263,12 @@
         "edit_task": "Edit Task",
         "update_task": "Update task",
         "add_task": "Add Task",
+        "confirmation_msg": "Are you sure to delete this Task?",
         "flash": {
-          "success_create": "Task {name} is created!",
-          "success_update": "Task {name} is updated!",
-          "success_delete": "Task {name} is deleted!",
-          "error_delete": "Task {name} couldn't be deleted, try again after refreshing the page"
+          "success_add": "Task *{name}* is added!",
+          "success_update": "Task *{name}* is updated!",
+          "success_delete": "Task *{name}* is deleted!",
+          "error_delete": "Task *{name}* couldn't be deleted, try again after refreshing the page"
         }
       }
     }
@@ -302,8 +302,8 @@
       "deadline_required": "Deadline is required",
       "customer_required": "Customer is required",
       "flash": {
-        "success_create": "Sale {name} is created!",
-        "success_update": "Sale {name} is updated!"
+        "success_create": "Sale *{name}* is created!",
+        "success_update": "Sale *{name}* is updated!"
       }
     },
     
@@ -315,11 +315,10 @@
       "user": "User",
       "status": "Status",
       "description": "Description",
-      "no_items": "The Sale in this invoice has no items",
       "confirmation_msg": "Are you sure to delete this sale?",
       "flash": {
-        "success_delete": "Sale {name} is deleted!",
-        "error_delete": "Sale {name} couldn't be deleted, try again after refreshing the page"
+        "success_delete": "Sale *{name}* is deleted!",
+        "error_delete": "Sale *{name}* couldn't be deleted, try again after refreshing the page"
       }
     },
     "items": {
@@ -341,12 +340,12 @@
         "add_item": "Add Item",
         "edit_item": "Edit Item", 
         "update_item": "Update Item",       
-        "confirmation_msg": "Are you sure to delete this item?",
+        "confirmation_msg": "Are you sure to delete this Item?",
         "flash": {
-          "notice_create": "Item is created!",
+          "notice_add": "Item is added!",
           "success_update": "Item is updated!",
-          "success_delete": "Item {name} is deleted!",
-          "error_delete": "Item {name} couldn't be deleted, try again after refreshing the page"
+          "success_delete": "Item *{name}* is deleted!",
+          "error_delete": "Item *{name}* couldn't be deleted, try again after refreshing the page"
         }
       }
     }
@@ -365,8 +364,8 @@
       "select_country": "-Select Country-",
       "select_region": "-Select Region-",      
       "flash": {
-        "success_create": "Customer {name} is created!",
-        "success_update": "Customer {name} is updated!"
+        "success_create": "Customer *{name}* is created!",
+        "success_update": "Customer *{name}* is updated!"
       }
     },
     "show": {
@@ -390,8 +389,8 @@
     },
     "confirmation_msg": "Are you sure to delete this customer?",
     "flash": {
-      "success_delete": "Customer {name} is deleted!",
-      "error_delete": "Customer {name} couldn't be deleted, try again after refreshing the page"
+      "success_delete": "Customer *{name}* is deleted!",
+      "error_delete": "Customer *{name}* couldn't be deleted, try again after refreshing the page"
     }
   },
   "invoices": {
@@ -421,8 +420,8 @@
       "sale_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
       "project_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
       "flash": {
-        "success_create": "Invoice {name} created!",
-        "success_update": "Invoice {name} is updated!"
+        "success_create": "Invoice *{name}* created!",
+        "success_update": "Invoice *{name}* is updated!"
       }
     },
     "show": {
@@ -447,8 +446,8 @@
       "edit_sale": "Edit Sale",
       "confirmation_msg": "Are you sure to delete this invoice?",      
       "flash": {
-        "success_delete": "Invoice {name} is deleted!",
-        "error_delete": "Invoice {name} couldn't be deleted, try again after refreshing the page"
+        "success_delete": "Invoice *{name}* is deleted!",
+        "error_delete": "Invoice *{name}* couldn't be deleted, try again after refreshing the page"
       }
     }
   },

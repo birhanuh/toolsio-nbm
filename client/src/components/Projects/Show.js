@@ -55,8 +55,14 @@ class Show extends Component {
     event.preventDefault()
 
     // Show modal
-    $('.small.modal').modal('show')
+    $('.small.modal.project').modal('show')
+  }
 
+  hideConfirmationModal(event) {
+    event.preventDefault()
+
+    // Show modal
+    $('.small.modal.project').modal('hide')
   }
 
   handleDelete(id, event) {
@@ -68,7 +74,7 @@ class Show extends Component {
       () => {
         this.props.addFlashMessage({
           type: 'success',
-          text: T.translate("projects.show.success_delete", { project_name: projectName})
+          text: T.translate("projects.show.flash.success_delete", { name: name})
         })  
         this.context.router.history.push('/projects')
       },
@@ -78,17 +84,9 @@ class Show extends Component {
     
   }
 
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal').modal('hide')
-
-  }
-
   render() {
     const { _id, name, deadline, customer, status, description, tasks } = this.state
-    console.log('tasks: ', tasks)
+    
     return (
       <div className="ui stackable grid">
         <div className="twelve wide column">
@@ -125,14 +123,14 @@ class Show extends Component {
           </div>    
         </div>
 
-        <div className="ui small modal">
+        <div className="ui small modal project">
           <div className="header">Confirmation</div>
           <div className="content">
             <p>{T.translate("projects.show.confirmation_msg")}</p>
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>Cancel</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>Approve</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("button.cancel")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("button.delete")}</button>
           </div>
         </div>
       </div>

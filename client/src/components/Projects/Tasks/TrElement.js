@@ -27,7 +27,7 @@ export const AddElement = ({task, handleNewTaskChange, handleCreate}) => {
           error={task.errors.message && task.errors.message.errors && task.errors.message.errors.paymentType && task.errors.message.errors.paymentType.message}
           formClass="ui small input"
           options={[
-            <option key="default" value="" disabled>{T.translate("projects.tasks.new.select_payment_type")}</option>,
+            <option key="default" value="" disabled>{T.translate("projects.tasks.form.select_payment_type")}</option>,
             <option key="per hour" value="per hour">Per task</option>,
             <option key="per task" value="per task">Per hour</option>
             ]
@@ -65,14 +65,14 @@ export const AddElement = ({task, handleNewTaskChange, handleCreate}) => {
         />
       </td>
       <td className="add-task" width="120px">     
-        <button disabled={task.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.new.add_task")}</button> 
+        <button disabled={task.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.form.add_task")}</button> 
       </td>
     </tr>
   )  
 }
 
 
-export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCreate, handleEdit, handleCancelEdit, handleDelete, handleUpdate, handleEditTaskChange}) => {
+export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditTaskChange, showConfirmationModal}) => {
   return (
     <tr key={task._id} id={task._id}>      
       <td className="show-task">{task.name}</td>
@@ -82,7 +82,7 @@ export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCrea
       <td className="show-task">{task.vat}</td>
       <td className="show-task" width="120px">
         <div className="show-task ui fluid small buttons">
-          <button className="ui negative icon basic button" onClick={handleDelete}><i className="delete icon"></i></button>
+          <button className="ui negative icon basic button" onClick={showConfirmationModal}><i className="delete icon"></i></button>
           <button className="ui positive icon basic button" onClick={handleEdit}><i className="edit icon"></i></button>
         </div>
       </td>
@@ -105,7 +105,7 @@ export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCrea
           error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.paymentType && editTask.errors.message.errors.paymentType.message}
           formClass="ui small input"
           options={[
-            <option key="default" value="" disabled>{T.translate("projects.tasks.new.select_payment_type")}</option>,
+            <option key="default" value="" disabled>{T.translate("projects.tasks.form.select_payment_type")}</option>,
             <option key="per hour" value="per hour">Per task</option>,
             <option key="per task" value="per task">Per hour</option>
             ]

@@ -11,10 +11,15 @@ import T from 'i18n-react'
 
 import $ from 'jquery'
 
+// Modal
+$.fn.modal = require('semantic-ui-modal')
+$.fn.dimmer = require('semantic-ui-dimmer')
+
 class Task extends Component {
    constructor(props) {
     super(props)
     this.state = {
+      taskToBeDeleated: {},
       newTask: {
         _creator: this.props.creator,
         name: "",
@@ -113,7 +118,7 @@ class Task extends Component {
 
           this.props.addFlashMessage({
             type: 'success',
-            text: 'Task added'
+            text: T.translate("projects.tasks.form.flash.success_add", { name: name})
           })
         },
         ({ response }) => {
@@ -180,12 +185,6 @@ class Task extends Component {
     $('#'+task._id+' td.show-task').show()    
   }
 
-  handleDelete(task, event) {
-    event.preventDefault()
-
-    
-  }
-
   isValidEditTask() {
     const { errors, isValid } = Validation.validateTaskInput(this.state.editTask)
     
@@ -222,7 +221,7 @@ class Task extends Component {
 
           this.props.addFlashMessage({
             type: 'success',
-            text: 'Task updated'
+            text: T.translate("projects.tasks.form.flash.success_update", { name: name})
           })
 
           // Hide edit tr and show show tr
@@ -237,6 +236,45 @@ class Task extends Component {
         }
       )  
     }
+  }
+
+  showConfirmationModal(task, event) {
+    event.preventDefault()
+    
+    this.setState({
+      taskToBeDeleated: task
+    })
+
+    // Show modal
+    $('.small.modal.task').modal('show')
+  }
+    
+  hideConfirmationModal(event) {
+    event.preventDefault()
+
+    // Show modal
+    $('.small.modal.task').modal('hide')
+  }
+
+  handleDelete(task, event) {
+    event.preventDefault()
+    
+    let name = task.name
+
+    this.props.deleteTask(task).then(
+      () => {
+        this.setState({
+          taskToBeDeleated: {}
+        })
+
+        this.props.addFlashMessage({
+          type: 'success',
+          text: T.translate("projects.tasks.form.flash.success_delete", { name: name})
+        })  
+      },
+      ({ response }) => {
+      }
+    ) 
   }
 
   render() {
@@ -254,7 +292,7 @@ class Task extends Component {
           handleNewTaskChange={this.handleNewTaskChange.bind(this)} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, task)}
-          handleDelete={this.handleDelete.bind(this, task)}/> 
+          showConfirmationModal={this.showConfirmationModal.bind(this, task)}/> 
         )
     )
 
@@ -263,12 +301,12 @@ class Task extends Component {
         <table className="ui very basic table tasks">
           <thead>
             <tr>
-              <th>{T.translate("projects.tasks.new.name")}</th>
-              <th>{T.translate("projects.tasks.new.payment_type")}</th>
-              <th>{T.translate("projects.tasks.new.hours")}</th>
-              <th>{T.translate("projects.tasks.new.price")}</th>
-              <th>{T.translate("projects.tasks.new.vat")}</th>
-              <th width="110px">{T.translate("projects.tasks.new.actions")}</th>
+              <th>{T.translate("projects.tasks.form.name")}</th>
+              <th>{T.translate("projects.tasks.form.payment_type")}</th>
+              <th>{T.translate("projects.tasks.form.hours")}</th>
+              <th>{T.translate("projects.tasks.form.price")}</th>
+              <th>{T.translate("projects.tasks.form.vat")}</th>
+              <th width="110px">{T.translate("projects.tasks.form.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -282,6 +320,16 @@ class Task extends Component {
             
           </tbody>
         </table>
+        <div className="ui small modal task">
+          <div className="header">Confirmation</div>
+          <div className="content">
+            <p>{T.translate("projects.tasks.form.confirmation_msg")}</p>
+          </div>
+          <div className="actions">
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("button.cancel")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.taskToBeDeleated)}>{T.translate("button.delete")}</button>
+          </div>
+        </div>
       </form>
     )
   }

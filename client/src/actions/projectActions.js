@@ -50,6 +50,13 @@ export function taskUpdated(task) {
   }
 }
 
+export function taskDeleted(task) {
+  return {
+    type: TASK_DELETED,
+    task
+  }
+}
+
 export function createProject(project) {
   return dispatch => {
     return axios.post('/api/projects', project).then(res => { 
@@ -85,7 +92,7 @@ export function updateProject(project) {
 export function deleteProject(id) {
   return dispatch => {
     return axios.delete(`/api/projects/${id}`).then(res => { 
-      dispatch(projectDeleted(res.data.result)) 
+      dispatch(projectDeleted(id)) 
     })
   }
 }
@@ -107,7 +114,11 @@ export function updateTask(task) {
   
 }
 
-export function deleteTask(id) {
-  
+export function deleteTask(task) {
+  return dispatch => {
+    return axios.delete(`/api/tasks/${task._id}`).then(res => {
+      dispatch(taskDeleted(task))
+    })
+  }
 }
 

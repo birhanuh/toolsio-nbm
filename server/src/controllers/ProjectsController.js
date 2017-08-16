@@ -52,7 +52,7 @@ export default {
         return
       }
 
-      callback(null, id)
+      callback(null, null)
     })
   }
 }
