@@ -55,7 +55,14 @@ export default {
         return
       }
 
-      callback(null, null)
+      // Remove item from Sale
+      Sale.findByIdAndUpdate(item._creator, { $pull: { items: id} }, function(err, project) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, null)
+      })
     })
   }
 }

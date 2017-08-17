@@ -68,7 +68,7 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
-    let projectName = this.props.project.name
+    let name = this.props.project.name
 
     this.props.deleteProject(id).then(
       () => {

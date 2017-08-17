@@ -54,7 +54,14 @@ export default {
         return
       }
 
-      callback(null, null)
+      // Remove task from Project
+      Project.findByIdAndUpdate(task._creator, { $pull: { tasks: id} }, function(err, project) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, null)
+      })
     })
   }
 }

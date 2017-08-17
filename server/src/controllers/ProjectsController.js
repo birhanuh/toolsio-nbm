@@ -1,4 +1,5 @@
 import Project from '../models/Project'
+import Task from '../models/Task'
 
 export default {
   
@@ -52,7 +53,14 @@ export default {
         return
       }
 
-      callback(null, null)
+      // Remove related tasks
+      Task.remove({ _creator: id }, function(err, task) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, null)
+      })
     })
   }
 }

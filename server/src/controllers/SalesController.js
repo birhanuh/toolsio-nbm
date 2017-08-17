@@ -1,4 +1,5 @@
 import Sale from '../models/Sale'
+import Item from '../models/Item'
 
 export default {
   
@@ -54,7 +55,14 @@ export default {
         return
       }
 
-      callback(null, {})
+      // Remove related items
+      Item.remove({ _creator: id }, function(err, item) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, null)
+      })
     })
   }
 }
