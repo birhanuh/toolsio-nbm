@@ -11,7 +11,7 @@ class FlashMessagesList extends Component {
     )
 
     return (
-      <div className={classnames({'sixteen wide column': messages.length !== 0})}>{messages}</div>
+      <div className={classnames({'sixteen wide column flash-message': messages.length !== 0})}>{messages}</div>
     )
   }
 }

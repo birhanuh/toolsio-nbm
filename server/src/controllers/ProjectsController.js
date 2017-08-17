@@ -1,9 +1,10 @@
 import Project from '../models/Project'
+import Task from '../models/Task'
 
 export default {
   
-  find: (params, callback) => {
-    Project.find(params).populate('customer').exec(function(err, projects) {
+  find: (callback) => {
+    Project.find({}).select('-tasks').populate({ path: 'customer', select: 'name' }).exec(function(err, projects) {
       if (err) {
         callback(err, null)
         return
@@ -14,7 +15,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Project.findById(id).populate('customer').exec(function(err, project) {
+    Project.findById(id).populate([{ path: 'customer', select: 'name'}, { path: 'tasks' }]).exec(function(err, project) {
       if (err) {
         callback(err, null)
         return
@@ -52,7 +53,14 @@ export default {
         return
       }
 
-      callback(null, null)
+      // Remove related tasks
+      Task.remove({ _creator: id }, function(err, task) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, null)
+      })
     })
   }
 }

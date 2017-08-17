@@ -5,6 +5,9 @@ import { createSale, fetchSale, updateSale } from '../../actions/saleActions'
 import { fetchCustomers } from '../../actions/customerActions'
 import Form from './Form'
 
+// Localization 
+import T from 'i18n-react'
+
 class FormPage  extends Component {
   
   state = {
@@ -24,11 +27,29 @@ class FormPage  extends Component {
 
   saveSale = ({ _id, name, customer, deadline, status, description }) => {
     if (_id) {
-      return this.props.updateSale({ _id, name, customer, deadline, status, description }).then(
-        () => { this.setState({ redirect: true }) } )   
+      return this.props.updateSale({ _id, name, customer, deadline, status, description })
+        .then(() => 
+          { 
+            this.setState({ redirect: true }) 
+
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sales.form.flash.success_update", { name: name})
+            })  
+            this.context.router.history.push('/sales')
+          })   
     } else {        
-      return this.props.createSale({ _id, name, customer, deadline, status, description }).then(
-        () => { this.setState({ redirect: true }) } )   
+      return this.props.createSale({ _id, name, customer, deadline, status, description })
+        .then(() => { 
+          this.setState({ redirect: true }) 
+
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sales.form.flash.success_create", { name: name})
+            })  
+            this.context.router.history.push('/sales')
+
+          })   
     }
   }
 
@@ -49,7 +70,8 @@ FormPage.propTypes = {
   createSale: React.PropTypes.func.isRequired,
   fetchSale: React.PropTypes.func.isRequired,
   updateSale: React.PropTypes.func.isRequired,
-  fetchCustomers: React.PropTypes.func.isRequired
+  fetchCustomers: React.PropTypes.func.isRequired,
+  customers: React.PropTypes.array.isRequired
 }
 
 function mapStateToProps(state, props) {
@@ -64,6 +86,10 @@ function mapStateToProps(state, props) {
     sale: null,
     customers: state.customers
   }
+}
+
+FormPage.contextTypes = {
+  router: React.PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps, { createSale, fetchSale, updateSale, fetchCustomers })(FormPage)

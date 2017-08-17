@@ -4,19 +4,19 @@ import Card from './Card'
 // Localization 
 import T from 'i18n-react'
 
-export default function List({ projects, deleteProject }) {
+export default function List({ projects }) {
   const emptyMessage = (
     <div className="ui info message">
       <div className="header">
-        {T.translate("sales.index.empty_projects_header")}
+        {T.translate("projects.page.empty_projects_header")}
       </div>
-      <p>{T.translate("sales.index.empty_projects_message")}</p>
+      <p>{T.translate("projects.page.empty_projects_message")}</p>
     </div>
   )
 
   const projectsList = (
-    <div className="ui grid">
-      { projects.map(project => <Card project={project} key={project._id} deleteProject={deleteProject} />) }
+    <div className="ui two cards sales">
+      { projects.map(project => <Card project={project} key={project._id} />) }
     </div>
   )
 
@@ -28,6 +28,5 @@ export default function List({ projects, deleteProject }) {
 }
 
 List.propTypes = {
-  projects: React.PropTypes.array.isRequired,
-  deleteProject: React.PropTypes.func.isRequired
+  projects: React.PropTypes.array.isRequired
 }

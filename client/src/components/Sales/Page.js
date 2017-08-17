@@ -16,15 +16,15 @@ class Page extends Component {
   render() {
     return (
       <div className="row column">  
-        <div className="ui clearing segment transparent">
-          <div className="ui right floated action input">
+        <div className="ui clearing vertical segment border-bottom-none">
+          <div className="ui right floated icon input">
             <input type="text" placeholder="Search..." />
-            <button className="ui button">Search</button>
+            <i className="inverted circular search link icon"></i>
           </div>
 
           <Link className="ui left floated primary button" to="/sales/new">
             <i className="add circle icon"></i>
-            {T.translate("sales.index.create_new_sale")}
+            {T.translate("sales.page.create_new_sale")}
           </Link>   
         </div>   
 

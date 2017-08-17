@@ -4,6 +4,9 @@ import { Redirect } from 'react-router-dom'
 import { createCustomer, fetchCustomer, updateCustomer } from '../../actions/customerActions'
 import Form from './Form'
 
+// Localization 
+import T from 'i18n-react'
+
 class FormPage  extends Component {
   
   state = {
@@ -19,11 +22,29 @@ class FormPage  extends Component {
 
   saveCustomer = ({ _id, name, vatNumber, contact, includeContactOnInvoice, address }) => {
     if (_id) {
-      return this.props.updateCustomer({ _id, name, vatNumber, contact, includeContactOnInvoice, address }).then(
-        () => { this.setState({ redirect: true }) } )   
+      return this.props.updateCustomer({ _id, name, vatNumber, contact, includeContactOnInvoice, address })
+        .then(() => 
+          { 
+            this.setState({ redirect: true }) 
+
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("customers.form.flash.success_update", { name: name})
+            })  
+            this.context.router.history.push('/customers')
+          })   
     } else {        
-      return this.props.createCustomer({ _id, name, vatNumber, contact, includeContactOnInvoice, address }).then(
-        () => { this.setState({ redirect: true }) } )   
+      return this.props.createCustomer({ _id, name, vatNumber, contact, includeContactOnInvoice, address })
+        .then(() => 
+          { 
+            this.setState({ redirect: true }) 
+
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("customers.form.flash.success_update", { name: name})
+            })  
+            this.context.router.history.push('/customers')
+          })   
     }
   }
 
@@ -54,6 +75,10 @@ function mapStateToProps(state, props) {
     }
   } 
   return { customer: null }
+}
+
+FormPage.contextTypes = {
+  router: React.PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps, { createCustomer, fetchCustomer, updateCustomer })(FormPage)

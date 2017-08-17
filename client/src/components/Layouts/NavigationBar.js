@@ -36,63 +36,116 @@ class NavigationBar extends Component {
   render() {
     const { isAuthenticated } = this.props.auth
 
+    const currentPage = window.location.pathname
+    let currentPageTitle
+
+    switch(currentPage) {
+      case '/dashboard': 
+        currentPageTitle = "dashboard.index.header"
+        break
+      case '/settings': 
+        currentPageTitle = "settings.index.header"
+        break
+      case '/customers': 
+        currentPageTitle = "customers.index.header"
+        break
+      case '/projects': 
+        currentPageTitle = "projects.index.header"
+        break
+      case '/sales': 
+        currentPageTitle = "sales.index.header"
+        break  
+      case '/invoices': 
+        currentPageTitle = "invoices.index.header"
+        break
+      default:
+        currentPageTitle = "No page title"
+    }
+
     const userLinks = (
-      <nav className="ui fixed stackable menu">
-        <div className="left menu">
-          <div className="logo item">
-            <Link to="/dashboard">
-              <img src={logoInverted} alt="logo-inverted" />
-            </Link>
+      <div>
+        <nav className="ui fixed stackable menu">
+          <div className="left menu">
+            <div className="logo item">
+              <Link to="/dashboard">
+                <img src={logoInverted} alt="logo-inverted" />
+              </Link>
+            </div>
+            <div className="item">
+              <i className="sidebar icon"></i>
+            </div>
           </div>
-          <div className="item">
-            <i className="sidebar icon"></i>
+          
+          <div className="right menu">
+            <div className="ui dropdown item">
+              <i className="alarm icon"></i>
+              <div className="menu">
+                <a className="item">
+                  <div className="ui label orange">WAR</div> 
+                  It is a long established.
+                </a>
+                <a className="item">
+                  <div className="ui label blue">NEW</div> 
+                  NEW
+                </a>
+                <a className="item">
+                  <div className="ui label green">SENT</div> 
+                  SENT
+                </a>
+              </div>
+            </div>
+            <div className="ui dropdown item">
+              <i className="mail envelop icon"></i>
+              <div className="ui mini blue label envelop">1</div>
+              <div className="menu">
+                <a className="item"><strong>Okay, right back at you in...</strong></a>
+                <a className="item"><strong>Hi, I have sent you...</strong></a>                
+                <a className="item">{T.translate("internal_navigation.notifications")}</a>
+              </div>
+            </div>
+            <div className="ui medium dropdown item">
+              <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
+              Birhanu <i className="dropdown icon"></i>
+              <div className="menu">
+                <a className="item">
+                  <i className="tasks icon"></i>
+                  {T.translate("internal_navigation.tasks")}
+                  <div className="ui right floated blue label">1</div>
+                </a>
+                <a className="item">
+                  <i className="settings icon"></i>
+                  {T.translate("internal_navigation.settings")}
+                </a>
+                <div className="divider"></div>
+                <a className="item" to="#" onClick={this.logout.bind(this)} >
+                  <i className="sign out icon"></i>
+                  {T.translate("internal_navigation.sign_out")}
+                </a>   
+              </div>
+            </div>
+          </div>
+        </nav>
+        <div className="ui fixed menu header-breadcrumb">          
+          <div className="left menu">
+            <div className="item">
+              <h2 className="ui header">{T.translate('"'+currentPageTitle+'"')}
+                <div className="sub header">{T.translate('"'+currentPageTitle+'"')}</div>
+              </h2>
+            </div>              
+          </div>
+          <div className="right menu">
+            <div className="item">
+              <div className="ui breadcrumb">
+                <a className="section">Dashboard</a>
+                <div className="divider"> / </div>
+                <a className="section">Sales</a>
+                <div className="divider"> / </div>
+                <div className="active section">New</div>
+              </div>
+            </div>
           </div>
         </div>
-        
-        <div className="right menu">
-          <div className="ui dropdown item">
-            <i className="alarm icon"></i>
-            <div className="menu">
-              <a className="item">
-                <div className="ui label orange">WAR</div> 
-                It is a long established.
-              </a>
-              <a className="item">
-                <div className="ui label blue">NEW</div> 
-                NEW
-              </a>
-              <a className="item">
-                <div className="ui label green">SENT</div> 
-                SENT
-              </a>
-            </div>
-          </div>
-          <div className="ui dropdown item">
-            <i className="mail envelop icon"></i>
-            <div className="ui small blue label envelop">1</div>
-            <div className="menu">
-              <a className="item"><strong>Okay, right back at you in...</strong></a>
-              <a className="item"><strong>Hi, I have sent you...</strong></a>                
-              <a className="item">{T.translate("internal_navigation.notifications")}</a>
-            </div>
-          </div>
-          <div className="ui dropdown item">
-            <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-            Birhanu <i className="dropdown icon"></i>
-            <div className="menu">
-              <a className="item">
-                <i className="settings icon"></i>
-                {T.translate("internal_navigation.settings")}
-              </a>
-              <div className="divider"></div>
-              <a className="item" to="#" onClick={this.logout.bind(this)} >
-                <i className="sign out icon"></i>
-                {T.translate("internal_navigation.sign_out")}
-              </a>   
-            </div>
-          </div>
-        </div>
-      </nav>
+      </div>
     )
 
     const guestLinks = (

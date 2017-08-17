@@ -4,29 +4,28 @@
   min-height: 100%;
 }
 
-@font-face {
-  font-family: 'Open Sans', sans-serif;
-  src: font-url('fonts/OpenSans-Bold.ttf') format('truetype'),
-    font-url('fonts/OpenSans-Italic.ttf') format('truetype'),
-    font-url('fonts/OpenSans-Light.ttf') format('truetype'),
-    font-url('fonts/OpenSans-Regular.ttf') format('truetype');  
-}
+// @font-face {
+//   font-family: 'Open Sans', sans-serif;
+//   src: font-url('fonts/OpenSans-Bold.ttf') format('truetype'),
+//     font-url('fonts/OpenSans-Italic.ttf') format('truetype'),
+//     font-url('fonts/OpenSans-Light.ttf') format('truetype'),
+//     font-url('fonts/OpenSans-Regular.ttf') format('truetype');  
+// }
 
 body {
   background-color: $body-background-color;
   color: $body-color;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
+  // font-family: 'Open Sans', sans-serif;
+  // font-size: 16px;
   moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased; 
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
           text-size-adjust: 100%;
-  margin-bottom: 360px;
 }
 
-body .internal-page {
-  margin-bottom: -140px;
+body .internal-page {  
+  margin-bottom: 120px !important;
 }
 
 // Anchor 
@@ -88,16 +87,22 @@ nav.ui.menu {
   background: $turquoise;
   border: 1px solid rgba(22,91,97,.15);
   box-shadow: 0 1px 2px 0 rgba(22,91,97,.15);
+  .ui.dropdown > .menu {
+    min-width: 200px;
+    left: inherit;
+    right: 0;
+  }
   .ui.dropdown .ui.avatar.image {
     width: 1.4em;
     height: 1.4em;
   }
-
+  .ui.dropdown .menu>.item {
+    padding: .98571429em 1.14285714em!important;
+  }
   .label.envelop {
     position: absolute;
-    right: 3px;
-    top: 5px;
-    padding: .3em .561429em;
+    right: 5px;
+    top: 7px;
   }
 }
 
@@ -149,7 +154,7 @@ nav.ui.menu {
     color: #ffffff;
     text-shadow: 0 1px 0 rgba(0,0,0,0.4);
   }
-  h5 {
+  h3 {
     color: $medium-grey;
     text-shadow: 0 1px 0 rgba(0,0,0,0.4);
     margin-top: 0;
@@ -214,7 +219,7 @@ nav.ui.menu {
 
 // Sidebar 
 .ui.visible.sidebar {
-  width: 200px;
+  width: 190px;
   background: $dark-mid-night-blue;
   border: none;
   .item {    
@@ -224,7 +229,7 @@ nav.ui.menu {
     font-weight: 600;
     text-transform: uppercase !important;
   }
-  .active.item {
+  .active.item, .active.item:hover, .active.item:focus {
     background: $body-background-color;
     color: $dark-mid-night-blue;
   }
@@ -239,11 +244,7 @@ nav.ui.menu {
     margin: 0 .5em 0 0;
   }  
   .ui.segment {
-    background: $dark-mid-night-blue;
     color: #d9d9d9;
-    border: none;
-    margin-top: 0;
-    margin-bottom: 0;
   }  
   .ui.segment.account {
     border-bottom: 1px solid $light-dark-grey;
@@ -260,30 +261,41 @@ nav.ui.menu {
 }
 
 // Header breadcrumb
-.ui.clearing.segment.header-breadcrumb {
-  position: relative;
+.ui.fixed.menu.header-breadcrumb {
+  margin-top: 48px;
   overflow: hidden;
-  padding: 5px 20px;
-  @include border-radius(0);
+  padding: 5px 1rem;
+  box-shadow: none;
+  z-index: 10;
   h2 {
     font-size: 0.875em;
     text-transform: uppercase;
     font-weight: 700;
   }
-  .ui.breadcrumb .active.section, .ui.breadcrumb a {
-    font-size: 80%;
+  .sub.header {
+    margin-top: 2px;
+    font-size: 0.875em;
+  }
+  .item {
+    padding: 5px 0;
+  }
+  .item:before {
+    background: none;
   }
 }
 
 // Footer 
-.ui.footer.segment {
+.ui.footer.segment {  
+  width: 100%;
   background-color: $x-dark-mid-night-blue;
   color: $dark-medium-grey;
-  margin: 5em 0em 0em;
-  padding: 5em 0em;
+  padding: 5em 1em;
+}
+
+.ui.footer.segment.internal-footer {
+  padding: 2em 1em;
   position: absolute;
   bottom: 0;
-  width: 100%;
 }
 
 // Message
@@ -296,39 +308,38 @@ nav.ui.menu {
   margin-top: 0;
 }
 
-// Flash
-.alert {
+// Message
+.ui.message {
   border-radius: (3px);
 }
 
-.alert-success {
+.ui.success.message {
   color: $dark-green;
   background: $white-green;
-  border-color: $x-light-green;
+  box-shadow: 0 0 0 1px $green inset, 0 0 0 0 transparent;
 }
 
-.alert-warning {
+.ui.warning.message {
   color: $dark-orange;
   background: $white-orange;
-  border-color: $x-light-orange;
+  box-shadow: 0 0 0 1px $orange inset, 0 0 0 0 transparent;
 }
 
-.alert-danger {
+.ui.negative.message {
   color: $dark-red;
   background: $white-red;
-  border-color: $x-light-red;
+  box-shadow: 0 0 0 1px $red inset, 0 0 0 0 transparent;
 }
 
-.alert-notice {
-  @extend .alert-success;
+.ui.info.message {
+  color: $blue;
+  background: $white-blue;
+  box-shadow: 0 0 0 1px $blue inset, 0 0 0 0 transparent;
 }
 
-.alert-alert {
-  @extend .alert-danger;
-}
-
-.flash_warning {
-  @extend .alert-warning;
+.sixteen.wide.column.flash-message {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
@@ -376,7 +387,7 @@ nav.ui.menu .item>a>img:not(.ui) {
 }
 
 nav.ui.menu .logo.item {
-  width: 200px;
+  width: 190px;
   padding: 5px;
 }
 
@@ -425,18 +436,10 @@ nav.ui.menu .item>a {
   @include border-radius(0);
 }
 
-// Panel
-.ui.segments > .segment, .ui.segment, .ui.message {
+// Segment
+.ui.segments > .segment, .ui.segment, .ui.message, .ui.card, .ui.cards>.card {
   @include border-radius(3px);
-  box-shadow: none;
-  border: 1px solid $light-grey;
-}
-
-.ui.segment.transparent {
-  background: transparent;
-  box-shadow: none;
-  border: none;
-  padding: 0;
+  box-shadow: 0 1px 2px 0 rgba(224,224,224,1);
 }
 
 .ui.attached.segment {
@@ -512,27 +515,14 @@ i.orange.icon {
 }
 
 // Description list
-dt {
-  font-weight: bold;
-}
-
-//Image
-.img-circle {
-  border-radius: 50% !important;
-}
-
-.img-rounded {
-  border-radius: 3px;
-}
-
-// Table
-.ui.table.project thead th, .ui.table.sale thead th {
-  padding: .22857143em .78571429em;
-}
-
-.ui.table.project td, .ui.table.sale td {
-  padding: .58571429em;
-}
+dl.dl-horizontal {
+  dd, dt {
+    padding: 2px 0;
+  }
+  dt {
+    font-weight: bold;
+  }
+} 
 
 // Custome note box
 .bs-callout {
@@ -595,30 +585,14 @@ dt {
   }
 }
 
-.well-left-text {
-  .pull-left h3, h4, h5 {
-    margin-left: 25px;
+// Modal
+.ui.modal {
+  >.header {
+    padding: .8rem 1.5rem; 
   }
-  .row {
-    margin-left: 10px;
-  }
-}
-
-.well-text-container {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 100%;
-  width: 20px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  span {
-    color: $white;
-    transform: rotate(-90deg);
-    position: absolute;
-    bottom: 7px;
-    width: 100%;
-  }
+  >.actions {
+    padding: 0.7rem 1rem;
+  }  
 }
 
 // Custome fieldset and legend
@@ -634,12 +608,6 @@ dt {
   }
 }
 
-// Padding
-.no-gutter > [class*='col-'] {
-  padding-right:0;
-  padding-left:0;
-}
-
 // Pagination
 .pagination > li > a, .pagination > li > span {
   color: $turquoise;
@@ -650,9 +618,22 @@ dt {
   border-color: $dark-turquoise;
 }
 
-// Pagination
 .pagination {
   margin: 20px 15px;
+}
+
+// Animation
+.animation-delay-1 {
+  @include animation-delay(.1s);
+}
+
+.fadeInRightBig {
+  -webkit-animation-name: fadeInRightBig;
+          animation-name: fadeInRightBig;
+}
+
+.animated {
+  @include animation-duration(1s);
 }
 
 // Sprite
@@ -816,18 +797,40 @@ dt {
   }
 }
 
-// Animation
-.animation-delay-1 {
-  @include animation-delay(.1s);
+// Projects & Sales
+.ui.table.projects thead th, .ui.table.sales thead th  {
+  padding: .32857143em .78571429em;
 }
 
-.fadeInRightBig {
-  -webkit-animation-name: fadeInRightBig;
-          animation-name: fadeInRightBig;
+.ui.table.tasks thead th, .ui.table.items thead th  {
+  padding: .42857143em .78571429em;
 }
 
-.animated {
-  @include animation-duration(1s);
+form .ui.table tr {
+  td.add-task, td.edit-task, td.add-item, td.edit-item {
+    vertical-align: top;
+  }
+}
+
+form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
+  display: none;
+  button {
+    width: 50%;
+  }
+}
+
+.ui.table.project td, .ui.table.sale td {
+  padding: .58571429em;
+}
+
+.ui.table.task td:last-child, .ui.table.item td:last-child {
+  padding-right: 10px !important;
+}
+
+.ui.two.cards.sales, .ui.two.cards.projects {
+  .card a.ui.header {
+    margin-top: -20px;
+  }
 }
 
 /* Extra small devices (phones, less than 433px) */
@@ -886,7 +889,7 @@ dt {
     }
   }
   .ui.internal-page {
-    margin-top: 48px;
+    margin-top: 100px;
   }
   .ui.visible.sidebar {
     margin-top: 48px !important;
@@ -900,14 +903,20 @@ dt {
 
 /* Medium devices (desktops, 992px and upto large desktops, 1200px) */
 @media (min-width: $screen-md) and (max-width: $screen-lg) {
-  .ui.internal-page {
-    margin-left: 200px;
+  .ui.internal-page, .ui.footer.segment.internal-footer, .ui.fixed.menu.header-breadcrumb {
+    margin-left: 190px;
+  }
+  .ui.fixed.menu.header-breadcrumb .right.menu {
+    margin-right: 190px;
   }
 }
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: $screen-lg) {
-  .ui.internal-page {
-     margin-left: 200px;
+  .ui.internal-page, .ui.footer.segment.internal-footer, .ui.fixed.menu.header-breadcrumb {
+    margin-left: 190px;
+  }
+  .ui.fixed.menu.header-breadcrumb .right.menu {
+    margin-right: 190px;
   }
 }

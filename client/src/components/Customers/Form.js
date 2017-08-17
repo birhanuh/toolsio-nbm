@@ -87,6 +87,7 @@ class Form extends Component {
       if (e.target.name === "email" || e.target.name === "phoneNumber") {
         let updatedContact = Object.assign({}, this.state.contact)
         updatedContact[e.target.name] = e.target.value
+
          this.setState({
           contact: updatedContact,
           errors
@@ -95,6 +96,7 @@ class Form extends Component {
         || e.target.name === "country") {
         let updatedAddress = Object.assign({}, this.state.address)
         updatedAddress[e.target.name] = e.target.value
+
          this.setState({
           address: updatedAddress,
           errors
@@ -110,6 +112,7 @@ class Form extends Component {
       if (e.target.name === "email" || e.target.name === "phoneNumber") {
         let updatedContact = Object.assign({}, this.state.contact)
         updatedContact[e.target.name] = e.target.value
+
          this.setState({
           contact: updatedContact
         })
@@ -117,6 +120,7 @@ class Form extends Component {
         || e.target.name === "country") {
         let updatedAddress = Object.assign({}, this.state.address)
         updatedAddress[e.target.name] = e.target.value
+        
          this.setState({
           address: updatedAddress
         })
@@ -165,7 +169,7 @@ class Form extends Component {
   }
 
   render() {
-    const { name, vatNumber, contact, includeContactOnInvoice, address, errors, isLoading } = this.state
+    const { _id, name, vatNumber, contact, includeContactOnInvoice, address, errors, isLoading } = this.state
     
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
     //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
@@ -179,7 +183,7 @@ class Form extends Component {
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
-              <h1 className="ui header">{T.translate("customers.new.header")}</h1> 
+               {_id ? <h1 className="ui header">{T.translate("customers.form.edit_customer")}</h1> : <h1 className="ui header">{T.translate("customers.form.new_customer")}</h1>}
             </div>
 
             { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }

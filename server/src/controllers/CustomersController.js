@@ -2,8 +2,8 @@ import Customer from '../models/Customer'
 
 export default {
   
-  find: (params, callback) => {
-    Customer.find(params, function(err, customers) {
+  find: (callback) => {
+    Customer.find(function(err, customers) {
       if (err) {
         callback(err, null)
         return

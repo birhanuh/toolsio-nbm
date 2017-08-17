@@ -15,6 +15,7 @@ const UserSchema = new Schema({
     age: Number,
     gender: String
   },
+  
   created_at: Date,
   updated_at: Date
 })

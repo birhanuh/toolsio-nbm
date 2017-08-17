@@ -8,30 +8,28 @@ import T from 'i18n-react'
 export default function Card({project}) {
   
   return (
-    <div className="eight wide column">
-      <div className="ui segment">
-        <div className="ui clearing segment transparent">
-          <div className={classnames("ui right floated uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
-            {project.status}
-          </div>
-          
-          <Link to={`/projects/show/${project._id}`} className="ui left floated header">
-            <h4 className={classnames("ui header", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
-              {project.name}
-            </h4>
-          </Link>
+    <div className="card">
+      <div className="content">
+        <div className={classnames("ui uppercase tiny right ribbon label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+          {project.status}
         </div>
+        
+        <Link to={`/projects/show/${project._id}`} className="ui header">
+          <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
+            {project.name}
+          </h3>
+        </Link>
 
-        <p className="m-t-m">{project.description}</p>
+        <div className="description">{project.description}</div>
 
-        <table className="ui very basic center aligned table project">
+        <table className="ui very basic center aligned table projects">
           <thead>
             <tr>
               <th>{T.translate("projects.show.user")}</th>
-              <th>{T.translate("projects.index.deadline")}</th>
-              <th>{T.translate("projects.index.customer")}</th>
-              <th>{T.translate("projects.index.progress")}</th>
-              <th>{T.translate("projects.index.invoiced")}</th>
+              <th>{T.translate("projects.page.deadline")}</th>
+              <th>{T.translate("projects.page.customer")}</th>
+              <th>{T.translate("projects.page.progress")}</th>
+              <th>{T.translate("projects.page.invoiced")}</th>
             </tr>
           </thead>
           <tbody>

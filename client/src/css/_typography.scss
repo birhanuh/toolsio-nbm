@@ -1,60 +1,38 @@
-// Sizes
+Sizes
 h1, h1.ui.header {
-  font-size: 2.25em;
   line-height: 1.25;
   letter-spacing: -0.2px;
   font-weight: 500;
 }
 
 h2, h2.ui.header {
-  font-size: 1.875em;
   line-height: 1.15;
   letter-spacing: -0.2px;
   font-weight: 500;
 }
 
 h3, h3.ui.header {
-  font-size: 1.5em;
   line-height: 1.05;
   letter-spacing: -0.2px;
   font-weight: 500;
 }
 
 h4, h4.ui.header {
-  font-size: 1.25em;
   line-height: 1.25;
   letter-spacing: -0.2px;
   font-weight: 500;
 }
 
 h5, h5.ui.header {
-  font-size: 1.125em;
   line-height: 1.15;
   letter-spacing: -0.2px;
   font-weight: 500;
 }
 
 h6, h6.ui.header {
-  font-size: 1em;
   line-height: 1.05;
   letter-spacing: -0.2px;
   font-weight: 500;
-}
-
-p, span, label, a {
-  font-size: 0.875em;
-}
-
-.ui.table {
-  font-size: 0.875em;
-}
-
-.ui.label, .ui.labels .label {
-  font-size: 75%;
-}
-
-.ui.menu .ui.dropdown .menu>.item {
-  font-size: 0.875em!important;
 }
 
 // Labels

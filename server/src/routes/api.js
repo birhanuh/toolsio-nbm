@@ -20,7 +20,7 @@ router.get('/:resource', authenticate, function(req, res) {
     return
   }
 
-  controller.find(req.query, function(err, results) {
+  controller.find(function(err, results) {
     if (err) {
       res.status(500).json({ 
         errors: {

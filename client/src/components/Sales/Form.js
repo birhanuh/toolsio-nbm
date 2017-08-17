@@ -21,10 +21,14 @@ class Form extends Component {
       _id: this.props.sale ? this.props.sale._id : null,
       name: this.props.sale ? this.props.sale.name : '',
       deadline: this.props.sale ? moment(this.props.sale.deadline) : moment(),
-      customer: this.props.sale ? this.props.sale.customer : '',
+      customer: this.props.sale ? this.props.sale.customer._id : '',
       status: this.props.sale ? this.props.sale.status : '',
       description: this.props.sale ? this.props.sale.description : '',
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false
     }
   }
@@ -35,7 +39,7 @@ class Form extends Component {
         _id: nextProps.sale._id,
         name: nextProps.sale.name,
         deadline: moment(nextProps.sale.deadline),
-        customer: nextProps.sale.customer,
+        customer: nextProps.sale.customer._id,
         status: nextProps.sale.status,
         description: nextProps.sale.description
       })
@@ -43,10 +47,10 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
-    if (!!this.state.errors[e.target.name]) {
+    if (!!this.state.errors.message.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors.message.errors[e.target.name]
 
       this.setState({
         [e.target.name]: e.target.value,
@@ -63,8 +67,11 @@ class Form extends Component {
   isValid() {
     const { errors, isValid } = Validation.validateSaleInput(this.state)
 
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ errors: updatedErrors })
     }
 
     return isValid;
@@ -74,9 +81,10 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid) { 
+    if (this.isValid()) { 
       const { _id, name, deadline, customer, status, description } = this.state
       this.setState({ isLoading: true })
+      
       this.props.saveSale({ _id, name, customer, deadline, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
@@ -101,28 +109,28 @@ class Form extends Component {
     //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
 
     return (  
-      <div className="ui stackable centered grid">
-        <div className="eight wide column ui segment">  
+      <div className="row">
+        <div className="ui text container ui segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
-              <h1 className="ui header">{T.translate("sales.new.header")}</h1>              
+              {_id ? <h1 className="ui header">{T.translate("sales.form.edit_sale")}</h1> : <h1 className="ui header">{T.translate("sales.form.new_sale")}</h1>}        
             </div>
 
             { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
             <InputField
-              label={T.translate("sales.new.name")}
+              label={T.translate("sales.form.name")}
               name="name" 
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message['name'].message}
+              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message.errors.name.message}
               formClass="inline field"
             />
             <div  className={classnames("inline field", { error: !!errors.deadline })}>
-              <label className="" htmlFor="date">{T.translate("sales.new.deadline")}</label>
+              <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
@@ -131,20 +139,20 @@ class Form extends Component {
               <span>{errors.password}</span>
             </div>
             <SelectField
-              label={T.translate("sales.new.customer")}
+              label={T.translate("sales.form.customer")}
               name="customer"
-              value={customer && customer._id} 
+              value={typeof customer === 'object' ? customer._id : customer} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"
               
-              options={[<option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
+              options={[<option key="default" value="" disabled>{T.translate("sales.form.select_customer")}</option>,
                 customersOptions]}
             />
 
             { _id &&
               <SelectField
-                label={T.translate("sales.new.status")}
+                label={T.translate("sales.form.status")}
                 name="status"
                 type="select"
                 value={status} 
@@ -175,11 +183,11 @@ class Form extends Component {
             </div>      
             */}
             <TextAreaField
-              label={T.translate("sales.new.description")}
+              label={T.translate("sales.form.description")}
               name="description" 
               value={description} 
               onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("projects.new.description")}
+              placeholder={T.translate("sales.form.description")}
               formClass="inline field"
             />
 

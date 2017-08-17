@@ -18,10 +18,14 @@ class Form extends Component {
       _id: this.props.project ? this.props.project._id : null,
       name: this.props.project ? this.props.project.name : '',
       deadline: this.props.project ? moment(this.props.project.deadline) : moment(),
-      customer: this.props.project ? this.props.project.customer : '',
+      customer: this.props.project ? this.props.project.customer._id : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false
     }
   }
@@ -42,10 +46,10 @@ class Form extends Component {
   handleChange = (e) => {
     //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
 
-    if (!!this.state.errors[e.target.name]) {
+    if (!!this.state.errors.message.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors.message.errors[e.target.name]
 
       this.setState({
         [e.target.name]: e.target.value,
@@ -61,8 +65,11 @@ class Form extends Component {
   isValid() {
     const { errors, isValid } = Validation.validateProjectInput(this.state)
 
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ errors: updatedErrors })
     }
 
     return isValid;
@@ -72,9 +79,10 @@ class Form extends Component {
      event.preventDefault()
 
     // Validation
-    if (this.isValid) { 
+    if (this.isValid()) { 
       const { _id, name, deadline, customer, status, description } = this.state
       this.setState({ isLoading: true })
+
       this.props.saveProject({ _id, name, customer, deadline, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
@@ -83,29 +91,29 @@ class Form extends Component {
   handleChangeDate(deadline) {
     this.setState({
       deadline: deadline
-    });
+    })
   } 
 
   render() {
     const { _id, name, deadline, customer, status, description, errors, isLoading } = this.state
-    
+ 
     const customersOptions = map(this.props.customers, (customer) => 
       <option key={customer._id} value={customer._id}>{customer.name}</option>
     )
     
     return (
-      <div className="ui stackable centered grid">
-        <div className="eight wide column ui segment">  
+      <div className="row">
+        <div className="ui text container ui segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
             <div className="inline field"> 
-              <h1 className="ui header">{T.translate("projects.new.header")}</h1>
+              {_id ? <h1 className="ui header">{T.translate("projects.form.edit_project")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}
             </div>
             
             { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             <InputField
-              label={T.translate("projects.new.name")}
+              label={T.translate("projects.form.name")}
               name="name" 
               value={name} 
               onChange={this.handleChange.bind(this)} 
@@ -115,7 +123,7 @@ class Form extends Component {
             />
                           
             <div  className={classnames("inline field", { error: !!errors['deadline'] })}>
-              <label className="" htmlFor="date">{T.translate("projects.new.deadline")}</label>
+              <label className="" htmlFor="date">{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
@@ -125,20 +133,20 @@ class Form extends Component {
             </div>
             
             <SelectField
-              label={T.translate("projects.new.customer")}
+              label={T.translate("projects.form.customer")}
               name="customer"
-              value={customer && customer._id} 
+              value={typeof customer === 'object' ? customer._id : customer} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"
 
-              options={[<option key="default" value="" disabled>{T.translate("projects.new.select_customer")}</option>,
+              options={[<option key="default" value="" disabled>{T.translate("projects.form.select_customer")}</option>,
                 customersOptions]}
             />
             
             { _id &&
               <SelectField
-                label={T.translate("projects.new.status")}
+                label={T.translate("projects.form.status")}
                 name="status"
                 type="select"
                 value={status} 
@@ -170,11 +178,11 @@ class Form extends Component {
             */}
 
             <TextAreaField
-              label={T.translate("projects.new.description")}
+              label={T.translate("projects.form.description")}
               name="description" 
               value={description} 
               onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("projects.new.description")}
+              placeholder={T.translate("projects.form.description")}
               formClass="inline field"
             /> 
 
@@ -186,6 +194,10 @@ class Form extends Component {
       </div>
     )
   }
+}
+
+Form.propTypes = {
+  customers: React.PropTypes.array.isRequired
 }
 
 export default Form

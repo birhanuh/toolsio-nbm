@@ -10,7 +10,7 @@ export default function List({ customers, deleteCustomer }) {
   )
 
   const customersList = (
-    <table className="ui striped selectable small table">
+    <table className="ui very compact striped selectable table">
        <thead>
           <tr>
             <th>{T.translate("customers.show.name")}</th>

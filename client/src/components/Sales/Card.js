@@ -8,29 +8,27 @@ import T from 'i18n-react'
 export default function Card({sale}) {
   
   return (
-    <div className="eight wide column">
-      <div className="ui segment">
-        <div className="ui clearing segment transparent">
-         <div className={classnames("ui right floated uppercase label", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
-            {sale.status}
-          </div>
-          
-          <Link to={`/sales/show/${sale._id}`} className="ui left floated header">
-            <h4 className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
-              {sale.name}
-            </h4>
-          </Link>
+    <div className="card">
+      <div className="content">        
+        <div className={classnames("ui uppercase tiny right ribbon label", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+          {sale.status}
         </div>
+        
+        <Link to={`/sales/show/${sale._id}`} className="ui header">
+          <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+            {sale.name}
+          </h3>
+        </Link>
+  
+        <div className="description">{sale.description}</div>
 
-        <p className="m-t-m">{sale.description}</p>
-
-        <table className="ui very basic center aligned table sale">
+        <table className="ui very basic center aligned table sales">
           <thead>
             <tr>
               <th>{T.translate("sales.show.user")}</th>
-              <th>{T.translate("sales.index.deadline")}</th>
-              <th>{T.translate("sales.index.customer")}</th>
-              <th>{T.translate("sales.index.invoiced")}</th>
+              <th>{T.translate("sales.page.deadline")}</th>
+              <th>{T.translate("sales.page.customer")}</th>
+              <th>{T.translate("sales.page.invoiced")}</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +43,8 @@ export default function Card({sale}) {
           </tbody>
         </table>
 
-      </div>
+      </div>  
+   
     </div>
   )
 }
