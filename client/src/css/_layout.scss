@@ -224,7 +224,6 @@ nav.ui.menu {
   border: none;
   .item {    
     color: #d9d9d9;
-    font-size: 1em;
     border-bottom: 1px solid $light-dark-grey;
     padding: 10px;
     font-weight: 600;
@@ -807,11 +806,11 @@ dl.dl-horizontal {
   padding: .42857143em .78571429em;
 }
 
-form .ui.table tr td.add-task, form .ui.table tr td.edit-task {
+form .ui.table tr td.add-task, form .ui.table tr td.edit-item {
   vertical-align: top;
 }
 
-form .ui.table tr td.edit-task {
+form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
   display: none;
   button {
     width: 50%;
