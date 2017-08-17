@@ -28,8 +28,10 @@ export const AddElement = ({item, handleNewItemChange, handleCreate}) => {
           formClass="ui small input"
           options={[
             <option key="default" value="" disabled>{T.translate("sales.items.form.select_unit")}</option>,
-            <option key="per hour" value="per hour">Per item</option>,
-            <option key="per item" value="per item">Per hour</option>
+            <option key="piece" value="piece">Piece</option>,
+            <option key="meter" value="meter">Meter</option>,
+            <option key="kilo gram" value="kilo gram">Kilo gram</option>,
+            <option key="liter" value="liter">Liter</option>
             ]
           }
         />
@@ -72,7 +74,7 @@ export const AddElement = ({item, handleNewItemChange, handleCreate}) => {
 }
 
 
-export const ShowEditElement = ({item, editItem, handleNewItemChange, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, showConfirmationModal}) => {
+export const ShowEditElement = ({item, editItem, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, showConfirmationModal}) => {
   return (
     <tr key={item._id} id={item._id}>      
       <td className="show-item">{item.name}</td>
@@ -90,7 +92,7 @@ export const ShowEditElement = ({item, editItem, handleNewItemChange, handleCrea
         <InputField
           name="name" 
           value={editItem.name} 
-          onChange={handleNewItemChange}  
+          onChange={handleEditItemChange}  
           placeholder="Name"
           error={editItem.errors.message && editItem.errors.message.errors && editItem.errors.message.errors.name && editItem.errors.message.errors.name.message}
           formClass="ui small input"
@@ -101,13 +103,15 @@ export const ShowEditElement = ({item, editItem, handleNewItemChange, handleCrea
           name="unit"
           type="select"
           value={editItem.unit} 
-          onChange={handleNewItemChange}  
+          onChange={handleEditItemChange}  
           error={editItem.errors.message && editItem.errors.message.errors && editItem.errors.message.errors.unit && editItem.errors.message.errors.unit.message}
           formClass="ui small input"
           options={[
             <option key="default" value="" disabled>{T.translate("sales.items.form.select_unit")}</option>,
-            <option key="per hour" value="per hour">Per item</option>,
-            <option key="per item" value="per item">Per hour</option>
+            <option key="piece" value="piece">Piece</option>,
+            <option key="meter" value="meter">Meter</option>,
+            <option key="kilo gram" value="kilo gram">Kilo gram</option>,
+            <option key="liter" value="liter">Liter</option>
             ]
           }
         />
@@ -116,7 +120,7 @@ export const ShowEditElement = ({item, editItem, handleNewItemChange, handleCrea
         <InputField
           name="quantity" 
           value={editItem.quantity.toString()} 
-          onChange={handleNewItemChange}  
+          onChange={handleEditItemChange}  
           placeholder="0.00"
           error={editItem.errors.message && editItem.errors.message.errors && editItem.errors.message.errors.quantity && editItem.errors.message.errors.quantity.message}
           formClass="ui small input"
@@ -126,7 +130,7 @@ export const ShowEditElement = ({item, editItem, handleNewItemChange, handleCrea
         <InputField
           name="price" 
           value={editItem.price.toString()} 
-          onChange={handleNewItemChange} 
+          onChange={handleEditItemChange} 
           placeholder="0.00"
           error={editItem.errors.message && editItem.errors.message.errors && editItem.errors.message.errors.price && editItem.errors.message.errors.price.message}
           formClass="ui small input"
@@ -136,7 +140,7 @@ export const ShowEditElement = ({item, editItem, handleNewItemChange, handleCrea
         <InputField
           name="vat" 
           value={editItem.vat.toString()} 
-          onChange={handleNewItemChange} 
+          onChange={handleEditItemChange} 
           placeholder="0"
           error={editItem.errors.message && editItem.errors.message.errors && editItem.errors.message.errors.vat && editItem.errors.message.errors.vat.message}
           formClass="ui small input"

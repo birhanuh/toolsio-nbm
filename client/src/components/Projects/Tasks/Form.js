@@ -225,8 +225,8 @@ class Task extends Component {
           })
 
           // Hide edit tr and show show tr
-          $('#'+_id+' td .edit-task').hide()
-          $('#'+_id+' td .show-task').show()   
+          $('#'+_id+' td.edit-task').hide()
+          $('#'+_id+' td.show-task').show()   
         },
         ({ response }) => {
           let updatedTask = Object.assign({}, this.state.editTask)
@@ -289,7 +289,7 @@ class Task extends Component {
           task={task} 
           editTask={editTask}
           handleCancelEdit={this.handleCancelEdit.bind(this, task)}
-          handleNewTaskChange={this.handleNewTaskChange.bind(this)} 
+          handleEditTaskChange={this.handleEditTaskChange.bind(this, task)} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, task)}
           showConfirmationModal={this.showConfirmationModal.bind(this, task)}/> 

@@ -26,7 +26,7 @@ export default {
   },
 
   create: (params, callback) => {  
-    Item.create(params.item, function(err, item) {
+    Item.create(params, function(err, item) {
       if (err) {
         callback(err, null)
         return

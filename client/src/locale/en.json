@@ -342,8 +342,8 @@
         "update_item": "Update Item",       
         "confirmation_msg": "Are you sure to delete this Item?",
         "flash": {
-          "notice_add": "Item is added!",
-          "success_update": "Item is updated!",
+          "success_add": "Item *{name}* is added!",
+          "success_update": "Item *{name}* is updated!",
           "success_delete": "Item *{name}* is deleted!",
           "error_delete": "Item *{name}* couldn't be deleted, try again after refreshing the page"
         }

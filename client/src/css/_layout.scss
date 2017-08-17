@@ -262,11 +262,11 @@ nav.ui.menu {
 
 // Header breadcrumb
 .ui.fixed.menu.header-breadcrumb {
-  margin-top: 49px;
+  margin-top: 48px;
   overflow: hidden;
   padding: 5px 1rem;
   box-shadow: none;
-  @include border-radius(0);
+  z-index: 10;
   h2 {
     font-size: 0.875em;
     text-transform: uppercase;
@@ -806,8 +806,10 @@ dl.dl-horizontal {
   padding: .42857143em .78571429em;
 }
 
-form .ui.table tr td.add-task, form .ui.table tr td.edit-item {
-  vertical-align: top;
+form .ui.table tr {
+  td.add-task, td.edit-task, td.add-item, td.edit-item {
+    vertical-align: top;
+  }
 }
 
 form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {

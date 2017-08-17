@@ -72,7 +72,7 @@ export const AddElement = ({task, handleNewTaskChange, handleCreate}) => {
 }
 
 
-export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditTaskChange, showConfirmationModal}) => {
+export const ShowEditElement = ({task, editTask, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditTaskChange, showConfirmationModal}) => {
   return (
     <tr key={task._id} id={task._id}>      
       <td className="show-task">{task.name}</td>
@@ -90,7 +90,7 @@ export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCrea
         <InputField
           name="name" 
           value={editTask.name} 
-          onChange={handleNewTaskChange}  
+          onChange={handleEditTaskChange}  
           placeholder="Name"
           error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.name && editTask.errors.message.errors.name.message}
           formClass="ui small input"
@@ -101,7 +101,7 @@ export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCrea
           name="paymentType"
           type="select"
           value={editTask.paymentType} 
-          onChange={handleNewTaskChange}  
+          onChange={handleEditTaskChange}  
           error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.paymentType && editTask.errors.message.errors.paymentType.message}
           formClass="ui small input"
           options={[
@@ -116,7 +116,7 @@ export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCrea
         <InputField
           name="hours" 
           value={editTask.hours.toString()} 
-          onChange={handleNewTaskChange}  
+          onChange={handleEditTaskChange}  
           placeholder="0.00"
           error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.hours && editTask.errors.message.errors.hours.message}
           formClass="ui small input"
@@ -126,7 +126,7 @@ export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCrea
         <InputField
           name="price" 
           value={editTask.price.toString()} 
-          onChange={handleNewTaskChange} 
+          onChange={handleEditTaskChange} 
           placeholder="0.00"
           error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.price && editTask.errors.message.errors.price.message}
           formClass="ui small input"
@@ -136,7 +136,7 @@ export const ShowEditElement = ({task, editTask, handleNewTaskChange, handleCrea
         <InputField
           name="vat" 
           value={editTask.vat.toString()} 
-          onChange={handleNewTaskChange} 
+          onChange={handleEditTaskChange} 
           placeholder="0"
           error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.vat && editTask.errors.message.errors.vat.message}
           formClass="ui small input"

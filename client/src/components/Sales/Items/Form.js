@@ -225,8 +225,8 @@ class Item extends Component {
           })
 
           // Hide edit tr and show show tr
-          $('#'+_id+' td .edit-item').hide()
-          $('#'+_id+' td .show-item').show()   
+          $('#'+_id+' td.edit-item').hide()
+          $('#'+_id+' td.show-item').show()   
         },
         ({ response }) => {
           let updatedItem = Object.assign({}, this.state.editItem)
@@ -289,7 +289,7 @@ class Item extends Component {
           item={item} 
           editItem={editItem}
           handleCancelEdit={this.handleCancelEdit.bind(this, item)}
-          handleNewItemChange={this.handleNewItemChange.bind(this)} 
+          handleEditItemChange={this.handleEditItemChange.bind(this, item)} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, item)}
           showConfirmationModal={this.showConfirmationModal.bind(this, item)}/> 
