@@ -16,7 +16,7 @@ class Page extends Component {
   render() {
     return (
       <div className="row column">  
-        <div className="ui segment transparent">
+        <div className="ui vertical segment">
           <Link className="ui primary button" to="/customers/new">
             <i className="add circle icon"></i>
             {T.translate("customers.page.add_new_customer")}

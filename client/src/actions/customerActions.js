@@ -44,6 +44,22 @@ export function createCustomer(customer) {
   }
 }
 
+export function fetchCustomers() {
+  return dispatch => {
+    return axios.get('/api/customers').then(res => {
+      dispatch(setCustomers(res.data.results))
+    })
+  }
+}
+
+export function fetchCustomer(id) {
+  return dispatch => {
+    return axios.get(`/api/customers/${id}`).then(res => {
+      dispatch(customerFetched(res.data.result))
+    })
+  }
+}
+
 export function updateCustomer(customer) {
   return dispatch => {
     return axios.put(`/api/customers/${customer._id}`, customer).then(res => {
@@ -57,21 +73,5 @@ export function deleteCustomer(id) {
     return axios.delete(`/api/customers/${id}`).then(res => {
       dispatch(customerDeleted(id))
     })    
-  }
-}
-
-export function fetchCustomers() {
-  return dispatch => {
-    return axios.get('/api/customers').then(res => {
-      dispatch(setCustomers(res.data.results))
-    })
-  }
-}
-
-export function fetchCustomer(id) {
-  return dispatch => {
-    return axios.get(`/api/customers/${id}`).then(res => {
-      dispatch(customerFetched(res.data.results))
-    })
   }
 }

@@ -8,11 +8,14 @@ export default function Tr({customer, deleteCustomer}) {
       <td>{customer.name}</td>
       <td>{customer.vatNumber}</td>
       <td>{customer.contact.phoneNumber}{customer.contact.email}</td>
-      <td>{customer.includeContactOnInvoice}</td>
+      <td>{}</td>
+      <td>{}</td>
       <td>
-        <button className="ui small icon basic button red" onClick={deleteCustomer(customer._id)}><i className="delete icon"></i></button>
-        <Link to={`/customers/edit/${customer._id}`} className="ui small icon basic button green"><i className="edit icon"></i></Link>
-         <Link to={`/customers/show/${customer._id}`} className="ui small icon basic blue button"><i className="unhide icon"></i></Link>
+        <div className="ui small buttons">
+          <button className="ui icon basic button red" onClick={deleteCustomer(customer._id)}><i className="delete icon"></i></button>
+          <Link to={`/customers/edit/${customer._id}`} className="ui icon basic button green"><i className="edit icon"></i></Link>
+          <Link to={`/customers/show/${customer._id}`} className="ui icon basic blue button"><i className="unhide icon"></i></Link>
+        </div>
       </td>
     </tr>
   )
