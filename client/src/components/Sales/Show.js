@@ -94,7 +94,7 @@ class Show extends Component {
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
             <dl className="dl-horizontal">
               <dt>{T.translate("sales.show.customer")}</dt>
-              <dd>{customer.name}</dd>
+              <dd>{customer ? customer.name: <p className="blue">{T.translate("sales.show.no_customer")}</p>}</dd>
               {/*<dt>{T.translate("sales.show.user")}</dt>
               <dd>{sale.user.first_name}</dd>*/}
               <dt>{T.translate("sales.show.deadline")}</dt>
@@ -114,7 +114,7 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("sales.items.header")}</h3>
 
-            { this.state.items && this.state._id && <ItemForm creator={this.state._id} items={this.state.items} /> }
+            { items && this.state._id && <ItemForm creator={this.state._id} items={this.state.items} /> }
             
             <div className="ui divider"></div>
 

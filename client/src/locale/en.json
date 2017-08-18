@@ -203,6 +203,7 @@
       "status": "Status",
       "user": "User",
       "customer": "Customer",
+      "no_customer": "No Customer",
       "progress": "Progress",
       "deadline": "Deadline",
       "invoiced": "Invoiced",
@@ -233,6 +234,7 @@
       "header": "Project",
       "name": "name",
       "customer": "Customer",
+      "no_customer": "No Customer",
       "deadline": "Deadline",
       "user": "User",
       "status": "Status",
@@ -285,6 +287,7 @@
       "status": "Status",
       "user": "User",
       "customer": "Customer",
+      "no_cutomer": "No Customer",
       "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Sales are shown here."
@@ -298,6 +301,7 @@
       "status": "Status",
       "user": "User",
       "customer": "Customer",
+      "no_cutomer": "No Customer",
       "description": "Description",
       "select_status": "-Select Status-",
       "select_customer": "-Select Customer-",
@@ -314,6 +318,7 @@
       "header": "Sale",
       "name": "name",
       "customer": "Customer",
+      "no_customer": "No Customer",
       "date": "Date",
       "user": "User",
       "status": "Status",
@@ -390,12 +395,12 @@
         "country": "Country"
       },
       "active_projects_sales": "Active Projects/Sales",
-      "unpaid_invoices": "Unpaid invoices"
-    },
-    "confirmation_msg": "Are you sure to delete this customer?",
-    "flash": {
-      "success_delete": "Customer *{name}* is deleted!",
-      "error_delete": "Customer *{name}* couldn't be deleted, try again after refreshing the page"
+      "unpaid_invoices": "Unpaid invoices",
+      "confirmation_msg": "Are you sure to delete this customer?",
+      "flash": {
+        "success_delete": "Customer *{name}* is deleted!",
+        "error_delete": "Customer *{name}* couldn't be deleted, try again after refreshing the page"
+      }
     }
   },
   "invoices": {

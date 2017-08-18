@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessages'
 import { fetchCustomer, deleteCustomer } from '../../actions/customerActions'
 
@@ -32,9 +31,7 @@ class Show extends Component {
       contact: {
         phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
         email: this.props.customer ? this.props.customer.contact.email : ''
-      },
-      errors: {},
-      isLoading: false
+      }
     }
   }
 
@@ -48,19 +45,19 @@ class Show extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({
-      _id: nextProps.customer._id,
-      name: nextProps.customer.name,
+      _id: nextProps.customer ? nextProps.customer._id : null,
+      name: nextProps.customer ? nextProps.customer.name : '',
       address: {
-        street: nextProps.customer.address.street,
-        postalCode: nextProps.customer.address.postalCode,
-        region: nextProps.customer.address.region,
-        country: nextProps.customer.address.country
+        street: nextProps.customer ? nextProps.customer.address.street : '',
+        postalCode: nextProps.customer ? nextProps.customer.address.postalCode : '',
+        region: nextProps.customer ? nextProps.customer.address.region : '',
+        country: nextProps.customer ? nextProps.customer.address.country : ''
       },
-      vatNumber: nextProps.customer.vatNumber,
-      includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
+      vatNumber: nextProps.customer ? nextProps.customer.vatNumber : '',
+      includeContactOnInvoice: nextProps.customer ? nextProps.customer.includeContactOnInvoice : null,
       contact: {
-        phoneNumber: nextProps.customer.contact.phoneNumber,
-        email: nextProps.customer.contact.email
+        phoneNumber: nextProps.customer ? nextProps.customer.contact.phoneNumber : '',
+        email: nextProps.customer ? nextProps.customer.contact.email : ''
       }
     })
   }
@@ -82,7 +79,7 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
-    let name = this.props.customer.name
+    let name = this.state.name
 
     this.props.deleteCustomer(id).then(
       () => {
@@ -99,7 +96,7 @@ class Show extends Component {
   }
 
   render() {
-    const { _id, name, vatNumber, contact, includeContactOnInvoice, address, errors, isLoading } = this.state
+    const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
     
     return (
       <div className="ui stackable grid">

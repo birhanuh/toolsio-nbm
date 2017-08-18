@@ -36,7 +36,7 @@ export default function Card({project}) {
             <tr>
               <td>John</td>
               <td>{project.deadline}</td>
-              <td>{project.customer.name}</td>
+              <td>{project.customer ? project.customer.name: <p className="blue">{T.translate("projects.page.no_customer")}</p>}</td>
               <td>
                 <div className="ui progress success small m-b-n">
                   <div className="bar">

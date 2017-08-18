@@ -233,6 +233,7 @@ class Form extends Component {
                 <input 
                   type="checkbox" 
                   name="includeContactOnInvoice" 
+                  value={includeContactOnInvoice}
                   onChange={this.handleChange.bind(this)} />
                 <label></label>
               </div>
@@ -260,7 +261,7 @@ class Form extends Component {
               <div className={classnames("inline field", {error: errors.message && errors.message.errors && errors.message.errors['address.country']})}>              
                 <label>{T.translate("customers.show.address.country")}</label>
                 <CountryDropdown
-                  defaultOptionLabel={T.translate("customers.new.select_country")}
+                  defaultOptionLabel={T.translate("customers.form.select_country")}
                   value={address.country}
                   onChange={(val) => this.selectCountry(val)} 
                   error={errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message} />
@@ -270,7 +271,7 @@ class Form extends Component {
               <div className={classnames("inline field", {error: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>              
                 <label>{T.translate("customers.show.address.region")}</label> 
                 <RegionDropdown
-                  defaultOptionLabel={T.translate("customers.new.select_region")}
+                  defaultOptionLabel={T.translate("customers.form.select_region")}
                   disabled={address.country === ''}
                   country={address.country}
                   value={address.region}

@@ -18,7 +18,7 @@ class Form extends Component {
       _id: this.props.project ? this.props.project._id : null,
       name: this.props.project ? this.props.project.name : '',
       deadline: this.props.project ? moment(this.props.project.deadline) : moment(),
-      customer: this.props.project ? this.props.project.customer._id : '',
+      customer: this.props.project ? (this.props.project.customer ? this.props.project.customer._id : '') : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
       errors: {
@@ -135,7 +135,7 @@ class Form extends Component {
             <SelectField
               label={T.translate("projects.form.customer")}
               name="customer"
-              value={typeof customer === 'object' ? customer._id : customer} 
+              value={customer ? (typeof customer === 'object' ? customer._id : customer) : ''} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
               formClass="inline field"
