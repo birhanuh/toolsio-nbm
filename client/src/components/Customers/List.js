@@ -17,6 +17,7 @@ export default function List({ customers, deleteCustomer }) {
             <th>{T.translate("customers.show.vat_number")}</th>
             <th>{T.translate("customers.show.contact.header")}</th>
             <th>{T.translate("customers.show.active_projects_sales")}</th>
+            <th>{T.translate("customers.show.unpaid_invoices")}</th>
             <th>Actions</th>
           </tr>
         </thead>

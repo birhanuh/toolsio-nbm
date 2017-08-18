@@ -35,7 +35,7 @@ export default function Card({sale}) {
             <tr>
               <td>John</td>
               <td>{sale.deadline}</td>
-              <td>{sale.customer.name}</td>
+              <td>{sale.customer ? sale.customer.name: <p className="blue">{T.translate("sales.page.no_customer")}</p>}</td>
               <td>
                 <i className={classnames("check circle outline icon", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}></i>
               </td>
