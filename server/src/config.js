@@ -20,7 +20,7 @@ export default {
   mongoose_test: `mongodb://${dns}/toolsio_test`,
   mongoose: `mongodb://${dns}/toolsio`,
 
-  // jwt
-  jwtSecret: 'somesecretkeyforjsonwebtoken'
+  // secret
+  secret: 'somesecretkeyforjsonwebtoken'
 
 }

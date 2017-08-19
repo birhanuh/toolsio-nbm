@@ -74,12 +74,13 @@ class Form extends Component {
       
       // Make submit
       this.props.signupRequest(this.state.user).then(
-        () => {
+        (response) => {
           this.props.addFlashMessage({
             type: 'success',
             text: 'You have signed up successfully!'
           })
-          this.context.histrory.push('/dashboard')
+          console.log('response: ', response)
+          //this.context.histrory.push('/dashboard')
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )

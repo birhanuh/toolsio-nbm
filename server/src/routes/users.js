@@ -1,5 +1,6 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
+import passport from 'passport'
 import jwt from 'jsonwebtoken'
 import config from '../config'
 
@@ -14,12 +15,20 @@ router.get('/:identifier', (req, res) => {
   })
 })
 
+router.get('/', (req, res) => {
+  console.log(req.user)
+  console.log(req.isAuthenticated())
+})
+
 // Register User
 router.post('/register', function(req, res) {
 
   User.create(req.body)
     .then(user => 
-      res.json({ success: true })
+      req.login(user._id, function(err) {
+        //res.json({ success: true })
+        res.redirect('/')
+      })
     ).catch(err => 
       res.status(500).json({ 
         errors: {
@@ -40,7 +49,7 @@ router.post('/login', (req, res) => {
         const token = jwt.sign({
           id: user[0]._id,
           email: user[0].email
-        }, config.jwtSecret)
+        }, config.secret)
         res.json({ token })
       } else {
         res.status(401).json({ errors: { form: 'Invalid Credentials.' } }) 
@@ -49,6 +58,14 @@ router.post('/login', (req, res) => {
       res.status(401).json({ errors: { form: 'Invalid Credentials.' } }) 
     }  
   })
+})
+
+passport.serializeUser(function(user_id, done) {
+  done(null, user_id)
+})
+
+passport.deserializeUser(function(user_id, done) {
+  done(null, user_id)
 })
 
 module.exports = router

@@ -204,7 +204,7 @@ class NavigationBar extends Component {
               {T.translate("landing.home.welcome")}&nbsp;
               <div className="turquoise visible-all-inline">{T.translate("internal_navigation.toolsio")}</div>
             </h1>
-            <h5>{T.translate("landing.home.slogan")}</h5>
+            <h3>{T.translate("landing.home.slogan")}</h3>
             <a href="/signup" className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
           </div>
         </div>

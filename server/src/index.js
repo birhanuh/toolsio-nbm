@@ -19,6 +19,10 @@ import config from './config'
 // Mongodb connection
 import db from './db'
 
+// Authentication package 
+import session from 'express-session'
+import passport from 'passport'
+
 // View Engine
 //app.set('view engine', 'jade')
 //app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects'])
@@ -28,6 +32,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser());
+
+app.use(session({
+  secret: config.secret,
+  resave: false,
+  saveUninitialized: false,
+  //cookie: {secure: true}
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 if (app.get('env') === 'development') {
   app.locals.pretty = true;
