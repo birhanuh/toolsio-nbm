@@ -38,7 +38,18 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   //cookie: {secure: true}
+  cookie: { maxAge: 2628000000 },
+  store: new (require('express-sessions'))({
+    storage: 'mongodb',
+    //instance: mongoose, // optional 
+    host: 'localhost', // optional 
+    //port: 27017, // optional 
+    db: 'toolsio', // optional 
+    collection: 'sessions', // optional 
+    expire: 86400 // optional 
+  })
 }))
+
 app.use(passport.initialize())
 app.use(passport.session())
 
