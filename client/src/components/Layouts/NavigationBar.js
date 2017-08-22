@@ -34,7 +34,6 @@ class NavigationBar extends Component {
   }
 
   render() {
-    console.log('isAuthenticated: ', isAuthenticated)
     const { isAuthenticated } = this.props.auth
 
     const currentPage = window.location.pathname

@@ -1,7 +1,6 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
-import jwt from 'jsonwebtoken'
 import config from '../config'
 
 import User from '../models/User'
@@ -28,8 +27,7 @@ router.post('/register', function(req, res) {
   User.create(req.body)
     .then(user => 
       req.login(user._id, function(err) {
-        //res.json({ success: true })
-        res.redirect('/')
+        res.json({ success: true })
       })
     ).catch(err => 
       res.status(500).json({ 
@@ -42,20 +40,6 @@ router.post('/register', function(req, res) {
 })
 
 // Login User
-// router.post('/login', passport.authenticate('local', {
-//     // If this function gets called, authentication was successful.
-//     // `req.user` contains the authenticated user.
-//     //res.redirect('/users/' + req.user.username)
-//     successRedirect: '/dashboard',
-//     failureRedirect: '/login'
-// }))
-
-router.post('/logout', function(req, res) {
-  req.logout()
-  req.session.destroy()
-  res.redirect('/')
-})
-
 router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
@@ -63,25 +47,12 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
     admin: req.user.admin })
 })
 
-// router.post('/login', (req, res) => {
-//   const { email, password } = req.body
-
-//   User.find({ email: email }).then(user => {
-//     if (user[0]) {
-//       if (bcrypt.compareSync(password, user[0].password)) {
-//         const token = jwt.sign({
-//           id: user[0]._id,
-//           email: user[0].email
-//         }, config.secret)
-//         res.json({ token })
-//       } else {
-//         res.status(401).json({ errors: { form: 'Invalid Credentials.' } }) 
-//       }
-//     } else {
-//       res.status(401).json({ errors: { form: 'Invalid Credentials.' } }) 
-//     }  
-//   })
-// })
+router.post('/logout', function(req, res) {
+  req.logout()
+  req.session.destroy(function(err) {
+    res.json({ success: true })
+  })
+})
 
 passport.serializeUser(function(userId, done) {
   done(null, userId)

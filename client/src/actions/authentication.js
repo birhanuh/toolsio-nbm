@@ -25,18 +25,19 @@ export function isUserExists(identifier) {
 export function loginRequest(data) {
   return dispatch => {
     return axios.post('/users/login', data).then(res => {
-      const token = res.data.token
-      
       localStorage.setItem('user', JSON.stringify(res.data))
       dispatch(setCurrentUser(res.data))
+      console.log('res: ', res)
     })
   }
 }
 
 export function logout() {
   return dispatch => {
-    localStorage.removeItem('user')
-    dispatch(setCurrentUser({}))
-    return axios.post('/users/logout')
+    return axios.post('/users/logout').then(
+      () => {        
+        localStorage.removeItem('user')
+        dispatch(setCurrentUser({}))  
+      })
   }
 }
