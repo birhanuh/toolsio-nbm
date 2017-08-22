@@ -34,6 +34,7 @@ class NavigationBar extends Component {
   }
 
   render() {
+    console.log('isAuthenticated: ', isAuthenticated)
     const { isAuthenticated } = this.props.auth
 
     const currentPage = window.location.pathname
@@ -192,9 +193,9 @@ class NavigationBar extends Component {
               <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
               <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
            
-              <div className="right item">                    
-                <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link>     
-                <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+              <div className="right item">                        
+                <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>               
+                <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link>    
               </div>  
             </div>
           </div>

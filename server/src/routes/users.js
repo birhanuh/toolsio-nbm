@@ -42,18 +42,25 @@ router.post('/register', function(req, res) {
 })
 
 // Login User
-router.post('/login', passport.authenticate('local', {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    //res.redirect('/users/' + req.user.username)
-    successRedirect: '/dashboard',
-    failureRedirect: '/login'
-}))
+// router.post('/login', passport.authenticate('local', {
+//     // If this function gets called, authentication was successful.
+//     // `req.user` contains the authenticated user.
+//     //res.redirect('/users/' + req.user.username)
+//     successRedirect: '/dashboard',
+//     failureRedirect: '/login'
+// }))
+
+router.post('/logout', function(req, res) {
+  req.logout()
+  req.session.destroy()
+  res.redirect('/')
+})
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  res.json({ success: req.user })
+  res.json({ firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+    admin: req.user.admin })
 })
 
 // router.post('/login', (req, res) => {

@@ -3,6 +3,7 @@ import config from '../config'
 
 import User from '../models/User'
 
+/*
 // next is a callback function that calls the next function in chain 
 export default (req, res, next) => {
   const authorizationHeader = req.headers['authorization']
@@ -39,13 +40,23 @@ export default (req, res, next) => {
     })
   }
 }
-
-export function authenticationMiddleware() {
+*/
+export function authenticate() {
   return (req, res, next) => {
     console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`)
 
     if (req.isAuthenticated()) return next()
 
-    res.redirect('/login')
+    res.status(401).json({ error: 'Failed to authenticate' })
+  }
+}
+
+export function ensureAuthenticated(req, res, next) {
+  console.log('ensureAuthenticated: ', req.isAuthenticated())
+  if(req.isAuthenticated()) {
+    return next()
+  } else {
+    //res.redirect('/users/login')
+    res.status(401).json({ error: 'Failed to authenticate' })
   }
 }

@@ -57,6 +57,11 @@ if (app.get('env') === 'development') {
   app.locals.pretty = true;
 }
 
+// app.use(function(req, res, next) {
+//   res.locals.isAuthenticated = req.isAuthenticated()
+//   next()  
+// })
+
 app.use('/users', users)
 app.use('/api', api)
 //app.use('/', routes)

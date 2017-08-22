@@ -26,20 +26,17 @@ export function loginRequest(data) {
   return dispatch => {
     return axios.post('/users/login', data).then(res => {
       const token = res.data.token
-      localStorage.setItem('jwtToken', token)
-      setAuthorizationToken(token)
       
-      // Decoded toke (i.e. user object)
-      let decoded = jwtDecode(token)
-      dispatch(setCurrentUser(decoded))
+      localStorage.setItem('user', JSON.stringify(res.data))
+      dispatch(setCurrentUser(res.data))
     })
   }
 }
 
 export function logout() {
   return dispatch => {
-    localStorage.removeItem('jwtToken')
-    setAuthorizationToken(false)
+    localStorage.removeItem('user')
     dispatch(setCurrentUser({}))
+    return axios.post('/users/logout')
   }
 }
