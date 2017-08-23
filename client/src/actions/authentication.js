@@ -22,6 +22,12 @@ export function isUserExists(identifier) {
   }
 }
 
+export function subdomainRequest(data) {
+  return dispatch => {
+    // body...
+  }
+}
+
 export function loginRequest(data) {
   return dispatch => {
     return axios.post('/users/login', data).then(res => {

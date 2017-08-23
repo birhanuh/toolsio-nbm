@@ -99,7 +99,14 @@
     "sign_in": "Sign in",
     "new_to_us": "New to us?",
     "email_required": "Email is required",
-    "password_required:": "Password is required"
+    "password_required": "Password is required",
+    "subdomain": {
+      "header": "Enter your subdomain",
+      "company_name": "Your subdomain is most likely your company name",
+      "continue_button": "Continue",
+      "error": "can't be blank",
+      "dont_have_an_account": "Don't have an account? Sign up for free now!"
+    },
   },
   "account": {
     "edit": {

@@ -16,11 +16,6 @@ router.get('/:identifier', (req, res) => {
   })
 })
 
-router.get('/', (req, res) => {
-  console.log(req.user)
-  console.log(req.isAuthenticated())
-})
-
 // Register User
 router.post('/register', function(req, res) {
 

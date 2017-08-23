@@ -16,7 +16,11 @@ class Form extends Component {
         password: '',
         confirmPassword: ''
       },
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false,
       invalid: false
     }
@@ -58,8 +62,11 @@ class Form extends Component {
   isValid() {
     const { errors, isValid } = Validation.validateRegistrationInput(this.state.user)
 
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ errors: updatedErrors })
     }
 
     return isValid;

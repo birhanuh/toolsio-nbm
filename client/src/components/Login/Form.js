@@ -16,7 +16,11 @@ class Form extends Component {
         email: '',
         password: ''
       },
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false
     }
   }
@@ -32,8 +36,11 @@ class Form extends Component {
   isValid() {
     const { errors, isValid } = Validation.validateLoginInput(this.state.user)
 
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ errors: updatedErrors })
     }
 
     return isValid;
@@ -64,23 +71,23 @@ class Form extends Component {
         <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
-            { errors.form && <div className="ui negative message"><p>{errors.form}</p></div> }
+            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            <div className={classnames("field", { error: !!errors.email })}>
+            <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.email })}>
               <div className="ui right icon input">
                 <i className="user icon"></i>
                 <input type="text" name="email" placeholder={T.translate("sign_in.email")} 
                   value={this.state.user.email} onChange={this.handleChange.bind(this)} />
-                <span>{errors.email}</span>
               </div>
+              <span className="red">{errors.message && errors.message.errors && errors.message.errors.email && errors.message.errors.email.message}</span>
             </div>  
-            <div className={classnames("field", { error: !!errors.password })}>
+            <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.password })}>
               <div className="ui right icon input">
                 <i className="lock icon"></i>
                 <input type="password" name="password" placeholder={T.translate("sign_in.password")}
-                  value={this.state.user.password} onChange={this.handleChange.bind(this)} />
-                <span>{errors.password}</span>
+                  value={this.state.user.password} onChange={this.handleChange.bind(this)} />                
               </div>
+              <span className="red">{errors.message && errors.message.errors && errors.message.errors.password && errors.message.errors.password.message}</span>
             </div>
                   
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_in.sign_in")}</button>

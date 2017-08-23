@@ -16,6 +16,7 @@ class Page extends Component {
           </a>
           <div className="content">
             {T.translate("sign_in.header")}
+            {T.translate("sign_in.subdomain.header")}
           </div>
         </h2>
         
