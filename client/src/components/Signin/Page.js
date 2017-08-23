@@ -15,7 +15,6 @@ class Page extends Component {
             <img src={logo} className="image" alt="logo-square" />
           </a>
           <div className="content">
-            {T.translate("sign_in.header")}
             {T.translate("sign_in.subdomain.header")}
           </div>
         </h2>

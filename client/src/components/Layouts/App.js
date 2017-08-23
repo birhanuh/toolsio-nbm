@@ -5,7 +5,8 @@ import classnames from 'classnames'
 import Dashboard from '../Dashboard/Page'
 import Landing from './Landing'
 import Signup from '../Signup/Page'
-import Login from '../Login/Page'
+import Signin from '../Signin/Page'
+import Subdomain from '../Signin/Subdomain'
 import ProjectsPage from '../Projects/Page'
 import ProjectsFormPage from '../Projects/FormPage'
 import ProjectsShow from '../Projects/Show'
@@ -56,8 +57,8 @@ class App extends Component {
 
   render() {
     let landingPage = window.location.pathname === '/' ? true : false
-    let authPages = window.location.pathname === '/login' || window.location.pathname === '/signup'
-      ? true : false
+    let authPages = window.location.pathname === '/sigin' || window.location.pathname === '/signup'
+      || window.location.pathname === '/subdomain' ? true : false
 
     let internalPages = (landingPage || authPages) ? false : true 
 
@@ -90,7 +91,8 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Landing} />
               <Route path="/signup" component={Signup} />
-              <Route path="/login" component={Login} />
+              <Route path="/signin" component={Signin} />
+              <Route path="/subdomain" component={Subdomain} />
               <Route path="/dashboard" component={requireAuth(Dashboard)} />
               <Route exact path="/projects" component={requireAuth(ProjectsPage)} />
               <Route exact path="/projects/edit/:id" component={requireAuth(ProjectsFormPage)} /> 

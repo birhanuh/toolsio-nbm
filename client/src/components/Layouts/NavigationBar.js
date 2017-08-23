@@ -176,8 +176,8 @@ class NavigationBar extends Component {
           <ActiveLink activeOnlyWhenExact className="item" to="#testimonials" label={T.translate("landing.testmonial.header")} />
           <ActiveLink activeOnlyWhenExact className="item" to="#pricing" label={T.translate("landing.pricing.header")} />
           <ActiveLink activeOnlyWhenExact className="item" to="#contacts" label={T.translate("landing.contacts.header")} />
-          <Link className="item" to="/login">{T.translate("sign_in.sign_in")}</Link>    
-          <Link className="item" to="/login">{T.translate("sign_up.sign_up")}</Link>    
+          <Link className="item" to="/subdomain">{T.translate("sign_in.sign_in")}</Link>    
+          <Link className="item" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
         </div>
         <div id="home" className="ui inverted vertical masthead center aligned segment">
           <div className="ui container">
@@ -193,7 +193,7 @@ class NavigationBar extends Component {
               <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
            
               <div className="right item">                                                   
-                <Link className="ui inverted button"  to="/login">{T.translate("sign_in.sign_in")}</Link> 
+                <Link className="ui inverted button"  to="/subdomain">{T.translate("sign_in.sign_in")}</Link> 
                 <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>     
               </div>  
             </div>
