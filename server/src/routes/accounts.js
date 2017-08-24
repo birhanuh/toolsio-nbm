@@ -13,5 +13,4 @@ router.get('/:subdomain', (req, res) => {
   })
 })
 
-
 module.exports = router

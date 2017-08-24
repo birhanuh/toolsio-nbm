@@ -6,6 +6,7 @@ const SALT_WORK_FACTOR = 10
 
 // User Schema 
 const UserSchema = new Schema({
+  account: { type: mongoose.Schema.Types.ObjectId, ref: "Account" },
   firstName: { type: String /**, index: true**/ }, 
   lastName: { type: String },
   email: { type: String, required: [true, "Email is required."], index: { unique: true } },
@@ -15,7 +16,8 @@ const UserSchema = new Schema({
     age: Number,
     gender: String
   },
-  
+  avatar: { data: Buffer, contentType: String },
+
   createdAt: Date,
   updatedAt: Date
 })
