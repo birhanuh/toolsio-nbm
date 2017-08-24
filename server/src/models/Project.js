@@ -8,8 +8,8 @@ let projectSchema = new mongoose.Schema({
   description: { type: String, default: '' },
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
 
-  created_at: Date,
-  updated_at: Date
+  createdAt: Date,
+  updatedAt: Date
 })
 
 projectSchema.pre('validate', function (next) {

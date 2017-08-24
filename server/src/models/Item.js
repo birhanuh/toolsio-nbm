@@ -9,8 +9,8 @@ let itemSchema = new mongoose.Schema({
   price: { type: Number, required: [true, "Price is required."] },
   vat: { type: Number, min: 1, max: 100, required: [true, "Vat is required."] },
 
-  created_at: Date,
-  updated_at: Date
+  createdAt: Date,
+  updatedAt: Date
 })
 
 itemSchema.post('save', function(doc, next) {

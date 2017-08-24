@@ -9,8 +9,8 @@ let saleSchema = new mongoose.Schema({
   description: { type: String, default: '' },
   items: [{ type: mongoose.Schema.Types.ObjectId, ref: "Item" }],
 
-  created_at: Date,
-  updated_at: Date
+  createdAt: Date,
+  updatedAt: Date
 })
 
 saleSchema.pre('validate', function (next) {

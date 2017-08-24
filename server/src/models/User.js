@@ -16,8 +16,8 @@ const UserSchema = new Schema({
     gender: String
   },
   
-  created_at: Date,
-  updated_at: Date
+  createdAt: Date,
+  updatedAt: Date
 })
 
 UserSchema.pre('save', function(next) {

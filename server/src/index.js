@@ -9,6 +9,7 @@ import logger from 'morgan'
 // Init app
 const app = express()
 
+import accounts from './routes/accounts'
 import users from './routes/users'
 import api from './routes/api'
 //import routes from './routes/index'
@@ -62,6 +63,7 @@ if (app.get('env') === 'development') {
 //   next()  
 // })
 
+app.use('/accounts', accounts)
 app.use('/users', users)
 app.use('/api', api)
 //app.use('/', routes)
