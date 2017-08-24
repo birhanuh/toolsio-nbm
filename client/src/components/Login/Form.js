@@ -76,7 +76,7 @@ class Form extends Component {
             <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.email })}>
               <div className="ui right icon input">
                 <i className="user icon"></i>
-                <input type="text" name="email" placeholder={T.translate("sign_in.email")} 
+                <input type="text" name="email" placeholder={T.translate("log_in.email")} 
                   value={this.state.user.email} onChange={this.handleChange.bind(this)} />
               </div>
               <span className="red">{errors.message && errors.message.errors && errors.message.errors.email && errors.message.errors.email.message}</span>
@@ -84,13 +84,13 @@ class Form extends Component {
             <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.password })}>
               <div className="ui right icon input">
                 <i className="lock icon"></i>
-                <input type="password" name="password" placeholder={T.translate("sign_in.password")}
+                <input type="password" name="password" placeholder={T.translate("log_in.password")}
                   value={this.state.user.password} onChange={this.handleChange.bind(this)} />                
               </div>
               <span className="red">{errors.message && errors.message.errors && errors.message.errors.password && errors.message.errors.password.message}</span>
             </div>
                   
-            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_in.sign_in")}</button>
+            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.log_in")}</button>
               
           </div>
         </form>         

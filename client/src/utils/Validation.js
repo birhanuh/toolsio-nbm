@@ -10,7 +10,7 @@ export default {
     let errors = {}
 
     if (!data.email) {
-      errors.email = T.translate("sign_in.email_required")
+      errors.email = T.translate("log_in.email_required")
     } else {
       if (!Validator.isEmail(data.email)) {
         errors.email = T.translate("sign_un.email_format_required") 
@@ -39,12 +39,27 @@ export default {
 
     if (!data.email) {
       errors["email"] = {
-        message: T.translate("sign_in.email_required")
+        message: T.translate("log_in.email_required")
       }
     }
     if (!data.password) {
       errors["password"] = {
-        message: T.translate("sign_in.password_required")
+        message: T.translate("log_in.password_required")
+      }
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
+  validateSubdomainInput: (data) => {
+    let errors = {}
+
+    if (!data.subdomain) {
+      errors["subdomain"] = {
+        message: T.translate("log_in.subdomain.subdomain_required")
       }
     }
     

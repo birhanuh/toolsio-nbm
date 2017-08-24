@@ -30,7 +30,7 @@ if (localStorage.user) {
   var User = localStorage.getItem('user');
   store.dispatch(setCurrentUser(JSON.parse(User)))
 }
-
+console.log('cookie: ', document.cookie)
 // Localization setup
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
 

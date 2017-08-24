@@ -8,11 +8,13 @@ import classnames from 'classnames'
 // Localization 
 import T from 'i18n-react'
 
+import logo from '../../images/logo-square.png'
+
 class Subdomain extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      Subdomain: '',
+      subdomain: '',
       errors: {
         message: {
           errors: {}
@@ -22,20 +24,14 @@ class Subdomain extends Component {
     }
   }
   
-  componentDidMount = () => {
-    // Fetch Project when id is present in params
-    const { match } = this.props
-    console.log('match: ', match)
-  }
-
   handleChange(e) {
     this.setState({
-      [e.target.name] = e.target.value
+      [e.target.name]: e.target.value
     })
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateLoginInput(this.state.user)
+    const { errors, isValid } = Validation.validateSubdomainInput(this.state.subdomain)
 
     let updatedErrors = Object.assign({}, this.state.errors)
     updatedErrors.message.errors = errors
@@ -58,7 +54,7 @@ class Subdomain extends Component {
             type: 'success',
             text: 'You are on your company page, now login with your credentials!'
           })
-          this.context.router.history.push(`http://${subdomain}.lvh.me:3000/login`)
+          this.context.router.history.push(`http://${this.state.subdomain}.lvh.me:3000/login`)
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )  
@@ -69,6 +65,15 @@ class Subdomain extends Component {
     const { errors, isLoading } = this.state
    
     return (  
+      <div>
+        <h2 className="ui teal image header">
+          <a className="" href="/">
+            <img src={logo} className="image" alt="logo-square" />
+          </a>
+          <div className="content">
+            {T.translate("log_in.subdomain.header")}
+          </div>
+        </h2>
         <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
@@ -76,17 +81,25 @@ class Subdomain extends Component {
 
             <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
               <div className="ui right labeled input">
-                <input type="text" name="email" placeholder={T.translate("sign_in.subdomain.company_name")} 
-                  value={this.state.user.subdomain} onChange={this.handleChange.bind(this)} />
+                <input type="text" name="email" placeholder={T.translate("log_in.subdomain.company_name")} 
+                  value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
                 <div className="ui label">toolsio.com</div>  
               </div>
               <span className="red">{errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors.subdomain.message}</span>
             </div>  
 
-            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_in.subdomain.continue_button")}</button>
+            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>
               
           </div>
-        </form>         
+        </form>  
+        <div className="ui message">
+          {T.translate("log_in.new_to_us")}&nbsp;<a href="/signup">{T.translate("sign_up.sign_up")}</a>
+        </div>
+        <div className="ui centered grid m-t-m">
+          <small className="visible-all-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="visible-all-block">{T.translate("landing.footer.address")}</small>
+        </div>
+      </div>       
       
     )
   }

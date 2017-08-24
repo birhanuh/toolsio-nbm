@@ -1,6 +1,6 @@
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 import { setAuthorizationToken } from '../utils'
-import jwtDecode from 'jwt-decode'
 import { SET_CURRENT_USER } from './types'
 
 export function setCurrentUser(user) {
@@ -22,9 +22,9 @@ export function isUserExists(identifier) {
   }
 }
 
-export function subdomainRequest(data) {
+export function subdomainRequest(subdomain) {
   return dispatch => {
-    // body...
+    return axios.get(`/accounts/${subdomain}`)
   }
 }
 
@@ -33,7 +33,6 @@ export function loginRequest(data) {
     return axios.post('/users/login', data).then(res => {
       localStorage.setItem('user', JSON.stringify(res.data))
       dispatch(setCurrentUser(res.data))
-      console.log('res: ', res)
     })
   }
 }
