@@ -14,7 +14,8 @@ import users from './routes/users'
 import api from './routes/api'
 //import routes from './routes/index'
 
-// Mongodb credentials
+// Config
+require('dotenv').config()
 import config from './config'
 
 // Mongodb connection
@@ -81,8 +82,8 @@ app.use((req, res) => {
 // Set port
 app.set('port', process.env.PORT)
 app.listen(app.get('port'), () => 
-  console.log('Server started on port: ' + app.get('port'))
-);
+  console.log('Server started on port: ' + process.env.PORT)
+)
 
 // Setup mongoose 
 let mongoURI = config.mongoose
