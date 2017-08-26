@@ -54,7 +54,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-if (app.get('env') === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.locals.pretty = true;
 }
 
