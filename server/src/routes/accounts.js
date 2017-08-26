@@ -7,9 +7,9 @@ let router = express.Router()
 let LocalStrategy = require('passport-local').Strategy
 
 // Register Account
-router.post('/register', function(req, res) {
+router.put('/register', function(req, res) {
 
-  Account.create(req.body)
+  Account.update({subdomain: req.body.subdomain}, req.body)
     .then(account => 
       res.json({ result: account.subdomain })
     ).catch(err => 
