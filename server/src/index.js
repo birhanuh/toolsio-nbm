@@ -79,7 +79,7 @@ app.use((req, res) => {
 })
 
 // Set port
-app.set('port', (process.env.PORT || 8080))
+app.set('port', process.env.PORT)
 app.listen(app.get('port'), () => 
   console.log('Server started on port: ' + app.get('port'))
 );
