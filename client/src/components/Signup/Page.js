@@ -1,7 +1,7 @@
 import React, { Component } from 'react' 
 import { connect } from 'react-redux'
 import Form from './Form'
-import { signupRequest, isUserExists } from '../../actions/authentication'
+import { signupRequest, isAccountExists, isUserExists} from '../../actions/authentication'
 import { addFlashMessage } from '../../actions/flashMessages'
 
 // Localization 
@@ -11,7 +11,7 @@ import logo from '../../images/logo-square.png';
 
 class Page extends Component {
   render() {
-    const { signupRequest, isUserExists, addFlashMessage } = this.props
+    const { signupRequest, isAccountExists, isUserExists, addFlashMessage } = this.props
     return (      
           
       <div>
@@ -22,7 +22,7 @@ class Page extends Component {
           <div className="content">{T.translate("sign_up.header")}</div>
         </h2>
         
-        <Form signupRequest={signupRequest} isUserExists={isUserExists} addFlashMessage={addFlashMessage}/> 
+        <Form signupRequest={signupRequest} isAccountExists={isAccountExists} isUserExists={isUserExists} addFlashMessage={addFlashMessage}/> 
 
         <div className="ui message"> 
           {T.translate("sign_up.already_a_user")}&nbsp;<a href="/login">{T.translate("sign_up.log_in_here")}</a>
@@ -40,9 +40,10 @@ class Page extends Component {
 Page.propTypes = {
   signupRequest: React.PropTypes.func.isRequired,
   addFlashMessage: React.PropTypes.func.isRequired,
+  isAccountExists: React.PropTypes.func.isRequired,
   isUserExists: React.PropTypes.func.isRequired
 }
 
-export default connect(null, { signupRequest, addFlashMessage, isUserExists })(Page)
+export default connect(null, { signupRequest, addFlashMessage, isAccountExists, isUserExists })(Page)
 
 

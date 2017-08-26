@@ -9,25 +9,32 @@ export default {
   validateRegistrationInput: (data) => {
     let errors = {}
 
-    if (!data.email) {
+    if (!data.user.email) {
       errors.email = T.translate("log_in.email_required")
     } else {
-      if (!Validator.isEmail(data.email)) {
+      if (!Validator.isEmail(data.user.email)) {
         errors.email = T.translate("sign_un.email_format_required") 
       }
     }  
-    if (!data.password) {
+    if (!data.user.password) {
       errors.password = T.translate("sign_up.password_required")
     }
-    if (!data.confirmPassword) {
+    if (!data.user.confirmPassword) {
       errors.confirmPassword = T.translate("sign_up.password_confirmation_required")
     }
-    if (data.password && data.confirmPassword) {
+    if (data.user.password && data.confirmPassword) {
       if (!Validator.equals(data.password, data.confirmPassword)) {
         errors.confirmPassword = T.translate("sign_up.password_match_required")
       }
     }
-      
+    
+    if (!data.account.subdomain) {
+      errors.subdomain = T.translate("sign_up.subdomain.subdomain_required")
+    }
+    if (!data.account.industry) {
+      errors.industry = T.translate("sign_up.subdomain.industry_required")
+    }
+
     return {
       errors,
       isValid: isEmpty(errors)

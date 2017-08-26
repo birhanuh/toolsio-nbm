@@ -4,27 +4,63 @@ import passport from 'passport'
 import config from '../config'
 
 import User from '../models/User'
+import Account from '../models/Account'
 
 let router = express.Router()
 
 let LocalStrategy = require('passport-local').Strategy
 
-// Get regisetred user
-router.get('/:identifier', (req, res) => {
-  User.find({ email: req.params.identifier }).then(user => {
-    res.json( { user }) 
-  })
-})
-
 // Register User
-router.post('/register', function(req, res) {
+// router.post('/register', function(req, res) {
 
-  User.create(req.body)
-    .then(user => 
-      req.login(user._id, function(err) {
-        res.json({ success: true })
-      })
-    ).catch(err => 
+//   User.create(req.body)
+//     .then(user => 
+//       req.login(user._id, function(err) {
+//         res.json({ success: true })
+//       })
+//     ).catch(err => 
+//       res.status(500).json({ 
+//         errors: {
+//           confirmation: 'fail',
+//           message: err
+//         }
+//       })
+//     )
+// })
+
+router.post('/register', function(req, res) {
+  const { account, user } = req.body
+  
+  User.create(user).then(user => {
+    Account.create(account).then(account => {
+      
+      // Push associated user
+      account.users.push(user)
+      account.save().then(account => {
+
+        // Push associated account
+        user.account = account
+        user.save().then(user => {
+          req.login(user._id, function(err) {
+            res.json({ success: true })
+          })
+        }).catch(err => 
+          res.status(500).json({ 
+            errors: {
+              confirmation: 'fail',
+              message: err
+            }
+          })
+        )
+      }).catch(err => 
+        res.status(500).json({ 
+          errors: {
+            confirmation: 'fail',
+            message: err
+          }
+        })
+      )
+    }).catch(err => 
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
@@ -32,6 +68,21 @@ router.post('/register', function(req, res) {
         }
       })
     )
+  }).catch(err => 
+    res.status(500).json({ 
+      errors: {
+        confirmation: 'fail',
+        message: err
+      }
+    })
+  )
+})
+
+// Get regisetred user
+router.get('/:email', (req, res) => {
+  User.find({ email: req.params.email }).then(user => {
+    res.json( { user }) 
+  })
 })
 
 // Login User
@@ -49,13 +100,13 @@ router.post('/logout', function(req, res) {
   })
 })
 
-passport.serializeUser(function(userId, done) {
-  done(null, userId)
+passport.serializeUser(function(user, done) {
+  done(null, user._id)
 })
 
-passport.deserializeUser(function(userId, done) {
-  User.getUserById(userId, function(err, user) {
-    done(err, userId)
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user)
   })
 })
 
