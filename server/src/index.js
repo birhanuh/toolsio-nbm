@@ -30,10 +30,10 @@ import passport from 'passport'
 //app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects'])
 
 // BodyParser and Cookie parser Middleware(Setup code)
-app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(logger('dev'))
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cookieParser());
+app.use(cookieParser())
 
 app.use(session({
   secret: config.secret,
@@ -56,7 +56,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 if (process.env.NODE_ENV === 'development') {
-  app.locals.pretty = true;
+  app.locals.pretty = true
 }
 
 // app.use(function(req, res, next) {

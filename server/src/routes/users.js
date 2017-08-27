@@ -40,9 +40,11 @@ router.post('/register', function(req, res) {
 
         // Push associated account
         user.account = account
+        user.tenantId = account.subdomain
         user.save().then(user => {
           req.login(user._id, function(err) {
-            res.json({ success: true })
+            res.json({ firstName: user.firstName, lastName: user.lastName, email: user.email, 
+              admin: user.admin, tenantId: user.tenantId })
           })
         }).catch(err => 
           res.status(500).json({ 
@@ -90,12 +92,21 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
   res.json({ firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
-    admin: req.user.admin })
+    admin: req.user.admin, tenantId: req.user.tenantId })
 })
 
 router.post('/logout', function(req, res) {
   req.logout()
   req.session.destroy(function(err) {
+    if (err) {
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
+      })
+      return
+    }
     res.json({ success: true })
   })
 })
@@ -115,7 +126,18 @@ passport.use(new LocalStrategy({usernameField: 'email'},
     User.getUserByEmail(email, function(err, user) {
       if (err) throw err
       if (!user) {
-        return done(null, false, {message: 'Incorrect email.'})
+        return done(null, false, {
+          errors: {
+            confirmation: 'fail',
+            message: {
+              errors: {
+                email: {
+                  message: 'Incorrect email.'
+                }
+              }
+            }
+          }
+        })
       }
       
       User.comparePassword(password, user.password, function(err, isMatch) {
@@ -124,7 +146,18 @@ passport.use(new LocalStrategy({usernameField: 'email'},
         if(isMatch){
           return done(null, user)
         } else {
-          return done(null, false, {message: 'Invalid password'})
+          return done(null, false, {
+            errors: {
+              confirmation: 'fail',
+              message: {
+                errors: {
+                  password: {
+                    message: 'Incorrect password.'
+                  }
+                }
+              }
+            }
+          })
         }
       })
     })

@@ -12,7 +12,11 @@ export function setCurrentAccount(account) {
 export function signupRequest(accountAndUser) {
   console.log('data: ', accountAndUser)
   return dispatch => {
-    return axios.post('/users/register', accountAndUser)
+    return axios.post('/users/register', accountAndUser).then(res => {
+       //document.cookie = "username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
+      //document.cookie = "firstName="+res.data.firstName+"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
+      console.log('res: ', res)
+    })
   }
 }
 
@@ -25,6 +29,8 @@ export function isAccountExists(subdomain) {
 export function subdomainRequest(subdomain) {
   return dispatch => {
     return axios.get(`/accounts/${subdomain}`).then(res => {
+      //document.cookie = "username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
+      //document.cookie = "firstName="+res.data.firstName+"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
       localStorage.setItem('account', JSON.stringify(res.data))
       dispatch(setCurrentAccount(res.data))
     })

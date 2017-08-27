@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import mongoTenant from 'mongo-tenant'
+
 import bcrypt from 'bcrypt'
 
 let Schema = mongoose.Schema
@@ -19,7 +21,9 @@ const UserSchema = new Schema({
   avatar: { data: Buffer, contentType: String },
 
   createdAt: Date,
-  updatedAt: Date
+  updatedAt: Date,
+
+  tenantId: { type: String }
 })
 
 UserSchema.pre('save', function(next) {
@@ -43,7 +47,8 @@ UserSchema.pre('save', function(next) {
   })
 })
 
-const User = module.exports = mongoose.model('User', UserSchema);
+UserSchema.plugin(mongoTenant)
+const User = module.exports = mongoose.model('User', UserSchema)
 
 module.exports.getUserByEmail = function(email, callback) {
   var query = {email: email}
