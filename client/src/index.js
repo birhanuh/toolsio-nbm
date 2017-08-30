@@ -8,7 +8,7 @@ import thunk from 'redux-thunk'
 import rootReducer from './rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { setAuthorizationToken } from './utils'
-import { setCurrentUser } from './actions/authentication'
+import { setCurrentAccount } from './actions/authentication'
 
 // Localization 
 import T from 'i18n-react'
@@ -25,10 +25,10 @@ const store = createStore(
   )
 )
 
-if (localStorage.user) {
+if (localStorage.account) {
   // Retrieve the object from storage
-  var User = localStorage.getItem('user');
-  store.dispatch(setCurrentUser(JSON.parse(User)))
+  var Account = localStorage.getItem('account');
+  store.dispatch(setCurrentAccount(JSON.parse(Account)))
 }
 console.log('cookie: ', document.cookie)
 // Localization setup

@@ -40,11 +40,11 @@ router.post('/register', function(req, res) {
 
         // Push associated account
         user.account = account
-        user.tenantId = account.subdomain
+        user.tenantId = account.companyName
         user.save().then(user => {
-          req.login(user._id, function(err) {
+          req.login(user, function(err) {
             res.json({ firstName: user.firstName, lastName: user.lastName, email: user.email, 
-              admin: user.admin, tenantId: user.tenantId })
+              admin: user.admin, companyName: user.tenantId })
           })
         }).catch(err => 
           res.status(500).json({ 

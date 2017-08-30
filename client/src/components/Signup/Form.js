@@ -11,7 +11,7 @@ class Form extends Component {
     super(props)
     this.state = {
       account: {
-        subdomain: '', 
+        companyName: '', 
         industry: ''
       },
       user: {
@@ -32,7 +32,7 @@ class Form extends Component {
   }
   
   handleChange(e) {
-    if (e.target.name === "subdomain" || e.target.name === "industry") {
+    if (e.target.name === "companyName" || e.target.name === "industry") {
       let updatedAccount = Object.assign({}, this.state.account)
       updatedAccount[e.target.name] = e.target.value
       this.setState({
@@ -59,7 +59,7 @@ class Form extends Component {
         if (res.data.account[0]) {
           errors['message'] = {
             errors: {
-              subdomain: {
+              companyName: {
                 message: 'There is account with such '+field+ '.'
               }  
             }  
@@ -115,7 +115,7 @@ class Form extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    if (true) { 
+    if (this.isValid()) { 
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoading: true })
       
@@ -127,8 +127,8 @@ class Form extends Component {
             type: 'success',
             text: 'You have signed up successfully!'
           })
-          console.log('response: ', response)
-          //this.context.histrory.push('/dashboard')
+          console.log('account: ', this.props.account.companyName)
+          this.context.histrory.push('http://test1.lvh.me:3000/dashboard')
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )
@@ -192,16 +192,16 @@ class Form extends Component {
             formClass="field"
           />
           <SelectField
-            label={T.translate("sign_up.subdomain.industry")}
+            label={T.translate("sign_up.account.industry")}
             name="industry"
             type="select"
             value={account.industry} 
             onChange={this.handleChange.bind(this)} 
-            error={errors.message && errors.message.errors && errors.message.errors.status && errors.message['status'].message}
+            error={errors.message && errors.message.errors && errors.message.errors.industry && errors.message.errors['industry'].message}
             formClass="field"
 
             options={[
-              <option key="default" value="" disabled>{T.translate("sign_up.subdomain.select_industry")}</option>,
+              <option key="default" value="" disabled>{T.translate("sign_up.account.select_industry")}</option>,
               <option key="human resource" value="human resource">Human resource</option>,
               <option key="fashion" value="fashion">Fashion</option>,
               <option key="import/export" value="import/export">Import/Export</option>,
@@ -210,13 +210,13 @@ class Form extends Component {
               ]
             }
           />
-          <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
+          <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.companyName })}>
             <div className="ui right labeled input">
-              <input type="text" name="subdomain" placeholder={T.translate("sign_up.subdomain.company_name")} 
-                onBlur={this.checkAccountExists.bind(this)} value={account.subdomain} onChange={this.handleChange.bind(this)} />
+              <input type="text" name="companyName" placeholder={T.translate("sign_up.account.company_name")} 
+                onBlur={this.checkAccountExists.bind(this)} value={account.companyName} onChange={this.handleChange.bind(this)} />
               <div className="ui label">toolsio.com</div>  
             </div>
-            <span className="red">{errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors.subdomain.message}</span>
+            <span className="red">{errors.message && errors.message.errors && errors.message.errors.companyName && errors.message.errors.companyName.message}</span>
           </div>  
 
           <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>

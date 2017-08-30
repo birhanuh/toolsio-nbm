@@ -58,7 +58,7 @@ class App extends Component {
   render() {
     let landingPage = window.location.pathname === '/' ? true : false
     let authPages = window.location.pathname === '/login' || window.location.pathname === '/signup'
-      || window.location.pathname === '/subdomain' ? true : false
+      ? true : false
 
     let internalPages = (landingPage || authPages) ? false : true 
 

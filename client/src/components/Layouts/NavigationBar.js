@@ -193,7 +193,7 @@ class NavigationBar extends Component {
               <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
            
               <div className="right item">                                                   
-                <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
+                <Link className="ui inverted button"  to="/login">{T.translate("log_in.log_in")}</Link> 
                 <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>     
               </div>  
             </div>

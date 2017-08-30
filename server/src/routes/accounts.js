@@ -9,9 +9,9 @@ let LocalStrategy = require('passport-local').Strategy
 // Register Account
 router.put('/register', function(req, res) {
 
-  Account.update({subdomain: req.body.subdomain}, req.body)
+  Account.update({companyName: req.body.companyName}, req.body)
     .then(account => 
-      res.json({ result: account.subdomain })
+      res.json({ result: account.companyName })
     ).catch(err => 
       res.status(500).json({ 
         errors: {
@@ -23,8 +23,8 @@ router.put('/register', function(req, res) {
 })
 
 // Get regisetred user
-router.get('/:subdomain', (req, res) => {
-  Account.find({ subdomain: req.params.subdomain }).then(account => {
+router.get('/:companyName', (req, res) => {
+  Account.find({ companyName: req.params.companyName }).then(account => {
     res.json( { account }) 
   })
 })
