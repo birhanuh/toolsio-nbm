@@ -1,26 +1,68 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import passport from 'passport'
 import config from '../config'
 
 import User from '../models/User'
+import Account from '../models/Account'
 
 let router = express.Router()
 
-// Get regisetred user
-router.get('/:identifier', (req, res) => {
-  User.find({ email: req.params.identifier }).then(user => {
-    res.json( { user }) 
-  })
-})
+let LocalStrategy = require('passport-local').Strategy
 
 // Register User
-router.post('/register', function(req, res) {
+// router.post('/register', function(req, res) {
 
-  User.create(req.body)
-    .then(user => 
-      res.json({ success: true })
-    ).catch(err => 
+//   User.create(req.body)
+//     .then(user => 
+//       req.login(user._id, function(err) {
+//         res.json({ success: true })
+//       })
+//     ).catch(err => 
+//       res.status(500).json({ 
+//         errors: {
+//           confirmation: 'fail',
+//           message: err
+//         }
+//       })
+//     )
+// })
+
+router.post('/register', function(req, res) {
+  const { account, user } = req.body
+  
+  User.create(user).then(user => {
+    Account.create(account).then(account => {
+      
+      // Push associated user
+      account.users.push(user)
+      account.save().then(account => {
+
+        // Push associated account
+        user.account = account
+        user.tenantId = account.companyName
+        user.save().then(user => {
+          req.login(user, function(err) {
+            res.json({ firstName: user.firstName, lastName: user.lastName, email: user.email, 
+              admin: user.admin, companyName: user.tenantId })
+          })
+        }).catch(err => 
+          res.status(500).json({ 
+            errors: {
+              confirmation: 'fail',
+              message: err
+            }
+          })
+        )
+      }).catch(err => 
+        res.status(500).json({ 
+          errors: {
+            confirmation: 'fail',
+            message: err
+          }
+        })
+      )
+    }).catch(err => 
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
@@ -28,28 +70,99 @@ router.post('/register', function(req, res) {
         }
       })
     )
+  }).catch(err => 
+    res.status(500).json({ 
+      errors: {
+        confirmation: 'fail',
+        message: err
+      }
+    })
+  )
+})
+
+// Get regisetred user
+router.get('/:email', (req, res) => {
+  User.find({ email: req.params.email }).then(user => {
+    res.json( { user }) 
+  })
 })
 
 // Login User
-router.post('/login', (req, res) => {
-  const { email, password } = req.body
+router.post('/login', passport.authenticate('local'), function(req, res) {
+  // If this function gets called, authentication was successful.
+  // `req.user` contains the authenticated user.
+  res.json({ firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+    admin: req.user.admin, tenantId: req.user.tenantId })
+})
 
-  User.find({ email: email }).then(user => {
-    if (user[0]) {
-      if (bcrypt.compareSync(password, user[0].password)) {
-        const token = jwt.sign({
-          id: user[0]._id,
-          email: user[0].email
-        }, config.jwtSecret)
-        res.json({ token })
-      } else {
-        res.status(401).json({ errors: { form: 'Invalid Credentials.' } }) 
-      }
-    } else {
-      res.status(401).json({ errors: { form: 'Invalid Credentials.' } }) 
-    }  
+router.post('/logout', function(req, res) {
+  req.logout()
+  req.session.destroy(function(err) {
+    if (err) {
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
+      })
+      return
+    }
+    res.json({ success: true })
   })
 })
+
+passport.serializeUser(function(user, done) {
+  done(null, user._id)
+})
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user)
+  })
+})
+
+passport.use(new LocalStrategy({usernameField: 'email'},
+  function(email, password, done) {
+    User.getUserByEmail(email, function(err, user) {
+      if (err) throw err
+      if (!user) {
+        return done(null, false, {
+          errors: {
+            confirmation: 'fail',
+            message: {
+              errors: {
+                email: {
+                  message: 'Incorrect email.'
+                }
+              }
+            }
+          }
+        })
+      }
+      
+      User.comparePassword(password, user.password, function(err, isMatch) {
+        if(err) throw err
+        
+        if(isMatch){
+          return done(null, user)
+        } else {
+          return done(null, false, {
+            errors: {
+              confirmation: 'fail',
+              message: {
+                errors: {
+                  password: {
+                    message: 'Incorrect password.'
+                  }
+                }
+              }
+            }
+          })
+        }
+      })
+    })
+  }
+))
 
 module.exports = router
 

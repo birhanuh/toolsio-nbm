@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose' 
 import bcrypt from 'bcrypt'
 
 let Schema = mongoose.Schema
@@ -6,18 +6,22 @@ const SALT_WORK_FACTOR = 10
 
 // User Schema 
 const UserSchema = new Schema({
+  account: { type: mongoose.Schema.Types.ObjectId, ref: "Account" },
   firstName: { type: String /**, index: true**/ }, 
   lastName: { type: String },
-  email: { type: String, required: [true, "Email is required."], index: { unique: true } },
+  email: { type: String, required: [true, "Email is required."], index: {unique: true, dropDups: true} },
   password: { type: String, required: [true, "Password is required."] },
   admin: Boolean,
   meta: {
     age: Number,
     gender: String
   },
-  
-  created_at: Date,
-  updated_at: Date
+  avatar: { data: Buffer, contentType: String },
+
+  createdAt: Date,
+  updatedAt: Date,
+
+  tenantId: { type: String }
 })
 
 UserSchema.pre('save', function(next) {
@@ -41,30 +45,40 @@ UserSchema.pre('save', function(next) {
   })
 })
 
-module.exports = mongoose.model('User', UserSchema);
+UserSchema.post('save', function(error, doc, next) {
+  if (error.name === 'MongoError' && error.code === 11000) {
+    let message = {
+      errors: {
+        email: {
+          message: 'There is user with such email.'
+        } 
+      }
+    }
+    next(message)
+  } else {
+    next(error)
+  }
+})
+
+let User = module.exports = mongoose.model('User', UserSchema)
+
+module.exports.getUserByEmail = function(email, callback) {
+  var query = {email: email}
+  User.findOne(query, callback)
+}
+
+module.exports.comparePassword = function(candidatePassword, hash, callback) {
+  bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+    if (err)throw err
+    callback(null, isMatch)
+  })
+}
 
 // module.exports.createUser = function(newUser, callback) {
 //   bcrypt.genSalt(10, function(err, salt) {
 //     bcrypt.hash(newUser.password, salt, function(err, hash) {
 //       newUser.password = hash;
 //       newUser.save(callback);
-//     });
-//   });
-// }
-
-// module.exports.getUserByEmail = function(email, callback) {
-//   var query = {email: email};
-//   User.findOne(query, callback);
-//   console.log('query: ', query);
-// }
-
-// module.exports.getUserById = function(id, callback) {
-//   User.findById(id, callback);
-// }
-
-// module.exports.comparePassword = function(candidatePassword, hash, callback) {
-//   bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
-//     if (err)throw err;
-//     callback(null, isMatch);
-//   });
+//     })
+//   })
 // }

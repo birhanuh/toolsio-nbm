@@ -8,8 +8,7 @@ import thunk from 'redux-thunk'
 import rootReducer from './rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { setAuthorizationToken } from './utils'
-import jwtDecode from 'jwt-decode'
-import { setCurrentUser } from './actions/authentication'
+import { setCurrentAccount } from './actions/authentication'
 
 // Localization 
 import T from 'i18n-react'
@@ -26,11 +25,12 @@ const store = createStore(
   )
 )
 
-if (localStorage.jwtToken) {
-  setAuthorizationToken(localStorage.jwtToken)
-  store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
+if (localStorage.account) {
+  // Retrieve the object from storage
+  var Account = localStorage.getItem('account');
+  store.dispatch(setCurrentAccount(JSON.parse(Account)))
 }
-
+console.log('cookie: ', document.cookie)
 // Localization setup
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
 

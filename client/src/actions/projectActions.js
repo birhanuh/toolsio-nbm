@@ -68,6 +68,7 @@ export function createProject(project) {
 export function fetchProjects() {
   return dispatch => {
     return axios.get('/api/projects').then(res => {
+      console.log('res: ', res)
       dispatch(setProjects(res.data.results))
     })
   }

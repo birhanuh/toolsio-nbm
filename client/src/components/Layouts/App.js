@@ -6,6 +6,7 @@ import Dashboard from '../Dashboard/Page'
 import Landing from './Landing'
 import Signup from '../Signup/Page'
 import Login from '../Login/Page'
+import Subdomain from '../Login/Subdomain'
 import ProjectsPage from '../Projects/Page'
 import ProjectsFormPage from '../Projects/FormPage'
 import ProjectsShow from '../Projects/Show'
@@ -57,7 +58,7 @@ class App extends Component {
   render() {
     let landingPage = window.location.pathname === '/' ? true : false
     let authPages = window.location.pathname === '/login' || window.location.pathname === '/signup'
-      ? true : false
+      || window.location.pathname === '/subdomain' ? true : false
 
     let internalPages = (landingPage || authPages) ? false : true 
 
@@ -82,15 +83,16 @@ class App extends Component {
           </div>
         }
 
-        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
+        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable middle aligned center aligned grid auth-pages': authPages})}>          
                    
-          <FlashMessagesList />
+          { !authPages && <FlashMessagesList /> }
           
           <div className={classnames({'sixteen wide column': internalPages, 'six wide column': authPages})}>
             <Switch>
               <Route exact path="/" component={Landing} />
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
+              <Route path="/subdomain" component={Subdomain} />
               <Route path="/dashboard" component={requireAuth(Dashboard)} />
               <Route exact path="/projects" component={requireAuth(ProjectsPage)} />
               <Route exact path="/projects/edit/:id" component={requireAuth(ProjectsFormPage)} /> 

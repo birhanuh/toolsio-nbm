@@ -1,6 +1,7 @@
 import React, { Component } from 'react' 
 import { Validation } from '../../utils'
-import { InputField } from '../../utils/FormFields'
+import { InputField, SelectField } from '../../utils/FormFields'
+import classnames from 'classnames'
 
 // Localization 
 import T from 'i18n-react'
@@ -9,6 +10,10 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      account: {
+        companyName: '', 
+        industry: ''
+      },
       user: {
         firstName: '',
         lastName: '',
@@ -16,18 +21,57 @@ class Form extends Component {
         password: '',
         confirmPassword: ''
       },
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false,
       invalid: false
     }
   }
   
-  onChange(e) {
-    let updatedUser = Object.assign({}, this.state.user)
-    updatedUser[e.target.name] = e.target.value
-    this.setState({
-      user: updatedUser
-    })
+  handleChange(e) {
+    if (e.target.name === "companyName" || e.target.name === "industry") {
+      let updatedAccount = Object.assign({}, this.state.account)
+      updatedAccount[e.target.name] = e.target.value
+      this.setState({
+        account: updatedAccount
+      })
+    }
+    else if (e.target.name === "firstName" || e.target.name === "lastName" || e.target.name === "email"
+        || e.target.name === "password" || e.target.name === "confirmPassword") {
+      let updatedUser = Object.assign({}, this.state.user)
+      updatedUser[e.target.name] = e.target.value
+      this.setState({
+        user: updatedUser
+      })
+    }  
+  }
+
+  checkAccountExists(e) {
+    const field = e.target.name
+    const val = e.target.value
+    if (val !== '') {
+      this.props.isAccountExists(val).then(res => {
+        let errors = this.state.errors
+        let invalid
+        if (res.data.account[0]) {
+          errors['message'] = {
+            errors: {
+              companyName: {
+                message: 'There is account with such '+field+ '.'
+              }  
+            }  
+          }
+          invalid = true
+        } else {
+          errors[field] = ''
+          invalid = false
+        }
+        this.setState({ errors, invalid })
+      })
+    }
   }
 
   checkUserExists(e) {
@@ -56,10 +100,13 @@ class Form extends Component {
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateRegistrationInput(this.state.user)
+    const { errors, isValid } = Validation.validateRegistrationInput(this.state)
+
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
 
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ errors: updatedErrors })
     }
 
     return isValid;
@@ -68,18 +115,19 @@ class Form extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    if (true) { 
+    if (this.isValid()) { 
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoading: true })
       
+      const { account, user } = this.state
       // Make submit
-      this.props.signupRequest(this.state.user).then(
-        () => {
+      this.props.signupRequest({account, user}).then(
+        (response) => {
           this.props.addFlashMessage({
             type: 'success',
             text: 'You have signed up successfully!'
           })
-          this.context.histrory.push('/dashboard')
+          this.context.router.history.push('/dashboard')
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )
@@ -87,7 +135,7 @@ class Form extends Component {
   }
 
   render() {
-    const { errors, isLoading, invalid } = this.state
+    const { account, user, errors, isLoading, invalid } = this.state
     
     return (            
       <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
@@ -98,16 +146,16 @@ class Form extends Component {
           <InputField
             label={T.translate("sign_up.first_name")}
             name="firstName" 
-            value={this.state.user.firstName} 
-            onChange={this.onChange.bind(this)} 
+            value={user.firstName} 
+            onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.first_name")}
             formClass="field"
           />
           <InputField
             label={T.translate("sign_up.last_name")}
             name="lastName" 
-            value={this.state.user.lastName} 
-            onChange={this.onChange.bind(this)} 
+            value={user.lastName} 
+            onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.last_name")}
             formClass="field"
           />
@@ -115,8 +163,8 @@ class Form extends Component {
             label={T.translate("sign_up.email")}
             name="email" 
             type="email"
-            value={this.state.user.email} 
-            onChange={this.onChange.bind(this)} 
+            value={user.email} 
+            onChange={this.handleChange.bind(this)} 
             checkUserExists={this.checkUserExists.bind(this)} 
             placeholder={T.translate("sign_up.email")}
             error={errors.message && errors.message.errors && errors.message.errors['email'] && errors.message.errors['email'].message}
@@ -126,8 +174,8 @@ class Form extends Component {
             label={T.translate("sign_up.password")}
             name="password" 
             type="password"
-            value={this.state.user.password} 
-            onChange={this.onChange.bind(this)} 
+            value={user.password} 
+            onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.password")}
             error={errors.message && errors.message.errors && errors.message.errors['password'] && errors.message.errors['password'].message}
             formClass="field"
@@ -136,13 +184,40 @@ class Form extends Component {
             label={T.translate("sign_up.confirm_password")}
             name="confirmPassword" 
             type="password"
-            value={this.state.user.confirmPassword} 
-            onChange={this.onChange.bind(this)} 
+            value={user.confirmPassword} 
+            onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.confirm_password")}
             error={errors.confirmPassword}
             formClass="field"
           />
-          
+          <SelectField
+            label={T.translate("sign_up.account.industry")}
+            name="industry"
+            type="select"
+            value={account.industry} 
+            onChange={this.handleChange.bind(this)} 
+            error={errors.message && errors.message.errors && errors.message.errors.industry && errors.message.errors['industry'].message}
+            formClass="field"
+
+            options={[
+              <option key="default" value="" disabled>{T.translate("sign_up.account.select_industry")}</option>,
+              <option key="human resource" value="human resource">Human resource</option>,
+              <option key="fashion" value="fashion">Fashion</option>,
+              <option key="import/export" value="import/export">Import/Export</option>,
+              <option key="store" value="store">Store</option>,
+              <option key="technology" value="technology">Technology</option>
+              ]
+            }
+          />
+          <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.companyName })}>
+            <div className="ui right labeled input">
+              <input type="text" name="companyName" placeholder={T.translate("sign_up.account.company_name")} 
+                onBlur={this.checkAccountExists.bind(this)} value={account.companyName} onChange={this.handleChange.bind(this)} />
+              <div className="ui label">toolsio.com</div>  
+            </div>
+            <span className="red">{errors.message && errors.message.errors && errors.message.errors.companyName && errors.message.errors.companyName.message}</span>
+          </div>  
+
           <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
         </div>
       </form>         
@@ -155,6 +230,7 @@ class Form extends Component {
 Form.propTypes = {
   signupRequest: React.PropTypes.func.isRequired,
   addFlashMessage: React.PropTypes.func.isRequired,
+  isAccountExists: React.PropTypes.func.isRequired,
   isUserExists: React.PropTypes.func.isRequired
 }
 
