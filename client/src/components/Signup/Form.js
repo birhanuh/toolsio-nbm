@@ -127,8 +127,7 @@ class Form extends Component {
             type: 'success',
             text: 'You have signed up successfully!'
           })
-          console.log('account: ', this.props.account.companyName)
-          this.context.histrory.push('http://test1.lvh.me:3000/dashboard')
+          this.context.router.history.push('/dashboard')
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )

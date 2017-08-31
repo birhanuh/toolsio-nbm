@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import Form from './Form'
+import FlashMessagesList from '../../flash/FlashMessagesList'
 
 // Localization 
 import T from 'i18n-react'
@@ -19,12 +20,14 @@ class Page extends Component {
           </div>
         </h2>
         
+        <FlashMessagesList />
+
         <Form />
 
         <div className="ui message">
           {T.translate("log_in.new_to_us")}&nbsp;<a href="/signup">{T.translate("sign_up.sign_up")}</a>
         </div>
-        <div className="ui centered grid m-t-m">
+        <div className="ui text-container m-t-m">
           <small className="visible-all-block">{T.translate("landing.footer.copyright")}</small>
           <small className="visible-all-block">{T.translate("landing.footer.address")}</small>
         </div>

@@ -17,34 +17,34 @@ class Landing extends Component {
           <div className="ui middle aligned container">
             <div className="ui two column stackable centered grid">
               <div className="column">
-                <h3 className="ui header">{T.translate("landing.features.header")}</h3>
+                <h2 className="ui header">{T.translate("landing.features.header")}</h2>
               </div>
               <div className="two column centered row">  
                 <div className="column">     
                   <div className="sprite invoice left floated"></div>
                   <blockquote>
-                    <h4 className="ui header">{T.translate("landing.features.invoice.header")}</h4>
+                    <h3 className="ui header">{T.translate("landing.features.invoice.header")}</h3>
                     <p>{T.translate("landing.features.invoice.text")}</p>
                   </blockquote>  
                 </div>  
                 <div className="column">     
                   <div className="sprite sale left floated"></div>
                   <blockquote>
-                    <h4 className="ui header">{T.translate("landing.features.sale.header")}</h4>
+                    <h3 className="ui header">{T.translate("landing.features.sale.header")}</h3>
                     <p>{T.translate("landing.features.sale.text")}</p>
                   </blockquote>  
                 </div>  
                 <div className="column">     
                   <div className="sprite project left floated"></div>
                   <blockquote>
-                    <h4 className="ui header">{T.translate("landing.features.project.header")}</h4>
+                    <h3 className="ui header">{T.translate("landing.features.project.header")}</h3>
                     <p>{T.translate("landing.features.project.text")}</p>
                   </blockquote>  
                 </div>  
                 <div className="column">     
                   <div className="sprite analysis left floated"></div>
                   <blockquote>
-                    <h4 className="ui header">{T.translate("landing.features.analysis.header")}</h4>
+                    <h3 className="ui header">{T.translate("landing.features.analysis.header")}</h3>
                     <p>{T.translate("landing.features.analysis.text")}</p>
                   </blockquote>  
                 </div>  
@@ -57,7 +57,7 @@ class Landing extends Component {
           <div className="ui middle aligned container">
             <div className="ui two column stackable centered grid">
               <div className="column">
-                <h3 className="ui header">{T.translate("landing.clients.header")}</h3>
+                <h2 className="ui header">{T.translate("landing.clients.header")}</h2>
               </div>
               <div className="column row">
                 <div className="ui three column grid">
@@ -93,17 +93,17 @@ class Landing extends Component {
                   <div className="slides">
                     <div className="slide-item item1">
                       <i className="quote left icon"></i>
-                      <h6 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h6>
+                      <h5 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
                       <p>- Jonathan Deo</p>
                     </div>    
                     <div className="slide-item item2">
                       <i className="quote left icon"></i>
-                      <h6 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h6>
+                      <h5 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
                       <p>- Jonathan Deo</p>
                     </div>  
                     <div className="slide-item item3">
                       <i className="quote left icon"></i>
-                      <h6 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h6>
+                      <h5 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
                       <p>- Jonathan Deo</p>
                     </div>  
                   </div>
@@ -117,7 +117,7 @@ class Landing extends Component {
           <div className="ui middle aligned container">
             <div className="ui three column stackable centered grid">
               <div className="column">
-                <h3 className="ui header">{T.translate("landing.pricing.header")}</h3>
+                <h2 className="ui header">{T.translate("landing.pricing.header")}</h2>
               </div>
               <div className="three column row">
                 <div className="column">
@@ -175,7 +175,7 @@ class Landing extends Component {
           <div className="ui middle aligned container"> 
               <div className="ui two column stackable centered grid">
                 <div className="column">
-                  <h3 className="ui header">{T.translate("landing.contacts.header")}</h3>
+                  <h2 className="ui header">{T.translate("landing.contacts.header")}</h2>
                 </div>
                 <div className="column row">
                   <div className="column">

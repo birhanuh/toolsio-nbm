@@ -167,10 +167,6 @@ nav.ui.menu {
   padding: 8em 0em;
 }
 
-.ui.vertical.stripe h3 {
-  font-size: 2em;
-}
-
 .ui.vertical.stripe .button + h3,
 .ui.vertical.stripe p + h3 {
   margin-top: 3em;
@@ -181,7 +177,7 @@ nav.ui.menu {
 }
 
 .ui.vertical.stripe p {
-  font-size: 1.33em;
+  font-size: 1.125em !important;
 }
 
 .ui.vertical.stripe .horizontal.divider {
@@ -199,8 +195,7 @@ nav.ui.menu {
 
 .ui.vertical.stripe {
   padding: 4em 0em;
-  h3 {
-    font-size: 1.5em;
+  h2 {
     color: $mid-night-blue;
     margin-top: -30px;
     text-align: center;
@@ -377,6 +372,9 @@ nav.ui.menu {
   margin-top: 5rem !important;
   .ui.header > a + .content {
     font-weight: 600;
+  }
+  .ui.centered.grid {
+    display: grid;
   }
 }
 
@@ -730,7 +728,7 @@ dl.dl-horizontal {
   .slide-item p {
     color: $turquoise;
   }
-  .slide-item h6 {
+  .slide-item h5 {
     font-weight: 400;
     color: $medium-grey;
   }
@@ -750,7 +748,7 @@ dl.dl-horizontal {
   padding-left: 0;
   list-style: none;
   li {
-    font-size: 0.875em;
+    font-size: 1.125em;
     line-height: 1.5;
   }
   li.pricing-title {

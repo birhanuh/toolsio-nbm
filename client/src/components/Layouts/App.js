@@ -58,7 +58,7 @@ class App extends Component {
   render() {
     let landingPage = window.location.pathname === '/' ? true : false
     let authPages = window.location.pathname === '/login' || window.location.pathname === '/signup'
-      ? true : false
+      || window.location.pathname === '/subdomain' ? true : false
 
     let internalPages = (landingPage || authPages) ? false : true 
 
@@ -83,9 +83,9 @@ class App extends Component {
           </div>
         }
 
-        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
+        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable middle aligned center aligned grid auth-pages': authPages})}>          
                    
-          <FlashMessagesList />
+          { !authPages && <FlashMessagesList /> }
           
           <div className={classnames({'sixteen wide column': internalPages, 'six wide column': authPages})}>
             <Switch>

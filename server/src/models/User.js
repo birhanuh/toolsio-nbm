@@ -1,6 +1,4 @@
-import mongoose from 'mongoose'
-import mongoTenant from 'mongo-tenant'
-
+import mongoose from 'mongoose' 
 import bcrypt from 'bcrypt'
 
 let Schema = mongoose.Schema
@@ -11,7 +9,7 @@ const UserSchema = new Schema({
   account: { type: mongoose.Schema.Types.ObjectId, ref: "Account" },
   firstName: { type: String /**, index: true**/ }, 
   lastName: { type: String },
-  email: { type: String, required: [true, "Email is required."], index: { unique: true } },
+  email: { type: String, required: [true, "Email is required."], index: {unique: true, dropDups: true} },
   password: { type: String, required: [true, "Password is required."] },
   admin: Boolean,
   meta: {
@@ -47,8 +45,22 @@ UserSchema.pre('save', function(next) {
   })
 })
 
-UserSchema.plugin(mongoTenant)
-const User = module.exports = mongoose.model('User', UserSchema)
+UserSchema.post('save', function(error, doc, next) {
+  if (error.name === 'MongoError' && error.code === 11000) {
+    let message = {
+      errors: {
+        email: {
+          message: 'There is user with such email.'
+        } 
+      }
+    }
+    next(message)
+  } else {
+    next(error)
+  }
+})
+
+let User = module.exports = mongoose.model('User', UserSchema)
 
 module.exports.getUserByEmail = function(email, callback) {
   var query = {email: email}

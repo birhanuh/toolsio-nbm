@@ -27,7 +27,6 @@ export function isAccountExists(companyName) {
 export function companyNameRequest(companyName) {
   return dispatch => {
     return axios.get(`/accounts/${companyName}`).then(res => {
-      //document.cookie = "username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
       //document.cookie = "firstName="+res.data.firstName+"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
       localStorage.setItem('account', JSON.stringify(res.data))
       dispatch(setCurrentAccount(res.data))

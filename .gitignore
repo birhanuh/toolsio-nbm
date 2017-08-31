@@ -4,7 +4,7 @@
 node_modules
 
 # post processed
-client/src/css/app.css
+app.css
 
 # testing
 
