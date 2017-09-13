@@ -6,6 +6,7 @@ mongoose.Promise = require('bluebird')
 
 export default {
   connect: function(mongoURI) { 
+    console.log('mongoURI: ', mongoURI)
     mongoose.connect(mongoURI, {useMongoClient: true})
     .then(() => {
       console.log('DB CONNECTION SUCCESS: '+mongoURI)

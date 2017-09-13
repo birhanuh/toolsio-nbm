@@ -1,33 +1,32 @@
 {
-  "name": "toolsio-react",
+  "name": "spec2",
   "version": "1.0.0",
   "description": "A Project tracking and Sales management tool.",
-  "main": "server.js",
-  "directories": {
-    "test": "./"
-  },
+  "main": "index.js",
   "scripts": {
-    "test": "babel-node src/run.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/birhanuh/toolsio-react.git"
   },
-  "author": "Birhanu Hailemariam",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/birhanuh/toolsio-react/issues"
   },
-  "homepage": "https://github.com/birhanuh/toolsio-node#readme",
+  "homepage": "https://github.com/birhanuh/toolsio-react#readme",
   "dependencies": {
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "axios": "^0.15.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.23.0",
-    "babel-preset-es2015": "^6.22.0",
-    "factory_girl": "^0.2.3",
-    "jasmine": "^2.6.0",
-    "nodemon": "^1.11.0"
+    "babel-jest": "^21.0.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "jest": "^21.0.2",
+    "react-test-renderer": "^15.6.1",
+    "factory_girl": "^0.2.3"
   }
 }
