@@ -10,16 +10,17 @@ import FactoryGirl from '../factories'
 import sales from '../fixtures/sales' 
 
 // Schema
-var Sale = require('../../../server/src/models/Sale')
+import Sale from '../../../server/src/models/Sale'
 
 /*// Factories 
 import fixtures from 'pow-mongoose-fixtures'
 //Files
 fixtures.load(__dirname + '/../fixtures/sales.js')*/
 
-let controllers = require('../../../server/src/controllers')
-let salesController = controllers['sales']
+// Factored Sale
 let sale = FactoryGirl.create('sale')
+
+let saleId = null
 
 describe("Sale", function() { 
 
@@ -32,56 +33,57 @@ describe("Sale", function() {
   })
 
   describe('validation', function() {
-    test('should fail with validation errors for each required field', function() {
-      var sale = new Sale()
-      sale.save(function(err) {
+    test('should fail with validation errors for each required field', function(done) {
+      Sale.create({}, function(err, sale) {
         expect(err).not.toBeNull()
         expect(err.errors.customer.message).toContain('Customer is required.')
         expect(err.errors.name.message).toContain('Name is required.')
         expect(err.errors.deadline.message).toContain('Deadline is required.')
+        done()
       })
     })
-  })
 
-  describe('CRUD', function() {
-    test('creates sale', function() { 
+    test('saves Sale', function(done) {
+      Sale.create(sale, function(err, sale) {
+        
+        // Assign id
+        saleId = sale._id
+       
+        expect(sale).not.toBeNull()
+        expect(sale.name).toContain('Sale 1')
+        expect(sale.status).toContain('new')
+        expect(sale.description).toContain('Description 1...')
+        done()
+      })
+    })
 
-      salesController.create(sale, function(error, result) {
+    test('finds Sale', function(done) { 
+
+      Sale.findById(saleId, sale, function(error, result) {
         expect(result.length).not.toBe(0)
       })
-      db.fixtures('mongodb://localhost/toolsio_test', Sale, sales)
+      done()
     })
 
-    test('finds sale', function() { 
+    test('updates Sale', function(done) { 
 
-      // salesController.create(sale, function(error, result) {
-      //   expect(result.length).not.toBe(0)
-      // })
-    })
-
-    test('updates sale', function() { 
-
-      // salesController.put(sale, function(error, result) {
-      //   expect(result.length).not.toBe(0)
-      // })
-      // db.fixtures('mongodb://localhost/toolsio_test', Sale, sales)
-    })
-
-    xtest('deletes sale', function() { 
-
-      salesController.create(sale, function(error, result) {
-        expect(result.length).not.toBe(0)
+      // Update name
+      sale.name = 'Sale 1 updated'
+      
+      Sale.findByIdAndUpdate(saleId, sale, function(error, result) {
+        expect(result[0].name).toContain('Sale 1 updated')
       })
-      db.fixtures('mongodb://localhost/toolsio_test', Sale, sales)
+      done()
     })
 
-    /*
-    test('it returns status code 200', function() {
-      axios.post('/api/sales', sale).then(res => { 
-        expect(response.statusCode).toBe(200)
+    test('deletes Sale', function(done) { 
+
+      Sale.findByIdAndRemove(saleId, sale, function(error, result) {
+        expect(result.length).toBe(0)
       })
+      done()
+      //db.fixtures('mongodb://localhost/toolsio_test', Sale, sales)
     })
-    */
   })
 
 })
