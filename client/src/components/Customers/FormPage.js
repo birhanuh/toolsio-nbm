@@ -41,7 +41,7 @@ class FormPage  extends Component {
 
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("customers.form.flash.success_update", { name: name})
+              text: T.translate("customers.form.flash.success_create", { name: name})
             })  
             this.context.router.history.push('/customers')
           })   

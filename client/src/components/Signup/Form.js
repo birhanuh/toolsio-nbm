@@ -33,18 +33,14 @@ class Form extends Component {
   
   handleChange(e) {
     if (e.target.name === "companyName" || e.target.name === "industry") {
-      let updatedAccount = Object.assign({}, this.state.account)
-      updatedAccount[e.target.name] = e.target.value
       this.setState({
-        account: updatedAccount
+        account: { ...this.state.account, [e.target.name]: e.target.value }
       })
     }
     else if (e.target.name === "firstName" || e.target.name === "lastName" || e.target.name === "email"
         || e.target.name === "password" || e.target.name === "confirmPassword") {
-      let updatedUser = Object.assign({}, this.state.user)
-      updatedUser[e.target.name] = e.target.value
       this.setState({
-        user: updatedUser
+        user: { ...this.state.user, [e.target.name]: e.target.value }
       })
     }  
   }

@@ -4,10 +4,9 @@
   "description": "A Project tracking and Sales management tool.",
   "main": "server.js",
   "directories": {
-    "test": "test"
+    "test": "./"
   },
   "scripts": {
-    "start": "nodemon --watch src --exec babel-node -- src/index.js",
     "test": "babel-node src/run.js"
   },
   "repository": {
@@ -21,18 +20,8 @@
   },
   "homepage": "https://github.com/birhanuh/toolsio-node#readme",
   "dependencies": {
-    "axios": "^0.15.3",
-    "bcrypt": "^1.0.2",
-    "bluebird": "^3.5.0",
-    "body-parser": "^1.16.1",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.14.1",
-    "jsonwebtoken": "^7.3.0",
-    "lodash": "^4.17.4",
-    "mongoose": "^4.8.2",
-    "morgan": "^1.8.1",
-    "shortid": "^2.2.6",
-    "validator": "^7.0.0"
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",

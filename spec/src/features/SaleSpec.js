@@ -13,13 +13,13 @@ let customer = FactoryGirl.create('customer')
 'use strict'
 
 describe("Sale", function() { 
-  var result, result2, props, button
+  let result, result2, props, button
 
   beforeEach(function() {
     props = {
       createSale: '',
       fetchSale: '',
-      updateSale: '',
+      updateSale: ''
     }
     result = TestUtils.renderIntoDocument(<FormPage {...props} />)
     result2 = TestUtils.renderIntoDocument(<Page {...props} />)

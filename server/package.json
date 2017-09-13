@@ -2,13 +2,12 @@
   "name": "toolsio-react",
   "version": "1.0.0",
   "description": "A Project tracking and Sales management tool.",
-  "main": "server.js",
+  "main": "./src/index.js",
   "directories": {
-    "test": "test"
+    "test": "../spec"
   },
   "scripts": {
-    "start": "nodemon --watch src --exec babel-node -- src/index.js",
-    "test": "babel-node spec/run.js"
+    "start": "nodemon --watch src --exec babel-node -- src/index.js"
   },
   "repository": {
     "type": "git",
