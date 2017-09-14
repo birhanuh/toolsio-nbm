@@ -1,8 +1,6 @@
 // Mongodb connecton
 import db from '../../../server/src/db'
 
-import axios from 'axios'
-
 // Load factories 
 import FactoryGirl from '../factories'
 
@@ -29,61 +27,59 @@ describe("Sale", function() {
   })
 
   afterAll(function() {
-    db.drop('sales', 'mongodb://localhost/toolsio_test')
+    db.drop()
   })
 
-  describe('validation', function() {
-    test('should fail with validation errors for each required field', function(done) {
-      Sale.create({}, function(err, sale) {
-        expect(err).not.toBeNull()
-        expect(err.errors.customer.message).toContain('Customer is required.')
-        expect(err.errors.name.message).toContain('Name is required.')
-        expect(err.errors.deadline.message).toContain('Deadline is required.')
-        done()
-      })
-    })
-
-    test('saves Sale', function(done) {
-      Sale.create(sale, function(err, sale) {
-        
-        // Assign id
-        saleId = sale._id
-       
-        expect(sale).not.toBeNull()
-        expect(sale.name).toContain('Sale 1')
-        expect(sale.status).toContain('new')
-        expect(sale.description).toContain('Description 1...')
-        done()
-      })
-    })
-
-    test('finds Sale', function(done) { 
-
-      Sale.findById(saleId, sale, function(error, result) {
-        expect(result.length).not.toBe(0)
-      })
+  test('should fail with validation errors for each required field', function(done) {
+    Sale.create({}, function(err, sale) {
+      expect(err).not.toBeNull()
+      expect(err.errors.customer.message).toContain('Customer is required.')
+      expect(err.errors.name.message).toContain('Name is required.')
+      expect(err.errors.deadline.message).toContain('Deadline is required.')
       done()
     })
+  })
 
-    test('updates Sale', function(done) { 
-
-      // Update name
-      sale.name = 'Sale 1 updated'
+  test('saves Sale', function(done) {
+    Sale.create(sale, function(err, sale) {
       
-      Sale.findByIdAndUpdate(saleId, sale, function(error, result) {
-        expect(result[0].name).toContain('Sale 1 updated')
-      })
+      // Assign id
+      saleId = sale._id
+     
+      expect(sale).not.toBeNull()
+      expect(sale.name).toContain('Sale 1')
+      expect(sale.status).toContain('new')
+      expect(sale.description).toContain('Description 1...')
       done()
     })
+  })
 
-    test('deletes Sale', function(done) { 
+  test('finds Sale', function(done) { 
 
-      Sale.findByIdAndRemove(saleId, sale, function(error, result) {
-        expect(result.length).toBe(0)
-      })
+    Sale.findById(saleId, sale, function(error, sale) {
+      expect(sale).not.toBeNull()
       done()
-      //db.fixtures('mongodb://localhost/toolsio_test', Sale, sales)
     })
+  })
+
+  test('updates Sale', function(done) { 
+
+    // Update name
+    sale.name = 'Sale 1 updated'
+    
+    Sale.findByIdAndUpdate(saleId, sale, {new: true}, function(error, sale) {
+      expect(sale.name).toContain('Sale 1 updated')
+      done()
+    })
+  })
+
+  test('deletes Sale', function(done) { 
+
+    Sale.findByIdAndRemove(saleId, sale, function(error, sale) {
+     expect(sale).not.toBeNull()
+     done()
+    })
+    //db.fixtures('mongodb://localhost/toolsio_test', Sale, sales)
   })
 
 })
