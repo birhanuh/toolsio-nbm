@@ -2,6 +2,18 @@ import FactoryGirl from 'factory_girl'
 import mongoose from 'mongoose'
 let id = mongoose.Types.ObjectId()
 
+FactoryGirl.define('user', function() {
+  this.account = id
+  this.firstName = 'User 1'
+  this.lastName = 'User 1'
+  this.email = 'user@email.com' 
+  this.password = 'pw'
+  this.admin = true
+  this.meta = { age: 21, gender: 'm' }
+  this.avatar = { data: null, contentType: '' }
+  this.tenantId = ''
+})
+
 FactoryGirl.define('customer', function() {
   this.name = 'Customer 1'
   this.vatNumber = '1234' 

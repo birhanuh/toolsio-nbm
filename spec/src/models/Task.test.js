@@ -25,9 +25,11 @@ describe("Task", function() {
 
   test('should fail with validation errors for each required field', (done) => {
     Task.create({}, function(err, task) {
+      
       expect(err).not.toBeNull()
       expect(err.errors.name.message).toContain('Name is required.')
       expect(err.errors.paymentType.message).toContain('Payment type is required.')
+
       done()
     })
   })

@@ -25,10 +25,12 @@ describe("Project", function() {
 
   test('should fail with validation errors for each required field', function(done) {
     Project.create({}, function(err, project) {
+
       expect(err).not.toBeNull()
       expect(err.errors.customer.message).toContain('Customer is required.')
       expect(err.errors.name.message).toContain('Name is required.')
       expect(err.errors.deadline.message).toContain('Deadline is required.')
+      
       done()
     })
   })

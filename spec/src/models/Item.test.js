@@ -25,9 +25,11 @@ describe("Item", function() {
 
   test('should fail with validation errors for each required field', (done) => {
     Item.create({}, function(err, item) {
+
       expect(err).not.toBeNull()
       expect(err.errors.name.message).toContain('Name is required.')
       expect(err.errors.unit.message).toContain('Unit is required.')
+      
       done()
     })
   })

@@ -25,9 +25,11 @@ describe("Customer", function() {
 
   test('should fail with validation errors for each required field', (done) => {
     Customer.create({}, function(err, customer) {
+
       expect(err).not.toBeNull()
       expect(err.errors.name.message).toContain('Name is required.')
       expect(err.errors.vatNumber.message).toContain('Vat number is required.')
+      
       done()
     })
   })
