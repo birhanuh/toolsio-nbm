@@ -31,4 +31,22 @@ FactoryGirl.define('project', function() {
   this.tasks = []
 })
 
+FactoryGirl.define('task', function() {
+  this._creator = id
+  this.name = 'Task 1'
+  this.hours = 2 
+  this.paymentType = 'Per hour'
+  this.price = 20
+  this.vat = 10
+})
+
+FactoryGirl.define('item', function() {
+  this._creator = id
+  this.name = 'Item 1'
+  this.unit = 'meter' 
+  this.quantity = 15
+  this.price = 20
+  this.vat = 10
+})
+
 module.exports = FactoryGirl

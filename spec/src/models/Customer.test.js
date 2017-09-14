@@ -70,11 +70,11 @@ describe("Customer", function() {
     })
   })
 
-  xtest('deletes Customer', (done) => { 
+  test('deletes Customer', (done) => { 
 
     Customer.findByIdAndRemove(customerId, customer, (error, customer) => {
       expect(customer).not.toBeNull()
-      
+
       done()
     })
   })
