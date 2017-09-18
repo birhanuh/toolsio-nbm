@@ -24,8 +24,8 @@ describe("Item", function() {
 
 
   test('should fail with validation errors for each required field', (done) => {
-    Item.create({}, function(err, item) {
 
+    Item.create({}, function(err, item) {
       expect(err).not.toBeNull()
       expect(err.errors.name.message).toContain('Name is required.')
       expect(err.errors.unit.message).toContain('Unit is required.')
@@ -36,8 +36,7 @@ describe("Item", function() {
 
   test('saves Item', (done) => {
     
-    Item.create(item, (err, item) => {
-      
+    Item.create(item, (err, item) => {      
       // Assign id
       itemId = item._id
  
@@ -64,8 +63,7 @@ describe("Item", function() {
     // Update name
     item.name = 'Item 1 updated'
     
-    Item.findByIdAndUpdate(itemId, item, {new: true}, (error, item) => {
-      
+    Item.findByIdAndUpdate(itemId, item, {new: true}, (error, item) => {      
       expect(item.name).toContain('Item 1 updated')
 
       done()

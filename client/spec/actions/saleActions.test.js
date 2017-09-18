@@ -31,8 +31,8 @@ describe("Sale", function() {
   })
 
   test('should fail with validation errors for each required field', function(done) {
-    Sale.create({}, function(err, sale) {
-      
+    
+    Sale.create({}, function(err, sale) {      
       expect(err).not.toBeNull()
       expect(err.errors.customer.message).toContain('Customer is required.')
       expect(err.errors.name.message).toContain('Name is required.')
@@ -43,8 +43,8 @@ describe("Sale", function() {
   })
 
   test('saves Sale', function(done) {
-    Sale.create(sale, function(err, sale) {
-      
+
+    Sale.create(sale, function(err, sale) {      
       // Assign id
       saleId = sale._id
      
@@ -52,6 +52,7 @@ describe("Sale", function() {
       expect(sale.name).toContain('Sale 1')
       expect(sale.status).toContain('new')
       expect(sale.description).toContain('Description 1...')
+
       done()
     })
   })
@@ -60,6 +61,7 @@ describe("Sale", function() {
 
     Sale.findById(saleId, sale, function(error, sale) {
       expect(sale).not.toBeNull()
+
       done()
     })
   })
@@ -79,6 +81,7 @@ describe("Sale", function() {
 
     Sale.findByIdAndRemove(saleId, sale, function(error, sale) {
      expect(sale).not.toBeNull()
+     
      done()
     })
     //db.fixtures('mongodb://localhost/toolsio_test', Sale, sales)

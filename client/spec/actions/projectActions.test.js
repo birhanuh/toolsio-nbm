@@ -24,8 +24,8 @@ describe("Task", function() {
 
 
   test('should fail with validation errors for each required field', (done) => {
-    Task.create({}, function(err, task) {
-      
+
+    Task.create({}, function(err, task) {      
       expect(err).not.toBeNull()
       expect(err.errors.name.message).toContain('Name is required.')
       expect(err.errors.paymentType.message).toContain('Payment type is required.')
@@ -36,8 +36,7 @@ describe("Task", function() {
 
   test('saves Task', (done) => {
     
-    Task.create(task, (err, task) => {
-      
+    Task.create(task, (err, task) => {      
       // Assign id
       taskId = task._id
  
@@ -64,8 +63,7 @@ describe("Task", function() {
     // Update name
     task.name = 'Task 1 updated'
     
-    Task.findByIdAndUpdate(taskId, task, {new: true}, (error, task) => {
-      
+    Task.findByIdAndUpdate(taskId, task, {new: true}, (error, task) => {      
       expect(task.name).toContain('Task 1 updated')
 
       done()

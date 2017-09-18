@@ -24,8 +24,8 @@ describe("User", function() {
 
 
   test('should fail with validation errors for each required field', function(done) {
-    User.create({}, function(err, user) {
 
+    User.create({}, function(err, user) {
       expect(err).not.toBeNull()
       expect(err.errors.email.message).toContain('Email is required.')
       expect(err.errors.password.message).toContain('Password is required.')
@@ -37,7 +37,6 @@ describe("User", function() {
   test('saves User', function(done) {
    
     User.create(user, function(err, user) {
-
      // Assign id
       userId = user._id
 

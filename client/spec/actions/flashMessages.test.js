@@ -24,8 +24,8 @@ describe("Project", function() {
 
 
   test('should fail with validation errors for each required field', function(done) {
-    Project.create({}, function(err, project) {
 
+    Project.create({}, function(err, project) {
       expect(err).not.toBeNull()
       expect(err.errors.customer.message).toContain('Customer is required.')
       expect(err.errors.name.message).toContain('Name is required.')
@@ -36,8 +36,8 @@ describe("Project", function() {
   })
 
   test('saves Project', function(done) {
-    Project.create(project, function(err, project) {
-      
+
+    Project.create(project, function(err, project) {      
       // Assign id
       projectId = project._id
      

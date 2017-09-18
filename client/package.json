@@ -33,10 +33,19 @@
     "superagent": "^3.5.1",
     "validator": "^7.0.0"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
+  },
   "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "identity-obj-proxy": "^3.0.0",
     "node-sass-chokidar": "0.0.1",
     "npm-run-all": "^4.0.2",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "jest": "^21.1.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
@@ -44,8 +53,8 @@
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test": "jest"
   },
   "proxy": "http://localhost:8080"
 }
