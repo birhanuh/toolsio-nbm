@@ -34,6 +34,9 @@
     "validator": "^7.0.0"
   },
   "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
     "moduleNameMapper": {
       "\\.(css|less)$": "identity-obj-proxy"
     }
@@ -42,7 +45,9 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "enzyme": "^2.9.1",
+    "enzyme-to-json": "^2.0.0",
     "identity-obj-proxy": "^3.0.0",
+    "immutable": "^3.8.1",
     "jest": "^21.1.0",
     "node-sass-chokidar": "0.0.1",
     "npm-run-all": "^4.0.2",

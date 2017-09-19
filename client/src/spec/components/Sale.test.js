@@ -1,6 +1,9 @@
 import React from 'react'
+import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
-import { shallow } from 'enzyme'
+import { fromJS } from 'immutable'
+import { shallow, mount } from 'enzyme'
+import toJson from 'enzyme-to-json'
 import configureMockStore from 'redux-mock-store'
 import FormPage from '../../components/Sales/FormPage'
 import Form from '../../components/Sales/Form'
@@ -9,7 +12,7 @@ import Show from '../../components/Sales/Show'
 
 function setup() {
   
-  const mockStore = configureMockStore([ thunk ]);
+  const mockStore = configureMockStore([ thunk ])
   const storeStateMockFormPage = {
     sales:{
       sale: 'ABC'
@@ -54,7 +57,7 @@ function setup() {
     deleteeSale: jest.fn()
   }
 
-  //const formPageWrapper = mount(<FormPage {...propsForm} store={storeFormPage} />)
+  //const formPageWrapper = mount(<Provider store={storeFormPage}><FormPage {...propsForm} /></Provider>)
   const formWrapper = mount(<Form />)
   //const pageWrapper = mount(<Page {...propsShow} store={storeShow} />)
   //const showWrapper = mount(<Show {...propsPage} store={storePage} />)
@@ -67,13 +70,9 @@ function setup() {
   }
 }
 
-describe("Sale", function() { 
+describe("components", function() { 
 
   beforeEach(function() {
-    let store = {
-
-    }
-
     let propsForm = {
       fetchSale: jest.fn(),
       deleteSale: jest.fn(),
@@ -99,27 +98,25 @@ describe("Sale", function() {
     // const button3 = TestUtils.scryRenderDOMComponentsWithTag(result3, 'button')
   })
 
-  it("FormPage", () => { 
-    let props = {
-      createSale: '',
-      fetchSale: '',
-      updateSale: '',
-      fetchCustomers: ''
-    }
- 
-    const formComponent = shallow(<Form />)
-    expect(formComponent.find('button').hasClass('ui primary')).toBe(true)
+  describe("<FormPage />", function() { 
+    it('renders correctly', () => { 
+      
+      //const { formWrapper } = setup()
+      //expect(formWrapper.find('button').hasClass('ui primary')).toBe(true)
 
+      const formComponent = shallow(<Form />)
+      expect(formComponent.find('button').hasClass('ui primary')).toBe(true)
 
-    // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'name')).value = 'Sale 1'
-    // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'deadline')).value = new Date()
-    // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'status')).value = 'NEW'
-    // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'describtion')).value = 'Sale 1 ...'
-    // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'customer')).value = customer
-    // TestUtils.Simulate.click(button[0])
-    // expect(ReactDOM.findDOMNode(result2).textContent).toContain('Sale 1')  
+      // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'name')).value = 'Sale 1'
+      // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'deadline')).value = new Date()
+      // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'status')).value = 'NEW'
+      // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'describtion')).value = 'Sale 1 ...'
+      // ReactDOM.findDOMNode(TestUtils.findRenderDOMComponentWithName(result, 'customer')).value = customer
+      // TestUtils.Simulate.click(button[0])
+      // expect(ReactDOM.findDOMNode(result2).textContent).toContain('Sale 1')  
+    })
   })
-
+    
   // it("edits Sale", function() { 
   //   expect(TestUtils.findRenderDOMComponentWithTag(result2, 'table')).toBeDefined()     
   //   expect(textContent).toContain('View')  
