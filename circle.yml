@@ -1,7 +1,8 @@
-# test:
-#   override:
-#     - cd spec/ 
-#     - npm test
+test:
+  override:
+    - cd client/ 
+    - cd server/ 
+    - npm test
 
-# deployment:
+deployment:
 
