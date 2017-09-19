@@ -1,3 +1,9 @@
+dependencies:
+  override:
+    - cd client/ 
+    - cd server/  
+    - npm install
+
 test:
   override:
     - cd client/ 
@@ -5,4 +11,6 @@ test:
     - npm test
 
 deployment:
+
+
 
