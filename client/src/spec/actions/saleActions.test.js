@@ -1,51 +1,44 @@
 import { 
   addSale, setSales, saleFetched, saleUpdated, saleDeleted, addItem, itemUpdated, itemDeleted
 } from '../../actions/saleActions'
+import * as types from '../../actions/types'
 
-describe("actoins", function() { 
+describe("actoins", () => { 
 
-  describe("addSale", function() { 
+  test('should create an action to add a Sale', () => {
+    const sale = {}
+    const expectedAction = {
+      type: types.ADD_SALE,
+      sale
+    }
+    expect(addSale(sale)).toEqual(expectedAction)
+  })  
 
-    test('should have a type of "ADD_SALE"', function() {
-      expect(addSale().type).toEqual('ADD_SALE')
-    })  
+  test('should create an action to set Sales', () => {
+    const sales = []
+    const expectedAction = {
+      type: types.SET_SALES,
+      sales
+    }
+    expect(setSales(sales)).toEqual(expectedAction)
+  })  
 
-    test('should pass on the sale we pass in', function() {
-      const sale = {}
-      expect(addSale(sale).sale).toEqual(sale)
-    })  
-  })
+  test('should create an action to update a Sale', () => {
+    const sale = {}
+    const expectedAction = {
+      type: types.SALE_UPDATED,
+      sale
+    }
+    expect(saleUpdated(sale)).toEqual(expectedAction)
+  })  
 
-  describe("setSales", function() { 
-
-    test('should have a type of "SET_SALES"', function() {
-      expect(setSales().type).toEqual('SET_SALES')
-    })  
-
-    test('should pass on the sales we pass in', function() {
-      const sales = []
-      expect(setSales(sales).sales).toEqual(sales)
-    })  
-  })
-
-  describe("saleUpdated", function() { 
-
-    test('should have a type of "SALE_UPDATED"', function() {
-      expect(saleUpdated().type).toEqual('SALE_UPDATED')
-    })  
-  })
-
-  describe("addItem", function() { 
-
-    test('should have a type of "ADD_ITEM"', function() {
-      expect(addItem().type).toEqual('ADD_ITEM')
-    })  
-
-    test('should pass on the item we pass in', function() {
-      const item = {}
-      expect(addItem(item).item).toEqual(item)
-    })  
-  })
-
+  test('should create an action to create an Item', () => {
+    const item = {}
+    const expectedAction = {
+      type: types.ADD_ITEM,
+      item
+    }
+    expect(addItem(item)).toEqual(expectedAction)
+  })  
   
 })

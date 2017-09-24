@@ -1,25 +1,19 @@
-import saleReducer from '../../reducers/sales'
-import { fromJS } from 'immutable'
+import reducer from '../../reducers/sales'
+import * as types from '../../actions/types'
 
-describe("reducer", function() { 
-
-  test('should return initial state', function() {
-    expect(saleReducer(undefined, {})).toEqual(fromJS({
-      saleId: '',
-      sales: [],
-      sale: {},
-      item: {}
-    }))
-    
-  })  
+describe("sale reducer", function() { 
   
-  test('should have a type of "ADD_SALE"', function() {
-    expect(addSale().type).toEqual('ADD_SALE')
-  })  
-
-  test('should pass on the sale we pass in', function() {
+  it('should handle ADD_SALE', () => {
     const sale = {}
-    expect(addSale(sale).sale).toEqual(sale)
+
+    expect(
+      reducer([], {
+        type: types.ADD_SALE,
+        sale: sale
+      })
+    ).toEqual([
+      sale
+    ])
   })  
 
   

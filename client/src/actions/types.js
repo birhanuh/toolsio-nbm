@@ -27,15 +27,8 @@ export const CUSTOMER_UPDATED = 'CUSTOMER_UPDATED'
 export const CUSTOMER_DELETED = 'CUSTOMER_DELETED'
 
 // TASKS
-export const SET_TASKS = 'SET_TASKS'
-export const ADD_TASK = 'ADD_TASK'
-export const TASK_FETCHED = 'TASK_FETCHED'
-export const TASK_UPDATED = 'TASK_UPDATED'
-export const TASK_DELETED = 'TASK_DELETED'
-
-// ITEMS
-export const SET_ITEMS = 'SET_ITEMS'
-export const ADD_ITEM = 'ADD_ITEM'
-export const ITEM_FETCHED = 'ITEM_FETCHED'
-export const ITEM_UPDATED = 'ITEM_UPDATED'
-export const ITEM_DELETED = 'ITEM_DELETED'
+export const SET_INVOICES = 'SET_INVOICES'
+export const ADD_INVOICE = 'ADD_INVOICE'
+export const INVOICE_FETCHED = 'INVOICE_FETCHED'
+export const INVOICE_UPDATED = 'INVOICE_UPDATED'
+export const INVOICE_DELETED = 'INVOICE_DELETED'

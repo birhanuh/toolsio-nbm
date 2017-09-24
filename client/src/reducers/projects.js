@@ -35,54 +35,6 @@ export default function projects(state = [], action = {}) {
         ]
       }
 
-    case ADD_TASK:
-      const creatorIndexAddTask = state.findIndex(item => item._id === action.task._creator)
-      if (creatorIndexAddTask > -1) {
-        return state.map(item => {
-          if (item._id === action.task._creator) {
-            return {
-              ...item,
-              tasks: [...item.tasks, action.task]     
-            }  
-          }
-          return item 
-        })
-      } else {
-        return [...state]
-      }
-
-    case TASK_UPDATED:
-      const creatorIndexUpdateTask = state.findIndex(item => item._id === action.task._creator)
-      if (creatorIndexUpdateTask > -1) {
-        return state.map(item => {
-          if (item._id === action.task._creator) {
-            return {
-              ...item,
-              tasks: [...item.tasks.filter(taskItem => taskItem._id !== action.task._id), action.task]     
-            }  
-          }
-          return item 
-        })
-      } else {
-        return [...state]
-      }
-
-    case TASK_DELETED:
-      const creatorIndexDeleteTask = state.findIndex(item => item._id === action.task._creator)
-      if (creatorIndexDeleteTask > -1) {
-        return state.map(item => {
-          if (item._id === action.task._creator) {
-            return {
-              ...item,
-              tasks: [...item.tasks.filter(taskItem => taskItem._id !== action.task._id)]        
-            }  
-          }
-          return item 
-        })
-      } else {
-        return [...state]
-      }
-
     default: return state
   }
 }
