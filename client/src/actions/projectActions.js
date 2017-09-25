@@ -29,10 +29,10 @@ export function projectUpdated(project) {
   }
 }
 
-export function projectDeleted(id) {
+export function projectDeleted(projectId) {
   return {
     type: PROJECT_DELETED,
-    id
+    projectId
   }
 }
 

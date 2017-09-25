@@ -1,5 +1,5 @@
 import { 
-  addSale, setSales, saleFetched, saleUpdated, saleDeleted, addItem, itemUpdated, itemDeleted
+  addSale, setSales, saleFetched, saleUpdated, saleDeleted
 } from '../../actions/saleActions'
 import * as types from '../../actions/types'
 
