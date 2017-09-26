@@ -1,4 +1,4 @@
-import { ADD_PROJECT, SET_PROJECTS, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED, ADD_TASK, TASK_UPDATED, TASK_DELETED } from '../actions/types'
+import { ADD_PROJECT, SET_PROJECTS, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED } from '../actions/types'
 
 export default function projects(state = [], action = {}) {
   switch(action.type) {    
@@ -13,7 +13,7 @@ export default function projects(state = [], action = {}) {
       ]
 
     case PROJECT_DELETED:
-      return state.filter(item => item._id !== action.id)
+      return state.filter(item => item._id !== action.projectId)
     
     case PROJECT_UPDATED:
       return state.map(item => {

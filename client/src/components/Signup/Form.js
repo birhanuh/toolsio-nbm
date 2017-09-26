@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import { Validation } from '../../utils'
 import { InputField, SelectField } from '../../utils/FormFields'
 import classnames from 'classnames'
@@ -224,15 +225,15 @@ class Form extends Component {
 
 // Proptypes definition
 Form.propTypes = {
-  signupRequest: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired,
-  isAccountExists: React.PropTypes.func.isRequired,
-  isUserExists: React.PropTypes.func.isRequired
+  signupRequest: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
+  isAccountExists: PropTypes.func.isRequired,
+  isUserExists: PropTypes.func.isRequired
 }
 
 // Contexttype definition
 Form.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 
 export default Form

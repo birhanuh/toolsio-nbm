@@ -1,11 +1,11 @@
 // Mongodb connecton
-import db from '../../../server/src/db'
+import db from '../../db'
 
 // Load factories 
 import FactoryGirl from '../factories'
 
 // Schema
-import Item from '../../../server/src/models/Item'
+import Item from '../../models/Item'
 
 // Factored Item
 let item = FactoryGirl.create('item')
@@ -23,7 +23,7 @@ describe("Item", function() {
   })
 
 
-  test('should fail with validation errors for each required field', (done) => {
+  it('should fail with validation errors for each required field', (done) => {
 
     Item.create({}, function(err, item) {
       expect(err).not.toBeNull()
@@ -34,7 +34,7 @@ describe("Item", function() {
     })
   })
 
-  test('saves Item', (done) => {
+  it('saves Item', (done) => {
     
     Item.create(item, (err, item) => {      
       // Assign id
@@ -49,7 +49,7 @@ describe("Item", function() {
     })
   })
 
-  test('finds Item', (done) => { 
+  it('finds Item', (done) => { 
 
     Item.findById(itemId, item, (error, item) => {
       expect(item).not.toBeNull()
@@ -58,7 +58,7 @@ describe("Item", function() {
     })
   })
 
-  test('updates Item', (done) => { 
+  it('updates Item', (done) => { 
 
     // Update name
     item.name = 'Item 1 updated'
@@ -70,7 +70,7 @@ describe("Item", function() {
     })
   })
 
-  test('deletes Item', (done) => { 
+  it('deletes Item', (done) => { 
 
     Item.findByIdAndRemove(itemId, item, (error, item) => {
       expect(item).not.toBeNull()

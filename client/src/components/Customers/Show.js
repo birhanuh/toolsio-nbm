@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addFlashMessage } from '../../actions/flashMessages'
@@ -199,13 +200,13 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  fetchCustomer: React.PropTypes.func.isRequired,
-  deleteCustomer: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  fetchCustomer: PropTypes.func.isRequired,
+  deleteCustomer: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state, props) {

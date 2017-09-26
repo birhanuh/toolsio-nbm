@@ -11,7 +11,7 @@ export default {
       }
       
       // Get Sale of item owner 
-      Sale.findById(item._creator).populate([{ path: 'customer', select: 'name'}, { path: 'items' }]).exec(function(err, sale) {
+      Sale.findByIdAndUpdate(item._creator).populate([{ path: 'customer', select: 'name'}, { path: 'items' }]).exec(function(err, sale) {
         if (err) {
           callback(err, null)
           return
@@ -30,7 +30,7 @@ export default {
       }
 
       // Get Sale of item owner 
-      Sale.findById(item._creator).populate([{ path: 'customer', select: 'name'}, { path: 'items' }]).exec(function(err, sale) {
+      Sale.findByIdAndUpdate(item._creator).populate([{ path: 'customer', select: 'name'}, { path: 'items' }]).exec(function(err, sale) {
         if (err) {
           callback(err, null)
           return

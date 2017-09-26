@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Tr from './Tr'
 
 // Localization 
@@ -35,6 +36,6 @@ export default function List({ customers, deleteCustomer }) {
 }
 
 List.propTypes = {
-  customers: React.PropTypes.array.isRequired,
-  deleteCustomer: React.PropTypes.func.isRequired
+  customers: PropTypes.array.isRequired,
+  deleteCustomer: PropTypes.func.isRequired
 }

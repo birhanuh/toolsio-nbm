@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/authentication'
@@ -222,8 +223,8 @@ class NavigationBar extends Component {
 }
 
 NavigationBar.propTypes = {
-  auth: React.PropTypes.object.isRequired,
-  logout: React.PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
@@ -197,7 +198,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  customers: React.PropTypes.array.isRequired
+  customers: PropTypes.array.isRequired
 }
 
 export default Form

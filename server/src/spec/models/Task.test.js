@@ -1,11 +1,11 @@
 // Mongodb connecton
-import db from '../../../server/src/db'
+import db from '../../db'
 
 // Load factories 
 import FactoryGirl from '../factories'
 
 // Schema
-import Task from '../../../server/src/models/Task'
+import Task from '../../models/Task'
 
 // Factored Task
 let task = FactoryGirl.create('task')
@@ -23,7 +23,7 @@ describe("Task", function() {
   })
 
 
-  test('should fail with validation errors for each required field', (done) => {
+  it('should fail with validation errors for each required field', (done) => {
 
     Task.create({}, function(err, task) {      
       expect(err).not.toBeNull()
@@ -34,7 +34,7 @@ describe("Task", function() {
     })
   })
 
-  test('saves Task', (done) => {
+  it('saves Task', (done) => {
     
     Task.create(task, (err, task) => {      
       // Assign id
@@ -49,7 +49,7 @@ describe("Task", function() {
     })
   })
 
-  test('finds Task', (done) => { 
+  it('finds Task', (done) => { 
 
     Task.findById(taskId, task, (error, task) => {
       expect(task).not.toBeNull()
@@ -58,7 +58,7 @@ describe("Task", function() {
     })
   })
 
-  test('updates Task', (done) => { 
+  it('updates Task', (done) => { 
 
     // Update name
     task.name = 'Task 1 updated'
@@ -70,7 +70,7 @@ describe("Task", function() {
     })
   })
 
-  test('deletes Task', (done) => { 
+  it('deletes Task', (done) => { 
 
     Task.findByIdAndRemove(taskId, task, (error, task) => {
       expect(task).not.toBeNull()

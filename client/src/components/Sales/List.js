@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Card from './Card'
 
 // Localization 
@@ -28,6 +29,6 @@ export default function List({ sales, deleteSale }) {
 }
 
 List.propTypes = {
-  sales: React.PropTypes.array.isRequired,
-  deleteSale: React.PropTypes.func.isRequired
+  sales: PropTypes.array.isRequired,
+  deleteSale: PropTypes.func.isRequired
 }

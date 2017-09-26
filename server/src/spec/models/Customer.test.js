@@ -1,11 +1,11 @@
 // Mongodb connecton
-import db from '../../../server/src/db'
+import db from '../../db'
 
 // Load factories 
 import FactoryGirl from '../factories'
 
 // Schema
-import Customer from '../../../server/src/models/Customer'
+import Customer from '../../models/Customer'
 
 // Factored Customer
 let customer = FactoryGirl.create('customer')
@@ -23,7 +23,7 @@ describe("Customer", function() {
   })
 
 
-  test('should fail with validation errors for each required field', (done) => {
+  it('should fail with validation errors for each required field', (done) => {
     Customer.create({}, function(err, customer) {
 
       expect(err).not.toBeNull()
@@ -34,7 +34,7 @@ describe("Customer", function() {
     })
   })
 
-  test('saves Customer', (done) => {
+  it('saves Customer', (done) => {
     
     Customer.create(customer, (err, customer) => {
       
@@ -50,7 +50,7 @@ describe("Customer", function() {
     })
   })
 
-  test('finds Customer', (done) => { 
+  it('finds Customer', (done) => { 
 
     Customer.findById(customerId, customer, (error, customer) => {
       expect(customer).not.toBeNull()
@@ -59,7 +59,7 @@ describe("Customer", function() {
     })
   })
 
-  test('updates Customer', (done) => { 
+  it('updates Customer', (done) => { 
 
     // Update name
     customer.name = 'Customer 1 updated'
@@ -72,7 +72,7 @@ describe("Customer", function() {
     })
   })
 
-  test('deletes Customer', (done) => { 
+  it('deletes Customer', (done) => { 
 
     Customer.findByIdAndRemove(customerId, customer, (error, customer) => {
       expect(customer).not.toBeNull()

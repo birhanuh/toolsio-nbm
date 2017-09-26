@@ -1,4 +1,5 @@
 import React from 'react' 
+import PropTypes from 'prop-types'
 import classnames from 'classnames'
 
 export const InputField = ({ type, options, name, field, value, label, 
@@ -55,13 +56,13 @@ export const SelectField = ({ options, name, field, value, label, error,
 }  
 
 InputField.propTypes = TextAreaField.propTypes = SelectField.propTypes = {  
-  name: React.PropTypes.string.isRequired, 
-  value: React.PropTypes.string.isRequired, 
-  label: React.PropTypes.string, 
-  error: React.PropTypes.string, 
-  placeholder: React.PropTypes.string, 
-  onChange: React.PropTypes.func.isRequired,
-  checkUserExists: React.PropTypes.func
+  name: PropTypes.string.isRequired, 
+  value: PropTypes.string.isRequired, 
+  label: PropTypes.string, 
+  error: PropTypes.string, 
+  placeholder: PropTypes.string, 
+  onChange: PropTypes.func.isRequired,
+  checkUserExists: PropTypes.func
 }
 
 InputField.defaultProps = {

@@ -1,5 +1,5 @@
 // Mongodb connecton
-import db from '../../../server/src/db'
+import db from '../../db'
 
 // Load factories 
 import FactoryGirl from '../factories'
@@ -8,7 +8,7 @@ import FactoryGirl from '../factories'
 import sales from '../fixtures/sales' 
 
 // Schema
-import Sale from '../../../server/src/models/Sale'
+import Sale from '../../models/Sale'
 
 /*// Factories 
 import fixtures from 'pow-mongoose-fixtures'
@@ -30,7 +30,7 @@ describe("Sale", function() {
     db.drop()
   })
 
-  test('should fail with validation errors for each required field', function(done) {
+  it('should fail with validation errors for each required field', function(done) {
     
     Sale.create({}, function(err, sale) {      
       expect(err).not.toBeNull()
@@ -42,7 +42,7 @@ describe("Sale", function() {
     })
   })
 
-  test('saves Sale', function(done) {
+  it('saves Sale', function(done) {
 
     Sale.create(sale, function(err, sale) {      
       // Assign id
@@ -57,7 +57,7 @@ describe("Sale", function() {
     })
   })
 
-  test('finds Sale', function(done) { 
+  it('finds Sale', function(done) { 
 
     Sale.findById(saleId, sale, function(error, sale) {
       expect(sale).not.toBeNull()
@@ -66,7 +66,7 @@ describe("Sale", function() {
     })
   })
 
-  test('updates Sale', function(done) { 
+  it('updates Sale', function(done) { 
 
     // Update name
     sale.name = 'Sale 1 updated'
@@ -77,7 +77,7 @@ describe("Sale", function() {
     })
   })
 
-  test('deletes Sale', function(done) { 
+  it('deletes Sale', function(done) { 
 
     Sale.findByIdAndRemove(saleId, sale, function(error, sale) {
      expect(sale).not.toBeNull()

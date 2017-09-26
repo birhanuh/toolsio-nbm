@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
@@ -337,12 +338,12 @@ class Task extends Component {
 }
 
 Task.propTypes = {
-  tasks: React.PropTypes.array.isRequired,
-  creator: React.PropTypes.string.isRequired,
-  createTask: React.PropTypes.func.isRequired,
-  updateTask: React.PropTypes.func.isRequired,
-  deleteTask: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  tasks: PropTypes.array.isRequired,
+  creator: PropTypes.string.isRequired,
+  createTask: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 export default connect(null, { createTask, updateTask, deleteTask, addFlashMessage } )(Task)

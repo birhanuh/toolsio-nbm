@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Card from './Card'
 
 // Localization 
@@ -28,5 +29,5 @@ export default function List({ projects }) {
 }
 
 List.propTypes = {
-  projects: React.PropTypes.array.isRequired
+  projects: PropTypes.array.isRequired
 }

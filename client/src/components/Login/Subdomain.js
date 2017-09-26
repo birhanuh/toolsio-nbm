@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { subdomainRequest } from '../../actions/authentication'
@@ -106,12 +107,12 @@ class Subdomain extends Component {
 }
 
 Subdomain.propTypes = {
-  subdomainRequest: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  subdomainRequest: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Subdomain.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 
 export default connect(null, { subdomainRequest, addFlashMessage })(Subdomain)

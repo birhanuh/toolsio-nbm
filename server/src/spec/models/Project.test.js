@@ -1,11 +1,11 @@
 // Mongodb connecton
-import db from '../../../server/src/db'
+import db from '../../db'
 
 // Load factories 
 import FactoryGirl from '../factories'
 
 // Schema
-import Project from '../../../server/src/models/Project'
+import Project from '../../models/Project'
 
 // Factored Project
 let project = FactoryGirl.create('project')
@@ -23,7 +23,7 @@ describe("Project", function() {
   })
 
 
-  test('should fail with validation errors for each required field', function(done) {
+  it('should fail with validation errors for each required field', function(done) {
 
     Project.create({}, function(err, project) {
       expect(err).not.toBeNull()
@@ -35,7 +35,7 @@ describe("Project", function() {
     })
   })
 
-  test('saves Project', function(done) {
+  it('saves Project', function(done) {
 
     Project.create(project, function(err, project) {      
       // Assign id
@@ -50,7 +50,7 @@ describe("Project", function() {
     })
   })
 
-  test('finds Project', function(done) { 
+  it('finds Project', function(done) { 
 
     Project.findById(projectId, project, function(error, project) {
       expect(project).not.toBeNull()
@@ -59,7 +59,7 @@ describe("Project", function() {
     })
   })
 
-  test('updates Project', function(done) { 
+  it('updates Project', function(done) { 
 
     // Update name
     project.name = 'Project 1 updated'
@@ -71,7 +71,7 @@ describe("Project", function() {
     })
   })
 
-  test('deletes Project', function(done) { 
+  it('deletes Project', function(done) { 
 
     Project.findByIdAndRemove(projectId, project, function(error, project) {
       expect(project).not.toBeNull()

@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { loginRequest } from '../../actions/authentication'
@@ -100,12 +101,12 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  loginRequest: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  loginRequest: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Form.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 
 export default connect(null, { loginRequest, addFlashMessage })(Form)

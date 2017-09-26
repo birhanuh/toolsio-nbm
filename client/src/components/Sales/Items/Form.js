@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
@@ -337,12 +338,12 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-  items: React.PropTypes.array.isRequired,
-  creator: React.PropTypes.string.isRequired,
-  createItem: React.PropTypes.func.isRequired,
-  updateItem: React.PropTypes.func.isRequired,
-  deleteItem: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  items: PropTypes.array.isRequired,
+  creator: PropTypes.string.isRequired,
+  createItem: PropTypes.func.isRequired,
+  updateItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 export default connect(null, { createItem, updateItem, deleteItem, addFlashMessage } )(Item)

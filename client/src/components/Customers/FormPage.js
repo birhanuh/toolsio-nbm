@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { createCustomer, fetchCustomer, updateCustomer } from '../../actions/customerActions'
@@ -62,9 +63,9 @@ class FormPage  extends Component {
 }
 
 FormPage.propTypes = {
-  createCustomer: React.PropTypes.func.isRequired,
-  fetchCustomer: React.PropTypes.func.isRequired,
-  updateCustomer: React.PropTypes.func.isRequired
+  createCustomer: PropTypes.func.isRequired,
+  fetchCustomer: PropTypes.func.isRequired,
+  updateCustomer: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, props) {
@@ -78,7 +79,7 @@ function mapStateToProps(state, props) {
 }
 
 FormPage.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps, { createCustomer, fetchCustomer, updateCustomer })(FormPage)
