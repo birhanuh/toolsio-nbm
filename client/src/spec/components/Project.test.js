@@ -1,21 +1,159 @@
-var request = require("request");
+import React from 'react'
+import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
+import thunk from 'redux-thunk'
+import { shallow, mount } from 'enzyme'
+import toJson from 'enzyme-to-json'
+import configureMockStore from 'redux-mock-store'
+import FormPage from '../../components/Projects/FormPage'
+import Form from '../../components/Projects/Form'
+import Page from '../../components/Projects/Page'
+import Show from '../../components/Projects/Show'
+import { createProject, fetchProject } from '../../actions/saleActions'
 
-var base_url = "http://localhost:3000/"
+// Factories
+import { Project, Projects, Customer, Customers } from '../factories'
 
-describe("Hello World Server", function() {
-  describe("GET /", function() {
-    it("returns status code 200", function(done) {
-      request.get(base_url, function(error, response, body) {
-        expect(response.statusCode).toBe(200);
-        done();
-      });
-    });
+// Setups
+const mockStore = configureMockStore([ thunk ])
+let store, props, component, wrapper
 
-    it("returns Hello World", function(done) {
-      request.get(base_url, function(error, response, body) {
-        expect(body).toBe("Hello World");
-        done();
-      });
-    });
-  });
-});
+describe("components", function() { 
+
+  describe("<Form />", function() { 
+    
+    beforeEach(()=>{
+      props = {
+        customers: Customers
+      }
+
+      component = shallow(<Form {...props}/>)
+    })
+
+    it('renders correctly', () => { 
+      
+      expect(component.find('button').hasClass('ui primary')).toBe(true)
+
+      // const formComponent = shallow(<Form />)
+      // const tree = toJson(formComponent)
+      // console.log(tree
+
+    })
+  })
+   
+  describe("<FormPage />", function() {  
+
+    beforeEach(()=>{
+      const storeStateMock = {
+        projects: {
+          Project,
+          find: jest.fn()
+        },
+        customers:{
+          customer: Customer
+        }
+      }
+
+      store = mockStore(storeStateMock)
+
+      props = {
+        createProject: jest.fn(),
+        fetchProject: jest.fn(),
+        updateProject: jest.fn(),
+        fetchCustomers: jest.fn(),
+        customers: Customers,
+        match: {
+          params: {
+            id: 1
+          }
+        }
+      }
+
+      wrapper = mount(<BrowserRouter><Provider store={store}><FormPage {...props} /></Provider></BrowserRouter>)
+    })
+
+    it('renders connected component', function() { 
+      
+      expect(wrapper.find(FormPage).length).toEqual(1)
+    })
+
+    it('check Prop matchs', function() { 
+
+      expect(wrapper.find(FormPage).prop('createProject')).toEqual(props.createProject)
+      expect(wrapper.find(FormPage).prop('fetchProject')).toEqual(props.fetchProject)
+      expect(wrapper.find(FormPage).prop('updateProject')).toEqual(props.updateProject)
+      expect(wrapper.find(FormPage).prop('fetchCustomers')).toEqual(props.fetchCustomers)
+    })
+
+  })
+
+  describe("<Page />", function() {  
+
+    beforeEach(()=>{
+      const storeStateMock = {
+        projects: Projects
+      }
+
+      store = mockStore(storeStateMock)
+
+      props = {
+        fetchProjects: jest.fn(),
+        deleteProject: jest.fn()
+      }
+
+      wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
+    })
+
+    it('renders connected component', function() { 
+      
+      expect(wrapper.find(Page).length).toEqual(1)
+    })
+
+    it('check Prop matchs', function() { 
+
+      expect(wrapper.find(Page).prop('fetchProjects')).toEqual(props.fetchProjects)
+      expect(wrapper.find(Page).prop('deleteProject')).toEqual(props.deleteProject)
+    })
+
+  })
+
+  describe("<Show />", function() {  
+    
+    beforeEach(()=>{
+      const storeStateMock = {
+        projects: {
+          Projects,
+          find: jest.fn()
+        }
+      }
+
+      store = mockStore(storeStateMock)
+
+      props = {
+        fetchProject: jest.fn(),
+        deleteProject: jest.fn(),
+        addFlashMessage: jest.fn(),
+        match: {
+          params: {
+            id: 1
+          }
+        }
+      }
+
+      wrapper = mount(<BrowserRouter><Provider store={store}><Show {...props} /></Provider></BrowserRouter>)
+    })
+
+    it('renders connected component', function() { 
+      
+      expect(wrapper.find(Show).length).toEqual(1)
+    })
+
+    it('check Prop matchs', function() { 
+
+      expect(wrapper.find(Show).prop('fetchProjects')).toEqual(props.fetchProjects)
+      expect(wrapper.find(Show).prop('deleteProject')).toEqual(props.deleteProject)
+    })
+
+  })
+
+})

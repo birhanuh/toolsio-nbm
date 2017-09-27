@@ -12,7 +12,7 @@ import Show from '../../components/Sales/Show'
 import { createSale, fetchSale } from '../../actions/saleActions'
 
 // Factories
-import { Sale, Sales, Customer } from '../factories'
+import { Sale, Sales, Customer, Customers } from '../factories'
 
 // Setups
 const mockStore = configureMockStore([ thunk ])
@@ -23,7 +23,11 @@ describe("components", function() {
   describe("<Form />", function() { 
     
     beforeEach(()=>{
-      component = shallow(<Form />)
+      props = {
+        customers: Customers
+      }
+
+      component = shallow(<Form {...props}/>)
     })
 
     it('renders correctly', () => { 
@@ -57,6 +61,7 @@ describe("components", function() {
         fetchSale: jest.fn(),
         updateSale: jest.fn(),
         fetchCustomers: jest.fn(),
+        customers: Customers,
         match: {
           params: {
             id: 1
@@ -64,7 +69,7 @@ describe("components", function() {
         }
       }
 
-      wrapper = mount(<Provider store={store}><FormPage {...props} /></Provider>)
+      wrapper = mount(<BrowserRouter><Provider store={store}><FormPage {...props} /></Provider><BrowserRouter>)
     })
 
     it('renders connected component', function() { 
