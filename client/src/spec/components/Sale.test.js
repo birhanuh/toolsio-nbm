@@ -1,111 +1,154 @@
 import React from 'react'
 import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
 import thunk from 'redux-thunk'
 import { shallow, mount } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import configureMockStore from 'redux-mock-store'
-import PureFormPage from '../../components/Sales/FormPage'
+import FormPage from '../../components/Sales/FormPage'
 import Form from '../../components/Sales/Form'
 import Page from '../../components/Sales/Page'
 import Show from '../../components/Sales/Show'
+import { createSale, fetchSale } from '../../actions/saleActions'
 
-function setup() {
-  
-  const mockStore = configureMockStore([ thunk ])
+// Factories
+import { Sale, Sales, Customer } from '../factories'
 
-  const storeStateMockFormPage = {
-    sales:{
-      sale: 'ABC'
-    },
-    customers:{
-      customer: 'ABC'
-    }
-  }
-
-  let props = {
-    match: {
-      params: {
-        id: 1
-      }
-    }
-  }
-  let storeFormPage = mockStore(storeStateMockFormPage)
-
-  const storeStateMockPage = {
-    sales:{
-      sales: ['ABC', 'ABC']
-    }
-  }
-
-  let storePage = mockStore(storeStateMockPage)
-
-  const storeStateMockShow = {
-    sales:{
-      sale: 'ABC'
-    }
-  }
-
-  let storeShow = mockStore(storeStateMockShow)
-
-  const propsFormPage = {
-    createSale: jest.fn(),
-    fetchSale: jest.fn(),
-    updateSale: jest.fn(),
-    fetchCustomers: jest.fn()
-  }
-
-  const propsShow = {
-    fetchSale: jest.fn(),
-    deleteSale: jest.fn(),
-    addFlashMessage: jest.fn()
-  }
-
-  const propsPage = {
-    fetchSales: jest.fn(),
-    deleteeSale: jest.fn()
-  }
-
-  //const formPageWrapper = mount(<PureFormPage store={storeFormPage} {...propsFormPage} />)
-  const formWrapper = shallow(<Form />)
-  //const pageWrapper = mount(<Page {...propsShow} store={storeShow} />)
-  //const showWrapper = mount(<Show {...propsPage} store={storePage} />)
-
-  return {
-    propsFormPage,
-    propsShow,
-    propsPage,
-    formWrapper,
-    //formPageWrapper,
-    //pageWrapper,
-    //showWrapper
-  }
-}
+// Setups
+const mockStore = configureMockStore([ thunk ])
+let store, props, component, wrapper
 
 describe("components", function() { 
 
   describe("<Form />", function() { 
+    
+    beforeEach(()=>{
+      component = shallow(<Form />)
+    })
+
     it('renders correctly', () => { 
       
-      const { formWrapper } = setup()
-     
-      expect(formWrapper.find('button').hasClass('ui primary')).toBe(true)
+      expect(component.find('button').hasClass('ui primary')).toBe(true)
 
       // const formComponent = shallow(<Form />)
       // const tree = toJson(formComponent)
-      //  console.log(tree
-      // expect(formComponent.find('button').hasClass('ui primary')).toBe(true)
+      // console.log(tree
 
     })
   })
    
   describe("<FormPage />", function() {  
-    it("renders correctly", function() { 
-      //const { formPageWrapper } = setup()
-      //expect(formPageWrapper.find('button').hasClass('ui primary')).toBe(true)
 
+    beforeEach(()=>{
+      const storeStateMock = {
+        sales: {
+          Sale,
+          find: jest.fn()
+        },
+        customers:{
+          customer: Customer
+        }
+      }
 
+      store = mockStore(storeStateMock)
+
+      props = {
+        createSale: jest.fn(),
+        fetchSale: jest.fn(),
+        updateSale: jest.fn(),
+        fetchCustomers: jest.fn(),
+        match: {
+          params: {
+            id: 1
+          }
+        }
+      }
+
+      wrapper = mount(<Provider store={store}><FormPage {...props} /></Provider>)
     })
+
+    it('renders connected component', function() { 
+      
+      expect(wrapper.find(FormPage).length).toEqual(1)
+    })
+
+    it('check Prop matchs', function() { 
+
+      expect(wrapper.find(FormPage).prop('createSale')).toEqual(props.createSale)
+      expect(wrapper.find(FormPage).prop('fetchSale')).toEqual(props.fetchSale)
+      expect(wrapper.find(FormPage).prop('updateSale')).toEqual(props.updateSale)
+      expect(wrapper.find(FormPage).prop('fetchCustomers')).toEqual(props.fetchCustomers)
+    })
+
   })
 
+  describe("<Page />", function() {  
+
+    beforeEach(()=>{
+      const storeStateMock = {
+        sales: Sales
+      }
+
+      store = mockStore(storeStateMock)
+
+      props = {
+        fetchSales: jest.fn(),
+        deleteSale: jest.fn()
+      }
+
+      wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
+    })
+
+    it('renders connected component', function() { 
+      
+      expect(wrapper.find(Page).length).toEqual(1)
+    })
+
+    it('check Prop matchs', function() { 
+
+      expect(wrapper.find(Page).prop('fetchSales')).toEqual(props.fetchSales)
+      expect(wrapper.find(Page).prop('deleteSale')).toEqual(props.deleteSale)
+    })
+
+  })
+
+  describe("<Show />", function() {  
+    
+    beforeEach(()=>{
+      const storeStateMock = {
+        sales: {
+          Sales,
+          find: jest.fn()
+        }
+      }
+
+      store = mockStore(storeStateMock)
+
+      props = {
+        fetchSale: jest.fn(),
+        deleteSale: jest.fn(),
+        addFlashMessage: jest.fn(),
+        match: {
+          params: {
+            id: 1
+          }
+        }
+      }
+
+      wrapper = mount(<BrowserRouter><Provider store={store}><Show {...props} /></Provider></BrowserRouter>)
+    })
+
+    it('renders connected component', function() { 
+      
+      expect(wrapper.find(Show).length).toEqual(1)
+    })
+
+    it('check Prop matchs', function() { 
+
+      expect(wrapper.find(Show).prop('fetchSales')).toEqual(props.fetchSales)
+      expect(wrapper.find(Show).prop('deleteSale')).toEqual(props.deleteSale)
+    })
+
+  })
 
 })

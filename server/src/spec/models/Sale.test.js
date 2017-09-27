@@ -1,5 +1,8 @@
-// Mongodb connecton
+// Mongodb connection
 import db from '../../db'
+
+// Macros
+import Macros from '../helpers/Macros'
 
 // Load factories 
 import FactoryGirl from '../factories'
@@ -27,7 +30,7 @@ describe("Sale", function() {
   })
 
   afterAll(function() {
-    db.drop()
+    Macros.dropDatabase()
   })
 
   it('should fail with validation errors for each required field', function(done) {

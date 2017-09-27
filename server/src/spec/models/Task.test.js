@@ -1,5 +1,8 @@
-// Mongodb connecton
+// Mongodb connection
 import db from '../../db'
+
+// Macros
+import Macros from '../helpers/Macros'
 
 // Load factories 
 import FactoryGirl from '../factories'
@@ -19,7 +22,7 @@ describe("Task", function() {
   })
 
   afterAll(() => {
-    db.drop()
+    Macros.dropDatabase()
   })
 
 

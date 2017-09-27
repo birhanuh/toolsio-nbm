@@ -88,10 +88,6 @@ function mapStateToProps(state, props) {
   }
 }
 
-FormPage.contextTypes = {
-  router: PropTypes.object.isRequired
-}
+
 
 export default connect(mapStateToProps, { createSale, fetchSale, updateSale, fetchCustomers })(FormPage)
-
-export { FormPage as PureFormPage } // Pure component (for tests)
