@@ -69,7 +69,7 @@ describe("components", function() {
         }
       }
 
-      wrapper = mount(<BrowserRouter><Provider store={store}><FormPage {...props} /></Provider><BrowserRouter>)
+      wrapper = mount(<BrowserRouter><Provider store={store}><FormPage {...props} /></Provider></BrowserRouter>)
     })
 
     it('renders connected component', function() { 
