@@ -5,8 +5,8 @@ dependencies:
 
 test:
   override:
-    - cd client/ npm test 
-    - cd server/ npm test
+    - cd client && npm test 
+    - cd server && npm test
 
 
 
