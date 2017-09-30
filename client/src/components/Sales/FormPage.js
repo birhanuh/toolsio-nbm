@@ -60,7 +60,7 @@ class FormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/sales" /> : 
-          <Form sale={this.props.sale} saveSale={this.saveSale} customers={this.props.customers} />
+          <Form sale={this.props.sale} customers={this.props.customers} saveSale={this.saveSale} />
         }
       </div>
     )

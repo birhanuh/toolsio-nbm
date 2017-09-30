@@ -31,7 +31,6 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  customers: PropTypes.array.isRequired,
   fetchCustomers: PropTypes.func.isRequired,
   deleteCustomer: PropTypes.func.isRequired
 }

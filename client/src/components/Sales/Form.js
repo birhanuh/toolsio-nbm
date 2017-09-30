@@ -21,7 +21,7 @@ class Form extends Component {
     this.state = {
       _id: this.props.sale ? this.props.sale._id : null,
       name: this.props.sale ? this.props.sale.name : '',
-      deadline: this.props.sale ? moment(this.props.sale.deadline) : moment(),
+      deadline: this.props.sale ? moment(this.props.sale.deadline, "DD-MM-YYYY") : moment(),
       customer: this.props.sale ? (this.props.sale.customer ? this.props.sale.customer._id : '') : '',
       status: this.props.sale ? this.props.sale.status : '',
       description: this.props.sale ? this.props.sale.description : '',
@@ -203,6 +203,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  sale: PropTypes.object,
   customers: PropTypes.array.isRequired
 }
 

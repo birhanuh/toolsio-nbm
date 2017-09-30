@@ -5,14 +5,14 @@ import thunk from 'redux-thunk'
 import { shallow, mount } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import configureMockStore from 'redux-mock-store'
-import FormPage from '../../components/Projects/FormPage'
-import Form from '../../components/Projects/Form'
-import Page from '../../components/Projects/Page'
-import Show from '../../components/Projects/Show'
-import { createProject, fetchProject } from '../../actions/saleActions'
+import FormPage from '../../components/Sales/FormPage'
+import Form from '../../components/Sales/Form'
+import Page from '../../components/Sales/Page'
+import Show from '../../components/Sales/Show'
+import { createSale, fetchSale } from '../../actions/saleActions'
 
 // Factories
-import { Project, Projects, Customer, Customers } from '../factories'
+import { Sale, Sales, Customer, Customers } from '../factories'
 
 // Setups
 const mockStore = configureMockStore([ thunk ])
@@ -24,6 +24,7 @@ describe("components", function() {
     
     beforeEach(()=>{
       props = {
+        sale: Sale,
         customers: Customers
       }
 
@@ -45,23 +46,20 @@ describe("components", function() {
 
     beforeEach(()=>{
       const storeStateMock = {
-        projects: {
-          Project,
+        sales: {
+          Sales,
           find: jest.fn()
         },
-        customers:{
-          customer: Customer
-        }
+        customers: Customers
       }
 
       store = mockStore(storeStateMock)
 
       props = {
-        createProject: jest.fn(),
-        fetchProject: jest.fn(),
-        updateProject: jest.fn(),
+        createSale: jest.fn(),
+        fetchSale: jest.fn(),
+        updateSale: jest.fn(),
         fetchCustomers: jest.fn(),
-        customers: Customers,
         match: {
           params: {
             id: 1
@@ -79,9 +77,9 @@ describe("components", function() {
 
     it('check Prop matchs', function() { 
 
-      expect(wrapper.find(FormPage).prop('createProject')).toEqual(props.createProject)
-      expect(wrapper.find(FormPage).prop('fetchProject')).toEqual(props.fetchProject)
-      expect(wrapper.find(FormPage).prop('updateProject')).toEqual(props.updateProject)
+      expect(wrapper.find(FormPage).prop('createSale')).toEqual(props.createSale)
+      expect(wrapper.find(FormPage).prop('fetchSale')).toEqual(props.fetchSale)
+      expect(wrapper.find(FormPage).prop('updateSale')).toEqual(props.updateSale)
       expect(wrapper.find(FormPage).prop('fetchCustomers')).toEqual(props.fetchCustomers)
     })
 
@@ -91,14 +89,13 @@ describe("components", function() {
 
     beforeEach(()=>{
       const storeStateMock = {
-        projects: Projects
+        sales: Sales
       }
 
       store = mockStore(storeStateMock)
 
       props = {
-        fetchProjects: jest.fn(),
-        deleteProject: jest.fn()
+        fetchSales: jest.fn()
       }
 
       wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
@@ -111,8 +108,7 @@ describe("components", function() {
 
     it('check Prop matchs', function() { 
 
-      expect(wrapper.find(Page).prop('fetchProjects')).toEqual(props.fetchProjects)
-      expect(wrapper.find(Page).prop('deleteProject')).toEqual(props.deleteProject)
+      expect(wrapper.find(Page).prop('fetchSales')).toEqual(props.fetchSales)
     })
 
   })
@@ -121,8 +117,8 @@ describe("components", function() {
     
     beforeEach(()=>{
       const storeStateMock = {
-        projects: {
-          Projects,
+        sales: {
+          Sales,
           find: jest.fn()
         }
       }
@@ -130,8 +126,8 @@ describe("components", function() {
       store = mockStore(storeStateMock)
 
       props = {
-        fetchProject: jest.fn(),
-        deleteProject: jest.fn(),
+        fetchSale: jest.fn(),
+        deleteSale: jest.fn(),
         addFlashMessage: jest.fn(),
         match: {
           params: {
@@ -150,8 +146,8 @@ describe("components", function() {
 
     it('check Prop matchs', function() { 
 
-      expect(wrapper.find(Show).prop('fetchProjects')).toEqual(props.fetchProjects)
-      expect(wrapper.find(Show).prop('deleteProject')).toEqual(props.deleteProject)
+      expect(wrapper.find(Show).prop('fetchSales')).toEqual(props.fetchSales)
+      expect(wrapper.find(Show).prop('deleteSale')).toEqual(props.deleteSale)
     })
 
   })

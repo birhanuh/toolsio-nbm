@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { InputField } from '../../utils/FormFields'
@@ -92,11 +93,9 @@ class Form extends Component {
         })
       } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
         || e.target.name === "country") {
-        let updatedAddress = Object.assign({}, this.state.address)
-        updatedAddress[e.target.name] = e.target.value
 
          this.setState({
-          address: updatedAddress,
+          address: { ...this.state.address, [e.target.name]: e.target.value },
           errors
         })
       } else {
@@ -285,6 +284,10 @@ class Form extends Component {
       </div>
     )
   }
+}
+
+Form.propTypes = {
+  customer: PropTypes.object
 }
 
 export default Form
