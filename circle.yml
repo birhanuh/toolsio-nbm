@@ -4,20 +4,23 @@ machine:
 
 dependencies:
   override:
-    - npm install -{NODE_ENV} client/ 
-    - npm install -{NODE_ENV} server/  
+    - npm install -${NODE_ENV} client/ 
+    - npm install -${NODE_ENV} server/  
 
 test:
   override:
     - cd client/ && npm test 
     - cd server/ && npm test
 
-deployment: 
-  prod:
+deployment:
+  production:
     branch: master
-      commands:
-        - chmod +x ./deploy-version.sh
-        - ./deploy-version.sh
+    commands:
+      - ./deploy_prod.sh
+  staging:
+    branch: develop
+    commands:
+      - ./deploy_staging.sh
 
 
 
