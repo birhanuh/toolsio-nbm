@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ADD_PROJECT, SET_PROJECTS, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED } from './types'
+import { ADD_PROJECT, SET_PROJECTS, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED, ADD_TASK, TASK_UPDATED, TASK_DELETED } from './types'
 
 export function addProject(project) {
   return {
@@ -29,10 +29,31 @@ export function projectUpdated(project) {
   }
 }
 
-export function projectDeleted(projectId) {
+export function projectDeleted(id) {
   return {
     type: PROJECT_DELETED,
-    projectId
+    id
+  }
+}
+
+export function addTask(task) {
+  return {
+    type: ADD_TASK,
+    task  
+  }
+}
+
+export function taskUpdated(task) {
+  return {
+    type: TASK_UPDATED,
+    task
+  }
+}
+
+export function taskDeleted(task) {
+  return {
+    type: TASK_DELETED,
+    task
   }
 }
 
@@ -80,7 +101,7 @@ export function deleteProject(id) {
 export function createTask(task) {
   return dispatch => {
     return axios.post('/api/tasks', task).then(res => {
-      dispatch(projectUpdated(res.data.result))
+      dispatch(addTask(res.data.result))
     })
   }
 }
@@ -88,7 +109,7 @@ export function createTask(task) {
 export function updateTask(task) {
   return dispatch => {
     return axios.put(`/api/tasks/${task._id}`, task).then(res => {
-      dispatch(projectUpdated(res.data.result))
+      dispatch(taskUpdated(res.data.result))
     })
   }
   
@@ -97,8 +118,7 @@ export function updateTask(task) {
 export function deleteTask(task) {
   return dispatch => {
     return axios.delete(`/api/tasks/${task._id}`).then(res => {
-      dispatch(projectUpdated(res.data.result))
+      dispatch(taskDeleted(task))
     })
   }
 }
-

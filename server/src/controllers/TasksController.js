@@ -2,6 +2,28 @@ import Task from '../models/Task'
 import Project from '../models/Project'
 
 export default {
+  
+  find: (params, callback) => {
+    Task.find(params, function(err, tasks) {
+      if (err) {
+        callback(err, null)
+        return
+      }
+
+      callback(null, tasks)
+    })
+  },
+
+  findById: (id, callback) => {
+    Task.findById(id, function(err, task) {
+      if (err) {
+        callback(err, null)
+        return
+      }
+
+      callback(null, task)
+    })
+  },
 
   create: (params, callback) => {  
     Task.create(params, function(err, task) {
@@ -10,14 +32,7 @@ export default {
         return
       }
 
-      // Return updated Project with added task
-      Project.findByIdAndUpdate(task._creator).populate([{ path: 'customer', select: 'name'}, { path: 'tasks' }]).exec(function(err, project) {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        callback(null, project)
-      })
+      callback(null, task)
     })
   },
 
@@ -28,14 +43,7 @@ export default {
         return
       }
 
-      // Return updated Project with updated item
-      Project.findByIdAndUpdate(task._creator).populate([{ path: 'customer', select: 'name'}, { path: 'tasks' }]).exec(function(err, project) {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        callback(null, project)
-      })
+      callback(null, task)
     })
   },
 
@@ -46,13 +54,13 @@ export default {
         return
       }
 
-      // Return updated Project with removed task
-      Project.findByIdAndUpdate(task._creator).populate([{ path: 'customer', select: 'name'}, { path: 'tasks' }]).exec(function(err, project) {
+      // Remove task from Project
+      Project.findByIdAndUpdate(task._creator, { $pull: { tasks: id} }, function(err, project) {
         if (err) {
           callback(err, null)
           return
         }
-        callback(null, project)
+        callback(null, null)
       })
     })
   }

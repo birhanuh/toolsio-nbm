@@ -2,6 +2,28 @@ import Item from '../models/Item'
 import Sale from '../models/Sale'
 
 export default {
+  
+  find: (params, callback) => {
+    Item.find(params, function(err, items) {
+      if (err) {
+        callback(err, null)
+        return
+      }
+
+      callback(null, items)
+    })
+  },
+
+  findById: (id, callback) => {
+    Item.findById(id, function(err, item) {
+      if (err) {
+        callback(err, null)
+        return
+      }
+
+      callback(null, item)
+    })
+  },
 
   create: (params, callback) => {  
     Item.create(params, function(err, item) {
@@ -10,14 +32,7 @@ export default {
         return
       }
       
-      // Get Sale of item owner 
-      Sale.findByIdAndUpdate(item._creator).populate([{ path: 'customer', select: 'name'}, { path: 'items' }]).exec(function(err, sale) {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        callback(null, sale)
-      })
+      callback(null, item)
 
     })
   },
@@ -29,14 +44,7 @@ export default {
         return
       }
 
-      // Get Sale of item owner 
-      Sale.findByIdAndUpdate(item._creator).populate([{ path: 'customer', select: 'name'}, { path: 'items' }]).exec(function(err, sale) {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        callback(null, sale)
-      })
+      callback(null, item)
     })
   },
 
@@ -48,12 +56,12 @@ export default {
       }
 
       // Remove item from Sale
-      Sale.findByIdAndUpdate(item._creator).populate([{ path: 'customer', select: 'name'}, { path: 'items' }]).exec(function(err, sale) {
+      Sale.findByIdAndUpdate(item._creator, { $pull: { items: id} }, function(err, Sale) {
         if (err) {
           callback(err, null)
           return
         }
-        callback(null, sale)
+        callback(null, null)
       })
     })
   }
