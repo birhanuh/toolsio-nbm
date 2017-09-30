@@ -4,7 +4,7 @@ import nock from 'nock'
 
 // Actions 
 import { 
-  addSale, setSales, saleFetched, saleUpdated, saleDeleted, addItem
+  fetchSales, addSale, setSales, saleFetched, saleUpdated, saleDeleted, addItem
 } from '../../actions/saleActions'
 import * as types from '../../actions/types'
 
@@ -57,21 +57,16 @@ describe("actoins", () => {
   })  
 
   // Async Action Creator
-  it('creates SET_SALES when fetching Sales has been done', () => {
-    nock('http://example.com/')
-      .get('/sales')
-      .reply(200, { body: { sales: ['do something'] } })
+  it('should excute fetchSales()', () => {
+    
+    const store = mockStore({})
 
-    const expectedActions = [
-      { type: types.SET_SALES },
-      { type: types.SET_SALES, body: { sales: ['do something'] } }
-    ]
-    const store = mockStore({ sales: Sales })
-
-    return store.dispatch(setSales(Sales)).then(() => {
-      // return of async actions
-      expect(store.getActions()).toEqual(expectedActions)
-    })
+    // Return the promise
+    return store.dispatch(fetchSales())
+      .then(() => {
+        const actions = store.getActions()
+        expect(actions[0]).toEqual(setSales())
+      })
   })
   
 })
