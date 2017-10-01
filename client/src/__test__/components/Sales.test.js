@@ -11,7 +11,6 @@ import FormPage from '../../components/Sales/FormPage'
 import Form from '../../components/Sales/Form'
 import Page from '../../components/Sales/Page'
 import Show from '../../components/Sales/Show'
-import { createSale, fetchSale } from '../../actions/saleActions'
 
 // Factories
 import { Sale, Sales, Customer, Customers } from '../factories'

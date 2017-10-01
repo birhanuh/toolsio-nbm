@@ -38,7 +38,7 @@ class Page extends Component {
 Page.propTypes = {
   sales: PropTypes.array.isRequired,
   fetchSales: PropTypes.func.isRequired,
-  deleteSale: PropTypes.func.isRequired
+  deleteSale: PropTypes.func.isRequired,
 }
 
 function mapSateToProps(state) {

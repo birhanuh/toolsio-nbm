@@ -143,7 +143,8 @@ class Show extends Component {
 Show.propTypes = {
   fetchProject: PropTypes.func.isRequired,
   deleteProject: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired,
+  project: PropTypes.object
 }
 
 Show.contextTypes = {

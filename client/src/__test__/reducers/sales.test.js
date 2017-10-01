@@ -1,48 +1,21 @@
 import reducer from '../../reducers/sales'
 import * as types from '../../actions/types'
 
-// Sale store mocks
-const sale = {
-  _id: 1,
-  name: 'Sale 1',
-  deadline: new Date().toDateString(),
-  status: 'new',
-  description: 'Sale 1 description...' 
-}
-
-const sales = [{
-  _id: 1,
-  name: 'Sale 1',
-  deadline: new Date().toDateString(),
-  status: 'new',
-  description: 'Sale 1 description...' 
-},
-{
-  _id: 2,
-  name: 'Sale 2',
-  deadline: new Date().toDateString(),
-  status: 'new',
-  description: 'Sale 2 description...' 
-}]
+// Factories
+import { Sales, Sale, Sale2 } from '../factories'
 
 describe("sale reducer", function() { 
 
   it('should handle ADD_SALE', () => {
 
     expect(
-      reducer([sale], {
+      reducer([Sale], {
         type: types.ADD_SALE,
-        sale: sale
+        sale: Sale2
       })
     ).toEqual([
-      {
-        _id: 1,
-        name: 'Sale 1',
-        deadline: new Date().toDateString(),
-        status: 'new',
-        description: 'Sale 1 description...' 
-      },
-      sale
+      Sale,
+      Sale2
     ])
   })  
 
@@ -51,10 +24,10 @@ describe("sale reducer", function() {
     expect(
       reducer([], {
         type: types.SET_SALES,
-        sales: sales
+        sales: Sales
       })
     ).toEqual(
-      sales
+      Sales
     )
   }) 
   
@@ -64,7 +37,7 @@ describe("sale reducer", function() {
             status: 'new', description: 'Sale 1 description updated...'  }
 
     expect(
-      reducer([sale], {
+      reducer([Sale], {
         type: types.SALE_UPDATED,
         sale: saleUpdated
       })
@@ -76,43 +49,24 @@ describe("sale reducer", function() {
   it('should handle SALE_FETCHED', () => {
 
     expect(
-      reducer(sales, {
+      reducer(Sales, {
         type: types.SALE_FETCHED,
-        sale: sale
+        sale: Sale
       })
-    ).toEqual([
-      {
-        _id: 1,
-        name: 'Sale 1',
-        deadline: new Date().toDateString(),
-        status: 'new',
-        description: 'Sale 1 description...' 
-      },
-      {
-        _id: 2,
-        name: 'Sale 2',
-        deadline: new Date().toDateString(),
-        status: 'new',
-        description: 'Sale 2 description...' 
-      }
-    ])
+    ).toEqual(
+      Sales
+    )
   }) 
 
   it('should handle SALE_DELETED', () => {
   
     expect(
-      reducer(sales, {
+      reducer(Sales, {
         type: types.SALE_DELETED,
-        saleId: sale._id
+        saleId: Sale._id
       })
     ).toEqual([
-      {
-        _id: 2,
-        name: 'Sale 2',
-        deadline: new Date().toDateString(),
-        status: 'new',
-        description: 'Sale 2 description...' 
-      }
+      Sale2
     ])
   }) 
 

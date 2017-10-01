@@ -71,7 +71,9 @@ FormPage.propTypes = {
   createProject: PropTypes.func.isRequired,
   fetchProject: PropTypes.func.isRequired,
   updateProject: PropTypes.func.isRequired,
-  fetchCustomers: PropTypes.func.isRequired
+  fetchCustomers: PropTypes.func.isRequired,
+  customers: PropTypes.array.isRequired,
+  project: PropTypes.object
 }
 
 function mapStateToProps(state, props) {

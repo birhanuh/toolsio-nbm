@@ -18,7 +18,7 @@ class Form extends Component {
     this.state = {
       _id: this.props.project ? this.props.project._id : null,
       name: this.props.project ? this.props.project.name : '',
-      deadline: this.props.project ? moment(this.props.project.deadline, "DD-MM-YYYY") : moment(),
+      deadline: this.props.project ? moment(this.props.project.deadline, "MM-DD-YYYY") : moment(),
       customer: this.props.project ? (this.props.project.customer ? this.props.project.customer._id : '') : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',

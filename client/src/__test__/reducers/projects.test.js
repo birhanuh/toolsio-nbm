@@ -1,48 +1,21 @@
 import reducer from '../../reducers/projects'
 import * as types from '../../actions/types'
 
-// Project store mocks
-const project = {
-  _id: 1,
-  name: 'Project 1',
-  deadline: new Date().toDateString(),
-  status: 'new',
-  description: 'Project 1 description...' 
-}
-
-const projects = [{
-  _id: 1,
-  name: 'Project 1',
-  deadline: new Date().toDateString(),
-  status: 'new',
-  description: 'Project 1 description...' 
-},
-{
-  _id: 2,
-  name: 'Project 2',
-  deadline: new Date().toDateString(),
-  status: 'new',
-  description: 'Project 2 description...' 
-}]
+// Factories
+import { Projects, Project, Project2 } from '../factories'
 
 describe("project reducer", function() { 
 
   it('should handle ADD_PROJECT', () => {
 
     expect(
-      reducer([project], {
+      reducer([Project], {
         type: types.ADD_PROJECT,
-        project: project
+        project: Project2
       })
     ).toEqual([
-      {
-        _id: 1,
-        name: 'Project 1',
-        deadline: new Date().toDateString(),
-        status: 'new',
-        description: 'Project 1 description...' 
-      },
-      project
+      Project,
+      Project2
     ])
   })  
 
@@ -51,10 +24,10 @@ describe("project reducer", function() {
     expect(
       reducer([], {
         type: types.SET_PROJECTS,
-        projects: projects
+        projects: Projects
       })
     ).toEqual(
-      projects
+      Projects
     )
   }) 
   
@@ -64,7 +37,7 @@ describe("project reducer", function() {
             status: 'new', description: 'Project 1 description updated...'  }
 
     expect(
-      reducer([project], {
+      reducer([Project], {
         type: types.PROJECT_UPDATED,
         project: projectUpdated
       })
@@ -76,43 +49,24 @@ describe("project reducer", function() {
   it('should handle PROJECT_FETCHED', () => {
 
     expect(
-      reducer(projects, {
+      reducer(Projects, {
         type: types.PROJECT_FETCHED,
-        project: project
+        project: Project
       })
-    ).toEqual([
-      {
-        _id: 1,
-        name: 'Project 1',
-        deadline: new Date().toDateString(),
-        status: 'new',
-        description: 'Project 1 description...' 
-      },
-      {
-        _id: 2,
-        name: 'Project 2',
-        deadline: new Date().toDateString(),
-        status: 'new',
-        description: 'Project 2 description...' 
-      }
-    ])
+    ).toEqual(
+      Projects
+    )
   }) 
 
   it('should handle PROJECT_DELETED', () => {
   
     expect(
-      reducer(projects, {
+      reducer(Projects, {
         type: types.PROJECT_DELETED,
-        projectId: project._id
+        projectId: Project._id
       })
     ).toEqual([
-      {
-        _id: 2,
-        name: 'Project 2',
-        deadline: new Date().toDateString(),
-        status: 'new',
-        description: 'Project 2 description...' 
-      }
+      Project2
     ])
   }) 
 

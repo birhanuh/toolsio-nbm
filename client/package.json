@@ -38,7 +38,8 @@
       "src/**/*.js"
     ],
     "moduleNameMapper": {
-      "\\.(css|less)$": "identity-obj-proxy"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/src/__mocks__/styleMock.js"
     }
   },
   "devDependencies": {
@@ -47,9 +48,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^2.0.0",
-    "identity-obj-proxy": "^3.0.0",
     "jest": "^21.1.0",
-    "nock": "^9.0.22",
     "node-sass-chokidar": "0.0.1",
     "npm-run-all": "^4.0.2",
     "react-addons-test-utils": "^15.6.0",
