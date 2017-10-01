@@ -5,7 +5,7 @@ import thunk from 'redux-thunk'
 import { signupRequest, setCurrentAccount } from '../../actions/authentication'
 import * as types from '../../actions/types'
 
-const middlewares = [thunk]
+const middlewares = [thunk] // add your middlewares like `redux-thunk`
 const mockStore = configureMockStore(middlewares)
 
 describe("actoins", () => { 
@@ -20,15 +20,16 @@ describe("actoins", () => {
   })  
 
   // Async Action Creator
-  it('should excute signupRequest()', () => {
-    
+  xit('should excute signupRequest()', () => {
+    const accountAndUser = {}
+
     const store = mockStore({})
 
     // Return the promise
-    return store.dispatch(signupRequest())
+    return store.dispatch(signupRequest(accountAndUser))
       .then(() => {
         const actions = store.getActions()
-        expect(actions[0]).toEqual(setProjects())
+        expect(actions[0]).toEqual(setCurrentAccount(accountAndUser))
       })
   })
   

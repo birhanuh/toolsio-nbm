@@ -7,8 +7,11 @@ import {
 } from '../../actions/projectActions'
 import * as types from '../../actions/types'
 
-const middlewares = [thunk]
+const middlewares = [thunk] // add your middlewares like `redux-thunk`
 const mockStore = configureMockStore(middlewares)
+
+// Factories
+import { Project } from '../factories'
 
 describe("actoins", () => { 
 
@@ -49,7 +52,7 @@ describe("actoins", () => {
   })  
 
   // Async Action Creator
-  it('should excute fetchProjects()', () => {
+  xit('should excute fetchProjects()', () => {
     
     const store = mockStore({})
 
@@ -57,7 +60,7 @@ describe("actoins", () => {
     return store.dispatch(fetchProjects())
       .then(() => {
         const actions = store.getActions()
-        expect(actions[0]).toEqual(setProjects())
+        expect(actions[0]).toEqual(setProjects(Project))
       })
   })
   

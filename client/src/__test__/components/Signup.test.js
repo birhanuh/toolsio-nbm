@@ -14,7 +14,9 @@ import Page from '../../components/Signup/Page'
 import { Account } from '../factories'
 
 // Setups
-const mockStore = configureMockStore([ thunk ])
+const middlewares = [thunk] // add your middlewares like `redux-thunk`
+const mockStore = configureMockStore(middlewares)
+
 let store, props, component, wrapper
 
 describe("components", function() { 
