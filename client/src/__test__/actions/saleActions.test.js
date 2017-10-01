@@ -1,6 +1,5 @@
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import nock from 'nock'
 
 // Actions 
 import { 
@@ -11,14 +10,7 @@ import * as types from '../../actions/types'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
-// Factories
-import { Sales } from '../factories'
-
 describe("actoins", () => { 
-
-  afterEach(() => {
-    nock.cleanAll()
-  })
 
   test('should create an action to add a Sale', () => {
     const sale = {}

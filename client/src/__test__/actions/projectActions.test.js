@@ -1,82 +1,64 @@
-// Mongodb connecton
-import db from '../../../server/src/db'
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 
-// Load factories 
-import FactoryGirl from '../factories'
+// Actions 
+import { 
+  fetchProjects, addProject, setProjects, projectFetched, projectUpdated, projectDeleted, addTask
+} from '../../actions/projectActions'
+import * as types from '../../actions/types'
 
-// Schema
-import Task from '../../../server/src/models/Task'
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
 
-// Factored Task
-let task = FactoryGirl.create('task')
+describe("actoins", () => { 
 
-let taskId = null
+  test('should create an action to add a Project', () => {
+    const project = {}
+    const expectedAction = {
+      type: types.ADD_PROJECT,
+      project
+    }
+    expect(addProject(project)).toEqual(expectedAction)
+  })  
 
-describe("Task", function() { 
+  test('should create an action to set Projects', () => {
+    const projects = []
+    const expectedAction = {
+      type: types.SET_PROJECTS,
+      projects
+    }
+    expect(setProjects(projects)).toEqual(expectedAction)
+  })  
 
-  beforeAll(() => {
-    db.connect('mongodb://localhost/toolsio_test')
-  })
+  test('should create an action to update a Project', () => {
+    const project = {}
+    const expectedAction = {
+      type: types.PROJECT_UPDATED,
+      project
+    }
+    expect(projectUpdated(project)).toEqual(expectedAction)
+  })  
 
-  afterAll(() => {
-    db.drop()
-  })
+  test('should create an action to create a Task', () => {
+    const task = {}
+    const expectedAction = {
+      type: types.ADD_TASK,
+      task
+    }
+    expect(addTask(task)).toEqual(expectedAction)
+  })  
 
-
-  test('should fail with validation errors for each required field', (done) => {
-
-    Task.create({}, function(err, task) {      
-      expect(err).not.toBeNull()
-      expect(err.errors.name.message).toContain('Name is required.')
-      expect(err.errors.paymentType.message).toContain('Payment type is required.')
-
-      done()
-    })
-  })
-
-  test('saves Task', (done) => {
+  // Async Action Creator
+  it('should excute fetchProjects()', () => {
     
-    Task.create(task, (err, task) => {      
-      // Assign id
-      taskId = task._id
- 
-      expect(task).not.toBeNull()
-      expect(task.name).toContain('Task 1')
-      expect(task.paymentType).toContain('Per hour')
-      expect(task.price).toBe(20)
+    const store = mockStore({})
 
-      done()
-    })
+    // Return the promise
+    return store.dispatch(fetchProjects())
+      .then(() => {
+        const actions = store.getActions()
+        expect(actions[0]).toEqual(setProjects())
+      })
   })
-
-  test('finds Task', (done) => { 
-
-    Task.findById(taskId, task, (error, task) => {
-      expect(task).not.toBeNull()
-
-      done()
-    })
-  })
-
-  test('updates Task', (done) => { 
-
-    // Update name
-    task.name = 'Task 1 updated'
-    
-    Task.findByIdAndUpdate(taskId, task, {new: true}, (error, task) => {      
-      expect(task.name).toContain('Task 1 updated')
-
-      done()
-    })
-  })
-
-  test('deletes Task', (done) => { 
-
-    Task.findByIdAndRemove(taskId, task, (error, task) => {
-      expect(task).not.toBeNull()
-      
-      done()
-    })
-  })
-
+  
 })

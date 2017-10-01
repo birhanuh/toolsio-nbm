@@ -65,7 +65,7 @@ describe("customer reducer", function() {
     expect(
       reducer(Customers, {
         type: types.CUSTOMER_DELETED,
-        customerId: Customer._id
+        id: Customer._id
       })
     ).toEqual([
       Customer2

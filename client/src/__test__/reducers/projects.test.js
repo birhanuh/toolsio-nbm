@@ -63,7 +63,7 @@ describe("project reducer", function() {
     expect(
       reducer(Projects, {
         type: types.PROJECT_DELETED,
-        projectId: Project._id
+        id: Project._id
       })
     ).toEqual([
       Project2

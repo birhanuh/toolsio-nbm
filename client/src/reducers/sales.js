@@ -14,7 +14,7 @@ export default function sales(state = [], action = {}) {
       ]
 
     case SALE_DELETED:
-      return state.filter(item => item._id !== action.saleId)
+      return state.filter(item => item._id !== action.id)
     
     case SALE_UPDATED:
       return state.map(item => {

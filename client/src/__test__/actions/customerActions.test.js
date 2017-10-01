@@ -1,84 +1,55 @@
-// Mongodb connecton
-import db from '../../../server/src/db'
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 
-// Load factories 
-import FactoryGirl from '../factories'
+// Actions 
+import { 
+  fetchCustomers, addCustomer, setCustomers, CustomerFetched, customerUpdated, customerDeleted
+} from '../../actions/customerActions'
+import * as types from '../../actions/types'
 
-// Schema
-import Customer from '../../../server/src/models/Customer'
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
 
-// Factored Customer
-let customer = FactoryGirl.create('customer')
+describe("actoins", () => { 
 
-let customerId = null
+  test('should create an action to add a Customer', () => {
+    const customer = {}
+    const expectedAction = {
+      type: types.ADD_CUSTOMER,
+      customer
+    }
+    expect(addCustomer(customer)).toEqual(expectedAction)
+  })  
 
-describe("Customer", function() { 
+  test('should create an action to set Customers', () => {
+    const customers = []
+    const expectedAction = {
+      type: types.SET_CUSTOMERS,
+      customers
+    }
+    expect(setCustomers(customers)).toEqual(expectedAction)
+  })  
 
-  beforeAll(() => {
-    db.connect('mongodb://localhost/toolsio_test')
-  })
+  test('should create an action to update a Customer', () => {
+    const customer = {}
+    const expectedAction = {
+      type: types.CUSTOMER_UPDATED,
+      customer
+    }
+    expect(customerUpdated(customer)).toEqual(expectedAction)
+  })  
 
-  afterAll(() => {
-    db.drop()
-  })
-
-
-  test('should fail with validation errors for each required field', (done) => {
-    Customer.create({}, function(err, customer) {
-
-      expect(err).not.toBeNull()
-      expect(err.errors.name.message).toContain('Name is required.')
-      expect(err.errors.vatNumber.message).toContain('Vat number is required.')
-      
-      done()
-    })
-  })
-
-  test('saves Customer', (done) => {
+  // Async Action Creator
+  it('should excute fetchCustomers()', () => {
     
-    Customer.create(customer, (err, customer) => {
-      
-      // Assign id
-      customerId = customer._id
- 
-      expect(customer).not.toBeNull()
-      expect(customer.name).toContain('Customer 1')
-      expect(customer.contact.phoneNumber).toContain('12345678910')
-      expect(customer.vatNumber).toContain('1234')
+    const store = mockStore({})
 
-      done()
-    })
+    // Return the promise
+    return store.dispatch(fetchCustomers())
+      .then(() => {
+        const actions = store.getActions()
+        expect(actions[0]).toEqual(setCustomers())
+      })
   })
-
-  test('finds Customer', (done) => { 
-
-    Customer.findById(customerId, customer, (error, customer) => {
-      expect(customer).not.toBeNull()
-
-      done()
-    })
-  })
-
-  test('updates Customer', (done) => { 
-
-    // Update name
-    customer.name = 'Customer 1 updated'
-    
-    Customer.findByIdAndUpdate(customerId, customer, {new: true}, (error, customer) => {
-      
-      expect(customer.name).toContain('Customer 1 updated')
-
-      done()
-    })
-  })
-
-  test('deletes Customer', (done) => { 
-
-    Customer.findByIdAndRemove(customerId, customer, (error, customer) => {
-      expect(customer).not.toBeNull()
-
-      done()
-    })
-  })
-
+  
 })

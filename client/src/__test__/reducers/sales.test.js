@@ -63,7 +63,7 @@ describe("sale reducer", function() {
     expect(
       reducer(Sales, {
         type: types.SALE_DELETED,
-        saleId: Sale._id
+        id: Sale._id
       })
     ).toEqual([
       Sale2
