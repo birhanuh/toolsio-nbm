@@ -20,7 +20,7 @@ describe("Task", () => {
   })
 
   afterAll((done) => {
-    Macros.dropDatabase()
+    Marcros.db('tasks', process.env.DB_DEVELOPMENT)
     done()
   })
 

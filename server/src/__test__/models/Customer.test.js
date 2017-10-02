@@ -20,7 +20,7 @@ describe("Customer", () => {
   })
 
   afterAll((done) => {
-    Macros.dropDatabase()
+    Marcros.db('customers', process.env.DB_DEVELOPMENT)
     done()
   })
 

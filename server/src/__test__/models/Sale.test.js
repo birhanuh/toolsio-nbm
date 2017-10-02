@@ -10,13 +10,8 @@ import FactoryGirl from '../factories'
 // Schema
 import Sale from '../../models/Sale'
 
-/*// Factories 
-import fixtures from 'pow-mongoose-fixtures'
 //Files
-fixtures.load(__dirname + '/../fixtures/sales.js')*/
-
-// Factored Sale
-let sale = FactoryGirl.create('sale')
+/*fixtures.load(__dirname + '/../fixtures/sales.js')*/
 
 let saleCreated = {}
 
@@ -28,7 +23,7 @@ describe("Sale",  () => {
   })
 
   afterAll( (done) => {
-    Macros.dropDatabase()
+    Marcros.db('sales', process.env.DB_DEVELOPMENT)
     done()
   })
 

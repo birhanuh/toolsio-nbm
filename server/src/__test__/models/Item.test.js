@@ -20,7 +20,7 @@ describe("Item", () => {
   })
 
   afterAll((done) => {
-    Macros.dropDatabase()
+    Marcros.db('items', process.env.DB_DEVELOPMENT)
     done()
   })
 

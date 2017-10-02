@@ -1,9 +1,19 @@
 import mongoose from 'mongoose'
 
 export default {
-  dropDatabase: () => {       
-    /* Drop the DB */
-    mongoose.connection.db.dropDatabase()
+  drop: function(collectionName, mongoURI) {  
+    mongoose.createConnection(mongoURI, {useMongoClient: true}, function(err, db) {    
+      /* Drop the DB */
+      //mongoose.connection.db.dropDatabase();
+
+      /* Drop collections */
+      mongoose.connection.collections[collectionName].drop( function(err) {
+        console.log('collection dropped');
+      })
+
+      /* Close connection */
+      mongoose.connection.close()
+    })
   },
 
   fixtures: (mongoURI, schema, data) => {

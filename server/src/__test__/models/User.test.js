@@ -20,7 +20,7 @@ describe("User", () => {
   })
 
   afterAll((done) => {
-    Marcros.dropDatabase()
+    Marcros.db('user', process.env.DB_DEVELOPMENT)
     done()
   })
 
