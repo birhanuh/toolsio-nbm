@@ -10,10 +10,7 @@ import FactoryGirl from '../factories'
 // Schema
 import Task from '../../models/Task'
 
-// Factored Task
-let task = FactoryGirl.create('task')
-
-let taskId = null
+let taskCreated = {}
 
 describe("Task", () => { 
 
@@ -41,22 +38,26 @@ describe("Task", () => {
 
   it('saves Task', (done) => {
     
-    Task.create(task, (err, task) => {      
-      // Assign id
-      taskId = task._id
- 
-      expect(task).not.toBeNull()
-      expect(task.name).toContain('Task 1')
-      expect(task.paymentType).toContain('Per hour')
-      expect(task.price).toBe(20)
+    FactoryGirl.create('task').then(task => {
 
-      done()
+      Task.create(task, (err, task) => {      
+        // Assign the new created Task
+        taskCreated = task
+   
+        expect(task).not.toBeNull()
+        expect(task.name).toContain('Task 1')
+        expect(task.paymentType).toContain('Per hour')
+        expect(task.price).toBe(20)
+
+        done()
+      })
     })
+    
   })
 
   it('finds Task', (done) => { 
 
-    Task.findById(taskId, task, (error, task) => {
+    Task.findById(taskCreated._id, (error, task) => {
       expect(task).not.toBeNull()
 
       done()
@@ -64,24 +65,25 @@ describe("Task", () => {
   })
 
   it('updates Task', (done) => { 
-
-    // Update name
-    task.name = 'Task 1 updated'
     
-    Task.findByIdAndUpdate(taskId, task, {new: true}, (error, task) => {      
+    // Update name
+    taskCreated.name = 'Task 1 updated'
+
+    Task.findByIdAndUpdate(taskCreated._id, taskCreated, {new: true}, (error, task) => {      
       expect(task.name).toContain('Task 1 updated')
 
       done()
     })
+  
   })
 
   it('deletes Task', (done) => { 
 
-    Task.findByIdAndRemove(taskId, task, (error, task) => {
+    Task.findByIdAndRemove(taskCreated._id, (error, task) => {
       expect(task).not.toBeNull()
       
       done()
-    })
+    })  
   })
 
 })

@@ -10,10 +10,7 @@ import FactoryGirl from '../factories'
 // Schema
 import Item from '../../models/Item'
 
-// Factored Item
-let item = FactoryGirl.create('item')
-
-let itemId = null
+let itemCreated = {}
 
 describe("Item", () => { 
 
@@ -41,22 +38,24 @@ describe("Item", () => {
 
   it('saves Item', (done) => {
     
-    Item.create(item, (err, item) => {      
-      // Assign id
-      itemId = item._id
- 
-      expect(item).not.toBeNull()
-      expect(item.name).toContain('Item 1')
-      expect(item.unit).toContain('meter')
-      expect(item.price).toBe(20)
+    FactoryGirl.create('item').then(item => {    
+      Item.create(item, (err, item) => {      
+        // Assign created Item
+        itemCreated = item
+   
+        expect(item).not.toBeNull()
+        expect(item.name).toContain('Item 1')
+        expect(item.unit).toContain('meter')
+        expect(item.price).toBe(20)
 
-      done()
-    })
+        done()
+      })
+    })  
   })
 
   it('finds Item', (done) => { 
 
-    Item.findById(itemId, item, (error, item) => {
+    Item.findById(itemCreated._id, (error, item) => {
       expect(item).not.toBeNull()
 
       done()
@@ -66,9 +65,9 @@ describe("Item", () => {
   it('updates Item', (done) => { 
 
     // Update name
-    item.name = 'Item 1 updated'
+    itemCreated.name = 'Item 1 updated'
     
-    Item.findByIdAndUpdate(itemId, item, {new: true}, (error, item) => {      
+    Item.findByIdAndUpdate(itemCreated._id, itemCreated, {new: true}, (error, item) => {      
       expect(item.name).toContain('Item 1 updated')
 
       done()
@@ -77,7 +76,7 @@ describe("Item", () => {
 
   it('deletes Item', (done) => { 
 
-    Item.findByIdAndRemove(itemId, item, (error, item) => {
+    Item.findByIdAndRemove(itemCreated._id, (error, item) => {
       expect(item).not.toBeNull()
       
       done()

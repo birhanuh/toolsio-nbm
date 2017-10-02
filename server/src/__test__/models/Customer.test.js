@@ -10,10 +10,7 @@ import FactoryGirl from '../factories'
 // Schema
 import Customer from '../../models/Customer'
 
-// Factored Customer
-let customer = FactoryGirl.create('customer')
-
-let customerId = null
+let customerCreated = {}
 
 describe("Customer", () => { 
 
@@ -41,23 +38,25 @@ describe("Customer", () => {
 
   it('saves Customer', (done) => {
     
-    Customer.create(customer, (err, customer) => {
-      
-      // Assign id
-      customerId = customer._id
- 
-      expect(customer).not.toBeNull()
-      expect(customer.name).toContain('Customer 1')
-      expect(customer.contact.phoneNumber).toContain('12345678910')
-      expect(customer.vatNumber).toContain('1234')
+    FactoryGirl.create('customer').then(customer => {
+      Customer.create(customer, (err, customer) => {
+        
+        // Assign created Customer
+        customerCreated = customer
+   
+        expect(customer).not.toBeNull()
+        expect(customer.name).toContain('Customer 1')
+        expect(customer.contact.phoneNumber).toContain('12345678910')
+        expect(customer.vatNumber).toContain('1234')
 
-      done()
-    })
+        done()
+      })
+    })  
   })
 
   it('finds Customer', (done) => { 
 
-    Customer.findById(customerId, customer, (error, customer) => {
+    Customer.findById(customerCreated._id, (error, customer) => {
       expect(customer).not.toBeNull()
 
       done()
@@ -67,9 +66,9 @@ describe("Customer", () => {
   it('updates Customer', (done) => { 
 
     // Update name
-    customer.name = 'Customer 1 updated'
+    customerCreated.name = 'Customer 1 updated'
     
-    Customer.findByIdAndUpdate(customerId, customer, {new: true}, (error, customer) => {
+    Customer.findByIdAndUpdate(customerCreated._id, customerCreated, {new: true}, (error, customer) => {
       
       expect(customer.name).toContain('Customer 1 updated')
 
@@ -79,7 +78,7 @@ describe("Customer", () => {
 
   it('deletes Customer', (done) => { 
 
-    Customer.findByIdAndRemove(customerId, customer, (error, customer) => {
+    Customer.findByIdAndRemove(customerCreated._id, (error, customer) => {
       expect(customer).not.toBeNull()
 
       done()

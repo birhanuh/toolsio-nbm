@@ -20,7 +20,7 @@ let invoiceSchema = new Schema({
   updatedAt: Date
 })
 
-customerSchema.pre('validate', function(next) {
+invoiceSchema.pre('validate', function(next) {
   if (this.deadline && this.payment_term) {
     next(Error('Only Deadline or Payment term should be filled, not both'))
   } else {
@@ -28,7 +28,7 @@ customerSchema.pre('validate', function(next) {
   }
 })
 
-customerSchema.pre('validate', function(next) {
+invoiceSchema.pre('validate', function(next) {
   if (this.project && this.sale) {
     next(Error('Only Project or Sale should be selected, not both'))
   } else {
@@ -42,4 +42,4 @@ invoiceSchema.methods.allUnpaidInvoicesByStatus = function() {
 invoiceSchema.methods.unpaidInvoicesByInvitedUsers = function() {
 }
 
-let Invoice = module.exports mongoose.model('Invoice', invoiceSchema)
+let Invoice = module.exports = mongoose.model('Invoice', invoiceSchema)

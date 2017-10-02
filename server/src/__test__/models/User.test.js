@@ -10,10 +10,7 @@ import FactoryGirl from '../factories'
 // Schema
 import User from '../../models/User'
 
-// Factored User
-let user = FactoryGirl.create('user')
-
-let userId = null
+let userCreated = {}
 
 describe("User", () => { 
 
@@ -41,21 +38,23 @@ describe("User", () => {
 
   it('saves User', (done) => {
    
-    User.create(user, (err, user) => {
-     // Assign id
-      userId = user._id
+    FactoryGirl.build('user').then(user => {
+      User.create(user, (err, user) => {
+       // Assign created User
+        userCreated = user
 
-      expect(user).not.toBeNull()
-      expect(user.firstName).toContain('User 1')
-      expect(user.email).toContain('user@email.com')
+        expect(user).not.toBeNull()
+        expect(user.firstName).toContain('User 1')
+        expect(user.email).toContain('user1@ymail.com')
 
-      done()
+        done()
+      })
     })
   })
 
   it('finds User', (done) => { 
 
-    User.getUserByEmail(user.email, (error, user) => {
+    User.getUserByEmail(userCreated.email, (error, user) => {
       expect(user).not.toBeNull()
 
       done()
@@ -65,9 +64,9 @@ describe("User", () => {
   it('updates User', (done) => { 
 
     // Update name
-    user.firstName = 'User 1 updated'
+    userCreated.firstName = 'User 1 updated'
     
-    User.findByIdAndUpdate(userId, user, {new: true}, (error, user) => {
+    User.findByIdAndUpdate(userCreated._id, userCreated, {new: true}, (error, user) => {
       expect(user.firstName).toContain('User 1 updated')
 
       done()
@@ -76,11 +75,13 @@ describe("User", () => {
 
   it('deletes User', (done) => { 
 
-    User.findByIdAndRemove(userId, user, (error, user) => {
-      expect(user).not.toBeNull()
+    FactoryGirl.build('user').then(user => {
+      User.findByIdAndRemove(userCreated._id, userCreated, (error, user) => {
+        expect(user).not.toBeNull()
 
-      done()
-    })
+        done()
+      })
+    })  
   })
 
 })

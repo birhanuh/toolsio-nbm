@@ -7,9 +7,6 @@ import Macros from '../helpers/Macros'
 // Load factories 
 import FactoryGirl from '../factories'
 
-// Load factories 
-import sales from '../fixtures/sales' 
-
 // Schema
 import Sale from '../../models/Sale'
 
@@ -21,7 +18,7 @@ fixtures.load(__dirname + '/../fixtures/sales.js')*/
 // Factored Sale
 let sale = FactoryGirl.create('sale')
 
-let saleId = null
+let saleCreated = {}
 
 describe("Sale",  () => { 
 
@@ -49,22 +46,24 @@ describe("Sale",  () => {
 
   it('saves Sale', (done) => {
 
-    Sale.create(sale, (err, sale) => {      
-      // Assign id
-      saleId = sale._id
-     
-      expect(sale).not.toBeNull()
-      expect(sale.name).toContain('Sale 1')
-      expect(sale.status).toContain('new')
-      expect(sale.description).toContain('Description 1...')
+    FactoryGirl.create('sale').then(sale => {
+      Sale.create(sale, (err, sale) => {      
+        // Assign created Sale
+        saleCreated = sale
+       
+        expect(sale).not.toBeNull()
+        expect(sale.name).toContain('Sale 1')
+        expect(sale.status).toContain('new')
+        expect(sale.description).toContain('Description 1...')
 
-      done()
-    })
+        done()
+      })
+    })  
   })
 
   it('finds Sale', (done) => { 
 
-    Sale.findById(saleId, sale, (error, sale) => {
+    Sale.findById(saleCreated._id, (error, sale) => {
       expect(sale).not.toBeNull()
 
       done()
@@ -74,9 +73,9 @@ describe("Sale",  () => {
   it('updates Sale', (done) => { 
 
     // Update name
-    sale.name = 'Sale 1 updated'
+    saleCreated.name = 'Sale 1 updated'
     
-    Sale.findByIdAndUpdate(saleId, sale, {new: true}, (error, sale) => {
+    Sale.findByIdAndUpdate(saleCreated._id, saleCreated, {new: true}, (error, sale) => {
       expect(sale.name).toContain('Sale 1 updated')
       done()
     })
@@ -84,7 +83,7 @@ describe("Sale",  () => {
 
   it('deletes Sale', (done) => { 
 
-    Sale.findByIdAndRemove(saleId, sale, (error, sale) => {
+    Sale.findByIdAndRemove(saleCreated._id, (error, sale) => {
      expect(sale).not.toBeNull()
      
      done()

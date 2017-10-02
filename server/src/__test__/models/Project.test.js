@@ -10,10 +10,7 @@ import FactoryGirl from '../factories'
 // Schema
 import Project from '../../models/Project'
 
-// Factored Project
-let project = FactoryGirl.create('project')
-
-let projectId = null
+let projectCreated = {}
 
 describe("Project",  () => { 
 
@@ -42,22 +39,24 @@ describe("Project",  () => {
 
   it('saves Project', (done) => {
 
-    Project.create(project, function(err, project) {      
-      // Assign id
-      projectId = project._id
-     
-      expect(project).not.toBeNull()
-      expect(project.name).toContain('Project 1')
-      expect(project.status).toContain('new')
-      expect(project.description).toContain('Description 1...')
+    FactoryGirl.create('project').then(project => {
+      Project.create(project, function(err, project) {      
+        // Assign created Project
+        projectCreated = project
+       
+        expect(project).not.toBeNull()
+        expect(project.name).toContain('Project 1')
+        expect(project.status).toContain('new')
+        expect(project.description).toContain('Description 1...')
 
-      done()
+        done()
+      })
     })
   })
 
   it('finds Project', (done) => { 
 
-    Project.findById(projectId, project, (error, project) => {
+    Project.findById(projectCreated._id, (error, project) => {
       expect(project).not.toBeNull()
 
       done()
@@ -67,9 +66,9 @@ describe("Project",  () => {
   it('updates Project', (done) => { 
 
     // Update name
-    project.name = 'Project 1 updated'
+    projectCreated.name = 'Project 1 updated'
     
-    Project.findByIdAndUpdate(projectId, project, {new: true}, (error, project) => {
+    Project.findByIdAndUpdate(projectCreated._id, projectCreated, {new: true}, (error, project) => {
       expect(project.name).toContain('Project 1 updated')
 
       done()
@@ -78,7 +77,7 @@ describe("Project",  () => {
 
   it('deletes Project', (done) => { 
 
-    Project.findByIdAndRemove(projectId, project, (error, project) => {
+    Project.findByIdAndRemove(projectCreated._id, (error, project) => {
       expect(project).not.toBeNull()
 
       done()

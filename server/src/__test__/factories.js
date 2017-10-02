@@ -1,64 +1,85 @@
-import FactoryGirl from 'factory_girl'
+import FactoryGirl from 'factory-girl'
 import mongoose from 'mongoose'
 let id = mongoose.Types.ObjectId()
 
-FactoryGirl.define('user', function() {
-  this.account = id
-  this.firstName = 'User 1'
-  this.lastName = 'User 1'
-  this.email = 'user@email.com' 
-  this.password = 'pw'
-  this.admin = true
-  this.meta = { age: 21, gender: 'm' }
-  this.avatar = { data: null, contentType: '' }
-  this.tenantId = ''
+// Schemas
+import User from '../models/User'
+import Account from '../models/Account'
+import Project from '../models/Project'
+import Sale from '../models/Sale'
+import Item from '../models/Item'
+import Task from '../models/Task'
+import Customer from '../models/Customer'
+import Invoice from '../models/Invoice'
+
+FactoryGirl.define('user', User, {
+  account: id,
+  firstName: 'User 1',
+  lastName: 'User 1',
+  email: FactoryGirl.seq('User.email', (n) => `user${n}@ymail.com`),
+  password: 'pw',
+  admin: true,
+  meta: { age: 21, gender: 'm' },
+  avatar: { data: null, contentType: '' },
+  tenantId: ''
 })
 
-FactoryGirl.define('customer', function() {
-  this.name = 'Customer 1'
-  this.vatNumber = '1234' 
-  this.contact = { phoneNumber: '12345678910' }
-  this.includeContactOnInvoice = false
-  this.projects = []
-  this.sales = []
-  this.invoices = []
-  this.address = { street: 'Street 1', postalCode: '1234', region: 'Espoo', country: 'Finland' }
+FactoryGirl.define('account', Account, {
+  users: id,
+  companyName: FactoryGirl.seq('Account.companyName', (n) => `Company ${n}`),
+  industry: 'IT',
+  contact: { phoneNumber: '12345678910' },
+  email: FactoryGirl.seq('User.email', (n) => `user${n}@ymail.com`),
+  address: { street: 'Street 1', postalCode: '1234', region: 'Espoo', country: 'Finland' },
+  logo: { data: null, contentType: '' },
+  tenantId: ''
 })
 
-FactoryGirl.define('sale', function() {
-  this.customer = id
-  this.name = 'Sale 1'
-  this.deadline = new Date() 
-  this.status = 'new'
-  this.description = 'Description 1...'
-  this.items = []
+FactoryGirl.define('customer', Customer, {
+  name: 'Customer 1',
+  vatNumber: '1234', 
+  contact: { phoneNumber: '12345678910' },
+  includeContactOnInvoice: false,
+  projects: [],
+  sales: [],
+  invoices: [],
+  address: { street: 'Street 1', postalCode: '1234', region: 'Espoo', country: 'Finland' }
 })
 
-FactoryGirl.define('project', function() {
-  this.customer = id
-  this.name = 'Project 1'
-  this.deadline = new Date() 
-  this.status = 'new'
-  this.description = 'Description 1...'
-  this.tasks = []
+FactoryGirl.define('sale', Sale, {
+  customer: id,
+  name: 'Sale 1',
+  deadline: new Date(), 
+  status: 'new',
+  description: 'Description 1...',
+  items: []
 })
 
-FactoryGirl.define('task', function() {
-  this._creator = id
-  this.name = 'Task 1'
-  this.hours = 2 
-  this.paymentType = 'Per hour'
-  this.price = 20
-  this.vat = 10
+FactoryGirl.define('project', Project, {
+  customer: id,
+  name: 'Project 1',
+  deadline: new Date(), 
+  status: 'new',
+  description: 'Description 1...',
+  tasks: []
 })
 
-FactoryGirl.define('item', function() {
-  this._creator = id
-  this.name = 'Item 1'
-  this.unit = 'meter' 
-  this.quantity = 15
-  this.price = 20
-  this.vat = 10
+FactoryGirl.define('task', Task, {
+  _creator: id,
+  name: 'Task 1',
+  hours: 2, 
+  paymentType: 'Per hour',
+  price: 20,
+  vat: 10
+})
+
+FactoryGirl.define('item', Item, {
+  _creator: id,
+  name: 'Item 1',
+  unit: 'meter', 
+  quantity: 15,
+  price: 20,
+  vat: 10
 })
 
 module.exports = FactoryGirl
