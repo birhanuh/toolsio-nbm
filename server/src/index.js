@@ -85,10 +85,8 @@ app.listen(app.get('port'), () =>
   console.log('Server started on port: ' + process.env.PORT)
 )
 
-// Setup mongoose 
-let mongoURI = config.mongoose
-
-db.connect(mongoURI)
+// Connect to mognodb
+db.connect(process.env.DB_HOST+process.env.DB_DEVELOPMENT)
 
 
 

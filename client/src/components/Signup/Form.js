@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import { Validation } from '../../utils'
 import { InputField, SelectField } from '../../utils/FormFields'
 import classnames from 'classnames'
@@ -33,18 +34,14 @@ class Form extends Component {
   
   handleChange(e) {
     if (e.target.name === "companyName" || e.target.name === "industry") {
-      let updatedAccount = Object.assign({}, this.state.account)
-      updatedAccount[e.target.name] = e.target.value
       this.setState({
-        account: updatedAccount
+        account: { ...this.state.account, [e.target.name]: e.target.value }
       })
     }
     else if (e.target.name === "firstName" || e.target.name === "lastName" || e.target.name === "email"
         || e.target.name === "password" || e.target.name === "confirmPassword") {
-      let updatedUser = Object.assign({}, this.state.user)
-      updatedUser[e.target.name] = e.target.value
       this.setState({
-        user: updatedUser
+        user: { ...this.state.user, [e.target.name]: e.target.value }
       })
     }  
   }
@@ -228,15 +225,15 @@ class Form extends Component {
 
 // Proptypes definition
 Form.propTypes = {
-  signupRequest: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired,
-  isAccountExists: React.PropTypes.func.isRequired,
-  isUserExists: React.PropTypes.func.isRequired
+  signupRequest: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
+  isAccountExists: PropTypes.func.isRequired,
+  isUserExists: PropTypes.func.isRequired
 }
 
 // Contexttype definition
 Form.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 
 export default Form

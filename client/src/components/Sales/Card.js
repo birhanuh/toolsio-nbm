@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 
@@ -50,5 +51,5 @@ export default function Card({sale}) {
 }
 
 Card.propTypes = {
-  sale: React.PropTypes.object.isRequired
+  sale: PropTypes.object.isRequired
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
@@ -17,7 +18,7 @@ class Form extends Component {
     this.state = {
       _id: this.props.project ? this.props.project._id : null,
       name: this.props.project ? this.props.project.name : '',
-      deadline: this.props.project ? moment(this.props.project.deadline) : moment(),
+      deadline: this.props.project ? moment(this.props.project.deadline, "MM-DD-YYYY") : moment(),
       customer: this.props.project ? (this.props.project.customer ? this.props.project.customer._id : '') : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
@@ -197,7 +198,8 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  customers: React.PropTypes.array.isRequired
+  project: PropTypes.object,
+  customers: PropTypes.array.isRequired
 }
 
 export default Form

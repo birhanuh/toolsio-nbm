@@ -26,11 +26,12 @@ export function isAccountExists(companyName) {
 
 export function companyNameRequest(companyName) {
   return dispatch => {
-    return axios.get(`/accounts/${companyName}`).then(res => {
-      //document.cookie = "firstName="+res.data.firstName+"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
-      localStorage.setItem('account', JSON.stringify(res.data))
-      dispatch(setCurrentAccount(res.data))
-    })
+    return axios.get(`/accounts/${companyName}`)
+      .then(res => {
+        //document.cookie = "firstName="+res.data.firstName+"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
+        localStorage.setItem('account', JSON.stringify(res.data))
+        dispatch(setCurrentAccount(res.data))
+      })
   }
 }
 
@@ -42,17 +43,18 @@ export function isUserExists(email) {
 
 export function loginRequest(data) {
   return dispatch => {
-    return axios.post('/users/login', data).then(res => {
-      localStorage.setItem('account', JSON.stringify(res.data))
-      dispatch(setCurrentAccount(res.data))
-    })
+    return axios.post('/users/login', data)
+      .then(res => {
+        localStorage.setItem('account', JSON.stringify(res.data))
+        dispatch(setCurrentAccount(res.data))
+      })
   }
 }
 
 export function logout() {
   return dispatch => {
-    return axios.post('/users/logout').then(
-      () => {        
+    return axios.post('/users/logout')
+      .then(() => {        
         localStorage.removeItem('account')
         dispatch(setCurrentAccount({}))  
       })

@@ -59,67 +59,73 @@ export function taskDeleted(task) {
 
 export function createProject(project) {
   return dispatch => {
-    return axios.post('/api/projects', project).then(res => { 
-      dispatch(addProject(res.data.result)) 
-    })
+    return axios.post('/api/projects', project)
+      .then(res => { 
+        dispatch(addProject(res.data.result)) 
+      })
   }
 }
 
 export function fetchProjects() {
   return dispatch => {
-    return axios.get('/api/projects').then(res => {
-      console.log('res: ', res)
-      dispatch(setProjects(res.data.results))
-    })
+    return axios.get('/api/projects')
+      .then(res => {
+        dispatch(setProjects(res.data.results))
+      })
   }
 }
 
 export function fetchProject(id) {
   return dispatch => {
-    return axios.get(`/api/projects/${id}`).then(res => {
-      dispatch(projectFetched(res.data.result))
-    })
+    return axios.get(`/api/projects/${id}`)
+      .then(res => {
+        dispatch(projectFetched(res.data.result))
+      })
   }
 }
 
 export function updateProject(project) {
   return dispatch => {
-    return axios.put(`/api/projects/${project._id}`, project).then(res => { 
-      dispatch(projectUpdated(res.data.result)) 
-    })
+    return axios.put(`/api/projects/${project._id}`, project)
+      .then(res => { 
+        dispatch(projectUpdated(res.data.result)) 
+      })
   }
 }
 
 export function deleteProject(id) {
   return dispatch => {
-    return axios.delete(`/api/projects/${id}`).then(res => { 
-      dispatch(projectDeleted(id)) 
-    })
+    return axios.delete(`/api/projects/${id}`)
+      .then(res => { 
+        dispatch(projectDeleted(id)) 
+      })
   }
 }
 
 export function createTask(task) {
   return dispatch => {
-    return axios.post('/api/tasks', task).then(res => {
-      dispatch(addTask(res.data.result))
-    })
+    return axios.post('/api/tasks', task)
+      .then(res => {
+        dispatch(addTask(res.data.result))
+      })
   }
 }
 
 export function updateTask(task) {
   return dispatch => {
-    return axios.put(`/api/tasks/${task._id}`, task).then(res => {
-      dispatch(taskUpdated(res.data.result))
-    })
+    return axios.put(`/api/tasks/${task._id}`, task)
+      .then(res => {
+        dispatch(taskUpdated(res.data.result))
+      })
   }
   
 }
 
 export function deleteTask(task) {
   return dispatch => {
-    return axios.delete(`/api/tasks/${task._id}`).then(res => {
-      dispatch(taskDeleted(task))
-    })
+    return axios.delete(`/api/tasks/${task._id}`)
+      .then(res => {
+        dispatch(taskDeleted(task))
+      })
   }
 }
-

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessages'
 import { fetchSale, deleteSale } from '../../actions/saleActions'
 
@@ -98,7 +100,7 @@ class Show extends Component {
               {/*<dt>{T.translate("sales.show.user")}</dt>
               <dd>{sale.user.first_name}</dd>*/}
               <dt>{T.translate("sales.show.deadline")}</dt>
-              <dd>{deadline}</dd>
+              <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("sales.show.status")}</dt>
               <dd>
                 <div className={classnames("ui tiny uppercase label", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}> 
@@ -139,13 +141,14 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  fetchSale: React.PropTypes.func.isRequired,
-  deleteSale: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired
+  fetchSale: PropTypes.func.isRequired,
+  deleteSale: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
+  sale: PropTypes.object
 }
 
 Show.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state, props) {

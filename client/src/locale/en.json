@@ -329,6 +329,7 @@
       "header": "Sale",
       "name": "name",
       "customer": "Customer",
+      "deadline": "Deadline",
       "no_customer": "No Customer",
       "date": "Date",
       "user": "User",

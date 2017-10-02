@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { connect } from 'react-redux'
@@ -35,9 +36,9 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  sales: React.PropTypes.array.isRequired,
-  fetchSales: React.PropTypes.func.isRequired,
-  deleteSale: React.PropTypes.func.isRequired
+  sales: PropTypes.array.isRequired,
+  fetchSales: PropTypes.func.isRequired,
+  deleteSale: PropTypes.func.isRequired,
 }
 
 function mapSateToProps(state) {

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 export default function Tr({customer, deleteCustomer}) {
@@ -22,6 +23,6 @@ export default function Tr({customer, deleteCustomer}) {
 }
 
 Tr.propTypes = {
-  customer: React.PropTypes.object.isRequired,
-  deleteCustomer: React.PropTypes.func.isRequired
+  customer: PropTypes.object.isRequired,
+  deleteCustomer: PropTypes.func.isRequired
 }

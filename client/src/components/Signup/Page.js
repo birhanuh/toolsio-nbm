@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Form from './Form'
 import { signupRequest, isAccountExists, isUserExists} from '../../actions/authentication'
@@ -43,11 +44,11 @@ class Page extends Component {
 
 // Proptypes definition
 Page.propTypes = {
-  signupRequest: React.PropTypes.func.isRequired,
-  addFlashMessage: React.PropTypes.func.isRequired,
-  isAccountExists: React.PropTypes.func.isRequired,
-  isUserExists: React.PropTypes.func.isRequired,
-  account: React.PropTypes.object.isRequired
+  signupRequest: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
+  isAccountExists: PropTypes.func.isRequired,
+  isUserExists: PropTypes.func.isRequired,
+  account: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {

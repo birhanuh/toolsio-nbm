@@ -1,4 +1,5 @@
-import React, { Component } from 'react' 
+import React, { Component } from 'react'
+import PropTypes from 'prop-types' 
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { createSale, fetchSale, updateSale } from '../../actions/saleActions'
@@ -59,7 +60,7 @@ class FormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/sales" /> : 
-          <Form sale={this.props.sale} saveSale={this.saveSale} customers={this.props.customers} />
+          <Form sale={this.props.sale} customers={this.props.customers} saveSale={this.saveSale} />
         }
       </div>
     )
@@ -67,11 +68,12 @@ class FormPage  extends Component {
 }
 
 FormPage.propTypes = {
-  createSale: React.PropTypes.func.isRequired,
-  fetchSale: React.PropTypes.func.isRequired,
-  updateSale: React.PropTypes.func.isRequired,
-  fetchCustomers: React.PropTypes.func.isRequired,
-  customers: React.PropTypes.array.isRequired
+  createSale: PropTypes.func.isRequired,
+  fetchSale: PropTypes.func.isRequired,
+  updateSale: PropTypes.func.isRequired,
+  fetchCustomers: PropTypes.func.isRequired,
+  customers: PropTypes.array.isRequired,
+  sale: PropTypes.object
 }
 
 function mapStateToProps(state, props) {
@@ -89,9 +91,7 @@ function mapStateToProps(state, props) {
 }
 
 FormPage.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps, { createSale, fetchSale, updateSale, fetchCustomers })(FormPage)
-
-
