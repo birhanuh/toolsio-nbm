@@ -1,8 +1,7 @@
 import mongoose from 'mongoose'
 
 export default {
-  dropDatabase: () => {   
-    
+  dropDatabase: () => {       
     /* Drop the DB */
     mongoose.connection.db.dropDatabase()
   },

@@ -15,19 +15,21 @@ let customer = FactoryGirl.create('customer')
 
 let customerId = null
 
-describe("Customer", function() { 
+describe("Customer", () => { 
 
-  beforeAll(() => {
+  beforeAll((done) => {
     db.connect('mongodb://localhost/toolsio_test')
+    done()
   })
 
-  afterAll(() => {
+  afterAll((done) => {
     Macros.dropDatabase()
+    done()
   })
 
 
   it('should fail with validation errors for each required field', (done) => {
-    Customer.create({}, function(err, customer) {
+    Customer.create({}, (err, customer) => {
 
       expect(err).not.toBeNull()
       expect(err.errors.name.message).toContain('Name is required.')

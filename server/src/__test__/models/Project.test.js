@@ -15,18 +15,20 @@ let project = FactoryGirl.create('project')
 
 let projectId = null
 
-describe("Project", function() { 
+describe("Project",  () => { 
 
-  beforeAll(function() {
+  beforeAll( (done) => {
     db.connect('mongodb://localhost/toolsio_test')
+    done()
   })
 
-  afterAll(function() {
+  afterAll( (done) => {
     Macros.dropDatabase()
+    done()
   })
 
 
-  it('should fail with validation errors for each required field', function(done) {
+  it('should fail with validation errors for each required field', (done) => {
 
     Project.create({}, function(err, project) {
       expect(err).not.toBeNull()
@@ -38,7 +40,7 @@ describe("Project", function() {
     })
   })
 
-  it('saves Project', function(done) {
+  it('saves Project', (done) => {
 
     Project.create(project, function(err, project) {      
       // Assign id
@@ -53,30 +55,30 @@ describe("Project", function() {
     })
   })
 
-  it('finds Project', function(done) { 
+  it('finds Project', (done) => { 
 
-    Project.findById(projectId, project, function(error, project) {
+    Project.findById(projectId, project, (error, project) => {
       expect(project).not.toBeNull()
 
       done()
     })
   })
 
-  it('updates Project', function(done) { 
+  it('updates Project', (done) => { 
 
     // Update name
     project.name = 'Project 1 updated'
     
-    Project.findByIdAndUpdate(projectId, project, {new: true}, function(error, project) {
+    Project.findByIdAndUpdate(projectId, project, {new: true}, (error, project) => {
       expect(project.name).toContain('Project 1 updated')
 
       done()
     })
   })
 
-  it('deletes Project', function(done) { 
+  it('deletes Project', (done) => { 
 
-    Project.findByIdAndRemove(projectId, project, function(error, project) {
+    Project.findByIdAndRemove(projectId, project, (error, project) => {
       expect(project).not.toBeNull()
 
       done()

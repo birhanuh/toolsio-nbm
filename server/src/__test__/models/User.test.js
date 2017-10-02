@@ -15,20 +15,22 @@ let user = FactoryGirl.create('user')
 
 let userId = null
 
-describe("User", function() { 
+describe("User", () => { 
 
-  beforeAll(function() {
+  beforeAll((done) => {
     db.connect('mongodb://localhost/toolsio_test')
+    done()
   })
 
-  afterAll(function() {
+  afterAll((done) => {
     Marcros.dropDatabase()
+    done()
   })
 
 
-  it('should fail with validation errors for each required field', function(done) {
+  it('should fail with validation errors for each required field', (done) => {
 
-    User.create({}, function(err, user) {
+    User.create({}, (err, user) => {
       expect(err).not.toBeNull()
       expect(err.errors.email.message).toContain('Email is required.')
       expect(err.errors.password.message).toContain('Password is required.')
@@ -37,9 +39,9 @@ describe("User", function() {
     })
   })
 
-  it('saves User', function(done) {
+  it('saves User', (done) => {
    
-    User.create(user, function(err, user) {
+    User.create(user, (err, user) => {
      // Assign id
       userId = user._id
 
@@ -51,30 +53,30 @@ describe("User", function() {
     })
   })
 
-  it('finds User', function(done) { 
+  it('finds User', (done) => { 
 
-    User.getUserByEmail(user.email, function(error, user) {
+    User.getUserByEmail(user.email, (error, user) => {
       expect(user).not.toBeNull()
 
       done()
     })
   })
 
-  it('updates User', function(done) { 
+  it('updates User', (done) => { 
 
     // Update name
     user.firstName = 'User 1 updated'
     
-    User.findByIdAndUpdate(userId, user, {new: true}, function(error, user) {
+    User.findByIdAndUpdate(userId, user, {new: true}, (error, user) => {
       expect(user.firstName).toContain('User 1 updated')
 
       done()
     })
   })
 
-  it('deletes User', function(done) { 
+  it('deletes User', (done) => { 
 
-    User.findByIdAndRemove(userId, user, function(error, user) {
+    User.findByIdAndRemove(userId, user, (error, user) => {
       expect(user).not.toBeNull()
 
       done()

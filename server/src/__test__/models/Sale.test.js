@@ -23,19 +23,21 @@ let sale = FactoryGirl.create('sale')
 
 let saleId = null
 
-describe("Sale", function() { 
+describe("Sale",  () => { 
 
-  beforeAll(function() {
+  beforeAll( (done) => {
     db.connect('mongodb://localhost/toolsio_test')
+    done()
   })
 
-  afterAll(function() {
+  afterAll( (done) => {
     Macros.dropDatabase()
+    done()
   })
 
-  it('should fail with validation errors for each required field', function(done) {
+  it('should fail with validation errors for each required field', (done) => {
     
-    Sale.create({}, function(err, sale) {      
+    Sale.create({}, (err, sale) => {      
       expect(err).not.toBeNull()
       expect(err.errors.customer.message).toContain('Customer is required.')
       expect(err.errors.name.message).toContain('Name is required.')
@@ -45,9 +47,9 @@ describe("Sale", function() {
     })
   })
 
-  it('saves Sale', function(done) {
+  it('saves Sale', (done) => {
 
-    Sale.create(sale, function(err, sale) {      
+    Sale.create(sale, (err, sale) => {      
       // Assign id
       saleId = sale._id
      
@@ -60,29 +62,29 @@ describe("Sale", function() {
     })
   })
 
-  it('finds Sale', function(done) { 
+  it('finds Sale', (done) => { 
 
-    Sale.findById(saleId, sale, function(error, sale) {
+    Sale.findById(saleId, sale, (error, sale) => {
       expect(sale).not.toBeNull()
 
       done()
     })
   })
 
-  it('updates Sale', function(done) { 
+  it('updates Sale', (done) => { 
 
     // Update name
     sale.name = 'Sale 1 updated'
     
-    Sale.findByIdAndUpdate(saleId, sale, {new: true}, function(error, sale) {
+    Sale.findByIdAndUpdate(saleId, sale, {new: true}, (error, sale) => {
       expect(sale.name).toContain('Sale 1 updated')
       done()
     })
   })
 
-  it('deletes Sale', function(done) { 
+  it('deletes Sale', (done) => { 
 
-    Sale.findByIdAndRemove(saleId, sale, function(error, sale) {
+    Sale.findByIdAndRemove(saleId, sale, (error, sale) => {
      expect(sale).not.toBeNull()
      
      done()

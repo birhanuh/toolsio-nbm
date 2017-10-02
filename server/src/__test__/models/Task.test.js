@@ -15,20 +15,22 @@ let task = FactoryGirl.create('task')
 
 let taskId = null
 
-describe("Task", function() { 
+describe("Task", () => { 
 
-  beforeAll(() => {
+  beforeAll((done) => {
     db.connect('mongodb://localhost/toolsio_test')
+    done()
   })
 
-  afterAll(() => {
+  afterAll((done) => {
     Macros.dropDatabase()
+    done()
   })
 
 
   it('should fail with validation errors for each required field', (done) => {
 
-    Task.create({}, function(err, task) {      
+    Task.create({}, (err, task) => {      
       expect(err).not.toBeNull()
       expect(err.errors.name.message).toContain('Name is required.')
       expect(err.errors.paymentType.message).toContain('Payment type is required.')
