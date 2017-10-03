@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import Sale from './sale'
 
 let itemSchema = new mongoose.Schema({
-  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "Sale" },
+  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "sale" },
   name: { type: String, required: [true, "Name is required."] },
   unit: { type: String, required: [true, "Unit is required."] },
   quantity: { type: Number, required: [true, "Quantity is required."] },
@@ -28,5 +28,5 @@ itemSchema.post('save', function(doc, next) {
   next()
 })
 
-//let Item = module.exports = mongoose.model('item', itemSchema)
+let Item = module.exports = mongoose.model('item', itemSchema)
 

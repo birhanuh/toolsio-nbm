@@ -26,7 +26,7 @@ FactoryGirl.define('user', User, {
 
 FactoryGirl.define('account', Account, {
   users: id,
-  subdomain: FactoryGirl.seq('Account.subdomain', (n) => `Company ${n}`),
+  subdomain: FactoryGirl.seq('Account.subdomain', (n) => `company${n}`),
   industry: 'IT',
   contact: { phoneNumber: '12345678910' },
   email: FactoryGirl.seq('User.email', (n) => `user${n}@ymail.com`),

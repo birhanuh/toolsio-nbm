@@ -8,7 +8,7 @@ import Macros from '../helpers/Macros'
 import FactoryGirl from '../factories'
 
 // Schema
-import Account from '../../models/Account'
+import Account from '../../models/account'
 
 let accountCreated = {}
 
@@ -44,7 +44,7 @@ describe("Account", () => {
         accountCreated = account
 
         expect(account).not.toBeNull()
-        expect(account.subdomain).toContain('company')
+        expect(account.subdomain).toContain('company1')
         expect(account.industry).toContain('IT')
 
         done()

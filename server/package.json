@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "nodemon --watch src --exec babel-node -- src/index.js",
-    "test": "jest"
+    "tst": "jest",
+    "test": "wdio"
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,10 @@
     "jest": "^21.1.0",
     "nodemon": "^1.11.0",
     "phantomjs": "^2.1.7",
+    "selenium-standalone": "^6.9.0",
+    "wdio-chromedriver-service": "^0.1.1",
+    "wdio-dot-reporter": "0.0.9",
+    "wdio-jasmine-framework": "^0.3.2",
     "webdriverio": "^4.8.0"
   }
 }

@@ -2,11 +2,11 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-import task from'./customer'
-import task from'./project'
-import task from'./sale'
+import customer from'./customer'
+import project from'./project'
+import sale from'./sale'
 import task from'./task'
-import task from'./itask'
+import item from'./item'
 
 let invoiceSchema = new Schema({
   customer: { type: ObjectId, required: true },

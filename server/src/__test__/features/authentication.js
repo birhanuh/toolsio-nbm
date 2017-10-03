@@ -1,3 +1,5 @@
+require('babel/register')
+   
 // Mongodb connection
 import db from '../../db'
 
@@ -6,24 +8,9 @@ import Macros from '../helpers/Macros'
   
 describe("User", () => { 
 
-  var client;
-  var paceUrl = process.env.PACE_URL || 'http://localhost:3000/'
-  var originalTimeout;
-
   beforeAll((done) => {
     // Connect to test db
     db.connect('mongodb://localhost/toolsio_test')
-    
-    var webdriverio = require('webdriverio')
-    var options = {
-      desiredCapabilities: {
-        browserName: 'phantomjs'
-      }
-    }
-
-    client = webdriverio.remote(options);
-    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 
     done()
   })
@@ -35,7 +22,7 @@ describe("User", () => {
 
   it('allows to register via the registration page', function (done) {
 
-    client.init()
+    browswer.init()
       .url(paceUrl)
       .click('a.ui.huge.primary.button')
       .setValue('input#firstname', 'Test 1')
