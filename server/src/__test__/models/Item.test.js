@@ -2,13 +2,13 @@
 import db from '../../db'
 
 // Macros
-import Macros from '../helpers/Macros'
+import Macros from '../helpers/macros'
 
 // Load factories 
 import FactoryGirl from '../factories'
 
 // Schema
-import Item from '../../models/Item'
+import Item from '../../models/item'
 
 let itemCreated = {}
 

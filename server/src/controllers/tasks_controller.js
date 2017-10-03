@@ -1,5 +1,5 @@
-import Task from '../models/Task'
-import Project from '../models/Project'
+import Task from '../models/task'
+import Project from '../models/project'
 
 export default {
   

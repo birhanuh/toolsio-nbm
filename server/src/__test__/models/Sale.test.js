@@ -2,13 +2,13 @@
 import db from '../../db'
 
 // Macros
-import Macros from '../helpers/Macros'
+import Macros from '../helpers/macros'
 
 // Load factories 
 import FactoryGirl from '../factories'
 
 // Schema
-import Sale from '../../models/Sale'
+import Sale from '../../models/sale'
 
 //Files
 /*fixtures.load(__dirname + '/../fixtures/sales.js')*/

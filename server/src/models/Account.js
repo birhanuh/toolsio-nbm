@@ -5,8 +5,8 @@ let Schema = mongoose.Schema
 
 // Account Schema 
 const accountSchema = new Schema({
-  users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  companyName: { type: String, required: [true, "Company name is required."] }, 
+  users: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+  subdomain: { type: String, required: [true, "Subdomain is required."] }, 
   industry: { type: String, required: [true, "Industry is required."] },
   address: {
     street: { type: String },
@@ -31,4 +31,4 @@ function contactValidator() {
   }
 }
 
-let Account = module.exports = mongoose.model('Account', accountSchema)
+let Account = module.exports = mongoose.model('account', accountSchema)

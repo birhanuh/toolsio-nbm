@@ -1,4 +1,4 @@
-import Sale from '../models/Sale'
+import Sale from '../models/sale'
 import Item from '../models/Item'
 
 export default {

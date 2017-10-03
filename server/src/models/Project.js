@@ -6,7 +6,7 @@ let projectSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: [true, "Customer is required."] },
   status: { type: String, required: [true, "Status is required."] },
   description: { type: String, default: '' },
-  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "task" }],
 
   createdAt: Date,
   updatedAt: Date
@@ -17,4 +17,4 @@ projectSchema.pre('validate', function (next) {
   next()
 }) 
 
-let Project = module.exports = mongoose.model('Project', projectSchema)
+let Project = module.exports = mongoose.model('project', projectSchema)

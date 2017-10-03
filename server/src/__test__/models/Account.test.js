@@ -29,7 +29,7 @@ describe("Account", () => {
 
     Account.create({}, (err, account) => {
       expect(err).not.toBeNull()
-      expect(err.errors.companyName.message).toContain('Company name is required.')
+      expect(err.errors.subdomain.message).toContain('Subdomain is required.')
       expect(err.errors.industry.message).toContain('Industry is required.')
 
       done()
@@ -44,7 +44,7 @@ describe("Account", () => {
         accountCreated = account
 
         expect(account).not.toBeNull()
-        expect(account.companyName).toContain('Company 1')
+        expect(account.subdomain).toContain('company')
         expect(account.industry).toContain('IT')
 
         done()
@@ -64,10 +64,10 @@ describe("Account", () => {
   it('updates Account', (done) => { 
 
     // Update name
-    accountCreated.companyName = 'Company 1 updated'
+    accountCreated.subdomain = 'company updated'
     
     Account.findByIdAndUpdate(accountCreated._id, accountCreated, {new: true}, (error, account) => {
-      expect(account.companyName).toContain('Company 1 updated')
+      expect(account.subdomain).toContain('company updated')
 
       done()
     })

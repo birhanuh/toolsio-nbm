@@ -12,7 +12,7 @@ class Form extends Component {
     super(props)
     this.state = {
       account: {
-        companyName: '', 
+        subdomain: '', 
         industry: ''
       },
       user: {
@@ -33,7 +33,7 @@ class Form extends Component {
   }
   
   handleChange(e) {
-    if (e.target.name === "companyName" || e.target.name === "industry") {
+    if (e.target.name === "subdomain" || e.target.name === "industry") {
       this.setState({
         account: { ...this.state.account, [e.target.name]: e.target.value }
       })
@@ -56,7 +56,7 @@ class Form extends Component {
         if (res.data.account[0]) {
           errors['message'] = {
             errors: {
-              companyName: {
+              subdomain: {
                 message: 'There is account with such '+field+ '.'
               }  
             }  
@@ -206,13 +206,13 @@ class Form extends Component {
               ]
             }
           />
-          <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.companyName })}>
+          <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
             <div className="ui right labeled input">
-              <input type="text" name="companyName" placeholder={T.translate("sign_up.account.company_name")} 
-                onBlur={this.checkAccountExists.bind(this)} value={account.companyName} onChange={this.handleChange.bind(this)} />
+              <input type="text" name="subdomain" placeholder={T.translate("sign_up.account.subdomain")} 
+                onBlur={this.checkAccountExists.bind(this)} value={account.subdomain} onChange={this.handleChange.bind(this)} />
               <div className="ui label">toolsio.com</div>  
             </div>
-            <span className="red">{errors.message && errors.message.errors && errors.message.errors.companyName && errors.message.errors.companyName.message}</span>
+            <span className="red">{errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors.subdomain.message}</span>
           </div>  
 
           <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>

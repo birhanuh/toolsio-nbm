@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Sale from './Sale'
+import Sale from './sale'
 
 let itemSchema = new mongoose.Schema({
   _creator: { type: mongoose.Schema.Types.ObjectId, ref: "Sale" },
@@ -28,5 +28,5 @@ itemSchema.post('save', function(doc, next) {
   next()
 })
 
-let Item = module.exports = mongoose.model('Item', itemSchema)
+//let Item = module.exports = mongoose.model('item', itemSchema)
 

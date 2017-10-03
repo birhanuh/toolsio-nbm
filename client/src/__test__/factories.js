@@ -114,7 +114,7 @@ export const Customers = [{
 // Account
 export const Account = {
   _id: 1,
-  companyName: 'Company 1',
+  subdomain: 'company',
   industry: 'IT',
   contact: { phoneNumber: '12345678910' },
   address: { street: 'Street 1', postalCode: '1234', region: 'Espoo', country: 'Finland' }
