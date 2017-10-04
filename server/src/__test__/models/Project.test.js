@@ -15,7 +15,7 @@ let projectCreated = {}
 describe("Project",  () => { 
 
   beforeAll( (done) => {
-    db.connect('mongodb://localhost/toolsio_test')
+    db.connect(process.env.DB_HOST+process.env.TEST)
     done()
   })
 

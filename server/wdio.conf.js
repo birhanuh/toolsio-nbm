@@ -1,5 +1,7 @@
 exports.config = {
-    
+    before: function() {
+        require('babel-register')
+    },
     //
     // ==================
     // Specify Test Files

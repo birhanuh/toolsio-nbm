@@ -8,8 +8,7 @@
   },
   "scripts": {
     "start": "nodemon --watch src --exec babel-node -- src/index.js",
-    "tst": "jest",
-    "test": "wdio"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -41,6 +40,8 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "factory-girl": "^5.0.0-beta.1",
+    "gulp": "^3.9.1",
+    "gulp-webdriver": "^2.0.3",
     "jest": "^21.1.0",
     "nodemon": "^1.11.0",
     "phantomjs": "^2.1.7",
