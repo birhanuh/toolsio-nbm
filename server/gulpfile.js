@@ -1,20 +1,17 @@
 var gulp = require('gulp'), 
   nodemon = require('gulp-nodemon'),
   babel = require('gulp-babel'),
-  Cache = require('gulp-file-cache')
   jest = require('jest-cli')
 
 var selenium = require('selenium-standalone'),
   webdriver = require('gulp-webdriver')
 
-var cache = new Cache();
-
 // Development 
 gulp.task('compile', function () {
   var stream = gulp.src(['./src/**/*.js', '!./src/__test__']) // your ES2015 code 
-    .pipe(cache.filter()) // remember files 
-    .pipe(babel({})) // compile new ones 
-    .pipe(cache.cache()) // cache them 
+    .pipe(babel({
+      presets: ['env']
+    })) // compile new ones 
     .pipe(gulp.dest('./dist')) // write them 
   return stream // important for gulp-nodemon to wait for completion 
 })
@@ -24,24 +21,15 @@ gulp.task('server', ['compile'], function () {
     script: 'dist/', // run ES5 code 
     watch: 'src', // watch ES2015 code 
     tasks: ['compile'],
-    env: { 'NODE_ENV': 'development' } // compile synchronously onChange 
+    env: { 
+      'NODE_ENV': 'development' 
+    } // compile synchronously onChange 
   })
  
   return stream
 })
 
 // Test
-gulp.task('server-with-test-db', function () {
-  nodemon({
-    script: 'dist/',
-    env: { 'NODE_ENV': 'test' }
-  })
-})
-
-var jestConfig = {
-  rootDir: './src/__test__'
-}
-
 gulp.task('jest', function(done) {
   
   process.env.DB_HOST = 'mongodb://localhost/'
@@ -51,6 +39,19 @@ gulp.task('jest', function(done) {
     done()
   })
 })
+
+gulp.task('server-with-test-db', function () {
+  nodemon({
+    script: 'dist/',
+    env: { 
+      'NODE_ENV': 'test' 
+    }
+  })
+})
+
+var jestConfig = {
+  rootDir: './src/__test__'
+}
 
 // gulp.task('tdd', function(done) {
 //   gulp.watch([ jestConfig.rootDir + "/**/*.js" ], [ 'jest' ]);
