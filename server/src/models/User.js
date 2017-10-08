@@ -6,7 +6,7 @@ const SALT_WORK_FACTOR = 10
 
 // User Schema 
 const UserSchema = new Schema({
-  account: { type: mongoose.Schema.Types.ObjectId, ref: "Account" },
+  account: { type: mongoose.Schema.Types.ObjectId, ref: "account" },
   firstName: { type: String /**, index: true**/ }, 
   lastName: { type: String },
   email: { type: String, required: [true, "Email is required."], index: {unique: true, dropDups: true} },
@@ -60,7 +60,7 @@ UserSchema.post('save', function(error, doc, next) {
   }
 })
 
-let User = module.exports = mongoose.model('User', UserSchema)
+let User = module.exports = mongoose.model('user', UserSchema)
 
 module.exports.getUserByEmail = function(email, callback) {
   var query = {email: email}

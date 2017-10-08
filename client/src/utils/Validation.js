@@ -37,9 +37,9 @@ export default {
         } 
       }
     }    
-    if (!data.account.companyName) {
-      errors["companyName"] = {
-        message: T.translate("sign_up.account.company_name_required")
+    if (!data.account.subdomain) {
+      errors["subdomain"] = {
+        message: T.translate("sign_up.account.subdomain_required")
       }
     }
     if (!data.account.industry) {
@@ -77,9 +77,9 @@ export default {
   validateSubdomainInput: (data) => {
     let errors = {}
 
-    if (!data.companyName) {
-      errors["companyName"] = {
-        message: T.translate("log_in.subdomain.company_name_required")
+    if (!data.subdomain) {
+      errors["subdomain"] = {
+        message: T.translate("log_in.subdomain.subdomain_required")
       }
     }
     

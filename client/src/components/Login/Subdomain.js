@@ -82,7 +82,7 @@ class Subdomain extends Component {
 
             <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
               <div className="ui right labeled input">
-                <input type="text" name="email" placeholder={T.translate("log_in.subdomain.company_name")} 
+                <input type="text" name="email" placeholder={T.translate("log_in.subdomain.subdomain")} 
                   value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
                 <div className="ui label">toolsio.com</div>  
               </div>

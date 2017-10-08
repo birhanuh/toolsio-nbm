@@ -1,5 +1,5 @@
-import Item from '../models/Item'
-import Sale from '../models/Sale'
+import Item from '../models/item'
+import Sale from '../models/sale'
 
 export default {
   

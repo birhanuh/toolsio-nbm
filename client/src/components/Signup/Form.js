@@ -12,7 +12,7 @@ class Form extends Component {
     super(props)
     this.state = {
       account: {
-        companyName: '', 
+        subdomain: '', 
         industry: ''
       },
       user: {
@@ -33,7 +33,7 @@ class Form extends Component {
   }
   
   handleChange(e) {
-    if (e.target.name === "companyName" || e.target.name === "industry") {
+    if (e.target.name === "subdomain" || e.target.name === "industry") {
       this.setState({
         account: { ...this.state.account, [e.target.name]: e.target.value }
       })
@@ -56,7 +56,7 @@ class Form extends Component {
         if (res.data.account[0]) {
           errors['message'] = {
             errors: {
-              companyName: {
+              subdomain: {
                 message: 'There is account with such '+field+ '.'
               }  
             }  
@@ -141,6 +141,7 @@ class Form extends Component {
           { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
           
           <InputField
+            id='firstName'
             label={T.translate("sign_up.first_name")}
             name="firstName" 
             value={user.firstName} 
@@ -149,6 +150,7 @@ class Form extends Component {
             formClass="field"
           />
           <InputField
+            id='lastName'
             label={T.translate("sign_up.last_name")}
             name="lastName" 
             value={user.lastName} 
@@ -157,10 +159,11 @@ class Form extends Component {
             formClass="field"
           />
           <InputField
-            label={T.translate("sign_up.email")}
-            name="email" 
             type="email"
+            name="email" 
             value={user.email} 
+            id='email'
+            label={T.translate("sign_up.email")}
             onChange={this.handleChange.bind(this)} 
             checkUserExists={this.checkUserExists.bind(this)} 
             placeholder={T.translate("sign_up.email")}
@@ -168,30 +171,32 @@ class Form extends Component {
             formClass="field"
           />
           <InputField
-            label={T.translate("sign_up.password")}
-            name="password" 
             type="password"
+            name="password" 
             value={user.password} 
+            id="password"
+            label={T.translate("sign_up.password")}
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.password")}
             error={errors.message && errors.message.errors && errors.message.errors['password'] && errors.message.errors['password'].message}
             formClass="field"
           />
           <InputField
-            label={T.translate("sign_up.confirm_password")}
-            name="confirmPassword" 
             type="password"
+            name="confirmPassword" 
             value={user.confirmPassword} 
+            id="confirmPassword"
+            label={T.translate("sign_up.confirm_password")}
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.confirm_password")}
             error={errors.confirmPassword}
             formClass="field"
           />
           <SelectField
-            label={T.translate("sign_up.account.industry")}
-            name="industry"
             type="select"
+            name="industry"
             value={account.industry} 
+            label={T.translate("sign_up.account.industry")}
             onChange={this.handleChange.bind(this)} 
             error={errors.message && errors.message.errors && errors.message.errors.industry && errors.message.errors['industry'].message}
             formClass="field"
@@ -206,13 +211,13 @@ class Form extends Component {
               ]
             }
           />
-          <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.companyName })}>
+          <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
             <div className="ui right labeled input">
-              <input type="text" name="companyName" placeholder={T.translate("sign_up.account.company_name")} 
-                onBlur={this.checkAccountExists.bind(this)} value={account.companyName} onChange={this.handleChange.bind(this)} />
+              <input type="text" name="subdomain" id="subdomain" placeholder={T.translate("sign_up.account.subdomain")} 
+                onBlur={this.checkAccountExists.bind(this)} value={account.subdomain} onChange={this.handleChange.bind(this)} />
               <div className="ui label">toolsio.com</div>  
             </div>
-            <span className="red">{errors.message && errors.message.errors && errors.message.errors.companyName && errors.message.errors.companyName.message}</span>
+            <span className="red">{errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors.subdomain.message}</span>
           </div>  
 
           <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>

@@ -3,14 +3,14 @@ import mongoose from 'mongoose'
 let id = mongoose.Types.ObjectId()
 
 // Schemas
-import User from '../models/User'
-import Account from '../models/Account'
-import Project from '../models/Project'
-import Sale from '../models/Sale'
-import Item from '../models/Item'
-import Task from '../models/Task'
-import Customer from '../models/Customer'
-import Invoice from '../models/Invoice'
+import User from '../models/user'
+import Account from '../models/account'
+import Project from '../models/project'
+import Sale from '../models/sale'
+import Item from '../models/item'
+import Task from '../models/task'
+import Customer from '../models/customer'
+import Invoice from '../models/invoice'
 
 FactoryGirl.define('user', User, {
   account: id,
@@ -26,7 +26,7 @@ FactoryGirl.define('user', User, {
 
 FactoryGirl.define('account', Account, {
   users: id,
-  companyName: FactoryGirl.seq('Account.companyName', (n) => `Company ${n}`),
+  subdomain: FactoryGirl.seq('Account.subdomain', (n) => `company${n}`),
   industry: 'IT',
   contact: { phoneNumber: '12345678910' },
   email: FactoryGirl.seq('User.email', (n) => `user${n}@ymail.com`),

@@ -2,25 +2,25 @@
 import db from '../../db'
 
 // Macros
-import Macros from '../helpers/Macros'
+import Macros from '../helpers/macros'
 
 // Load factories 
 import FactoryGirl from '../factories'
 
 // Schema
-import Item from '../../models/Item'
+import Item from '../../models/item'
 
 let itemCreated = {}
 
 describe("Item", () => { 
 
   beforeAll((done) => {
-    db.connect('mongodb://localhost/toolsio_test')
+    db.connect(process.env.DB_HOST+process.env.DB_TEST)
     done()
   })
 
   afterAll((done) => {
-    Marcros.db('items', process.env.DB_DEVELOPMENT)
+    Macros.clean('items')
     done()
   })
 

@@ -14,9 +14,9 @@ let customerSchema = new mongoose.Schema({
     email: { type: String, match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Wrong Email fromat."], validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} }
   },
   includeContactOnInvoice: { type: Boolean, default: false },
-  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
-  sales: [{ type: mongoose.Schema.Types.ObjectId, ref: "Sale" }],
-  invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "Invoice" }]
+  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
+  sales: [{ type: mongoose.Schema.Types.ObjectId, ref: "sale" }],
+  invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "invoice" }]
 })
  
 function contactValidator() {
@@ -42,4 +42,4 @@ customerSchema.post('save', function(error, doc, next) {
   }
 })
 
-let Customer = module.exports = mongoose.model('Customer', customerSchema)
+let Customer = module.exports = mongoose.model('customer', customerSchema)

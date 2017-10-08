@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 
-export const InputField = ({ type, options, name, field, value, label, 
+export const InputField = ({ type, name, value, id, label, 
   error, placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>
@@ -11,6 +11,7 @@ export const InputField = ({ type, options, name, field, value, label,
         type={type}
         name={name} 
         value={value} 
+        id={id}
         onChange={onChange} 
         onBlur={checkUserExists}
         placeholder={placeholder} 
@@ -20,14 +21,15 @@ export const InputField = ({ type, options, name, field, value, label,
   )
 }  
 
-export const TextAreaField = ({ options, name, field, value, label, error, 
+export const TextAreaField = ({ name, value, id, label, error, 
   placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {  
   return (
     <div className={classnames(formClass, { error: !!error })}>
       { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }
-      <textarea  
+      <textarea 
         name={name} 
         value={value} 
+        id={id}
         onChange={onChange} 
         onBlur={checkUserExists}
         placeholder={placeholder}>
@@ -37,7 +39,7 @@ export const TextAreaField = ({ options, name, field, value, label, error,
   )
 } 
 
-export const SelectField = ({ options, name, field, value, label, error, 
+export const SelectField = ({ options, name, value, label, error, 
   placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>

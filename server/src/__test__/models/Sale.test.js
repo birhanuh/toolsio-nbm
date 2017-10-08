@@ -2,13 +2,13 @@
 import db from '../../db'
 
 // Macros
-import Macros from '../helpers/Macros'
+import Macros from '../helpers/macros'
 
 // Load factories 
 import FactoryGirl from '../factories'
 
 // Schema
-import Sale from '../../models/Sale'
+import Sale from '../../models/sale'
 
 //Files
 /*fixtures.load(__dirname + '/../fixtures/sales.js')*/
@@ -18,12 +18,12 @@ let saleCreated = {}
 describe("Sale",  () => { 
 
   beforeAll( (done) => {
-    db.connect('mongodb://localhost/toolsio_test')
+    db.connect(process.env.DB_HOST+process.env.DB_TEST)
     done()
   })
 
   afterAll( (done) => {
-    Marcros.db('sales', process.env.DB_DEVELOPMENT)
+    Macros.clean('sales')
     done()
   })
 

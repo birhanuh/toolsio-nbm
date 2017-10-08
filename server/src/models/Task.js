@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
-import Project from './Project'
+import Project from './project'
 
 let taskSchema = new mongoose.Schema({
-  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
+  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "project" },
   name: { type: String, required: [true, "Name is required."] },
   hours: { type: Number, min: 1, max: 8, required: [true, "Hours is required."] },
   paymentType: { type: String, required: [true, "Payment type is required."] },
@@ -28,4 +28,4 @@ taskSchema.post('save', function(doc, next) {
   next()
 })
 
-let Task = module.exports = mongoose.model('Task', taskSchema)
+let Task = module.exports = mongoose.model('task', taskSchema)

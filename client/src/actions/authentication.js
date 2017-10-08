@@ -18,15 +18,15 @@ export function signupRequest(accountAndUser) {
   }
 }
 
-export function isAccountExists(companyName) {
+export function isAccountExists(subdomain) {
   return dispatch => {
-    return axios.get(`/accounts/${companyName}`)
+    return axios.get(`/accounts/${subdomain}`)
   }
 }
 
-export function companyNameRequest(companyName) {
+export function subdomainRequest(subdomain) {
   return dispatch => {
-    return axios.get(`/accounts/${companyName}`)
+    return axios.get(`/accounts/${subdomain}`)
       .then(res => {
         //document.cookie = "firstName="+res.data.firstName+"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
         localStorage.setItem('account', JSON.stringify(res.data))

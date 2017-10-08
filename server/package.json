@@ -4,11 +4,12 @@
   "description": "A Project tracking and Sales management tool.",
   "main": "./src/index.js",
   "directories": {
-    "test": "__tests__"
+    "test": "./src/__tests__"
   },
   "scripts": {
     "start": "nodemon --watch src --exec babel-node -- src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "tst": "wdio"
   },
   "repository": {
     "type": "git",
@@ -40,7 +41,18 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "factory-girl": "^5.0.0-beta.1",
-    "jest": "^21.1.0",
-    "nodemon": "^1.11.0"
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-webdriver": "^2.0.3",
+    "jest": "^21.2.1",
+    "jest-cli": "^21.2.1",
+    "nodemon": "^1.11.0",
+    "phantomjs": "^2.1.7",
+    "selenium-standalone": "^6.9.0",
+    "wdio-chromedriver-service": "^0.1.1",
+    "wdio-dot-reporter": "0.0.9",
+    "wdio-jasmine-framework": "^0.3.2",
+    "webdriverio": "^4.8.0"
   }
 }

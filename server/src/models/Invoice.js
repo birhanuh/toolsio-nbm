@@ -2,7 +2,11 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-import task from'./Task'
+import customer from'./customer'
+import project from'./project'
+import sale from'./sale'
+import task from'./task'
+import item from'./item'
 
 let invoiceSchema = new Schema({
   customer: { type: ObjectId, required: true },
@@ -42,4 +46,5 @@ invoiceSchema.methods.allUnpaidInvoicesByStatus = function() {
 invoiceSchema.methods.unpaidInvoicesByInvitedUsers = function() {
 }
 
-let Invoice = module.exports = mongoose.model('Invoice', invoiceSchema)
+let Invoice = module.exports = mongoose.model('invoice', invoiceSchema)
+

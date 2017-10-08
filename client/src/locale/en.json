@@ -80,12 +80,12 @@
     "notice": "All (*) fields are mandatory. Enter correct information.",
     "sign_up": "Sign up",    
     "account": {
-      "header": "Enter your companyName",
+      "subdomain": "Enter your subdomain",
       "industry": "Industry",
       "select_industry": "-Select Industry-",
-      "company_name": "Company name",
+      "subdomain": "Subdomain",
       "continue_button": "Continue",
-      "company_name_required": "Company name is required",
+      "subdomain_required": "Subdomain is required",
       "industry_required": "Industry is required",
       "dont_have_an_account": "Don't have an account? Sign up for free now!"
     },
@@ -103,11 +103,11 @@
     "new_to_us": "New to us?",
     "email_required": "Email is required",
     "password_required": "Password is required",
-    "companyName": {
-      "header": "Enter your companyName",
-      "company_name": "Your companyName is most likely your company name",
+    "subdomain": {
+      "header": "Enter your subdomain",
+      "subdomain": "Your subdomain is most likely your company name",
       "continue_button": "Continue",
-      "companyName_required": "Subdomain is required",
+      "subdomain_required": "Subdomain is required",
       "dont_have_an_account": "Don't have an account? Sign up for free now!"
     }
   },
@@ -120,7 +120,7 @@
       "header": "Account",
       "company": "Company",
       "url": "URL",
-      "company_name": "Company name",
+      "subdomain": "Subdomain",
       "industry": "Industry",
       "phone_number": "Phone number",
       "email": "Email",
