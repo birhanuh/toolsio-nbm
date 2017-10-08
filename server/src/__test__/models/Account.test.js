@@ -15,12 +15,12 @@ let accountCreated = {}
 describe("Account", () => { 
 
   beforeAll((done) => {
-    db.connect(process.env.DB_HOST+process.env.TEST)
+    db.connect(process.env.DB_HOST+process.env.DB_TEST)
     done()
   })
 
   afterAll((done) => {
-    Marcros.db('accounts', process.env.DB_DEVELOPMENT)
+    Macros.clean('accounts')
     done()
   })
 

@@ -18,12 +18,12 @@ let saleCreated = {}
 describe("Sale",  () => { 
 
   beforeAll( (done) => {
-    db.connect(process.env.DB_HOST+process.env.TEST)
+    db.connect(process.env.DB_HOST+process.env.DB_TEST)
     done()
   })
 
   afterAll( (done) => {
-    Marcros.db('sales', process.env.DB_DEVELOPMENT)
+    Macros.clean('sales')
     done()
   })
 

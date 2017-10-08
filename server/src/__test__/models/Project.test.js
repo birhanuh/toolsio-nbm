@@ -15,12 +15,12 @@ let projectCreated = {}
 describe("Project",  () => { 
 
   beforeAll( (done) => {
-    db.connect(process.env.DB_HOST+process.env.TEST)
+    db.connect(process.env.DB_HOST+process.env.DB_TEST)
     done()
   })
 
   afterAll( (done) => {
-    Marcros.db('projects', process.env.DB_DEVELOPMENT)
+    Macros.clean('projects')
     done()
   })
 

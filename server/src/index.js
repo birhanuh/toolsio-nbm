@@ -55,7 +55,9 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-if (process.env.NODE_ENV === 'development') {
+let env = process.env.NODE_ENV || 'development'
+
+if (env === 'development') {
   app.locals.pretty = true
 }
 
@@ -86,7 +88,11 @@ app.listen(app.get('port'), () =>
 )
 
 // Connect to mognodb
-db.connect(process.env.DB_HOST+process.env.DB_DEVELOPMENT)
+if (env === 'development') {
+  db.connect(process.env.DB_HOST+process.env.DB_DEVELOPMENT)
+} else if (env === 'test') {
+  db.connect(process.env.DB_HOST+process.env.DB_TEST)
+}
 
 
 
