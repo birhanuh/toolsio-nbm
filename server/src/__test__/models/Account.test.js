@@ -1,9 +1,6 @@
 // Mongodb connection
 import db from '../../db'
 
-// Macros
-import Macros from '../helpers/Macros'
-
 // Load factories 
 import FactoryGirl from '../factories'
 
@@ -16,11 +13,12 @@ describe("Account", () => {
 
   beforeAll((done) => {
     db.connect(process.env.DB_HOST+process.env.DB_TEST)
+    db.dropCollection('accounts')
     done()
   })
 
   afterAll((done) => {
-    Macros.clean('accounts')
+    db.close()
     done()
   })
 

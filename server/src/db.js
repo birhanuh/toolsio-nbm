@@ -13,6 +13,26 @@ export default {
     .catch((error) => {
       console.log('DB CONNECTION FAILED: '+error)
     })
+  },
+
+  dropCollection: function(collectionName) {  
+       
+    /* Clean collections */
+    mongoose.connection.collections[collectionName].drop( function(err) {
+      console.log('collection dropped')
+    })
+  },
+
+  close: function(collectionName) {  
+     
+    /* Close connection */
+    mongoose.connection.close()
+  },
+
+  drop: function(collectionName) {  
+     
+    /* Drop the DB */
+    mongoose.connection.db.dropDatabase()
   }
 
 }

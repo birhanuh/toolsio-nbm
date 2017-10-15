@@ -1,9 +1,6 @@
 // Mongodb connection
 import db from '../../db'
 
-// Macros
-import Macros from '../helpers/macros'
-
 // Load factories 
 import FactoryGirl from '../factories'
 
@@ -14,13 +11,14 @@ let projectCreated = {}
 
 describe("Project",  () => { 
 
-  beforeAll( (done) => {
+  beforeAll((done) => {
     db.connect(process.env.DB_HOST+process.env.DB_TEST)
+    db.dropCollection('projects')
     done()
   })
 
-  afterAll( (done) => {
-    Macros.clean('projects')
+  afterAll((done) => {
+    db.close()
     done()
   })
 

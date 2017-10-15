@@ -16,6 +16,9 @@ import SalesShow from '../Sales/Show'
 import CustomersPage from '../Customers/Page'
 import CustomersFormPage from '../Customers/FormPage'
 import CustomersShow from '../Customers/Show'
+import InvoicesPage from '../Invoices/Page'
+import InvoicesFormPage from '../Invoices/FormPage'
+import InvoicesShow from '../Invoices/Show'
 import requireAuth from '../../utils/requireAuth'
 
 import NavigationBar from './NavigationBar'
@@ -106,6 +109,10 @@ class App extends Component {
               <Route exact path="/customers/edit/:id" component={requireAuth(CustomersFormPage)} /> 
               <Route exact path="/customers/new" component={requireAuth(CustomersFormPage)} />
               <Route exact path="/customers/show/:id" component={requireAuth(CustomersShow)} /> 
+              <Route exact path="/invoices" component={requireAuth(InvoicesPage)} />
+              <Route exact path="/invoices/edit/:id" component={requireAuth(InvoicesFormPage)} /> 
+              <Route exact path="/invoices/new" component={requireAuth(InvoicesFormPage)} />
+              <Route exact path="/invoices/show/:id" component={requireAuth(InvoicesShow)} /> 
             </Switch>
           </div>
         </section>

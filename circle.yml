@@ -1,7 +1,11 @@
+machine:
+  environment:
+    NODE_ENV: development
+
 dependencies:
   override:
-    - npm install client/ 
-    - npm install server/  
+    - npm install --${NODE_ENV} client/ 
+    - npm install --${NODE_ENV} server/  
 
 test:
   override:
@@ -17,7 +21,6 @@ deployment:
     branch: develop
     commands:
       - ./deploy_staging.sh
-
 
 
 

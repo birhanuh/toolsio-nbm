@@ -1,17 +1,4 @@
 {  
-  "button": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "next": "Next",
-    "delete": "Delete",
-    "view": "View",
-    "edit": "Edit",
-    "back": "Back",
-    "exit": "Exit",
-    "search": "Search",
-    "send": "Send",
-    "ok": "OK"
-  },
   "landing": {
     "home": {
       "header": "Home",
@@ -223,6 +210,9 @@
     "form": {
       "new_project": "New Project",
       "edit_project": "Edit Project",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
       "name": "Name",
       "deadline": "Deadline",
       "status": "Status",
@@ -306,6 +296,9 @@
     "form": {
       "new_sale": "New Sale",
       "edit_sale": "Edit Sale",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
       "notice_create": "Sale created!",
       "name": "Name",
       "deadline": "Deadline",
@@ -382,6 +375,9 @@
     "form": {
       "new_customer": "New Customer",
       "edit_customer": "Edit Customer",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
       "notice_add": "Customer added",
       "select_country": "-Select Country-",
       "select_region": "-Select Region-",      
@@ -420,13 +416,17 @@
       "header": "Invoices",
       "are_you_sure": "Are you sure?",
       "empty_invoices": "There are no invoices yet",
-      "create_invoice": "Create new Invoice",
+      "create_new_invoice": "Create new Invoice",
       "description": "All created Invoices are shown here."
     },
     "form": {
       "new_invoice": "New Invoice",
       "edit_invoice": "Edit Invoice",
-      "create_invoice": "Create Invoice",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "next": "Next",
+      "previous": "Previous",
       "user": "User",
       "confirmation": "Confirmation",
       "invoice_details": "Invoice details",

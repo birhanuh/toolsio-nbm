@@ -1,9 +1,8 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import map from 'lodash/map'
 import { Validation } from '../../utils'
-import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
+import { InputField } from '../../utils/FormFields'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -17,75 +16,127 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.project ? this.props.project._id : null,
-      name: this.props.project ? this.props.project.name : '',
-      deadline: this.props.project ? moment(this.props.project.deadline, "MM-DD-YYYY") : moment(),
-      customer: this.props.project ? (this.props.project.customer ? this.props.project.customer._id : '') : '',
-      status: this.props.project ? this.props.project.status : '',
-      description: this.props.project ? this.props.project.description : '',
-      errors: {
-        message: {
-          errors: {}
-        }
+      _id: this.props.invoice ? this.props.invoice._id : null,
+      step1: {
+        sale: this.props.invoice ? this.props.invoice.sale : '',
+        project: this.props.invoice ? this.props.invoice.project : ''
       },
+      step2: {
+        phoneNumber: this.props.invoice ? this.props.invoice.contact.phoneNumber : '',
+        email: this.props.invoice ? this.props.invoice.contact.email : ''
+      },
+      errors: {},
       isLoading: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.project) {
-      this.setState({
-        _id: nextProps.project._id,
-        name: nextProps.project.name,
-        deadline: moment(nextProps.project.deadline),
-        customer: nextProps.project.customer,
-        status: nextProps.project.status,
-        description: nextProps.project.description
-      })
+    this.setState({
+      _id: nextProps.invoice._id,
+      name: nextProps.invoice.name,
+      address: {
+        street: nextProps.invoice.address.street,
+        postalCode: nextProps.invoice.address.postalCode,
+        region: nextProps.invoice.address.region,
+        country: nextProps.invoice.address.country
+      },
+      vatNumber: nextProps.invoice.vatNumber,
+      includeContactOnInvoice: nextProps.invoice.includeContactOnInvoice,
+      contact: {
+        phoneNumber: nextProps.invoice.contact.phoneNumber,
+        email: nextProps.invoice.contact.email
+      }
+    })
+  }
+
+  componentDidMount = () => {
+    let classContextThis = this
+    
+    if (this.state.includeContactOnInvoice === true) {
+      $('.ui.toggle.checkbox').checkbox('check')
     }
+
+    $('.ui.toggle.checkbox').checkbox({
+      onChecked: function() {
+         classContextThis.setState({
+          includeContactOnInvoice: true
+        })
+      },
+      onUnchecked: function() {
+        classContextThis.setState({
+          includeContactOnInvoice: false
+        })
+      }
+    })
+
   }
 
   handleChange = (e) => {
-    //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
-
-    if (!!this.state.errors.message.errors[e.target.name]) {
+    if (!!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors.message.errors[e.target.name]
+      delete errors[e.target.name]
 
-      this.setState({
-        [e.target.name]: e.target.value,
-        errors
-      })
+      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+
+         this.setState({
+          contact: { ...this.state.contact, [e.target.name]: e.target.value },
+          errors
+        })
+      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
+        || e.target.name === "country") {
+
+         this.setState({
+          address: { ...this.state.address, [e.target.name]: e.target.value },
+          errors
+        })
+      } else {
+        this.setState({
+          [e.target.name]: e.target.value,
+          errors
+        })
+      }
     } else {
-      this.setState({
-        [e.target.name]: e.target.value
-      })
+
+      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+
+         this.setState({
+          contact: { ...this.state.contact, [e.target.name]: e.target.value },
+        })
+      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
+        || e.target.name === "country") {
+        
+         this.setState({
+          address: { ...this.state.address, [e.target.name]: e.target.value }
+        })
+      } else {
+        this.setState({
+          [e.target.name]: e.target.value
+        })
+      }
+
     }
+   
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateProjectInput(this.state)
-
-    let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    const { errors, isValid } = Validation.validateCustomerInput(this.state)
 
     if (!isValid) {
-      this.setState({ errors: updatedErrors })
+      this.setState({ errors })
     }
 
     return isValid;
   }
 
-  handleSubmit(event) {
-     event.preventDefault()
+  handleSubmit = (e) => {
+    e.preventDefault()
 
     // Validation
-    if (this.isValid()) { 
-      const { _id, name, deadline, customer, status, description } = this.state
+    if (this.isValid) { 
+      const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
       this.setState({ isLoading: true })
-
-      this.props.saveProject({ _id, name, customer, deadline, status, description })
+      this.props.saveCustomer({ _id, name, vatNumber, includeContactOnInvoice, contact, address })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -97,14 +148,15 @@ class Form extends Component {
   } 
 
   render() {
-    const { _id, name, deadline, customer, status, description, errors, isLoading } = this.state
- 
-    const customersOptions = map(this.props.customers, (customer) => 
-      <option key={customer._id} value={customer._id}>{customer.name}</option>
-    )
+    const { _id, name, vatNumber, contact, includeContactOnInvoice, address, errors, isLoading } = this.state
     
-    return (
-      <div className="row">
+    //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
+    //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
+    //    { key: 'ready', value: 'ready', text: 'READY' } ,
+    //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
+
+    return (  
+       <div className="row">
         <div className="ui text container ui segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
@@ -199,8 +251,8 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  project: PropTypes.object,
-  customers: PropTypes.array.isRequired
+  invoice: PropTypes.object
 }
 
 export default Form
+
