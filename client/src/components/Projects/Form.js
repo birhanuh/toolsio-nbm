@@ -131,7 +131,7 @@ class Form extends Component {
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span>{errors.password}</span>
+              <span>{errors.deadline}</span>
             </div>
             
             <SelectField

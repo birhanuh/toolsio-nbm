@@ -9,20 +9,26 @@ import task from'./task'
 import item from'./item'
 
 let invoiceSchema = new Schema({
-  customer: { type: ObjectId, required: true },
-  date_of_an_invoice: { type: Date, default: Date.now, required: true },
-  deadline: { type: Date, default: Date.now, required: true },
-  payment_term: { type: Number },
-  interest_in_arrears: { type: Number },
-  status: { type: String, required: true },
+  customer: { type: mongoose.Schema.Types.ObjectId, ref: "customer", required: [true, "Customer is required."] },
+  date_of_an_invoice: { type: Date, default: Date.now },
+  deadline: { type: Date, required: [true, "Deadline is required."] },
+  paymentTerm: { type: Number, required: [true, "Payment term is required."] },
+  interestInArrears: { type: Number, required: [true, "Interset in arrears is required."] },
+  status: { type: String, required: [true, "Status is required."] },
   description: { type: String },
-  project: { type: ObjectId },
-  sale: { type: ObjectId },
-  billed: { type: Boolean, required: true, default: false },
+  project: { type: mongoose.Schema.Types.ObjectId, ref: "project", required: [true, "Project is required."] },
+  sale: { type: mongoose.Schema.Types.ObjectId, ref: "sale", required: [true, "Sale is required."] },
+  referenceNumber: { type: String, required: true },
 
-  createdAt: Date,
-  updatedAt: Date
+  createdAt: Date.now,
+  updatedAt: Date.now
 })
+
+projectSchema.pre('save', function (next) {
+  this.referenceNumber = (this.sale.findById(this.sale).customer._id +' - '+ this.sale) ||
+    (this.project.findById(this.project).customer._id +' - '+ this.project)
+  next()
+}) 
 
 invoiceSchema.pre('validate', function(next) {
   if (this.deadline && this.payment_term) {

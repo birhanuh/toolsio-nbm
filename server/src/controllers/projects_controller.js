@@ -15,7 +15,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Project.findById(id).populate([{ path: 'customer', select: 'name'}, { path: 'tasks' }]).exec(function(err, project) {
+    Project.findById(id).populate([{ path: 'customer', select: '_id'}, { path: 'customer', select: 'name'}, { path: 'tasks' }]).exec(function(err, project) {
       if (err) {
         callback(err, null)
         return
