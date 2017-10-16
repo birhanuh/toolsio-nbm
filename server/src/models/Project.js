@@ -7,6 +7,7 @@ let projectSchema = new mongoose.Schema({
   status: { type: String, required: [true, "Status is required."] },
   description: { type: String, default: '' },
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "task" }],
+  total: { type: Number, default: 0 },
 
   createdAt: Date,
   updatedAt: Date

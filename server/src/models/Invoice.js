@@ -20,11 +20,20 @@ let invoiceSchema = new Schema({
   sale: { type: mongoose.Schema.Types.ObjectId, ref: "sale", required: [true, "Sale is required."] },
   referenceNumber: { type: String, required: true },
 
-  createdAt: Date.now,
-  updatedAt: Date.now
+  createdAt: { type: Date.now},
+  updatedAt: {type: Date.now}
 })
 
-projectSchema.pre('save', function (next) {
+invoiceSchema.pre('save', function(next){
+  now = new Date()
+  this.updatedAt = now
+  if (!this.createdAt) {
+    this.createdAt = now
+  }
+  next()
+})
+
+invoiceSchema.pre('save', function (next) {
   this.referenceNumber = (this.sale.findById(this.sale).customer._id +' - '+ this.sale) ||
     (this.project.findById(this.project).customer._id +' - '+ this.project)
   next()

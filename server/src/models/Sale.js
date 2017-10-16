@@ -8,6 +8,7 @@ let saleSchema = new mongoose.Schema({
   status: { type: String, required: [true, "Status is required."] },
   description: { type: String, default: '' },
   items: [{ type: mongoose.Schema.Types.ObjectId, ref: "item" }],
+  total: { type: Number, default: 0 },
 
   createdAt: Date,
   updatedAt: Date

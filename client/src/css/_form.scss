@@ -222,7 +222,7 @@ select.date {
 
 // Horizontal form
 .ui.form .inline.field>label {
-  width: 20%;
+  width: 25%;
 }
 
 .ui.form .field > label {
@@ -234,11 +234,11 @@ select.date {
 }
 
 .ui.form .inline.field>select, .ui.form .inline.field>input {
-  width: 77%;
+  width: 72%;
 }
 
 .ui.form .inline.field>textarea, .ui.form .inline.field>div>input  {
-  width: 77%;
+  width: 72%;
   display: inline-block;
   margin-top: 0;
   margin-bottom: 0;
@@ -248,7 +248,7 @@ select.date {
 
 .ui.form .inline.field> .header, .ui.form .inline.field>button {
   display: inline-block;
-  margin-left: 22% !important;
+  margin-left: 27% !important;
   margin-top: 0;
   margin-bottom: 0;
   vertical-align: middle;
@@ -258,8 +258,12 @@ select.date {
   text-align: left;
 }
 
+.ui.form .field.error label  {
+  color: #9F3A38 !important;
+}
+
 .ui.form .inline.field.error>span {
-  margin-left: 22% !important;
+  margin-left: 27% !important;
 }
 
 .ui.input.error {

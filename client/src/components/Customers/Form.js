@@ -39,22 +39,24 @@ class Form extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      _id: nextProps.customer._id,
-      name: nextProps.customer.name,
-      address: {
-        street: nextProps.customer.address.street,
-        postalCode: nextProps.customer.address.postalCode,
-        region: nextProps.customer.address.region,
-        country: nextProps.customer.address.country
-      },
-      vatNumber: nextProps.customer.vatNumber,
-      includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
-      contact: {
-        phoneNumber: nextProps.customer.contact.phoneNumber,
-        email: nextProps.customer.contact.email
-      }
-    })
+    if (nextProps.customer) {
+      this.setState({
+        _id: nextProps.customer._id,
+        name: nextProps.customer.name,
+        address: {
+          street: nextProps.customer.address.street,
+          postalCode: nextProps.customer.address.postalCode,
+          region: nextProps.customer.address.region,
+          country: nextProps.customer.address.country
+        },
+        vatNumber: nextProps.customer.vatNumber,
+        includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
+        contact: {
+          phoneNumber: nextProps.customer.contact.phoneNumber,
+          email: nextProps.customer.contact.email
+        }
+      })
+    }
   }
 
   componentDidMount = () => {
@@ -277,7 +279,7 @@ class Form extends Component {
             </fieldset>
 
             <div className="inline field">    
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>
+              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("customers.form.save")}</button>
             </div>  
           </form> 
         </div>  

@@ -23,6 +23,7 @@ itemSchema.post('save', function(doc, next) {
         } 
       }
     }
+    project.total = project.total += this.price
   })
 
   next()

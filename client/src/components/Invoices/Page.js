@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import List from './List' 
+import { connect } from 'react-redux'
+import { fetchInvoices } from '../../actions/invoiceActions'
 
 // Localization 
 import T from 'i18n-react'
@@ -18,7 +21,7 @@ class Page extends Component {
           </Link>
         </div>  
 
-        {/*<List invoices={this.props.invoices} deleteCustomer={deleteCustomer} />   */}
+        <List invoices={this.props.invoices} />   
       </div>  
 
     )
@@ -26,4 +29,14 @@ class Page extends Component {
   }
 }
 
-export default Page
+Page.propTypes = {
+  fetchInvoices: PropTypes.func.isRequired
+}
+
+function mapSateToProps(state) {
+  return {
+    invoices: state.invoices
+  }
+}
+
+export default connect(mapSateToProps, { fetchInvoices })(Page)

@@ -62,7 +62,7 @@ class FormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/invoices" /> : 
-          <Form invoice={this.props.invoice} saveInvoice={this.saveInvoice} sales={this.props.sales} invoices={this.props.invoices}/>
+          <Form invoice={this.props.invoice} saveInvoice={this.saveInvoice} sales={this.props.sales} projects={this.props.projects} />
         }
       </div>
     )
@@ -83,13 +83,13 @@ function mapStateToProps(state, props) {
     return {
       invoice: state.invoices.find(item => item._id === match.params.id),
       sales: state.sales,
-      invoices: state.invoices
+      projects: state.projects
     }
   } 
   return { 
     invoice: null,
     sales: state.sales,
-    invoices: state.invoices
+    projects: state.projects
   }
 }
 

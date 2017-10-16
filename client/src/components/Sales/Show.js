@@ -42,15 +42,17 @@ class Show extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      _id: nextProps.sale ? nextProps.sale._id : null,
-      name: nextProps.sale ? nextProps.sale.name : '',
-      deadline: nextProps.sale ? nextProps.sale.deadline : '',
-      customer: nextProps.sale ? nextProps.sale.customer : '',
-      status: nextProps.sale ? nextProps.sale.status : '',
-      description: nextProps.sale ? nextProps.sale.description : '',
-      items: nextProps.sale ? nextProps.sale.items : []
-    })
+    if (nextProps.sale) {
+      this.setState({
+        _id: nextProps.sale._id,
+        name: nextProps.sale.name,
+        deadline: nextProps.sale.deadline,
+        customer: nextProps.sale.customer,
+        status: nextProps.sale.status,
+        description: nextProps.sale.description,
+        items: nextProps.sale.items
+      })
+    }
   }
 
   showConfirmationModal(event) {

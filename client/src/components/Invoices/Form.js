@@ -1,8 +1,9 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
+import map from 'lodash/map'
 import { Validation } from '../../utils'
-import { InputField } from '../../utils/FormFields'
+import { InputField, SelectField, TextAreaField } from '../../utils/FormFields'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -19,11 +20,11 @@ class Form extends Component {
       _id: this.props.invoice ? this.props.invoice._id : null,
       sale: this.props.invoice ? this.props.invoice.sale : '',
       project: this.props.invoice ? this.props.invoice.project : '',
-      deadline: this.props.invoice ? this.props.invoice.deadline : '',
+      deadline: this.props.invoice ? moment(this.props.invoice.deadline, "MM-DD-YYYY") : moment(),
       paymentTerm: this.props.invoice ? this.props.invoice.paymentTerm : '',
       intersetInArrears: this.props.invoice ? this.props.invoice.intersetInArrears : '',
       status: this.props.invoice ? this.props.invoice.contact.status : '',
-      description: this.props.invoice ? this.props.invoice.contact.description : ''
+      description: this.props.invoice ? this.props.invoice.contact.description : '',
       step: 1,
       errors: {},
       isLoading: false
@@ -31,38 +32,22 @@ class Form extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      _id: nextProps.invoice._id,
-      sale: this.props.invoice ? this.props.invoice.sale,
-      project: this.props.invoice ? this.props.invoice.project,
-      date_of_an_invoice: this.props.invoice ? this.props.invoice.date_of_an_invoice,
-      deadline: this.props.invoice ? this.props.invoice.deadline,
-      paymentTerm: this.props.invoice ? this.props.invoice.paymentTerm,
-      intersetInArrears: this.props.invoice ? this.props.invoice.intersetInArrears,
-      status: this.props.invoice ? this.props.invoice.contact.status,
-      description: this.props.invoice ? this.props.invoice.contact.description
-    })
+    if (nextProps.invoice) {
+      this.setState({
+        _id: nextProps.invoice._id,
+        sale: nextProps.invoice.sale,
+        project: nextProps.invoice.project,
+        deadline: moment(nextProps.invoice.deadline),
+        paymentTerm: nextProps.invoice.paymentTerm,
+        intersetInArrears: nextProps.invoice.intersetInArrears,
+        status: nextProps.invoice.contact.status,
+        description: nextProps.invoice.contact.description
+      })
+    }
   }
 
   componentDidMount = () => {
-    let classContextThis = this
-    
-    if (this.state.includeContactOnInvoice === true) {
-      $('.ui.toggle.checkbox').checkbox('check')
-    }
 
-    $('.ui.toggle.checkbox').checkbox({
-      onChecked: function() {
-         classContextThis.setState({
-          includeContactOnInvoice: true
-        })
-      },
-      onUnchecked: function() {
-        classContextThis.setState({
-          includeContactOnInvoice: false
-        })
-      }
-    })
 
   }
 
@@ -86,7 +71,7 @@ class Form extends Component {
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateCustomerInput(this.state)
+    const { errors, isValid } = Validation.validateInvoiceInput(this.state)
 
     if (!isValid) {
       this.setState({ errors })
@@ -102,7 +87,7 @@ class Form extends Component {
     if (this.isValid) { 
       const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
       this.setState({ isLoading: true })
-      this.props.saveCustomer({ _id, name, vatNumber, includeContactOnInvoice, contact, address })
+      this.props.saveInvoice({ _id, name, vatNumber, includeContactOnInvoice, contact, address })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -124,15 +109,15 @@ class Form extends Component {
       <option key={project._id} value={project._id}>{project.name}</option>
     )
 
-    // const paymentTermOptions = Array(99).fill().map((key, value) => 
-    //   <option key={key} value={value}>{value}</option>
-    // )
+    const paymentTermOptions = Array(99).fill().map((key, value) => 
+      <option key={key} value={value}>{value}</option>
+    )
 
     return (  
        <div className="row">
         <div className="ui text container ui segment">  
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+          <form className={classnames("ui form", { loading: isLoading })}>
             <div className="inline field"> 
               {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : <h1 className="ui header">{T.translate("invoices.form.new_invoice")}</h1>}
             </div>
@@ -140,10 +125,10 @@ class Form extends Component {
             { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             <fieldset className="custom-fieldset">
-              <legend className="custom-legend">{T.translate("invoices.select_sale_or_project")}</legend>
+              <legend className="custom-legend">{T.translate("invoices.form.select_sale_or_project")}</legend>
               
               <SelectField
-                label={T.translate("sales.page.header")}
+                label={T.translate("invoices.form.sales")}
                 name="sale"
                 value={sale ? (typeof sale === 'object' ? sale._id : sale) : ''} 
                 onChange={this.handleChange.bind(this)} 
@@ -155,7 +140,7 @@ class Form extends Component {
               />
 
                <SelectField
-                label={T.translate("projects.page.header")}
+                label={T.translate("invoices.form.projects")}
                 name="project"
                 value={project ? (typeof project === 'object' ? project._id : project) : ''} 
                 onChange={this.handleChange.bind(this)} 
@@ -168,7 +153,7 @@ class Form extends Component {
             </fieldset>
 
             <fieldset className="custom-fieldset">
-              <legend className="custom-legend">{T.translate("invoices.payment_term_or_deadline")}</legend>
+              <legend className="custom-legend">{T.translate("invoices.form.select_payment_term_or_deadline")}</legend>
 
               <div  className={classnames("inline field", { error: !!errors.deadline })}>
                 <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
@@ -180,7 +165,7 @@ class Form extends Component {
                 <span>{errors.password}</span>
               </div>
 
-              <InputField
+              <SelectField
                 label={T.translate("invoices.form.payment_term")}
                 name="name" 
                 value={name} 
@@ -188,15 +173,18 @@ class Form extends Component {
                 placeholder="Name"
                 error={errors.message && errors.message.errors && errors.message.errors.paymentTerm && errors.message.errors.paymentTerm.message}
                   formClass="inline field"
+
+                options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_days")}</option>,
+                  paymentTermOptions]}
               />
             </fieldset>  
 
             <InputField
-              label={T.translate("invoices.form.interset_in_arrears")}
+              label={T.translate("invoices.form.interest_in_arrears")}
               name="intersetInArrears" 
               value={intersetInArrears} 
               onChange={this.handleChange.bind(this)} 
-              placeholder="Name"
+              placeholder="0%"
               error={errors.message && errors.message.errors && errors.message.errors.intersetInArrears && errors.message.errors.intersetInArrears.message}
                 formClass="inline field"
             />
@@ -232,7 +220,7 @@ class Form extends Component {
             /> 
 
             <div className="inline field">    
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>
+              <button disabled={isLoading} className="ui primary button" onClick={this.handleSubmit.bind(this)}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.next")}</button>
             </div>  
           </form> 
         </div>  

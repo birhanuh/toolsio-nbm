@@ -45,22 +45,24 @@ class Show extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      _id: nextProps.customer ? nextProps.customer._id : null,
-      name: nextProps.customer ? nextProps.customer.name : '',
-      address: {
-        street: nextProps.customer ? nextProps.customer.address.street : '',
-        postalCode: nextProps.customer ? nextProps.customer.address.postalCode : '',
-        region: nextProps.customer ? nextProps.customer.address.region : '',
-        country: nextProps.customer ? nextProps.customer.address.country : ''
-      },
-      vatNumber: nextProps.customer ? nextProps.customer.vatNumber : '',
-      includeContactOnInvoice: nextProps.customer ? nextProps.customer.includeContactOnInvoice : null,
-      contact: {
-        phoneNumber: nextProps.customer ? nextProps.customer.contact.phoneNumber : '',
-        email: nextProps.customer ? nextProps.customer.contact.email : ''
-      }
-    })
+    if (nextProps.customer) {
+      this.setState({
+        _id: nextProps.customer._id,
+        name: nextProps.customer.name,
+        address: {
+          street: nextProps.customer.address.street,
+          postalCode: nextProps.customer.address.postalCode,
+          region: nextProps.customer.address.region,
+          country: nextProps.customer.address.country
+        },
+        vatNumber: nextProps.customer.vatNumber,
+        includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
+        contact: {
+          phoneNumber: nextProps.customer.contact.phoneNumber,
+          email: nextProps.customer.contact.email
+        }
+      })
+    }
   }
 
   showConfirmationModal(event) {
