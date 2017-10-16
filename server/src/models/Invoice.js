@@ -20,8 +20,8 @@ let invoiceSchema = new Schema({
   sale: { type: mongoose.Schema.Types.ObjectId, ref: "sale", required: [true, "Sale is required."] },
   referenceNumber: { type: String, required: true },
 
-  createdAt: { type: Date.now},
-  updatedAt: {type: Date.now}
+  createdAt: { type: Date },
+  updatedAt: {type: Date }
 })
 
 invoiceSchema.pre('save', function(next){
