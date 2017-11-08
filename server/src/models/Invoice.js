@@ -1,31 +1,34 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+import mongoose from 'mongoose'
 
-import customer from'./customer'
-import project from'./project'
-import sale from'./sale'
-import task from'./task'
-import item from'./item'
+import Customer from'./customer'
+import Project from'./project'
+import Sale from'./sale'
+import Task from'./task'
+import Item from'./item'
 
-let invoiceSchema = new Schema({
+let invoiceSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "customer", required: [true, "Customer is required."] },
   date_of_an_invoice: { type: Date, default: Date.now },
-  deadline: { type: Date, required: [true, "Deadline is required."] },
-  paymentTerm: { type: Number, required: [true, "Payment term is required."] },
+  deadline: { type: Date, validate: { validator: deadlinePaymentTermValidator, message: 'Select either Deadline or Payment term.'} },
+  paymentTerm: { type: Number, validate: { validator: deadlinePaymentTermValidator, message: 'Select either Deadline or Payment term.'} },
   interestInArrears: { type: Number, required: [true, "Interset in arrears is required."] },
   status: { type: String, required: [true, "Status is required."] },
   description: { type: String },
-  project: { type: mongoose.Schema.Types.ObjectId, ref: "project", required: [true, "Project is required."] },
-  sale: { type: mongoose.Schema.Types.ObjectId, ref: "sale", required: [true, "Sale is required."] },
+  project: { type: mongoose.Schema.Types.ObjectId, ref: "project", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
+  sale: { type: mongoose.Schema.Types.ObjectId, ref: "sale", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
   referenceNumber: { type: String, required: true },
 
   createdAt: { type: Date },
   updatedAt: {type: Date }
 })
 
+invoiceSchema.pre('validate', function (next) {
+  this.status = "pending"
+  next()
+}) 
+
 invoiceSchema.pre('save', function(next){
-  now = new Date()
+  let now = new Date()
   this.updatedAt = now
   if (!this.createdAt) {
     this.createdAt = now
@@ -33,27 +36,60 @@ invoiceSchema.pre('save', function(next){
   next()
 })
 
-invoiceSchema.pre('save', function (next) {
-  this.referenceNumber = (this.sale.findById(this.sale).customer._id +' - '+ this.sale) ||
-    (this.project.findById(this.project).customer._id +' - '+ this.project)
+invoiceSchema.pre('validate', function (next) {
+
+  if (this.sale) {
+    
+    Sale.findById(this.sale)
+      .then(sale => {
+
+        this.customer = sale.customer
+        this.referenceNumber = this.sale +'-'+ this.customer
+
+        next()
+      })
+  } 
+
+  if (this.project) {
+    
+    Project.findById(this.project)
+      .then(project => {
+            
+        this.customer = project.customer
+        this.referenceNumber = this.project +'-'+ this.customer   
+    
+        next()
+      })
+  }
+  
   next()
 }) 
 
-invoiceSchema.pre('validate', function(next) {
-  if (this.deadline && this.payment_term) {
-    next(Error('Only Deadline or Payment term should be filled, not both'))
+function saleProjectValidator() {
+  if (this.sale && this.project) {
+    return false
+  } else if (!this.sale && !this.project) {
+    return false
+  } else if (this.sale && !this.project) {
+    this.project = null
+    return true
+  } else if (!this.sale && this.project) {
+    this.sale = null
+    return true
   } else {
-    next()
+    return true
   }
-})
+}
 
-invoiceSchema.pre('validate', function(next) {
-  if (this.project && this.sale) {
-    next(Error('Only Project or Sale should be selected, not both'))
+function deadlinePaymentTermValidator() {
+  if (this.deadline && this.paymentTerm) {
+    return false
+  } else if (!this.deadline && !this.paymentTerm) {
+    return false
   } else {
-    next()
+    return true
   }
-})
+}
 
 invoiceSchema.methods.allUnpaidInvoicesByStatus = function() {
 }

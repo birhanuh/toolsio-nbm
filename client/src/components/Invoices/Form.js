@@ -22,7 +22,7 @@ class Form extends Component {
       project: this.props.invoice ? this.props.invoice.project : '',
       deadline: this.props.invoice ? moment(this.props.invoice.deadline, "MM-DD-YYYY") : moment(),
       paymentTerm: this.props.invoice ? this.props.invoice.paymentTerm : '',
-      intersetInArrears: this.props.invoice ? this.props.invoice.intersetInArrears : '',
+      interestInArrears: this.props.invoice ? this.props.invoice.interestInArrears : '',
       status: this.props.invoice ? this.props.invoice.contact.status : '',
       description: this.props.invoice ? this.props.invoice.contact.description : '',
       step: 1,
@@ -39,7 +39,7 @@ class Form extends Component {
         project: nextProps.invoice.project,
         deadline: moment(nextProps.invoice.deadline),
         paymentTerm: nextProps.invoice.paymentTerm,
-        intersetInArrears: nextProps.invoice.intersetInArrears,
+        interestInArrears: nextProps.invoice.interestInArrears,
         status: nextProps.invoice.contact.status,
         description: nextProps.invoice.contact.description
       })
@@ -85,9 +85,9 @@ class Form extends Component {
 
     // Validation
     if (this.isValid) { 
-      const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
+      const { _id, sale, project, deadline, paymentTerm, interestInArrears, status, description } = this.state
       this.setState({ isLoading: true })
-      this.props.saveInvoice({ _id, name, vatNumber, includeContactOnInvoice, contact, address })
+      this.props.saveInvoice({ _id, sale, project, deadline, paymentTerm, interestInArrears, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -99,7 +99,7 @@ class Form extends Component {
   } 
 
   render() {
-    const { _id, sale, project, deadline, paymentTerm, intersetInArrears, status, description, errors, isLoading } = this.state
+    const { _id, sale, project, deadline, paymentTerm, interestInArrears, status, description, errors, isLoading } = this.state
     
      const salesOptions = map(this.props.sales, (sale) => 
       <option key={sale._id} value={sale._id}>{sale.name}</option>
@@ -122,7 +122,7 @@ class Form extends Component {
               {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : <h1 className="ui header">{T.translate("invoices.form.new_invoice")}</h1>}
             </div>
             
-            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("invoices.form.select_sale_or_project")}</legend>
@@ -130,7 +130,7 @@ class Form extends Component {
               <SelectField
                 label={T.translate("invoices.form.sales")}
                 name="sale"
-                value={sale ? (typeof sale === 'object' ? sale._id : sale) : ''} 
+                value={sale} 
                 onChange={this.handleChange.bind(this)} 
                 error={errors.message && errors.message.errors && errors.message.errors.sale && errors.message.errors.sale.message}
                 formClass="inline field"
@@ -142,7 +142,7 @@ class Form extends Component {
                <SelectField
                 label={T.translate("invoices.form.projects")}
                 name="project"
-                value={project ? (typeof project === 'object' ? project._id : project) : ''} 
+                value={project} 
                 onChange={this.handleChange.bind(this)} 
                 error={errors.message && errors.message.errors && errors.message.errors.project && errors.message.errors.project.message}
                 formClass="inline field"
@@ -167,8 +167,8 @@ class Form extends Component {
 
               <SelectField
                 label={T.translate("invoices.form.payment_term")}
-                name="name" 
-                value={name} 
+                name="paymentTerm" 
+                value={paymentTerm} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Name"
                 error={errors.message && errors.message.errors && errors.message.errors.paymentTerm && errors.message.errors.paymentTerm.message}
@@ -181,11 +181,11 @@ class Form extends Component {
 
             <InputField
               label={T.translate("invoices.form.interest_in_arrears")}
-              name="intersetInArrears" 
-              value={intersetInArrears} 
+              name="interestInArrears" 
+              value={interestInArrears} 
               onChange={this.handleChange.bind(this)} 
               placeholder="0%"
-              error={errors.message && errors.message.errors && errors.message.errors.intersetInArrears && errors.message.errors.intersetInArrears.message}
+              error={errors.message && errors.message.errors && errors.message.errors.interestInArrears && errors.message.errors.interestInArrears.message}
                 formClass="inline field"
             />
             
@@ -200,11 +200,9 @@ class Form extends Component {
                 formClass="inline field"
 
                 options={[
-                  <option key="default" value="new" disabled>NEW</option>,
-                  <option key="on going" value="on going">ON GOING</option>,
-                  <option key="finished" value="finished">FINISHED</option>,
-                  <option key="delayed" value="delayed">DELAYED</option>,
-                  <option key="delivered" value="delivered">DELIVERED</option>
+                  <option key="default" value="pending" disabled>PENDING</option>,
+                  <option key="paid" value="paid">PAID</option>,
+                  <option key="overdue" value="overdue">OVERDUE</option>
                   ]
                 }
               />

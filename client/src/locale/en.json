@@ -449,8 +449,8 @@
       "interest_in_arrears": "Interest in arrears (in %)",
       "reference_number": "Reference number",
       "description": "Description",
-      "select_sale_or_project": "Select Sale or Project",
-      "select_payment_term_or_deadline": "Select either a Payment term or Deadline",
+      "select_sale_or_project": "Select either Sale or Project, not both.",
+      "select_payment_term_or_deadline": "Select either a Payment term or Deadline, not both.",
       "sale_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
       "project_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
       "flash": {

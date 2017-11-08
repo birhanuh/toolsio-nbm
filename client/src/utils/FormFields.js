@@ -40,7 +40,7 @@ export const TextAreaField = ({ name, value, id, label, error,
 } 
 
 export const SelectField = ({ options, name, value, label, error, 
-  placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
+  onChange, labelHorizontal, formClass}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>
       { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }

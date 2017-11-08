@@ -91,6 +91,7 @@ router.post('/:resource', ensureAuthenticated, function(req, res) {
   }
 
   controller.create(req.body, function(err, result) {
+    console.log('body: ', req.body)
     if (err) {
       res.status(500).json({ 
         errors: {

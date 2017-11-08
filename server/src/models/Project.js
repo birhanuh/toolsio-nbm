@@ -9,8 +9,8 @@ let projectSchema = new mongoose.Schema({
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "task" }],
   total: { type: Number, default: 0 },
 
-  createdAt: Date,
-  updatedAt: Date
+  createdAt: { type: Date },
+  updatedAt: { type: Date }
 })
 
 projectSchema.pre('validate', function (next) {

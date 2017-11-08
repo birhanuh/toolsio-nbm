@@ -10,6 +10,10 @@ import T from 'i18n-react'
 
 class Page extends Component {
 
+  componentDidMount() {
+    this.props.fetchInvoices()
+  }
+
   render() {
     return (
 

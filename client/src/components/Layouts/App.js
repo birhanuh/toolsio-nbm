@@ -28,7 +28,7 @@ import FlashMessagesList from '../../flash/FlashMessagesList'
 import 'semantic-ui-css/semantic.min.css'
 
 // CSS entry
-import '../../css/app.css'
+import '../../css/app.scss'
 
 // Images
 import logo from '../../images/logo-square.png' 

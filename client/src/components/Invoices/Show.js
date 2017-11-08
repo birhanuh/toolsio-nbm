@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessages'
 import { fetchInvoice, deleteInvoice } from '../../actions/invoiceActions'
 
@@ -97,6 +98,9 @@ class Show extends Component {
             <h1 className="ui header">{T.translate("invoices.show.header")}
               <div class="sub header">{sale || project}</div>
             </h1> 
+            <div className={classnames("ui uppercase tiny right ribbon label", {orange: status === 'pending', red: project.status === 'overdue', green: project.status === 'paid' })}> 
+              {status}
+            </div>
             <dl className="dl-horizontal">
               <dt>{T.translate("invoices.show.customer")}</dt>
               <dd>{sale.customer.name || project.customer.name}</dd>

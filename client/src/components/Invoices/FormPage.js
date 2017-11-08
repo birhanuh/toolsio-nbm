@@ -28,9 +28,9 @@ class FormPage  extends Component {
     this.props.fetchProjects()
   }
 
-  saveInvoice = ({ _id, sale, project, deadline, paymentTerm, intersetInArrears, status, description }) => {
+  saveInvoice = ({ _id, sale, project, deadline, paymentTerm, interestInArrears, status, description }) => {
     if (_id) {
-      return this.props.updateInvoice({ _id, sale, project, deadline, paymentTerm, intersetInArrears, status, description })
+      return this.props.updateInvoice({ _id, sale, project, deadline, paymentTerm, interestInArrears, status, description })
         .then(() => 
           { 
             this.setState({ redirect: true }) 
@@ -42,7 +42,7 @@ class FormPage  extends Component {
             this.context.router.history.push('/invoices')
         })   
     } else {        
-      return this.props.createInvoice({ _id, sale, project, deadline, paymentTerm, intersetInArrears, status, description })
+      return this.props.createInvoice({ _id, sale, project, deadline, paymentTerm, interestInArrears, status, description })
         .then(() => 
           { 
             this.setState({ redirect: true }) 
