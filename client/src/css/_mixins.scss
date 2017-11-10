@@ -33,11 +33,11 @@
 
 @mixin transition($options) {
   // e.g @include transition (2s ease-in)
-  -webkit-transition: opacity ($options);
-     -moz-transition: opacity ($options);
-       -o-transition: opacity ($options);
-      -ms-transition: opacity ($options);
-          transition: opacity ($options);
+  -webkit-transition: ($options);
+     -moz-transition: ($options);
+       -o-transition: ($options);
+      -ms-transition: ($options);
+          transition: ($options);
 }
 
 @mixin animation-delay($second) {

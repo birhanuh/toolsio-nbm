@@ -20,13 +20,22 @@ const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
   )} />
 )
 
-class NavigationBar extends Component {
+class HeaderNav extends Component {
   
   componentDidMount = () => {
     $('.ui.dropdown.item').dropdown({
       // you can use any ui transition
       transition: 'vertical flip'
     })
+  }
+
+   handleToggleBar = (e) => {
+    e.preventDefault()
+    console.log('clicked')
+    $(".ui.visible.sidebar").toggleClass('collapsed')
+    $('.ui.internal-page').toggleClass('collapsed')
+    $('.ui.footer.segment.internal-footer').toggleClass('collapsed')
+    $('.ui.fixed.menu.header-breadcrumb').toggleClass('collapsed')
   }
 
   logout(e) {
@@ -73,7 +82,7 @@ class NavigationBar extends Component {
               </Link>
             </div>
             <div className="item">
-              <i className="sidebar icon"></i>
+              <a onClick={this.handleToggleBar.bind(this)} href="#"><i className="sidebar icon"></i></a>
             </div>
           </div>
           
@@ -222,7 +231,7 @@ class NavigationBar extends Component {
   }
 }
 
-NavigationBar.propTypes = {
+HeaderNav.propTypes = {
   auth: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
 }
@@ -233,4 +242,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { logout })(NavigationBar)
+export default connect(mapStateToProps, { logout })(HeaderNav)

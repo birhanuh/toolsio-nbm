@@ -63,6 +63,13 @@ a {
   display: none;
 }
 
+.ui.menu .item a i.sidebar.icon  {
+  color: $white !important;
+  &:hover {
+    color: $white-turquoise !important;
+  }
+}
+
 .ui.secondary.inverted.menu .link.item, .ui.secondary.inverted.menu a.item  {
   text-transform: uppercase;
   color: $white !important;
@@ -213,12 +220,14 @@ nav.ui.menu {
   width: 190px;
   background: $dark-mid-night-blue;
   border: none;
+  @include transition(all .4s ease 0s);
   .item {    
     color: #d9d9d9;
     border-bottom: 1px solid $light-dark-grey;
     padding: 10px;
     font-weight: 600;
     text-transform: uppercase !important;
+    height: 35px;
   }
   .active.item, .active.item:hover, .active.item:focus {
     background: $body-background-color;
@@ -239,8 +248,53 @@ nav.ui.menu {
   }  
   .ui.segment.account {
     border-bottom: 1px solid $light-dark-grey;
+  }
+  .ui.segment.account p {
+    height: 18px;
   }  
 } 
+
+.ui.visible.sidebar.collapsed {
+  width: 100px;
+}
+
+// Toggle styles
+.ui.visible.sidebar.collapsed {
+  span {
+    visibility: collapse;
+    position: absolute;
+    opacity: 0;
+    -webkit-transition: opacity 600ms, visibility 600ms;
+            transition: opacity 600ms, visibility 600ms;
+  }
+  .account p {
+    visibility: collapse;
+    opacity: 0;
+    -webkit-transition: opacity 600ms, visibility 600ms;
+            transition: opacity 600ms, visibility 600ms;
+  }
+  i, span {
+    position: absolute;
+    left: 40px;
+    @include transition(all .4s ease 0s);
+  }
+}
+
+.ui.visible.sidebar {
+  span {
+    visibility: visible;
+    opacity: 1;
+    position: absolute;
+    -webkit-transition: opacity 600ms, visibility 600ms;
+            transition: opacity 600ms, visibility 600ms;
+  }
+  .account p {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity 600ms, visibility 600ms;
+            transition: opacity 600ms, visibility 600ms;
+  }
+}
 
 // Breadcrump
 .ui.breadcrumb .active.section {
@@ -888,6 +942,7 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
   }
   .ui.internal-page {
     margin-top: 100px;
+    @include transition(all .4s ease 0s);
   }
   .ui.visible.sidebar {
     margin-top: 48px !important;
@@ -903,6 +958,10 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
 @media (min-width: $screen-md) and (max-width: $screen-lg) {
   .ui.internal-page, .ui.footer.segment.internal-footer, .ui.fixed.menu.header-breadcrumb {
     margin-left: 190px;
+    @include transition(all .4s ease 0s);
+  }
+  .ui.internal-page.collapsed, .ui.footer.segment.internal-footer.collapsed, .ui.fixed.menu.header-breadcrumb.collapsed {
+    margin-left: 100px;
   }
   .ui.fixed.menu.header-breadcrumb .right.menu {
     margin-right: 190px;
@@ -913,6 +972,10 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
 @media (min-width: $screen-lg) {
   .ui.internal-page, .ui.footer.segment.internal-footer, .ui.fixed.menu.header-breadcrumb {
     margin-left: 190px;
+    @include transition(all .4s ease 0s);
+  }
+  .ui.internal-page.collapsed, .ui.footer.segment.internal-footer.collapsed, .ui.fixed.menu.header-breadcrumb.collapsed {
+    margin-left: 100px;
   }
   .ui.fixed.menu.header-breadcrumb .right.menu {
     margin-right: 190px;

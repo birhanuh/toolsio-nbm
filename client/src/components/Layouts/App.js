@@ -21,7 +21,7 @@ import InvoicesFormPage from '../Invoices/FormPage'
 import InvoicesShow from '../Invoices/Show'
 import requireAuth from '../../utils/requireAuth'
 
-import NavigationBar from './NavigationBar'
+import HeaderNav from './HeaderNav'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
 // Semantic CSS
@@ -47,7 +47,7 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
   <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
     <Link className={match ? 'active item' : 'item' } to={to}>
       <i className={icon}></i>
-      {label}
+      <span>{label}</span>
     </Link>
   )} />
 )
@@ -68,7 +68,7 @@ class App extends Component {
     return (
       <div className="pusher">
         
-        { !authPages && <NavigationBar /> }
+        { !authPages && <HeaderNav /> }
 
         { internalPages && 
           <div className="ui visible sidebar vertical menu">
