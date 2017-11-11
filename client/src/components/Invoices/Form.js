@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { InputField, SelectField, TextAreaField } from '../../utils/FormFields'
+import Steps from './Steps'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -92,6 +93,11 @@ class Form extends Component {
     }
   }
 
+  handleSteps = (arg, e) => {
+    e.preventDefault()
+  
+  }
+
   handleChangeDate(deadline) {
     this.setState({
       deadline: deadline
@@ -139,6 +145,8 @@ class Form extends Component {
                 salesOptions]}
             />
 
+             <div className="ui horizontal divider">Or</div>
+
              <SelectField
               label={T.translate("invoices.form.projects")}
               name="project"
@@ -151,6 +159,13 @@ class Form extends Component {
                 projectsOptions]}
             />
           </fieldset>
+
+          <div className="inline field mt-5"> 
+            <button className="ui button" onClick={this.handleSteps.bind(this)}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
+            <button className="ui primary button" onClick={this.handleSteps.bind(this)}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
+
+            <a href="#" onClick={this.handleSteps.bind(this, 'cancel')} className="ui negative visible-all-block mt-3">{T.translate("invoices.form.cancel")}</a>
+          </div>  
         </div>
       </div>      
     )
@@ -177,6 +192,8 @@ class Form extends Component {
               />
               <span>{errors.password}</span>
             </div>
+            
+            <div className="ui horizontal divider">Or</div>
 
             <SelectField
               label={T.translate("invoices.form.payment_term")}
@@ -229,6 +246,13 @@ class Form extends Component {
             placeholder={T.translate("invoices.form.description")}
             formClass="inline field"
           /> 
+
+          <div className="inline field mt-5"> 
+            <button className="ui button" onClick={this.handleSteps.bind(this)}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
+            <button className="ui primary button" onClick={this.handleSteps.bind(this)}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
+
+            <a href="#" onClick={this.handleSteps.bind(this, 'cancel')} className="ui negative visible-all-block mt-3">{T.translate("invoices.form.cancel")}</a>
+          </div>  
         </div>  
       </div>
     )
@@ -279,7 +303,7 @@ class Form extends Component {
           <br/>
 
           <div className="inline field">    
-            <button disabled={isLoading} className="ui primary button" onClick={this.handleSubmit.bind(this)}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.next")}</button>
+            <button disabled={isLoading} className="ui primary button" onClick={this.handleSubmit.bind(this)}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.save")}</button>
           </div>  
         </div>
       </div>
@@ -288,6 +312,8 @@ class Form extends Component {
     return (  
       <form className={classnames("ui form", { loading: isLoading })}>
         
+        <Steps /> 
+
         { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
         {saleAndProjectDetails}

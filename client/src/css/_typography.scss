@@ -101,3 +101,9 @@ a.text-warning:hover, a.text-warning:focus {
 a.text-danger:hover, a.text-danger:focus {
   color: $dark-red;
 }
+
+.ui.header .sub.header {
+  display: inline-block;
+  margin: 0 5px;
+}
+

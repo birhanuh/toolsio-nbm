@@ -130,7 +130,7 @@
     }
   },
   "users": {
-    "index": {
+    "page": {
       "header": "Users",
       "authorized_user": "Authorized user",
       "invite_user": "Invite User",

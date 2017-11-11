@@ -246,12 +246,11 @@ select.date {
   font-size: 1em;
 }
 
-.ui.form .inline.field> .header, .ui.form .inline.field>button {
+.ui.form .inline.field> .header, .ui.form .inline.field>button:first-child, .ui.form .inline.field>a {
   display: inline-block;
   margin-left: 27% !important;
   margin-top: 0;
   margin-bottom: 0;
-  vertical-align: middle;
 }
 .ui.form .field.error span, .ui.form .input.error span  {
   display: inherit;
@@ -277,6 +276,11 @@ select.date {
     border-color: #E0B4B4 !important;
     color: #9F3A38 !important;
   }
+}
+
+/* Invoice Steps */
+.steps .suitcase, .steps .cart {
+  font-size: 1.2em;
 }
 
 /* Extra mall devices (phones, less than 433px) */
