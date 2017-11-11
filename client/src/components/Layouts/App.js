@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
 
 import Dashboard from '../Dashboard/Page'
@@ -22,6 +22,7 @@ import InvoicesShow from '../Invoices/Show'
 import requireAuth from '../../utils/requireAuth'
 
 import HeaderNav from './HeaderNav'
+import Sidebar from './Sidebar'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
 // Semantic CSS
@@ -32,7 +33,6 @@ import '../../css/app.scss'
 
 // Images
 import logo from '../../images/logo-square.png' 
-import logoPlaceholderMedium from '../../images/logo-placeholder-medium.png'
 
 // Jquery
 import $ from 'jquery'
@@ -42,15 +42,6 @@ $.fn.sidebar = require('semantic-ui-sidebar')
 
 // Localization 
 import T from 'i18n-react'
-
-const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
-  <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
-    <Link className={match ? 'active item' : 'item' } to={to}>
-      <i className={icon}></i>
-      <span>{label}</span>
-    </Link>
-  )} />
-)
 
 class App extends Component {
   
@@ -71,19 +62,7 @@ class App extends Component {
         { !authPages && <HeaderNav /> }
 
         { internalPages && 
-          <div className="ui visible sidebar vertical menu">
-            <div className="ui center aligned vertical segment account">
-              <a href="/settings">
-                <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
-              </a>
-              <p className="m-t-s">Birhanu (Admin)</p>
-            </div>
-            <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboards.header")} />
-            <ActiveLink activeOnlyWhenExact to="/projects" icon="suitcase icon" label={T.translate("projects.page.header")} />
-            <ActiveLink activeOnlyWhenExact to="/sales" icon="cart icon" label={T.translate("sales.page.header")} />
-            <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.page.header")}/>
-            <ActiveLink activeOnlyWhenExact to="/invoices" icon="file text outline  icon" label={T.translate("invoices.page.header")}/>
-          </div>
+          <Sidebar />
         }
 
         <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable middle aligned center aligned grid auth-pages': authPages})}>          

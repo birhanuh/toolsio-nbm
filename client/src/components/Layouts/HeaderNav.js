@@ -31,7 +31,7 @@ class HeaderNav extends Component {
 
    handleToggleBar = (e) => {
     e.preventDefault()
-    console.log('clicked')
+    
     $(".ui.visible.sidebar").toggleClass('collapsed')
     $('.ui.internal-page').toggleClass('collapsed')
     $('.ui.footer.segment.internal-footer').toggleClass('collapsed')

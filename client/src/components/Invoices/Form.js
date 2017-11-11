@@ -113,116 +113,190 @@ class Form extends Component {
       <option key={key} value={value}>{value}</option>
     )
 
-    return (  
-       <div className="row">
-        <div className="ui text container ui segment">  
-
-          <form className={classnames("ui form", { loading: isLoading })}>
-            <div className="inline field"> 
-              {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : <h1 className="ui header">{T.translate("invoices.form.new_invoice")}</h1>}
-            </div>
-            
-            { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
-
-            <fieldset className="custom-fieldset">
-              <legend className="custom-legend">{T.translate("invoices.form.select_sale_or_project")}</legend>
-              
-              <SelectField
-                label={T.translate("invoices.form.sales")}
-                name="sale"
-                value={sale} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.message && errors.message.errors && errors.message.errors.sale && errors.message.errors.sale.message}
-                formClass="inline field"
-
-                options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_sale")}</option>,
-                  salesOptions]}
-              />
-
-               <SelectField
-                label={T.translate("invoices.form.projects")}
-                name="project"
-                value={project} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.message && errors.message.errors && errors.message.errors.project && errors.message.errors.project.message}
-                formClass="inline field"
-
-                options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_project")}</option>,
-                  projectsOptions]}
-              />
-            </fieldset>
-
-            <fieldset className="custom-fieldset">
-              <legend className="custom-legend">{T.translate("invoices.form.select_payment_term_or_deadline")}</legend>
-
-              <div  className={classnames("inline field", { error: !!errors.deadline })}>
-                <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
-                <DatePicker
-                  dateFormat="DD/MM/YYYY"
-                  selected={deadline}
-                  onChange={this.handleChangeDate.bind(this)}
-                />
-                <span>{errors.password}</span>
-              </div>
-
-              <SelectField
-                label={T.translate("invoices.form.payment_term")}
-                name="paymentTerm" 
-                value={paymentTerm} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder="Name"
-                error={errors.message && errors.message.errors && errors.message.errors.paymentTerm && errors.message.errors.paymentTerm.message}
-                  formClass="inline field"
-
-                options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_days")}</option>,
-                  paymentTermOptions]}
-              />
-            </fieldset>  
-
-            <InputField
-              label={T.translate("invoices.form.interest_in_arrears")}
-              name="interestInArrears" 
-              value={interestInArrears} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder="0%"
-              error={errors.message && errors.message.errors && errors.message.errors.interestInArrears && errors.message.errors.interestInArrears.message}
-                formClass="inline field"
-            />
-            
-            { _id &&
-              <SelectField
-                label={T.translate("invoices.form.status")}
-                name="status"
-                type="select"
-                value={status} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.message && errors.message.errors && errors.message.errors.status && errors.message['status'].message}
-                formClass="inline field"
-
-                options={[
-                  <option key="default" value="pending" disabled>PENDING</option>,
-                  <option key="paid" value="paid">PAID</option>,
-                  <option key="overdue" value="overdue">OVERDUE</option>
-                  ]
-                }
-              />
+    const saleAndProjectDetails = (
+      <div className="row">
+        <div className="ui text container ui segment"> 
+          <div className="inline field"> 
+            {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
+              <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
+                <div className="sub header">{T.translate("invoices.form.sale_and_project_details")}</div>
+              </h1>
             }
-
-            <TextAreaField
-              label={T.translate("invoices.form.description")}
-              name="description" 
-              value={description} 
+          </div>
+          
+          <fieldset className="custom-fieldset">
+            <legend className="custom-legend">{T.translate("invoices.form.select_sale_or_project")}</legend>
+            
+            <SelectField
+              label={T.translate("invoices.form.sales")}
+              name="sale"
+              value={sale} 
               onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("invoices.form.description")}
+              error={errors.message && errors.message.errors && errors.message.errors.sale && errors.message.errors.sale.message}
               formClass="inline field"
-            /> 
 
-            <div className="inline field">    
-              <button disabled={isLoading} className="ui primary button" onClick={this.handleSubmit.bind(this)}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.next")}</button>
-            </div>  
-          </form> 
+              options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_sale")}</option>,
+                salesOptions]}
+            />
+
+             <SelectField
+              label={T.translate("invoices.form.projects")}
+              name="project"
+              value={project} 
+              onChange={this.handleChange.bind(this)} 
+              error={errors.message && errors.message.errors && errors.message.errors.project && errors.message.errors.project.message}
+              formClass="inline field"
+
+              options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_project")}</option>,
+                projectsOptions]}
+            />
+          </fieldset>
+        </div>
+      </div>      
+    )
+
+    const invocieDetails = (
+      <div className="row">
+        <div className="ui text container ui segment"> 
+          <div className="inline field"> 
+            {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
+              <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
+                <div className="sub header">{T.translate("invoices.form.invoice_details")}</div>
+              </h1>
+            }
+          </div>
+          <fieldset className="custom-fieldset">
+            <legend className="custom-legend">{T.translate("invoices.form.select_payment_term_or_deadline")}</legend>
+
+            <div  className={classnames("inline field", { error: !!errors.deadline })}>
+              <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
+              <DatePicker
+                dateFormat="DD/MM/YYYY"
+                selected={deadline}
+                onChange={this.handleChangeDate.bind(this)}
+              />
+              <span>{errors.password}</span>
+            </div>
+
+            <SelectField
+              label={T.translate("invoices.form.payment_term")}
+              name="paymentTerm" 
+              value={paymentTerm} 
+              onChange={this.handleChange.bind(this)} 
+              placeholder="Name"
+              error={errors.message && errors.message.errors && errors.message.errors.paymentTerm && errors.message.errors.paymentTerm.message}
+                formClass="inline field"
+
+              options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_days")}</option>,
+                paymentTermOptions]}
+            />
+          </fieldset>  
+
+          <InputField
+            label={T.translate("invoices.form.interest_in_arrears")}
+            name="interestInArrears" 
+            value={interestInArrears} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder="0%"
+            error={errors.message && errors.message.errors && errors.message.errors.interestInArrears && errors.message.errors.interestInArrears.message}
+              formClass="inline field"
+          />
+          
+          { _id &&
+            <SelectField
+              label={T.translate("invoices.form.status")}
+              name="status"
+              type="select"
+              value={status} 
+              onChange={this.handleChange.bind(this)} 
+              error={errors.message && errors.message.errors && errors.message.errors.status && errors.message['status'].message}
+              formClass="inline field"
+
+              options={[
+                <option key="default" value="pending" disabled>PENDING</option>,
+                <option key="paid" value="paid">PAID</option>,
+                <option key="overdue" value="overdue">OVERDUE</option>
+                ]
+              }
+            />
+          }
+
+          <TextAreaField
+            label={T.translate("invoices.form.description")}
+            name="description" 
+            value={description} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder={T.translate("invoices.form.description")}
+            formClass="inline field"
+          /> 
         </div>  
       </div>
+    )
+
+    const confirmation = (
+      <div className="row">
+        <div className="ui text container ui segment"> 
+          <div className="inline field"> 
+            {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
+              <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
+                <div className="sub header">{T.translate("invoices.form.confirmation")}</div>
+              </h1>
+            }
+          </div> 
+          
+          <dl className="dl-horizontal">
+            {/*<dt>{T.translate("invoices.show.user")}</dt>
+            <dd>{invoice.user.first_name}</dd>*/}  
+            <dt>{T.translate("invoices.show.deadline")}</dt>
+            <dd>{deadline.toString()}</dd>
+            <dt>{T.translate("invoices.show.status")}</dt>
+            <dd><div className={classnames("ui uppercase tiny label", {orang: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
+            {status}
+          </div></dd>
+            <dt>{T.translate("invoices.show.payment_term")}</dt>
+            <dd>{paymentTerm}</dd>
+            <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
+            <dd>{interestInArrears}</dd>
+            <dt>{T.translate("invoices.show.description")}</dt>
+            <dd>{description}</dd>
+          </dl>  
+          <br/>
+
+          
+          {sale &&
+            <dl className="dl-horizontal">
+              <dt>{T.translate("invoices.form.sale")}</dt>
+              <dd>{sale.name}</dd>
+            </dl>
+          }
+          
+          {project &&
+            <dl className="dl-horizontal">
+              <dt>{T.translate("invoices.form.project")}</dt>
+              <dd>{project.name}</dd>
+            </dl>
+          }
+          <br/>
+
+          <div className="inline field">    
+            <button disabled={isLoading} className="ui primary button" onClick={this.handleSubmit.bind(this)}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.next")}</button>
+          </div>  
+        </div>
+      </div>
+    )
+
+    return (  
+      <form className={classnames("ui form", { loading: isLoading })}>
+        
+        { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+
+        {saleAndProjectDetails}
+
+        {invocieDetails}
+
+        {confirmation}
+
+      </form> 
     )
   }
 }

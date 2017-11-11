@@ -106,13 +106,13 @@ class Show extends Component {
               <dd>{sale.customer.name || project.customer.name}</dd>
               {/*<dt>{T.translate("invoices.show.user")}</dt>
               <dd>{invoice.user.first_name}</dd>*/}            
-              <dt>{T.translate("invoices.show.contact.date_of_an_invoice")}</dt>
+              <dt>{T.translate("invoices.show.date_of_an_invoice")}</dt>
               <dd>{createdAt}</dd>
               <dt>{T.translate("invoices.show.deadline")}</dt>
               <dd>{deadline}</dd>
-              <dt>{T.translate("invoices.show.address.payment_term")}</dt>
+              <dt>{T.translate("invoices.show.payment_term")}</dt>
               <dd>{paymentTerm}</dd>
-              <dt>{T.translate("invoices.show.interset_in_arrears")}</dt>
+              <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
               <dd>{intersetInArrears}</dd>
               <dt>{T.translate("invoices.show.reference_number")}</dt>
               <dd>{referenceNumber}</dd>
