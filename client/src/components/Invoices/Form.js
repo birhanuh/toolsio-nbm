@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import map from 'lodash/map'
+import isEmpty from 'lodash/isEmpty'
 import { Validation } from '../../utils'
 import { InputField, SelectField, TextAreaField } from '../../utils/FormFields'
 import Steps from './Steps'
@@ -19,14 +20,18 @@ class Form extends Component {
     super(props)
     this.state = {
       _id: this.props.invoice ? this.props.invoice._id : null,
-      sale: this.props.invoice ? this.props.invoice.sale : '',
-      project: this.props.invoice ? this.props.invoice.project : '',
-      deadline: this.props.invoice ? moment(this.props.invoice.deadline, "MM-DD-YYYY") : moment(),
-      paymentTerm: this.props.invoice ? this.props.invoice.paymentTerm : '',
-      interestInArrears: this.props.invoice ? this.props.invoice.interestInArrears : '',
-      status: this.props.invoice ? this.props.invoice.contact.status : '',
-      description: this.props.invoice ? this.props.invoice.contact.description : '',
-      step: 1,
+      step1: {
+        sale: this.props.invoice ? this.props.invoice.sale : '',
+        project: this.props.invoice ? this.props.invoice.project : '' 
+      },
+      step2: {
+        deadline: this.props.invoice ? moment(this.props.invoice.deadline, "MM-DD-YYYY") : moment(),
+        paymentTerm: this.props.invoice ? this.props.invoice.paymentTerm : '',
+        interestInArrears: this.props.invoice ? this.props.invoice.interestInArrears : '',
+        status: this.props.invoice ? this.props.invoice.contact.status : '',
+        description: this.props.invoice ? this.props.invoice.contact.description : ''
+      },
+      currentStep: 'step1',
       errors: {},
       isLoading: false
     }
@@ -36,19 +41,22 @@ class Form extends Component {
     if (nextProps.invoice) {
       this.setState({
         _id: nextProps.invoice._id,
-        sale: nextProps.invoice.sale,
-        project: nextProps.invoice.project,
-        deadline: moment(nextProps.invoice.deadline),
-        paymentTerm: nextProps.invoice.paymentTerm,
-        interestInArrears: nextProps.invoice.interestInArrears,
-        status: nextProps.invoice.contact.status,
-        description: nextProps.invoice.contact.description
+        step1: {
+          sale: nextProps.invoice.sale,
+          project: nextProps.invoice.project
+        },
+        step2: {
+          deadline: moment(nextProps.invoice.deadline),
+          paymentTerm: nextProps.invoice.paymentTerm,
+          interestInArrears: nextProps.invoice.interestInArrears,
+          status: nextProps.invoice.contact.status,
+          description: nextProps.invoice.contact.description
+        }
       })
     }
   }
 
   componentDidMount = () => {
-
 
   }
 
@@ -58,15 +66,47 @@ class Form extends Component {
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
 
-      this.setState({
-        [e.target.name]: e.target.value,
-        errors
-      })
+      if (e.target.name === "sale" || e.target.name === "project") {
+    
+        this.setState({
+          step1: { ...this.state.step1, [e.target.name]: e.target.value },
+          errors
+        })
+      } else if (e.target.name === "deadline" || e.target.name === "paymentTerm"
+        || e.target.name === "interestInArrears" || e.target.name === "status"
+        || e.target.name === "description" ) {
+
+        this.setState({
+          step2: { ...this.state.step2, [e.target.name]: e.target.value },
+          errors
+        })
+      } else {
+
+        this.setState({
+          [e.target.name]: e.target.value,
+          errors
+        })
+      }
     } else {
 
-      this.setState({
-        [e.target.name]: e.target.value
-      })
+     if (e.target.name === "sale" || e.target.name === "project") {
+    
+        this.setState({
+          step1: { ...this.state.step1, [e.target.name]: e.target.value }
+        })
+      } else if (e.target.name === "deadline" || e.target.name === "paymentTerm"
+        || e.target.name === "interestInArrears" || e.target.name === "status"
+        || e.target.name === "description" ) {
+
+        this.setState({
+          step2: { ...this.state.step2, [e.target.name]: e.target.value }
+        })
+      } else {
+
+        this.setState({
+          [e.target.name]: e.target.value,
+        })
+      }
     }
    
   }
@@ -85,17 +125,32 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid) { 
-      const { _id, sale, project, deadline, paymentTerm, interestInArrears, status, description } = this.state
+    if (this.isValid()) { 
+      const { _id } = this.state
+      const { sale, project } = this.state.step1
+      const { deadline, paymentTerm, interestInArrears, status, description } = this.state.step2
+
       this.setState({ isLoading: true })
       this.props.saveInvoice({ _id, sale, project, deadline, paymentTerm, interestInArrears, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 
-  handleSteps = (arg, e) => {
+  handleStep1 = (arg, e) => {
     e.preventDefault()
-  
+    
+    if ((this.state.step1.sale  !== '' || this.state.step1.project !== '') && isEmpty(this.state.errors)) {
+      this.setState({ currentStep: 'step2' })
+    }
+  }
+
+   handleStep2 = (arg, e) => {
+    e.preventDefault()
+    
+    if ((this.state.step2.deadline  !== '' || this.state.step2.paymentTerm !== '') && 
+      this.state.step2.interestInArrears !== '' && isEmpty(this.state.errors)) {
+      this.setState({ currentStep: 'step3' })
+    }
   }
 
   handleChangeDate(deadline) {
@@ -105,7 +160,7 @@ class Form extends Component {
   } 
 
   render() {
-    const { _id, sale, project, deadline, paymentTerm, interestInArrears, status, description, errors, isLoading } = this.state
+    const { _id, step1, step2, errors, isLoading, currentStep } = this.state
     
      const salesOptions = map(this.props.sales, (sale) => 
       <option key={sale._id} value={sale._id}>{sale.name}</option>
@@ -125,7 +180,7 @@ class Form extends Component {
           <div className="inline field"> 
             {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
               <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-                <div className="sub header">{T.translate("invoices.form.sale_and_project_details")}</div>
+                <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.sale_or_project")}</div>
               </h1>
             }
           </div>
@@ -136,7 +191,7 @@ class Form extends Component {
             <SelectField
               label={T.translate("invoices.form.sales")}
               name="sale"
-              value={sale} 
+              value={step1.sale} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.sale && errors.message.errors.sale.message}
               formClass="inline field"
@@ -150,7 +205,7 @@ class Form extends Component {
              <SelectField
               label={T.translate("invoices.form.projects")}
               name="project"
-              value={project} 
+              value={step1.project} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.project && errors.message.errors.project.message}
               formClass="inline field"
@@ -161,10 +216,10 @@ class Form extends Component {
           </fieldset>
 
           <div className="inline field mt-5"> 
-            <button className="ui button" onClick={this.handleSteps.bind(this)}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
-            <button className="ui primary button" onClick={this.handleSteps.bind(this)}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
+            <button className="ui button" onClick={this.handleStep1.bind(this, 'cancel')}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
+            <button className="ui primary button" onClick={this.handleStep1.bind(this, 'cancel')}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
 
-            <a href="#" onClick={this.handleSteps.bind(this, 'cancel')} className="ui negative visible-all-block mt-3">{T.translate("invoices.form.cancel")}</a>
+            <a href="#" onClick={this.handleStep1.bind(this, 'cancel')} className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</a>
           </div>  
         </div>
       </div>      
@@ -176,7 +231,7 @@ class Form extends Component {
           <div className="inline field"> 
             {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
               <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-                <div className="sub header">{T.translate("invoices.form.invoice_details")}</div>
+                <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.invoice_details")}</div>
               </h1>
             }
           </div>
@@ -187,7 +242,7 @@ class Form extends Component {
               <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
-                selected={deadline}
+                selected={step2.deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
               <span>{errors.password}</span>
@@ -198,7 +253,7 @@ class Form extends Component {
             <SelectField
               label={T.translate("invoices.form.payment_term")}
               name="paymentTerm" 
-              value={paymentTerm} 
+              value={step2.paymentTerm} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
               error={errors.message && errors.message.errors && errors.message.errors.paymentTerm && errors.message.errors.paymentTerm.message}
@@ -212,7 +267,7 @@ class Form extends Component {
           <InputField
             label={T.translate("invoices.form.interest_in_arrears")}
             name="interestInArrears" 
-            value={interestInArrears} 
+            value={step2.interestInArrears} 
             onChange={this.handleChange.bind(this)} 
             placeholder="0%"
             error={errors.message && errors.message.errors && errors.message.errors.interestInArrears && errors.message.errors.interestInArrears.message}
@@ -224,7 +279,7 @@ class Form extends Component {
               label={T.translate("invoices.form.status")}
               name="status"
               type="select"
-              value={status} 
+              value={step2.status} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.status && errors.message['status'].message}
               formClass="inline field"
@@ -241,17 +296,17 @@ class Form extends Component {
           <TextAreaField
             label={T.translate("invoices.form.description")}
             name="description" 
-            value={description} 
+            value={step2.description} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("invoices.form.description")}
             formClass="inline field"
           /> 
 
           <div className="inline field mt-5"> 
-            <button className="ui button" onClick={this.handleSteps.bind(this)}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
-            <button className="ui primary button" onClick={this.handleSteps.bind(this)}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
+            <button className="ui button" onClick={this.handleStep2.bind(this, 'cancel')}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
+            <button className="ui primary button" onClick={this.handleStep2.bind(this, 'cancel')}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
 
-            <a href="#" onClick={this.handleSteps.bind(this, 'cancel')} className="ui negative visible-all-block mt-3">{T.translate("invoices.form.cancel")}</a>
+            <a href="#" onClick={this.handleStep2.bind(this, 'cancel')} className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</a>
           </div>  
         </div>  
       </div>
@@ -263,7 +318,7 @@ class Form extends Component {
           <div className="inline field"> 
             {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
               <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-                <div className="sub header">{T.translate("invoices.form.confirmation")}</div>
+                <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.confirmation")}</div>
               </h1>
             }
           </div> 
@@ -272,32 +327,29 @@ class Form extends Component {
             {/*<dt>{T.translate("invoices.show.user")}</dt>
             <dd>{invoice.user.first_name}</dd>*/}  
             <dt>{T.translate("invoices.show.deadline")}</dt>
-            <dd>{deadline.toString()}</dd>
+            <dd>{step2.deadline.toString()}</dd>
             <dt>{T.translate("invoices.show.status")}</dt>
-            <dd><div className={classnames("ui uppercase tiny label", {orang: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
-            {status}
-          </div></dd>
+            <dd><div className="ui uppercase tiny label orange">pending</div></dd>
             <dt>{T.translate("invoices.show.payment_term")}</dt>
-            <dd>{paymentTerm}</dd>
+            <dd>{step2.paymentTerm ? step2.paymentTerm : '-'}</dd>
             <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
-            <dd>{interestInArrears}</dd>
+            <dd>{step2.interestInArrears}</dd>
             <dt>{T.translate("invoices.show.description")}</dt>
-            <dd>{description}</dd>
+            <dd>{step2.description}</dd>
           </dl>  
           <br/>
-
           
-          {sale &&
+          {step1.sale &&
             <dl className="dl-horizontal">
               <dt>{T.translate("invoices.form.sale")}</dt>
-              <dd>{sale.name}</dd>
+              <dd>{step1.sale.name}</dd>
             </dl>
           }
           
-          {project &&
+          {step1.project &&
             <dl className="dl-horizontal">
               <dt>{T.translate("invoices.form.project")}</dt>
-              <dd>{project.name}</dd>
+              <dd>{step1.project.name}</dd>
             </dl>
           }
           <br/>
@@ -310,19 +362,19 @@ class Form extends Component {
     )
 
     return (  
-      <form className={classnames("ui form", { loading: isLoading })}>
-        
+      <div className="ui form">
         <Steps /> 
+        {currentStep === 'step1' &&  saleAndProjectDetails}
+        {currentStep === 'step2' && invocieDetails}
 
-        { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+        <form className={classnames("ui form", { loading: isLoading })}>
 
-        {saleAndProjectDetails}
+          { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-        {invocieDetails}
+          {currentStep === 'step3' && confirmation}
 
-        {confirmation}
-
-      </form> 
+        </form> 
+      </div>
     )
   }
 }

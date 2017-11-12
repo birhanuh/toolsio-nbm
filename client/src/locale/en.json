@@ -382,7 +382,14 @@
       "cancel": "Cancel",
       "notice_add": "Customer added",
       "select_country": "-Select Country-",
-      "select_region": "-Select Region-",      
+      "select_region": "-Select Region-",   
+      "name": "Name is required.",
+      "vat_number_required": "Vat number is required.",
+      "phone_number_or_email_required": "Either Phone number or email should be filled.",
+      "street_required": "Street is required.",
+      "postal_code_required": "Postal code is required.",
+      "regoin_required": "Region is required.",
+      "country_required": "Country is required.",
       "flash": {
         "success_create": "Customer *{name}* is created!",
         "success_update": "Customer *{name}* is updated!"
@@ -437,7 +444,7 @@
       "user": "User",
       "confirmation": "Confirmation",
       "invoice_details": "Invoice details",
-      "sale_and_project_details": "Sale and Project details",
+      "sale_or_project": "Sale or Project",
       "select_customer": "-Select Customer-",
       "select_user": "-Select User-",
       "select_status": "-Select Status-",
@@ -455,6 +462,9 @@
       "select_payment_term_or_deadline": "Select either a Payment term or Deadline, not both.",
       "sale_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
       "project_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
+      "sale_or_project_required": "Select either Sale or Project.",
+      "deadline_or_payment_required": "Select either Deadline or Payment term.",
+      "intereset_in_arrears_required": "Interset in arrears is required.",
       "flash": {
         "success_create": "Invoice *{name}* created!",
         "success_update": "Invoice *{name}* is updated!"

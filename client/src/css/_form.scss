@@ -278,11 +278,6 @@ select.date {
   }
 }
 
-/* Invoice Steps */
-.steps .suitcase, .steps .cart {
-  font-size: 1.2em;
-}
-
 /* Extra mall devices (phones, less than 433px) */
 @media (max-width: $screen-xs) {
   .ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {

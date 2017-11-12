@@ -7,9 +7,11 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
 
 module.exports = {
-  entry: {
-    app: './src/index.js'
-  },  
+  entry: [
+    // We ship a few polyfills by default:
+    require.resolve('./polyfills'),
+    './src/index.js'
+  ],  
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),

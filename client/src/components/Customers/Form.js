@@ -82,6 +82,7 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
+    console.info('target: ', !!this.state.errors[e.target.name])
     if (!!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)

@@ -14,18 +14,13 @@ let invoiceSchema = new mongoose.Schema({
   interestInArrears: { type: Number, required: [true, "Interset in arrears is required."] },
   status: { type: String, required: [true, "Status is required."] },
   description: { type: String },
-  project: { type: mongoose.Schema.Types.ObjectId, ref: "project", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
-  sale: { type: mongoose.Schema.Types.ObjectId, ref: "sale", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
+  project: { type: mongoose.Schema.Types.ObjectId, required: false, default: null, ref: "project", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
+  sale: { type: mongoose.Schema.Types.ObjectId, required: false, default: null, ref: "sale", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
   referenceNumber: { type: String, required: true },
 
   createdAt: { type: Date },
   updatedAt: {type: Date }
 })
-
-invoiceSchema.pre('validate', function (next) {
-  this.status = "pending"
-  next()
-}) 
 
 invoiceSchema.pre('save', function(next){
   let now = new Date()
@@ -33,24 +28,23 @@ invoiceSchema.pre('save', function(next){
   if (!this.createdAt) {
     this.createdAt = now
   }
+
   next()
 })
 
-invoiceSchema.pre('validate', function (next) {
+invoiceSchema.pre('validate', function (next, done) {
 
-  if (this.sale) {
-    
+  if (this.sale !== null) {
     Sale.findById(this.sale)
       .then(sale => {
-
         this.customer = sale.customer
         this.referenceNumber = this.sale +'-'+ this.customer
-
-        next()
+        console.log('customer1: ', this.customer)
+        done()
       })
   } 
 
-  if (this.project) {
+  if (this.project !== null) {
     
     Project.findById(this.project)
       .then(project => {
@@ -58,9 +52,12 @@ invoiceSchema.pre('validate', function (next) {
         this.customer = project.customer
         this.referenceNumber = this.project +'-'+ this.customer   
     
-        next()
+        done()
       })
   }
+  console.log('customer2: ', this.customer)
+  // Set initial value
+  this.status = "pending"
   
   next()
 }) 
@@ -92,9 +89,11 @@ function deadlinePaymentTermValidator() {
 }
 
 invoiceSchema.methods.allUnpaidInvoicesByStatus = function() {
+
 }
 
 invoiceSchema.methods.unpaidInvoicesByInvitedUsers = function() {
+
 }
 
 let Invoice = module.exports = mongoose.model('invoice', invoiceSchema)

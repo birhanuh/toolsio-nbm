@@ -24,7 +24,7 @@ export default function Sidebar() {
         <a href="/settings">
           <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
         </a>
-        <p className="mt-3">Birhanu (Admin)</p>
+        <p className="mt-3 mb-2">Birhanu (Admin)</p>
       </div>
       <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboards.header")} />
       <ActiveLink activeOnlyWhenExact to="/projects" icon="suitcase icon" label={T.translate("projects.page.header")} />

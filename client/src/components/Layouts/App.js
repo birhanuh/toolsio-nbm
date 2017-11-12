@@ -40,9 +40,6 @@ import $ from 'jquery'
 // Sidebar
 $.fn.sidebar = require('semantic-ui-sidebar')
 
-// Localization 
-import T from 'i18n-react'
-
 class App extends Component {
   
   componentDidMount = () => {

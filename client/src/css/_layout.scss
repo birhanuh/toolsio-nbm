@@ -296,6 +296,15 @@ nav.ui.menu {
   }
 }
 
+// Steps
+.ui.steps .step.active .title {
+  color: inherit;
+}
+
+.steps .suitcase, .steps .cart {
+  font-size: 1.2em;
+}
+
 // Breadcrump
 .ui.breadcrumb .active.section {
   font-weight: 400;
@@ -929,7 +938,7 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
   .dl-horizontal {
     dt {
       float: left;
-      width: 120px;
+      width: 130px;
       overflow: hidden;
       clear: left;
       text-align: right;
@@ -937,7 +946,7 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
       white-space: nowrap;
     }
     dd {
-      margin-left: 140px;
+      margin-left: 150px;
     }
   }
   .ui.internal-page {
