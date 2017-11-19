@@ -32,35 +32,30 @@ invoiceSchema.pre('save', function(next){
   next()
 })
 
-invoiceSchema.pre('validate', function (next, done) {
+invoiceSchema.pre('validate', function(next) {
 
-  if (this.sale !== null) {
-    Sale.findById(this.sale)
-      .then(sale => {
-        this.customer = sale.customer
-        this.referenceNumber = this.sale +'-'+ this.customer
-        console.log('customer1: ', this.customer)
-        done()
-      })
+  let classContextThis = this
+
+  if (this.sale) {
+    Sale.findOne({_id: this.sale}).exec(function (err, sale){    
+      classContextThis.customer = sale.customer
+      classContextThis.referenceNumber = classContextThis.sale +'-'+ classContextThis.customer
+    })   
   } 
 
-  if (this.project !== null) {
-    
-    Project.findById(this.project)
-      .then(project => {
-            
-        this.customer = project.customer
-        this.referenceNumber = this.project +'-'+ this.customer   
-    
-        done()
-      })
+  if (this.project) {    
+    let project = Sale.findOne({_id: this.project})
+
+    this.project = project.customer
+    this.referenceNumber = this.project +'-'+ this.customer
   }
-  console.log('customer2: ', this.customer)
+
+  console.log('customer: ', this.customer)
   // Set initial value
   this.status = "pending"
   
   next()
-}) 
+})
 
 function saleProjectValidator() {
   if (this.sale && this.project) {

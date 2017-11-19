@@ -125,7 +125,7 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid()) { 
+    if (true) { 
       const { _id } = this.state
       const { sale, project } = this.state.step1
       const { deadline, paymentTerm, interestInArrears, status, description } = this.state.step2
@@ -361,7 +361,8 @@ class Form extends Component {
       </div>
     )
 
-    return (  
+    return ( 
+    /* 
       <div className="ui form">
         <Steps /> 
         {currentStep === 'step1' &&  saleAndProjectDetails}
@@ -374,7 +375,21 @@ class Form extends Component {
           {currentStep === 'step3' && confirmation}
 
         </form> 
-      </div>
+      </div> */
+
+      <div className="ui form">
+        <Steps /> 
+
+        <form className={classnames("ui form", { loading: isLoading })}>
+
+          { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+
+          
+          {saleAndProjectDetails}
+          {invocieDetails}
+          {confirmation}
+        </form> 
+      </div> 
     )
   }
 }

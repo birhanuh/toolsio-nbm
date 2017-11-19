@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
@@ -7,11 +6,9 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
 
 module.exports = {
-  entry: [
-    // We ship a few polyfills by default:
-    require.resolve('./polyfills'),
-    './src/index.js'
-  ],  
+  entry: {
+    app: [require.resolve('./polyfills'), './src/index.js']
+  },  
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
