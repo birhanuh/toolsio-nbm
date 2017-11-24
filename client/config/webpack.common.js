@@ -14,17 +14,12 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './src'
-  },
   plugins: [
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     // In development, this will be an empty string.
     new InterpolateHtmlPlugin({
-      'NODE_ENV': 'development',
       'PUBLIC_URL': ''
     }),
     // Generates an `index.html` file with the <script> injected.
@@ -41,27 +36,7 @@ module.exports = {
     // makes the discovery automatic so you don't have to restart.
     // See https://github.com/facebookincubator/create-react-app/issues/186
     new WatchMissingNodeModulesPlugin('./node_modules')
-  ],  
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    compress: true,
-    port: 3000,
-    proxy: {
-     '/**': {
-        target: 'http://localhost:8080/',
-        changeOrigin: true,
-        bypass: function(req, res, proxyOptions) {
-          if (req.headers.accept.indexOf("html") !== -1) {
-            return "/index.html"
-          }
-        }
-     },
-    },
-    overlay: {
-     warnings: false,
-     errors: true
-    }
-  },
+  ], 
   module: {
     rules: [
       { 
