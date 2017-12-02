@@ -7,7 +7,8 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 
 module.exports = {
   entry: {
-    app: [require.resolve('./polyfills'), './src/index.js']
+    polyfills: './config/polyfills',
+    app: './src/index.js'
   },  
   output: {
     filename: '[name].bundle.js',

@@ -22,7 +22,7 @@ let invoiceSchema = new mongoose.Schema({
   updatedAt: {type: Date }
 })
 
-invoiceSchema.pre('save', function(next){
+invoiceSchema.pre('save', function(next) {
   let now = new Date()
   this.updatedAt = now
   if (!this.createdAt) {
@@ -32,35 +32,40 @@ invoiceSchema.pre('save', function(next){
   next()
 })
 
-invoiceSchema.pre('validate', function(next) {
+invoiceSchema.pre('validate', async function(next) {
 
   let classContextThis = this
 
   if (this.sale) {
-    Sale.findOne({_id: this.sale}).exec(function (err, sale){    
-      classContextThis.customer = sale.customer
-      classContextThis.referenceNumber = classContextThis.sale +'-'+ classContextThis.customer
-    })   
+    let sale = await getSaleById(this.sale)
+
+    this.customer = sale.customer
+    this.referenceNumber = this.sale +'-'+ this.customer 
   } 
 
   if (this.project) {    
-    let project = Sale.findOne({_id: this.project})
+    let project = await getProjectById(this.project)
 
-    this.project = project.customer
+    this.customer = project.customer
     this.referenceNumber = this.project +'-'+ this.customer
   }
 
-  console.log('customer: ', this.customer)
   // Set initial value
   this.status = "pending"
   
   next()
 })
 
+function getSaleById(id) {
+  return Sale.findById(id)
+}
+
+function getProjectById(id) {
+  return Project.findById(id)
+}
+
 function saleProjectValidator() {
   if (this.sale && this.project) {
-    return false
-  } else if (!this.sale && !this.project) {
     return false
   } else if (this.sale && !this.project) {
     this.project = null

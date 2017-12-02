@@ -15,6 +15,7 @@ class Page extends Component {
   }
 
   render() {
+    console.log('invoices', this.props.invoices)
     return (
 
       <div className="row column">  
