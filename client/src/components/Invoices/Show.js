@@ -21,13 +21,16 @@ class Show extends Component {
     super(props)
     this.state = {
       _id: this.props.invoice ? this.props.invoice._id : null,
-      sale: this.props.invoice ? this.props.invoice.sale : '',
-      project: this.props.invoice ? this.props.invoice.project : '',
+      sale: this.props.invoice ? this.props.invoice.sale : null,
+      project: this.props.invoice ? this.props.invoice.project : null,
+      customer: this.props.invoice ? this.props.invoice.customer : null,
       deadline: this.props.invoice ? this.props.invoice.deadline : '',
+      dateOfAnInvoice: this.props.invoice ? this.props.invoice.createdAt: '',
       paymentTerm: this.props.invoice ? this.props.invoice.paymentTerm : '',
       intersetInArrears: this.props.invoice ? this.props.invoice.intersetInArrears : '',
-      status: this.props.invoice ? this.props.invoice.contact.status : '',
-      description: this.props.invoice ? this.props.invoice.contact.description : ''
+      status: this.props.invoice ? this.props.invoice.status : '',
+      referenceNumber: this.props.invoice ? this.props.invoice.referenceNumber : '',
+      description: this.props.invoice ? this.props.invoice.description : ''
     }
   }
 
@@ -45,12 +48,14 @@ class Show extends Component {
         _id: nextProps.invoice._id,
         sale: nextProps.invoice.sale,
         project: nextProps.invoice.project,
-        date_of_an_invoice: nextProps.invoice.date_of_an_invoice,
+        customer: nextProps.invoice.customer,
         deadline: nextProps.invoice.deadline,
+        dateOfAnInvoice: nextProps.invoice.dateOfAnInvoice,
         paymentTerm: nextProps.invoice.paymentTerm,
         intersetInArrears: nextProps.invoice.intersetInArrears,
-        status: nextProps.invoice.contact.status,
-        description: nextProps.invoice.contact.description
+        status: nextProps.invoice.status,
+        referenceNumber: nextProps.invoice.referenceNumber,
+        description: nextProps.invoice.description
       })
     }
   }
@@ -89,35 +94,35 @@ class Show extends Component {
   }
 
   render() {
-    const { _id, sale, project, deadline, paymentTerm, intersetInArrears, status, referenceNumber, description, createdAt } = this.state
+    const { _id, sale, project, customer, dateOfAnInvoice, deadline, paymentTerm, intersetInArrears, status, referenceNumber, description, createdAt } = this.state
     
     return (
       <div className="ui stackable grid">
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className="ui header">{T.translate("invoices.show.header")}
-              <div class="sub header">{sale || project}</div>
+              <div className="sub header">{sale && sale.name || project && project.name}</div>
             </h1> 
-            <div className={classnames("ui uppercase tiny right ribbon label", {orange: status === 'pending', red: project.status === 'overdue', green: project.status === 'paid' })}> 
+            <div className={classnames("ui uppercase tiny right ribbon label", {orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
               {status}
             </div>
             <dl className="dl-horizontal">
               <dt>{T.translate("invoices.show.customer")}</dt>
-              <dd>{sale.customer.name || project.customer.name}</dd>
+              <dd>{customer && customer.name}</dd>
               {/*<dt>{T.translate("invoices.show.user")}</dt>
               <dd>{invoice.user.first_name}</dd>*/}            
               <dt>{T.translate("invoices.show.date_of_an_invoice")}</dt>
               <dd>{createdAt}</dd>
               <dt>{T.translate("invoices.show.deadline")}</dt>
-              <dd>{deadline}</dd>
+              <dd>{deadline ? deadline : '-'}</dd>
               <dt>{T.translate("invoices.show.payment_term")}</dt>
-              <dd>{paymentTerm}</dd>
+              <dd>{paymentTerm ? paymentTerm : ''}</dd>
               <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
-              <dd>{intersetInArrears}</dd>
+              <dd>{intersetInArrears ? intersetInArrears : ''}</dd>
               <dt>{T.translate("invoices.show.reference_number")}</dt>
               <dd>{referenceNumber}</dd>
               <dt>{T.translate("invoices.show.description")}</dt>
-              <dd>{description}</dd>
+              <dd>{description ? description : '-'}</dd>
             </dl>  
             <br/>
 
@@ -177,8 +182,8 @@ class Show extends Component {
 
             <div className="ui divider"></div>
 
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("button.delete")}</button>
-            <Link to={`/invoices/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("button.edit")}</Link>
+            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("invoices.form.delete")}</button>
+            <Link to={`/invoices/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.form.edit")}</Link>
           </div>    
         </div>
 
@@ -188,8 +193,8 @@ class Show extends Component {
             <p>{T.translate("invoices.show.confirmation_msg")}</p>
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("button.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("button.delete")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("invoices.form.cancel")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("invoices.form.delete")}</button>
           </div>
         </div>
       </div>

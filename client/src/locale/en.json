@@ -380,6 +380,7 @@
       "save": "Save",
       "delete": "Delete",
       "cancel": "Cancel",
+      "edit": "Edit",
       "notice_add": "Customer added",
       "select_country": "-Select Country-",
       "select_region": "-Select Region-",   
@@ -435,12 +436,23 @@
       "save": "Save",
       "delete": "Delete",
       "cancel": "Cancel",
+      "edit": "Edit",
       "next": "Next",
       "previous": "Previous",
       "sales": "Sales",
       "projects": "Projects",
-      "sale": "Sale",
-      "project": "Project",
+      "sale": {
+        "header": "Sale",
+        "name": "Name",
+        "status": "status",
+        "customer": "customer"
+      },
+      "project": {
+        "header": "Project",
+        "name": "Name",
+        "status": "status",
+        "customer": "customer"
+      },
       "user": "User",
       "confirmation": "Confirmation",
       "invoice_details": "Invoice details",

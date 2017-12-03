@@ -31,6 +31,8 @@ class Form extends Component {
         status: this.props.invoice ? this.props.invoice.contact.status : '',
         description: this.props.invoice ? this.props.invoice.contact.description : ''
       },
+      sale: null,
+      project: null,
       currentStep: 'step1',
       errors: {},
       isLoading: false
@@ -144,13 +146,23 @@ class Form extends Component {
     }
   }
 
-   handleStep2 = (arg, e) => {
+  handleStep2 = (arg, e) => {
     e.preventDefault()
     
     if ((this.state.step2.deadline  !== '' || this.state.step2.paymentTerm !== '') && 
       this.state.step2.interestInArrears !== '' && isEmpty(this.state.errors)) {
       this.setState({ currentStep: 'step3' })
     }
+
+    const sale = this.props.sales.find(item => item._id === this.state.step1.sale ) 
+    this.setState({
+      sale: sale
+    })
+
+    const project = this.props.projects.find(item => item._id === this.state.step1.project ) 
+    this.setState({
+      project: project
+    })
   }
 
   handleChangeDate(deadline) {
@@ -160,7 +172,7 @@ class Form extends Component {
   } 
 
   render() {
-    const { _id, step1, step2, errors, isLoading, currentStep } = this.state
+    const { _id, step1, step2, sale, project, errors, isLoading, currentStep } = this.state
     
      const salesOptions = map(this.props.sales, (sale) => 
       <option key={sale._id} value={sale._id}>{sale.name}</option>
@@ -337,20 +349,37 @@ class Form extends Component {
             <dt>{T.translate("invoices.show.description")}</dt>
             <dd>{step2.description}</dd>
           </dl>  
-          <br/>
           
-          {step1.sale &&
-            <dl className="dl-horizontal">
-              <dt>{T.translate("invoices.form.sale")}</dt>
-              <dd>{step1.sale.name}</dd>
-            </dl>
+          {sale &&
+            <div>
+              <div className="inline field"> 
+                <h2 className="ui header">{T.translate("invoices.form.sale.header")}</h2>
+              </div>
+              <dl className="dl-horizontal">
+                <dt>{T.translate("invoices.form.sale.name")}</dt>
+                <dd>{sale.name}</dd>
+                <dt>{T.translate("invoices.form.sale.status")}</dt>
+                <dd>{sale.status}</dd>
+                <dt>{T.translate("invoices.form.sale.customer")}</dt>
+                <dd>{sale.customer.name}</dd>
+              </dl>
+            </div>
           }
           
-          {step1.project &&
-            <dl className="dl-horizontal">
-              <dt>{T.translate("invoices.form.project")}</dt>
-              <dd>{step1.project.name}</dd>
-            </dl>
+          {project &&
+            <div>
+              <div className="inline field"> 
+                <h2 className="ui header">{T.translate("invoices.form.project.header")}</h2>
+              </div>
+              <dl className="dl-horizontal">
+                <dt>{T.translate("invoices.form.project.name")}</dt>
+                <dd>{project.name}</dd>
+                <dt>{T.translate("invoices.form.project.status")}</dt>
+                <dd>{project.status}</dd>
+                <dt>{T.translate("invoices.form.project.customer")}</dt>
+                <dd>{project.customer.name}</dd>
+              </dl>
+            </div>
           }
           <br/>
 

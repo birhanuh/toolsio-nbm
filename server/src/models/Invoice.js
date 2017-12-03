@@ -8,7 +8,6 @@ import Item from'./item'
 
 let invoiceSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "customer", required: [true, "Customer is required."] },
-  date_of_an_invoice: { type: Date, default: Date.now },
   deadline: { type: Date, validate: { validator: deadlinePaymentTermValidator, message: 'Select either Deadline or Payment term.'} },
   paymentTerm: { type: Number, validate: { validator: deadlinePaymentTermValidator, message: 'Select either Deadline or Payment term.'} },
   interestInArrears: { type: Number, required: [true, "Interset in arrears is required."] },
