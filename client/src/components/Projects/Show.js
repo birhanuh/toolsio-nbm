@@ -122,19 +122,19 @@ class Show extends Component {
             
             <div className="ui divider"></div>
 
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("button.delete")}</button>
-            <Link to={`/projects/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("button.edit")}</Link>
+            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("projects.show.delete")}</button>
+            <Link to={`/projects/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("projects.show.edit")}</Link>
           </div>    
         </div>
 
         <div className="ui small modal project">
           <div className="header">Confirmation</div>
           <div className="content">
-            <p>{T.translate("projects.show.confirmation_msg")}</p>
+            <p className="red">{T.translate("projects.show.confirmation_msg")}</p>
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("button.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("button.delete")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("projects.show.cancel")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("projects.show.delete")}</button>
           </div>
         </div>
       </div>

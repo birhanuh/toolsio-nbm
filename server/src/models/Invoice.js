@@ -33,8 +33,6 @@ invoiceSchema.pre('save', function(next) {
 
 invoiceSchema.pre('validate', async function(next) {
 
-  let classContextThis = this
-
   if (this.sale) {
     let sale = await getSaleById(this.sale)
 

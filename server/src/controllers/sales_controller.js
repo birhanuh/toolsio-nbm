@@ -63,6 +63,16 @@ export default {
         }
         callback(null, null)
       })
+
+       // Remove relateded invoice
+      Invoice.remove({ project: id }, function(err, invoice) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, null)
+      })
+
     })
   }
 }

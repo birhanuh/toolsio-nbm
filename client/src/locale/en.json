@@ -244,6 +244,9 @@
       "invoice": "Invoice",
       "tasks": "Tasks",
       "total": "Total",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
       "confirmation_msg": "Are you sure to delete this Project?",
       "flash": {
         "success_delete": "Project *{name}* is deleted",
@@ -252,6 +255,8 @@
     },
     "tasks": {
       "header": "Tasks",
+      "delete": "Delete",
+      "cancel": "Cancel",
       "form": {
         "header": "Task",
         "name": "Name",
@@ -317,8 +322,7 @@
         "success_create": "Sale *{name}* is created!",
         "success_update": "Sale *{name}* is updated!"
       }
-    },
-    
+    },    
     "show": {
       "header": "Sale",
       "name": "name",
@@ -332,6 +336,9 @@
       "invoice": "Invoice",
       "items": "Items",
       "total": "Total",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
       "confirmation_msg": "Are you sure to delete this sale?",
       "flash": {
         "success_delete": "Sale *{name}* is deleted!",
@@ -340,6 +347,8 @@
     },
     "items": {
       "header": "Items",
+      "delete": "Delete",
+      "cancel": "Cancel",
       "form": {        
         "name": "Name",
         "quantity": "Quantity",
@@ -399,6 +408,9 @@
     "show": {
       "name": "Name",
       "vat_number": "Vat number",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
       "contact": {
         "header": "Contact",
         "phone_number": "Phone number",
@@ -485,6 +497,8 @@
     "show": {
       "header": "Invoice",
       "name": "Name",
+      "sale": "Sale",
+      "project": "Project",
       "sale_project": "Sale/Project",
       "invoice_for": "Invoice for",
       "date_of_an_invoice": "Date of an invoice",
@@ -500,10 +514,26 @@
       "interest_in_arrears": "Interest in arrears",
       "reference_number": "Reference number",
       "description": "Description",
-      "list": "List",
       "view": "View",
       "edit_project": "Edit Project",
       "edit_sale": "Edit Sale",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "items": {
+        "name": "Name",
+        "unit": "Unit",
+        "quantity": "Quantity",
+        "vat": "Vat",
+        "price": "Price"
+      },
+      "tasks": {
+        "name": "Name",
+        "payment_type": "Payment type",
+        "hours": "Hours",
+        "vat": "Vat",
+        "price": "Price"
+      },
       "confirmation_msg": "Are you sure to delete this invoice?",      
       "flash": {
         "success_delete": "Invoice *{name}* is deleted!",

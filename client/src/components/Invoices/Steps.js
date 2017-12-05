@@ -1,14 +1,15 @@
 import React from 'react'
+import classnames from 'classnames'
 
 // Localization 
 import T from 'i18n-react'
 
-export default function Steps() {
+export default function Steps({currentStep}) {
   return (
     <div className="row mb-4">
       <div className="ui text container"> 
         <div className="ui small steps">
-          <div className="step">
+          <div className={classnames("step", {active: currentStep === 'step1'})}>
             <div>
               <i className="suitcase icon"></i><br/>
               <i className="cart icon"></i>
@@ -17,13 +18,13 @@ export default function Steps() {
               <div className="title">{T.translate("invoices.form.sale_or_project")}</div>
             </div>
           </div>
-          <div className="active step">
+          <div className={classnames("step", {active: currentStep === 'step2'})}>
             <i className="file text icon"></i>
             <div className="content">
               <div className="title">{T.translate("invoices.form.invoice_details")}</div>
             </div>
           </div>
-          <div className="disabled step">
+          <div className={classnames("step", {active: currentStep === 'step3'})}>
             <i className="info icon"></i>
             <div className="content">
               <div className="title">{T.translate("invoices.form.confirmation")}</div>

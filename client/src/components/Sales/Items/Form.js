@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { createItem, updateItem, deleteItem } from '../../../actions/saleActions'
 import { addFlashMessage } from '../../../actions/flashMessages'
-import { AddElement, ShowEditElement } from './TrElement'
+import { AddElement, ShowEditElement } from './Tr'
 
 // Localization 
 import T from 'i18n-react'
@@ -324,11 +324,11 @@ class Item extends Component {
         <div className="ui small modal item">
           <div className="header">Confirmation</div>
           <div className="content">
-            <p>{T.translate("sales.items.form.confirmation_msg")}</p>
+            <p className="red">{T.translate("sales.items.form.confirmation_msg")}</p>
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("button.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.itemToBeDeleated)}>{T.translate("button.delete")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.items.cancel")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.itemToBeDeleated)}>{T.translate("sale.items.delete")}</button>
           </div>
         </div>
       </form>

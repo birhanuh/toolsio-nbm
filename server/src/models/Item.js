@@ -14,8 +14,9 @@ let itemSchema = new mongoose.Schema({
 })
 
 itemSchema.post('save', function(doc, next) {
+
   // Update related Project after saving Task
-  Sale.findByIdAndUpdate(this._creator, { $push: { items: this._id} }, { new: true }, function(err, sale) {
+  Sale.findByIdAndUpdate(this._creator, { $push: {items: this._id}, $inc: {total: this.price} }, { new: true }, function(err, sale) {
     if (err) {
       errors: {
         cant_update_sale: {
@@ -23,7 +24,6 @@ itemSchema.post('save', function(doc, next) {
         } 
       }
     }
-    project.total = project.total += this.price
   })
 
   next()

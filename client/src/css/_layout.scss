@@ -251,7 +251,10 @@ nav.ui.menu {
   }
   .ui.segment.account p {
     height: 18px;
-  }  
+  }
+  .ui.segment.account .image {
+    background: #ffffff;
+  }    
 } 
 
 .ui.visible.sidebar.collapsed {
@@ -891,6 +894,18 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
 .ui.two.cards.sales, .ui.two.cards.projects {
   .card a.ui.header {
     margin-top: -20px;
+  }
+}
+
+// Invoices
+.invoice.show {
+  .ui.huge.corner {
+    font-size: 1.62857143rem;
+  }
+  .corner p {
+    font-size: 0.6em;
+    margin: 23px auto 15px 15px;
+    @include transform-rotate(45deg) 
   }
 }
 

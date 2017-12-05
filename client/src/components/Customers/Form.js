@@ -33,7 +33,11 @@ class Form extends Component {
         phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
         email: this.props.customer ? this.props.customer.contact.email : ''
       },
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false
     }
   }
@@ -133,8 +137,13 @@ class Form extends Component {
   isValid() {
     const { errors, isValid } = Validation.validateCustomerInput(this.state)
 
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ 
+        errors: updatedErrors 
+      })
     }
 
     return isValid;
@@ -144,7 +153,7 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid) { 
+    if (this.isValid()) { 
       const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
       this.setState({ isLoading: true })
       this.props.saveCustomer({ _id, name, vatNumber, includeContactOnInvoice, contact, address })

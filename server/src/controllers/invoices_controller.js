@@ -3,7 +3,7 @@ import Invoice from '../models/invoice'
 export default {
   
   find: (callback) => {
-    Invoice.find({}).populate([{path: 'sale', select: 'name'}, {path: 'project', select: 'name'}, {path: 'customer', select: 'name'}]).exec(function(err, invoices) {
+    Invoice.find({}).populate([{path: 'sale', select: 'name total'}, {path: 'project', select: 'name total' }, {path: 'customer', select: 'name'}]).exec(function(err, invoices) {
       if (err) {
         callback(err, null)
         return
@@ -14,7 +14,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Invoice.findById(id).populate([{path: 'sale'}, {path: 'project'}, {path: 'customer', select: 'name'}]).exec(function(err, invoice) {
+    Invoice.findById(id).populate([{path: 'sale', populate: { path: 'items' }}, {path: 'project', populate: { path: 'tasks' }}, {path: 'customer', select: 'name'}]).exec(function(err, invoice) {
       if (err) {
         callback(err, null)
         return

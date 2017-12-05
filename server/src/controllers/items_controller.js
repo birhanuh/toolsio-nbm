@@ -56,7 +56,7 @@ export default {
       }
 
       // Remove item from Sale
-      Sale.findByIdAndUpdate(item._creator, { $pull: { items: id} }, function(err, Sale) {
+      Sale.findByIdAndUpdate(item._creator, { $pull: { items: id}, $inc: {total: -item.price} }, function(err, Sale) {
         if (err) {
           callback(err, null)
           return

@@ -5,7 +5,7 @@ import { Route, Link } from 'react-router-dom'
 import T from 'i18n-react'
 
 // Images
-import logoPlaceholderMedium from '../../images/logo-placeholder-medium.png'
+import logoPlaceholderMedium from '../../images/logo-placeholder.svg'
 
 const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
   <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (

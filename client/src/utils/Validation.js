@@ -254,26 +254,31 @@ export default {
 
   validateInvoiceInput: (data) => {
     let errors = {}
+    
+    if (data.currentStep === 'step1') {
+      if ((!data.step1.saleId && !data.step1.projectId) || (data.step1.saleId && data.step1.projectId)) {
+        errors['saleId'] = {
+          message: T.translate("invoices.form.sale_or_project_required")
+        }
+         errors['projectId'] = {
+          message: T.translate("invoices.form.sale_or_project_required")
+        }
+      }      
+    }
 
-    if (!data.step1.sale && !data.step1.project) {
-      errors['sale'] = {
-        message: T.translate("invoices.form.sale_or_project_required")
+    if (data.currentStep === 'step2') {
+      if (!data.step2.deadline && !data.step2.paymentTerm) {
+        errors['deadline'] = {
+          message: T.translate("invoices.form.deadline_or_payment_required")
+        }
+        errors['paymentTerm'] = {
+          message: T.translate("invoices.form.deadline_or_payment_required")
+        }
       }
-       errors['project'] = {
-        message: T.translate("invoices.form.sale_or_project_required")
-      }
-    }
-    if (!data.step2.deadline && !data.step2.paymentTerm) {
-      errors['deadline'] = {
-        message: T.translate("invoices.form.deadline_or_payment_required")
-      }
-      errors['paymentTerm'] = {
-        message: T.translate("invoices.form.deadline_or_payment_required")
-      }
-    }
-    if (!data.step2.intererstInArrears) {
-      errors['intererstInArrears'] = {
-        message: T.translate("invoices.form.intereset_in_arrears_required")
+      if (!data.step2.interestInArrears) {
+        errors['interestInArrears'] = {
+          message: T.translate("invoices.form.intereset_in_arrears_required")
+        }
       }
     }
 
