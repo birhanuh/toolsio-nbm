@@ -114,15 +114,14 @@ class Show extends Component {
               
               <h3 className="ui header">{T.translate("customers.show.contact.header")}</h3>
               <dt>{T.translate("customers.show.contact.phone_number")}</dt>
-              <dd>{contact.phoneNumber}</dd>
+              <dd>{contact.phoneNumber ? contact.phoneNumber : '-'}</dd>
               <dt>{T.translate("customers.show.contact.email")}</dt>
-              <dd>{contact.email}</dd>
+              <dd>{contact.email ? contact.email : '-'}</dd>
               
-              <h3 className="ui header">{T.translate("customers.show.include_contact_on_invoice")}</h3>
               <dt>{T.translate("customers.show.include_contact_on_invoice")}</dt>
               <dd>
-                {includeContactOnInvoice ? <i className="check circle outline green"></i> :
-                  <i className="check circle outline red"></i>
+                {includeContactOnInvoice ? <i className="check circle outline icon green"></i> :
+                  <i className="minus circle outline icon red"></i>
                 }
               </dd>
 

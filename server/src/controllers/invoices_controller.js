@@ -14,7 +14,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Invoice.findById(id).populate([{path: 'sale', populate: { path: 'items' }}, {path: 'project', populate: { path: 'tasks' }}, {path: 'customer', select: 'name'}]).exec(function(err, invoice) {
+    Invoice.findById(id).populate([{path: 'sale', populate: { path: 'items' }}, {path: 'project', populate: { path: 'tasks' }}, {path: 'customer'}]).exec(function(err, invoice) {
       if (err) {
         callback(err, null)
         return

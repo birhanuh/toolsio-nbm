@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Form from './Form'
-import { signupRequest, isAccountExists, isUserExists} from '../../actions/authentication'
+import { signupRequest, isAccountExists, isUserExists} from '../../actions/authenticationAction'
 import { addFlashMessage } from '../../actions/flashMessages'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 

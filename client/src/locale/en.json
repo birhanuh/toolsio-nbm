@@ -102,6 +102,21 @@
     "header": "Account",
     "edit": {
       "header": "Edit accout information"
+    },    
+    "user": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email"
+    },
+    "users": {
+      "header": "Users",
+      "authorized_user": "Authorized user",
+      "invite_user": "Invite User",
+      "email": "Email",
+      "description": "Invited users and send new invitation form are availble here."
+    },
+    "edit": {
+      "header": "Edit user"
     },
     "show": {
       "header": "Account",
@@ -127,18 +142,6 @@
     },
     "update": {
       "success_update": "Account updated!"
-    }
-  },
-  "users": {
-    "page": {
-      "header": "Users",
-      "authorized_user": "Authorized user",
-      "invite_user": "Invite User",
-      "email": "Email",
-      "description": "Invited users and send new invitation form are availble here."
-    },
-    "edit": {
-      "header": "Edit user"
     }
   },
   "internal_navigation": {
@@ -497,13 +500,24 @@
     "show": {
       "header": "Invoice",
       "name": "Name",
-      "sale": "Sale",
-      "project": "Project",
       "sale_project": "Sale/Project",
       "invoice_for": "Invoice for",
       "date_of_an_invoice": "Date of an invoice",
       "from": "From",
-      "customer": "Customer",
+      "customer": {
+        "name": "Name",
+        "vat_number": "Vat number",
+        "contact": {
+          "phone_number": "Phone number",
+          "email": "Email"
+        },
+        "address": {
+          "street": "Street",
+          "postal_code": "Postal code",
+          "region": "Region",
+          "country": "Country"
+        }
+      },
       "sale_status": "Sale status",
       "project_status": "Project status",
       "user": "User",
@@ -520,19 +534,35 @@
       "edit": "Edit",
       "delete": "Delete",
       "cancel": "Cancel",
-      "items": {
+      "sale": {
+        "header": "Sale",
         "name": "Name",
-        "unit": "Unit",
-        "quantity": "Quantity",
-        "vat": "Vat",
-        "price": "Price"
+        "deadline": "Deadline",
+        "status": "Status",
+        "description": "Description",
+        "items": {
+          "header": "Items",
+          "name": "Name",
+          "unit": "Unit",
+          "quantity": "Quantity",
+          "vat": "Vat",
+          "price": "Price"
+        }
       },
-      "tasks": {
+      "project": {
+        "header": "Project",
         "name": "Name",
-        "payment_type": "Payment type",
-        "hours": "Hours",
-        "vat": "Vat",
-        "price": "Price"
+        "deadline": "Deadline",
+        "status": "Status",
+        "description": "Description",
+        "tasks": {
+          "header": "Tasks",
+          "name": "Name",
+          "payment_type": "Payment type",
+          "hours": "Hours",
+          "vat": "Vat",
+          "price": "Price"
+        }
       },
       "confirmation_msg": "Are you sure to delete this invoice?",      
       "flash": {

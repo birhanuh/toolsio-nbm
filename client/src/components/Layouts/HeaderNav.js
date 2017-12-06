@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { logout } from '../../actions/authentication'
+import { logout } from '../../actions/authenticationAction'
 
 import $ from 'jquery'
 $.fn.dropdown = require('semantic-ui-dropdown')
@@ -44,7 +44,7 @@ class HeaderNav extends Component {
   }
 
   render() {
-    const { isAuthenticated } = this.props.auth
+    const { isAuthenticated, account } = this.props.authentication
 
     const currentPage = window.location.pathname
     let currentPageTitle
@@ -115,7 +115,7 @@ class HeaderNav extends Component {
             </div>
             <div className="ui medium dropdown item">
               <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-              Birhanu <i className="dropdown icon"></i>
+              {account.firstName}<i className="dropdown icon"></i>
               <div className="menu">
                 <a className="item">
                   <i className="tasks icon"></i>
@@ -232,13 +232,13 @@ class HeaderNav extends Component {
 }
 
 HeaderNav.propTypes = {
-  auth: PropTypes.object.isRequired,
+  authentication: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {
   return {
-    auth: state.auth
+    authentication: state.authentication
   }
 }
 

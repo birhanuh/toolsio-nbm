@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
-import { subdomainRequest } from '../../actions/authentication'
+import { subdomainRequest } from '../../actions/authenticationAction'
 import { addFlashMessage } from '../../actions/flashMessages'
 import classnames from 'classnames'
 

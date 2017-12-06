@@ -510,6 +510,10 @@ nav.ui.menu .item>a {
   border: 1px solid $light-grey;
 }
 
+.ui.vertical.segment:first-child {
+  border-bottom: none;
+}
+
 .panel-transparent-header {
   .ui.top.attached.header {
     padding: 0.78571429rem 0;

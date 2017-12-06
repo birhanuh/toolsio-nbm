@@ -101,15 +101,33 @@ class Show extends Component {
 
     const saleAndItems = (
       <div>
-        <h3 className="ui header">{T.translate("invoices.show.sale")}</h3>
+        <h3 className="ui header">{T.translate("invoices.show.sale.header")}</h3>
+        <dl className="dl-horizontal"> 
+          <dt>{T.translate("invoices.show.sale.name")}</dt>
+          <dd>{sale && sale.name}</dd>
+          <dt>{T.translate("invoices.show.sale.deadline")}</dt>
+          <dd>{sale && sale.deadline}</dd>
+          <dt>{T.translate("invoices.show.sale.status")}</dt>
+          <dd>
+            { sale && 
+              <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+                    {sale.status}
+                  </div>
+            }
+          </dd>
+          <dt>{T.translate("invoices.show.sale.description")}</dt>
+          <dd>{sale && sale.description ? sale.description : ''}</dd>
+        </dl> 
+
+        <h4 className="ui header">{T.translate("invoices.show.sale.items.header")}</h4>
         <table className="ui very basic table invoice sale">
           <thead>
             <tr>
-              <th>{T.translate("invoices.show.items.name")}</th>
-              <th>{T.translate("invoices.show.items.unit")}</th>
-              <th>{T.translate("invoices.show.items.quantity")}</th>
-              <th>{T.translate("invoices.show.items.vat")}</th>              
-              <th>{T.translate("invoices.show.items.price")}</th>
+              <th>{T.translate("invoices.show.sale.items.name")}</th>
+              <th>{T.translate("invoices.show.sale.items.unit")}</th>
+              <th>{T.translate("invoices.show.sale.items.quantity")}</th>
+              <th>{T.translate("invoices.show.sale.items.vat")}</th>              
+              <th>{T.translate("invoices.show.sale.items.price")}</th>
             </tr>
           </thead>
           <tbody>
@@ -132,16 +150,34 @@ class Show extends Component {
     )
 
     const projectAndTasks = (
-       <div>
-        <h4 className="ui header">{T.translate("invoices.show.project")}</h4>
+      <div>
+        <h3 className="ui header">{T.translate("invoices.show.project.header")}</h3>
+        <dl className="dl-horizontal"> 
+          <dt>{T.translate("invoices.show.project.name")}</dt>
+          <dd>{project && project.name}</dd>
+          <dt>{T.translate("invoices.show.project.deadline")}</dt>
+          <dd>{project && project.deadline}</dd>
+          <dt>{T.translate("invoices.show.project.status")}</dt>
+          <dd>
+            { project && 
+              <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+                    {project.status}
+                  </div>
+            }
+          </dd>
+          <dt>{T.translate("invoices.show.project.description")}</dt>
+          <dd>{project && project.description ? project.description : ''}</dd>
+        </dl>  
+
+        <h4 className="ui header">{T.translate("invoices.show.project.tasks.header")}</h4>
         <table className="ui very basic table invoice project">
           <thead>
             <tr>
-              <th>{T.translate("invoices.show.tasks.name")}</th>
-              <th>{T.translate("invoices.show.tasks.payment_type")}</th>
-              <th>{T.translate("invoices.show.tasks.hours")}</th>
-              <th>{T.translate("invoices.show.tasks.vat")}</th>
-              <th>{T.translate("invoices.show.tasks.price")}</th>
+              <th>{T.translate("invoices.show.project.tasks.name")}</th>
+              <th>{T.translate("invoices.show.project.tasks.payment_type")}</th>
+              <th>{T.translate("invoices.show.project.tasks.hours")}</th>
+              <th>{T.translate("invoices.show.project.tasks.vat")}</th>
+              <th>{T.translate("invoices.show.project.tasks.price")}</th>
             </tr>
           </thead>
           <tbody>
@@ -163,6 +199,15 @@ class Show extends Component {
       </div>
     )
 
+    const customerContact = (      
+      <div>
+        <dt>{T.translate("invoices.show.customer.contact.phone_number")}</dt>
+        <dd>{customer && customer.contact && (customer.contact.phoneNumber ? customer.contact.phoneNumber : '-')}</dd>
+        <dt>{T.translate("invoices.show.customer.contact.email")}</dt>
+        <dd>{customer && customer.contact && (customer.contact.email ? customer.contact.email : '-')}</dd>
+      </div>
+    )
+
     return (
       <div className="ui stackable grid invoice show">
         <div className="twelve wide column">
@@ -173,30 +218,63 @@ class Show extends Component {
             <div className={classnames("ui uppercase huge right corner label", {orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
               <p>{status}</p>
             </div>
-            <dl className="dl-horizontal">
-              <dt>{T.translate("invoices.show.customer")}</dt>
-              <dd>{customer && customer.name}</dd>
-              {/*<dt>{T.translate("invoices.show.user")}</dt>
-              <dd>{invoice.user.first_name}</dd>*/}            
-              <dt>{T.translate("invoices.show.date_of_an_invoice")}</dt>
-              <dd>{createdAt}</dd>
-              <dt>{T.translate("invoices.show.deadline")}</dt>
-              <dd>{deadline ? deadline : '-'}</dd>
-              <dt>{T.translate("invoices.show.payment_term")}</dt>
-              <dd>{paymentTerm ? paymentTerm : '-'}</dd>
-              <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
-              <dd>{interestInArrears ? interestInArrears : ''}</dd>
-              <dt>{T.translate("invoices.show.reference_number")}</dt>
-              <dd>{referenceNumber}</dd>
-              <dt>{T.translate("invoices.show.description")}</dt>
-              <dd>{description ? description : '-'}</dd>
-            </dl>  
+
+            <div className="ui clearing vertical segment border-bottom-none">
+              <div className="ui left floated vertical segment p-0 m-0">
+                <dl className="dl-horizontal">      
+                  <dt>{T.translate("invoices.show.date_of_an_invoice")}</dt>
+                  <dd>{createdAt}</dd>
+                  <dt>{T.translate("invoices.show.deadline")}</dt>
+                  <dd>{deadline ? deadline : '-'}</dd>
+                  <dt>{T.translate("invoices.show.payment_term")}</dt>
+                  <dd>{paymentTerm ? paymentTerm : '-'}</dd>
+                  <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
+                  <dd>{interestInArrears ? interestInArrears : ''}</dd>
+                  <dt>{T.translate("invoices.show.reference_number")}</dt>
+                  <dd>{referenceNumber}</dd>
+                  <dt>{T.translate("invoices.show.description")}</dt>
+                  <dd>{description ? description : '-'}</dd>
+                </dl>  
+              </div>
+              <div className="ui right floated vertical segment p-0 m-0">
+                <dl className="dl-horizontal">
+                  <dt>{T.translate("invoices.show.customer.name")}</dt>
+                  <dd>{customer && customer.name}</dd>          
+                  <dt>{T.translate("invoices.show.customer.vat_number")}</dt>
+                  <dd>{customer && customer.vatNumber}</dd>
+                  
+                  { customer && customer.includeContactOnInvoice && customerContact }
+
+                  <dt>{T.translate("invoices.show.customer.address.street")}</dt>
+                  <dd>{customer && customer.address && customer.address.street}</dd>
+                  <dt>{T.translate("invoices.show.customer.address.postal_code")}</dt>
+                  <dd>{customer && customer.address && customer.address.postalCode}</dd>
+                  <dt>{T.translate("invoices.show.customer.address.region")}</dt>
+                  <dd>{customer && customer.address && customer.address.region}</dd>
+                  <dt>{T.translate("invoices.show.customer.address.country")}</dt>
+                  <dd>{customer && customer.address && customer.address.country}</dd>
+                </dl>  
+              </div>
+            </div>
 
             { sale && saleAndItems }
 
             { project && projectAndTasks }
-
+            
             <div className="ui divider"></div>
+
+            <div className="ui clearing vertical segment border-bottom-none pt-0">
+              <div className="ui right floated vertical segment p-0 m-0">
+                <dl className="dl-horizontal">                
+                <dt>{T.translate("account.user.first_name")}</dt>
+                <dd>{this.props.account.firstName}</dd> 
+                <dt>{T.translate("account.user.last_name")}</dt>
+                <dd>{this.props.account.lastName}</dd> 
+                <dt>{T.translate("account.user.email")}</dt>
+                <dd>{this.props.account.email}</dd> 
+              </dl>  
+              </div>
+            </div>
 
             <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("invoices.show.delete")}</button>
             <Link to={`/invoices/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
@@ -232,7 +310,8 @@ function mapStateToProps(state, props) {
   const { match } = props
   if (match.params.id) {
     return {
-      invoice: state.invoices.find(item => item._id === match.params.id)
+      invoice: state.invoices.find(item => item._id === match.params.id),
+      account: state.authentication.account
     }
   } 
 }
