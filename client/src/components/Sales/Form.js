@@ -137,7 +137,7 @@ class Form extends Component {
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span>{errors.password}</span>
+              <span>{errors.deadline}</span>
             </div>
             <SelectField
               label={T.translate("sales.form.customer")}
@@ -193,7 +193,7 @@ class Form extends Component {
             />
 
             <div className="inline field">    
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>
+              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.form.save")}</button>
             </div>  
           </form> 
         </div>  

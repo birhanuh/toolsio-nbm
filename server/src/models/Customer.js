@@ -16,11 +16,16 @@ let customerSchema = new mongoose.Schema({
   includeContactOnInvoice: { type: Boolean, default: false },
   projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
   sales: [{ type: mongoose.Schema.Types.ObjectId, ref: "sale" }],
-  invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "invoice" }]
+  invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "invoice" }],
+
+  createdAt: { type: Date },
+  updatedAt: {type: Date }
 })
  
 function contactValidator() {
-  if (this.contact.phoneNumber === '' && this.contact.email === '') {
+  if (!this.contact.phoneNumber  && !this.contact.email) {
+    return false
+  } else if (this.contact.phoneNumber  && this.contact.email) {
     return false
   } else {
     return true

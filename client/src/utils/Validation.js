@@ -207,7 +207,85 @@ export default {
       errors,
       isValid: isEmpty(errors)
     }
-  }
+  },
 
+  validateCustomerInput: (data) => {
+    let errors = {}
+
+    if (!data.name) {
+      errors['name'] = {
+        message: T.translate("customers.form.name_required")
+      }
+    }
+    if (!data.contact.phoneNumber && !data.contact.email) {
+      errors['phoneNumber'] = {
+        message: T.translate("customers.form.phone_number_or_email_required")
+      }
+       errors['email'] = {
+        message: T.translate("customers.form.phone_number_or_email_required")
+      }
+    }
+    if (!data.address.street) {
+      errors['street'] = {
+        message: T.translate("customers.form.street_required")
+      }
+    }
+    if (!data.address.postalCode) {
+      errors['postalCode'] = {
+        message: T.translate("customers.form.postal_code_required")
+      }
+    }
+    if (!data.address.region) {
+      errors['region'] = {
+        message: T.translate("customers.form.region_required")
+      }
+    }
+    if (!data.address.country) {
+      errors['country'] = {
+        message: T.translate("customers.form.country_required")
+      }
+    }
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
+  validateInvoiceInput: (data) => {
+    let errors = {}
+    
+    if (data.currentStep === 'step1') {
+      if ((!data.step1.sale && !data.step1.project) || (data.step1.sale && data.step1.project)) {
+        errors['sale'] = {
+          message: T.translate("invoices.form.sale_or_project_required")
+        }
+         errors['project'] = {
+          message: T.translate("invoices.form.sale_or_project_required")
+        }
+      }      
+    }
+
+    if (data.currentStep === 'step2') {
+      if (!data.step2.deadline && !data.step2.paymentTerm) {
+        errors['deadline'] = {
+          message: T.translate("invoices.form.deadline_or_payment_required")
+        }
+        errors['paymentTerm'] = {
+          message: T.translate("invoices.form.deadline_or_payment_required")
+        }
+      }
+      if (!data.step2.interestInArrears) {
+        errors['interestInArrears'] = {
+          message: T.translate("invoices.form.intereset_in_arrears_required")
+        }
+      }
+    }
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  }
 
 }  

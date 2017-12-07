@@ -1,5 +1,6 @@
 import Project from '../models/project'
 import Task from '../models/task'
+import Invoice from '../models/invoice'
 
 export default {
   
@@ -15,7 +16,7 @@ export default {
   },
 
   findById: (id, callback) => {
-    Project.findById(id).populate([{ path: 'customer', select: 'name'}, { path: 'tasks' }]).exec(function(err, project) {
+    Project.findById(id).populate([{ path: 'customer', select: '_id'}, { path: 'customer', select: 'name'}, { path: 'tasks'}, { path: 'invoice', select: '_id' }]).exec(function(err, project) {
       if (err) {
         callback(err, null)
         return
@@ -53,7 +54,7 @@ export default {
         return
       }
 
-      // Remove related tasks
+      // Remove relateded tasks
       Task.remove({ _creator: id }, function(err, task) {
         if (err) {
           callback(err, null)
@@ -61,6 +62,16 @@ export default {
         }
         callback(null, null)
       })
+
+      // Remove relateded invoice
+      Invoice.remove({ project: id }, function(err, invoice) {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, null)
+      })
+      
     })
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { logout } from '../../actions/authentication'
+import { logout } from '../../actions/authenticationAction'
 
 import $ from 'jquery'
 $.fn.dropdown = require('semantic-ui-dropdown')
@@ -20,7 +20,7 @@ const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
   )} />
 )
 
-class NavigationBar extends Component {
+class HeaderNav extends Component {
   
   componentDidMount = () => {
     $('.ui.dropdown.item').dropdown({
@@ -29,13 +29,22 @@ class NavigationBar extends Component {
     })
   }
 
+   handleToggleBar = (e) => {
+    e.preventDefault()
+    
+    $(".ui.visible.sidebar").toggleClass('collapsed')
+    $('.ui.internal-page').toggleClass('collapsed')
+    $('.ui.footer.segment.internal-footer').toggleClass('collapsed')
+    $('.ui.fixed.menu.header-breadcrumb').toggleClass('collapsed')
+  }
+
   logout(e) {
     e.preventDefault()
     this.props.logout()
   }
 
   render() {
-    const { isAuthenticated } = this.props.auth
+    const { isAuthenticated, account } = this.props.authentication
 
     const currentPage = window.location.pathname
     let currentPageTitle
@@ -73,7 +82,7 @@ class NavigationBar extends Component {
               </Link>
             </div>
             <div className="item">
-              <i className="sidebar icon"></i>
+              <a onClick={this.handleToggleBar.bind(this)} href="#"><i className="sidebar icon"></i></a>
             </div>
           </div>
           
@@ -106,7 +115,7 @@ class NavigationBar extends Component {
             </div>
             <div className="ui medium dropdown item">
               <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-              Birhanu <i className="dropdown icon"></i>
+              {account.firstName}<i className="dropdown icon"></i>
               <div className="menu">
                 <a className="item">
                   <i className="tasks icon"></i>
@@ -203,7 +212,7 @@ class NavigationBar extends Component {
           <div className="ui text container">
             <h1 className="ui inverted header">
               {T.translate("landing.home.welcome")}&nbsp;
-              <div className="turquoise visible-all-inline">{T.translate("internal_navigation.toolsio")}</div>
+              <div className="turquoise d-inline">{T.translate("internal_navigation.toolsio")}</div>
             </h1>
             <h3>{T.translate("landing.home.slogan")}</h3>
             <a href="/signup" className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
@@ -222,15 +231,15 @@ class NavigationBar extends Component {
   }
 }
 
-NavigationBar.propTypes = {
-  auth: PropTypes.object.isRequired,
+HeaderNav.propTypes = {
+  authentication: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {
   return {
-    auth: state.auth
+    authentication: state.authentication
   }
 }
 
-export default connect(mapStateToProps, { logout })(NavigationBar)
+export default connect(mapStateToProps, { logout })(HeaderNav)

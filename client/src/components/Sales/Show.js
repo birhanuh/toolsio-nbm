@@ -42,15 +42,17 @@ class Show extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      _id: nextProps.sale ? nextProps.sale._id : null,
-      name: nextProps.sale ? nextProps.sale.name : '',
-      deadline: nextProps.sale ? nextProps.sale.deadline : '',
-      customer: nextProps.sale ? nextProps.sale.customer : '',
-      status: nextProps.sale ? nextProps.sale.status : '',
-      description: nextProps.sale ? nextProps.sale.description : '',
-      items: nextProps.sale ? nextProps.sale.items : []
-    })
+    if (nextProps.sale) {
+      this.setState({
+        _id: nextProps.sale._id,
+        name: nextProps.sale.name,
+        deadline: nextProps.sale.deadline,
+        customer: nextProps.sale.customer,
+        status: nextProps.sale.status,
+        description: nextProps.sale.description,
+        items: nextProps.sale.items
+      })
+    }
   }
 
   showConfirmationModal(event) {
@@ -96,7 +98,7 @@ class Show extends Component {
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
             <dl className="dl-horizontal">
               <dt>{T.translate("sales.show.customer")}</dt>
-              <dd>{customer ? customer.name: <p className="blue">{T.translate("sales.show.no_customer")}</p>}</dd>
+              <dd>{customer && <Link to={`/customers/show/${customer._id}`}>{customer.name}</Link>}</dd>
               {/*<dt>{T.translate("sales.show.user")}</dt>
               <dd>{sale.user.first_name}</dd>*/}
               <dt>{T.translate("sales.show.deadline")}</dt>
@@ -120,19 +122,19 @@ class Show extends Component {
             
             <div className="ui divider"></div>
 
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("button.delete")}</button>
-            <Link to={`/sales/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("button.edit")}</Link>
+            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("sales.show.delete")}</button>
+            <Link to={`/sales/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("sales.show.edit")}</Link>
           </div>    
         </div>
 
         <div className="ui small modal sale">
           <div className="header">Confirmation</div>
           <div className="content">
-            <p>{T.translate("sales.show.confirmation_msg")}</p>
+            <p className="red">{T.translate("sales.show.confirmation_msg")}</p>
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("button.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("button.delete")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.show.cancel")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("sales.show.delete")}</button>
           </div>
         </div>
       </div>

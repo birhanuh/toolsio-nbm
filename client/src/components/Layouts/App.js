@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
 
 import Dashboard from '../Dashboard/Page'
@@ -16,38 +16,29 @@ import SalesShow from '../Sales/Show'
 import CustomersPage from '../Customers/Page'
 import CustomersFormPage from '../Customers/FormPage'
 import CustomersShow from '../Customers/Show'
+import InvoicesPage from '../Invoices/Page'
+import InvoicesFormPage from '../Invoices/FormPage'
+import InvoicesShow from '../Invoices/Show'
 import requireAuth from '../../utils/requireAuth'
 
-import NavigationBar from './NavigationBar'
+import HeaderNav from './HeaderNav'
+import Sidebar from './Sidebar'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
 // Semantic CSS
 import 'semantic-ui-css/semantic.min.css'
 
 // CSS entry
-import '../../css/app.css'
+import '../../css/app.scss'
 
 // Images
 import logo from '../../images/logo-square.png' 
-import logoPlaceholderMedium from '../../images/logo-placeholder-medium.png'
 
 // Jquery
 import $ from 'jquery'
 
 // Sidebar
 $.fn.sidebar = require('semantic-ui-sidebar')
-
-// Localization 
-import T from 'i18n-react'
-
-const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
-  <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
-    <Link className={match ? 'active item' : 'item' } to={to}>
-      <i className={icon}></i>
-      {label}
-    </Link>
-  )} />
-)
 
 class App extends Component {
   
@@ -65,22 +56,10 @@ class App extends Component {
     return (
       <div className="pusher">
         
-        { !authPages && <NavigationBar /> }
+        { !authPages && <HeaderNav /> }
 
         { internalPages && 
-          <div className="ui visible sidebar vertical menu">
-            <div className="ui center aligned vertical segment account">
-              <a href="/settings">
-                <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
-              </a>
-              <p className="m-t-s">Birhanu (Admin)</p>
-            </div>
-            <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboards.header")} />
-            <ActiveLink activeOnlyWhenExact to="/projects" icon="suitcase icon" label={T.translate("projects.page.header")} />
-            <ActiveLink activeOnlyWhenExact to="/sales" icon="cart icon" label={T.translate("sales.page.header")} />
-            <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.page.header")}/>
-            <ActiveLink activeOnlyWhenExact to="/invoices" icon="file text outline  icon" label={T.translate("invoices.page.header")}/>
-          </div>
+          <Sidebar />
         }
 
         <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable middle aligned center aligned grid auth-pages': authPages})}>          
@@ -106,6 +85,10 @@ class App extends Component {
               <Route exact path="/customers/edit/:id" component={requireAuth(CustomersFormPage)} /> 
               <Route exact path="/customers/new" component={requireAuth(CustomersFormPage)} />
               <Route exact path="/customers/show/:id" component={requireAuth(CustomersShow)} /> 
+              <Route exact path="/invoices" component={requireAuth(InvoicesPage)} />
+              <Route exact path="/invoices/edit/:id" component={requireAuth(InvoicesFormPage)} /> 
+              <Route exact path="/invoices/new" component={requireAuth(InvoicesFormPage)} />
+              <Route exact path="/invoices/show/:id" component={requireAuth(InvoicesShow)} /> 
             </Switch>
           </div>
         </section>

@@ -5,6 +5,7 @@ import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
 
+// Datepicker 
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -130,7 +131,7 @@ class Form extends Component {
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span>{errors.password}</span>
+              <span>{errors.deadline}</span>
             </div>
             
             <SelectField
@@ -188,7 +189,7 @@ class Form extends Component {
             /> 
 
             <div className="inline field">    
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>
+              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.form.save")}</button>
             </div>  
           </form> 
         </div>  

@@ -8,8 +8,8 @@ import { authenticate, ensureAuthenticated } from '../middlewares/authenticate'
 // response with error and halt operatoin so, route code never excutes)
 router.get('/:resource', ensureAuthenticated, function(req, res) {
   
-  var resource = req.params.resource
-  var controller = controllers[resource]
+  let resource = req.params.resource
+  let controller = controllers[resource]
   if (controller == null) {
     res.status(500).json({
       errors: {
@@ -41,10 +41,10 @@ router.get('/:resource', ensureAuthenticated, function(req, res) {
 // GET resource with id
 router.get('/:resource/:id', ensureAuthenticated, function(req, res) {
   
-  var resource = req.params.resource
-  var id = req.params.id
+  let resource = req.params.resource
+  let id = req.params.id
 
-  var controller = controllers[resource]
+  let controller = controllers[resource]
   if (controller == null) {
     res.status(500).json({
       errors: {
@@ -77,9 +77,9 @@ router.get('/:resource/:id', ensureAuthenticated, function(req, res) {
 // POST resource 
 router.post('/:resource', ensureAuthenticated, function(req, res) {
   
-  var resource = req.params.resource
-  
-  var controller = controllers[resource]
+  let resource = req.params.resource
+
+  let controller = controllers[resource]
   if (controller == null) {
     res.status(500).json({
       errors: {
@@ -90,7 +90,11 @@ router.post('/:resource', ensureAuthenticated, function(req, res) {
     return
   }
 
-  controller.create(req.body, function(err, result) {
+  // Remove the null _id value that comes from client side for making the _id availabe inside save middlewares 
+  let requestBody = req.body
+  delete requestBody['_id']
+    
+  controller.create(requestBody, function(err, result) {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -111,9 +115,9 @@ router.post('/:resource', ensureAuthenticated, function(req, res) {
 // UPDATE resource with id
 router.put('/:resource/:id', ensureAuthenticated, function(req, res) {
 
-  var resource = req.params.resource
+  let resource = req.params.resource
 
-  var controller = controllers[resource]
+  let controller = controllers[resource]
   if (controller == null) {
     res.status(500).json({
       errors: {
@@ -143,10 +147,10 @@ router.put('/:resource/:id', ensureAuthenticated, function(req, res) {
 // DELETE resource with id
 router.delete('/:resource/:id', ensureAuthenticated, function(req, res) {
   
-  var resource = req.params.resource
-  var id = req.params.id
+  let resource = req.params.resource
+  let id = req.params.id
 
-  var controller = controllers[resource]
+  let controller = controllers[resource]
   if (controller == null) {
     res.status(500).json({
       errors: {

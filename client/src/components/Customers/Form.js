@@ -33,28 +33,34 @@ class Form extends Component {
         phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
         email: this.props.customer ? this.props.customer.contact.email : ''
       },
-      errors: {},
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
       isLoading: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState({
-      _id: nextProps.customer._id,
-      name: nextProps.customer.name,
-      address: {
-        street: nextProps.customer.address.street,
-        postalCode: nextProps.customer.address.postalCode,
-        region: nextProps.customer.address.region,
-        country: nextProps.customer.address.country
-      },
-      vatNumber: nextProps.customer.vatNumber,
-      includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
-      contact: {
-        phoneNumber: nextProps.customer.contact.phoneNumber,
-        email: nextProps.customer.contact.email
-      }
-    })
+    if (nextProps.customer) {
+      this.setState({
+        _id: nextProps.customer._id,
+        name: nextProps.customer.name,
+        address: {
+          street: nextProps.customer.address.street,
+          postalCode: nextProps.customer.address.postalCode,
+          region: nextProps.customer.address.region,
+          country: nextProps.customer.address.country
+        },
+        vatNumber: nextProps.customer.vatNumber,
+        includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
+        contact: {
+          phoneNumber: nextProps.customer.contact.phoneNumber,
+          email: nextProps.customer.contact.email
+        }
+      })
+    }
   }
 
   componentDidMount = () => {
@@ -80,6 +86,7 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
+    console.info('target: ', !!this.state.errors[e.target.name])
     if (!!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
@@ -130,8 +137,13 @@ class Form extends Component {
   isValid() {
     const { errors, isValid } = Validation.validateCustomerInput(this.state)
 
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
     if (!isValid) {
-      this.setState({ errors })
+      this.setState({ 
+        errors: updatedErrors 
+      })
     }
 
     return isValid;
@@ -141,7 +153,7 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid) { 
+    if (this.isValid()) { 
       const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
       this.setState({ isLoading: true })
       this.props.saveCustomer({ _id, name, vatNumber, includeContactOnInvoice, contact, address })
@@ -277,7 +289,7 @@ class Form extends Component {
             </fieldset>
 
             <div className="inline field">    
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("button.save")}</button>
+              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("customers.form.save")}</button>
             </div>  
           </form> 
         </div>  

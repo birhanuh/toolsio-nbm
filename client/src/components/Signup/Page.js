@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Form from './Form'
-import { signupRequest, isAccountExists, isUserExists} from '../../actions/authentication'
+import { signupRequest, isAccountExists, isUserExists} from '../../actions/authenticationAction'
 import { addFlashMessage } from '../../actions/flashMessages'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
@@ -33,9 +33,9 @@ class Page extends Component {
         <div className="ui message"> 
           {T.translate("sign_up.already_a_user")}&nbsp;<a href="/login">{T.translate("sign_up.log_in_here")}</a>
         </div>
-        <div className="ui text-container m-t-m">
-          <small className="visible-all-block">{T.translate("landing.footer.copyright")}</small>
-          <small className="visible-all-block">{T.translate("landing.footer.address")}</small>
+        <div className="ui text-container mt-4">
+          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="d-block">{T.translate("landing.footer.address")}</small>
         </div>
       </div>  
     )
@@ -53,7 +53,7 @@ Page.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    account: state.auth.account
+    account: state.authentication.account
   } 
 }
 

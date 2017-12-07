@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
-import { subdomainRequest } from '../../actions/authentication'
+import { subdomainRequest } from '../../actions/authenticationAction'
 import { addFlashMessage } from '../../actions/flashMessages'
 import classnames from 'classnames'
 
@@ -96,9 +96,9 @@ class Subdomain extends Component {
         <div className="ui message">
           {T.translate("log_in.new_to_us")}&nbsp;<a href="/signup">{T.translate("sign_up.sign_up")}</a>
         </div>
-        <div className="ui centered grid m-t-m">
-          <small className="visible-all-block">{T.translate("landing.footer.copyright")}</small>
-          <small className="visible-all-block">{T.translate("landing.footer.address")}</small>
+        <div className="ui centered grid mt-4">
+          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="d-block">{T.translate("landing.footer.address")}</small>
         </div>
       </div>       
       

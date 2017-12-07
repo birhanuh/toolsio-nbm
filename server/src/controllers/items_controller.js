@@ -55,14 +55,16 @@ export default {
         return
       }
 
-      // Remove item from Sale
-      Sale.findByIdAndUpdate(item._creator, { $pull: { items: id} }, function(err, Sale) {
+      // Remove Item from this Sale
+      Sale.findByIdAndUpdate(item._creator, { $pull: { items: id}, $inc: {total: -item.price} }, function(err, Sale) {
         if (err) {
           callback(err, null)
           return
         }
         callback(null, null)
       })
+
+      callback(null, null)
     })
   }
 }

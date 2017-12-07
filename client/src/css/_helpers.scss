@@ -62,78 +62,298 @@
 }
 
 // Display
-.visible-all-inline-block {
+.d-inline-block {
   display: inline-block !important;
 }
 
-.visible-all-inline {
+.d-inline {
   display: inline !important;
 }
 
-.visible-all-block {
+.d-block {
   display: block !important;
 }
 
 // Margins
-.m-t-n {
- margin-top: 0 !important;
- padding-top: 0 !important;
+.m-0 {
+  margin: 0 !important;
 }
 
-.m-b-n {
- margin-bottom: 0 !important;
+.m-1 {
+  margin: .25rem !important;
 }
 
-.m-t-xxs {
- margin-top: 3px !important;
+.m-2 {
+  margin: .5rem !important;
 }
 
-.m-t-xs {
- margin-top: 5px !important;
+.m-3 {
+  margin: 1rem !important;
 }
 
-.m-b-xxs {
- margin-bottom: 3px !important;
+.m-4 {
+  margin: 1.5rem !important;
 }
 
-.m-b-xs {
- margin-bottom: 5px !important;
+.m-5 {
+  margin: 2rem !important;
 }
 
-.m-t-s {
- margin-top: 10px !important;
+.m-6 {
+  margin: 3rem !important;
 }
 
-.m-b-s {
- margin-bottom: 10px !important;
+.mb-0 {
+  margin-bottom: 0 !important;
 }
 
-.m-t-m {
- margin-top: 15px !important;
+.mb-1 {
+  margin-bottom: .25rem !important;
 }
 
-.m-b-m {
- margin-bottom: 15px !important;
+.mb-2 {
+  margin-bottom: .5rem !important;
 }
 
-.m-t-l {
- margin-top: 20px !important;
+.mb-3 {
+  margin-bottom: 1rem !important;
 }
 
-.m-b-l {
- margin-bottom: 20px !important;
+.mb-4 {
+  margin-bottom: 1.5rem !important;
 }
 
-.m-t-xl {
- margin-top: 30px !important;
+.mb-5 {
+  margin-bottom: 2rem !important;
 }
 
-.m-b-xl {
- margin-bottom: 30px !important;
+.mb-6 {
+  margin-bottom: 3rem !important;
 }
 
-.no-margins {
- margin: 0 !important;
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-1 {
+  margin-top: .25rem !important;
+}
+
+.mt-2 {
+  margin-top: .5rem !important;
+}
+
+.mt-3 {
+  margin-top: 1rem !important;
+}
+
+.mt-4 {
+  margin-top: 1.5rem !important;
+}
+
+.mt-5 {
+ margin-top: 2rem !important;
+}
+
+.mt-6 {
+  margin-top: 3rem !important;
+}
+
+.ml-0 {
+  margin-left: 0 !important;
+}
+
+.ml-1 {
+  margin-left: .25rem !important;
+}
+
+.ml-2 {
+  margin-left: .5rem !important;
+}
+
+.ml-3 {
+  margin-left: 1rem !important;
+}
+
+.ml-4 {
+  margin-left: 1.5rem !important;
+}
+
+.ml-5 {
+  margin-left: 2rem !important;
+}
+
+.ml-6 {
+  margin-left: 3rem !important;
+}
+
+.mr-0 {
+  margin-right: 0 !important;
+}
+
+.mr-1 {
+  margin-right: .25rem !important;
+}
+
+.mr-2 {
+  margin-right: .5rem !important;
+}
+
+.mr-3 {
+  margin-right: 1rem !important;
+}
+
+.mr-4 {
+  margin-right: 1.5rem !important;
+}
+
+.mr-5 {
+  margin-right: 2rem !important;
+}
+
+.mr-6 {
+  margin-right: 3rem !important;
+}
+
+// Paddings
+.p-0 {
+  padding: 0 !important;
+}
+
+.p-1 {
+  padding: .25rem !important;
+}
+
+.p-2 {
+  padding: .5rem !important;
+}
+
+.p-3 {
+  padding: 1rem !important;
+}
+
+.p-4 {
+  padding: 1.5rem !important;
+}
+
+.p-5 {
+  padding: 2rem !important;
+}
+
+.p-6 {
+  padding: 3rem !important;
+}
+
+.pb-0 {
+  padding-bottom: 0 !important;
+}
+
+.pb-1 {
+  padding-bottom: .25rem !important;
+}
+
+.pb-2 {
+  padding-bottom: .5rem !important;
+}
+
+.pb-3 {
+  padding-bottom: 1rem !important;
+}
+
+.pb-4 {
+  padding-bottom: 1.5rem !important;
+}
+
+.pb-5 {
+  padding-bottom: 2rem !important;
+}
+
+.pb-6 {
+  padding-bottom: 3rem !important;
+}
+
+.pt-0 {
+  padding-top: 0 !important;
+}
+
+.pt-1 {
+  padding-top: .25rem !important;
+}
+
+.pt-2 {
+  padding-top: .5rem !important;
+}
+
+.pt-3 {
+  padding-top: 1rem !important;
+}
+
+.pt-4 {
+  padding-top: 1.5rem !important;
+}
+
+.pt-5 {
+  padding-top: 2rem !important;
+}
+
+.pt-6 {
+  padding-top: 3rem !important;
+}
+
+.pl-0 {
+  padding-left: 0 !important;
+}
+
+.pl-1 {
+  padding-left: .25rem !important;
+}
+
+.pl-2 {
+  padding-left: .5rem !important;
+}
+
+.pl-3 {
+  padding-left: 1rem !important;
+}
+
+.pl-4 {
+  padding-left: 1.5rem !important;
+}
+
+.pl-5 {
+  padding-left: 2rem !important;
+}
+
+.pl-6 {
+  padding-left: 3rem !important;
+}
+
+.pr-0 {
+  padding-left: 0 !important;
+}
+
+.pr-1 {
+  padding-left: .25rem !important;
+}
+
+.pr-2 {
+  padding-left: .5rem !important;
+}
+
+.pr-3 {
+  padding-left: 1rem !important;
+}
+
+.pr-4 {
+  padding-left: 1.5rem !important;
+}
+
+.pr-5 {
+  padding-left: 2rem !important;
+}
+
+.pr-6 {
+  padding-left: 3rem !important;
 }
 
 // borders

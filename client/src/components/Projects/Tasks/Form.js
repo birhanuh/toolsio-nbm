@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { createTask, updateTask, deleteTask } from '../../../actions/projectActions'
 import { addFlashMessage } from '../../../actions/flashMessages'
-import { AddElement, ShowEditElement } from './TrElement'
+import { AddElement, ShowEditElement } from './Tr'
 
 // Localization 
 import T from 'i18n-react'
@@ -324,11 +324,11 @@ class Task extends Component {
         <div className="ui small modal task">
           <div className="header">Confirmation</div>
           <div className="content">
-            <p>{T.translate("projects.tasks.form.confirmation_msg")}</p>
+            <p className="red">{T.translate("projects.tasks.form.confirmation_msg")}</p>
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("button.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.taskToBeDeleated)}>{T.translate("button.delete")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("projects.tasks.cancel")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.taskToBeDeleated)}>{T.translate("projects.tasks.delete")}</button>
           </div>
         </div>
       </form>
