@@ -14,8 +14,8 @@ let taskSchema = new mongoose.Schema({
 })
 
 taskSchema.post('save', function(doc, next) {
-
-  // Update related Project after saving Task
+  
+  // Push task and increment total value to related Project object
   Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id}, $inc: {total: this.price} }, { new: true }, function(err, project) {
     if (err) {
       errors: {

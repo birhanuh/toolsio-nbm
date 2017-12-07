@@ -22,8 +22,8 @@ class Form extends Component {
     this.state = {
       _id: this.props.invoice ? this.props.invoice._id : null,
       step1: {
-        saleId: this.props.invoice ? (this.props.invoice.sale ? this.props.invoice.sale._id : '') : '',
-        projectId: this.props.invoice ? (this.props.invoice.project ? this.props.invoice.project._id : '') : '' 
+        sale: this.props.invoice ? (this.props.invoice.sale ? this.props.invoice.sale._id : '') : '',
+        project: this.props.invoice ? (this.props.invoice.project ? this.props.invoice.project._id : '') : '' 
       },
       step2: {
         deadline: this.props.invoice ? moment(this.props.invoice.deadline, "MM-DD-YYYY") : moment(),
@@ -49,8 +49,8 @@ class Form extends Component {
       this.setState({
         _id: nextProps.invoice._id,
         step1: {
-          saleId: nextProps.invoice.sale && nextProps.invoice.sale._id,
-          projectId: nextProps.invoice.project && nextProps.invoice.project._id
+          sale: nextProps.invoice.sale && nextProps.invoice.sale._id,
+          project: nextProps.invoice.project && nextProps.invoice.project._id
         },
         step2: {
           deadline: moment(nextProps.invoice.deadline),
@@ -71,7 +71,7 @@ class Form extends Component {
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
 
-      if (e.target.name === "saleId" || e.target.name === "projectId") {
+      if (e.target.name === "sale" || e.target.name === "project") {
     
         this.setState({
           step1: { ...this.state.step1, [e.target.name]: e.target.value },
@@ -94,7 +94,7 @@ class Form extends Component {
       }
     } else {
 
-     if (e.target.name === "saleId" || e.target.name === "projectId") {
+     if (e.target.name === "sale" || e.target.name === "project") {
     
         this.setState({
           step1: { ...this.state.step1, [e.target.name]: e.target.value }
@@ -137,11 +137,11 @@ class Form extends Component {
     // Validation
     if (this.isValid()) { 
       const { _id } = this.state
-      const { saleId, projectId } = this.state.step1
+      const { sale, project } = this.state.step1
       const { deadline, paymentTerm, interestInArrears, status, description } = this.state.step2
 
       this.setState({ isLoading: true })
-      this.props.saveInvoice({ _id, saleId, projectId, deadline, paymentTerm, interestInArrears, status, description })
+      this.props.saveInvoice({ _id, sale, project, deadline, paymentTerm, interestInArrears, status, description })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -162,12 +162,12 @@ class Form extends Component {
     }
 
     if (this.state._id === null) {
-      const sale = this.props.sales.find(item => item._id === this.state.step1.saleId ) 
+      const sale = this.props.sales.find(item => item._id === this.state.step1.sale ) 
       this.setState({
         sale: sale
       })
 
-      const project = this.props.projects.find(item => item._id === this.state.step1.projectId ) 
+      const project = this.props.projects.find(item => item._id === this.state.step1.project ) 
       this.setState({
         project: project
       })
@@ -223,10 +223,10 @@ class Form extends Component {
             
             <SelectField
               label={T.translate("invoices.form.sales")}
-              name="saleId"
-              value={step1.saleId ? step1.saleId : ''} 
+              name="sale"
+              value={step1.sale ? step1.sale : ''} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.errors && errors.message.errors.saleId && errors.message.errors.saleId.message}
+              error={errors.message && errors.message.errors && errors.message.errors.sale && errors.message.errors.sale.message}
               formClass="inline field"
 
               options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_sale")}</option>,
@@ -237,10 +237,10 @@ class Form extends Component {
 
              <SelectField
               label={T.translate("invoices.form.projects")}
-              name="projectId"
-              value={step1.projectId ? step1.projectId : ''} 
+              name="project"
+              value={step1.project ? step1.project : ''} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.errors && errors.message.errors.projectId && errors.message.errors.projectId.message}
+              error={errors.message && errors.message.errors && errors.message.errors.project && errors.message.errors.project.message}
               formClass="inline field"
 
               options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_project")}</option>,
@@ -379,7 +379,11 @@ class Form extends Component {
                 <dt>{T.translate("invoices.form.sale.name")}</dt>
                 <dd>{sale.name}</dd>
                 <dt>{T.translate("invoices.form.sale.status")}</dt>
-                <dd>{sale.status}</dd>
+                <dd>
+                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+                    {project.status}
+                  </div>
+                </dd>
                 <dt>{T.translate("invoices.form.sale.customer")}</dt>
                 <dd>{sale.customer.name}</dd>
               </dl>
@@ -395,7 +399,11 @@ class Form extends Component {
                 <dt>{T.translate("invoices.form.project.name")}</dt>
                 <dd>{project.name}</dd>
                 <dt>{T.translate("invoices.form.project.status")}</dt>
-                <dd>{project.status}</dd>
+                <dd>
+                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+                    {project.status}
+                  </div>
+                </dd>
                 <dt>{T.translate("invoices.form.project.customer")}</dt>
                 <dd>{project.customer && project.customer.name}</dd>
               </dl>

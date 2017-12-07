@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Customer from'./customer'
 
 // User Schema 
 let saleSchema = new mongoose.Schema({
@@ -10,6 +11,8 @@ let saleSchema = new mongoose.Schema({
   items: [{ type: mongoose.Schema.Types.ObjectId, ref: "item" }],
   total: { type: Number, default: 0 },
 
+  invoice: { type: mongoose.Schema.Types.ObjectId, ref: "invoice" },
+
   createdAt: Date,
   updatedAt: Date
 })
@@ -18,6 +21,22 @@ saleSchema.pre('validate', function (next) {
   this.status = "new"
   next()
 }) 
+
+saleSchema.post('save', function(doc, next) {
+
+  // Push sale to related Customer object
+  Customer.findByIdAndUpdate(this.customer, { $push: { sales: this._id }}, { new: true }, function(err, customer) {
+    if (err) {
+      errors: {
+        cantUpdateCustomer: {
+          message: err
+        } 
+      }
+    }
+  })
+
+  next()
+})
 
 saleSchema.methods.addItems = function(items) {
   this.items.push(items)

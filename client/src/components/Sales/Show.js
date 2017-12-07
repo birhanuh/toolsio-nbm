@@ -98,7 +98,7 @@ class Show extends Component {
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
             <dl className="dl-horizontal">
               <dt>{T.translate("sales.show.customer")}</dt>
-              <dd>{customer ? customer.name: <p className="blue">{T.translate("sales.show.no_customer")}</p>}</dd>
+              <dd>{customer && <Link to={`/customers/show/${customer._id}`}>{customer.name}</Link>}</dd>
               {/*<dt>{T.translate("sales.show.user")}</dt>
               <dd>{sale.user.first_name}</dd>*/}
               <dt>{T.translate("sales.show.deadline")}</dt>

@@ -55,7 +55,7 @@ export default {
         return
       }
 
-      // Remove item from Sale
+      // Remove Item from this Sale
       Sale.findByIdAndUpdate(item._creator, { $pull: { items: id}, $inc: {total: -item.price} }, function(err, Sale) {
         if (err) {
           callback(err, null)
@@ -63,6 +63,8 @@ export default {
         }
         callback(null, null)
       })
+
+      callback(null, null)
     })
   }
 }

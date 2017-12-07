@@ -53,6 +53,44 @@ invoiceSchema.pre('validate', async function(next) {
   next()
 })
 
+invoiceSchema.post('save', function(doc, next) {
+  
+  // Push invoice to related Customer object
+  Customer.findByIdAndUpdate(this.customer, { $push: { invoices: this._id }}, { new: true }, function(err, customer) {
+    if (err) {
+      errors: {
+        cantUpdateCustomer: {
+          message: err
+        } 
+      }
+    }
+  })
+
+  // Push Invoice to related Sale object
+  Sale.findByIdAndUpdate(this.sale, { invoice: this._id }, { new: true }, function(err, sale) {
+    if (err) {
+      errors: {
+        cantUpdateSale: {
+          message: err
+        } 
+      }
+    }
+  })
+
+  // Push Invoice to related Projectr object
+  Project.findByIdAndUpdate(this.project, { invoice: this._id }, { new: true }, function(err, project) {
+    if (err) {
+      errors: {
+        cantUpdateProject: {
+          message: err
+        } 
+      }
+    }
+  })
+
+  next()
+})
+
 function getSaleById(id) {
   return Sale.findById(id)
 }

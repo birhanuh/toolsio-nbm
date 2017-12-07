@@ -53,7 +53,7 @@ Page.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    account: state.auth.account
+    account: state.authentication.account
   } 
 }
 

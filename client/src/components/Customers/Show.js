@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import map from 'lodash/map'
+import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessages'
 import { fetchCustomer, deleteCustomer } from '../../actions/customerActions'
 
@@ -32,7 +34,10 @@ class Show extends Component {
       contact: {
         phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
         email: this.props.customer ? this.props.customer.contact.email : ''
-      }
+      },
+      sales: this.props.customer ? this.props.sales : null,
+      projects: this.props.customer ? this.props.projects : null,
+      invoices: this.props.customer ? this.props.invoices : null,
     }
   }
 
@@ -60,7 +65,10 @@ class Show extends Component {
         contact: {
           phoneNumber: nextProps.customer.contact.phoneNumber,
           email: nextProps.customer.contact.email
-        }
+        },
+        sales: nextProps.customer.sales,
+        projects: nextProps.customer.projects,
+        invoices: nextProps.customer.invoices,
       })
     }
   }
@@ -99,8 +107,106 @@ class Show extends Component {
   }
 
   render() {
-    const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
+    const { _id, name, vatNumber, contact, includeContactOnInvoice, address, projects, sales, invoices } = this.state
     
+    const emptyProjectsMessage = (
+      <div className="ui mini info message">
+        <div className="ui header">
+          {T.translate("projects.page.empty_projects_header")}
+        </div>
+      </div>
+    )
+
+    const projectsList = map(projects, (project) => 
+      <div className="ui segment">
+        <div className="ui three column grid">
+          <div className="eight wide column">
+            <Link to={`/projects/show/${project._id}`} className="ui header">
+              <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
+                {project.name}
+              </h3>
+            </Link>
+          </div>
+
+          <div className="four wide column">
+            <div className={classnames("ui uppercase tiny right label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+              {project.status}
+            </div>
+          </div>
+          
+          <div className="four wide column">
+            <span>{project.deadline}</span>
+          </div>
+        </div>
+      </div>
+    )
+         
+    const emptySalesMessage = (
+      <div className="ui mini info message">
+        <div className="ui header">
+          {T.translate("sales.page.empty_sales_header")}
+        </div>
+      </div>
+    )
+
+    const salesList = map(sales, (sale) => 
+      <div className="ui segment">
+        <div className="ui three column grid">
+          <div className="eight wide column">
+            <Link to={`/sales/show/${sale._id}`} className="ui header">
+              <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
+                {sale.name}
+              </h3>
+            </Link>
+          </div>
+
+          <div className="four wide column">
+            <div className={classnames("ui uppercase tiny right label", {blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+              {sale.status}
+            </div>
+          </div>
+          
+          <div className="four wide column">  
+            <span>{sale.deadline}</span>
+          </div>
+
+        </div>
+      </div>
+    )
+      
+    const emptyInvoicesMessage = (
+      <div className="ui mini info message">
+        <div className="ui header">
+          {T.translate("invoices.page.empty_invoices_header")}
+        </div>
+      </div>
+    )
+
+    const invoicesList = map(invoices, (invoice) => 
+       <div className="ui segment">
+        <div className="ui three column grid">
+          <div className="eight wide column">
+            <Link to={`/invoices/show/${invoice._id}`} className="ui header">
+              <h3 className={classnames({orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
+                {invoice.referenceNumber}
+              </h3>
+            </Link>
+          </div>
+
+          <div className="four wide column">
+            <div className={classnames("ui uppercase tiny label", {orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
+            {invoice.status}
+            </div>
+          </div>
+
+          <div className="four wide column">
+            <span>{invoice.deadline}</span>
+          </div>
+
+        </div>
+      </div>
+    )
+
     return (
       <div className="ui stackable grid">
         <div className="twelve wide column">
@@ -135,48 +241,20 @@ class Show extends Component {
               <dt>{T.translate("customers.show.address.country")}</dt>
               <dd>{address.country}</dd>
             </dl>  
-            <br/>
+
             <h3 className="ui header">{T.translate("projects.page.header")}</h3>
-            <table className="ui very basic table projects">
-              <thead>
-                <tr>
-                  <th>{T.translate("projects.show.name")}</th>
-                  <th>{T.translate("projects.show.deadline")}</th>
-                  <th>{T.translate("projects.show.status")}</th>
-                  <th>{T.translate("projects.show.invoice")}</th>
-                  <th>{T.translate("projects.show.tasks")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{}</td>
-                  <td>{}</td>
-                  <td>{}</td>
-                  <td>{}</td>
-                  <td>{}</td>
-                </tr>
-              </tbody>
-            </table>
-          
+            { projects && (projects.length === 0 ? emptyProjectsMessage : projectsList) }
+            
+            <div className="ui divider"></div>
+
             <h3 className="ui header">{T.translate("sales.page.header")}</h3>
-            <table className="ui very basic table sales">
-              <thead>
-                <tr>
-                  <th>{T.translate("sales.show.name")}</th>
-                  <th>{T.translate("sales.show.status")}</th>
-                  <th>{T.translate("sales.show.invoice")}</th>
-                  <th>{T.translate("sales.show.items")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{}</td>
-                  <td>{}</td>
-                  <td>{}</td>
-                  <td>{}</td>
-                </tr>
-              </tbody>  
-            </table>
+            { sales && sales.length === 0 ? emptySalesMessage : salesList }
+
+            <div className="ui divider"></div>
+
+
+            <h3 className="ui header">{T.translate("invoices.page.header")}</h3>
+            { invoices && invoices.length === 0 ? emptyInvoicesMessage : invoicesList }
 
             <div className="ui divider"></div>
 

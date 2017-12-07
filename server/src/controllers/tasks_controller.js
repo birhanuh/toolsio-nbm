@@ -54,7 +54,7 @@ export default {
         return
       }
 
-      // Remove task from Project
+      // Remove Task from this Project
       Project.findByIdAndUpdate(task._creator, { $pull: { tasks: id}, $inc: {total: -task.price} }, function(err, project) {
         if (err) {
           callback(err, null)
@@ -62,6 +62,8 @@ export default {
         }
         callback(null, null)
       })
+
+      callback(null, null)
     })
   }
 }
