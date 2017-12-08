@@ -6,7 +6,7 @@ if (typeof Promise === 'undefined') {
   window.Promise = require('promise/lib/es6-extensions.js');
 }
 
-var modernBrowser = ('fetch' in window && assign in Object)
+var modernBrowser = ('fetch' in window && 'assign' in Object)
 
 if (!modernBrowser) {
   // fetch() polyfill for making API calls.
