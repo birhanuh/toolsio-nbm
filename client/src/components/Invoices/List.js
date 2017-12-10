@@ -6,8 +6,14 @@ import T from 'i18n-react'
 
 // Datatables
 import $ from 'jquery'
-$.fn.DataTable = require('datatables.net-se')
-$.fn.Buttons = require('datatables.net-buttons-se')
+window.JSZip = require('jszip')
+//require('pdfmake')
+import 'datatables.net-se'
+import 'datatables.net-buttons-se'
+import 'datatables.net-buttons/js/buttons.flash'
+import 'datatables.net-buttons/js/buttons.html5'
+import 'datatables.net-buttons/js/buttons.print'
+import 'datatables.net-responsive-se'
 
 // Images
 import ajaxLoader from '../../images/ajax-loader.gif' 
@@ -15,20 +21,36 @@ import ajaxLoader from '../../images/ajax-loader.gif'
 class List extends Component {
 
   componentDidUpdate() {  
-    let table = $('.table').DataTable({
+    $('.table').dataTable({
       dom: "<'ui three column grid'<'five wide column'l><'seven wide center aligned column'B><'right aligned four wide column'f>>t<'ui grid'<'left aligned eight wide column'i><'right aligned eight wide column'p>>",
-      //dom: 'lBfrtip',
-      oLanguage: {
-        sProcessing: "<img src='"+ajaxLoader+"'>"
+      processing: true,
+      responsive: true,
+      language: {
+        emptyTable: 'No records',
+        processing: "<img src='"+ajaxLoader+"'>",
+        //info: '_START_ to _END_ of _TOTAL_',
+        infoEmpty: '',
+        search: '',
+        searchPlaceholder: 'Search Invoices',
+        lengthMenu: '_MENU_',
+        paginate: {
+          previous: '<i class="left chevron icon"></i>',
+          next: '<i class="right chevron icon"></i>'
+        },
+        aria: {
+          paginate: {
+            previous: 'Previous',
+            next: 'Next'
+          }
+        }
       },
-      bProcessing: true,
       data: this.props.invoices,
       lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
       buttons: [
-        {extend: 'excel', title: 'Invoices', className: 'tiny ui button'},
-        {extend: 'csv', title: 'Invoices', className: 'tiny ui button'},
-        {extend: 'pdf', title: 'Invoices', className: 'tiny ui button'},
-        //{extend: 'print', title: 'Invoices', className: 'tiny ui button'}
+        {extend: 'excel', title: 'Invoices', className: 'ui button tiny'},
+        {extend: 'csv', title: 'Invoices', className: 'ui button tiny'},
+        {extend: 'pdf', title: 'Invoices', className: 'ui button tiny'},
+        {extend: 'print', title: 'Invoices', className: 'ui button tiny'}
       ],
       columnDefs: [ {
         targets: 'no-sort',
@@ -39,16 +61,10 @@ class List extends Component {
       } ]
       
     })
-
-    // new $.fn.DataTable.Buttons( table, {
-    //   buttons: [
-    //     'copy', 'excel', 'pdf'
-    //   ]
-    // })
   }
 
   componentWillUnmount() {
-    //$('.table').DataTable().fnDestroy()
+    $('.table').DataTable().destroy()
   }
 
   render() {

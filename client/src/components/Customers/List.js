@@ -15,10 +15,27 @@ class List extends Component {
   
   componentDidUpdate() {  
     $('.table').DataTable({
-      oLanguage: {
-        sProcessing: "<img src='"+ajaxLoader+"'>"
+      processing: true,
+      responsive: true,
+      language: {
+        emptyTable: 'No records',
+        processing: "<img src='"+ajaxLoader+"'>",
+        //info: '_START_ to _END_ of _TOTAL_',
+        infoEmpty: '',
+        search: '',
+        searchPlaceholder: 'Search Customers',
+        lengthMenu: '_MENU_',
+        paginate: {
+          previous: '<i class="left chevron icon"></i>',
+          next: '<i class="right chevron icon"></i>'
+        },
+        aria: {
+          paginate: {
+            previous: 'Previous',
+            next: 'Next'
+          }
+        }
       },
-      bProcessing: true,
       data: this.props.customers,
       lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
       columnDefs: [ {
