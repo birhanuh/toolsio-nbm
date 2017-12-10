@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import map from 'lodash/map'
 import classnames from 'classnames'
-import { addFlashMessage } from '../../actions/flashMessages'
+import { addFlashMessage } from '../../actions/flashMessagesActions'
 import { fetchCustomer, deleteCustomer } from '../../actions/customerActions'
 
 // Localization 

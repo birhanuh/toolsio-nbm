@@ -65,6 +65,7 @@
     "css-loader": "0.26.1",
     "dotenv": "^4.0.0",
     "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
     "enzyme-to-json": "^3.2.2",
     "eslint": "3.16.1",
     "eslint-config-react-app": "^0.6.2",

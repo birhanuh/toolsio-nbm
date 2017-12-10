@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { logout } from '../../actions/authenticationAction'
+import { logout } from '../../actions/authenticationActions'
 
 import $ from 'jquery'
 $.fn.dropdown = require('semantic-ui-dropdown')

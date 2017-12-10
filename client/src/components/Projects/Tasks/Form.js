@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { createTask, updateTask, deleteTask } from '../../../actions/projectActions'
-import { addFlashMessage } from '../../../actions/flashMessages'
+import { addFlashMessage } from '../../../actions/flashMessagesActions'
 import { AddElement, ShowEditElement } from './Tr'
 
 // Localization 

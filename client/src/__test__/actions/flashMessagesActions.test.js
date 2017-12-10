@@ -1,7 +1,7 @@
 // Actions 
 import { 
   addFlashMessage, deleteFlashMessage
-} from '../../actions/flashMessages'
+} from '../../actions/flashMessagesActions'
 import * as types from '../../actions/types'
 
 describe("actions", () => { 

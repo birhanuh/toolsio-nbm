@@ -8,7 +8,7 @@ import thunk from 'redux-thunk'
 import rootReducer from './rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { setAuthorizationToken } from './utils'
-import { setCurrentAccount } from './actions/authenticationAction'
+import { setCurrentAccount } from './actions/authenticationActions'
 
 // Localization 
 import T from 'i18n-react'

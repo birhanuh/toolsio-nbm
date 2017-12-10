@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { addFlashMessage } from '../../../actions/flashMessages'
+import { addFlashMessage } from '../../../actions/flashMessagesActions'
 import { fetchInvoice, deleteInvoice } from '../../../actions/invoiceActions'
 
 // Localization 
