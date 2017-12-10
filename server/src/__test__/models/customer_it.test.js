@@ -1,3 +1,6 @@
+// Evironment config
+require('dotenv').config()
+
 // Mongodb connection
 import db from '../../db'
 

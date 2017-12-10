@@ -40,6 +40,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
     "babel-preset-env": "^1.6.0",
     "factory-girl": "^5.0.0-beta.1",
     "gulp": "^3.9.1",
@@ -47,7 +48,6 @@
     "gulp-nodemon": "^2.2.1",
     "gulp-webdriver": "^2.0.3",
     "jest": "^21.2.1",
-    "jest-cli": "^21.2.1",
     "nodemon": "^1.11.0",
     "phantomjs": "^2.1.7",
     "selenium-standalone": "^6.9.0",
