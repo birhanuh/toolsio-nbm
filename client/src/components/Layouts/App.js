@@ -18,7 +18,7 @@ import CustomersFormPage from '../Customers/FormPage'
 import CustomersShow from '../Customers/Show'
 import InvoicesPage from '../Invoices/Page'
 import InvoicesFormPage from '../Invoices/FormPage'
-import InvoicesShow from '../Invoices/Show'
+import InvoicesShow from '../Invoices/Show/Page'
 import requireAuth from '../../utils/requireAuth'
 
 import HeaderNav from './HeaderNav'

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOMServer from 'react-dom/server'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import List from './List' 
@@ -15,6 +16,27 @@ class Page extends Component {
   }
 
   render() {
+
+    const customers = this.props.customers.map(customer => {
+      let activeProjectsAndSales = ''
+      let unpaidInvoices = ''
+      let actions = (
+        <div className="ui small buttons">
+          <a href={`/customers/edit/${customer._id}`} className="ui icon basic button green"><i className="edit icon"></i></a>
+          <a href={`/customers/show/${customer._id}`} className="ui icon basic blue button"><i className="unhide icon"></i></a>
+        </div>
+      )
+
+      return [
+        customer.name,
+        customer.vatNumber,
+        customer.contact.phoneNumber+ '\n' +customer.contact.email,        
+        activeProjectsAndSales,
+        unpaidInvoices,
+        ReactDOMServer.renderToStaticMarkup(actions)        
+      ]
+    })
+    
     return (
       <div className="row column">  
         <div className="ui vertical segment">
@@ -24,7 +46,7 @@ class Page extends Component {
           </Link>
         </div>  
 
-        <List customers={this.props.customers} deleteCustomer={deleteCustomer} />   
+        <List customers={customers} deleteCustomer={deleteCustomer} />   
       </div>  
     )
   }

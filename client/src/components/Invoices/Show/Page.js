@@ -2,22 +2,23 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import map from 'lodash/map'
-import sumBy from 'lodash/sumBy'
 import classnames from 'classnames'
-import { addFlashMessage } from '../../actions/flashMessages'
-import { fetchInvoice, deleteInvoice } from '../../actions/invoiceActions'
+import { addFlashMessage } from '../../../actions/flashMessages'
+import { fetchInvoice, deleteInvoice } from '../../../actions/invoiceActions'
 
 // Localization 
 import T from 'i18n-react'
 
 import $ from 'jquery'
 
+import Sale from './Sale'
+import Project from './Project'
+
 // Modal
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
 
-class Show extends Component {
+class Page extends Component {
   
   constructor(props) {
     super(props)
@@ -53,7 +54,6 @@ class Show extends Component {
         customer: nextProps.invoice.customer,
         createdAt: nextProps.invoice.createdAt,
         deadline: nextProps.invoice.deadline,
-        dateOfAnInvoice: nextProps.invoice.dateOfAnInvoice,
         paymentTerm: nextProps.invoice.paymentTerm,
         interestInArrears: nextProps.invoice.interestInArrears,
         status: nextProps.invoice.status,
@@ -97,107 +97,7 @@ class Show extends Component {
   }
 
   render() {
-    const { _id, sale, project, customer, dateOfAnInvoice, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, createdAt } = this.state
-
-    const saleAndItems = (
-      <div>
-        <h3 className="ui header">{T.translate("invoices.show.sale.header")}</h3>
-        <dl className="dl-horizontal"> 
-          <dt>{T.translate("invoices.show.sale.name")}</dt>
-          <dd>{sale && sale.name}</dd>
-          <dt>{T.translate("invoices.show.sale.deadline")}</dt>
-          <dd>{sale && sale.deadline}</dd>
-          <dt>{T.translate("invoices.show.sale.status")}</dt>
-          <dd>
-            { sale && 
-              <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
-                    {sale.status}
-                  </div>
-            }
-          </dd>
-          <dt>{T.translate("invoices.show.sale.description")}</dt>
-          <dd>{sale && sale.description ? sale.description : ''}</dd>
-        </dl> 
-
-        <h4 className="ui header">{T.translate("invoices.show.sale.items.header")}</h4>
-        <table className="ui very basic table invoice sale">
-          <thead>
-            <tr>
-              <th>{T.translate("invoices.show.sale.items.name")}</th>
-              <th>{T.translate("invoices.show.sale.items.unit")}</th>
-              <th>{T.translate("invoices.show.sale.items.quantity")}</th>
-              <th>{T.translate("invoices.show.sale.items.vat")}</th>              
-              <th>{T.translate("invoices.show.sale.items.price")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            { sale && map(sale.items, (item) => 
-              <tr key={item._id}>
-                <td>{item.name}</td>
-                <td>{item.unit}</td>
-                <td>{item.quantity}</td>
-                <td>{item.vat}</td>
-                <td>{item.price}</td>
-              </tr>
-            )}
-            <tr>
-              <td colSpan="4"></td>
-              <td><strong>{sale && sumBy(sale.items, 'price')}</strong></td>
-            </tr>
-          </tbody>  
-        </table>
-      </div>
-    )
-
-    const projectAndTasks = (
-      <div>
-        <h3 className="ui header">{T.translate("invoices.show.project.header")}</h3>
-        <dl className="dl-horizontal"> 
-          <dt>{T.translate("invoices.show.project.name")}</dt>
-          <dd>{project && project.name}</dd>
-          <dt>{T.translate("invoices.show.project.deadline")}</dt>
-          <dd>{project && project.deadline}</dd>
-          <dt>{T.translate("invoices.show.project.status")}</dt>
-          <dd>
-            { project && 
-              <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
-                    {project.status}
-                  </div>
-            }
-          </dd>
-          <dt>{T.translate("invoices.show.project.description")}</dt>
-          <dd>{project && project.description ? project.description : ''}</dd>
-        </dl>  
-
-        <h4 className="ui header">{T.translate("invoices.show.project.tasks.header")}</h4>
-        <table className="ui very basic table invoice project">
-          <thead>
-            <tr>
-              <th>{T.translate("invoices.show.project.tasks.name")}</th>
-              <th>{T.translate("invoices.show.project.tasks.payment_type")}</th>
-              <th>{T.translate("invoices.show.project.tasks.hours")}</th>
-              <th>{T.translate("invoices.show.project.tasks.vat")}</th>
-              <th>{T.translate("invoices.show.project.tasks.price")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            { project && map(project.tasks, (task) => 
-              <tr key={task._id}>
-                <td>{task.name}</td>
-                <td>{task.paymentType}</td>
-                <td>{task.hours}</td>
-                <td>{task.vat}</td>
-                <td>{task.price}</td>
-              </tr>
-            )}
-            <tr>
-              <td colSpan="4"></td>
-              <td><strong>{project && sumBy(project.tasks, 'price')}</strong></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    )
+    const { _id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, createdAt } = this.state
 
     const customerContact = (      
       <div>
@@ -239,7 +139,7 @@ class Show extends Component {
               <div className="ui right floated vertical segment p-0 m-0">
                 <dl className="dl-horizontal">
                   <dt>{T.translate("invoices.show.customer.name")}</dt>
-                  <dd>{customer && customer.name}</dd>          
+                  <dd>{customer && <Link to={`/customers/show/${customer._id}`}>{customer.name}</Link>}</dd>          
                   <dt>{T.translate("invoices.show.customer.vat_number")}</dt>
                   <dd>{customer && customer.vatNumber}</dd>
                   
@@ -257,9 +157,9 @@ class Show extends Component {
               </div>
             </div>
 
-            { sale && saleAndItems }
+            { sale && <Sale sale={sale} /> }
 
-            { project && projectAndTasks }
+            { project && <Project project={project} /> }
             
             <div className="ui divider"></div>
 
@@ -296,13 +196,13 @@ class Show extends Component {
   }
 }
 
-Show.propTypes = {
+Page.propTypes = {
   fetchInvoice: PropTypes.func.isRequired,
   deleteInvoice: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired
 }
 
-Show.contextTypes = {
+Page.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
@@ -316,4 +216,4 @@ function mapStateToProps(state, props) {
   } 
 }
 
-export default connect(mapStateToProps, { fetchInvoice, deleteInvoice, addFlashMessage } )(Show)
+export default connect(mapStateToProps, { fetchInvoice, deleteInvoice, addFlashMessage } )(Page)
