@@ -20,13 +20,13 @@ import ajaxLoader from '../../images/ajax-loader.gif'
 
 class List extends Component {
 
-  componentDidUpdate() {  
+  componentDidUpdate = () => {  
     $('.table').dataTable({
       dom: "<'ui three column grid'<'five wide column'l><'seven wide center aligned column'B><'right aligned four wide column'f>>t<'ui grid'<'left aligned eight wide column'i><'right aligned eight wide column'p>>",
       processing: true,
       responsive: true,
       language: {
-        emptyTable: 'No records',
+        emptyTable: this.emptyMessage,
         processing: "<img src='"+ajaxLoader+"'>",
         //info: '_START_ to _END_ of _TOTAL_',
         infoEmpty: '',
@@ -64,11 +64,11 @@ class List extends Component {
   }
 
   componentWillUnmount() {
-    $('.table').DataTable().destroy()
+    $('.table').dataTable().fnDestroy()
   }
 
-  render() {
-    const emptyMessage = (
+  emptyMessage = () => {
+    return (
       <div className="ui info message">
         <div className="header">
           {T.translate("invoices.page.empty_invoices_header")}
@@ -76,8 +76,11 @@ class List extends Component {
         <p>{T.translate("invoices.page.empty_invoices_message")}</p>
       </div>
     )
+  }
+    
+  render() {
 
-    const invoicesList = (
+    return (
       <table className="ui very compact striped selectable table">
         <thead>
           <tr>
@@ -92,14 +95,7 @@ class List extends Component {
         <tbody>
           
         </tbody>
-      </table>
-
-    )
-
-    return (
-      <div>
-        { this.props.invoices.length === 0 ? emptyMessage : invoicesList }
-      </div>   
+      </table>   
     )
   }
 }

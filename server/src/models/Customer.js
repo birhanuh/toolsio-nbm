@@ -18,6 +18,8 @@ let customerSchema = new mongoose.Schema({
   sales: [{ type: mongoose.Schema.Types.ObjectId, ref: "sale" }],
   invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "invoice" }],
 
+  text: true,
+  
   createdAt: { type: Date },
   updatedAt: {type: Date }
 })
