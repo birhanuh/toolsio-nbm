@@ -84,9 +84,9 @@ a {
 }
 
 // Menu
-.ui.menu .item, .ui.menu .active.item,
-.ui.menu .active.item:hover, .ui.vertical.menu .active.item:hover,
-.ui.link.menu .item:hover, .ui.menu .dropdown.item:hover, .ui.menu .link.item:hover, .ui.menu a.item:hover {
+nav.ui.menu .item, nav.ui.menu .active.item,
+nav.ui.menu .active.item:hover, nav.ui.vertical.menu .active.item:hover,
+nav.ui.link.menu .item:hover, nav.ui.menu .dropdown.item:hover, nav.ui.menu .link.item:hover, nav.ui.menu a.item:hover {
   color: $white;
 }
 

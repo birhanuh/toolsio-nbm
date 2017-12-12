@@ -6,11 +6,18 @@ export default {
      
     let limit = parseInt(query.iDisplayLength) 
     let skip = parseInt(query.iDisplayStart)
-    let searchString = query.sSearch !== '' ? query.sSearch : ''
-    console.log('sSearch: ', query.sSearch === '')
+
+    const columns = ['name', 'vatNumber', 'contact']
+    let sortCol = parseInt(query.iSortCol_0)
+    let field = columns[sortCol]
+
+    let sortDir =  query.sSortDir_0 
+    
+    let textSearch = query.sSearch ? { $text: {$search: query.sSearch}} : {}
+    
     Customer.count({}, function( err, count){
 
-      Customer.find({$text: {$search: ''}}).skip(skip).limit(limit).exec(function(err, customers) {
+      Customer.find(textSearch).sort({[field]: ''+sortDir+''}).skip(skip).limit(limit).exec(function(err, customers) {
         if (err) {
           callback(err, null)
           return

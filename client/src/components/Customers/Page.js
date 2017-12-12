@@ -20,6 +20,8 @@ import 'datatables.net-buttons/js/buttons.html5'
 import 'datatables.net-buttons/js/buttons.print'
 import 'datatables.net-responsive-se'
 
+import 'datatables.net-se/css/dataTables.semanticui.css'
+
 // Images
 import ajaxLoader from '../../images/ajax-loader.gif' 
 
@@ -32,7 +34,7 @@ class Page extends Component {
       processing: true,
       responsive: true,
       language: {
-        emptyTable: this.emptyMessage,
+        emptyTable: '<p class="ui info message">'+T.translate("customers.page.empty_customers")+'</p>',
         processing: "<img src='"+ajaxLoader+"'>",
         //info: '_START_ to _END_ of _TOTAL_',
         infoEmpty: '',
@@ -50,16 +52,16 @@ class Page extends Component {
           }
         }
       },
-      bServerSide: true,
+      serverSide: true,
       ajaxSource: $('#customersTable').data('source'),
       lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-      // columnDefs: [ {
-      //   targets: 'no-sort',
-      //   orderable: false
-      //   }, {
-      //   targets: 'align-center',
-      //   className: 'text-center'
-      // } ]
+      columnDefs: [ {
+        targets: 'not-sortable',
+        orderable: false
+        }, {
+        //targets: 'align-center',
+        //className: 'center aligned'
+      } ]
     })
   }
 
@@ -67,10 +69,8 @@ class Page extends Component {
     $('.table').dataTable().fnDestroy()
   }
 
-  emptyMessage = () => {
-    return (
-      <p className="ui info message">{T.translate("customers.page.empty_customers")}</p>
-    )
+  shouldComponentUpdate = () => {
+    return false
   }
 
   render() {
@@ -109,9 +109,9 @@ class Page extends Component {
               <th>{T.translate("customers.page.name")}</th>
               <th>{T.translate("customers.page.vat_number")}</th>
               <th>{T.translate("customers.page.contacts")}</th>
-              <th>{T.translate("customers.page.active_projects_sales")}</th>
-              <th>{T.translate("customers.page.unpaid_invoices")}</th>
-              <th>{T.translate("customers.page.view")}</th>
+              <th className="not-sortable">{T.translate("customers.page.active_projects_sales")}</th>
+              <th className="not-sortable">{T.translate("customers.page.unpaid_invoices")}</th>
+              <th className="not-sortable">{T.translate("customers.page.view")}</th>
             </tr>
           </thead>
           <tbody>

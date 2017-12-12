@@ -16,6 +16,10 @@ class Page extends Component {
     this.props.fetchInvoices()
   }
 
+  shouldComponentUpdate = () => {
+    return false
+  }
+  
   render() {
     
     const invoices = this.props.invoices.map(invoice => {

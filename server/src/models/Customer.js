@@ -18,8 +18,6 @@ let customerSchema = new mongoose.Schema({
   sales: [{ type: mongoose.Schema.Types.ObjectId, ref: "sale" }],
   invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "invoice" }],
 
-  text: true,
-  
   createdAt: { type: Date },
   updatedAt: {type: Date }
 })
@@ -48,5 +46,7 @@ customerSchema.post('save', function(error, doc, next) {
     next(error)
   }
 })
+
+customerSchema.index({name: 'text', 'address.street': 'text', 'address.postalCode': 'text', 'address.region': 'text', 'address.country': 'text', 'contact.phoneNumber': 'text', 'contact.email': 'text'})
 
 let Customer = module.exports = mongoose.model('customer', customerSchema)
