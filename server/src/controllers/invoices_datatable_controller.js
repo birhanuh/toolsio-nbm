@@ -3,22 +3,21 @@ import Invioce from '../models/invoice'
 export default {
   
   find: (query, callback) => {
-     
-    let limit = parseInt(query.iDisplayLength) 
-    let skip = parseInt(query.iDisplayStart)
 
+    let start = parseInt(query.start)
+    let length = parseInt(query.length)
+
+    let order = query.order[0]
     const columns = ['name', 'vatNumber', 'contact']
-    let sortCol = parseInt(query.iSortCol_0)
-    let field = columns[sortCol]
+    let field = columns[parseInt(order.column)]
+    let sortDir =  order.dir 
+    let sort = query.order.length > 0 ? {[field]: ''+sortDir+''} : {}
 
-    let sortDir =  query.sSortDir_0
-    
-    let textSearch = query.sSearch ? { $text: {$search: query.sSearch}} : {}
-    let sort = field && sortDir ? {[field]: ''+sortDir+''} : {}
+    let search = query.search.value !== '' ? { $text: {$search: query.search.value}} : {}
 
     Invioce.count({}, function( err, count){
 
-      Invioce.find(textSearch).sort(sort).skip(skip).limit(limit).populate([{path: 'sale', select: 'name total'}, {path: 'project', select: 'name total' }, {path: 'customer', select: 'name'}]).exec(function(err, invoices) {
+      Invioce.find(search).sort(sort).skip(start).limit(length).populate([{path: 'sale', select: 'name total'}, {path: 'project', select: 'name total' }, {path: 'customer', select: 'name'}]).exec(function(err, invoices) {
         if (err) {
           callback(err, null)
           return
@@ -68,10 +67,9 @@ export default {
         })
 
         invoices = {      
-          sEcho: parseInt(query.sEcho),
-          iTotalRecords: count,
-          iTotalDisplayRecords: count,
-          aaData: invoicesFiltered
+           draw: parseInt(query.draw),
+          total: count,
+          list: invoicesFiltered
         }
      
         callback(null, invoices)

@@ -4,7 +4,7 @@ import Invoice from '../models/invoice'
 
 export default {
   
-  find: (callback) => {
+  find: (query, callback) => {
     Project.find({}).select('-tasks').populate({ path: 'customer', select: 'name' }).exec(function(err, projects) {
       if (err) {
         callback(err, null)

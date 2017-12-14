@@ -20,30 +20,8 @@ router.get('/:resource', ensureAuthenticated, function(req, res) {
     })
     return
   }
-  
-  if (resource.includes('datatable')) {
-    
-    let params = req.params
-    let controller = controllers[params.resource]
 
-    controller.find(req.query, function(err, results) {
-      if (err) {
-        res.status(500).json({ 
-          errors: {
-            confirmation: 'fail',
-            message: err
-          }
-        })
-        return
-      }
-      res.json(
-        results
-      )
-    })
-    return
-  }
-
-  controller.find(function(err, results) {
+  controller.find(req.query, function(err, results) {
     if (err) {
       res.status(500).json({ 
         errors: {

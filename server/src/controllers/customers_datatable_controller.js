@@ -3,22 +3,21 @@ import Customer from '../models/customer'
 export default {
   
   find: (query, callback) => {
-     
-    let limit = parseInt(query.iDisplayLength) 
-    let skip = parseInt(query.iDisplayStart)
 
+    let start = parseInt(query.start)
+    let length = parseInt(query.length)
+
+    let order = query.order[0]
     const columns = ['name', 'vatNumber', 'contact']
-    let sortCol = parseInt(query.iSortCol_0)
-    let field = columns[sortCol]
+    let field = columns[parseInt(order.column)]
+    let sortDir =  order.dir 
+    let sort = query.order.length > 0 ? {[field]: ''+sortDir+''} : {}
 
-    let sortDir =  query.sSortDir_0
+    let search = query.search.value !== '' ? { $text: {$search: query.search.value}} : {}
     
-    let textSearch = query.sSearch ? { $text: {$search: query.sSearch}} : {}
-    let sort = field && sortDir ? {[field]: ''+sortDir+''} : {}
-
     Customer.count({}, function( err, count){
 
-      Customer.find(textSearch).sort(sort).skip(skip).limit(limit).exec(function(err, customers) {
+      Customer.find(search).sort(sort).skip(start).limit(length).exec(function(err, customers) {
         if (err) {
           callback(err, null)
           return
@@ -49,10 +48,9 @@ export default {
         })
 
         customers = {      
-          sEcho: parseInt(query.sEcho),
-          iTotalRecords: count,
-          iTotalDisplayRecords: count,
-          aaData: customersFiltered
+          draw: parseInt(query.draw),
+          total: count,
+          list: customersFiltered
         }
      
         callback(null, customers)

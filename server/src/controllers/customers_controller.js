@@ -6,7 +6,7 @@ import Invoice from '../models/invoice'
 
 export default {
   
-  find: (callback) => {
+  find: (query, callback) => {
     Customer.find({}).select('name contact vatNumber').exec(function(err, customers) {
       if (err) {
         callback(err, null)

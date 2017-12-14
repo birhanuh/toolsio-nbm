@@ -55,8 +55,17 @@ class Page extends Component {
         }
       },
       serverSide: true,
-      ajaxSource: $('#invoicesTable').data('source'),
-      //ajaxDataProp: "results",
+      ajax: {
+        url: "api/invoices_datatable",
+        dataFilter: function(data) {
+          var json = $.parseJSON(data)
+          json.recordsTotal = json.results.total
+          json.recordsFiltered = json.results.total
+          json.data = json.results.list
+
+          return JSON.stringify(json) // return JSON string
+        }
+      },
       lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
       columnDefs: [ {
         targets: 'not-sortable',
@@ -111,7 +120,7 @@ class Page extends Component {
           </Link>
         </div>  
 
-        <table id="invoicesTable" className="ui very compact striped selectable table" data-source={"api/invoices_datatable"}>
+        <table id="invoicesTable" className="ui very compact striped selectable table">
           <thead>
             <tr>
               <th>{T.translate("invoices.page.sale_project")}</th>
