@@ -1,10 +1,16 @@
+import 'raf/polyfill'
+
 import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { shallow, mount } from 'enzyme'
+import { configure, shallow, mount } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
 import toJson from 'enzyme-to-json'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
+
+// Configure Adapter
+configure({ adapter: new Adapter() })
 
 // Components 
 import FormPage from '../../components/Sales/FormPage'

@@ -384,7 +384,13 @@
       "header": "Customers",
       "add_new_customer": "Add new customer",
       "empty_customers": "There are no customers yet",
-      "description": "All added Customers are shown here."
+      "description": "All added Customers are shown here.",
+      "name": "Name",
+      "contacts": "Contacts",
+      "vat_number": "Vat number",
+      "active_projects_sales": "Active Projects/Sales",
+      "unpaid_invoices": "Unpaid invoices",
+      "view": "View"
     },
     "form": {
       "new_customer": "New Customer",
@@ -427,8 +433,6 @@
         "region": "Region",
         "country": "Country"
       },
-      "active_projects_sales": "Active Projects/Sales",
-      "unpaid_invoices": "Unpaid invoices",
       "confirmation_msg": "Are you sure to delete this customer?",
       "flash": {
         "success_delete": "Customer *{name}* is deleted!",
@@ -443,7 +447,13 @@
       "empty_invoices_header": "There are no invoices",
       "empty_invoices_message": "Click Create new Invoice button above to create your first Invoice.",
       "create_new_invoice": "Create new Invoice",
-      "description": "All created Invoices are shown here."
+      "description": "All created Invoices are shown here.",
+      "sale_project": "Sale/Project",
+      "deadline": "Deadline",
+      "customer": "Customer",
+      "total": "Total",
+      "status": "Status",
+      "view": "View"
     },
     "form": {
       "new_invoice": "New Invoice",

@@ -62,16 +62,46 @@
 }
 
 // Display
-.d-inline-block {
+.inline-block {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
+}
+
+.block {
+  display: block;
+}
+
+.inline-block-i {
   display: inline-block !important;
 }
 
-.d-inline {
+.inline-i {
   display: inline !important;
 }
 
-.d-block {
+.block-i {
   display: block !important;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.overflow-visible {
+  overflow: visible !important;
+} 
+
+.overflow-ellipsis {
+  white-space:nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
 }
 
 // Margins

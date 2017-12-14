@@ -1,6 +1,8 @@
 import projects from './projects_controller'
 import sales from'./sales_controller'
 import customers from'./customers_controller'
+import customers_datatable from'./customers_datatable_controller'
+import invoices_datatable from'./invoices_datatable_controller'
 import tasks from'./tasks_controller'
 import items from'./items_controller'
 import invoices from'./invoices_controller'
@@ -11,5 +13,7 @@ module.exports = {
   customers,
   tasks,
   items,
-  invoices
+  invoices,
+  customers_datatable,
+  invoices_datatable
 }

@@ -1,4 +1,4 @@
-import reducer from '../../reducers/auth'
+import reducer from '../../reducers/authentication'
 import * as types from '../../actions/types'
 
 describe("auth reducer", () => { 

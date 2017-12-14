@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import map from 'lodash/map'
 import classnames from 'classnames'
-import { addFlashMessage } from '../../actions/flashMessages'
+import { addFlashMessage } from '../../actions/flashMessagesActions'
 import { fetchCustomer, deleteCustomer } from '../../actions/customerActions'
 
 // Localization 
@@ -118,7 +118,7 @@ class Show extends Component {
     )
 
     const projectsList = map(projects, (project) => 
-      <div className="ui segment">
+      <div key={project._id} className="ui segment">
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/projects/show/${project._id}`} className="ui header">
@@ -150,7 +150,7 @@ class Show extends Component {
     )
 
     const salesList = map(sales, (sale) => 
-      <div className="ui segment">
+      <div key={sale._id} className="ui segment">
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/sales/show/${sale._id}`} className="ui header">
@@ -183,7 +183,7 @@ class Show extends Component {
     )
 
     const invoicesList = map(invoices, (invoice) => 
-       <div className="ui segment">
+       <div key={invoice._id} className="ui segment">
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/invoices/show/${invoice._id}`} className="ui header">

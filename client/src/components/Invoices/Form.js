@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import map from 'lodash/map'
-import isEmpty from 'lodash/isEmpty'
 import { Validation } from '../../utils'
 import { InputField, SelectField, TextAreaField } from '../../utils/FormFields'
 import Steps from './Steps'
@@ -213,7 +212,7 @@ class Form extends Component {
           <div className="inline field"> 
             {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
               <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-                <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.sale_or_project")}</div>
+                <div className="sub header inline-block-i pl-1">{T.translate("invoices.form.sale_or_project")}</div>
               </h1>
             }
           </div>
@@ -251,7 +250,7 @@ class Form extends Component {
           <div className="inline field mt-5"> 
             <button className="ui primary button" onClick={this.handleNext.bind(this)}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
 
-            <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
+            <Link to="/invoices" className="ui negative block-i mt-3">{T.translate("invoices.form.cancel")}</Link>
           </div>  
         </div>
       </div>      
@@ -263,7 +262,7 @@ class Form extends Component {
           <div className="inline field"> 
             {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
               <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-                <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.invoice_details")}</div>
+                <div className="sub header inline-block-i pl-1">{T.translate("invoices.form.invoice_details")}</div>
               </h1>
             }
           </div>
@@ -338,7 +337,7 @@ class Form extends Component {
             <button className="ui button" onClick={this.handlePrevious.bind(this)}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
             <button className="ui primary button" onClick={this.handleNext.bind(this)}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
 
-            <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
+            <Link to="/invoices" className="ui negative block-i mt-3">{T.translate("invoices.form.cancel")}</Link>
           </div>  
         </div>  
       </div>
@@ -350,7 +349,7 @@ class Form extends Component {
           <div className="inline field"> 
             {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
               <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-                <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.confirmation")}</div>
+                <div className="sub header inline-block-i pl-1">{T.translate("invoices.form.confirmation")}</div>
               </h1>
             }
           </div> 
@@ -415,7 +414,7 @@ class Form extends Component {
             <button className="ui button" onClick={this.handlePrevious.bind(this)}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
             <button disabled={isLoading} className="ui primary button" onClick={this.handleSubmit.bind(this)}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.save")}</button>
             
-            <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
+            <Link to="/invoices" className="ui negative block-i mt-3">{T.translate("invoices.form.cancel")}</Link>
           </div>  
         </div>
       </div>

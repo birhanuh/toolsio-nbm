@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
 // Actions 
-import { signupRequest, setCurrentAccount } from '../../actions/authentication'
+import { signupRequest, setCurrentAccount } from '../../actions/authenticationActions'
 import * as types from '../../actions/types'
 
 const middlewares = [thunk] // add your middlewares like `redux-thunk`

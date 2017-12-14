@@ -8,7 +8,8 @@ import { authenticate, ensureAuthenticated } from '../middlewares/authenticate'
 // response with error and halt operatoin so, route code never excutes)
 router.get('/:resource', ensureAuthenticated, function(req, res) {
   
-  let resource = req.params.resource
+  let resource = req.params.resource 
+
   let controller = controllers[resource]
   if (controller == null) {
     res.status(500).json({
@@ -20,7 +21,7 @@ router.get('/:resource', ensureAuthenticated, function(req, res) {
     return
   }
 
-  controller.find(function(err, results) {
+  controller.find(req.query, function(err, results) {
     if (err) {
       res.status(500).json({ 
         errors: {

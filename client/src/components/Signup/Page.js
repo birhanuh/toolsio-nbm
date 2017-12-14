@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Form from './Form'
-import { signupRequest, isAccountExists, isUserExists} from '../../actions/authenticationAction'
-import { addFlashMessage } from '../../actions/flashMessages'
+import { signupRequest, isAccountExists, isUserExists} from '../../actions/authenticationActions'
+import { addFlashMessage } from '../../actions/flashMessagesActions'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
 // Localization 
@@ -34,8 +34,8 @@ class Page extends Component {
           {T.translate("sign_up.already_a_user")}&nbsp;<a href="/login">{T.translate("sign_up.log_in_here")}</a>
         </div>
         <div className="ui text-container mt-4">
-          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
-          <small className="d-block">{T.translate("landing.footer.address")}</small>
+          <small className="block-i">{T.translate("landing.footer.copyright")}</small>
+          <small className="block-i">{T.translate("landing.footer.address")}</small>
         </div>
       </div>  
     )

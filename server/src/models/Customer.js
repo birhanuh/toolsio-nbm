@@ -47,4 +47,6 @@ customerSchema.post('save', function(error, doc, next) {
   }
 })
 
+customerSchema.index({name: 'text', 'address.street': 'text', 'address.postalCode': 'text', 'address.region': 'text', 'address.country': 'text', 'contact.phoneNumber': 'text', 'contact.email': 'text'})
+
 let Customer = module.exports = mongoose.model('customer', customerSchema)

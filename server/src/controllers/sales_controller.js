@@ -3,7 +3,7 @@ import Item from '../models/item'
 
 export default {
   
-  find: (callback) => {
+  find: (query, callback) => {
      Sale.find({}).select('-items').populate({ path: 'customer', select: 'name' }).exec(function(err, sales) {
       if (err) {
         callback(err, null)
