@@ -212,7 +212,7 @@ class HeaderNav extends Component {
           <div className="ui text container">
             <h1 className="ui inverted header">
               {T.translate("landing.home.welcome")}&nbsp;
-              <div className="turquoise d-inline">{T.translate("internal_navigation.toolsio")}</div>
+              <div className="turquoise inline-i">{T.translate("internal_navigation.toolsio")}</div>
             </h1>
             <h3>{T.translate("landing.home.slogan")}</h3>
             <a href="/signup" className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>

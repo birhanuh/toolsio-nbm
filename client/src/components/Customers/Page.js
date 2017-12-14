@@ -28,6 +28,7 @@ import ajaxLoader from '../../images/ajax-loader.gif'
 class Page extends Component {
 
   componentDidMount() {
+    
     this.props.fetchCustomers()
 
     $('.table').DataTable({
@@ -54,6 +55,7 @@ class Page extends Component {
       },
       serverSide: true,
       ajaxSource: $('#customersTable').data('source'),
+      //ajaxDataProp: "results",
       lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
       columnDefs: [ {
         targets: 'not-sortable',

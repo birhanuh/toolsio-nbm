@@ -11,13 +11,14 @@ export default {
     let sortCol = parseInt(query.iSortCol_0)
     let field = columns[sortCol]
 
-    let sortDir =  query.sSortDir_0 
+    let sortDir =  query.sSortDir_0
     
     let textSearch = query.sSearch ? { $text: {$search: query.sSearch}} : {}
-    
+    let sort = field && sortDir ? {[field]: ''+sortDir+''} : {}
+
     Customer.count({}, function( err, count){
 
-      Customer.find(textSearch).sort({[field]: ''+sortDir+''}).skip(skip).limit(limit).exec(function(err, customers) {
+      Customer.find(textSearch).sort(sort).skip(skip).limit(limit).exec(function(err, customers) {
         if (err) {
           callback(err, null)
           return
