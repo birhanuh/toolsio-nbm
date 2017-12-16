@@ -1,12 +1,12 @@
 import express from 'express'
-let router = express.Router()
+const router = express.Router()
 import controllers from '../controllers'
 import { authenticate, ensureAuthenticated } from '../middlewares/authenticate'
 
 // POST recources (authenticate middleware function called when request comes and it checks for toke validation,
 // if every thing is ok, it procced to the route code but, if there no-toket or token-is-invalid then middlewaer 
 // response with error and halt operatoin so, route code never excutes)
-router.get('/:resource', ensureAuthenticated, function(req, res) {
+router.get('/:resource', ensureAuthenticated, (req, res) => {
   
   let resource = req.params.resource 
 
@@ -21,7 +21,7 @@ router.get('/:resource', ensureAuthenticated, function(req, res) {
     return
   }
 
-  controller.find(req.query, function(err, results) {
+  controller.find(req.query, (err, results) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -40,7 +40,7 @@ router.get('/:resource', ensureAuthenticated, function(req, res) {
 })
 
 // GET resource with id
-router.get('/:resource/:id', ensureAuthenticated, function(req, res) {
+router.get('/:resource/:id', ensureAuthenticated, (req, res) => {
   
   let resource = req.params.resource
   let id = req.params.id
@@ -56,7 +56,7 @@ router.get('/:resource/:id', ensureAuthenticated, function(req, res) {
     return
   }
 
-  controller.findById(id, function(err, result) {
+  controller.findById(id, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -76,7 +76,7 @@ router.get('/:resource/:id', ensureAuthenticated, function(req, res) {
 })
 
 // POST resource 
-router.post('/:resource', ensureAuthenticated, function(req, res) {
+router.post('/:resource', ensureAuthenticated, (req, res) => {
   
   let resource = req.params.resource
 
@@ -95,7 +95,7 @@ router.post('/:resource', ensureAuthenticated, function(req, res) {
   let requestBody = req.body
   delete requestBody['_id']
     
-  controller.create(requestBody, function(err, result) {
+  controller.create(requestBody, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -114,7 +114,7 @@ router.post('/:resource', ensureAuthenticated, function(req, res) {
 })
 
 // UPDATE resource with id
-router.put('/:resource/:id', ensureAuthenticated, function(req, res) {
+router.put('/:resource/:id', ensureAuthenticated, (req, res) => {
 
   let resource = req.params.resource
 
@@ -128,7 +128,7 @@ router.put('/:resource/:id', ensureAuthenticated, function(req, res) {
     })
   } 
 
-  controller.findByIdAndUpdate(req.params.id, req.body, function(err, result) {
+  controller.findByIdAndUpdate(req.params.id, req.body, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -146,7 +146,7 @@ router.put('/:resource/:id', ensureAuthenticated, function(req, res) {
 })
 
 // DELETE resource with id
-router.delete('/:resource/:id', ensureAuthenticated, function(req, res) {
+router.delete('/:resource/:id', ensureAuthenticated, (req, res) => {
   
   let resource = req.params.resource
   let id = req.params.id
@@ -162,7 +162,7 @@ router.delete('/:resource/:id', ensureAuthenticated, function(req, res) {
     return
   }
 
-  controller.findByIdAndRemove(id, function(err, result) {
+  controller.findByIdAndRemove(id, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {

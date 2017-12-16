@@ -1,11 +1,12 @@
-import projects from './projects_controller'
-import sales from'./sales_controller'
-import customers from'./customers_controller'
-import customers_datatable from'./customers_datatable_controller'
-import invoices_datatable from'./invoices_datatable_controller'
-import tasks from'./tasks_controller'
-import items from'./items_controller'
-import invoices from'./invoices_controller'
+import projects from './projects'
+import sales from'./sales'
+import customers from'./customers'
+import customers_datatable from'./customers_datatable'
+import invoices_datatable from'./invoices_datatable'
+import tasks from'./tasks'
+import items from'./items'
+import invoices from'./invoices'
+import chats from'./chats'
 
 module.exports = {
   projects,
@@ -15,5 +16,6 @@ module.exports = {
   items,
   invoices,
   customers_datatable,
-  invoices_datatable
+  invoices_datatable,
+  chats
 }

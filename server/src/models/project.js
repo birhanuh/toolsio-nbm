@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 import Customer from'./customer'
 
-let projectSchema = new mongoose.Schema({
+const projectSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Name is required."] },
   deadline: { type: Date, required: [true, "Deadline is required."] },
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "customer", required: [true, "Customer is required."] },
@@ -25,7 +25,7 @@ projectSchema.pre('validate', function (next) {
 projectSchema.post('save', function(doc, next) {
 
   // Push project to related Customer object
-  Customer.findByIdAndUpdate(this.customer, { $push: { projects: this._id }}, { new: true }, function(err, customer) {
+  Customer.findByIdAndUpdate(this.customer, { $push: { projects: this._id }}, { new: true }, (err, customer) => {
     if (err) {
       errors: {
         cantUpdateCustomer: {
@@ -38,4 +38,4 @@ projectSchema.post('save', function(doc, next) {
   next()
 })
 
-let Project = module.exports = mongoose.model('project', projectSchema)
+module.exports = mongoose.model('project', projectSchema)

@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import Customer from'./customer'
 
 // User Schema 
-let saleSchema = new mongoose.Schema({
+const saleSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Name is required."] },
   deadline: { type: Date, required: [true, "Deadline is required."] },  
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "customer", required: [true, "Customer is required."] },
@@ -17,15 +17,15 @@ let saleSchema = new mongoose.Schema({
   updatedAt: Date
 })
 
-saleSchema.pre('validate', function (next) {
+saleSchema.pre('validate', (next) => {
   this.status = "new"
   next()
 }) 
 
-saleSchema.post('save', function(doc, next) {
+saleSchema.post('save', (doc, next) => {
 
   // Push sale to related Customer object
-  Customer.findByIdAndUpdate(this.customer, { $push: { sales: this._id }}, { new: true }, function(err, customer) {
+  Customer.findByIdAndUpdate(this.customer, { $push: { sales: this._id }}, { new: true }, (err, customer) => {
     if (err) {
       errors: {
         cantUpdateCustomer: {
@@ -38,8 +38,8 @@ saleSchema.post('save', function(doc, next) {
   next()
 })
 
-saleSchema.methods.addItems = function(items) {
+saleSchema.methods.addItems = (items) => {
   this.items.push(items)
 }
 
-let Sale = module.exports = mongoose.model('sale', saleSchema)
+module.exports = mongoose.model('sale', saleSchema)

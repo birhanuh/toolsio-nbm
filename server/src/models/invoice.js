@@ -6,7 +6,7 @@ import Sale from'./sale'
 import Task from'./task'
 import Item from'./item'
 
-let invoiceSchema = new mongoose.Schema({
+const invoiceSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "customer", required: [true, "Customer is required."] },
   deadline: { type: Date, validate: { validator: deadlinePaymentTermValidator, message: 'Select either Deadline or Payment term.'} },
   paymentTerm: { type: Number, validate: { validator: deadlinePaymentTermValidator, message: 'Select either Deadline or Payment term.'} },
@@ -21,7 +21,7 @@ let invoiceSchema = new mongoose.Schema({
   updatedAt: {type: Date }
 })
 
-invoiceSchema.pre('save', function(next) {
+invoiceSchema.pre('save', (next) => {
   let now = new Date()
   this.updatedAt = now
   if (!this.createdAt) {
@@ -31,7 +31,7 @@ invoiceSchema.pre('save', function(next) {
   next()
 })
 
-invoiceSchema.pre('validate', async function(next) {
+invoiceSchema.pre('validate', async (next) => {
 
   if (this.sale) {
     let sale = await getSaleById(this.sale)
@@ -53,10 +53,10 @@ invoiceSchema.pre('validate', async function(next) {
   next()
 })
 
-invoiceSchema.post('save', function(doc, next) {
+invoiceSchema.post('save', (doc, next) => {
   
   // Push invoice to related Customer object
-  Customer.findByIdAndUpdate(this.customer, { $push: { invoices: this._id }}, { new: true }, function(err, customer) {
+  Customer.findByIdAndUpdate(this.customer, { $push: { invoices: this._id }}, { new: true }, (err, customer) => {
     if (err) {
       errors: {
         cantUpdateCustomer: {
@@ -67,7 +67,7 @@ invoiceSchema.post('save', function(doc, next) {
   })
 
   // Push Invoice to related Sale object
-  Sale.findByIdAndUpdate(this.sale, { invoice: this._id }, { new: true }, function(err, sale) {
+  Sale.findByIdAndUpdate(this.sale, { invoice: this._id }, { new: true }, (err, sale) => {
     if (err) {
       errors: {
         cantUpdateSale: {
@@ -78,7 +78,7 @@ invoiceSchema.post('save', function(doc, next) {
   })
 
   // Push Invoice to related Projectr object
-  Project.findByIdAndUpdate(this.project, { invoice: this._id }, { new: true }, function(err, project) {
+  Project.findByIdAndUpdate(this.project, { invoice: this._id }, { new: true }, (err, project) => {
     if (err) {
       errors: {
         cantUpdateProject: {
@@ -91,11 +91,11 @@ invoiceSchema.post('save', function(doc, next) {
   next()
 })
 
-function getSaleById(id) {
+let getSaleById = (id) => {
   return Sale.findById(id)
 }
 
-function getProjectById(id) {
+let getProjectById = (id) => {
   return Project.findById(id)
 }
 
@@ -123,13 +123,15 @@ function deadlinePaymentTermValidator() {
   }
 }
 
-invoiceSchema.methods.allUnpaidInvoicesByStatus = function() {
+invoiceSchema.methods.allUnpaidInvoicesByStatus = () => {
 
 }
 
-invoiceSchema.methods.unpaidInvoicesByInvitedUsers = function() {
+invoiceSchema.methods.unpaidInvoicesByInvitedUsers = () => {
 
 }
 
-let Invoice = module.exports = mongoose.model('invoice', invoiceSchema)
+invoiceSchema.index({customer: 'text', 'deadline': 'text', 'project.name': 'text', 'sale.name': 'text'})
+
+module.exports = mongoose.model('invoice', invoiceSchema)
 

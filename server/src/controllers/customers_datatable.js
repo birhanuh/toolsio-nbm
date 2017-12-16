@@ -15,9 +15,9 @@ export default {
 
     let search = query.search.value !== '' ? { $text: {$search: query.search.value}} : {}
     
-    Customer.count({}, function( err, count){
+    Customer.count({}, (err, count) => {
 
-      Customer.find(search).sort(sort).skip(start).limit(length).exec(function(err, customers) {
+      Customer.find(search).sort(sort).skip(start).limit(length).exec((err, customers) => {
         if (err) {
           callback(err, null)
           return

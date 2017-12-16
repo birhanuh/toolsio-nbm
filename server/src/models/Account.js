@@ -1,10 +1,8 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 
-let Schema = mongoose.Schema
-
 // Account Schema 
-const accountSchema = new Schema({
+const accountSchema = mongoose.Schema({
   users: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
   subdomain: { type: String, required: [true, "Subdomain is required."] }, 
   industry: { type: String, required: [true, "Industry is required."] },
@@ -31,4 +29,4 @@ function contactValidator() {
   }
 }
 
-let Account = module.exports = mongoose.model('account', accountSchema)
+module.exports = mongoose.model('account', accountSchema)
