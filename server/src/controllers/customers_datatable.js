@@ -11,7 +11,7 @@ export default {
     const columns = ['name', 'vatNumber', 'contact']
     let field = columns[parseInt(order.column)]
     let sortDir =  order.dir 
-    let sort = query.order.length > 0 ? {[field]: ''+sortDir+''} : {'-createdAt'}
+    let sort = query.order.length > 0 ? {[field]: ''+sortDir+''} : {createdAt: 'desc'}
 
     let search = query.search.value !== '' ? { $text: {$search: query.search.value}} : {}
     

@@ -1,6 +1,6 @@
 import express from 'express'
 
-import Account from '../models/Account'
+import Account from '../models/account'
 
 let router = express.Router()
 

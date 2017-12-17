@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt'
 import passport from 'passport'
 import config from '../config'
 
-import User from '../models/User'
-import Account from '../models/Account'
+import User from '../models/user'
+import Account from '../models/account'
 
 let router = express.Router()
 

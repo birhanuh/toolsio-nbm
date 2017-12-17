@@ -1,6 +1,6 @@
-import Conversation from '../models/conversation'
-import Message from '../models/message'
-import User form '../models/user'
+import Conversation from '../../models/messaging/conversation'
+import Message from '../../models/messaging/message'
+import User from '../../models/user'
 
 export default {
 
@@ -14,8 +14,8 @@ export default {
 
       // Set up empty array to hold conversations + most recent message
       let fullConversations = []
-      conversations.map(conversation = {
-        Message.find({ conversationId: conversation._id}).sort('-createdAt').limit(1).populate({ path: 'author', select: 'profile.firstName profile.lastName' }).exec((err, message) => {
+      conversations.map(conversation => {
+        Message.find({ conversationId: conversation._id}).sort('createdAt').limit(1).populate({ path: 'author', select: 'profile.firstName profile.lastName' }).exec((err, message) => {
           if(err) {
             callback(err, null)
             return
