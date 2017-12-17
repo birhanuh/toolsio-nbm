@@ -11,10 +11,9 @@ const projectSchema = new mongoose.Schema({
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "task" }],
   total: { type: Number, default: 0 },
 
-  invoice: { type: mongoose.Schema.Types.ObjectId, ref: "invoice" },
-
-  createdAt: { type: Date },
-  updatedAt: { type: Date }
+  invoice: { type: mongoose.Schema.Types.ObjectId, ref: "invoice" }
+},{
+  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
 projectSchema.pre('validate', function (next) {

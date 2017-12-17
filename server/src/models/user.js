@@ -12,19 +12,16 @@ const UserSchema = new Schema({
   email: { type: String, required: [true, "Email is required."], index: {unique: true, dropDups: true} },
   password: { type: String, required: [true, "Password is required."] },
   admin: Boolean,
+  avatar: { data: Buffer, contentType: String },
   meta: {
     age: Number,
     gender: String
-  },
-  avatar: { data: Buffer, contentType: String },
-
-  createdAt: Date,
-  updatedAt: Date,
-
-  tenantId: { type: String }
+  }
+},{
+  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function(next) {
   let user = this
 
   // only hash the password if it has been modified (or is new)
@@ -60,7 +57,7 @@ UserSchema.post('save', (error, doc, next) => {
   }
 })
 
-let User = module.exports = mongoose.model('user', UserSchema)
+module.exports = mongoose.model('user', UserSchema)
 
 module.exports.getUserByEmail = (email, callback) => {
   let query = {email: email}

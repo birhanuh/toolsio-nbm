@@ -11,10 +11,9 @@ const saleSchema = new mongoose.Schema({
   items: [{ type: mongoose.Schema.Types.ObjectId, ref: "item" }],
   total: { type: Number, default: 0 },
 
-  invoice: { type: mongoose.Schema.Types.ObjectId, ref: "invoice" },
-
-  createdAt: Date,
-  updatedAt: Date
+  invoice: { type: mongoose.Schema.Types.ObjectId, ref: "invoice" }
+},{
+  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
 saleSchema.pre('validate', (next) => {

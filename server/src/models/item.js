@@ -7,10 +7,9 @@ const itemSchema = new mongoose.Schema({
   unit: { type: String, required: [true, "Unit is required."] },
   quantity: { type: Number, required: [true, "Quantity is required."] },
   price: { type: Number, required: [true, "Price is required."] },
-  vat: { type: Number, min: 1, max: 100, required: [true, "Vat is required."] },
-
-  createdAt: Date,
-  updatedAt: Date
+  vat: { type: Number, min: 1, max: 100, required: [true, "Vat is required."] }
+},{
+  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
 itemSchema.post('save', (doc, next) => {

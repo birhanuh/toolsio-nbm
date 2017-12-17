@@ -30,7 +30,7 @@ let LocalStrategy = require('passport-local').Strategy
 
 router.post('/register', function(req, res) {
   const { account, user } = req.body
-  
+
   User.create(user).then(user => {
     Account.create(account).then(account => {
       
@@ -44,7 +44,7 @@ router.post('/register', function(req, res) {
         user.save().then(user => {
           req.login(user, function(err) {
             res.json({ firstName: user.firstName, lastName: user.lastName, email: user.email, 
-              admin: user.admin, subdomain: user.tenantId })
+              admin: user.admin, subdomain: user.account.subdomain })
           })
         }).catch(err => 
           res.status(500).json({ 
@@ -71,12 +71,14 @@ router.post('/register', function(req, res) {
       })
     )
   }).catch(err => 
-    res.status(500).json({ 
-      errors: {
-        confirmation: 'fail',
-        message: err
-      }
-    })
+    // res.status(500).json({ 
+    //   errors: {
+    //     confirmation: 'fail',
+    //     message: err
+    //   }
+    // })
+    
+      console.log('err: ', err)
   )
 })
 

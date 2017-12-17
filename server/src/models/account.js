@@ -16,9 +16,9 @@ const accountSchema = mongoose.Schema({
     phoneNumber: { type: String, match: [/\d{6,14}/, "Wrong Phone number fromat."], validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} },
     email: { type: String, match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Wrong Email fromat."], validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} }
   },
-  logo: { data: Buffer, contentType: String },
-  createdAt: Date,
-  updatedAt: Date
+  logo: { data: Buffer, contentType: String }
+},{
+  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
 function contactValidator() {

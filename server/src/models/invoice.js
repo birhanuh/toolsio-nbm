@@ -15,10 +15,9 @@ const invoiceSchema = new mongoose.Schema({
   description: { type: String },
   project: { type: mongoose.Schema.Types.ObjectId, required: false, default: null, ref: "project", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
   sale: { type: mongoose.Schema.Types.ObjectId, required: false, default: null, ref: "sale", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
-  referenceNumber: { type: String, required: true },
-
-  createdAt: { type: Date },
-  updatedAt: {type: Date }
+  referenceNumber: { type: String, required: true }
+},{
+  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
 invoiceSchema.pre('save', (next) => {
