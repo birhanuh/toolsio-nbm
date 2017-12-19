@@ -634,7 +634,10 @@
       "title": "Title",
       "recipient": "Recipient",
       "body": "Body",
-      "reply": "Reply"
+      "reply": "Reply",
+      "flash": {
+        "success_delete": "Message is deleted!"
+      }  
     },
     "reply": {
       "success": "Reply is sent"
