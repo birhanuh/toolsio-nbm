@@ -25,8 +25,8 @@ export default {
     })
   },
 
-  create: (params, callback) => {
-    Sale.create(params, function(err, sale) {
+  create: (reqBody, callback) => {
+    Sale.create(reqBody, function(err, sale) {
       if (err) {
         callback(err, null)
         return
@@ -36,8 +36,8 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, params, callback) => {
-    Sale.findByIdAndUpdate(id, params, {new: true}, function(err, sale) {
+  findByIdAndUpdate: (id, reqBody, callback) => {
+    Sale.findByIdAndUpdate(id, reqBody, {new: true}, function(err, sale) {
       if (err) {
         callback(err, null)
         return

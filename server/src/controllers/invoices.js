@@ -24,8 +24,8 @@ export default {
     })
   },
 
-  create: (params, callback) => {  
-    Invoice.create(params, function(err, invoice) {
+  create: (reqBody, callback) => {  
+    Invoice.create(reqBody, function(err, invoice) {
       if (err) {
         callback(err, null)
         return
@@ -34,8 +34,8 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, params, callback) => {
-    Invoice.findByIdAndUpdate(id, params, {new: true}, function(err, invoice) {
+  findByIdAndUpdate: (id, reqBody, callback) => {
+    Invoice.findByIdAndUpdate(id, reqBody, {new: true}, function(err, invoice) {
       if (err) {
         callback(err, null)
         return

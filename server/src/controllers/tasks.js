@@ -3,8 +3,8 @@ import Project from '../models/project'
 
 export default {
   
-  find: (query, params, callback) => {
-    Task.find(params, function(err, tasks) {
+  find: (query, callback) => {
+    Task.find(function(err, tasks) {
       if (err) {
         callback(err, null)
         return
@@ -25,8 +25,8 @@ export default {
     })
   },
 
-  create: (params, callback) => {  
-    Task.create(params, function(err, task) {
+  create: (reqBody, callback) => {  
+    Task.create(reqBody, function(err, task) {
       if (err) {
         callback(err, null)
         return
@@ -36,8 +36,8 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, params, callback) => {
-    Task.findByIdAndUpdate(id, params, {new: true}, function(err, task) {
+  findByIdAndUpdate: (id, reqBody, callback) => {
+    Task.findByIdAndUpdate(id, reqBody, {new: true}, function(err, task) {
       if (err) {
         callback(err, null)
         return

@@ -92,10 +92,10 @@ router.post('/:resource', ensureAuthenticated, (req, res) => {
   }
 
   // Remove the null _id value that comes from client side for making the _id availabe inside save middlewares 
-  let requestBody = req.body
-  delete requestBody['_id']
+  let reqBody = req.body
+  delete reqBody['_id']
     
-  controller.create(requestBody, (err, result) => {
+  controller.create(reqBody, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {

@@ -26,8 +26,8 @@ export default {
     })
   },
 
-  create: (params, callback) => {
-    Project.create(params, function(err, project) {
+  create: (reqBody, callback) => {
+    Project.create(reqBody, function(err, project) {
       if (err) {
         callback(err, null)
         return
@@ -36,8 +36,8 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, params, callback) => {
-    Project.findByIdAndUpdate(id, params, {new: true}, function(err, project) {
+  findByIdAndUpdate: (id, reqBody, callback) => {
+    Project.findByIdAndUpdate(id, reqBody, {new: true}, function(err, project) {
       if (err) {
         callback(err, null)
         return

@@ -3,8 +3,8 @@ import Sale from '../models/sale'
 
 export default {
   
-  find: (query, params, callback) => {
-    Item.find(params, function(err, items) {
+  find: (query, callback) => {
+    Item.find(function(err, items) {
       if (err) {
         callback(err, null)
         return
@@ -25,8 +25,8 @@ export default {
     })
   },
 
-  create: (params, callback) => {  
-    Item.create(params, function(err, item) {
+  create: (reqBody, callback) => {  
+    Item.create(reqBody, function(err, item) {
       if (err) {
         callback(err, null)
         return
@@ -37,8 +37,8 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, params, callback) => {
-    Item.findByIdAndUpdate(id, params, {new: true}, function(err, item) {
+  findByIdAndUpdate: (id, reqBody, callback) => {
+    Item.findByIdAndUpdate(id, reqBody, {new: true}, function(err, item) {
       if (err) {
         callback(err, null)
         return

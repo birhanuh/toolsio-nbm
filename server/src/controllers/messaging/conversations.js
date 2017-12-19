@@ -29,5 +29,31 @@ export default {
         })
       })
     }) 
+  },
+
+  create: (reqBody, callback) => {
+     Conversation.create(reqBody, { $push: { participants: reqBody.recipient }}, (err, conversation) => {
+      if (err) {
+        callback(err, null)
+        return
+      }
+
+      const message = new Message({
+        conversationId: conversation._id,
+        body: reqBody.composedMessage,
+        author: reqBody.user._id
+      })
+
+      Message.create(message, (err, message) => {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, message)
+      })
+     
+    })
   }
+
+
 }

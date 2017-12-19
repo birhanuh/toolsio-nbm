@@ -28,8 +28,8 @@ export default {
     })
   },
 
-  create: (params, callback) => {  
-    Customer.create(params, function(err, customer) {
+  create: (reqBody, callback) => {  
+    Customer.create(reqBody, function(err, customer) {
       if (err) {
         callback(err, null)
         return
@@ -38,8 +38,8 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, params, callback) => {
-    Customer.findByIdAndUpdate(id, params, {new: true}, function(err, customer) {
+  findByIdAndUpdate: (id, reqBody, callback) => {
+    Customer.findByIdAndUpdate(id, reqBody, {new: true}, function(err, customer) {
       if (err) {
         callback(err, null)
         return
