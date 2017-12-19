@@ -199,6 +199,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  saveProject: PropTypes.func.isRequired,
   project: PropTypes.object,
   customers: PropTypes.array.isRequired
 }

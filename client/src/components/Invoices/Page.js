@@ -3,7 +3,6 @@ import ReactDOMServer from 'react-dom/server'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import List from './List' 
 import { connect } from 'react-redux'
 import { fetchInvoices } from '../../actions/invoiceActions'
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import List from './List' 
 import { connect } from 'react-redux'
 import { fetchCustomers } from '../../actions/customerActions'
 

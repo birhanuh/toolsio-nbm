@@ -601,6 +601,8 @@
   "conversations": {
     "page": {
       "header": "Conversations",
+      "empty_projects_header": "There are no messages",
+      "empty_projects_message": "Click Compose new Message button above to compose your first Message.",
       "new_message": "New message",
       "empty_inbox": "Inbox is empty",
       "empty_sent": "Sent is empty",
@@ -611,6 +613,19 @@
       "remove": "Remove",
       "restore": "Restore",
       "description": "Internal messaging serivce, compose, read, reply and delete messages."
+    },
+    "form": {
+      "new_message": "New Message",
+      "send": "Send",
+      "cancel": "Cancel",
+      "title": "Title",
+      "message": "Message",
+      "recipient": "Recipient",
+      "select_recipient": "-Select recipient-",
+      "flash": {
+        "success_compose": "Message is sent!",
+        "error_compose": "Message is not sent, try sending again"
+      }
     },
     "show": {
       "header": "Show",

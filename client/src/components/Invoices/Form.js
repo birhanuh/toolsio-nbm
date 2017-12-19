@@ -443,6 +443,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  saveInvoice: PropTypes.func.isRequired,
   sales: PropTypes.array.isRequired,
   projects: PropTypes.array.isRequired
 }
