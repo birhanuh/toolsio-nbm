@@ -601,8 +601,8 @@
   "conversations": {
     "page": {
       "header": "Conversations",
-      "empty_projects_header": "There are no messages",
-      "empty_projects_message": "Click Compose new Message button above to compose your first Message.",
+      "empty_messages_header": "There are no messages",
+      "empty_messages_message": "Click Compose new Message button above to compose your first Message.",
       "new_message": "New message",
       "empty_inbox": "Inbox is empty",
       "empty_sent": "Sent is empty",
@@ -612,6 +612,9 @@
       "trash": "Trash",
       "remove": "Remove",
       "restore": "Restore",
+      "title": "Title",
+      "recipient": "Recipient",
+      "body": "Body",
       "description": "Internal messaging serivce, compose, read, reply and delete messages."
     },
     "form": {
@@ -619,7 +622,7 @@
       "send": "Send",
       "cancel": "Cancel",
       "title": "Title",
-      "message": "Message",
+      "body": "Body",
       "recipient": "Recipient",
       "select_recipient": "-Select recipient-",
       "flash": {
@@ -628,7 +631,9 @@
       }
     },
     "show": {
-      "header": "Show",
+      "title": "Title",
+      "recipient": "Recipient",
+      "body": "Body",
       "reply": "Reply"
     },
     "reply": {

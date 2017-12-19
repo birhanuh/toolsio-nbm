@@ -12,9 +12,9 @@ class Form extends Component {
     super(props)
     this.state = {
       _id: this.props.message ? this.props.message._id : null,
-      recipient: this.props.message ? this.props.message.recipient : '',
+      recipientId: this.props.message ? this.props.message.recipientId : '',
       title: this.props.message ? this.props.message.title : '',
-      message: this.props.message ? this.props.message.message : '',
+      body: this.props.body ? this.props.message.body : '',
       errors: {
         message: {
           errors: {}
@@ -66,18 +66,18 @@ class Form extends Component {
 
     // Validation
     if (this.isValid()) { 
-      const { _id, title, body } = this.state
+      const { _id, title, recipientId, body } = this.state
       this.setState({ isLoading: true })
-      this.props.composeMessage({ _id, title, recipient, message })
+      this.props.composeMessage({ _id, title, recipient, body })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 
   render() {
-    const { _id, title, recipient, message } = this.state
+    const { _id, title, recipientId, body } = this.state
 
     const recipientsOptions = map(this.props.recipients, (recipient) => 
-      <option key={recipient._id} value={recipient._id}>{recipient.name}</option>
+      <option key={recipient._id} value={recipient._id}>{recipient.firstName}</option>
     )
 
     return (  
@@ -87,24 +87,24 @@ class Form extends Component {
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
-               <h1 className="ui header">{T.translate("customers.form.new_customer")}</h1>
+               <h1 className="ui header">{T.translate("conversations.form.new_message")}</h1>
             </div>
 
             { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
 
             <SelectField
-              name="customer"
-              value={customer ? (typeof customer === 'object' ? customer._id : customer) : ''} 
+              name="recipientId"
+              value={recipientId} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
+              error={errors.message && errors.message.errors && errors.message.errors.recipientId && errors.message.errors.recipientId.message}
               formClass="inline field"
 
               options={[<option key="default" value="" disabled>{T.translate("conversations.form.select_recipient")}</option>,
-                customersOptions]}
+                recipientssOptions]}
             />
 
             <InputField
-              label={T.translate("conversations.show.title")}
+              label={T.translate("conversations.form.title")}
               name="title" 
               value={title} 
               onChange={this.handleChange.bind(this)} 
@@ -114,11 +114,11 @@ class Form extends Component {
             />
             
             <TextAreaField
-              label={T.translate("conversations.form.message")}
+              label={T.translate("conversations.form.body")}
               name="body" 
               value={body} 
               onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("conversations.form.message")}
+              placeholder={T.translate("conversations.form.body")}
               formClass="inline field"
             /> 
 

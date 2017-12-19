@@ -18,8 +18,8 @@ class FormPage  extends Component {
     this.props.fetchRecipient()
   }
 
-  sendMessage = ({ _id, title, recipient, body }) => {     
-    return this.props.composeMessage({ _id, title, recipient, body })
+  sendMessage = ({ _id, title, recipientId, body }) => {     
+    return this.props.composeMessage({ _id, title, recipientId, body })
       .then(() => 
         { 
           this.setState({ redirect: true }) 
