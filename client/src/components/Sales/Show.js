@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
-import { addFlashMessage } from '../../actions/flashMessagesActions'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchSale, deleteSale } from '../../actions/saleActions'
 
 import ItemForm from './Items/Form'

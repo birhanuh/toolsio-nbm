@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { subdomainRequest } from '../../actions/authenticationActions'
-import { addFlashMessage } from '../../actions/flashMessagesActions'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import classnames from 'classnames'
 
 // Localization 

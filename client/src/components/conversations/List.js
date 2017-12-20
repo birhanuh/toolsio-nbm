@@ -36,3 +36,4 @@ export default function List({ customers, deleteCustomer }) {
 List.propTypes = {
   customers: PropTypes.array.isRequired,
   deleteCustomer: PropTypes.func.isRequired
+}

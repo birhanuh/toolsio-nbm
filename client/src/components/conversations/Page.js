@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { connect } from 'react-redux'
-import { fetchMessages } from '../../actions/messageActions'
+import { fetchMessages } from '../../actions/conversatoinActions'
 
 // Localization 
 import T from 'i18n-react'
