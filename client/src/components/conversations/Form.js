@@ -1,8 +1,9 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import map from 'lodash/map'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { InputField } from '../../utils/FormFields'
+import { InputField, SelectField, TextAreaField } from '../../utils/FormFields'
 
 // Localization 
 import T from 'i18n-react'
@@ -68,13 +69,13 @@ class Form extends Component {
     if (this.isValid()) { 
       const { _id, title, recipientId, body } = this.state
       this.setState({ isLoading: true })
-      this.props.createConversatoin({ _id, title, recipient, body })
+      this.props.createConversatoin({ _id, title, recipientId, body })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 
   render() {
-    const { _id, title, recipientId, body } = this.state
+    const { _id, title, recipientId, body, errors, isLoading } = this.state
 
     const recipientsOptions = map(this.props.recipients, (recipient) => 
       <option key={recipient._id} value={recipient._id}>{recipient.firstName}</option>
@@ -100,7 +101,7 @@ class Form extends Component {
               formClass="inline field"
 
               options={[<option key="default" value="" disabled>{T.translate("conversations.form.select_recipient")}</option>,
-                recipientssOptions]}
+                recipientsOptions]}
             />
 
             <InputField

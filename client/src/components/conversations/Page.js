@@ -20,7 +20,7 @@ class Page extends Component {
         <div className="ui vertical segment">
           <Link className="ui primary button" to="/conversations/new">
             <i className="add circle icon"></i>
-            {T.translate("conversations.page.add_new_conversation")}
+            {T.translate("conversations.page.compose_new_conversation")}
           </Link>
         </div>  
 

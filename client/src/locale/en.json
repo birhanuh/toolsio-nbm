@@ -601,9 +601,9 @@
   "conversations": {
     "page": {
       "header": "Conversations",
-      "empty_messages_header": "There are no messages",
-      "empty_messages_message": "Click Compose new Message button above to compose your first Message.",
-      "new_message": "New message",
+      "empty_conversations_header": "There are no conversations",
+      "empty_conversations_message": "Click Compose new Conversation button above to compose your first Conversation.",
+      "compose_new_conversation": "Compose New Conversatoin",
       "empty_inbox": "Inbox is empty",
       "empty_sent": "Sent is empty",
       "empty_trash": "Empty trash",

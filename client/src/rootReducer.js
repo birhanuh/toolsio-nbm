@@ -15,5 +15,5 @@ export default combineReducers({
   projects,
   customers,
   invoices,
-  conversation
+  conversations
 })

@@ -7,7 +7,10 @@ import T from 'i18n-react'
 
 export default function List({ conversations }) {
   const emptyMessage = (
-    <p className="ui info message">{T.translate("conversations.page.empty_messages")}</p>
+    <div className="ui info message">
+      <h3>{T.translate("conversations.page.empty_conversations_header")}</h3>
+      <p>{T.translate("conversations.page.empty_conversations_message")}</p>
+    </div>
   )
 
   const conversationsList = (

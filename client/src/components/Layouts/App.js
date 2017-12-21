@@ -22,7 +22,7 @@ import InvoicesFormPage from '../Invoices/FormPage'
 import InvoicesShow from '../Invoices/Show/Page'
 import ConversationsPage from '../Conversations/Page'
 import ConversationsFormPage from '../Conversations/FormPage'
-import ConversationsShow from '../Conversations/Show/Page'
+import ConversationsShow from '../Conversations/Page'
 
 import HeaderNav from './HeaderNav'
 import Sidebar from './Sidebar'
