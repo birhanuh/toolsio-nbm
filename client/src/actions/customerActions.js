@@ -1,17 +1,17 @@
 import axios from 'axios'
 import { SET_CUSTOMERS, ADD_CUSTOMER, CUSTOMER_FETCHED, CUSTOMER_UPDATED, CUSTOMER_DELETED } from './types'
 
-export function setCustomers(customers) {
-  return {
-    type: SET_CUSTOMERS,
-    customers
-  }
-}
-
 export function addCustomer(customer) {
   return {
     type: ADD_CUSTOMER,
     customer
+  }
+}
+
+export function setCustomers(customers) {
+  return {
+    type: SET_CUSTOMERS,
+    customers
   }
 }
 

@@ -5,35 +5,34 @@ import Tr from './Tr'
 // Localization 
 import T from 'i18n-react'
 
-export default function List({ customers, deleteCustomer }) {
+export default function List({ conversations }) {
   const emptyMessage = (
     <p className="ui info message">{T.translate("conversations.page.empty_messages")}</p>
   )
 
-  const customersList = (
+  const conversationsList = (
     <table className="ui very compact striped selectable table">
       <thead>
         <tr>
-          <th>{T.translate("customers.page.title")}</th>
-          <th>{T.translate("customers.page.recipient")}</th>
-          <th>{T.translate("customers.page.body")}</th>
-          <th>{T.translate("customers.page.delete")}</th>
+          <th>{T.translate("conversations.page.title")}</th>
+          <th>{T.translate("conversations.page.recipient")}</th>
+          <th>{T.translate("conversations.page.body")}</th>
+          <th>{T.translate("conversations.page.delete")}</th>
         </tr>
       </thead>
       <tbody>
-        { customers.map(customer => <Tr customer={customer} key={customer._id} deleteCustomer={deleteCustomer} />) }
+        { conversations.map(conversation => <Tr conversation={conversation} key={conversation._id} />) }
       </tbody>
     </table>
   )
 
   return (
     <div>
-      { customers.length === 0 ? emptyMessage : customersList }
+      { conversations.length === 0 ? emptyMessage : conversationsList }
     </div>   
   )
 }
 
 List.propTypes = {
-  customers: PropTypes.array.isRequired,
-  deleteCustomer: PropTypes.func.isRequired
+  conversations: PropTypes.array.isRequired
 }

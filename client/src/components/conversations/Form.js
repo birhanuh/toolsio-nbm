@@ -68,7 +68,7 @@ class Form extends Component {
     if (this.isValid()) { 
       const { _id, title, recipientId, body } = this.state
       this.setState({ isLoading: true })
-      this.props.composeMessage({ _id, title, recipient, body })
+      this.props.createConversatoin({ _id, title, recipient, body })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -133,7 +133,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  composeMessage: PropTypes.func.isRequired,
+  createConversatoin: PropTypes.func.isRequired,
   recipients: PropTypes.array.isRequired
 }
 

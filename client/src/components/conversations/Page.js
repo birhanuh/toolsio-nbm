@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { connect } from 'react-redux'
-import { fetchMessages } from '../../actions/conversatoinActions'
+import { fetchConversations } from '../../actions/conversationActions'
 
 // Localization 
 import T from 'i18n-react'
@@ -11,34 +11,34 @@ import T from 'i18n-react'
 class Page extends Component {
 
   componentDidMount() {
-    this.props.fetchMessages()
+    this.props.fetchConversations()
   }
 
   render() {
     return (
       <div className="row column">  
         <div className="ui vertical segment">
-          <Link className="ui primary button" to="/messages/new">
+          <Link className="ui primary button" to="/conversations/new">
             <i className="add circle icon"></i>
-            {T.translate("messages.page.add_new_message")}
+            {T.translate("conversations.page.add_new_conversation")}
           </Link>
         </div>  
 
-        <List messages={this.props.messages} />   
+        <List conversations={this.props.conversations} />   
       </div>  
     )
   }
 }
 
 Page.propTypes = {
-  fetchMessages: PropTypes.func.isRequired
+  fetchConversations: PropTypes.func.isRequired
 }
 
 function mapSateToProps(state) {
   return {
-    messages: state.messages
+    conversations: state.conversations
   }
 }
 
-export default connect(mapSateToProps, { fetchMessages })(Page)
+export default connect(mapSateToProps, { fetchConversations })(Page)
 

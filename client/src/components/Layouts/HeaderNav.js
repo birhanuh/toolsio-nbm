@@ -110,7 +110,7 @@ class HeaderNav extends Component {
               <div className="menu">
                 <a className="item"><strong>Okay, right back at you in...</strong></a>
                 <a className="item"><strong>Hi, I have sent you...</strong></a>                
-                <a className="item">{T.translate("internal_navigation.notifications")}</a>
+                 <Link to="/conversations" className="item"><strong className="blue">{T.translate("internal_navigation.notifications")}</strong></Link>
               </div>
             </div>
             <div className="ui medium dropdown item">

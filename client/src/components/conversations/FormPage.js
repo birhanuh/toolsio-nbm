@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { composeMessage, fetchRecipient } from '../../actions/conversationActions'
+import { createConversation, fetchRecipient } from '../../actions/conversationActions'
 import Form from './Form'
 
 // Localization 
@@ -19,7 +19,7 @@ class FormPage  extends Component {
   }
 
   sendMessage = ({ _id, title, recipientId, body }) => {     
-    return this.props.composeMessage({ _id, title, recipientId, body })
+    return this.props.createConversation({ _id, title, recipientId, body })
       .then(() => 
         { 
           this.setState({ redirect: true }) 
@@ -47,7 +47,7 @@ class FormPage  extends Component {
 }
 
 FormPage.propTypes = {
-  composeMessage: PropTypes.func.isRequired,
+  createConversation: PropTypes.func.isRequired,
   fetchRecipient: PropTypes.func.isRequired,
 }
 
@@ -61,6 +61,6 @@ FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, { composeMessage, fetchRecipient })(FormPage)
+export default connect(mapStateToProps, { createConversation, fetchRecipient })(FormPage)
 
 
