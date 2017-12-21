@@ -39,7 +39,7 @@ class Page extends Component {
         //info: '_START_ to _END_ of _TOTAL_',
         infoEmpty: '',
         search: '',
-        searchPlaceholder: 'Search Customers',
+        searchPlaceholder: 'Search Name, Vat number and Contacts',
         lengthMenu: '_MENU_',
         paginate: {
           previous: '<i class="left chevron icon"></i>',

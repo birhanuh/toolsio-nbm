@@ -16,16 +16,41 @@ class Page extends Component {
 
   render() {
     return (
-      <div className="row column">  
-        <div className="ui vertical segment">
-          <Link className="ui primary button" to="/conversations/new">
-            <i className="add circle icon"></i>
-            {T.translate("conversations.page.compose_new_conversation")}
-          </Link>
-        </div>  
 
-        <List conversations={this.props.conversations} />   
-      </div>  
+      <div className="ui grid">
+        <div className="four wide column">
+          <div className="ui vertical fluid tabular menu">
+
+            <div className="ui center aligned vertical segment">
+              <Link className="ui primary small button" to="/conversations/new">
+                <i className="edit outline icon"></i>
+                {T.translate("conversations.page.compose_new_conversation")}
+              </Link>
+            </div>
+            
+            <div className="ui divider mt-0"></div>
+
+            <a className="active item">
+              Bio
+            </a>
+            <a className="item">
+              Pics
+            </a>
+            <a className="item">
+              Companies
+            </a>
+            <a className="item">
+              Links
+            </a>
+          </div>
+        </div>
+        <div className="twelve wide stretched column">
+          <div className="ui segment">
+
+            <List conversations={this.props.conversations} />   
+          </div>
+        </div>
+      </div> 
     )
   }
 }

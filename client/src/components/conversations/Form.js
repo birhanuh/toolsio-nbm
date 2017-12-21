@@ -83,11 +83,11 @@ class Form extends Component {
 
     return (  
       <div className="ui stackable centered grid">
-        <div className="eight wide column ui segment">  
+        <div className="fourteen wide column ui segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
-            <div className="inline field">  
+            <div className="field">  
                <h1 className="ui header">{T.translate("conversations.form.new_message")}</h1>
             </div>
 
@@ -98,7 +98,7 @@ class Form extends Component {
               value={recipientId} 
               onChange={this.handleChange.bind(this)} 
               error={errors.message && errors.message.errors && errors.message.errors.recipientId && errors.message.errors.recipientId.message}
-              formClass="inline field"
+              formClass="field"
 
               options={[<option key="default" value="" disabled>{T.translate("conversations.form.select_recipient")}</option>,
                 recipientsOptions]}
@@ -111,7 +111,7 @@ class Form extends Component {
               onChange={this.handleChange.bind(this)} 
               placeholder="Title"
               error={errors.message && errors.message.errors && errors.message.errors.title && errors.message.errors['name'].message}
-              formClass="inline field"
+              formClass="field"
             />
             
             <TextAreaField
@@ -120,11 +120,11 @@ class Form extends Component {
               value={body} 
               onChange={this.handleChange.bind(this)} 
               placeholder={T.translate("conversations.form.body")}
-              formClass="inline field"
+              formClass="field"
             /> 
 
-            <div className="inline field">    
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.send")}</button>
+            <div className="field">    
+              <button disabled={isLoading} className="ui primary button"><i className="send outline icon" aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.send")}</button>
             </div>  
           </form> 
         </div>  
@@ -134,8 +134,8 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  createConversatoin: PropTypes.func.isRequired,
-  recipients: PropTypes.array.isRequired
+  createConversation: PropTypes.func.isRequired,
+  users: PropTypes.array.isRequired
 }
 
 export default Form

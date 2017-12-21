@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { createConversation, fetchRecipient } from '../../actions/conversationActions'
+import { createConversation } from '../../actions/conversationActions'
+import { fetchUsers } from '../../actions/userActions'
+
 import Form from './Form'
 
 // Localization 
@@ -15,7 +17,7 @@ class FormPage  extends Component {
   }
 
   componentDidMount = () => {
-    this.props.fetchRecipient()
+    this.props.fetchUsers()
   }
 
   sendMessage = ({ _id, title, recipientId, body }) => {     
@@ -39,7 +41,7 @@ class FormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/conversations" /> : 
-          <Form recipients={this.props.recipients} sendMessage={this.sendMessage} />
+          <Form users={this.props.users} createConversation={this.props.createConversation} />
         }
       </div>
     )
@@ -48,12 +50,12 @@ class FormPage  extends Component {
 
 FormPage.propTypes = {
   createConversation: PropTypes.func.isRequired,
-  fetchRecipient: PropTypes.func.isRequired,
+  fetchUsers: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state, props) {
   return { 
-    recipients: state.recipients
+    users: state.users
   }
 }
 
@@ -61,6 +63,6 @@ FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, { createConversation, fetchRecipient })(FormPage)
+export default connect(mapStateToProps, { createConversation, fetchUsers })(FormPage)
 
 

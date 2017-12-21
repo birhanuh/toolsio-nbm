@@ -31,7 +31,7 @@ export function conversationDeleted(id) {
 
 export function createConversation(conversation) {
   return dispatch => {
-    return axios.post('api/conversations', conversation)
+    return axios.post('/api/conversations', conversation)
       .then(res => {
         dispatch(addConversation(res.data.result))
       })
@@ -40,7 +40,7 @@ export function createConversation(conversation) {
 
 export function fetchConversations() {
   return dispatch => {
-    return axios.get('api/conversations')
+    return axios.get('/api/conversations')
       .then(res => {
         dispatch(setConversations(res.data.result))
       })
@@ -49,7 +49,7 @@ export function fetchConversations() {
 
 export function fetchConversation(id) {
   return dispatch => {
-    return axios.get(`api/conversations/${id}`)
+    return axios.get(`/api/conversations/${id}`)
       .then(res => {
         dispatch(conversationFetched(res.data.result))
       })
@@ -58,10 +58,11 @@ export function fetchConversation(id) {
 
 export function deleteConversation(id) {
   return dispatch => {
-    return axios.delete(`api/conversations/${id}`)
+    return axios.delete(`/api/conversations/${id}`)
       .then(res => {
         dispatch(conversationDeleted(id))
       })
   }
 }
+
 
