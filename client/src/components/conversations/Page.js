@@ -19,7 +19,7 @@ class Page extends Component {
 
       <div className="ui grid">
         <div className="four wide column">
-          <div className="ui vertical fluid tabular menu">
+          <div className="ui vertical fluid menu">
 
             <div className="ui center aligned vertical segment">
               <Link className="ui primary small button" to="/conversations/new">
@@ -31,16 +31,24 @@ class Page extends Component {
             <div className="ui divider mt-0"></div>
 
             <a className="active item">
-              Bio
+              <div className="ui small label">12</div>
+              <i className="inbox outline icon"></i>
+              {T.translate("conversations.page.inbox")}
             </a>
             <a className="item">
-              Pics
+              <div className="ui small label">1</div>
+              <i className="send outline icon"></i>
+              {T.translate("conversations.page.sent")}
             </a>
             <a className="item">
-              Companies
+              <div className="ui small label">1</div>
+              <i className="trash outline icon"></i>
+              {T.translate("conversations.page.trash")}
             </a>
             <a className="item">
-              Links
+              <div className="ui small label">1</div>
+              <i className="copy outline icon"></i>
+              {T.translate("conversations.page.draft")}
             </a>
           </div>
         </div>

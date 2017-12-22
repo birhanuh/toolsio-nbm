@@ -82,11 +82,30 @@ router.post('/register', function(req, res) {
   )
 })
 
-// Get regisetred user
-router.get('/:email', (req, res) => {
-  User.find({ email: req.params.email }).then(user => {
-    res.json( { user }) 
-  })
+// Get user by email or all users
+router.get('/:resource', (req, res) => {
+  if (req.params.resource === 'email') {
+    User.find({ email: req.params.email }).then(user => {
+      res.json( { user }) 
+    })
+  } else if (req.params.resource === 'all') {
+    User.find({}).select('firstName').exec(function(err, users) {
+      if (err) {
+        res.status(500).json({ 
+          errors: {
+            confirmation: 'fail',
+            message: err
+          }
+        })
+        return
+      }
+      console.log('users: ', users)
+      res.json({ 
+        confirmation: 'success',
+        results: users 
+      })
+    })
+  }
 })
 
 // Login User

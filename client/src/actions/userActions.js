@@ -10,7 +10,7 @@ export function setUsers(users) {
 
 export function fetchUsers() {
   return dispatch => {
-    return axios.get('/api/users')
+    return axios.get('/users/all')
       .then(res => {
         dispatch(setUsers(res.data.result))
       })
