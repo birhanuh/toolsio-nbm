@@ -6,7 +6,7 @@ export default {
 
   find: (query, callback) => {
     // Only return one message from each conversation to display as sinppet
-    Conversation.find({ participants: query.user._id }).select('_id').exec((err, conversations) => {
+    Conversation.find((err, conversations) => {
       if (err) {
         callback(err, null)
         return
@@ -28,6 +28,31 @@ export default {
           }
         })
       })
+    }) 
+  },
+
+  findById: (id, callback) => {
+    // Only return one message from each conversation to display as sinppet
+    Conversation.findById(id, (err, conversation) => {
+      if (err) {
+        callback(err, null)
+        return
+      }
+
+      // Set up empty array to hold messages
+      let messages = []
+
+      Message.find({ conversationId: conversation._id}).sort('createdAt').limit(1).populate({ path: 'author', select: 'profile.firstName profile.lastName' }).exec((err, message) => {
+        if(err) {
+          callback(err, null)
+          return
+        }
+
+        messages.push(message)
+      })
+
+      callback(null, messages)
+     
     }) 
   },
 
