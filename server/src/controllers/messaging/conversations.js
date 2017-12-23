@@ -32,7 +32,7 @@ export default {
   },
 
   create: (reqBody, callback) => {
-     Conversation.create(reqBody, { $push: { participants: reqBody.recipient }}, (err, conversation) => {
+     Conversation.create(reqBody, { $push: { participants: reqBody.recipientId }}, (err, conversation) => {
       if (err) {
         callback(err, null)
         return
@@ -40,8 +40,8 @@ export default {
 
       const message = new Message({
         conversationId: conversation._id,
-        body: reqBody.composedMessage,
-        author: reqBody.user._id
+        body: reqBody.body,
+        author: reqBody.session.passport // Get id of current user from session
       })
 
       Message.create(message, (err, message) => {

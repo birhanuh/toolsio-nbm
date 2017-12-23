@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import ReactDOMServer from 'react-dom/server'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import classnames from 'classnames'
 import { connect } from 'react-redux'
 import { fetchInvoices } from '../../actions/invoiceActions'
 
@@ -85,29 +83,6 @@ class Page extends Component {
   }
   
   render() {
-    
-    const invoices = this.props.invoices.map(invoice => {
-      let status = (
-        <div className={classnames("ui uppercase tiny label", {orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
-          {invoice.status}
-        </div>
-      )
-      let actions = (
-        <div className="ui small buttons">
-          <a href={`/invoices/edit/${invoice._id}`} className="ui icon basic button green"><i className="edit icon"></i></a>
-          <a href={`/invoices/show/${invoice._id}`} className="ui icon basic blue button"><i className="unhide icon"></i></a>
-        </div>
-      )
-
-      return [
-        (invoice.sale && invoice.sale.name) || (invoice.project && invoice.project.name),
-        invoice.deadline,
-        invoice.customer.name,
-        invoice.project.total || invoice.sale.total,
-        ReactDOMServer.renderToStaticMarkup(status),      
-        ReactDOMServer.renderToStaticMarkup(actions)        
-      ]
-    })
 
     return (
 

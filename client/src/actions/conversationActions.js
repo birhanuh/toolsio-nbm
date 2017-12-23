@@ -3,28 +3,28 @@ import { SET_CONVERSATIONS, ADD_CONVERSATION, CONVERSATION_FETCHED, CONVERSATION
 
 export function addConversation(conversation) {
   return {
-    type: 'ADD_CONVERSATION',
+    type: ADD_CONVERSATION,
     conversation
   }
 }
 
 export function setConversations(conversations) {
   return { 
-    type: 'SET_CONVERSATIONS',
+    type: SET_CONVERSATIONS,
     conversations
   }
 }
 
 export function conversationFetched(conversation) {
   return {
-    type: 'CONVERSATION_FETCHED',
+    type: CONVERSATION_FETCHED,
     conversation
   }
 }
 
 export function conversationDeleted(id) {
   return {
-    type: 'CONVERSATION_DELETED',
+    type: CONVERSATION_DELETED,
     id
   }
 }

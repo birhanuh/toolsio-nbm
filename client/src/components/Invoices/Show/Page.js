@@ -113,7 +113,7 @@ class Page extends Component {
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className="ui header">{T.translate("invoices.show.header")}
-              <div className="sub header inline-block-i pl-1">{sale && sale.name || project && project.name}</div>
+              <div className="sub header inline-block-i pl-1">{(sale && sale.name) || (project && project.name)}</div>
             </h1> 
             <div className={classnames("ui uppercase huge right corner label", {orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
               <p>{status}</p>

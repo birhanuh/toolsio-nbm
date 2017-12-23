@@ -12,7 +12,7 @@ export function fetchUsers() {
   return dispatch => {
     return axios.get('/users/all')
       .then(res => {
-        dispatch(setUsers(res.data.result))
+        dispatch(setUsers(res.data.results))
       })
   }
 }

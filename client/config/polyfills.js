@@ -1,5 +1,3 @@
-'use strict';
-
 var modernBrowser = ('fetch' in window && 'assign' in Object)
 
 if (!modernBrowser) {

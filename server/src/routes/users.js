@@ -71,14 +71,12 @@ router.post('/register', function(req, res) {
       })
     )
   }).catch(err => 
-    // res.status(500).json({ 
-    //   errors: {
-    //     confirmation: 'fail',
-    //     message: err
-    //   }
-    // })
-    
-      console.log('err: ', err)
+    res.status(500).json({ 
+      errors: {
+        confirmation: 'fail',
+        message: err
+      }
+    })
   )
 })
 
@@ -99,7 +97,7 @@ router.get('/:resource', (req, res) => {
         })
         return
       }
-      console.log('users: ', users)
+     
       res.json({ 
         confirmation: 'success',
         results: users 

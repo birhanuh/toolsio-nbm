@@ -77,8 +77,8 @@ class Form extends Component {
   render() {
     const { _id, title, recipientId, body, errors, isLoading } = this.state
 
-    const recipientsOptions = map(this.props.recipients, (recipient) => 
-      <option key={recipient._id} value={recipient._id}>{recipient.firstName}</option>
+    const recipientsOptions = map(this.props.users, (user) => 
+      <option key={user._id} value={user._id}>{user.firstName}</option>
     )
 
     return (  
