@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import Tr from './Tr'
 
 // Localization 
 import T from 'i18n-react'
 
-export default function List({ conversations }) {
+export default function List({ conversations, deleteConversation }) {
   const emptyMessage = (
     <div className="ui info message">
       <h3>{T.translate("conversations.page.empty_conversations_header")}</h3>
@@ -24,7 +25,7 @@ export default function List({ conversations }) {
         </tr>
       </thead>
       <tbody>
-        { conversations.map(conversation => <Tr conversation={conversation} key={conversation._id} />) }
+        { conversations.map(conversation => <Tr conversation={conversation} key={conversation._id} deleteConversation={deleteConversation} />) }
       </tbody>
     </table>
   )
@@ -37,5 +38,6 @@ export default function List({ conversations }) {
 }
 
 List.propTypes = {
-  conversations: PropTypes.array.isRequired
+  conversations: PropTypes.array.isRequired,
+  deleteConversation: PropTypes.func.isRequired
 }

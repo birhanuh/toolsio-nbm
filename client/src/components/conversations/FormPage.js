@@ -20,8 +20,8 @@ class FormPage  extends Component {
     this.props.fetchUsers()
   }
 
-  sendMessage = ({ _id, title, recipientId, body }) => {     
-    return this.props.createConversation({ _id, title, recipientId, body })
+  createConversation = ({ _id, recipientId, title, body }) => {     
+    return this.props.createConversation({ _id, recipientId, title, body })
       .then(() => 
         { 
           this.setState({ redirect: true }) 
@@ -41,7 +41,7 @@ class FormPage  extends Component {
         {
           this.state.redirect ? 
           <Redirect to="/conversations" /> : 
-          <Form users={this.props.users} createConversation={this.props.createConversation} />
+          <Form users={this.props.users} createConversation={this.createConversation} />
         }
       </div>
     )

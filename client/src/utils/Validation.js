@@ -286,6 +286,31 @@ export default {
       errors,
       isValid: isEmpty(errors)
     }
+  },
+
+  validateConversationInput: (data) => {
+    let errors = {}
+
+    if (!data.name) {
+      errors['recipientId'] = {
+        message: T.translate("conversations.form.recipient_required")
+      }
+    }
+    if (!data.deadline) {
+      errors['title'] = {
+        message: T.translate("conversations.form.title_required")
+      }
+    }
+    if (!data.customer) {
+      errors['body'] = {
+        message: T.translate("conversations.form.body_required")
+      }
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
   }
 
 }  

@@ -28,8 +28,8 @@ export default {
     })
   },
 
-  create: (reqBody, callback) => {  
-    Customer.create(reqBody, function(err, customer) {
+  create: (req, callback) => {  
+    Customer.create(req.body, function(err, customer) {
       if (err) {
         callback(err, null)
         return

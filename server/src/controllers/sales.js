@@ -25,8 +25,8 @@ export default {
     })
   },
 
-  create: (reqBody, callback) => {
-    Sale.create(reqBody, function(err, sale) {
+  create: (req, callback) => {
+    Sale.create(req.body, function(err, sale) {
       if (err) {
         callback(err, null)
         return

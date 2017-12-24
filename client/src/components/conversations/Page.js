@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { connect } from 'react-redux'
-import { fetchConversations } from '../../actions/conversationActions'
+import { fetchConversations, deleteConversation } from '../../actions/conversationActions'
 
 // Localization 
 import T from 'i18n-react'
@@ -55,7 +55,7 @@ class Page extends Component {
         <div className="twelve wide stretched column">
           <div className="ui segment">
 
-            <List conversations={this.props.conversations} />   
+            <List conversations={this.props.conversations} deleteConversation={deleteConversation} />   
           </div>
         </div>
       </div> 
@@ -64,7 +64,8 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  fetchConversations: PropTypes.func.isRequired
+  fetchConversations: PropTypes.func.isRequired,
+  deleteConversation: PropTypes.func.isRequired
 }
 
 function mapSateToProps(state) {
@@ -73,5 +74,5 @@ function mapSateToProps(state) {
   }
 }
 
-export default connect(mapSateToProps, { fetchConversations })(Page)
+export default connect(mapSateToProps, { fetchConversations, deleteConversation })(Page)
 

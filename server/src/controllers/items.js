@@ -25,8 +25,8 @@ export default {
     })
   },
 
-  create: (reqBody, callback) => {  
-    Item.create(reqBody, function(err, item) {
+  create: (req, callback) => {  
+    Item.create(req.body, function(err, item) {
       if (err) {
         callback(err, null)
         return

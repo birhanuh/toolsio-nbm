@@ -33,7 +33,7 @@ export function createConversation(conversation) {
   return dispatch => {
     return axios.post('/api/conversations', conversation)
       .then(res => {
-        dispatch(addConversation(res.data.results))
+        dispatch(addConversation(res.data.result))
       })
   }
 }
@@ -51,7 +51,7 @@ export function fetchConversation(id) {
   return dispatch => {
     return axios.get(`/api/conversations/${id}`)
       .then(res => {
-        dispatch(conversationFetched(res.data.results))
+        dispatch(conversationFetched(res.data.result))
       })
   }
 }

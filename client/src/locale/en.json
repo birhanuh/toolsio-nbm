@@ -602,7 +602,7 @@
     "page": {
       "header": "Conversations",
       "empty_conversations_header": "There are no conversations",
-      "empty_conversations_message": "Click Compose new Conversation button above to compose your first Conversation.",
+      "empty_conversations_message": "Click Compose new Conversation button on the left-side panel to compose your first Conversation.",
       "compose_new_conversation": "Compose New Conversatoin",
       "empty_inbox": "Inbox is empty",
       "empty_sent": "Sent is empty",
@@ -626,6 +626,9 @@
       "body": "Body",
       "recipient": "Recipient",
       "select_recipient": "-Select recipient-",
+      "recipient_required": "Recipient code is required.",
+      "title_required": "Title is required.",
+      "body_required": "Body is required.",
       "flash": {
         "success_compose": "Message is sent!",
         "error_compose": "Message is not sent, try sending again"

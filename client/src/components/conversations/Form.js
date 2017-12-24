@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import map from 'lodash/map'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
@@ -66,10 +67,10 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid()) { 
-      const { _id, title, recipientId, body } = this.state
+    if (true) { 
+      const { _id, recipientId, title, body } = this.state
       this.setState({ isLoading: true })
-      this.props.createConversatoin({ _id, title, recipientId, body })
+      this.props.createConversation({ _id, recipientId, title, body })
         .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -78,7 +79,7 @@ class Form extends Component {
     const { _id, title, recipientId, body, errors, isLoading } = this.state
 
     const recipientsOptions = map(this.props.users, (user) => 
-      <option key={user._id} value={user._id}>{user.firstName}</option>
+      user._id !== this.props.account._id && <option key={user._id} value={user._id}>{user.firstName}</option>
     )
 
     return (  
@@ -109,8 +110,8 @@ class Form extends Component {
               name="title" 
               value={title} 
               onChange={this.handleChange.bind(this)} 
-              placeholder="Title"
-              error={errors.message && errors.message.errors && errors.message.errors.title && errors.message.errors['name'].message}
+              placeholder={T.translate("conversations.form.title")}
+              error={errors.message && errors.message.errors && errors.message.errors.title && errors.message.errors['title'].message}
               formClass="field"
             />
             
@@ -120,6 +121,7 @@ class Form extends Component {
               value={body} 
               onChange={this.handleChange.bind(this)} 
               placeholder={T.translate("conversations.form.body")}
+              error={errors.message && errors.message.errors && errors.message.errors.body && errors.message.errors['body'].message}
               formClass="field"
             /> 
 
@@ -138,4 +140,10 @@ Form.propTypes = {
   users: PropTypes.array.isRequired
 }
 
-export default Form
+function mapStateToProp(state) {
+  return {
+    account: state.authentication.account
+  }
+}
+
+export default connect(mapStateToProp) (Form)

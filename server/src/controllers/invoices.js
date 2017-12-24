@@ -24,8 +24,8 @@ export default {
     })
   },
 
-  create: (reqBody, callback) => {  
-    Invoice.create(reqBody, function(err, invoice) {
+  create: (req, callback) => {  
+    Invoice.create(req.body, function(err, invoice) {
       if (err) {
         callback(err, null)
         return

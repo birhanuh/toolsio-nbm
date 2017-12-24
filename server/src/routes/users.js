@@ -43,7 +43,7 @@ router.post('/register', function(req, res) {
         user.tenantId = account.subdomain
         user.save().then(user => {
           req.login(user, function(err) {
-            res.json({ firstName: user.firstName, lastName: user.lastName, email: user.email, 
+            res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
               admin: user.admin, subdomain: user.account.subdomain })
           })
         }).catch(err => 
@@ -110,7 +110,7 @@ router.get('/:resource', (req, res) => {
 router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  res.json({ firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+  res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
     admin: req.user.admin, tenantId: req.user.tenantId })
 })
 

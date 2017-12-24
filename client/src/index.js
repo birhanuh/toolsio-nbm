@@ -27,7 +27,7 @@ const store = createStore(
 
 if (localStorage.account) {
   // Retrieve the object from storage
-  var Account = localStorage.getItem('account');
+  var Account = localStorage.getItem('account')
   store.dispatch(setCurrentAccount(JSON.parse(Account)))
 }
 console.log('cookie: ', document.cookie)

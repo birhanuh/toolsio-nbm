@@ -95,7 +95,7 @@ router.post('/:resource', ensureAuthenticated, (req, res) => {
   let reqBody = req.body
   delete reqBody['_id']
     
-  controller.create(reqBody, (err, result) => {
+  controller.create(req, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {

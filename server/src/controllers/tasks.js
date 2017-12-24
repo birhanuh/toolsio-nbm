@@ -25,8 +25,8 @@ export default {
     })
   },
 
-  create: (reqBody, callback) => {  
-    Task.create(reqBody, function(err, task) {
+  create: (req, callback) => {  
+    Task.create(req.body, function(err, task) {
       if (err) {
         callback(err, null)
         return

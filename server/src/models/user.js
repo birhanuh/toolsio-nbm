@@ -57,7 +57,7 @@ UserSchema.post('save', (error, doc, next) => {
   }
 })
 
-module.exports = mongoose.model('user', UserSchema)
+let User = module.exports = mongoose.model('user', UserSchema)
 
 module.exports.getUserByEmail = (email, callback) => {
   let query = {email: email}
