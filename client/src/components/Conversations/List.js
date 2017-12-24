@@ -21,7 +21,7 @@ export default function List({ conversations, deleteConversation }) {
           <th>{T.translate("conversations.page.title")}</th>
           <th>{T.translate("conversations.page.recipient")}</th>
           <th>{T.translate("conversations.page.body")}</th>
-          <th>{T.translate("conversations.page.delete")}</th>
+          <th>{T.translate("conversations.page.remove")}</th>
         </tr>
       </thead>
       <tbody>
