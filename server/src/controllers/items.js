@@ -3,7 +3,7 @@ import Sale from '../models/sale'
 
 export default {
   
-  find: (query, callback) => {
+  find: (req, callback) => {
     Item.find(function(err, items) {
       if (err) {
         callback(err, null)

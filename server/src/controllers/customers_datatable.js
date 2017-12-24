@@ -2,7 +2,9 @@ import Customer from '../models/customer'
 
 export default {
   
-  find: (query, callback) => {
+  find: (req, callback) => {
+    
+    let query = req.query
 
     let start = parseInt(query.start)
     let length = parseInt(query.length)

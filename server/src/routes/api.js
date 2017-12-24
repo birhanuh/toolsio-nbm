@@ -21,7 +21,7 @@ router.get('/:resource', ensureAuthenticated, (req, res) => {
     return
   }
 
-  controller.find(req.query, (err, results) => {
+  controller.find(req, (err, results) => {
     if (err) {
       res.status(500).json({ 
         errors: {

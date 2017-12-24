@@ -4,9 +4,9 @@ import User from '../../models/user'
 
 export default {
 
-  find: (query, callback) => {
+  find: (req, callback) => {
     // Only return one message from each conversation to display as sinppet
-    Conversation.find((err, conversations) => {
+    Conversation.find({ participants: req.session.passport.user }).select('_id').exec((err, conversations) => {
       if (err) {
         callback(err, null)
         return
@@ -14,7 +14,8 @@ export default {
 
       // Set up empty array to hold conversations + most recent message
       let fullConversations = []
-      conversations.map(conversation => {
+
+      conversations.length !== 0 && conversations.map(conversation => {
         Message.find({ conversationId: conversation._id}).sort('createdAt').limit(1).populate({ path: 'author', select: 'profile.firstName profile.lastName' }).exec((err, message) => {
           if(err) {
             callback(err, null)
@@ -22,12 +23,10 @@ export default {
           }
 
           fullConversations.push(message)
-
-          if (fullConversations.length === conversations.length) {
-            callback(null, fullConversations)
-          }
         })
       })
+
+      callback(null, fullConversations)
     }) 
   },
 
@@ -66,7 +65,7 @@ export default {
       const message = new Message({
         conversationId: conversation._id,
         body: reqBody.body,
-        author: reqBody.session.passport // Get id of current user from session
+        author: reqBody.session.passport.user // Get id of current user from session
       })
 
       Message.create(message, (err, message) => {
