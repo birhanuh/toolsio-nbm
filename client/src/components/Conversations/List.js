@@ -25,7 +25,7 @@ export default function List({ conversations, deleteConversation }) {
         </tr>
       </thead>
       <tbody>
-        { conversations.map(conversation => <Tr conversation={conversation} key={conversation._id} deleteConversation={deleteConversation} />) }
+        { conversations.map(conversation => conversation.length !== 0 && <Tr conversation={conversation[0]} key={conversation[0]._id} deleteConversation={deleteConversation} />) }
       </tbody>
     </table>
   )

@@ -9,11 +9,11 @@ export default function Tr({conversation, deleteConversation}) {
     <tr>
       <td>
         <Link to={`/conversations/show/${conversation._id}`}>
-          {conversation._id}
+          {conversation.title}
         </Link>  
       </td>
       <td>{conversation._id}</td>
-      <td>{conversation._id}</td>      
+      <td>{conversation.body}</td>      
       <td>
         <button className="ui icon basic button red" onClick={deleteConversation(conversation._id)}><i className="delete icon"></i></button>
       </td>

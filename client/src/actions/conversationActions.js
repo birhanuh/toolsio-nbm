@@ -38,9 +38,9 @@ export function createConversation(conversation) {
   }
 }
 
-export function fetchConversations() {
+export function fetchConversations(param) {
   return dispatch => {
-    return axios.get('/api/conversations')
+    return axios.get(`/api/conversations/${param}`)
       .then(res => {
         dispatch(setConversations(res.data.results))
       })

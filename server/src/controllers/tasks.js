@@ -3,7 +3,7 @@ import Project from '../models/project'
 
 export default {
   
-  find: (req, callback) => {
+  find: (req, type, callback) => {
     Task.find(function(err, tasks) {
       if (err) {
         callback(err, null)

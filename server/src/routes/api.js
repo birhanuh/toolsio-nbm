@@ -6,9 +6,10 @@ import { authenticate, ensureAuthenticated } from '../middlewares/authenticate'
 // POST recources (authenticate middleware function called when request comes and it checks for toke validation,
 // if every thing is ok, it procced to the route code but, if there no-toket or token-is-invalid then middlewaer 
 // response with error and halt operatoin so, route code never excutes)
-router.get('/:resource', ensureAuthenticated, (req, res) => {
+router.get('/:resource/:type', ensureAuthenticated, (req, res) => {
   
   let resource = req.params.resource 
+  let type = req.params.type
 
   let controller = controllers[resource]
   if (controller == null) {
@@ -21,7 +22,7 @@ router.get('/:resource', ensureAuthenticated, (req, res) => {
     return
   }
 
-  controller.find(req, (err, results) => {
+  controller.find(req, type, (err, results) => {
     if (err) {
       res.status(500).json({ 
         errors: {

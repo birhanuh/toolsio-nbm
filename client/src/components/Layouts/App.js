@@ -93,6 +93,7 @@ class App extends Component {
               <Route exact path="/invoices/new" component={requireAuth(InvoicesFormPage)} />
               <Route exact path="/invoices/show/:id" component={requireAuth(InvoicesShow)} /> 
               <Route exact path="/conversations" component={requireAuth(ConversationsPage)} />
+              <Route exact path="/conversations/:type" component={requireAuth(ConversationsPage)} />
               <Route exact path="/conversations/new" component={requireAuth(ConversationsFormPage)} />
               <Route exact path="/conversations/show/:id" component={requireAuth(ConversationsShow)} /> 
             </Switch>

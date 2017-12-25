@@ -4,7 +4,7 @@ import User form '../models/user'
 
 export default {
 
-  find: (req, callback) => {
+  find: (req, type, callback) => {
     Message.find({ conversationId: req.query.conversationId }).select('createdAt body author').sort('-createdAt').populate({ path: 'author', select: 'firstName lastName' }).exec((err, messages) {
       if (err) {
         callback(err, null)
