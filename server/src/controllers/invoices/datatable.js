@@ -1,4 +1,4 @@
-import Invioce from '../models/invoice'
+import Invioce from '../../models/invoice'
 
 export default {
   

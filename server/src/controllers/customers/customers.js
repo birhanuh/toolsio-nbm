@@ -1,8 +1,8 @@
-import Customer from '../models/customer'
+import Customer from '../../models/customer'
 
-import Project from '../models/project'
-import Sale from '../models/sale'
-import Invoice from '../models/invoice'
+import Project from '../../models/project'
+import Sale from '../../models/sale'
+import Invoice from '../../models/invoice'
 
 export default {
   

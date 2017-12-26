@@ -41,8 +41,7 @@ class Page extends Component {
   render() {
     
     const { match } = this.props
-    console.log("conversation; ", this.props.conversation)
-    console.log('conversations: ', this.props.conversations)
+
     return (
 
       <div className="ui grid">

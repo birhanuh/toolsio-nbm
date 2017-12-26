@@ -1,21 +1,21 @@
 import projects from './projects'
 import sales from'./sales'
-import customers from'./customers'
-import customers_datatable from'./customers_datatable'
-import invoices_datatable from'./invoices_datatable'
+import customers from'./customers/customers'
+import customers_datatable from'./customers/datatable'
 import tasks from'./tasks'
 import items from'./items'
-import invoices from'./invoices'
-import conversations from'./messaging/conversations'
+import invoices from'./invoices/invoices'
+import invoices_datatable from'./invoices/datatable'
+import conversations from'./conversations/conversations'
 
 module.exports = {
   projects,
   sales,
   customers,
+  customers_datatable,
   tasks,
   items,
   invoices,
-  customers_datatable,
   invoices_datatable,
   conversations
 }

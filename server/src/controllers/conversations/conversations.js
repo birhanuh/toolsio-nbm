@@ -1,5 +1,5 @@
-import Conversation from '../../models/messaging/conversation'
-import Message from '../../models/messaging/message'
+import Conversation from '../../models/conversations/conversation'
+import Message from '../../models/conversations/message'
 import User from '../../models/user'
 import mongoose from 'mongoose'
 
