@@ -44,7 +44,14 @@ class FormPage  extends Component {
               type: 'success',
               text: T.translate("customers.form.flash.success_create", { name: name})
             })  
-            this.context.router.history.push('/customers')
+            
+            if (document.referrer.includes('projects/new')) {
+              this.context.router.history.push('/projects/new')
+            } else if (document.referrer.includes('sales/new')) {
+              this.context.router.history.push('/sales/new')
+            } else {
+              this.context.router.history.push('/customers') 
+            }
           })   
     }
   }

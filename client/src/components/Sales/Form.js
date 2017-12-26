@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import map from 'lodash/map'
@@ -104,11 +105,6 @@ class Form extends Component {
       <option key={customer._id} value={customer._id}>{customer.name}</option>
     )
 
-    //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
-    //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
-    //    { key: 'ready', value: 'ready', text: 'READY' } ,
-    //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
-
     return (  
       <div className="row">
         <div className="ui text container ui segment">  
@@ -130,6 +126,7 @@ class Form extends Component {
               error={errors.message && errors.message.errors && errors.message.errors.name && errors.message.errors.name.message}
               formClass="inline field"
             />
+
             <div  className={classnames("inline field", { error: !!errors.deadline })}>
               <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
               <DatePicker
@@ -139,6 +136,7 @@ class Form extends Component {
               />
               <span>{errors.deadline}</span>
             </div>
+
             <SelectField
               label={T.translate("sales.form.customer")}
               name="customer"
@@ -150,6 +148,20 @@ class Form extends Component {
               options={[<option key="default" value="" disabled>{T.translate("sales.form.select_customer")}</option>,
                 customersOptions]}
             />
+
+             {
+              customersOptions.length === 0 &&
+                <div className="inline field">
+                  <div className="ui mini info message mb-1">
+                    <p>{T.translate("sales.form.empty_customers_message")}</p>
+
+                    <Link className="ui primary outline tiny button" to="/customers/new">
+                      <i className="add circle icon"></i>
+                      {T.translate("customers.page.add_new_customer")}
+                    </Link>
+                  </div>
+                </div>
+            }
 
             { _id &&
               <SelectField
@@ -172,17 +184,6 @@ class Form extends Component {
               />
             }
 
-            {/*
-            <div className={classnames("field", { error: !!error.status })}>
-              <label htmlFor="status">Status</label>
-              <Dropdown 
-                placeholder='Status' 
-                search selection options={statusOptions}   
-                value={status} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.status} />
-            </div>      
-            */}
             <TextAreaField
               label={T.translate("sales.form.description")}
               name="description" 

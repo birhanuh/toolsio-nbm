@@ -212,6 +212,7 @@ class Form extends Component {
             }
           />
           <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
+            <label>{T.translate("sign_up.account.subdomain")}</label>
             <div className="ui right labeled input">
               <input type="text" name="subdomain" id="subdomain" placeholder={T.translate("sign_up.account.subdomain")} 
                 onBlur={this.checkAccountExists.bind(this)} value={account.subdomain} onChange={this.handleChange.bind(this)} />

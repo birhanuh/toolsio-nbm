@@ -33,7 +33,7 @@ class Page extends Component {
         <div className="ui message"> 
           {T.translate("sign_up.already_a_user")}&nbsp;<a href="/login">{T.translate("sign_up.log_in_here")}</a>
         </div>
-        <div className="ui text-container mt-4">
+        <div className="ui center aligned vertical segment">
           <small className="block-i">{T.translate("landing.footer.copyright")}</small>
           <small className="block-i">{T.translate("landing.footer.address")}</small>
         </div>

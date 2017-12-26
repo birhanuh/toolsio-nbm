@@ -49,7 +49,6 @@ class FormPage  extends Component {
               text: T.translate("sales.form.flash.success_create", { name: name})
             })  
             this.context.router.history.push('/sales')
-
           })   
     }
   }

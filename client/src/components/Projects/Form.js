@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import map from 'lodash/map'
@@ -146,6 +147,20 @@ class Form extends Component {
                 customersOptions]}
             />
             
+            {
+              customersOptions.length === 0 &&
+                <div className="inline field">
+                  <div className="ui mini info message mb-1">
+                    <p>{T.translate("projects.form.empty_customers_message")}</p>
+
+                    <Link className="ui primary outline tiny button" to="/customers/new">
+                      <i className="add circle icon"></i>
+                      {T.translate("customers.page.add_new_customer")}
+                    </Link>
+                  </div>
+                </div>
+            }
+
             { _id &&
               <SelectField
                 label={T.translate("projects.form.status")}

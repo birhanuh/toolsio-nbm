@@ -65,7 +65,7 @@ class App extends Component {
           <Sidebar />
         }
 
-        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable middle aligned center aligned grid auth-pages': authPages})}>          
+        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
                    
           { !authPages && <FlashMessagesList /> }
           

@@ -221,15 +221,21 @@ select.date {
 }
 
 // Horizontal form
+.ui.form .inline.field {
+  display: inherit;
+}
+
+.ui.form .inline.field > div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ui.form .inline.field > .info.message {
+  left: 27%;
+}
+
 .ui.form .inline.field>label {
   width: 25%;
-}
-
-.ui.form .field > label {
-  text-align: left;
-}
-
-.ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
   text-align: right;
 }
 
