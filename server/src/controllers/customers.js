@@ -6,7 +6,7 @@ import Invoice from '../models/invoice'
 
 export default {
   
-  find: (req, type, callback) => {
+  find: (req, callback) => {
     Customer.find({}).select('name contact vatNumber').exec(function(err, customers) {
       if (err) {
         callback(err, null)
@@ -17,8 +17,8 @@ export default {
     })
   },
 
-  findById: (id, callback) => {
-    Customer.findById(id).populate([{ path: 'sales', select: 'name status deadline' }, { path: 'projects', select: 'name status deadline' }, { path: 'invoices', select: 'referenceNumber status deadline' }]).exec(function(err, customer) {
+  findById: (req, callback) => {
+    Customer.findById(req.params.id).populate([{ path: 'sales', select: 'name status deadline' }, { path: 'projects', select: 'name status deadline' }, { path: 'invoices', select: 'referenceNumber status deadline' }]).exec(function(err, customer) {
       if (err) {
         callback(err, null)
         return
@@ -38,8 +38,8 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, reqBody, callback) => {
-    Customer.findByIdAndUpdate(id, reqBody, {new: true}, function(err, customer) {
+  findByIdAndUpdate: (req, callback) => {
+    Customer.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, customer) {
       if (err) {
         callback(err, null)
         return

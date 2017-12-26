@@ -5,6 +5,8 @@ const MessageSchema = new mongoose.Schema({
   title: { type: String, required: [true, "Title is required."] },
   body: { type: String, required: [true, "Message is required."] },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  read: {type: Boolean, default: false},
+  draft: {type: Boolean, default: false}
 },
 {
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 

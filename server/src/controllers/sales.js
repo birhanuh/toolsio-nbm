@@ -3,7 +3,8 @@ import Item from '../models/item'
 
 export default {
   
-  find: (req, type, callback) => {
+  find: (req, callback) => {
+    
      Sale.find({}).select('-items').populate({ path: 'customer', select: 'name' }).exec(function(err, sales) {
       if (err) {
         callback(err, null)
@@ -14,7 +15,10 @@ export default {
     })
   },
 
-  findById: (id, callback) => {
+  findById: (req, callback) => {
+
+    let id = req.params.id
+
     Sale.findById(id).populate([{ path: 'customer', select: '_id'}, { path: 'customer', select: 'name'}, { path: 'items' }, { path: 'invoice', select: '_id' }]).exec(function(err, sale) {
       if (err) {
         callback(err, null)
@@ -26,7 +30,10 @@ export default {
   },
 
   create: (req, callback) => {
-    Sale.create(req.body, function(err, sale) {
+
+    let body = req.body
+
+    Sale.create(body, function(err, sale) {
       if (err) {
         callback(err, null)
         return
@@ -36,8 +43,12 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, reqBody, callback) => {
-    Sale.findByIdAndUpdate(id, reqBody, {new: true}, function(err, sale) {
+  findByIdAndUpdate: (req, callback) => {
+
+    let id = req.params.id
+    let body = req.body
+
+    Sale.findByIdAndUpdate(id, body, {new: true}, function(err, sale) {
       if (err) {
         callback(err, null)
         return
@@ -48,7 +59,10 @@ export default {
 
   },
 
-  findByIdAndRemove: (id, callback) => {
+  findByIdAndRemove: (req, callback) => {
+
+    let id = req.params.id
+
     Sale.findByIdAndRemove(id, function(err, r) {
       if (err) {
         callback(err, {})

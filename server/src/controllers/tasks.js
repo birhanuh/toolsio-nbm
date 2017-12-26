@@ -3,7 +3,8 @@ import Project from '../models/project'
 
 export default {
   
-  find: (req, type, callback) => {
+  find: (req, callback) => {
+
     Task.find(function(err, tasks) {
       if (err) {
         callback(err, null)
@@ -14,7 +15,10 @@ export default {
     })
   },
 
-  findById: (id, callback) => {
+  findById: (req, callback) => {
+
+    let id = req.params.id
+
     Task.findById(id, function(err, task) {
       if (err) {
         callback(err, null)
@@ -26,7 +30,10 @@ export default {
   },
 
   create: (req, callback) => {  
-    Task.create(req.body, function(err, task) {
+
+    let body = req.body
+
+    Task.create(body, function(err, task) {
       if (err) {
         callback(err, null)
         return
@@ -36,8 +43,12 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, reqBody, callback) => {
-    Task.findByIdAndUpdate(id, reqBody, {new: true}, function(err, task) {
+  findByIdAndUpdate: (req, callback) => {
+
+    let id = req.params.id
+    let body = req.body
+
+    Task.findByIdAndUpdate(id, body, {new: true}, function(err, task) {
       if (err) {
         callback(err, null)
         return
@@ -47,7 +58,10 @@ export default {
     })
   },
 
-  findByIdAndRemove: (id, callback) => {
+  findByIdAndRemove: (req, callback) => {
+
+    let id = req.params.id
+
     Task.findByIdAndRemove(id, function(err, task) {
       if (err) {
         callback(err, null)

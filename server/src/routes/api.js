@@ -6,10 +6,9 @@ import { authenticate, ensureAuthenticated } from '../middlewares/authenticate'
 // POST recources (authenticate middleware function called when request comes and it checks for toke validation,
 // if every thing is ok, it procced to the route code but, if there no-toket or token-is-invalid then middlewaer 
 // response with error and halt operatoin so, route code never excutes)
-router.get('/:resource/:type', ensureAuthenticated, (req, res) => {
-  
+router.get('/:resource', ensureAuthenticated, (req, res) => {
+
   let resource = req.params.resource 
-  let type = req.params.type
 
   let controller = controllers[resource]
   if (controller == null) {
@@ -22,7 +21,7 @@ router.get('/:resource/:type', ensureAuthenticated, (req, res) => {
     return
   }
 
-  controller.find(req, type, (err, results) => {
+  controller.find(req, (err, results) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -44,7 +43,7 @@ router.get('/:resource/:type', ensureAuthenticated, (req, res) => {
 router.get('/:resource/:id', ensureAuthenticated, (req, res) => {
   
   let resource = req.params.resource
-  let id = req.params.id
+  //let id = req.params.id
 
   let controller = controllers[resource]
   if (controller == null) {
@@ -57,7 +56,7 @@ router.get('/:resource/:id', ensureAuthenticated, (req, res) => {
     return
   }
 
-  controller.findById(id, (err, result) => {
+  controller.findById(req, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -91,10 +90,6 @@ router.post('/:resource', ensureAuthenticated, (req, res) => {
     })
     return
   }
-
-  // Remove the null _id value that comes from client side for making the _id availabe inside save middlewares 
-  let reqBody = req.body
-  delete reqBody['_id']
     
   controller.create(req, (err, result) => {
     if (err) {
@@ -129,7 +124,7 @@ router.put('/:resource/:id', ensureAuthenticated, (req, res) => {
     })
   } 
 
-  controller.findByIdAndUpdate(req.params.id, req.body, (err, result) => {
+  controller.findByIdAndUpdate(req, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -150,7 +145,6 @@ router.put('/:resource/:id', ensureAuthenticated, (req, res) => {
 router.delete('/:resource/:id', ensureAuthenticated, (req, res) => {
   
   let resource = req.params.resource
-  let id = req.params.id
 
   let controller = controllers[resource]
   if (controller == null) {
@@ -163,7 +157,7 @@ router.delete('/:resource/:id', ensureAuthenticated, (req, res) => {
     return
   }
 
-  controller.findByIdAndRemove(id, (err, result) => {
+  controller.findByIdAndRemove(req, (err, result) => {
     if (err) {
       res.status(500).json({ 
         errors: {

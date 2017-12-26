@@ -2,7 +2,8 @@ import Invoice from '../models/invoice'
 
 export default {
   
-  find: (req, type, callback) => {
+  find: (req, callback) => {
+    
     Invoice.find({}).select('deadline status customer sale project').populate([{path: 'sale', select: 'name total'}, {path: 'project', select: 'name total' }, {path: 'customer', select: 'name'}]).exec(function(err, invoices) {
       if (err) {
         callback(err, null)
@@ -13,7 +14,10 @@ export default {
     })
   },
 
-  findById: (id, callback) => {
+  findById: (req, callback) => {
+
+    let id = req.params.id
+
     Invoice.findById(id).populate([{path: 'sale', populate: { path: 'items' }}, {path: 'project', populate: { path: 'tasks' }}, {path: 'customer'}]).exec(function(err, invoice) {
       if (err) {
         callback(err, null)
@@ -25,7 +29,10 @@ export default {
   },
 
   create: (req, callback) => {  
-    Invoice.create(req.body, function(err, invoice) {
+
+    let body = req.body
+
+    Invoice.create(body, function(err, invoice) {
       if (err) {
         callback(err, null)
         return
@@ -34,8 +41,12 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, reqBody, callback) => {
-    Invoice.findByIdAndUpdate(id, reqBody, {new: true}, function(err, invoice) {
+  findByIdAndUpdate: (req, callback) => {
+
+    let id = req.params.id
+    let body = req.body
+
+    Invoice.findByIdAndUpdate(id, body, {new: true}, function(err, invoice) {
       if (err) {
         callback(err, null)
         return
@@ -45,7 +56,10 @@ export default {
     })
   },
 
-  findByIdAndRemove: (id, callback) => {
+  findByIdAndRemove: (req, callback) => {
+
+    let id = req.params.id
+
     Invoice.findByIdAndRemove(id, function(err, invoice) {
       if (err) {
         callback(err, null)

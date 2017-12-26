@@ -5,11 +5,50 @@ import mongoose from 'mongoose'
 
 export default {
 
-  find: (req, type, callback) => {
-    
+  find: (req, callback) => {
+
     const _id = mongoose.Types.ObjectId(req.session.passport.user)
 
-    if (type === 'inbox') {
+    // Only return one message from each conversation to display as sinppet
+    Conversation.find({ participants: req.session.passport.user }).select('_id').exec((err, conversations) => {
+      if (err) {
+        callback(err, null)
+        return
+      }
+      
+      // Set up empty array to hold conversations + most recent message
+      let fullConversations = []
+
+      conversations.map(conversation => {
+        Message.find({ conversationId: conversation._id }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
+          if(err) {
+            callback(err, null)
+            return
+          }
+
+          if (!_id.equals(message[0].author._id)) {
+            fullConversations.push(message)
+          } else {
+            fullConversations.push([])
+          }
+
+          if(fullConversations.length === conversations.length) {
+            callback(null, fullConversations)
+          }
+        })
+      })
+      
+    })
+
+  },
+
+  findById: (req, callback) => {
+    
+    let id = req.params.id
+
+    const currentUserId = mongoose.Types.ObjectId(req.session.passport.user)
+
+    if (id === 'inbox') {
       // Only return one message from each conversation to display as sinppet
       Conversation.find({ participants: req.session.passport.user }).select('_id').exec((err, conversations) => {
         if (err) {
@@ -27,7 +66,7 @@ export default {
               return
             }
 
-            if (!_id.equals(message[0].author._id)) {
+            if (!currentUserId.equals(message[0].author._id)) {
               fullConversations.push(message)
             } else {
               fullConversations.push([])
@@ -43,7 +82,7 @@ export default {
       return
     } 
 
-    if (type === 'sent') {
+    if (id === 'sent') {
       Conversation.find({ participants: req.session.passport.user }).select('_id').exec((err, conversations) => {
         if (err) {
           callback(err, null)
@@ -72,32 +111,6 @@ export default {
       return
     }
 
-  },
-
-  findById: (id, callback) => {
-
-    // Only return one message from each conversation to display as sinppet
-    Conversation.findById(id, (err, conversation) => {
-      if (err) {
-        callback(err, null)
-        return
-      }
-
-      // Set up empty array to hold messages
-      let messages = []
-
-      Message.find({ conversationId: conversation._id}).sort('createdAt').limit(1).populate({ path: 'author', select: 'profile.firstName profile.lastName' }).exec((err, message) => {
-        if(err) {
-          callback(err, null)
-          return
-        }
-
-        messages.push(message)
-      })
-
-      callback(null, messages)
-     
-    }) 
   },
 
   create: (req, callback) => {
