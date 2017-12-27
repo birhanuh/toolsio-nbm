@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import List from './List' 
 import { connect } from 'react-redux'
-import { fetchConversations, fetchConversation, deleteConversation } from '../../actions/conversationActions'
+import { fetchConversations, fetchInboxOrSent, deleteConversation } from '../../actions/conversationActions'
 
 // jQuery
 import $ from 'jquery'
@@ -25,9 +25,9 @@ class Page extends Component {
     const { match } = this.props
     
     if (match.params.type === 'sent') {
-      this.props.fetchConversation('sent')
+      this.props.fetchInboxOrSent('sent')
     } else if (match.params.type === 'inbox') {
-      this.props.fetchConversation('inbox')
+      this.props.fetchInboxOrSent('inbox')
     } else {
       this.props.fetchConversations()
     }
@@ -87,7 +87,7 @@ class Page extends Component {
 
 Page.propTypes = {
   fetchConversations: PropTypes.func.isRequired,
-  fetchConversation: PropTypes.func.isRequired,
+  fetchInboxOrSent: PropTypes.func.isRequired,
   deleteConversation: PropTypes.func.isRequired
 }
 
@@ -97,7 +97,7 @@ function mapSateToProps(state, props) {
 
   if (match.params.type === 'inbox' || match.params.type === 'sent') {
     return {
-      conversations: state.conversations[0]
+      conversations: state.conversations
     }
   } else {
     return {
@@ -107,5 +107,5 @@ function mapSateToProps(state, props) {
 
 }
 
-export default connect(mapSateToProps, { fetchConversations, fetchConversation, deleteConversation })(Page)
+export default connect(mapSateToProps, { fetchConversations, fetchInboxOrSent, deleteConversation })(Page)
 

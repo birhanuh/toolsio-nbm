@@ -167,7 +167,7 @@ function mapStateToProps(state, props) {
   const { match } = props
   if (match.params.id) {
     return {
-      conversation: state.conversations.find(item => item[0].conversationId === match.params.id)
+      conversation: state.conversations.find(item => item.length !==0 && item[0].conversationId === match.params.id)
     }
   } 
 }

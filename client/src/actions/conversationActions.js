@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { SET_CONVERSATIONS, ADD_CONVERSATION, CONVERSATION_FETCHED, CONVERSATION_DELETED } from './types'
+import { SET_CONVERSATIONS, ADD_CONVERSATION, CONVERSATION_FETCHED, INBOX_OR_SENT_FETCHED, CONVERSATION_DELETED } from './types'
 
 export function addConversation(conversation) {
   return {
@@ -19,6 +19,13 @@ export function conversationFetched(conversation) {
   return {
     type: CONVERSATION_FETCHED,
     conversation
+  }
+}
+
+export function inboxOrSentFetched(inboxOrSent) {
+  return {
+    type: INBOX_OR_SENT_FETCHED,
+    inboxOrSent
   }
 }
 
@@ -43,6 +50,15 @@ export function fetchConversations() {
     return axios.get('/api/conversations/')
       .then(res => {
         dispatch(setConversations(res.data.results))
+      })
+  }
+}
+
+export function fetchInboxOrSent(inboxOrSent) {
+  return dispatch => {
+    return axios.get(`/api/conversations/${inboxOrSent}`)
+      .then(res => {
+        dispatch(inboxOrSentFetched(res.data.result))
       })
   }
 }

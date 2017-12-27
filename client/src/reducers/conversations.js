@@ -1,4 +1,4 @@
-import { SET_CONVERSATIONS, ADD_CONVERSATION, CONVERSATION_FETCHED, CONVERSATION_DELETED } from '../actions/types'
+import { SET_CONVERSATIONS, ADD_CONVERSATION, CONVERSATION_FETCHED, INBOX_OR_SENT_FETCHED, CONVERSATION_DELETED } from '../actions/types'
 
 export default function conversations(state = [], action = {}) {
   switch(action.type) {
@@ -15,8 +15,18 @@ export default function conversations(state = [], action = {}) {
     case CONVERSATION_DELETED:
       return state.filter(item => item._id !== action.id)
 
+    case INBOX_OR_SENT_FETCHED: 
+      const isStateSizeEqual = state.length === action.inboxOrSent.length
+  
+      if (isStateSizeEqual) {
+        return action.inboxOrSent
+      } else {
+        return action.inboxOrSent
+      }  
+
     case CONVERSATION_FETCHED: 
       const index = state.findIndex(item => item.length !==0 && item[0]._id === action.conversation[0]._id)
+      console.log('index', index)
       if (index > -1) {
         return state.map(item => {
           if (item.length !==0 && item[0]._id === action.conversation[0]._id) return action.conversation
