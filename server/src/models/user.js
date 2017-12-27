@@ -11,7 +11,7 @@ const UserSchema = new Schema({
   lastName: { type: String },
   email: { type: String, required: [true, "Email is required."], index: {unique: true, dropDups: true} },
   password: { type: String, required: [true, "Password is required."] },
-  admin: Boolean,
+  admin: {type: Boolean, default: false},
   avatar: { data: Buffer, contentType: String },
   meta: {
     age: Number,

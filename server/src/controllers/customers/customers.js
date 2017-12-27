@@ -7,7 +7,7 @@ import Invoice from '../../models/invoice'
 export default {
   
   find: (req, callback) => {
-    Customer.find({}).select('name contact vatNumber').exec(function(err, customers) {
+    Customer.find({}).select('name contact vatNumber').exec((err, customers) => {
       if (err) {
         callback(err, null)
         return
@@ -18,7 +18,10 @@ export default {
   },
 
   findById: (req, callback) => {
-    Customer.findById(req.params.id).populate([{ path: 'sales', select: 'name status deadline' }, { path: 'projects', select: 'name status deadline' }, { path: 'invoices', select: 'referenceNumber status deadline' }]).exec(function(err, customer) {
+
+    let id = req.params.id
+
+    Customer.findById(id).populate([{ path: 'sales', select: 'name status deadline' }, { path: 'projects', select: 'name status deadline' }, { path: 'invoices', select: 'referenceNumber status deadline' }]).exec(function(err, customer) {
       if (err) {
         callback(err, null)
         return
@@ -29,7 +32,10 @@ export default {
   },
 
   create: (req, callback) => {  
-    Customer.create(req.body, function(err, customer) {
+
+    let body = req.body
+
+    Customer.create(body, (err, customer) => {
       if (err) {
         callback(err, null)
         return
@@ -39,7 +45,11 @@ export default {
   },
 
   findByIdAndUpdate: (req, callback) => {
-    Customer.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, customer) {
+
+    let id = req.params.id
+    let body = req.body
+
+    Customer.findByIdAndUpdate(id, body, {new: true}, (err, customer) => {
       if (err) {
         callback(err, null)
         return
@@ -49,15 +59,18 @@ export default {
     })
   },
 
-  findByIdAndRemove: (id, callback) => {
-    Customer.findByIdAndRemove(id, function(err, customer) {
+  findByIdAndRemove: (req, callback) => {
+
+    let id = req.params.id
+
+    Customer.findByIdAndRemove(id, (err, customer) => {
       if (err) {
         callback(err, null)
         return
       }
 
       // Remove Project from this Customer
-      Project.findByIdAndUpdate(customer._id, { $pull: { projects: id} }, function(err, project) {
+      Project.findByIdAndUpdate(customer._id, { $pull: { projects: id} }, (err, project) => {
         if (err) {
           callback(err, null)
           return
@@ -66,7 +79,7 @@ export default {
       })
 
       // Remove Sale from this Customer
-      Sale.findByIdAndUpdate(customer._id, { $pull: { sales: id} }, function(err, sale) {
+      Sale.findByIdAndUpdate(customer._id, { $pull: { sales: id} }, (err, sale) => {
         if (err) {
           callback(err, null)
           return
@@ -75,7 +88,7 @@ export default {
       })
 
        // Remove Invoice from this Customer
-      Invoice.findByIdAndUpdate(customer._id, { $pull: { invoices: id} }, function(err, invoice) {
+      Invoice.findByIdAndUpdate(customer._id, { $pull: { invoices: id} }, (err, invoice) => {
         if (err) {
           callback(err, null)
           return

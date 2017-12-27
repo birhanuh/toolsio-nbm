@@ -122,7 +122,7 @@ class Show extends Component {
             
             <div className="ui divider"></div>
 
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("projects.show.delete")}</button>
+            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("projects.show.delete")}</button>
             <Link to={`/projects/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("projects.show.edit")}</Link>
           </div>    
         </div>

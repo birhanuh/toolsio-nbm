@@ -6,7 +6,7 @@ export default {
   
   find: (req, callback) => {
     
-    Project.find({}).select('-tasks').populate({ path: 'customer', select: 'name' }).exec(function(err, projects) {
+    Project.find({}).select('-tasks').populate({ path: 'customer', select: 'name' }).exec((err, projects) => {
       if (err) {
         callback(err, null)
         return
@@ -34,7 +34,7 @@ export default {
 
     let body = req.body
 
-    Project.create(body, function(err, project) {
+    Project.create(body, (err, project) => {
       if (err) {
         callback(err, null)
         return

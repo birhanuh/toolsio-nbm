@@ -111,6 +111,14 @@ export default {
       return
     }
 
+    Message.find({ conversationId: id }).select('createdAt body author conversationId').sort('-createdAt').populate({ path: 'author', select: 'firstName lastName admin' }).exec((err, messages) => {
+      if (err) {
+        callback(err, null)
+        return
+      }
+
+      callback(null, messages)
+    })
   },
 
   create: (req, callback) => {

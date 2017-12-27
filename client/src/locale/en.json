@@ -640,6 +640,9 @@
       "recipient": "Recipient",
       "body": "Body",
       "reply": "Reply",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "write_reply": "Write your reply...",
       "flash": {
         "success_delete": "Message is deleted!"
       }  

@@ -87,7 +87,8 @@ class Page extends Component {
 
 Page.propTypes = {
   fetchConversations: PropTypes.func.isRequired,
-  fetchConversation: PropTypes.func.isRequired
+  fetchConversation: PropTypes.func.isRequired,
+  deleteConversation: PropTypes.func.isRequired
 }
 
 function mapSateToProps(state, props) {

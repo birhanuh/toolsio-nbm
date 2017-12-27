@@ -16,10 +16,10 @@ export default function conversations(state = [], action = {}) {
       return state.filter(item => item._id !== action.id)
 
     case CONVERSATION_FETCHED: 
-      const index = state.findIndex(item => item._id === action.conversation._id)
+      const index = state.findIndex(item => item.length !==0 && item[0]._id === action.conversation[0]._id)
       if (index > -1) {
         return state.map(item => {
-          if (item._id === action.conversation._id) return action.conversation
+          if (item.length !==0 && item[0]._id === action.conversation[0]._id) return action.conversation
           return item
         })
       } else {
