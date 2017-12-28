@@ -94,11 +94,12 @@ class Show extends Component {
 
     const messageList = conversation.map(message => 
       <div key={message._id} className="comment">
+        <h3 className="ui header">{message.title}</h3>
         <a className="avatar">
           <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
         </a>
         <div className="content">
-          <a className="author">{message.firstName}</a>
+          <a className="author">{message.author.firstName}</a>
           <div className="metadata">
             <span className="date">{message.createdAt}</span>
           </div>
@@ -107,36 +108,33 @@ class Show extends Component {
             <a className="reply">Reply</a>
           </div>
         </div>
+        <div className="ui divider"></div> 
       </div>
       )
 
     return (
-      <div className="ui stackable grid">
-        <div className="twelve wide column">
-          <div className="ui segment">    
-            <div className="ui comments">
-              <h1 className="ui dividing header">{T.translate("conversations.page.header")}</h1>
-              
-              {messageList}
+      <div className="p-3">    
+        <div className="ui comments mb-5">
+          
+          {messageList}
 
-              <form className="ui reply form">
-                <TextAreaField
-                  label=""
-                  name="description" 
-                  value={body} 
-                  onChange={this.handleChange.bind(this)} 
-                  placeholder={T.translate("conversations.show.write_reply")}
-                  formClass="field"
-                />
-                <button className="ui primary small button" onClick={this.handleReply.bind(this)}><i className="edit icon"></i>{T.translate("conversations.show.reply")}</button>
-              </form>
-            </div>
-            
-            <div className="ui divider mt-5"></div>  
-
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("conversations.show.delete")}</button>
-          </div>    
+          <form className="ui reply form">
+            <TextAreaField
+              label=""
+              name="description" 
+              value={body} 
+              onChange={this.handleChange.bind(this)} 
+              placeholder={T.translate("conversations.show.write_reply")}
+              formClass="field"
+            />
+            <button className="ui primary small button" onClick={this.handleReply.bind(this)}><i className="edit icon"></i>{T.translate("conversations.show.reply")}</button>
+          </form>
         </div>
+        
+        <div className="ui divider mt-5"></div>  
+
+        <button className="ui negative button mt-3" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("conversations.show.delete")}</button>
+
 
         <div className="ui small modal conversation">
           <div className="header">Confirmation</div>
@@ -148,7 +146,8 @@ class Show extends Component {
             <button className="ui negative button" onClick={this.handleDelete.bind(this, conversationId)}>{T.translate("conversations.show.delete")}</button>
           </div>
         </div>
-      </div>
+
+      </div>       
     )
   }
 }

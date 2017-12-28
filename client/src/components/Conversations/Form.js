@@ -83,54 +83,52 @@ class Form extends Component {
     )
 
     return (  
-      <div className="ui stackable centered grid">
-        <div className="fourteen wide column ui segment">  
+      <div className="p-3">  
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+        <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
-            <div className="field">  
-               <h1 className="ui header">{T.translate("conversations.form.new_message")}</h1>
-            </div>
+          <div className="field">  
+             <h1 className="ui header">{T.translate("conversations.form.new_message")}</h1>
+          </div>
 
-            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
+          { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-            <SelectField
-              name="recipientId"
-              value={recipientId} 
-              onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.errors && errors.message.errors.recipientId && errors.message.errors.recipientId.message}
-              formClass="field"
+          <SelectField
+            name="recipientId"
+            value={recipientId} 
+            onChange={this.handleChange.bind(this)} 
+            error={errors.message && errors.message.errors && errors.message.errors.recipientId && errors.message.errors.recipientId.message}
+            formClass="field"
 
-              options={[<option key="default" value="" disabled>{T.translate("conversations.form.select_recipient")}</option>,
-                recipientsOptions]}
-            />
+            options={[<option key="default" value="" disabled>{T.translate("conversations.form.select_recipient")}</option>,
+              recipientsOptions]}
+          />
 
-            <InputField
-              label={T.translate("conversations.form.title")}
-              name="title" 
-              value={title} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("conversations.form.title")}
-              error={errors.message && errors.message.errors && errors.message.errors.title && errors.message.errors['title'].message}
-              formClass="field"
-            />
-            
-            <TextAreaField
-              label={T.translate("conversations.form.body")}
-              name="body" 
-              value={body} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("conversations.form.body")}
-              error={errors.message && errors.message.errors && errors.message.errors.body && errors.message.errors['body'].message}
-              formClass="field"
-            /> 
+          <InputField
+            label={T.translate("conversations.form.title")}
+            name="title" 
+            value={title} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder={T.translate("conversations.form.title")}
+            error={errors.message && errors.message.errors && errors.message.errors.title && errors.message.errors['title'].message}
+            formClass="field"
+          />
+          
+          <TextAreaField
+            label={T.translate("conversations.form.body")}
+            name="body" 
+            value={body} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder={T.translate("conversations.form.body")}
+            error={errors.message && errors.message.errors && errors.message.errors.body && errors.message.errors['body'].message}
+            formClass="field"
+          /> 
 
-            <div className="field">    
-              <button disabled={isLoading} className="ui primary button"><i className="send outline icon" aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.send")}</button>
-            </div>  
-          </form> 
-        </div>  
-      </div>
+          <div className="field">    
+            <button disabled={isLoading} className="ui primary button"><i className="send outline icon" aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.send")}</button>
+          </div>  
+        </form> 
+      </div> 
     )
   }
 }

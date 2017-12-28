@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import classnames from 'classnames'
-import List from './List' 
-import { connect } from 'react-redux'
-import { fetchConversations, fetchInboxOrSent, deleteConversation } from '../../actions/conversationActions'
+import { Link, Route, Switch } from 'react-router-dom'
+import classnames from 'classnames' 
+
+import List from './List'
+import Show from './Show'
+import FormPage from './FormPage'
 
 // jQuery
 import $ from 'jquery'
@@ -20,17 +20,6 @@ class Page extends Component {
       $('.ui .item').removeClass('active')
       $(this).addClass('active')
     })   
-
-    // Fetch Inbox or sent by seeing what's present in params
-    const { match } = this.props
-    
-    if (match.params.type === 'sent') {
-      this.props.fetchInboxOrSent('sent')
-    } else if (match.params.type === 'inbox') {
-      this.props.fetchInboxOrSent('inbox')
-    } else {
-      this.props.fetchConversations()
-    }
 
     $('#draft').on('click', function() {
       console.log('Draft clicked')
@@ -77,7 +66,13 @@ class Page extends Component {
         <div className="twelve wide stretched column">
           <div className="ui segment">
 
-            { this.props.conversations && <List conversations={this.props.conversations} deleteConversation={deleteConversation} />  }
+            <Switch>
+              <Route exact path="/conversations/new" component={FormPage} /> 
+              <Route exact path="/conversations/:type" component={List} />
+              <Route exact path="/conversations/show/:id" component={Show} /> 
+            </Switch>
+
+
           </div>
         </div>
       </div> 
@@ -85,27 +80,5 @@ class Page extends Component {
   }
 }
 
-Page.propTypes = {
-  fetchConversations: PropTypes.func.isRequired,
-  fetchInboxOrSent: PropTypes.func.isRequired,
-  deleteConversation: PropTypes.func.isRequired
-}
-
-function mapSateToProps(state, props) {
-  
-  const { match } = props
-
-  if (match.params.type === 'inbox' || match.params.type === 'sent') {
-    return {
-      conversations: state.conversations
-    }
-  } else {
-    return {
-      conversations: state.conversations
-    }
-  }
-
-}
-
-export default connect(mapSateToProps, { fetchConversations, fetchInboxOrSent, deleteConversation })(Page)
+export default Page
 

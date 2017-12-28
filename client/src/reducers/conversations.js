@@ -26,7 +26,7 @@ export default function conversations(state = [], action = {}) {
 
     case CONVERSATION_FETCHED: 
       const index = state.findIndex(item => item.length !==0 && item[0]._id === action.conversation[0]._id)
-      console.log('index', index)
+   
       if (index > -1) {
         return state.map(item => {
           if (item.length !==0 && item[0]._id === action.conversation[0]._id) return action.conversation
