@@ -6,7 +6,7 @@ import tasks from'./tasks'
 import items from'./items'
 import invoices from'./invoices/invoices'
 import invoices_datatable from'./invoices/datatable'
-import conversations from'./conversations/conversations'
+import conversations from'./conversations'
 
 module.exports = {
   projects,

@@ -1,6 +1,6 @@
-import Conversation from '../../models/conversations/conversation'
-import Message from '../../models/conversations/message'
-import User from '../../models/user'
+import Conversation from '../models/messaging/conversation'
+import Message from '../models/messaging/message'
+import User from '../models/user'
 import mongoose from 'mongoose'
 
 export default {
@@ -111,7 +111,7 @@ export default {
       return
     }
 
-    Message.find({ conversationId: id }).sort('-createdAt').populate({ path: 'author', select: 'firstName lastName admin' }).exec((err, messages) => {
+    Message.find({ conversationId: id }).select('createdAt body author conversationId').sort('-createdAt').populate({ path: 'author', select: 'firstName lastName admin' }).exec((err, messages) => {
       if (err) {
         callback(err, null)
         return
@@ -119,6 +119,7 @@ export default {
 
       callback(null, messages)
     })
+
   },
 
   create: (req, callback) => {
@@ -127,14 +128,9 @@ export default {
       participants: [req.session.passport.user, req.body.recipientId]
     })
 
-    Conversation.create(conversation, (err, newConversation) => {
-      if (err) {
-        callback(err, null)
-        return
-      }
-
+    if (req.params.conversationId) {
       const message = new Message({
-        conversationId: newConversation._id,
+        conversationId: req.params.conversationId,
         title: req.body.title,
         body: req.body.body,
         author: req.session.passport.user // Get id of current user from session
@@ -147,8 +143,31 @@ export default {
         }
         callback(null, message)
       })
-     
-    })
+    } else {
+      Conversation.create(conversation, (err, newConversation) => {
+        if (err) {
+          callback(err, null)
+          return
+        }
+
+        const message = new Message({
+          conversationId: newConversation._id,
+          title: req.body.title,
+          body: req.body.body,
+          author: req.session.passport.user // Get id of current user from session
+        })
+
+        Message.create(message, (err, message) => {
+          if (err) {
+            callback(err, null)
+            return
+          }
+          callback(null, message)
+        })
+       
+      })
+    }
+    
   }
 
 

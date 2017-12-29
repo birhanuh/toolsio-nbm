@@ -8,7 +8,7 @@ export default function Tr({conversation, deleteConversation}) {
     
     <tr>
       <td>
-        <Link to={`/conversations/show/${conversation.conversationId}`}>
+        <Link to={`/conversations/messages/${conversation.conversationId}`}>
           {conversation.isRead ? conversation.title : <strong>{conversation.title}</strong>}
         </Link>  
       </td>

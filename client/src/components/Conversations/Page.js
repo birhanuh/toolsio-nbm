@@ -67,9 +67,10 @@ class Page extends Component {
           <div className="ui segment">
 
             <Switch>
+              <Route exact path="/conversations" component={List} />
               <Route exact path="/conversations/new" component={FormPage} /> 
               <Route exact path="/conversations/:type" component={List} />
-              <Route exact path="/conversations/show/:id" component={Show} /> 
+              <Route exact path="/conversations/messages/:id" component={Show} /> 
             </Switch>
 
 
