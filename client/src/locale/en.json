@@ -615,7 +615,7 @@
       "draft": "Draft",
       "restore": "Restore",
       "title": "Title",
-      "recipient": "Recipient",
+      "sender": "Sender",
       "body": "Body",
       "description": "Internal messaging serivce, compose, read, reply and delete messages."
     },
@@ -627,7 +627,7 @@
       "body": "Body",
       "recipient": "Recipient",
       "select_recipient": "-Select recipient-",
-      "recipient_required": "Recipient code is required.",
+      "recipient_required": "Recipient is required.",
       "title_required": "Title is required.",
       "body_required": "Body is required.",
       "flash": {
@@ -640,7 +640,7 @@
       "recipient": "Recipient",
       "body": "Body",
       "reply": "Reply",
-      "delete": "Delete",
+      "delete_conversations": "Delete Conversations",
       "cancel": "Cancel",
       "write_reply": "Write your reply...",
       "flash": {

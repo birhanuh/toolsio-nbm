@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link, Route, Switch } from 'react-router-dom'
 import classnames from 'classnames' 
+import { connect } from 'react-redux'
+import { fetchConversations, fetchInboxOrSent, deleteConversation } from '../../actions/conversationActions'
 
 import List from './List'
 import Show from './Show'
@@ -14,6 +17,25 @@ import T from 'i18n-react'
 
 class Page extends Component {
 
+  constructor(props) {
+    super(props) 
+    this.state = {
+      countUnread: this.props.conversations.countUnread,
+      countDraft: this.props.conversations.countDraft,
+      conversations: this.props.conversations.conversations
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.conversations) {
+      this.setState({
+        countUnread: nextProps.conversations.countUnread,
+        countDraft: nextProps.conversations.countDraft,
+        conversations: nextProps.conversations.conversations
+      })
+    }
+  }
+
   componentDidMount() {
 
     $('.ui .item').on('click', function() {
@@ -25,11 +47,38 @@ class Page extends Component {
       console.log('Draft clicked')
     })
 
+    // Fetch Inbox or sent by seeing what's present in params
+    const { match } = this.props
+    
+    if (match.params.type === 'sent') {
+      this.props.fetchInboxOrSent('sent')
+    } else if (match.params.type === 'inbox') {
+      this.props.fetchInboxOrSent('inbox')
+    } else {
+      this.props.fetchConversations()
+    }
+
   }
 
   render() {
     
+    const { countUnread, countDraft, conversations } = this.state
     const { match } = this.props
+   
+    let countUnreadElement
+    let countDraftElement
+
+    if (countUnread !== 0) {
+      countUnreadElement = <div className="ui small blue label">{countUnread}</div>  
+    } else {
+      countUnreadElement = <div></div>
+    }
+
+    if (countDraft !== 0) {
+      countDraftElement = <div className="ui small green label">{countDraft}</div>  
+    } else {
+      countDraftElement = <div></div>
+    }
 
     return (
 
@@ -47,19 +96,28 @@ class Page extends Component {
             <div className="ui divider mt-0"></div>
 
             <Link to="/conversations/inbox" className={classnames('item', {active: (match.params.type === "inbox" || typeof match.params.type === "undefined")})}>
-              <div className="ui small label">12</div>
-              <i className="inbox outline icon"></i>
-              {T.translate("conversations.page.inbox")}
+              
+              {countUnreadElement}
+
+              <div>
+                <i className="inbox outline icon"></i>&nbsp;
+                {T.translate("conversations.page.inbox")}
+              </div>
             </Link>
             <Link to="/conversations/sent" className={classnames('item', {active: match.params.type === "sent"})}>
-              <div className="ui small label">1</div>
-              <i className="send outline icon"></i>
-              {T.translate("conversations.page.sent")}
+              <div>
+                <i className="send outline icon"></i>&nbsp;
+                {T.translate("conversations.page.sent")}
+              </div>
             </Link>
             <Link to="/conversations/draft" id="draft" className={classnames('item', {active: match.params.type === "draft"})}>
-              <div className="ui small label">1</div>
-              <i className="copy outline icon"></i>
-              {T.translate("conversations.page.draft")}
+
+              {countDraftElement}
+
+              <div>
+                <i className="copy outline icon"></i>&nbsp;
+                {T.translate("conversations.page.draft")}
+              </div>
             </Link>
           </div>
         </div>
@@ -67,10 +125,14 @@ class Page extends Component {
           <div className="ui segment">
 
             <Switch>
-              <Route exact path="/conversations" component={List} />
+              {conversations && <Route exact path="/conversations" children={() =>
+                <List conversations={conversations} deleteConversation={deleteConversation} account={this.props.account} />
+              } />}
               <Route exact path="/conversations/new" component={FormPage} /> 
-              <Route exact path="/conversations/:type" component={List} />
-              <Route exact path="/conversations/messages/:id" component={Show} /> 
+              {conversations && <Route exact path="/conversations/:type" children={() =>
+                <List conversations={conversations} deleteConversation={deleteConversation} account={this.props.account} />
+              } />}
+              <Route exact path="/conversations/:type/:id" component={Show} /> 
             </Switch>
 
 
@@ -81,5 +143,19 @@ class Page extends Component {
   }
 }
 
-export default Page
+Page.propTypes = {
+  fetchConversations: PropTypes.func.isRequired,
+  fetchInboxOrSent: PropTypes.func.isRequired,
+  deleteConversation: PropTypes.func.isRequired
+}
+
+function mapSateToProps(state) {
+  
+  return {
+    conversations: state.conversations,
+    account: state.authentication.account
+  }
+}
+
+export default connect(mapSateToProps, { fetchConversations, fetchInboxOrSent, deleteConversation }) (Page)
 

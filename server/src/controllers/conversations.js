@@ -7,7 +7,7 @@ export default {
 
   find: (req, callback) => {
 
-    const _id = mongoose.Types.ObjectId(req.session.passport.user)
+    const currentUserId = mongoose.Types.ObjectId(req.session.passport.user)
 
     // Only return one message from each conversation to display as sinppet
     Conversation.find({ participants: req.session.passport.user }).select('_id').exec((err, conversations) => {
@@ -17,7 +17,10 @@ export default {
       }
       
       // Set up empty array to hold conversations + most recent message
-      let fullConversations = []
+      let inbox = []
+      let allConversations = []
+      let countUnread = 0
+      let countDraft = 0
 
       conversations.map(conversation => {
         Message.find({ conversationId: conversation._id }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
@@ -26,14 +29,32 @@ export default {
             return
           }
 
-          if (!_id.equals(message[0].author._id)) {
-            fullConversations.push(message)
+          if (message.length !== 0 && !currentUserId.equals(message[0].author._id)) {
+            
+            inbox.push(message)
+            allConversations.push(message)
+            
+            if (!message[0].isRead) {
+              countUnread += 1
+            }
+
+            if (!message.isDraft) {
+              countDraft += 1
+            }
+
           } else {
-            fullConversations.push([])
+            allConversations.push([])
           }
 
-          if(fullConversations.length === conversations.length) {
-            callback(null, fullConversations)
+          if(allConversations.length === conversations.length) {
+            
+            let allConversationsUnreadDraft = {
+              countUnread: countUnread,
+              countDraft: countDraft,
+              conversations: inbox
+            }
+
+            callback(null, allConversationsUnreadDraft)
           }
         })
       })
@@ -57,7 +78,10 @@ export default {
         }
         
         // Set up empty array to hold conversations + most recent message
-        let fullConversations = []
+        let inbox = []
+        let allConversations = []
+        let countUnread = 0
+        let countDraft = 0
 
         conversations.map(conversation => {
           Message.find({ conversationId: conversation._id }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
@@ -66,14 +90,31 @@ export default {
               return
             }
 
-            if (!currentUserId.equals(message[0].author._id)) {
-              fullConversations.push(message)
+            if (message.length !== 0 && !currentUserId.equals(message[0].author._id)) {
+              
+              inbox.push(message)
+              allConversations.push(message)
+
+              if (!message[0].isRead) {
+                countUnread += 1
+              }
+
+              if (!message.isDraft) {
+                countDraft += 1
+              }
             } else {
-              fullConversations.push([])
+              allConversations.push([])
             }
 
-            if(fullConversations.length === conversations.length) {
-              callback(null, fullConversations)
+            if(allConversations.length === conversations.length) {
+
+              let allConversationsUnreadDraft = {
+                countUnread: countUnread,
+                countDraft: countDraft,
+                conversations: inbox
+              }
+
+              callback(null, allConversationsUnreadDraft)
             }
           })
         })
@@ -90,7 +131,10 @@ export default {
         }
         
         // Set up empty array to hold conversations + most recent message
-        let fullConversations = []
+        let sent = []
+        let allConversations = []
+        let countUnread = 0
+        let countDraft = 0
 
         conversations.map(conversation => {
           Message.find({ conversationId: conversation._id, author: {_id: req.session.passport.user} }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
@@ -99,10 +143,30 @@ export default {
               return
             }
 
-            fullConversations.push(message)
+            if (message.length !== 0 && currentUserId.equals(message[0].author._id)) {
+              
+              sent.push(message)
+              allConversations.push(message)
 
-            if(fullConversations.length === conversations.length) {
-              callback(null, fullConversations)
+              if (!message[0].isRead) {
+                countUnread += 1
+              }
+
+              if (!message.isDraft) {
+                countDraft += 1
+              }
+            } else {
+              allConversations.push([])
+            }
+
+            if(allConversations.length === conversations.length) {
+              let allConversationsUnreadDraft = {
+                countUnread: countUnread,
+                countDraft: countDraft,
+                conversations: sent
+              }
+
+              callback(null, allConversationsUnreadDraft)
             }
           })
         })
@@ -127,8 +191,8 @@ export default {
     const conversation = new Conversation({
       participants: [req.session.passport.user, req.body.recipientId]
     })
-
-    if (req.params.conversationId) {
+    console.log('conversationId: ', req.query)
+    if (req.query.conversationId) {
       const message = new Message({
         conversationId: req.params.conversationId,
         title: req.body.title,
@@ -141,7 +205,7 @@ export default {
           callback(err, null)
           return
         }
-        callback(null, message)
+        callback(null, [message])
       })
     } else {
       Conversation.create(conversation, (err, newConversation) => {
@@ -162,7 +226,7 @@ export default {
             callback(err, null)
             return
           }
-          callback(null, message)
+          callback(null, [message])
         })
        
       })

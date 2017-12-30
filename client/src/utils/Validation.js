@@ -291,17 +291,17 @@ export default {
   validateConversationInput: (data) => {
     let errors = {}
 
-    if (!data.name) {
+    if (!data.recipientId) {
       errors['recipientId'] = {
         message: T.translate("conversations.form.recipient_required")
       }
     }
-    if (!data.deadline) {
+    if (!data.title) {
       errors['title'] = {
         message: T.translate("conversations.form.title_required")
       }
     }
-    if (!data.customer) {
+    if (!data.body) {
       errors['body'] = {
         message: T.translate("conversations.form.body_required")
       }

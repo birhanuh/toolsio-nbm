@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Validation } from '../../utils'
 import { TextAreaField } from '../../utils/FormFields'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchConversation, deleteConversation } from '../../actions/conversationActions'
@@ -26,7 +27,13 @@ class Show extends Component {
       recipientId: '',
       title: '',
       body: '',
-      conversation: this.props.conversation ? this.props.conversation : []
+      conversation: this.props.conversation ? this.props.conversation : [],
+      errors: {
+        message: {
+          errors: {}
+        }
+      },
+      isLoading: false
     }
   }
 
@@ -65,9 +72,31 @@ class Show extends Component {
    
   }
 
-  handleReply(event) {
-    event.preventDefault()
+  isValid() {
+    const { errors, isValid } = Validation.validateConversationInput(this.state)
+
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors.message.errors = errors
+
+    if (!isValid) {
+      this.setState({ 
+        errors: updatedErrors 
+      })
+    }
+
+    return isValid;
+  }
+
+  handleReply = (e) => {
+    e.preventDefault()
     
+    // Validation
+    if (this.isValid()) { 
+      const { _id, recipientId, title, body } = this.state
+      this.setState({ isLoading: true })
+      this.props.createConversation({ _id, recipientId, title, body })
+        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+    }
   }
 
   handleDelete(id, event) {
@@ -133,7 +162,7 @@ class Show extends Component {
         
         <div className="ui divider mt-5"></div>  
 
-        <button className="ui negative button mt-3" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("conversations.show.delete")}</button>
+        <button className="ui negative button mt-3" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("conversations.show.delete_conversations")}</button>
 
 
         <div className="ui small modal conversation">
@@ -163,10 +192,12 @@ Show.contextTypes = {
 }
 
 function mapStateToProps(state, props) {
+  
   const { match } = props
+  
   if (match.params.id) {
     return {
-      conversation: state.conversations.find(item => item.length !==0 && item[0].conversationId === match.params.id)
+      conversation: state.conversations.conversations && state.conversations.conversations.find(item => item.length !==0 && item[0].conversationId === match.params.id)
     }
   } 
 }

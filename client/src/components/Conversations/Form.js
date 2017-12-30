@@ -10,13 +10,13 @@ import { InputField, SelectField, TextAreaField } from '../../utils/FormFields'
 import T from 'i18n-react'
 
 class Form extends Component {
+  
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.message ? this.props.message._id : null,
-      recipientId: this.props.message ? this.props.message.recipientId : '',
-      title: this.props.message ? this.props.message.title : '',
-      body: this.props.body ? this.props.message.body : '',
+      recipientId: '',
+      title: '',
+      body: '',
       errors: {
         message: {
           errors: {}
@@ -49,7 +49,7 @@ class Form extends Component {
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateMessageInput(this.state)
+    const { errors, isValid } = Validation.validateConversationInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
     updatedErrors.message.errors = errors
@@ -67,7 +67,7 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (true) { 
+    if (this.isValid()) { 
       const { _id, recipientId, title, body } = this.state
       this.setState({ isLoading: true })
       this.props.createConversation({ _id, recipientId, title, body })

@@ -2,13 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-export default function Tr({conversation, deleteConversation}) {
+export default function Tr({conversation, deleteConversation, account}) {
   
-  return (
+  let conversationTypePath
+
+  if (conversation.author._id === account._id) {
+    conversationTypePath = `/conversations/sent/${conversation.conversationId}`
+  } else if (conversation.author._id !== account._id) {
+    conversationTypePath = `/conversations/inbox/${conversation.conversationId}`
+  }
     
+  return (
+
     <tr>
       <td>
-        <Link to={`/conversations/messages/${conversation.conversationId}`}>
+        <Link to={conversationTypePath}>
           {conversation.isRead ? conversation.title : <strong>{conversation.title}</strong>}
         </Link>  
       </td>
