@@ -615,7 +615,7 @@
       "draft": "Draft",
       "restore": "Restore",
       "title": "Title",
-      "sender": "Sender",
+      "from": "From",
       "body": "Body",
       "description": "Internal messaging serivce, compose, read, reply and delete messages."
     },
@@ -640,7 +640,7 @@
       "recipient": "Recipient",
       "body": "Body",
       "reply": "Reply",
-      "delete_conversations": "Delete Conversations",
+      "delete_conversation": "Delete Conversation",
       "cancel": "Cancel",
       "write_reply": "Write your reply...",
       "flash": {

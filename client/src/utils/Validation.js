@@ -311,6 +311,26 @@ export default {
       errors,
       isValid: isEmpty(errors)
     }
+  },
+
+  validateConversationReplyInput: (data) => {
+    let errors = {}
+
+    if (!data.title) {
+      errors['title'] = {
+        message: T.translate("conversations.form.title_required")
+      }
+    }
+    if (!data.body) {
+      errors['body'] = {
+        message: T.translate("conversations.form.body_required")
+      }
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
   }
 
 }  

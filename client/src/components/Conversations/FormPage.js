@@ -20,8 +20,8 @@ class FormPage  extends Component {
     this.props.fetchUsers()
   }
 
-  createConversation = ({ _id, recipientId, title, body }) => {     
-    return this.props.createConversation({ _id, recipientId, title, body })
+  createConversation = ({ recipientId, title, body }) => {     
+    return this.props.createConversation({ recipientId, title, body })
       .then(() => 
         { 
           this.setState({ redirect: true }) 

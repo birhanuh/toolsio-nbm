@@ -193,7 +193,11 @@ class Form extends Component {
               formClass="inline field"
             />
 
-            <div className="inline field">    
+            <div className="inline field">   
+              <Link className="ui primary outline button" to="/sales">
+                <i className="minus circle icon"></i>
+                {T.translate("sales.form.cancel")}
+              </Link> 
               <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.form.save")}</button>
             </div>  
           </form> 

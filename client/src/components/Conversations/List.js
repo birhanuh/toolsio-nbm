@@ -18,20 +18,20 @@ export default function List({ conversations, deleteConversation, account }) {
   const emptyInboxOrSent = (
     <div className="ui center aligned info message m-3">{T.translate("conversations.page.empty_conversations_header")}</div>
   )
-
+  console.log('vcon: ', conversations)
   const conversationsList = (
     <div className="p-3"> 
       <table className="ui very compact striped selectable table">
         <thead>
           <tr>
             <th>{T.translate("conversations.page.title")}</th>
-            <th>{T.translate("conversations.page.sender")}</th>
+            <th>{T.translate("conversations.page.from")}</th>
             <th>{T.translate("conversations.page.body")}</th>
             <th>{T.translate("conversations.page.remove")}</th>
           </tr>
         </thead>
         <tbody>
-          { conversations.map(conversation => conversation.length !== 0 ? <Tr conversation={conversation[0]} key={conversation[0]._id} deleteConversation={deleteConversation} account={account} /> : <tr key="empty-inbox-or-sent"><td colSpan="4">{emptyInboxOrSent}</td></tr> ) }
+          { conversations.map(conversation => conversation ? (!Array.isArray(conversation) && <Tr conversation={conversation} key={conversation._id} deleteConversation={deleteConversation} account={account} />) : <tr key="empty-inbox-or-sent"><td colSpan="4">{emptyInboxOrSent}</td></tr> ) } 
         </tbody>
       </table>
     </div>

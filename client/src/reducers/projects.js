@@ -23,6 +23,7 @@ export default function projects(state = [], action = {}) {
 
     case PROJECT_FETCHED: 
       const index = state.findIndex(item => item._id === action.project._id)
+      
       if (index > -1) {
         return state.map(item => {
           if (item._id === action.project._id) return action.project

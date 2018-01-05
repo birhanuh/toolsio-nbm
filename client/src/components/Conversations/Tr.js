@@ -7,11 +7,11 @@ export default function Tr({conversation, deleteConversation, account}) {
   let conversationTypePath
 
   if (conversation.author._id === account._id) {
-    conversationTypePath = `/conversations/sent/${conversation.conversationId}`
+    conversationTypePath = `/conversations/sent/show/${conversation.conversationId}`
   } else if (conversation.author._id !== account._id) {
-    conversationTypePath = `/conversations/inbox/${conversation.conversationId}`
+    conversationTypePath = `/conversations/inbox/show/${conversation.conversationId}`
   }
-    
+
   return (
 
     <tr>

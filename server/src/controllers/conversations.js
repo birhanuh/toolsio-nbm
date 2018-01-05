@@ -17,7 +17,7 @@ export default {
       }
       
       // Set up empty array to hold conversations + most recent message
-      let inbox = []
+      let messages = []
       let allConversations = []
       let countUnread = 0
       let countDraft = 0
@@ -28,10 +28,10 @@ export default {
             callback(err, null)
             return
           }
-
+          console.log('message: ', message)
           if (message.length !== 0 && !currentUserId.equals(message[0].author._id)) {
             
-            inbox.push(message)
+            messages.push(message[0])
             allConversations.push(message)
             
             if (!message[0].isRead) {
@@ -51,7 +51,7 @@ export default {
             let allConversationsUnreadDraft = {
               countUnread: countUnread,
               countDraft: countDraft,
-              conversations: inbox
+              conversations: messages
             }
 
             callback(null, allConversationsUnreadDraft)
@@ -69,19 +69,19 @@ export default {
 
     const currentUserId = mongoose.Types.ObjectId(req.session.passport.user)
 
+    // Set up empty array to hold conversations + most recent message
+    let messages = []
+    let allConversations = []
+    let countUnread = 0
+    let countDraft = 0
+
     if (id === 'inbox') {
       // Only return one message from each conversation to display as sinppet
-      Conversation.find({ participants: req.session.passport.user }).select('_id').exec((err, conversations) => {
+      Conversation.find({ participants: req.session.passport.user }).select('_id').sort({createdAt: 'asc'}).exec((err, conversations) => {
         if (err) {
           callback(err, null)
           return
         }
-        
-        // Set up empty array to hold conversations + most recent message
-        let inbox = []
-        let allConversations = []
-        let countUnread = 0
-        let countDraft = 0
 
         conversations.map(conversation => {
           Message.find({ conversationId: conversation._id }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
@@ -92,7 +92,7 @@ export default {
 
             if (message.length !== 0 && !currentUserId.equals(message[0].author._id)) {
               
-              inbox.push(message)
+              messages.push(message[0])
               allConversations.push(message)
 
               if (!message[0].isRead) {
@@ -111,7 +111,7 @@ export default {
               let allConversationsUnreadDraft = {
                 countUnread: countUnread,
                 countDraft: countDraft,
-                conversations: inbox
+                conversations: messages
               }
 
               callback(null, allConversationsUnreadDraft)
@@ -124,17 +124,11 @@ export default {
     } 
 
     if (id === 'sent') {
-      Conversation.find({ participants: req.session.passport.user }).select('_id').exec((err, conversations) => {
+      Conversation.find({ participants: req.session.passport.user }).select('_id').sort({createdAt: 'asc'}).exec((err, conversations) => {
         if (err) {
           callback(err, null)
           return
         }
-        
-        // Set up empty array to hold conversations + most recent message
-        let sent = []
-        let allConversations = []
-        let countUnread = 0
-        let countDraft = 0
 
         conversations.map(conversation => {
           Message.find({ conversationId: conversation._id, author: {_id: req.session.passport.user} }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
@@ -143,9 +137,9 @@ export default {
               return
             }
 
-            if (message.length !== 0 && currentUserId.equals(message[0].author._id)) {
+            if (message.length !== 0) {
               
-              sent.push(message)
+              sent.push(message[0])
               allConversations.push(message)
 
               if (!message[0].isRead) {
@@ -163,7 +157,7 @@ export default {
               let allConversationsUnreadDraft = {
                 countUnread: countUnread,
                 countDraft: countDraft,
-                conversations: sent
+                conversations: messages
               }
 
               callback(null, allConversationsUnreadDraft)
@@ -175,39 +169,31 @@ export default {
       return
     }
 
-    Message.find({ conversationId: id }).select('createdAt body author conversationId').sort('-createdAt').populate({ path: 'author', select: 'firstName lastName admin' }).exec((err, messages) => {
+    Message.find({ conversationId: id }).sort('-createdAt').populate({ path: 'author', select: 'firstName lastName' }).exec((err, messages) => {
       if (err) {
         callback(err, null)
         return
       }
 
-      callback(null, messages)
+      let allConversationsUnreadDraft = {
+        countUnread: countUnread,
+        countDraft: countDraft,
+        conversations: messages
+      }
+
+      callback(null, [messages])
     })
 
   },
 
   create: (req, callback) => {
-    
-    const conversation = new Conversation({
-      participants: [req.session.passport.user, req.body.recipientId]
-    })
-    console.log('conversationId: ', req.query)
-    if (req.query.conversationId) {
-      const message = new Message({
-        conversationId: req.params.conversationId,
-        title: req.body.title,
-        body: req.body.body,
-        author: req.session.passport.user // Get id of current user from session
+    console.log('conversationId: ', req.body)
+    if (req.body.recipientId) {
+
+      const conversation = new Conversation({
+        participants: [req.session.passport.user, req.body.recipientId]
       })
 
-      Message.create(message, (err, message) => {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        callback(null, [message])
-      })
-    } else {
       Conversation.create(conversation, (err, newConversation) => {
         if (err) {
           callback(err, null)
@@ -230,6 +216,27 @@ export default {
         })
        
       })
+      return
+    } 
+
+    if (req.body.conversationId) {
+
+      // If conversationId is present in req.body then this message is a reply
+      const message = new Message({
+        conversationId: req.body.conversationId,
+        title: req.body.title,
+        body: req.body.body,
+        author: req.session.passport.user // Get id of current user from session
+      })
+
+      Message.create(message, (err, message) => {
+        if (err) {
+          callback(err, null)
+          return
+        }
+        callback(null, [message])
+      })
+      return
     }
     
   }

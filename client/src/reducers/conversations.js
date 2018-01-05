@@ -16,27 +16,25 @@ export default function conversations(state = [], action = {}) {
       return state.filter(item => item._id !== action.id)
 
     case INBOX_OR_SENT_FETCHED: 
-      const isStateSizeEqual = state.length === action.inboxOrSent.length
+      return action.inboxOrSent
   
-      if (isStateSizeEqual) {
-        return action.inboxOrSent
-      } else {
-        return action.inboxOrSent
-      }  
-
     case CONVERSATION_FETCHED: 
-      const index = state.conversations && state.conversations.findIndex(item => item.length !==0 && item[0]._id === action.conversation[0]._id)
-   
+      const index = state.conversations && state.conversations.findIndex(item => item.conversationId === action.conversation[0].conversationId)
+     
       if (index > -1) {
-        return state.conversations.map(item => {
-          if (item.length !==0 && item[0]._id === action.conversation[0]._id) return action.conversation
-          return item
-        })
-      } else {
-        return [
+        return {
           ...state,
-          action.conversation
-        ]
+          conversations: state.conversations.map(item => {
+            if (item.conversationId === action.conversation[0].conversationId) return  action.conversation
+            return item
+          })
+        }
+      } else {
+        console.log('return')
+        return {
+          ...state,
+          conversations: action.conversation
+        }
       }  
 
     default: return state

@@ -50,12 +50,15 @@ class Page extends Component {
     // Fetch Inbox or sent by seeing what's present in params
     const { match } = this.props
     
-    if (match.params.type === 'sent') {
-      this.props.fetchInboxOrSent('sent')
-    } else if (match.params.type === 'inbox') {
+    if (match.params.type === 'inbox' && !match.params.id) {
       this.props.fetchInboxOrSent('inbox')
-    } else {
+      console.log('inbox')
+    } else if (match.params.type === 'sent' && !match.params.id) {
+      this.props.fetchInboxOrSent('sent')
+      console.log('sent')
+    } else if (!match.params.id) {
       this.props.fetchConversations()
+      console.log('undefined')
     }
 
   }
@@ -64,7 +67,7 @@ class Page extends Component {
     
     const { countUnread, countDraft, conversations } = this.state
     const { match } = this.props
-   
+
     let countUnreadElement
     let countDraftElement
 
@@ -128,11 +131,16 @@ class Page extends Component {
               {conversations && <Route exact path="/conversations" children={() =>
                 <List conversations={conversations} deleteConversation={deleteConversation} account={this.props.account} />
               } />}
+
               <Route exact path="/conversations/new" component={FormPage} /> 
+              
               {conversations && <Route exact path="/conversations/:type" children={() =>
                 <List conversations={conversations} deleteConversation={deleteConversation} account={this.props.account} />
               } />}
-              <Route exact path="/conversations/:type/:id" component={Show} /> 
+
+              <Route exact path="/conversations/:type/show/:id" render={(props) => 
+                <Show conversations={conversations} {...props} /> 
+              } />
             </Switch>
 
 

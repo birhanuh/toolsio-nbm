@@ -204,6 +204,10 @@ class Form extends Component {
             /> 
 
             <div className="inline field">    
+              <Link className="ui primary outline button" to="/projects">
+                <i className="minus circle icon"></i>
+                {T.translate("projects.form.cancel")}
+              </Link>
               <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.form.save")}</button>
             </div>  
           </form> 
