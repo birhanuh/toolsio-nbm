@@ -139,7 +139,7 @@ export default {
 
             if (message.length !== 0) {
               
-              sent.push(message[0])
+              messages.push(message[0])
               allConversations.push(message)
 
               if (!message[0].isRead) {
