@@ -22,7 +22,7 @@ export default function Tr({conversation, deleteConversation, account}) {
       </td>
       <td>{conversation.isRead ? conversation._id : <strong>{conversation._id}</strong> }</td>
       <td>{conversation.isRead ? conversation.body : <strong>{conversation.body}</strong> }</td>      
-      <td>
+      <td className="ui center aligned">
         <button className="ui icon basic mini button red" onClick={deleteConversation(conversation._id)}><i className="trash icon"></i></button>
       </td>
     </tr>
