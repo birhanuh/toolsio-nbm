@@ -1,5 +1,4 @@
 import mongoose from 'mongoose' 
-
 import Customer from'./customer'
 
 const projectSchema = new mongoose.Schema({

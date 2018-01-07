@@ -16,6 +16,8 @@ import $ from 'jquery'
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 class Show extends Component {
   
   constructor(props) {
@@ -209,6 +211,9 @@ class Show extends Component {
 
     return (
       <div className="ui stackable grid">
+
+        <Breadcrumb />
+
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className="ui header">{name}</h1> 

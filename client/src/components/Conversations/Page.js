@@ -9,6 +9,8 @@ import List from './List'
 import Show from './Show'
 import FormPage from './FormPage'
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 // jQuery
 import $ from 'jquery'
 
@@ -85,7 +87,10 @@ class Page extends Component {
 
     return (
 
-      <div className="ui grid">
+      <div className="ui stackable grid">
+
+        <Breadcrumb />
+
         <div className="four wide column">
           <div className="ui vertical fluid menu">
 

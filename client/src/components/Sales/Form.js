@@ -13,6 +13,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 // Localization 
 import T from 'i18n-react'
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 // Semantic UI JS
 //import { Dropdown, Input } from 'semantic-ui-react'
 
@@ -106,7 +108,10 @@ class Form extends Component {
     )
 
     return (  
-      <div className="row">
+      <div className="ui stackable grid">
+
+        <Breadcrumb />
+
         <div className="ui text container ui segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>

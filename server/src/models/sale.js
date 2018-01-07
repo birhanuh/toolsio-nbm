@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import Customer from'./customer'
 
-// User Schema 
 const saleSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Name is required."] },
   deadline: { type: Date, required: [true, "Deadline is required."] },  
@@ -16,12 +15,12 @@ const saleSchema = new mongoose.Schema({
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
-saleSchema.pre('validate', (next) => {
+saleSchema.pre('validate', function(next) {
   this.status = "new"
   next()
 }) 
 
-saleSchema.post('save', (doc, next) => {
+saleSchema.post('save', function(doc, next) {
 
   // Push sale to related Customer object
   Customer.findByIdAndUpdate(this.customer, { $push: { sales: this._id }}, { new: true }, (err, customer) => {

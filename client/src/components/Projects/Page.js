@@ -8,6 +8,8 @@ import { fetchProjects } from '../../actions/projectActions'
 // Localization 
 import T from 'i18n-react'
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 class Page extends Component {
 
   componentDidMount() {
@@ -17,6 +19,9 @@ class Page extends Component {
   render() {
     return (
       <div className="row column">  
+
+        <Breadcrumb />
+
         <div className="ui clearing vertical segment border-bottom-none">
           <div className="ui right floated icon input">
             <input type="text" placeholder="Search..." />

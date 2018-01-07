@@ -1,11 +1,12 @@
 import Sale from '../models/sale'
 import Item from '../models/item'
+import Invoice from '../models/invoice'
 
 export default {
   
   find: (req, callback) => {
     
-     Sale.find({}).select('-items').populate({ path: 'customer', select: 'name' }).exec(function(err, sales) {
+     Sale.find({}).select('-items').populate({ path: 'customer', select: 'name' }).exec((err, sales) => {
       if (err) {
         callback(err, null)
         return
@@ -19,7 +20,7 @@ export default {
 
     let id = req.params.id
 
-    Sale.findById(id).populate([{ path: 'customer', select: '_id'}, { path: 'customer', select: 'name'}, { path: 'items' }, { path: 'invoice', select: '_id' }]).exec(function(err, sale) {
+    Sale.findById(id).populate([{ path: 'customer', select: '_id'}, { path: 'customer', select: 'name'}, { path: 'items' }, { path: 'invoice', select: '_id' }]).exec((err, sale) => {
       if (err) {
         callback(err, null)
         return
@@ -33,7 +34,7 @@ export default {
 
     let body = req.body
 
-    Sale.create(body, function(err, sale) {
+    Sale.create(body, (err, sale) => {
       if (err) {
         callback(err, null)
         return
@@ -48,7 +49,7 @@ export default {
     let id = req.params.id
     let body = req.body
 
-    Sale.findByIdAndUpdate(id, body, {new: true}, function(err, sale) {
+    Sale.findByIdAndUpdate(id, body, {new: true}, (err, sale) => {
       if (err) {
         callback(err, null)
         return
@@ -63,14 +64,14 @@ export default {
 
     let id = req.params.id
 
-    Sale.findByIdAndRemove(id, function(err, r) {
+    Sale.findByIdAndRemove(id, (err, sale) => {
       if (err) {
         callback(err, {})
         return
       }
 
       // Remove related items
-      Item.remove({ _creator: id }, function(err, item) {
+      Item.remove({ _creator: id }, (err, item) => {
         if (err) {
           callback(err, null)
           return
@@ -79,7 +80,7 @@ export default {
       })
 
        // Remove relateded invoice
-      Invoice.remove({ project: id }, function(err, invoice) {
+      Invoice.remove({ project: id }, (err, invoice) => {
         if (err) {
           callback(err, null)
           return

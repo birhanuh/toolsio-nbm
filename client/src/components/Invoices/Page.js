@@ -7,6 +7,8 @@ import { fetchInvoices } from '../../actions/invoiceActions'
 // Localization 
 import T from 'i18n-react'
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 // Datatables
 import $ from 'jquery'
 window.JSZip = require('jszip')
@@ -29,7 +31,7 @@ class Page extends Component {
     
     this.props.fetchInvoices()
 
-    $('.table').DataTable({
+    $('.table').dataTable({
       processing: true,
       responsive: true,
       language: {
@@ -87,6 +89,9 @@ class Page extends Component {
     return (
 
       <div className="row column">  
+
+        <Breadcrumb />
+        
         <div className="ui vertical segment">
           <Link className="ui primary button" to="/invoices/new">
             <i className="add circle icon"></i>

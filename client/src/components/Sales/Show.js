@@ -14,6 +14,8 @@ import T from 'i18n-react'
 
 import $ from 'jquery'
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 // Modal
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
@@ -93,6 +95,9 @@ class Show extends Component {
     
     return (
       <div className="ui stackable grid">
+
+        <Breadcrumb />
+
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}>{name}</h1> 

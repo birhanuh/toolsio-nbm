@@ -33,7 +33,8 @@ describe("components", function() {
     
     beforeEach(()=>{
       props = {
-        customers: Customers
+        customers: Customers,
+        saveProject: jest.fn()
       }
 
       component = shallow(<Form {...props}/>)
@@ -83,7 +84,7 @@ describe("components", function() {
       expect(wrapper.find(FormPage).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(FormPage).prop('createProject')).toEqual(props.createProject)
       expect(wrapper.find(FormPage).prop('fetchProject')).toEqual(props.fetchProject)
@@ -114,7 +115,7 @@ describe("components", function() {
       expect(wrapper.find(Page).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(Page).prop('fetchProjects')).toEqual(props.fetchProjects)
     })
@@ -152,7 +153,7 @@ describe("components", function() {
       expect(wrapper.find(Show).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(Show).prop('fetchProjects')).toEqual(props.fetchProjects)
       expect(wrapper.find(Show).prop('deleteProject')).toEqual(props.deleteProject)

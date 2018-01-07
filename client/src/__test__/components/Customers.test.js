@@ -33,7 +33,8 @@ describe("components", function() {
     
     beforeEach(()=>{
       props = {
-        customers: Customers
+        customers: Customers,
+        saveCustomer: jest.fn()
       }
 
       component = shallow(<Form {...props}/>)
@@ -81,7 +82,7 @@ describe("components", function() {
       expect(wrapper.find(FormPage).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(FormPage).prop('createCustomer')).toEqual(props.createCustomer)
       expect(wrapper.find(FormPage).prop('fetchCustomer')).toEqual(props.fetchCustomer)
@@ -100,8 +101,7 @@ describe("components", function() {
       store = mockStore(storeStateMock)
 
       props = {
-        fetchCustomers: jest.fn(),
-        deleteCustomer: jest.fn()
+        fetchCustomers: jest.fn()
       }
 
       wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
@@ -112,10 +112,9 @@ describe("components", function() {
       expect(wrapper.find(Page).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(Page).prop('fetchCustomers')).toEqual(props.fetchCustomers)
-      expect(wrapper.find(Page).prop('deleteCustomer')).toEqual(props.deleteCustomer)
     })
 
   })
@@ -151,7 +150,7 @@ describe("components", function() {
       expect(wrapper.find(Show).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(Show).prop('fetchCustomers')).toEqual(props.fetchCustomers)
       expect(wrapper.find(Show).prop('deleteCustomer')).toEqual(props.deleteCustomer)
