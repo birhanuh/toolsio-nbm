@@ -317,30 +317,6 @@ nav.ui.menu {
   color: $turquoise;
 }
 
-// Header breadcrumb
-.ui.fixed.menu.header-breadcrumb {
-  margin-top: 48px;
-  overflow: hidden;
-  padding: 5px 1rem;
-  box-shadow: none;
-  z-index: 10;
-  h2 {
-    font-size: 0.875em;
-    text-transform: uppercase;
-    font-weight: 700;
-  }
-  .sub.header {
-    margin-top: 2px;
-    font-size: 0.875em;
-  }
-  .item {
-    padding: 5px 0;
-  }
-  .item:before {
-    background: none;
-  }
-}
-
 // Footer 
 .ui.footer.segment {  
   width: 100%;
@@ -410,6 +386,11 @@ nav.ui.menu {
 
 .alert-dismissable .close, .alert-dismissible .close {
   top: 0; 
+}
+
+// Comments 
+.ui.comments {
+  max-width: inherit;
 }
 
 // footer

@@ -232,7 +232,8 @@
       "flash": {
         "success_create": "Project *{name}* is created!",
         "success_update": "Project *{name}* is updated!"
-      }
+      },
+      "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
     },
     "show": {
       "header": "Project",
@@ -324,7 +325,8 @@
       "flash": {
         "success_create": "Sale *{name}* is created!",
         "success_update": "Sale *{name}* is updated!"
-      }
+      },
+      "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
     },    
     "show": {
       "header": "Sale",
@@ -382,8 +384,8 @@
   "customers": {
     "page": {
       "header": "Customers",
-      "add_new_customer": "Add new customer",
-      "empty_customers": "There are no customers yet",
+      "add_new_customer": "Add new Customer",
+      "empty_customers": "There are no customers. Click Add new Customer button above to create your first Customer.",
       "description": "All added Customers are shown here.",
       "name": "Name",
       "contacts": "Contacts",
@@ -444,9 +446,8 @@
     "page": {
       "header": "Invoices",
       "are_you_sure": "Are you sure?",
-      "empty_invoices_header": "There are no invoices",
-      "empty_invoices_message": "Click Create new Invoice button above to create your first Invoice.",
       "create_new_invoice": "Create new Invoice",
+      "empty_invoices_message": "There are no Invoices. Click Create new Invoice button above to create your first Invoice.",
       "description": "All created Invoices are shown here.",
       "sale_project": "Sale/Project",
       "deadline": "Deadline",
@@ -601,7 +602,9 @@
   "conversations": {
     "page": {
       "header": "Conversations",
-      "new_message": "New message",
+      "empty_conversations_header": "There are no conversations",
+      "empty_conversations_message": "Click Compose new Conversation button on the left-side panel to compose your first Conversation.",
+      "compose_new_conversation": "Compose New Conversatoin",
       "empty_inbox": "Inbox is empty",
       "empty_sent": "Sent is empty",
       "empty_trash": "Empty trash",
@@ -609,12 +612,40 @@
       "sent": "Sent",
       "trash": "Trash",
       "remove": "Remove",
+      "draft": "Draft",
       "restore": "Restore",
+      "title": "Title",
+      "from": "From",
+      "body": "Body",
       "description": "Internal messaging serivce, compose, read, reply and delete messages."
     },
+    "form": {
+      "new_message": "New Message",
+      "send": "Send",
+      "cancel": "Cancel",
+      "title": "Title",
+      "body": "Body",
+      "recipient": "Recipient",
+      "select_recipient": "-Select recipient-",
+      "recipient_required": "Recipient is required.",
+      "title_required": "Title is required.",
+      "body_required": "Body is required.",
+      "flash": {
+        "success_compose": "Message is sent!",
+        "error_compose": "Message is not sent, try sending again"
+      }
+    },
     "show": {
-      "header": "Show",
-      "reply": "Reply"
+      "title": "Title",
+      "recipient": "Recipient",
+      "body": "Body",
+      "reply": "Reply",
+      "delete_conversation": "Delete Conversation",
+      "cancel": "Cancel",
+      "write_reply": "Write your reply...",
+      "flash": {
+        "success_delete": "Message is deleted!"
+      }  
     },
     "reply": {
       "success": "Reply is sent"

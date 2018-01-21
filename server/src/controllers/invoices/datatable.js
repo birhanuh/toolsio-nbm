@@ -1,8 +1,10 @@
-import Invioce from '../models/invoice'
+import Invioce from '../../models/invoice'
 
 export default {
   
-  find: (query, callback) => {
+  find: (req, callback) => {
+
+    let query = req.query
 
     let start = parseInt(query.start)
     let length = parseInt(query.length)
@@ -17,7 +19,7 @@ export default {
 
     Invioce.count({}, function( err, count){
 
-      Invioce.find(search).sort(sort).skip(start).limit(length).populate([{path: 'sale', select: 'name total'}, {path: 'project', select: 'name total' }, {path: 'customer', select: 'name'}]).exec(function(err, invoices) {
+      Invioce.find(search).sort(sort).skip(start).limit(length).populate([{path: 'sale', select: 'name total'}, {path: 'project', select: 'name total' }, {path: 'customer', select: 'name'}]).exec((err, invoices) => {
         if (err) {
           callback(err, null)
           return

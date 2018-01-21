@@ -33,8 +33,8 @@ describe("components", function() {
     
     beforeEach(()=>{
       props = {
-        sale: Sale,
-        customers: Customers
+        customers: Customers,
+        saveSale: jest.fn(),
       }
 
       component = shallow(<Form {...props}/>)
@@ -84,7 +84,7 @@ describe("components", function() {
       expect(wrapper.find(FormPage).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(FormPage).prop('createSale')).toEqual(props.createSale)
       expect(wrapper.find(FormPage).prop('fetchSale')).toEqual(props.fetchSale)
@@ -115,7 +115,7 @@ describe("components", function() {
       expect(wrapper.find(Page).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(Page).prop('fetchSales')).toEqual(props.fetchSales)
     })
@@ -153,7 +153,7 @@ describe("components", function() {
       expect(wrapper.find(Show).length).toEqual(1)
     })
 
-    it('check Prop matchs', function() { 
+    it('check props matchs', function() { 
 
       expect(wrapper.find(Show).prop('fetchSales')).toEqual(props.fetchSales)
       expect(wrapper.find(Show).prop('deleteSale')).toEqual(props.deleteSale)

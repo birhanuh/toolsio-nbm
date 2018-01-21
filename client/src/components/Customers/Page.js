@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
-import ReactDOMServer from 'react-dom/server'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import List from './List' 
 import { connect } from 'react-redux'
 import { fetchCustomers } from '../../actions/customerActions'
 
 // Localization 
 import T from 'i18n-react'
 
-// Datatables
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 import $ from 'jquery'
+
+// Datatables
 window.JSZip = require('jszip')
 //require('pdfmake')
 import 'datatables.net-se'
@@ -31,16 +32,16 @@ class Page extends Component {
     
     this.props.fetchCustomers()
 
-    $('.table').DataTable({
+    $('.table').dataTable({
       processing: true,
       responsive: true,
       language: {
-        emptyTable: '<p class="ui info message">'+T.translate("customers.page.empty_customers")+'</p>',
+        emptyTable: '<p class="ui info message m-5">'+T.translate("customers.page.empty_customers")+'</p>',
         processing: "<img src='"+ajaxLoader+"'>",
         //info: '_START_ to _END_ of _TOTAL_',
         infoEmpty: '',
         search: '',
-        searchPlaceholder: 'Search Customers',
+        searchPlaceholder: 'Search Name, Vat number and Contacts',
         lengthMenu: '_MENU_',
         paginate: {
           previous: '<i class="left chevron icon"></i>',
@@ -85,28 +86,12 @@ class Page extends Component {
   }
 
   render() {
-    const customers = this.props.customers.map(customer => {
-      let activeProjectsAndSales = ''
-      let unpaidInvoices = ''
-      let actions = (
-        <div className="ui small buttons">
-          <a href={`/customers/edit/${customer._id}`} className="ui icon basic button green"><i className="edit icon"></i></a>
-          <a href={`/customers/show/${customer._id}`} className="ui icon basic blue button"><i className="unhide icon"></i></a>
-        </div>
-      )
-
-      return [
-        customer.name,
-        customer.vatNumber,
-        customer.contact.phoneNumber+ '\n' +customer.contact.email,        
-        activeProjectsAndSales,
-        unpaidInvoices,
-        ReactDOMServer.renderToStaticMarkup(actions)        
-      ]
-    })
     
     return (
       <div className="row column">  
+
+        <Breadcrumb />
+
         <div className="ui vertical segment">
           <Link className="ui primary button" to="/customers/new">
             <i className="add circle icon"></i>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { InputField } from '../../utils/FormFields'
@@ -14,6 +15,8 @@ import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 
 import $ from 'jquery'
 $.fn.checkbox = require('semantic-ui-checkbox')
+
+import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Form extends Component {
   constructor(props) {
@@ -86,7 +89,7 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
-    console.info('target: ', !!this.state.errors[e.target.name])
+  
     if (!!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
@@ -182,8 +185,11 @@ class Form extends Component {
     //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
 
     return (  
-      <div className="ui stackable centered grid">
-        <div className="eight wide column ui segment">  
+      <div className="ui stackable grid">
+
+        <Breadcrumb />
+
+        <div className="ui text container ui segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
@@ -288,7 +294,11 @@ class Form extends Component {
               
             </fieldset>
 
-            <div className="inline field">    
+            <div className="inline field">  
+              <Link className="ui primary outline button" to="/customers">
+                <i className="minus circle icon"></i>
+                {T.translate("customers.form.cancel")}
+              </Link>  
               <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("customers.form.save")}</button>
             </div>  
           </form> 
@@ -299,6 +309,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  saveCustomer: PropTypes.func.isRequired,
   customer: PropTypes.object
 }
 

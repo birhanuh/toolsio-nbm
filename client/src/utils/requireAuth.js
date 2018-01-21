@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addFlashMessage } from '../actions/flashMessagesActions'
+import { addFlashMessage } from '../actions/flashMessageActions'
 
 export default function(ComposedComponent) {
 

@@ -3,8 +3,9 @@ import Project from '../models/project'
 
 export default {
   
-  find: (query, params, callback) => {
-    Task.find(params, function(err, tasks) {
+  find: (req, callback) => {
+
+    Task.find(function(err, tasks) {
       if (err) {
         callback(err, null)
         return
@@ -14,7 +15,10 @@ export default {
     })
   },
 
-  findById: (id, callback) => {
+  findById: (req, callback) => {
+
+    let id = req.params.id
+
     Task.findById(id, function(err, task) {
       if (err) {
         callback(err, null)
@@ -25,8 +29,11 @@ export default {
     })
   },
 
-  create: (params, callback) => {  
-    Task.create(params, function(err, task) {
+  create: (req, callback) => {  
+
+    let body = req.body
+
+    Task.create(body, function(err, task) {
       if (err) {
         callback(err, null)
         return
@@ -36,8 +43,12 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, params, callback) => {
-    Task.findByIdAndUpdate(id, params, {new: true}, function(err, task) {
+  findByIdAndUpdate: (req, callback) => {
+
+    let id = req.params.id
+    let body = req.body
+
+    Task.findByIdAndUpdate(id, body, {new: true}, function(err, task) {
       if (err) {
         callback(err, null)
         return
@@ -47,7 +58,10 @@ export default {
     })
   },
 
-  findByIdAndRemove: (id, callback) => {
+  findByIdAndRemove: (req, callback) => {
+
+    let id = req.params.id
+
     Task.findByIdAndRemove(id, function(err, task) {
       if (err) {
         callback(err, null)

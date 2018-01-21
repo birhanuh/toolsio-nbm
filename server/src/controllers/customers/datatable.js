@@ -1,8 +1,10 @@
-import Customer from '../models/customer'
+import Customer from '../../models/customer'
 
 export default {
   
-  find: (query, callback) => {
+  find: (req, callback) => {
+    
+    let query = req.query
 
     let start = parseInt(query.start)
     let length = parseInt(query.length)
@@ -11,13 +13,13 @@ export default {
     const columns = ['name', 'vatNumber', 'contact']
     let field = columns[parseInt(order.column)]
     let sortDir =  order.dir 
-    let sort = query.order.length > 0 ? {[field]: ''+sortDir+''} : {}
+    let sort = query.order.length > 0 ? {[field]: ''+sortDir+''} : {createdAt: 'desc'}
 
     let search = query.search.value !== '' ? { $text: {$search: query.search.value}} : {}
     
-    Customer.count({}, function( err, count){
+    Customer.count({}, (err, count) => {
 
-      Customer.find(search).sort(sort).skip(start).limit(length).exec(function(err, customers) {
+      Customer.find(search).sort(sort).skip(start).limit(length).exec((err, customers) => {
         if (err) {
           callback(err, null)
           return

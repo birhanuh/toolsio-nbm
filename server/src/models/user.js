@@ -1,7 +1,7 @@
 import mongoose from 'mongoose' 
 import bcrypt from 'bcrypt'
 
-let Schema = mongoose.Schema
+const Schema = mongoose.Schema
 const SALT_WORK_FACTOR = 10
 
 // User Schema 
@@ -11,31 +11,28 @@ const UserSchema = new Schema({
   lastName: { type: String },
   email: { type: String, required: [true, "Email is required."], index: {unique: true, dropDups: true} },
   password: { type: String, required: [true, "Password is required."] },
-  admin: Boolean,
+  admin: {type: Boolean, default: false},
+  avatar: { data: Buffer, contentType: String },
   meta: {
     age: Number,
     gender: String
-  },
-  avatar: { data: Buffer, contentType: String },
-
-  createdAt: Date,
-  updatedAt: Date,
-
-  tenantId: { type: String }
+  }
+},{
+  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
 UserSchema.pre('save', function(next) {
-  var user = this
+  let user = this
 
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next()
 
   // generate a salt
-  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+  bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
     if (err) return next(err)
 
     // hash the password using our new salt
-    bcrypt.hash(user.password, salt, function(err, hash) {
+    bcrypt.hash(user.password, salt, (err, hash) => {
       if (err) return next(err)
 
       // override the cleartext password with the hashed one
@@ -45,7 +42,7 @@ UserSchema.pre('save', function(next) {
   })
 })
 
-UserSchema.post('save', function(error, doc, next) {
+UserSchema.post('save', (error, doc, next) => {
   if (error.name === 'MongoError' && error.code === 11000) {
     let message = {
       errors: {
@@ -62,13 +59,13 @@ UserSchema.post('save', function(error, doc, next) {
 
 let User = module.exports = mongoose.model('user', UserSchema)
 
-module.exports.getUserByEmail = function(email, callback) {
-  var query = {email: email}
+module.exports.getUserByEmail = (email, callback) => {
+  let query = {email: email}
   User.findOne(query, callback)
 }
 
-module.exports.comparePassword = function(candidatePassword, hash, callback) {
-  bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+module.exports.comparePassword = (candidatePassword, hash, callback) => {
+  bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
     if (err)throw err
     callback(null, isMatch)
   })

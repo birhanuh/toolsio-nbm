@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { addFlashMessage } from '../../../actions/flashMessagesActions'
+import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { fetchInvoice, deleteInvoice } from '../../../actions/invoiceActions'
 
 // Localization 
@@ -113,7 +113,7 @@ class Page extends Component {
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className="ui header">{T.translate("invoices.show.header")}
-              <div className="sub header inline-block-i pl-1">{sale && sale.name || project && project.name}</div>
+              <div className="sub header inline-block-i pl-1">{(sale && sale.name) || (project && project.name)}</div>
             </h1> 
             <div className={classnames("ui uppercase huge right corner label", {orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
               <p>{status}</p>
@@ -176,7 +176,7 @@ class Page extends Component {
               </div>
             </div>
 
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("invoices.show.delete")}</button>
+            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("invoices.show.delete")}</button>
             <Link to={`/invoices/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
           </div>    
         </div>

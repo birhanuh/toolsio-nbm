@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import map from 'lodash/map'
 import classnames from 'classnames'
-import { addFlashMessage } from '../../actions/flashMessagesActions'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchCustomer, deleteCustomer } from '../../actions/customerActions'
 
 // Localization 
@@ -15,6 +15,8 @@ import $ from 'jquery'
 // Modal
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
+
+import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Show extends Component {
   
@@ -209,6 +211,9 @@ class Show extends Component {
 
     return (
       <div className="ui stackable grid">
+
+        <Breadcrumb />
+
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className="ui header">{name}</h1> 
@@ -258,7 +263,7 @@ class Show extends Component {
 
             <div className="ui divider"></div>
 
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("customers.show.delete")}</button>
+            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("customers.show.delete")}</button>
             <Link to={`/customers/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("customers.show.edit")}</Link>
           </div>    
         </div>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
-import { addFlashMessage } from '../../actions/flashMessagesActions'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchSale, deleteSale } from '../../actions/saleActions'
 
 import ItemForm from './Items/Form'
@@ -13,6 +13,8 @@ import ItemForm from './Items/Form'
 import T from 'i18n-react'
 
 import $ from 'jquery'
+
+import Breadcrumb from '../Layouts/Breadcrumb'
 
 // Modal
 $.fn.modal = require('semantic-ui-modal')
@@ -93,6 +95,9 @@ class Show extends Component {
     
     return (
       <div className="ui stackable grid">
+
+        <Breadcrumb />
+
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
@@ -122,7 +127,7 @@ class Show extends Component {
             
             <div className="ui divider"></div>
 
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="delete icon"></i>{T.translate("sales.show.delete")}</button>
+            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("sales.show.delete")}</button>
             <Link to={`/sales/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("sales.show.edit")}</Link>
           </div>    
         </div>

@@ -3,8 +3,9 @@ import Sale from '../models/sale'
 
 export default {
   
-  find: (query, params, callback) => {
-    Item.find(params, function(err, items) {
+  find: (req, callback) => {
+    
+    Item.find(function(err, items) {
       if (err) {
         callback(err, null)
         return
@@ -14,8 +15,11 @@ export default {
     })
   },
 
-  findById: (id, callback) => {
-    Item.findById(id, function(err, item) {
+  findById: (req, callback) => {
+
+    let id = req.params.id
+
+    Item.findById(id, (err, item) => {
       if (err) {
         callback(err, null)
         return
@@ -25,8 +29,11 @@ export default {
     })
   },
 
-  create: (params, callback) => {  
-    Item.create(params, function(err, item) {
+  create: (req, callback) => {  
+
+    let body = req.body
+
+    Item.create(body, (err, item) => {
       if (err) {
         callback(err, null)
         return
@@ -37,8 +44,12 @@ export default {
     })
   },
 
-  findByIdAndUpdate: (id, params, callback) => {
-    Item.findByIdAndUpdate(id, params, {new: true}, function(err, item) {
+  findByIdAndUpdate: (req, callback) => {
+
+    let id = req.params.id
+    let body = req.body
+
+    Item.findByIdAndUpdate(id, body, {new: true}, (err, item) => {
       if (err) {
         callback(err, null)
         return
@@ -48,15 +59,18 @@ export default {
     })
   },
 
-  findByIdAndRemove: (id, callback) => {
-    Item.findByIdAndRemove(id, function(err, item) {
+  findByIdAndRemove: (req, callback) => {
+
+    let id = req.params.id
+
+    Item.findByIdAndRemove(id, (err, item) => {
       if (err) {
         callback(err, null)
         return
       }
 
       // Remove Item from this Sale
-      Sale.findByIdAndUpdate(item._creator, { $pull: { items: id}, $inc: {total: -item.price} }, function(err, Sale) {
+      Sale.findByIdAndUpdate(item._creator, { $pull: { items: id}, $inc: {total: -item.price} }, (err, Sale) => {
         if (err) {
           callback(err, null)
           return

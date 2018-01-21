@@ -7,6 +7,7 @@ import Landing from './Landing'
 import Signup from '../Signup/Page'
 import Login from '../Login/Page'
 import Subdomain from '../Login/Subdomain'
+import requireAuth from '../../utils/requireAuth'
 import ProjectsPage from '../Projects/Page'
 import ProjectsFormPage from '../Projects/FormPage'
 import ProjectsShow from '../Projects/Show'
@@ -19,7 +20,7 @@ import CustomersShow from '../Customers/Show'
 import InvoicesPage from '../Invoices/Page'
 import InvoicesFormPage from '../Invoices/FormPage'
 import InvoicesShow from '../Invoices/Show/Page'
-import requireAuth from '../../utils/requireAuth'
+import ConversationsPage from '../Conversations/Page'
 
 import HeaderNav from './HeaderNav'
 import Sidebar from './Sidebar'
@@ -62,7 +63,7 @@ class App extends Component {
           <Sidebar />
         }
 
-        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable middle aligned center aligned grid auth-pages': authPages})}>          
+        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
                    
           { !authPages && <FlashMessagesList /> }
           
@@ -89,6 +90,9 @@ class App extends Component {
               <Route exact path="/invoices/edit/:id" component={requireAuth(InvoicesFormPage)} /> 
               <Route exact path="/invoices/new" component={requireAuth(InvoicesFormPage)} />
               <Route exact path="/invoices/show/:id" component={requireAuth(InvoicesShow)} /> 
+              <Route exact path="/conversations" component={requireAuth(ConversationsPage)} />
+              <Route exact path="/conversations/:type" component={requireAuth(ConversationsPage)} />
+              <Route exact path="/conversations/:type/show/:id" component={requireAuth(ConversationsPage)} /> 
             </Switch>
           </div>
         </section>

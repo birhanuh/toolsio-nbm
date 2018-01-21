@@ -12,6 +12,7 @@ export function setCurrentAccount(account) {
 export function signupRequest(accountAndUser) {
   return dispatch => {
     return axios.post('/users/register', accountAndUser).then(res => {
+      //document.cookie = "_id="+res.data._id+"; firstName="+res.data.firstName+"; lastName="+res.data.firstName+"; email="+res.data.email+""
       localStorage.setItem('account', JSON.stringify(res.data))
       dispatch(setCurrentAccount(res.data))
     })
@@ -28,7 +29,6 @@ export function subdomainRequest(subdomain) {
   return dispatch => {
     return axios.get(`/accounts/${subdomain}`)
       .then(res => {
-        //document.cookie = "firstName="+res.data.firstName+"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/"
         localStorage.setItem('account', JSON.stringify(res.data))
         dispatch(setCurrentAccount(res.data))
       })

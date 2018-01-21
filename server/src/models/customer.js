@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
      
-let customerSchema = new mongoose.Schema({
+const customerSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Name is required."] },
   address: {
     street: { type: String, required: [true, "Street is required."] },
@@ -16,10 +16,9 @@ let customerSchema = new mongoose.Schema({
   includeContactOnInvoice: { type: Boolean, default: false },
   projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "project" }],
   sales: [{ type: mongoose.Schema.Types.ObjectId, ref: "sale" }],
-  invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "invoice" }],
-
-  createdAt: { type: Date },
-  updatedAt: {type: Date }
+  invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "invoice" }]
+},{
+  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
  
 function contactValidator() {
@@ -49,4 +48,4 @@ customerSchema.post('save', function(error, doc, next) {
 
 customerSchema.index({name: 'text', 'address.street': 'text', 'address.postalCode': 'text', 'address.region': 'text', 'address.country': 'text', 'contact.phoneNumber': 'text', 'contact.email': 'text'})
 
-let Customer = module.exports = mongoose.model('customer', customerSchema)
+module.exports = mongoose.model('customer', customerSchema)

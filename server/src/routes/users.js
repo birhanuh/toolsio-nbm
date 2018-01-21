@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt'
 import passport from 'passport'
 import config from '../config'
 
-import User from '../models/User'
-import Account from '../models/Account'
+import User from '../models/user'
+import Account from '../models/account'
 
 let router = express.Router()
 
@@ -30,7 +30,7 @@ let LocalStrategy = require('passport-local').Strategy
 
 router.post('/register', function(req, res) {
   const { account, user } = req.body
-  
+
   User.create(user).then(user => {
     Account.create(account).then(account => {
       
@@ -43,8 +43,8 @@ router.post('/register', function(req, res) {
         user.tenantId = account.subdomain
         user.save().then(user => {
           req.login(user, function(err) {
-            res.json({ firstName: user.firstName, lastName: user.lastName, email: user.email, 
-              admin: user.admin, subdomain: user.tenantId })
+            res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
+              admin: user.admin, subdomain: user.account.subdomain })
           })
         }).catch(err => 
           res.status(500).json({ 
@@ -80,18 +80,37 @@ router.post('/register', function(req, res) {
   )
 })
 
-// Get regisetred user
-router.get('/:email', (req, res) => {
-  User.find({ email: req.params.email }).then(user => {
-    res.json( { user }) 
-  })
+// Get user by email or all users
+router.get('/:resource', (req, res) => {
+  if (req.params.resource === 'email') {
+    User.find({ email: req.params.email }).then(user => {
+      res.json( { user }) 
+    })
+  } else if (req.params.resource === 'all') {
+    User.find({}).select('firstName').exec(function(err, users) {
+      if (err) {
+        res.status(500).json({ 
+          errors: {
+            confirmation: 'fail',
+            message: err
+          }
+        })
+        return
+      }
+     
+      res.json({ 
+        confirmation: 'success',
+        results: users 
+      })
+    })
+  }
 })
 
 // Login User
 router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  res.json({ firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+  res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
     admin: req.user.admin, tenantId: req.user.tenantId })
 })
 

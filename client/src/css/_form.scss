@@ -34,10 +34,8 @@
 // Buttons
 .ui.button {
   background-color: $medium-grey;
-  border-color: $medium-grey;
   &:hover, &.focus {
     background: $dark-medium-grey;
-    border-color: $dark-medium-grey;
   }
   font-weight: 600;
   @include border-radius(3px);  
@@ -47,48 +45,53 @@
   transition: background-color 300ms ease-out;
 }
 
+.ui.outline.button {
+  padding: .71429em 1.4em .671429em;
+}
+
 .ui.primary.button {
   background-color: $turquoise !important;
-  border-color: $turquoise !important;
   &:hover, &:focus {
     background-color: $dark-turquoise !important;
     border-color: $dark-turquoise !important;
   }
 }
 
+.ui.primary.outline.button {
+  color: $turquoise;
+  background-color: transparent !important;
+  border: 1px solid $turquoise !important;
+  &:hover, &:focus {
+    color: #ffffff;
+    background-color: $turquoise !important;
+  }
+}
+
 .ui.negative.button {
   background-color: $red;
-  border-color: $red;
   &:hover, &.focus {
     background-color: $x-dark-red;
-    border-color: $x-dark-red;
   }
 }
 
 .ui.positive.button {
   background: $green;
-  border-color: $green;
   &:hover, &.focus {
     background-color: $dark-green;
-    border-color: $dark-green;
   }
 }
 
 .ui.info.button {
   background: $light-blue;
-  border-color: $light-blue;
   &:hover, &.focus {
     background-color: $blue;
-    border-color: $blue;
   }
 }
 
 .ui.warning.button {
   background: $light-orange;
-  border-color: $light-orange;
   &:hover, &.focus {
     background-color: $orange;
-    border-color: $orange;
   }
 }
 
@@ -96,11 +99,9 @@
   @extend .ui.button;
   color: $white;
   background: $mid-night-blue;
-  border-color: $mid-night-blue;
   &:hover, &.focus {
     color: $white;
     background-color: $x-dark-mid-night-blue;
-    border-color: $x-dark-mid-night-blue;
   }
 }
 
@@ -221,15 +222,21 @@ select.date {
 }
 
 // Horizontal form
+.ui.form .inline.field {
+  display: inherit;
+}
+
+.ui.form .inline.field > div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ui.form .inline.field > .info.message {
+  left: 27%;
+}
+
 .ui.form .inline.field>label {
   width: 25%;
-}
-
-.ui.form .field > label {
-  text-align: left;
-}
-
-.ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
   text-align: right;
 }
 

@@ -25,6 +25,8 @@ import db from './db'
 import session from 'express-session'
 import passport from 'passport'
 
+import socketEvents from './socket/socketEvents'
+
 // View Engine
 //app.set('view engine', 'jade')
 //app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects'])
@@ -86,6 +88,9 @@ app.set('port', process.env.PORT)
 app.listen(app.get('port'), () => 
   console.log('Server started on port: ' + process.env.PORT)
 )
+
+//const io = require('socket.io').listen(8080)
+//socketEvents(io)
 
 // Connect to mognodb
 if (env === 'development') {
