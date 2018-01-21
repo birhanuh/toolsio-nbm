@@ -9,8 +9,9 @@ import T from 'i18n-react'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
-// Datatables
 import $ from 'jquery'
+
+// Datatables
 window.JSZip = require('jszip')
 //require('pdfmake')
 import 'datatables.net-se'

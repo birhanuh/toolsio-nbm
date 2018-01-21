@@ -1,8 +1,7 @@
 import { SET_SALES, ADD_SALE, SALE_FETCHED, SALE_UPDATED, SALE_DELETED, ADD_ITEM, ITEM_UPDATED, ITEM_DELETED  } from '../actions/types'
 
 export default function sales(state = [], action = {}) {
-  switch(action.type) {
-    
+  switch(action.type) {    
 
     case SET_SALES:
       return action.sales

@@ -9,6 +9,9 @@ import toJson from 'enzyme-to-json'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
+import 'datatables.net-se'
+jest.mock('datatables.net-se', () => ({ dataTable: jest.fn() }))
+
 // Configure Adapter
 configure({ adapter: new Adapter() })
 
