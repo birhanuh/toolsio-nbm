@@ -30,7 +30,6 @@ export default function conversations(state = [], action = {}) {
           })
         }
       } else {
-        console.log('return')
         return {
           ...state,
           conversations: action.conversation

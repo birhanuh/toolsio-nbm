@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 class List extends Component {
   render() {
     let { name, items } = this.props;
-    let options = [];
+    let options = []
 
     options.push(<option key="default" value={name}>{name}</option>);
 
@@ -19,7 +19,7 @@ class List extends Component {
           {options}
         </select>
       </div>  
-    );
+    )
   }
 }
 
