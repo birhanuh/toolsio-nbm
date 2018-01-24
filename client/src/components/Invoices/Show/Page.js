@@ -6,6 +6,8 @@ import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { fetchInvoice, deleteInvoice } from '../../../actions/invoiceActions'
 
+import Breadcrumb from '../../Layouts/Breadcrumb'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -110,6 +112,9 @@ class Page extends Component {
 
     return (
       <div className="ui stackable grid invoice show">
+
+        <Breadcrumb />
+
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}

@@ -180,7 +180,7 @@ class Form extends Component {
 
                 options={[
                   <option key="default" value="new" disabled>NEW</option>,
-                  <option key="preparing" value="preparing">PREPARING</option>,
+                  <option key="in progress" value="in progress">IN PROGRESS</option>,
                   <option key="ready" value="ready">READY</option>,
                   <option key="delayed" value="delayed">DELAYED</option>,
                   <option key="delivered" value="delivered">DELIVERED</option>

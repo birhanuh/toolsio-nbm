@@ -11,12 +11,12 @@ export default function Card({sale}) {
   return (
     <div className="card">
       <div className="content">        
-        <div className={classnames("ui uppercase tiny right ribbon label", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+        <div className={classnames("ui uppercase tiny right ribbon label", {blue: sale.status === 'new', orange: sale.status === 'in progress', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
           {sale.status}
         </div>
         
         <Link to={`/sales/show/${sale._id}`} className="ui header">
-          <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
+          <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', red: sale.status === 'delayed', green: sale.status === 'delivered'})}>
             {sale.name}
           </h3>
         </Link>
@@ -38,7 +38,7 @@ export default function Card({sale}) {
               <td>{sale.deadline}</td>
               <td>{sale.customer ? sale.customer.name: <p className="blue">{T.translate("sales.page.no_customer")}</p>}</td>
               <td>
-                <i className={classnames("check circle outline icon", {blue: sale.status === 'new', orange: sale.status === 'on going', red: sale.status === 'delayed', green: sale.status === 'delivered'})}></i>
+                <i className={classnames("check circle outline icon", {blue: sale.status === 'new', orange: sale.status === 'in progress', red: sale.status === 'delayed', green: sale.status === 'delivered'})}></i>
               </td>
             </tr>
           </tbody>

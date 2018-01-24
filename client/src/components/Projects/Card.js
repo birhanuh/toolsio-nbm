@@ -11,12 +11,12 @@ export default function Card({project}) {
   return (
     <div className="card">
       <div className="content">
-        <div className={classnames("ui uppercase tiny right ribbon label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+        <div className={classnames("ui uppercase tiny right ribbon label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
           {project.status}
         </div>
         
         <Link to={`/projects/show/${project._id}`} className="ui header">
-          <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
+          <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
             {project.name}
           </h3>
         </Link>
@@ -46,7 +46,7 @@ export default function Card({project}) {
                 </div>
               </td>
               <td>
-                <i className={classnames("check circle outline icon", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}></i>
+                <i className={classnames("check circle outline icon", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}></i>
               </td>
             </tr>
           </tbody>

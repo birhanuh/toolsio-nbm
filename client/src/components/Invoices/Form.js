@@ -380,7 +380,7 @@ class Form extends Component {
                 <dd>{sale.name}</dd>
                 <dt>{T.translate("invoices.form.sale.status")}</dt>
                 <dd>
-                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
                     {project.status}
                   </div>
                 </dd>
@@ -400,7 +400,7 @@ class Form extends Component {
                 <dd>{project.name}</dd>
                 <dt>{T.translate("invoices.form.project.status")}</dt>
                 <dd>
-                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
                     {project.status}
                   </div>
                 </dd>

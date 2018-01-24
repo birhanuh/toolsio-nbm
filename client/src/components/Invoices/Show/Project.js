@@ -20,7 +20,7 @@ export default function Project({project}) {
         <dt>{T.translate("invoices.show.project.status")}</dt>
         <dd>
           { project && 
-            <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+            <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
                   {project.status}
                 </div>
           }

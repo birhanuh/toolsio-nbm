@@ -7,6 +7,8 @@ import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchCustomer, deleteCustomer } from '../../actions/customerActions'
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -15,8 +17,6 @@ import $ from 'jquery'
 // Modal
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
-
-import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Show extends Component {
   
@@ -124,14 +124,14 @@ class Show extends Component {
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/projects/show/${project._id}`} className="ui header">
-              <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
+              <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
                 {project.name}
               </h3>
             </Link>
           </div>
 
           <div className="four wide column">
-            <div className={classnames("ui uppercase tiny right label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+            <div className={classnames("ui uppercase tiny right label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
               {project.status}
             </div>
           </div>
@@ -156,14 +156,14 @@ class Show extends Component {
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/sales/show/${sale._id}`} className="ui header">
-              <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
+              <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
                 {sale.name}
               </h3>
             </Link>
           </div>
 
           <div className="four wide column">
-            <div className={classnames("ui uppercase tiny right label", {blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+            <div className={classnames("ui uppercase tiny right label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
               {sale.status}
             </div>
           </div>
