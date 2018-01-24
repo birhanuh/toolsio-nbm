@@ -12,7 +12,7 @@ const itemSchema = new mongoose.Schema({
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
-itemSchema.post('save', (doc, next) => {
+itemSchema.post('save', function (doc, next) {
 
   // Push items and increment total to related Sale object
   Sale.findByIdAndUpdate(this._creator, { $push: {items: this._id}, $inc: {total: this.price} }, { new: true }, (err, sale) => {

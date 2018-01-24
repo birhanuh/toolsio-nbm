@@ -15,44 +15,37 @@ const invoiceSchema = new mongoose.Schema({
   description: { type: String },
   project: { type: mongoose.Schema.Types.ObjectId, required: false, default: null, ref: "project", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
   sale: { type: mongoose.Schema.Types.ObjectId, required: false, default: null, ref: "sale", validate: { validator: saleProjectValidator, message: 'Select either Sale or Project.'} },
-  referenceNumber: { type: String, required: true }
+  referenceNumber: { type: String, required: true },
+  total: { type: Number, default: 0 }
 },{
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
-invoiceSchema.pre('save', (next) => {
-  let now = new Date()
-  this.updatedAt = now
-  if (!this.createdAt) {
-    this.createdAt = now
-  }
-
-  next()
-})
-
-invoiceSchema.pre('validate', async (next) => {
+invoiceSchema.pre('validate', async function(next) {
 
   if (this.sale) {
     let sale = await getSaleById(this.sale)
 
     this.customer = sale.customer
     this.referenceNumber = this.sale +'-'+ this.customer 
+    this.total = sale.total
   } 
 
   if (this.project) {    
     let project = await getProjectById(this.project)
-
+  
     this.customer = project.customer
     this.referenceNumber = this.project +'-'+ this.customer
+    this.total = project.total
   }
 
   // Set initial value
-  this.status = "pending"
+  this.status = "new"
   
   next()
 })
 
-invoiceSchema.post('save', (doc, next) => {
+invoiceSchema.post('save', function(doc, next) {
   
   // Push invoice to related Customer object
   Customer.findByIdAndUpdate(this.customer, { $push: { invoices: this._id }}, { new: true }, (err, customer) => {

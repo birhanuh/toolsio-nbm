@@ -892,6 +892,9 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
     margin: 23px auto 15px 15px;
     @include transform-rotate(45deg) 
   }
+  .ui.header a {
+    width: auto;
+  }
 }
 
 /* Extra small devices (phones, less than 433px) */

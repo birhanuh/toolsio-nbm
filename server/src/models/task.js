@@ -12,8 +12,8 @@ const taskSchema = new mongoose.Schema({
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
-taskSchema.post('save', (doc, next) => {
-  
+taskSchema.post('save', function (doc, next) {
+
   // Push task and increment total value to related Project object
   Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id}, $inc: {total: this.price} }, { new: true }, (err, project) => {
     if (err) {

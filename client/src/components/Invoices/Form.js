@@ -203,7 +203,7 @@ class Form extends Component {
     )
 
     const paymentTermOptions = Array(99).fill().map((key, value) => 
-      <option key={key} value={value}>{value}</option>
+      <option key={value} value={value}>{value}</option>
     )
 
     const saleAndProjectDetails = (
@@ -316,7 +316,8 @@ class Form extends Component {
               formClass="inline field"
 
               options={[
-                <option key="default" value="pending" disabled>PENDING</option>,
+                <option key="default" value="new" disabled>NEW</option>,
+                <option key="pending" value="pending" disabled>PENDING</option>,
                 <option key="paid" value="paid">PAID</option>,
                 <option key="overdue" value="overdue">OVERDUE</option>
                 ]
@@ -360,7 +361,7 @@ class Form extends Component {
             <dt>{T.translate("invoices.show.deadline")}</dt>
             <dd>{step2.deadline.toString()}</dd>
             <dt>{T.translate("invoices.show.status")}</dt>
-            <dd><div className="ui uppercase tiny label orange">pending</div></dd>
+            <dd><div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div></dd>
             <dt>{T.translate("invoices.show.payment_term")}</dt>
             <dd>{step2.paymentTerm ? step2.paymentTerm : '-'}</dd>
             <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
