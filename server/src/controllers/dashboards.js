@@ -4,8 +4,12 @@ import Sale from '../models/sale'
 import User from '../models/user'
 import Customer from '../models/customer'
 
-let today = new Date()
-let thirtyDaysEarlierDateLong = new Date().setDate(today.getDate()-30)
+let date = new Date()
+
+var firstDayOfTheMonth = new Date(date.getFullYear(), date.getMonth(), 1)
+
+
+let thirtyDaysEarlierDateLong = new Date().setDate(date.getDate()-30)
 let thirtyDaysEarlierDate = new Date(thirtyDaysEarlierDateLong)
 
 export default {
@@ -21,56 +25,117 @@ export default {
 
     // Projects
     if (type === 'projects') {
-
+      Project.aggregate( [
+          {$match: {
+            createdAt: {
+              $gte: firstDayOfTheMonth
+            }
+          }},
+          {$group: 
+            {
+              _id: '$status', 
+              count: { $sum: 1}
+            }
+          }], function (err, results) {
+            if (err) {
+              callback(err, null)
+              return
+            }
+            callback(null, results)
+            return 
+        })
       return 
     }
 
     // Sales
     if (type === 'sales') {
+      Sale.aggregate( [
+          {$match: {
+            createdAt: {
+              $gte: firstDayOfTheMonth
+            }
+          }},
+          {$group: 
+            {
+              _id: '$status', 
+              count: { $sum: 1}
+            }
+          }], function (err, results) {
+            if (err) {
+              callback(err, null)
+              return
+            }
+            callback(null, results)
+            return 
+        })
+      return 
+    }
 
+    // Customers
+    if (type === 'customers') {
+      Customer.aggregate( [
+          {$match: {
+            createdAt: {
+              $gte: firstDayOfTheMonth
+            }
+          }},
+          {$group: 
+            {
+              _id: '{ month: { $month: "$createdAt" }, day: { $dayOfMonth: "$createdAt" }, year: { $year: "$createdAt" } }', 
+              count: { $sum: 1}
+            }
+          }], function (err, results) {
+            if (err) {
+              callback(err, null)
+              return
+            }
+            callback(null, results)
+            return 
+        })
       return 
     }
 
      // Invoices
     if (type === 'invoices') {
-      //  Project.aggregate( [
-      //   {
-      //     $group:
-      //       {
-      //          _id: "$status",  
-      //          count: { $sum: 1 }
-      //       }
-      //   }
-      // ], function (err, result) {
-      //      if (err) {
-      //          console.log(err);
-      //          return;
-      //      }
-      //      console.log(result);
-      //    })
-      //    return 
-      //  }
-      
-      Project.aggregate( [
-        {$match: {
-          createdAt: {
-            $gte: thirtyDaysEarlierDate
+
+      Invoice.aggregate( [
+          {$match: {
+            createdAt: {
+              $gte: thirtyDaysEarlierDate
+            }
+          }},
+          {$project: 
+            {
+              _id: 0, 
+              status: 1, 
+              week: { $week: '$createdAt' } 
+            }
+          },{$group: 
+            {
+              _id: {
+                week: '$week',
+                status: '$status'
+              },
+              statusCount: { '$sum': 1 }
+            }
+          },{$group: 
+            {
+              _id: '$_id.week', 
+              statuses: {
+                $push: { 
+                  status: '$_id.status',
+                  count: '$statusCount'
+                }
+              }
+            }
+          }], function (err, results) {
+          if (err) {
+            callback(err, null)
+            return
           }
-        }},
-        {$project: 
-          {_id: 0, 
-            status: 1, 
-            week: { $week: "$createdAt" } 
-          }
-        }], function (err, results) {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        console.log('result: ', results)
-        callback(null, results)
-        return 
-      })
+          callback(null, results)
+          return 
+        })
       }
 
     // Tasks

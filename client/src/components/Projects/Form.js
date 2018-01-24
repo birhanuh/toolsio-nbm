@@ -178,7 +178,7 @@ class Form extends Component {
 
                 options={[
                   <option key="default" value="new" disabled>NEW</option>,
-                  <option key="on going" value="on going">ON GOING</option>,
+                  <option key="in progress" value="in progress">IN PROGRESS</option>,
                   <option key="finished" value="finished">FINISHED</option>,
                   <option key="delayed" value="delayed">DELAYED</option>,
                   <option key="delivered" value="delivered">DELIVERED</option>
