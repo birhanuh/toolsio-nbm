@@ -267,7 +267,7 @@ export default {
     }
 
     if (data.currentStep === 'step2') {
-      if (!data.step2.deadline && !data.step2.paymentTerm) {
+      if (data.step2.deadline && data.step2.paymentTerm) {
         errors['deadline'] = {
           message: T.translate("invoices.form.deadline_or_payment_required")
         }

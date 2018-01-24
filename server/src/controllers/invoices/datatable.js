@@ -32,6 +32,9 @@ export default {
           let statusClass
           
           switch(invoice.status) {
+            case 'new':
+              statusClass = 'blue'
+              break
             case 'pending':
               statusClass = 'orange'
               break

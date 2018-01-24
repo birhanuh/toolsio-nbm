@@ -95,9 +95,20 @@ class Form extends Component {
   }
 
   handleChangeDate(deadline) {
-    this.setState({
-      deadline: deadline
-    });
+    if (!!this.state.errors['deadline']) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors['deadline']
+      
+      this.setState({
+        deadline: deadline,
+        errors
+      })
+    } else {
+      this.setState({
+        deadline: deadline
+      })
+    }
   } 
 
   render() {
@@ -132,14 +143,14 @@ class Form extends Component {
               formClass="inline field"
             />
 
-            <div  className={classnames("inline field", { error: !!errors.deadline })}>
+            <div  className={classnames("inline field", { error: !!(errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message) })}>
               <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span>{errors.deadline}</span>
+              <span className="red">{errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message}</span>
             </div>
 
             <SelectField
