@@ -33,6 +33,7 @@ export default {
   create: (req, callback) => {
 
     let body = req.body
+    delete body['_id']
 
     Sale.create(body, (err, sale) => {
       if (err) {
@@ -70,24 +71,23 @@ export default {
         return
       }
 
-      // Remove related items
-      Item.remove({ _creator: id }, (err, item) => {
+      // Remove associated Item
+      Item.remove({ _creator: sale._id }, (err, item) => {
         if (err) {
           callback(err, null)
           return
         }
-        callback(null, null)
       })
 
-       // Remove relateded invoice
-      Invoice.remove({ project: id }, (err, invoice) => {
+      // Remove associated Invoice
+      Invoice.remove({ sale: sale._id }, (err, invoice) => {
         if (err) {
           callback(err, null)
           return
         }
-        callback(null, null)
       })
 
+      callback(null, null)
     })
   }
 }

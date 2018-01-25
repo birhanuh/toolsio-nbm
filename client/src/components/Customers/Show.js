@@ -118,6 +118,7 @@ class Show extends Component {
         </div>
       </div>
     )
+    console.log('project: ', projects)
 
     const projectsList = map(projects, (project) => 
       <div key={project._id} className="ui segment">
@@ -231,8 +232,8 @@ class Show extends Component {
               
               <dt>{T.translate("customers.show.include_contact_on_invoice")}</dt>
               <dd>
-                {includeContactOnInvoice ? <i className="check circle outline icon green"></i> :
-                  <i className="minus circle outline icon red"></i>
+                {includeContactOnInvoice ? <i className="check circle icon green"></i> :
+                  <i className="minus circle icon red"></i>
                 }
               </dd>
 

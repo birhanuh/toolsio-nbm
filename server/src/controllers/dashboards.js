@@ -19,6 +19,28 @@ export default {
 
     // Income
     if (type === 'incomes') {
+      Invoice.aggregate( [
+          {$match: {
+            status: 'paid'
+          }},
+          {$group: 
+            {
+              _id: '$status', 
+              count: {
+                $sum: 1
+              },
+              sum: {
+                $sum: '$total'
+              }
+            }
+          }], function (err, results) {
+          if (err) {
+            callback(err, null)
+            return
+          }
+          callback(null, results)
+          return 
+        })
 
       return 
     }
@@ -44,6 +66,7 @@ export default {
             callback(null, results)
             return 
         })
+
       return 
     }
 
@@ -68,6 +91,7 @@ export default {
             callback(null, results)
             return 
         })
+
       return 
     }
 
@@ -92,6 +116,7 @@ export default {
             callback(null, results)
             return 
         })
+
       return 
     }
 
@@ -136,6 +161,8 @@ export default {
           callback(null, results)
           return 
         })
+
+        return
       }
 
     // Tasks

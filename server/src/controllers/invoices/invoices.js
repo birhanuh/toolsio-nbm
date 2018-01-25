@@ -31,6 +31,7 @@ export default {
   create: (req, callback) => {  
 
     let body = req.body
+    delete body['_id']
 
     Invoice.create(body, function(err, invoice) {
       if (err) {

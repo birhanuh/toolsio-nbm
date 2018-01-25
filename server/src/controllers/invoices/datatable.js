@@ -72,7 +72,7 @@ export default {
         })
 
         invoices = {      
-           draw: parseInt(query.draw),
+          draw: parseInt(query.draw),
           total: count,
           list: invoicesFiltered
         }

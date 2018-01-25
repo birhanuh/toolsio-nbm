@@ -15,8 +15,8 @@ export default function Card({project}) {
           {project.status}
         </div>
         
-        <Link to={`/projects/show/${project._id}`} className="ui header">
-          <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
+        <Link to={`/projects/show/${project._id}`} className={classnames("ui header", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
+          <h3>
             {project.name}
           </h3>
         </Link>

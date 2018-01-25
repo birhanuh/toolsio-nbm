@@ -36,7 +36,7 @@ class Page extends Component {
       processing: true,
       responsive: true,
       language: {
-        emptyTable: '<p class="ui info message m-5">'+T.translate("customers.page.empty_customers")+'</p>',
+         emptyTable: '<h4 class="ui header info message m-3">'+T.translate("customers.page.empty_customers_header")+'<p>'+T.translate("customers.page.empty_customers_message")+'</p></h4>',
         processing: "<img src='"+ajaxLoader+"'>",
         //info: '_START_ to _END_ of _TOTAL_',
         infoEmpty: '',

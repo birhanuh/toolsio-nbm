@@ -198,7 +198,7 @@
   "projects": {
     "page": {
       "header": "Projects",
-      "empty_projects_header": "There are no projects",
+      "empty_projects_header": "There are no Projects",
       "empty_projects_message": "Click Create new Project button above to create your first Project.",
       "create_new_project": "Create new project",
       "status": "Status",
@@ -292,7 +292,7 @@
   "sales": {
     "page": {
       "header": "Sales",
-      "empty_sales_header": "There are no sales",
+      "empty_sales_header": "There are no Sales",
       "empty_sales_message": "Click Create new Sale button above to create your first Sale.",
       "create_new_sale": "Create new sale",
       "status": "Status",
@@ -385,7 +385,8 @@
     "page": {
       "header": "Customers",
       "add_new_customer": "Add new Customer",
-      "empty_customers": "There are no customers. Click Add new Customer button above to create your first Customer.",
+      "empty_customers_header": "There are no Customers",
+      "empty_customers_message": "Click Add new Customer button above to create your first Customer.",
       "description": "All added Customers are shown here.",
       "name": "Name",
       "contacts": "Contacts",
@@ -447,7 +448,8 @@
       "header": "Invoices",
       "are_you_sure": "Are you sure?",
       "create_new_invoice": "Create new Invoice",
-      "empty_invoices_message": "There are no Invoices. Click Create new Invoice button above to create your first Invoice.",
+      "empty_invoices_header": "There are no Invoices",
+      "empty_invoices_message": "Click Create new Invoice button above to create your first Invoice.",
       "description": "All created Invoices are shown here.",
       "sale_project": "Sale/Project",
       "deadline": "Deadline",

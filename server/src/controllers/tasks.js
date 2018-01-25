@@ -32,6 +32,7 @@ export default {
   create: (req, callback) => {  
 
     let body = req.body
+    delete body['_id']
 
     Task.create(body, function(err, task) {
       if (err) {
@@ -68,13 +69,12 @@ export default {
         return
       }
 
-      // Remove Task from this Project
+      // Remove this Task from associated Project
       Project.findByIdAndUpdate(task._creator, { $pull: { tasks: id}, $inc: {total: -task.price} }, function(err, project) {
         if (err) {
           callback(err, null)
           return
         }
-        callback(null, null)
       })
 
       callback(null, null)

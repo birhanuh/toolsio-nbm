@@ -15,7 +15,7 @@ const projectSchema = new mongoose.Schema({
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
 
-projectSchema.pre('validate', function (next) {
+projectSchema.pre('validate', function(next) {
   this.status = "new"
   next()
 }) 

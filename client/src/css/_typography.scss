@@ -102,4 +102,19 @@ a.text-danger:hover, a.text-danger:focus {
   color: $dark-red;
 }
 
+// Headers
+.ui.blue.header {
+  color: $blue !important;
+}
 
+.ui.green.header {
+  color: $green !important;
+}
+
+.ui.orange.header {
+  color: $orange !important;
+}
+
+.ui.red.header {
+  color: $red !important;
+}
