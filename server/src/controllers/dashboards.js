@@ -17,8 +17,8 @@ export default {
 
     let type = req.query.type
 
-    // Income
-    if (type === 'incomes') {
+    // Total income
+    if (type === 'total-income') {
       Invoice.aggregate( [
           {$match: {
             status: 'paid'
@@ -32,6 +32,32 @@ export default {
               sum: {
                 $sum: '$total'
               }
+            }
+          }], function (err, results) {
+          if (err) {
+            callback(err, null)
+            return
+          }
+          callback(null, results)
+          return 
+        })
+
+      return 
+    }
+
+    // Incomes
+    if (type === 'incomes') {
+      Invoice.aggregate( [
+          {$match: {
+            createdAt: {
+              $gte: firstDayOfTheMonth
+            },
+            status: 'paid'
+          }},
+          {$group: 
+            {
+              _id: { month: { $month: "$createdAt" }, day: { $dayOfMonth: "$createdAt" }, year: { $year: "$createdAt" } }, 
+              count: { $sum: 1}
             }
           }], function (err, results) {
           if (err) {
@@ -105,7 +131,7 @@ export default {
           }},
           {$group: 
             {
-              _id: '{ month: { $month: "$createdAt" }, day: { $dayOfMonth: "$createdAt" }, year: { $year: "$createdAt" } }', 
+              _id: { month: { $month: "$createdAt" }, day: { $dayOfMonth: "$createdAt" }, year: { $year: "$createdAt" } }, 
               count: { $sum: 1}
             }
           }], function (err, results) {

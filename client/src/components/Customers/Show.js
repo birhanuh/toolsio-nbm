@@ -190,20 +190,20 @@ class Show extends Component {
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/invoices/show/${invoice._id}`} className="ui header">
-              <h3 className={classnames({orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
+              <h3 className={classnames({blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
                 {invoice.referenceNumber}
               </h3>
             </Link>
           </div>
 
           <div className="four wide column">
-            <div className={classnames("ui uppercase tiny label", {orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
+            <div className={classnames("ui uppercase tiny label", {blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
             {invoice.status}
             </div>
           </div>
 
           <div className="four wide column">
-            <span>{invoice.deadline}</span>
+            <span>{invoice.deadline || invoice.paymentTerm}</span>
           </div>
 
         </div>

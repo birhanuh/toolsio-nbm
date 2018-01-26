@@ -52,7 +52,7 @@ class Form extends Component {
           project: nextProps.invoice.project && nextProps.invoice.project._id
         },
         step2: {
-          deadline: moment(nextProps.invoice.deadline),
+          deadline: nextProps.invoice.deadline ? moment(nextProps.invoice.deadline) : null,
           paymentTerm: nextProps.invoice.paymentTerm,
           interestInArrears: nextProps.invoice.interestInArrears,
           status: nextProps.invoice.status,
@@ -204,8 +204,8 @@ class Form extends Component {
 
   render() {
     const { _id, step1, step2, sale, project, errors, isLoading, currentStep } = this.state
-    
-     const salesOptions = map(this.props.sales, (sale) => 
+    console.log("project ", project)
+    const salesOptions = map(this.props.sales, (sale) => 
       <option key={sale._id} value={sale._id}>{sale.name}</option>
     )
 
@@ -370,7 +370,7 @@ class Form extends Component {
             {/*<dt>{T.translate("invoices.show.user")}</dt>
             <dd>{invoice.user.first_name}</dd>*/}  
             <dt>{T.translate("invoices.show.deadline")}</dt>
-            <dd>{step2.deadline && step2.deadline.toString()}</dd>
+            <dd>{step2.deadline ? step2.deadline.toString() : '-'}</dd>
             <dt>{T.translate("invoices.show.status")}</dt>
             <dd><div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div></dd>
             <dt>{T.translate("invoices.show.payment_term")}</dt>
@@ -391,12 +391,12 @@ class Form extends Component {
                 <dd>{sale.name}</dd>
                 <dt>{T.translate("invoices.form.sale.status")}</dt>
                 <dd>
-                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
-                    {project.status}
+                  <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+                    {sale.status}
                   </div>
                 </dd>
                 <dt>{T.translate("invoices.form.sale.customer")}</dt>
-                <dd>{sale.customer.name}</dd>
+                <dd>{sale.customer && sale.customer.name}</dd>
               </dl>
             </div>
           }

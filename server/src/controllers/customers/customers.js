@@ -21,7 +21,7 @@ export default {
 
     let id = req.params.id
     
-    Customer.findById(id).populate([{ path: 'sales', select: 'name status deadline' }, { path: 'projects', select: 'name status deadline' }, { path: 'invoices', select: 'referenceNumber status deadline' }]).exec(function(err, customer) {
+    Customer.findById(id).populate([{ path: 'sales', select: 'name status deadline' }, { path: 'projects', select: 'name status deadline' }, { path: 'invoices', select: 'referenceNumber status deadline paymentTerm' }]).exec(function(err, customer) {
       if (err) {
         callback(err, null)
         return

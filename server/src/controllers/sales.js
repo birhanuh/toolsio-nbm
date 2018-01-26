@@ -20,7 +20,7 @@ export default {
 
     let id = req.params.id
 
-    Sale.findById(id).populate([{ path: 'customer', select: '_id'}, { path: 'customer', select: 'name'}, { path: 'items' }, { path: 'invoice', select: '_id' }]).exec((err, sale) => {
+    Sale.findById(id).populate([{ path: 'customer', select: 'name'}, { path: 'items' }, { path: 'invoice', select: '_id' }]).exec((err, sale) => {
       if (err) {
         callback(err, null)
         return
