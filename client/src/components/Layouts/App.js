@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
 
-import Dashboard from '../Dashboard/Page'
+import Dashboards from '../Dashboards/Page'
 import Landing from './Landing'
 import Signup from '../Signup/Page'
 import Login from '../Login/Page'
@@ -73,7 +73,7 @@ class App extends Component {
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
               <Route path="/subdomain" component={Subdomain} />
-              <Route path="/dashboard" component={requireAuth(Dashboard)} />
+              <Route path="/dashboards" component={requireAuth(Dashboards)} />
               <Route exact path="/projects" component={requireAuth(ProjectsPage)} />
               <Route exact path="/projects/edit/:id" component={requireAuth(ProjectsFormPage)} /> 
               <Route exact path="/projects/show/:id" component={requireAuth(ProjectsShow)} />

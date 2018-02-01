@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ADD_SALE, SET_SALES, SALE_FETCHED, SALE_UPDATED, SALE_DELETED, ADD_ITEM, ITEM_UPDATED, ITEM_DELETED } from './types'
 
+// Action creator
 export function addSale(sale) {
   return {
     type: ADD_SALE,
@@ -57,6 +58,7 @@ export function itemDeleted(item) {
   }
 }
 
+// Thunk actions
 export function createSale(sale) {
   return dispatch => {
     return axios.post('/api/sales', sale)

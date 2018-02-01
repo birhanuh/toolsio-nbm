@@ -8,12 +8,13 @@ let date = new Date()
 let firstDayOfLastMonth = new Date(date.getFullYear(), date.getMonth()-1, 1)
 
 export default {
-  find: (req, callback) => {
 
-    let type = req.query.type
+  findById: (req, callback) => {
+
+    let id = req.params.id
 
     // Total income
-    if (type === 'total-income') {
+    if (id === 'total-income') {
       Invoice.aggregate( [
           {$match: {
             status: 'paid'
@@ -41,7 +42,7 @@ export default {
     }
 
     // Incomes
-    if (type === 'incomes') {
+    if (id === 'incomes') {
       Invoice.aggregate( [
           {$match: {
             createdAt: {
@@ -81,7 +82,7 @@ export default {
     }
 
     // Projects
-    if (type === 'projects') {
+    if (id === 'projects') {
       Project.aggregate( [
           {$match: {
             createdAt: {
@@ -127,7 +128,7 @@ export default {
     }
 
     // Sales
-    if (type === 'sales') {
+    if (id === 'sales') {
       Sale.aggregate( [
           {$match: {
             createdAt: {
@@ -173,7 +174,7 @@ export default {
     }
 
     // Customers
-    if (type === 'customers') {
+    if (id === 'customers') {
       Customer.aggregate( [
           {$match: {
             createdAt: {
@@ -210,7 +211,7 @@ export default {
     }
 
      // Invoices
-    if (type === 'invoices') {
+    if (id === 'invoices') {
 
       Invoice.aggregate( [
           {$match: {
@@ -258,7 +259,7 @@ export default {
       }
 
     // Tasks Projects 
-    if (type === 'tasks-projects') {
+    if (id === 'tasks-projects') {
 
       Project.aggregate([
           {$match: {$or: [
@@ -298,7 +299,7 @@ export default {
     }
 
     // Tasks Sales 
-    if (type === 'tasks-sales') {
+    if (id === 'tasks-sales') {
 
       Sale.aggregate([
           {$match: {$or: [
@@ -338,7 +339,7 @@ export default {
     }
 
     // Tasks Invoices 
-    if (type === 'tasks-invoices') {
+    if (id === 'tasks-invoices') {
 
       Invoice.aggregate([
         {$match: {$or: [

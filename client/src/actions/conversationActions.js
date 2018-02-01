@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { SET_CONVERSATIONS, ADD_CONVERSATION, CONVERSATION_FETCHED, INBOX_OR_SENT_FETCHED, CONVERSATION_DELETED } from './types'
 
+// Action creators 
 export function addConversation(conversation) {
   return {
     type: ADD_CONVERSATION,
@@ -36,6 +37,7 @@ export function conversationDeleted(id) {
   }
 }
 
+// Thunk actions
 export function createConversation(conversation) {
   return dispatch => {
     return axios.post('/api/conversations', conversation)
