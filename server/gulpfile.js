@@ -3,9 +3,6 @@ var gulp = require('gulp'),
   babel = require('gulp-babel'),
   jest = require('jest-cli')
 
-var selenium = require('selenium-standalone'),
-  webdriver = require('gulp-webdriver')
-
 // Development 
 gulp.task('compile', function () {
   var stream = gulp.src(['./src/**/*.js', '!./src/__test__']) // your ES2015 code 
@@ -57,28 +54,15 @@ var jestConfig = {
 //   gulp.watch([ jestConfig.rootDir + "/**/*.js" ], [ 'jest' ]);
 // })
 
-gulp.task('selenium', function (done) {
-  selenium.install({
-    logger: function (message) { }
-  }, function (err) {
-    if (err) return done(err)
-
-    selenium.start(function (err, child) {
-      if (err) return done(err)
-      selenium.child = child;
-      done()
-    })
-  })
-})
-
-gulp.task('test:e2e', ['server-with-test-db', 'selenium'], function() {
+// gulp.task('test:e2e', ['server-with-test-db', 'selenium'], function() {
   
-  process.env.DB_HOST = 'mongodb://localhost/'
-  process.env.DB_TEST= 'toolsio_test'
+//   process.env.DB_HOST = 'mongodb://localhost/'
+//   process.env.DB_TEST= 'toolsio_test'
 
-  return gulp.src('wdio.conf.js').pipe(webdriver())
-})
+//   return gulp.src('wdio.conf.js').pipe(webdriver())
+// })
 
 gulp.task('it-test', ['test:e2e'], function () {
   selenium.child.kill()
 })
+
