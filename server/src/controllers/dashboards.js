@@ -5,12 +5,7 @@ import User from '../models/user'
 import Customer from '../models/customer'
 
 let date = new Date()
-
-var firstDayOfTheMonth = new Date(date.getFullYear(), date.getMonth(), 1)
-
-
-let thirtyDaysEarlierDateLong = new Date().setDate(date.getDate()-30)
-let thirtyDaysEarlierDate = new Date(thirtyDaysEarlierDateLong)
+let firstDayOfLastMonth = new Date(date.getFullYear(), date.getMonth()-1, 1)
 
 export default {
   find: (req, callback) => {
@@ -50,7 +45,7 @@ export default {
       Invoice.aggregate( [
           {$match: {
             createdAt: {
-              $gte: firstDayOfTheMonth
+              $gte: firstDayOfLastMonth
             },
             status: 'paid'
           }},
@@ -90,21 +85,31 @@ export default {
       Project.aggregate( [
           {$match: {
             createdAt: {
-              $gte: firstDayOfTheMonth
+              $gte: firstDayOfLastMonth
             }
           }},
+          {$project: 
+            {
+              _id: 0, 
+              status: 1, 
+              month: { $month: '$createdAt' } 
+            }
+          },
           {$group: 
             {
-              _id: '$status', 
+              _id: {
+                month: '$month',
+                status: '$status'
+              }, 
               count: { '$sum': 1 }
             }
           },{$group: 
             {
-              _id: null, 
+              _id: '$_id.month', 
               totalCount: { $sum: '$count' },
               data: {
                 $push: { 
-                  status: '$_id',
+                  status: '$_id.status',
                   count: '$count'
                 }
               }
@@ -126,21 +131,31 @@ export default {
       Sale.aggregate( [
           {$match: {
             createdAt: {
-              $gte: firstDayOfTheMonth
+              $gte: ffirstDayOfLastMonth
             }
           }},
+          {$project: 
+            {
+              _id: 0, 
+              status: 1, 
+              month: { $month: '$createdAt' } 
+            }
+          },
           {$group: 
             {
-              _id: '$status', 
+              _id: {
+                month: '$month',
+                status: '$status'
+              },
               count: { $sum: 1}
             }
           },{$group: 
             {
-              _id: null, 
+              _id: '$_id.month', 
               totalCount: { $sum: '$count' },
               data: {
                 $push: { 
-                  status: '$_id',
+                  status: '$_id.status',
                   count: '$count'
                 }
               }
@@ -162,7 +177,7 @@ export default {
       Customer.aggregate( [
           {$match: {
             createdAt: {
-              $gte: firstDayOfTheMonth
+              $gte: firstDayOfLastMonth
             }
           }},
           {$group: 
@@ -170,7 +185,8 @@ export default {
               _id: { month: { $month: "$createdAt" }, day: { $dayOfMonth: "$createdAt" }, year: { $year: "$createdAt" } }, 
               count: { $sum: 1}
             }
-          },{$group: 
+          },
+          {$group: 
             {
               _id: null, 
               totalCount: { $sum: '$count' },
@@ -199,16 +215,18 @@ export default {
       Invoice.aggregate( [
           {$match: {
             createdAt: {
-              $gte: thirtyDaysEarlierDate
+              $gte: firstDayOfLastMonth
             }
           }},
           {$project: 
             {
               _id: 0, 
               status: 1, 
-              week: { $week: '$createdAt' } 
+              week: { $week: '$createdAt' },
+              month: { $month: '$createdAt' } 
             }
-          },{$group: 
+          },
+          {$group: 
             {
               _id: {
                 week: '$week',
@@ -219,7 +237,7 @@ export default {
           },{$group: 
             {
               _id: '$_id.week', 
-              count: { $sum: '$statusCount' },
+              totalCount: { $sum: '$statusCount' },
               data: {
                 $push: { 
                   status: '$_id.status',
@@ -256,7 +274,8 @@ export default {
               },
               statusCount: { '$sum': 1 }
             }
-          },{$group: 
+          },
+          {$group: 
             {
               _id: '$_id.status', 
               count: { $sum: '$statusCount' },
@@ -295,7 +314,8 @@ export default {
               },
               statusCount: { '$sum': 1 }
             }
-          },{$group: 
+          },
+          {$group: 
             {
               _id: '$_id.status', 
               count: { $sum: '$statusCount' },
@@ -335,7 +355,8 @@ export default {
               },
               statusCount: { '$sum': 1 }
             }
-          },{$group: 
+          },
+          {$group: 
             {
               _id: '$_id.status', 
               count: { $sum: '$statusCount' },

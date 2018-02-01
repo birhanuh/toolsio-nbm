@@ -1,74 +1,21 @@
 import React, { Component } from 'react'
-import List from './List'
+import PropTypes from 'prop-types'
+import { connect } from 'react-reduxt'
+import { fetchTotalIncome, fetchIncomes, fetchProjects, fetchSales, fetchCustomers, fetchInvoices, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks } from '../../actions/dashboardActions'
+import Card from './Card'
 
 class Page extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      brand: null, 
-      model: null
-    }
-
-    this.brandChanged = this.brandChanged.bind(this);
-    this.modelChanged = this.modelChanged.bind(this);
-    this.buttonClicked = this.buttonClicked.bind(this);
-    this.knownModel = this.knownModel.bind(this);
-  }
-
-  brandChanged(event) {
-    let brand = event.target.value
-    if(this.knownBrand(brand)) {
-      this.setState({
-        brand: brand, 
-        model: null
-      })
-    } else {
-      this.setState({
-        brand: null, 
-        model: null
-      })
-    }
-  }
-
-  modelChanged(event) {
-    let model = event.target.value
-    if(this.knownModel(model)) {
-      this.setState({ model, buttonDisabled: false })
-    } else {
-      this.setState({ model: null, buttonDisabled: true })
-    }
-  }
-
-  buttonClicked(event) {
-    let { brand, model } = this.state;
-    console.log(this.state);
-    console.log(`${brand} ${model} riding...`)
-  }
-
-  data() {
-    return (
-      {
-        'Opel':   ['Agila', 'Astra', 'Corsa', 'Vectra'],
-        'Škoda':  ['Fabia', 'Octavia', 'Superb', 'Yeti'],
-        'Toyota': ['Auris', 'Avensis', 'Corolla', 'Prius']
-      }
-    )
-  }
-
-  brands() {
-    return Object.keys(this.data());
-  }
-
-  models() {
-    return this.state.brand ? this.data()[this.state.brand] : [];
-  }
-
-  knownBrand(brand) {
-    return this.brands().indexOf(brand) !== -1
-  }
-
-  knownModel(model) {
-    return this.models().indexOf(model) !== -1
+  
+  componentDidMount() {
+    this.props.fetchTotalIncome()
+    this.props.fetchIncomes()
+    this.props.fetchProjects()
+    this.props.fetchSales()
+    this.props.fetchCustomers()
+    this.props.fetchInvoices()
+    this.props.fetchProjectTasks()
+    this.props.fetchSaleTasks()
+    this.props.fetchInvoiceTasks()
   }
 
   render() {
@@ -76,21 +23,42 @@ class Page extends Component {
     let selectDisabled = this.state.brand === null
 
     return ( 
-      <div>
-        <h1>Dashboard</h1> 
-        <div className="form-inline">
-          <List name="Brand" items={this.brands()} 
-           handler={this.brandChanged} value={this.state.brand} />
-          &nbsp;&nbsp;
-          <List name="Model" selectDisabled={selectDisabled} items={this.models()} 
-           handler={this.modelChanged} value={this.state.model} />
-          &nbsp;&nbsp;
-          <button className="btn btn-primary" onClick={this.buttonClicked} 
-           disabled={buttonDisabled}>Ride</button>
-        </div>
+      <div className="row column">  
+
+        <Breadcrumb />
+
+        <Card totalIncome={fetchTotalIncome} income={fetchIncomes} projects={fetchProjects} sales={fetchSales} customers={fetchCustomers}
+          invoices={fetchInvoices} projectTasks={fetchProjectTasks} saleTasks={fetchSaleTasks} invoiceTasks={fetchInvoiceTasks} />
+
       </div>  
     )
   }  
 }
 
-export default Page
+Page.propTypes = {
+  fetchTotalIncome: PropTypes.object.isRequired,
+  fetchIncomes: PropTypes.object.isRequired,
+  fetchProjects: PropTypes.object.isRequired,
+  fetchSales: PropTypes.object.isRequired,
+  fetchCustomers: PropTypes.object.isRequired,
+  fetchInvoices: PropTypes.object.isRequired,
+  fetchProjectTasks: PropTypes.object.isRequired,
+  fetchSaleTasks: PropTypes.object.isRequired,
+  fetchInvoiceTasks: PropTypes.object.isRequired
+}
+
+function mapsStateToProps(state) {
+  // totalIncome: state.dashboard.totalIncome,
+  // incomes: state.dashboard.incomes,
+  // projects: state.dashboard.projects,
+  // sales: state.dashboard.sales,
+  // customers: state.dashboard.customers,
+  // invoices: state.dashboard.invoices,
+  // projectTasks: state.dashboard.projectTasks,
+  // saleTasks: state.dashboard.saleTasks,
+  // invoiceTasks: state.dashboard.invoiceTasks
+  dashboard: state.dashboard
+}
+
+export default connect(mapsStateToProps, { fetchTotalIncome, fetchIncomes, fetchProjects, fetchSales, fetchCustomers, fetchInvoices, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks })(Page)
+

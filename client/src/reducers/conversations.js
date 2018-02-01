@@ -1,6 +1,6 @@
 import { SET_CONVERSATIONS, ADD_CONVERSATION, CONVERSATION_FETCHED, INBOX_OR_SENT_FETCHED, CONVERSATION_DELETED } from '../actions/types'
 
-export default function conversations(state = [], action = {}) {
+export default function conversations(state = {}, action = {}) {
   switch(action.type) {
 
     case SET_CONVERSATIONS:
