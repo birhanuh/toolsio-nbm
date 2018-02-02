@@ -5,9 +5,12 @@ import classnames from 'classnames'
 // Localization 
 import T from 'i18n-react'
 
-export default function Card({project}) {
+export default function Card({dashboards}) {
   
+  const { totalIncome, incomes, projects, sales, customers, invoices, projectTasks, saleTasks, invoiceTasks } = dashboards
+
   return (
+
     <div className="card">
       <div className="content">
         
@@ -19,13 +22,5 @@ export default function Card({project}) {
 }
 
 Card.propTypes = {
-  totalIncome: PropTypes.object.isRequired,
-  incomes: PropTypes.object.isRequired,
-  projects: PropTypes.object.isRequired,
-  sales: PropTypes.object.isRequired,
-  customers: PropTypes.object.isRequired,
-  invoices: PropTypes.object.isRequired,
-  projectTasks: PropTypes.object.isRequired,
-  saleTasks: PropTypes.object.isRequired,
-  invoiceTasks: PropTypes.object.isRequired
+  dashboards: PropTypes.object.isRequired
 }

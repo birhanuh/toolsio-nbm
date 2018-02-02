@@ -9,12 +9,12 @@ let firstDayOfLastMonth = new Date(date.getFullYear(), date.getMonth()-1, 1)
 
 export default {
 
-  findById: (req, callback) => {
+  find: (req, callback) => {
 
-    let id = req.params.id
+    let type = req.query.type
 
     // Total income
-    if (id === 'total-income') {
+    if (type === 'total-income') {
       Invoice.aggregate( [
           {$match: {
             status: 'paid'
@@ -42,7 +42,7 @@ export default {
     }
 
     // Incomes
-    if (id === 'incomes') {
+    if (type === 'incomes') {
       Invoice.aggregate( [
           {$match: {
             createdAt: {
@@ -82,7 +82,7 @@ export default {
     }
 
     // Projects
-    if (id === 'projects') {
+    if (type === 'projects') {
       Project.aggregate( [
           {$match: {
             createdAt: {
@@ -128,11 +128,11 @@ export default {
     }
 
     // Sales
-    if (id === 'sales') {
+    if (type === 'sales') {
       Sale.aggregate( [
           {$match: {
             createdAt: {
-              $gte: ffirstDayOfLastMonth
+              $gte: firstDayOfLastMonth
             }
           }},
           {$project: 
@@ -174,7 +174,7 @@ export default {
     }
 
     // Customers
-    if (id === 'customers') {
+    if (type === 'customers') {
       Customer.aggregate( [
           {$match: {
             createdAt: {
@@ -211,7 +211,7 @@ export default {
     }
 
      // Invoices
-    if (id === 'invoices') {
+    if (type === 'invoices') {
 
       Invoice.aggregate( [
           {$match: {
@@ -259,7 +259,7 @@ export default {
       }
 
     // Tasks Projects 
-    if (id === 'tasks-projects') {
+    if (type === 'project-tasks') {
 
       Project.aggregate([
           {$match: {$or: [
@@ -299,7 +299,7 @@ export default {
     }
 
     // Tasks Sales 
-    if (id === 'tasks-sales') {
+    if (type === 'sale-tasks') {
 
       Sale.aggregate([
           {$match: {$or: [
@@ -339,7 +339,7 @@ export default {
     }
 
     // Tasks Invoices 
-    if (id === 'tasks-invoices') {
+    if (type === 'invoice-tasks') {
 
       Invoice.aggregate([
         {$match: {$or: [

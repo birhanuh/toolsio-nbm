@@ -51,7 +51,7 @@ class HeaderNav extends Component {
         <nav className="ui fixed stackable menu">
           <div className="left menu">
             <div className="logo item">
-              <Link to="/dashboard">
+              <Link to="/dashboards">
                 <img src={logoInverted} alt="logo-inverted" />
               </Link>
             </div>

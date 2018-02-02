@@ -6,6 +6,7 @@ import projects from './reducers/projects'
 import customers from './reducers/customers'
 import invoices from './reducers/invoices'
 import conversations from './reducers/conversations'
+import dashboards from './reducers/dashboards'
 import users from './reducers/users'
 
 // combineReducers combines all passed reducers in to one state object
@@ -17,5 +18,6 @@ export default combineReducers({
   customers,
   invoices,
   conversations,
+  dashboards,
   users
 })

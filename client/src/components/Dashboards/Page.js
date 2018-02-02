@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-reduxt'
+import { connect } from 'react-redux'
 import { fetchTotalIncome, fetchIncomes, fetchProjects, fetchSales, fetchCustomers, fetchInvoices, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks } from '../../actions/dashboardActions'
+
+// Localization 
+import T from 'i18n-react'
+
+import Breadcrumb from '../Layouts/Breadcrumb'
 import Card from './Card'
 
 class Page extends Component {
@@ -19,16 +24,47 @@ class Page extends Component {
   }
 
   render() {
-    let buttonDisabled = this.state.model === null || this.state.brand === null
-    let selectDisabled = this.state.brand === null
-
+     console.log('dashboards: ', this.props.dashboards)
     return ( 
       <div className="row column">  
 
         <Breadcrumb />
 
-        <Card totalIncome={fetchTotalIncome} income={fetchIncomes} projects={fetchProjects} sales={fetchSales} customers={fetchCustomers}
-          invoices={fetchInvoices} projectTasks={fetchProjectTasks} saleTasks={fetchSaleTasks} invoiceTasks={fetchInvoiceTasks} />
+        <div className="ui four column grid">
+          <div className="column">
+            <Card dashboards={this.props.dashboards} />
+          </div>
+          <div className="column">
+            <Card dashboards={this.props.dashboards} />
+          </div>
+          <div className="column">
+            <Card dashboards={this.props.dashboards} />
+          </div>
+          <div className="column">  
+            <Card dashboards={this.props.dashboards} />
+          </div>
+        </div>
+
+        <div className="ui two column grid">
+          <div className="one column">
+            <Card dashboards={this.props.dashboards} />
+          </div>
+          <div className="two column">
+            <Card dashboards={this.props.dashboards} /> 
+          </div>
+        </div>
+
+        <div className="ui three column grid">
+          <div className="column">
+            <Card dashboards={this.props.dashboards} />
+          </div>
+          <div className="column">
+            <Card dashboards={this.props.dashboards} />
+          </div>
+          <div className="column">
+            <Card dashboards={this.props.dashboards} />
+          </div>
+        </div>
 
       </div>  
     )
@@ -36,28 +72,21 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  fetchTotalIncome: PropTypes.object.isRequired,
-  fetchIncomes: PropTypes.object.isRequired,
-  fetchProjects: PropTypes.object.isRequired,
-  fetchSales: PropTypes.object.isRequired,
-  fetchCustomers: PropTypes.object.isRequired,
-  fetchInvoices: PropTypes.object.isRequired,
-  fetchProjectTasks: PropTypes.object.isRequired,
-  fetchSaleTasks: PropTypes.object.isRequired,
-  fetchInvoiceTasks: PropTypes.object.isRequired
+  fetchTotalIncome: PropTypes.func.isRequired,
+  fetchIncomes: PropTypes.func.isRequired,
+  fetchProjects: PropTypes.func.isRequired,
+  fetchSales: PropTypes.func.isRequired,
+  fetchCustomers: PropTypes.func.isRequired,
+  fetchInvoices: PropTypes.func.isRequired,
+  fetchProjectTasks: PropTypes.func.isRequired,
+  fetchSaleTasks: PropTypes.func.isRequired,
+  fetchInvoiceTasks: PropTypes.func.isRequired
 }
 
 function mapsStateToProps(state) {
-  // totalIncome: state.dashboard.totalIncome,
-  // incomes: state.dashboard.incomes,
-  // projects: state.dashboard.projects,
-  // sales: state.dashboard.sales,
-  // customers: state.dashboard.customers,
-  // invoices: state.dashboard.invoices,
-  // projectTasks: state.dashboard.projectTasks,
-  // saleTasks: state.dashboard.saleTasks,
-  // invoiceTasks: state.dashboard.invoiceTasks
-  dashboard: state.dashboard
+  return {
+    dashboards: state.dashboards
+  }
 }
 
 export default connect(mapsStateToProps, { fetchTotalIncome, fetchIncomes, fetchProjects, fetchSales, fetchCustomers, fetchInvoices, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks })(Page)
