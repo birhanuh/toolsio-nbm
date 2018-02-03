@@ -7,7 +7,8 @@ import { fetchTotalIncome, fetchIncomes, fetchProjects, fetchSales, fetchCustome
 import T from 'i18n-react'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
-import Card from './Card'
+import GraphCard from './GraphCard'
+import TextCard from './TextCard'
 
 class Page extends Component {
   
@@ -32,37 +33,37 @@ class Page extends Component {
 
         <div className="ui four column grid">
           <div className="column">
-            <Card dashboards={this.props.dashboards} />
+            <TextCard dashboards={this.props.dashboards} />
           </div>
           <div className="column">
-            <Card dashboards={this.props.dashboards} />
+            <GraphCard dashboards={this.props.dashboards} />
           </div>
           <div className="column">
-            <Card dashboards={this.props.dashboards} />
+            <GraphCard dashboards={this.props.dashboards} />
           </div>
           <div className="column">  
-            <Card dashboards={this.props.dashboards} />
+            <GraphCard dashboards={this.props.dashboards} />
           </div>
         </div>
 
         <div className="ui two column grid">
-          <div className="one column">
-            <Card dashboards={this.props.dashboards} />
+          <div className="four wide column">
+            <GraphCard dashboards={this.props.dashboards} />
           </div>
-          <div className="two column">
-            <Card dashboards={this.props.dashboards} /> 
+          <div className="twelve wide column">
+            <GraphCard dashboards={this.props.dashboards} /> 
           </div>
         </div>
 
         <div className="ui three column grid">
           <div className="column">
-            <Card dashboards={this.props.dashboards} />
+            <TextCard dashboards={this.props.dashboards} />
           </div>
           <div className="column">
-            <Card dashboards={this.props.dashboards} />
+            <TextCard dashboards={this.props.dashboards} />
           </div>
           <div className="column">
-            <Card dashboards={this.props.dashboards} />
+            <TextCard dashboards={this.props.dashboards} />
           </div>
         </div>
 

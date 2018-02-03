@@ -181,15 +181,26 @@ export default {
               $gte: firstDayOfLastMonth
             }
           }},
+          {$project: 
+            {
+              day: { $dayOfMonth: '$createdAt' },
+              month: { $month: '$createdAt' },
+              year: { $year: '$createdAt' }
+            }
+          },
           {$group: 
             {
-              _id: { month: { $month: "$createdAt" }, day: { $dayOfMonth: "$createdAt" }, year: { $year: "$createdAt" } }, 
+              _id: {
+                day: '$day',
+                month: '$month',
+                year: '$year',
+              }, 
               count: { $sum: 1}
             }
           },
           {$group: 
             {
-              _id: null, 
+              _id: '$_id.month', 
               totalCount: { $sum: '$count' },
               data: {
                 $push: { 
@@ -221,7 +232,6 @@ export default {
           }},
           {$project: 
             {
-              _id: 0, 
               status: 1, 
               week: { $week: '$createdAt' },
               month: { $month: '$createdAt' } 
@@ -231,16 +241,19 @@ export default {
             {
               _id: {
                 week: '$week',
+                month: '$month',
                 status: '$status'
               },
               statusCount: { '$sum': 1 }
             }
-          },{$group: 
+          },
+          {$group: 
             {
-              _id: '$_id.week', 
+              _id: '$_id.month', 
               totalCount: { $sum: '$statusCount' },
-              data: {
+              data: {                
                 $push: { 
+                  week: '$_id.week', 
                   status: '$_id.status',
                   count: '$statusCount'
                 }

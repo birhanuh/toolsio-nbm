@@ -7,17 +7,18 @@ import T from 'i18n-react'
 
 export default function Card({dashboards}) {
   
-  const { totalIncome, incomes, projects, sales, customers, invoices, projectTasks, saleTasks, invoiceTasks } = dashboards
+  const { totalIncome, projectTasks, saleTasks, invoiceTasks } = dashboards
 
   return (
 
-    <div className="card">
-      <div className="content">
-        
-
+    <div className="dashboards">
+      <h4 className="ui header">Incomes</h4>
+      <div className="ui card">
+        <div className="content">
+    
+        </div>
       </div>
-    </div>
-
+    </div>  
   )
 }
 
