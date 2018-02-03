@@ -12,20 +12,71 @@ import TextCard from './TextCard'
 
 class Page extends Component {
   
+  constructor(props) {
+    super(props)
+    this.state = {
+      totalIncome: {
+        data: this.props.totalIncome,
+        isLoading: false
+      },
+      incomes: {
+        data: this.props.incomes,
+        isLoading: false
+      },
+      projects: {
+        data: this.props.projects,
+        isLoading: false
+      },
+      sales: {
+        data: this.props.sales,
+        isLoading: false
+      },
+      invoices: {
+        data: this.props.invoices,
+        isLoading: false
+      },
+      customers: {
+        data: this.props.customers,
+        isLoading: false
+      },
+      projectTasks: {
+        data: this.props.projectTasks,
+        isLoading: false
+      },
+      saleTasks: {
+        data: this.props.saleTasks,
+        isLoading: false
+      },
+      invoiceTasks: {
+        data: this.props.invoiceTasks,
+        isLoading: false
+      }
+    }
+  }
+
   componentDidMount() {
     this.props.fetchTotalIncome()
+      .catch( ({response}) => this.setState({ totalIncome: { isLoading: true} }) )
     this.props.fetchIncomes()
+      .catch( ({response}) => this.setState({ incomes: { isLoading: true} }) )
     this.props.fetchProjects()
+      .catch( ({response}) => this.setState({ projects: { isLoading: true} }) )
     this.props.fetchSales()
+      .catch( ({response}) => this.setState({ sales: { isLoading: true} }) )
     this.props.fetchCustomers()
+      .catch( ({response}) => this.setState({ invoices: { isLoading: true} }) )
     this.props.fetchInvoices()
+      .catch( ({response}) => this.setState({ customers: { isLoading: true} }) )
     this.props.fetchProjectTasks()
+      .catch( ({response}) => this.setState({ projectTasks: { isLoading: true} }) )
     this.props.fetchSaleTasks()
+      .catch( ({response}) => this.setState({ saleTasks: { isLoading: true} }) )
     this.props.fetchInvoiceTasks()
+      .catch( ({response}) => this.setState({ invoiceTasks: { isLoading: true} }) )
   }
 
   render() {
-     console.log('dashboards: ', this.props.dashboards)
+     
     return ( 
       <div className="row column">  
 
@@ -33,37 +84,37 @@ class Page extends Component {
 
         <div className="ui four column grid">
           <div className="column">
-            <TextCard dashboards={this.props.dashboards} />
+            <TextCard totalIncome={this.props.totalIncome} />
           </div>
           <div className="column">
-            <GraphCard dashboards={this.props.dashboards} />
+            <GraphCard incomes={this.props.incomes} />
           </div>
           <div className="column">
-            <GraphCard dashboards={this.props.dashboards} />
+            <GraphCard projects={this.props.projects} />
           </div>
           <div className="column">  
-            <GraphCard dashboards={this.props.dashboards} />
+            <GraphCard sales={this.props.sales} />
           </div>
         </div>
 
         <div className="ui two column grid">
           <div className="four wide column">
-            <GraphCard dashboards={this.props.dashboards} />
+            <GraphCard customers={this.props.customers} />
           </div>
           <div className="twelve wide column">
-            <GraphCard dashboards={this.props.dashboards} /> 
+            <GraphCard invoices={this.props.invoices} /> 
           </div>
         </div>
 
         <div className="ui three column grid">
           <div className="column">
-            <TextCard dashboards={this.props.dashboards} />
+            <TextCard projectTasks={this.props.projectTasks} />
           </div>
           <div className="column">
-            <TextCard dashboards={this.props.dashboards} />
+            <TextCard saleTasks={this.props.saleTasks} />
           </div>
           <div className="column">
-            <TextCard dashboards={this.props.dashboards} />
+            <TextCard invoiceTasks={this.props.invoiceTasks} />
           </div>
         </div>
 
@@ -86,7 +137,15 @@ Page.propTypes = {
 
 function mapsStateToProps(state) {
   return {
-    dashboards: state.dashboards
+    totalIncome: state.dashboards.totalIncome,
+    incomes: state.dashboards.incomes,
+    projects: state.dashboards.projects,
+    sales: state.dashboards.sales,
+    customers: state.dashboards.customers,
+    invoices: state.dashboards.invoices,
+    projectTasks: state.dashboards.projectTasks,
+    saleTasks: state.dashboards.saleTasks,
+    invoiceTasks: state.dashboards.invoiceTasks
   }
 }
 

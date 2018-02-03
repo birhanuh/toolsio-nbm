@@ -8,9 +8,9 @@ import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries} from 'react-vis'
 // Localization 
 import T from 'i18n-react'
 
-export default function Card({dashboards}) {
+export default function Card({...props}) {
   
-  const { incomes, projects, sales, customers, invoices, projectTasks, saleTasks, invoiceTasks } = dashboards
+  const { incomes, projects, sales, customers, invoices } = props
 
   const data = [
     {x: 0, y: 8},
@@ -25,24 +25,94 @@ export default function Card({dashboards}) {
     {x: 9, y: 0}
   ]
 
+  const incomesGraph = (
+    <div className="image">
+      <XYPlot
+        width={300}
+        height={300}>
+        <HorizontalGridLines />
+        <LineSeries
+          data={data}/>
+        <XAxis />
+        <YAxis />
+      </XYPlot>
+    </div>
+    )
+
+  const projectsGraph = (
+    <div className="image">
+      <XYPlot
+        width={300}
+        height={300}>
+        <HorizontalGridLines />
+        <LineSeries
+          data={data}/>
+        <XAxis />
+        <YAxis />
+      </XYPlot>
+    </div>
+    )
+
+  const salesGraph = (
+    <div className="image">
+      <XYPlot
+        width={300}
+        height={300}>
+        <HorizontalGridLines />
+        <LineSeries
+          data={data}/>
+        <XAxis />
+        <YAxis />
+      </XYPlot>
+    </div>
+    )
+
+  const customersGraph = (
+    <div className="image">
+      <XYPlot
+        width={300}
+        height={300}>
+        <HorizontalGridLines />
+        <LineSeries
+          data={data}/>
+        <XAxis />
+        <YAxis />
+      </XYPlot>
+    </div>
+    )
+
+  const invoicesGraph = (
+    <div className="image">
+      <XYPlot
+        width={300}
+        height={300}>
+        <HorizontalGridLines />
+        <LineSeries
+          data={data}/>
+        <XAxis />
+        <YAxis />
+      </XYPlot>
+    </div>
+    )
+
   return (
 
     <div className="dashboards">
-      <h4 className="ui header">Incomes</h4>
+      <h4 className="ui header">
+        {incomes && T.translate("dashboards.incomes")}
+        {projects && T.translate("dashboards.projects")}
+        {sales && T.translate("dashboards.sales")}
+        {customers && T.translate("dashboards.customers")}
+        {invoices && T.translate("dashboards.invoices")}
+      </h4>
       <div className="ui card">
         <div className="content">
 
-          <div className="image">
-            <XYPlot
-              width={300}
-              height={300}>
-              <HorizontalGridLines />
-              <LineSeries
-                data={data}/>
-              <XAxis />
-              <YAxis />
-            </XYPlot>
-          </div>
+          { incomes && incomesGraph }
+          { projects && projectsGraph }
+          { sales && salesGraph }
+          { customers && customersGraph }
+          { invoices && invoicesGraph }
 
           <div className="right floated">
             <div className="meta">This month</div>
@@ -58,6 +128,6 @@ export default function Card({dashboards}) {
   )
 }
 
-Card.propTypes = {
-  dashboards: PropTypes.object.isRequired
-}
+// Card.propTypes = {
+//   props: PropTypes.object.isRequired
+// }

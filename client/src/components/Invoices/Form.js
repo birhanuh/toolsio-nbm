@@ -141,7 +141,7 @@ class Form extends Component {
 
       this.setState({ isLoading: true })
       this.props.saveInvoice({ _id, sale, project, deadline, paymentTerm, interestInArrears, status, description })
-        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 

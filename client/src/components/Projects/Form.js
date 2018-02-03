@@ -89,7 +89,7 @@ class Form extends Component {
       this.setState({ isLoading: true })
 
       this.props.saveProject({ _id, name, customer, deadline, status, description })
-        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 

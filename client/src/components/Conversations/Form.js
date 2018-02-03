@@ -70,7 +70,7 @@ class Form extends Component {
       const { _id, recipientId, title, body } = this.state
       this.setState({ isLoading: true })
       this.props.createConversation({ _id, recipientId, title, body })
-        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 
