@@ -100,7 +100,7 @@ class Show extends Component {
 
         <div className="twelve wide column">
           <div className="ui segment">    
-            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready' || status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
+            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
             <dl className="dl-horizontal">
               <dt>{T.translate("sales.show.customer")}</dt>
               <dd>{customer ? <Link to={`/customers/show/${customer._id}`}>{customer.name}</Link> : '-'}</dd>
@@ -110,7 +110,7 @@ class Show extends Component {
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("sales.show.status")}</dt>
               <dd>
-                <div className={classnames("ui tiny uppercase label", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready' || status === 'delivered', red: status === 'delayed'})}> 
+                <div className={classnames("ui tiny uppercase label", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}> 
                   {status}
                 </div>
               </dd>

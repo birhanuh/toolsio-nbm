@@ -11,11 +11,11 @@ export default function Card({project}) {
   return (
     <div className="card">
       <div className="content">
-        <div className={classnames("ui uppercase tiny right ribbon label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+        <div className={classnames("ui uppercase tiny right ribbon label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}> 
           {project.status}
         </div>
         
-        <Link to={`/projects/show/${project._id}`} className={classnames("ui header", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
+        <Link to={`/projects/show/${project._id}`} className={classnames("ui header", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}>
           <h3>
             {project.name}
           </h3>

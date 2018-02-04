@@ -62,7 +62,7 @@ export default {
               saleStatusClass = 'green' 
               break
             case 'ready':
-              saleStatusClass = 'green' 
+              saleStatusClass = 'turquoise' 
               break
              case 'delayed':
               saleStatusClass = 'red' 
@@ -86,7 +86,7 @@ export default {
               projectStatusClass = 'green' 
               break
             case 'delivered':
-              projectStatusClass = 'green' 
+              projectStatusClass = 'turquoise' 
               break
             case 'delayed':
               projectStatusClass = 'red' 

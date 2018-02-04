@@ -440,42 +440,6 @@ nav.ui.menu .item>a {
   margin: 0 auto;
 }
 
-// Label
-.ui[class*="right floated"].label {
-    float: right;
-    margin-top: 0;
-    margin-left: .5em;
-}
-
-.ui.orange.label, .ui.orange.labels .label {
-  background-color: $orange !important;
-  border-color: $orange !important;
-}
-
-.ui.blue.label, .ui.blue.labels .label {
-  background-color: $blue !important;
-  border-color: $blue !important;
-}
-
-.ui.green.label, .ui.green.labels .label {
-  background-color: $green !important;
-  border-color: $green !important;
-}
-
-.ui.red.label, .ui.red.labels .label {
-  background-color: $red !important;
-  border-color: $red !important;
-}
-
-// Line break
-.x-light-turquoise-hr {
-  border-top: 1px solid $x-light-turquoise;
-}
-
-.medium-grey-hr {
-  border-top: 1px solid $medium-grey;
-}
-
 // Thumbnail
 .thumbnail {
   @include border-radius(0);
@@ -524,38 +488,6 @@ nav.ui.menu .item>a {
   height: 0.875em;
 }
 
-.ui.progress.success .bar {
-  background-color: $green !important;
-}
-
-.ui.progress.info .bar {
-  background-color: $light-blue !important;
-}
-
-.ui.progress.error .bar {
-  background-color: $red !important;
-}
-
-.ui.progress.warning .bar {
-  background-color: $orange !important;
-}
-
-i.green.icon {
-  color: $green !important;
-}
-
-i.blue.icon {
-  color: $blue !important;
-}
-
-i.red.icon {
-  color: $red !important;
-}
-
-i.orange.icon {
-  color: $orange !important;
-}
-
 // Dropdown
 .dropdown-menu {
   min-width: 180px;
@@ -570,6 +502,13 @@ dl.dl-horizontal {
     font-weight: bold;
   }
 } 
+
+// Label
+.ui[class*="right floated"].label {
+    float: right;
+    margin-top: 0;
+    margin-left: .5em;
+}
 
 // Custome note box
 .bs-callout {
