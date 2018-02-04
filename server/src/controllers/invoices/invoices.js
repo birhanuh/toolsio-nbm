@@ -18,7 +18,7 @@ export default {
 
     let id = req.params.id
 
-    Invoice.findById(id).populate([{path: 'sale', populate: { path: 'items', path: 'customer', select: 'name' }}, {path: 'project', populate: { path: 'tasks', path: 'customer', select: 'name' } }]).exec(function(err, invoice) {
+    Invoice.findById(id).populate([{path: 'sale', populate: {path: 'items'} }, {path: 'project', populate: {path: 'tasks'} }, { path: 'customer', select: 'name vatNumber address' } ]).exec(function(err, invoice) {
       if (err) {
         callback(err, null)
         return

@@ -8,13 +8,14 @@ import T from 'i18n-react'
 export default function Card({...props}) {
   
   const { totalIncome, projectTasks, saleTasks, invoiceTasks } = props
-  console.log('saleTasks ', saleTasks)
+  
   const totalIncomeContent = (
       <div className="dashboards">
-        <h4 className="ui header">{T.translate("dashboards.total_income")}</h4>
-        <div className="ui card">
-          <div className="content">
-      
+        <h4 className="ui header">{T.translate("dashboards.total_income.header")}</h4>
+        <div className="ui card" style={{height: '266px', display: 'table'}}>
+          <div className="content" style={{display: 'table-cell', verticalAlign: 'middle'}}>
+            <h1 className="ui header green centered bold">{totalIncome && totalIncome[0].sum}</h1>
+            <div className="description center aligned">{T.translate("dashboards.total_income.description")}</div>
           </div>
         </div>
       </div>  
@@ -22,7 +23,7 @@ export default function Card({...props}) {
 
   const projectTasksContent = (
       <div className="dashboards">
-        <h4 className="ui header">{T.translate("dashboards.project_tasks")}</h4>
+        <h4 className="ui header">{T.translate("dashboards.project_tasks.header")}</h4>
         <div className="ui card">
           <div className="content">
             
@@ -33,7 +34,7 @@ export default function Card({...props}) {
 
   const saleTasksContent = (
       <div className="dashboards">
-        <h4 className="ui header">{T.translate("dashboards.sale_tasks")}</h4>
+        <h4 className="ui header">{T.translate("dashboards.sale_tasks.header")}</h4>
         <div className="ui card">
           <div className="content">
       
@@ -44,7 +45,7 @@ export default function Card({...props}) {
 
   const invoiceTasksContent = (
       <div className="dashboards">
-        <h4 className="ui header">{T.translate("dashboards.invoice_tasks")}</h4>
+        <h4 className="ui header">{T.translate("dashboards.invoice_tasks.header")}</h4>
         <div className="ui card">
           <div className="content">
       

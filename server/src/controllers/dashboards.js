@@ -50,21 +50,32 @@ export default {
             },
             status: 'paid'
           }},
+          {$project: 
+            {
+              total: 1,
+              day: { $dayOfMonth: '$createdAt' },
+              month: { $month: '$createdAt' },
+              year: { $year: '$createdAt' }
+            }
+          },
           {$group: 
             {
-              _id: { month: { $month: "$createdAt" }, day: { $dayOfMonth: "$createdAt" }, year: { $year: "$createdAt" } }, 
+              _id: {
+                day: '$day',
+                month: '$month',
+                year: '$year',
+              }, 
               count: { $sum: 1},
               sum: { $sum: '$total'}
             }
           },{$group: 
             {
-              _id: null, 
+              _id: '$_id.month', 
               totalCount: { $sum: '$count' },
               totalSum: { $sum: '$sum' },
               data: {
                 $push: { 
                   date: '$_id',
-                  count: '$count',
                   sum: '$sum'
                 }
               }

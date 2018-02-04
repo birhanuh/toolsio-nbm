@@ -29,7 +29,7 @@ export default function Card({...props}) {
     <div className="image">
       <XYPlot
         width={300}
-        height={300}>
+        height={200}>
         <HorizontalGridLines />
         <LineSeries
           data={data}/>
@@ -43,7 +43,7 @@ export default function Card({...props}) {
     <div className="image">
       <XYPlot
         width={300}
-        height={300}>
+        height={200}>
         <HorizontalGridLines />
         <LineSeries
           data={data}/>
@@ -57,7 +57,7 @@ export default function Card({...props}) {
     <div className="image">
       <XYPlot
         width={300}
-        height={300}>
+        height={200}>
         <HorizontalGridLines />
         <LineSeries
           data={data}/>
@@ -71,7 +71,7 @@ export default function Card({...props}) {
     <div className="image">
       <XYPlot
         width={300}
-        height={300}>
+        height={200}>
         <HorizontalGridLines />
         <LineSeries
           data={data}/>
@@ -84,8 +84,8 @@ export default function Card({...props}) {
   const invoicesGraph = (
     <div className="image">
       <XYPlot
-        width={300}
-        height={300}>
+        width={600}
+        height={200}>
         <HorizontalGridLines />
         <LineSeries
           data={data}/>
@@ -99,11 +99,11 @@ export default function Card({...props}) {
 
     <div className="dashboards">
       <h4 className="ui header">
-        {incomes && T.translate("dashboards.incomes")}
-        {projects && T.translate("dashboards.projects")}
-        {sales && T.translate("dashboards.sales")}
-        {customers && T.translate("dashboards.customers")}
-        {invoices && T.translate("dashboards.invoices")}
+        {incomes && T.translate("dashboards.incomes.header")}
+        {projects && T.translate("dashboards.projects.header")}
+        {sales && T.translate("dashboards.sales.header")}
+        {customers && T.translate("dashboards.customers.header")}
+        {invoices && T.translate("dashboards.invoices.header")}
       </h4>
       <div className="ui card">
         <div className="content">
@@ -115,11 +115,11 @@ export default function Card({...props}) {
           { invoices && invoicesGraph }
 
           <div className="right floated">
-            <div className="meta">This month</div>
+            <div className="meta">{T.translate("dashboards.this_month")}</div>
             <div className="header">15</div>
           </div>     
           <div className="left floated">
-            <div className="meta">Last month</div>
+            <div className="meta">{T.translate("dashboards.last_month")}</div>
             <div className="header">15</div>
           </div>    
         </div>

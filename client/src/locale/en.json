@@ -159,30 +159,45 @@
   "dashboards": {
     "header": "Dashboards",
     "description": "Summary of your business activties are shown infographically.",
-    "total_income": "Total income",
-    "total_income_description": "Cumulative of all of your incomes (paid-invoices) statred since using this sevice.",
-    "customers": "Customers",
-    "paid_invoices": "Paid invoces",
-    "project_tasks": "Project tasks",
-    "sale_tasks": "Invoice tasks",
-    "invoice_tasks": "Sale tasks",
-    "projects": "Projects",
-    "sales": "Sales",
-    "invoices": "Invoices",
-    "summary": "Summary",
-    "today": "Today",
-    "sales_and_projects": "Sales and Projects",
-    "incomes": "Incomes",
-    "last_week": "Last week",
-    "this_week": "This week",
-    "average_visits_per_week": "Average visits/week",
-    "this_week_visits": "This week visits",
-    "invoicing_performance": "Invoicing performance",
-    "new_projects": "New projects",
-    "in progress_sales": "Preparing sales",
-    "no_tasks_invoice": "No tasks for invoice",
-    "no_tasks_project": "No tasks for project",
-    "no_tasks_sale": "No tasks for sale",
+    "total_income": {
+      "header": "Total income",
+      "description": "Cumulative of all of your incomes (paid-invoices) statred since using this sevice."
+    },
+    "incomes": {
+      "header": "Incomes"
+    },
+    "projects": {
+      "header": "Projects",
+      "new_projects": "New projects"
+    },
+    "sales": {
+      "header": "Sales",
+      "new_sales": "New sales"
+    },
+    "customers": {
+      "header": "Customers"
+    },
+    "invoices": {
+      "header": "Invoices",
+      "paid": "Paid",
+      "pending": "Pending",
+      "overdue": "Overdue",
+      "invoicing_performance": "Invoicing performance"
+    },  
+    "project_tasks": {
+      "header": "Project tasks",
+      "no_tasks_project": "No tasks for project"
+    },
+    "sale_tasks": {
+      "header": "Sale tasks",
+      "no_tasks_sale": "No tasks for sale"
+    },
+    "invoice_tasks": {
+      "header": "Invoice tasks",
+      "no_tasks_invoice": "No tasks for invoice"
+    },   
+    "last_month": "Last month",
+    "this_month": "This month", 
     "no_tasks_users": "No tasks by other users",
     "tasks_pending_invoices": "You have <strong>%{pendings_number}</strong> pending invoices",
     "tasks_overdue_invoices": "You have <strong>%{overdues_number}</strong> overdue invoices",
