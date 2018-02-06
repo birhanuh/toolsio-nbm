@@ -4,8 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchInvoices } from '../../actions/dashboardActions'
 
-import 'react-vis/dist/style.css'
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas } from 'react-vis'
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend } from 'react-vis'
 
 // Localization 
 import T from 'i18n-react'
@@ -27,14 +26,40 @@ class InvoicesCard extends Component {
   const { value } = this.state
   const { invoices } = this.props
 
-  let useCanvas = false
-  const content = useCanvas ? 'TOGGLE TO SVG' : 'TOGGLE TO CANVAS';
-  const BarSeries = useCanvas ? VerticalBarSeriesCanvas : VerticalBarSeries;
+  let dataNew = []
+  let dataPending = []
+  let dataOverdue = []
+  let dataPaid = []
 
-  const data = invoices && invoices[1].data.map(invoice => 
-    ({x: invoice.week, y: invoice.count})
-    )
-  console.log('data invoice: ', data)
+  const data = invoices && invoices[1].data.map(invoice => {
+
+    let invoiceStatusClass          
+    switch(invoice.status) {
+      case 'new':
+        invoiceStatusClass = 'blue'
+        dataNew.push({x: invoice.week, y: invoice.count, status: invoice.status})
+        break
+      case 'pending':
+        invoiceStatusClass = 'orange'
+        dataNew.push({x: invoice.week, y: invoice.count, status: invoice.status})
+        break
+      case 'overdue':
+        invoiceStatusClass = 'red'
+        dataOverdue.push({x: invoice.week, y: invoice.count, status: invoice.status})
+        break
+      case 'paid':
+        invoiceStatusClass = 'green' 
+        dataPaid.push({x: invoice.week, y: invoice.count, status: invoice.status})
+        break
+      default:
+        invoiceStatusClass = 'undefined' 
+    }
+    
+    })
+  console.log('dataNew invoice: ', dataNew)
+   console.log('dataPending invoice: ', dataPending)
+    console.log('dataOverdue nvoice: ', dataOverdue )
+     console.log('dataPaid invoice: ', dataPaid)
   return (
     <div className="dashboards">
       <h4 className="ui header">
@@ -48,37 +73,36 @@ class InvoicesCard extends Component {
               xType="ordinal"
               width={600}
               height={300}
-              xDistance={100}
               >
+              <DiscreteColorLegend
+                style={{position: 'absolute', left: '40px', top: '0px'}}
+                orientation="horizontal" items={[
+                  {
+                    title: 'Apples',
+                    color: '#12939A'
+                  },
+                  {
+                    title: 'Oranges',
+                    color: '#79C7E3'
+                  }
+                ]}
+              />
               <VerticalGridLines />
               <HorizontalGridLines />
               <XAxis tickFormat={v => `Week ${v}`} />
               <YAxis />
-              <BarSeries
-                className="vertical-bar-series-example"
-                data={[
-                  {x: 'A', y: 10},
-                  {x: 'B', y: 5},
-                  {x: 'C', y: 15}
-                ]}/>
-              <BarSeries
-                data={[
-                  {x: 'A', y: 12},
-                  {x: 'B', y: 2},
-                  {x: 'C', y: 11}
-                ]}/>
-              <BarSeries
-                data={[
-                  {x: 'A', y: 12},
-                  {x: 'B', y: 2},
-                  {x: 'C', y: 11}
-                ]}/>
-              <BarSeries
-                data={[
-                  {x: 'A', y: 12},
-                  {x: 'B', y: 2},
-                  {x: 'C', y: 11}
-                ]}/>
+              <VerticalBarSeries
+                color="#199CD5"
+                data={dataNew}/>
+              <VerticalBarSeries
+                color="#F0730F"
+                data={dataPending}/>
+              <VerticalBarSeries
+                color="#be0a0a"
+                data={dataOverdue}/>
+              <VerticalBarSeries
+                color="#7DA40D"
+                data={dataPaid}/>
             </XYPlot>
           </div>
           <div className="right floated">

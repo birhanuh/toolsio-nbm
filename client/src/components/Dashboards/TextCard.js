@@ -5,7 +5,7 @@ import classnames from 'classnames'
 // Localization 
 import T from 'i18n-react'
 
-export default function Card({...props}) {
+export default function TextCard({...props}) {
   
   const { totalIncome, projectTasks, saleTasks, invoiceTasks } = props
   

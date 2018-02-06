@@ -6,6 +6,10 @@ import { fetchTotalIncome, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks 
 // Localization 
 import T from 'i18n-react'
 
+// React-vis style 
+import 'react-vis/dist/styles/plot.scss'
+import 'react-vis/dist/styles/legends.scss'
+
 import Breadcrumb from '../Layouts/Breadcrumb'
 import IncomesCard from './IncomesCard'
 import ProjectsCard from './ProjectsCard'
@@ -21,22 +25,6 @@ class Page extends Component {
     this.state = {
       totalIncome: {
         data: this.props.totalIncome,
-        isLoading: false
-      },
-      incomes: {
-        data: this.props.incomes,
-        isLoading: false
-      },
-      sales: {
-        data: this.props.sales,
-        isLoading: false
-      },
-      invoices: {
-        data: this.props.invoices,
-        isLoading: false
-      },
-      customers: {
-        data: this.props.customers,
         isLoading: false
       },
       projectTasks: {

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchProjects } from '../../actions/dashboardActions'
 
-import 'react-vis/dist/style.css'
 import { RadialChart, Hint } from 'react-vis'
 
 // Localization 
@@ -53,8 +52,17 @@ class ProjectsCard extends Component {
           projectStatusClass = 'undefined' 
       }
 
-      return ({theta: project.count, className: ''+projectStatusClass+''})
+      return ({theta: project.count, status: project.status, className: ''+projectStatusClass+''})
       })
+
+    const tooltipClass = {
+      fontSize: '12px',
+      background: 'black', 
+      opacity: 0.85, 
+      color: '#ffffff', 
+      padding: '5px', 
+      borderRadius: '5px'
+    }
 
     return (
       <div className="dashboards">
@@ -75,7 +83,14 @@ class ProjectsCard extends Component {
                 onSeriesMouseOut={v => this.setState({value: false})}
                 width={300}
                 height={200}>
-                {value && <Hint value={value}/>}
+                {value && 
+                  <Hint value={value}>
+                    <div style={tooltipClass}>
+                      <p><strong>Status: </strong><span style={{textTransform: 'capitalize'}}>{value.status}</span></p>
+                      <p><strong>Number: </strong>{value.theta}</p>
+                    </div>
+                  </Hint>
+                }
               </RadialChart>
             </div>
             <div className="right floated">

@@ -4,8 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchCustomers } from '../../actions/dashboardActions'
 
-import 'react-vis/dist/style.css'
-import { XYPlot, XAxis, YAxis, LineSeries, VerticalGridLines, HorizontalGridLines } from 'react-vis'
+import { XYPlot, XAxis, YAxis, LineSeries, VerticalGridLines, HorizontalGridLines, Hint } from 'react-vis'
 
 // Localization 
 import T from 'i18n-react'
@@ -42,6 +41,15 @@ class CustomersCard extends Component {
     const MARGIN = {
       bottom: 50
     }
+
+    const tooltipClass = {
+      fontSize: '12px',
+      background: 'black', 
+      opacity: 0.85, 
+      color: '#ffffff', 
+      padding: '5px', 
+      borderRadius: '5px'
+    }
    
     return (
       <div className="dashboards">
@@ -56,10 +64,23 @@ class CustomersCard extends Component {
                 xType="time"
                 margin={MARGIN}
                 width={300}
-                height={200}>
+                height={200}
+                onValueMouseOver={v => this.setState({value: v})}
+                onSeriesMouseOut={v => this.setState({value: false})}
+                >
+                {value && 
+                  <Hint value={value}>
+                    <div style={tooltipClass}>
+                      <p><strong>Status: </strong><span style={{textTransform: 'capitalize'}}>{value.x}</span></p>
+                      <p><strong>Number: </strong>{value.y}</p>
+                    </div>
+                  </Hint>
+                }
                 <HorizontalGridLines />
                 <LineSeries
-                  data={data}/>
+                  style={{strokeLinejoin: "round"}}
+                  data={data}
+                  />
                 <LineSeries
                   data={dataAvg}/>
                 <XAxis tickLabelAngle={-90} />

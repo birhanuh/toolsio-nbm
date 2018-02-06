@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchIncomes } from '../../actions/dashboardActions'
 
-import 'react-vis/dist/style.css'
 import {XYPlot, XAxis, YAxis, LineSeries, VerticalGridLines, HorizontalGridLines } from 'react-vis'
 
 // Localization 
@@ -56,6 +55,7 @@ class IncomesCard extends Component {
                 height={200}>
                 <HorizontalGridLines />
                 <LineSeries
+                  style={{strokeLinejoin: "round"}}
                   data={data}/>
                 <XAxis tickLabelAngle={-90} />
                 <YAxis />
