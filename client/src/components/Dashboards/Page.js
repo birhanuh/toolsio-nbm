@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchTotalIncome, fetchIncomes, fetchProjects, fetchSales, fetchCustomers, fetchInvoices, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks } from '../../actions/dashboardActions'
+import { fetchTotalIncome, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks } from '../../actions/dashboardActions'
 
 // Localization 
 import T from 'i18n-react'
@@ -25,10 +25,6 @@ class Page extends Component {
       },
       incomes: {
         data: this.props.incomes,
-        isLoading: false
-      },
-      projects: {
-        data: this.props.projects,
         isLoading: false
       },
       sales: {
@@ -61,16 +57,6 @@ class Page extends Component {
   componentDidMount() {
     this.props.fetchTotalIncome()
       .catch( ({response}) => this.setState({ totalIncome: { isLoading: true} }) )
-    this.props.fetchIncomes()
-      .catch( ({response}) => this.setState({ incomes: { isLoading: true} }) )
-    this.props.fetchProjects()
-      .catch( ({response}) => this.setState({ projects: { isLoading: true} }) )
-    this.props.fetchSales()
-      .catch( ({response}) => this.setState({ sales: { isLoading: true} }) )
-    this.props.fetchCustomers()
-      .catch( ({response}) => this.setState({ invoices: { isLoading: true} }) )
-    this.props.fetchInvoices()
-      .catch( ({response}) => this.setState({ customers: { isLoading: true} }) )
     this.props.fetchProjectTasks()
       .catch( ({response}) => this.setState({ projectTasks: { isLoading: true} }) )
     this.props.fetchSaleTasks()
@@ -81,7 +67,7 @@ class Page extends Component {
 
   render() {
     
-    const { totalIncome, incomes, projects, sales, customers, invoices, projectTasks, saleTasks, invoiceTasks } = this.props
+    const { totalIncome, projectTasks, saleTasks, invoiceTasks } = this.props
 
     return ( 
       <div className="row column">  
@@ -93,22 +79,22 @@ class Page extends Component {
             <TextCard totalIncome={totalIncome} />
           </div>
           <div className="column">
-            <IncomesCard incomes={incomes} />
+            <IncomesCard />
           </div>
           <div className="column">
-            <ProjectsCard projects={projects} />
+            <ProjectsCard />
           </div>
           <div className="column">  
-            <SalesCard sales={sales} />
+            <SalesCard />
           </div>
         </div>
 
         <div className="ui two column grid">
           <div className="four wide column">
-            <CustomersCard customers={customers} />
+            <CustomersCard />
           </div>
           <div className="twelve wide column">
-            <InvoicesCard invoices={invoices} /> 
+            <InvoicesCard /> 
           </div>
         </div>
 
@@ -131,11 +117,6 @@ class Page extends Component {
 
 Page.propTypes = {
   fetchTotalIncome: PropTypes.func.isRequired,
-  fetchIncomes: PropTypes.func.isRequired,
-  fetchProjects: PropTypes.func.isRequired,
-  fetchSales: PropTypes.func.isRequired,
-  fetchCustomers: PropTypes.func.isRequired,
-  fetchInvoices: PropTypes.func.isRequired,
   fetchProjectTasks: PropTypes.func.isRequired,
   fetchSaleTasks: PropTypes.func.isRequired,
   fetchInvoiceTasks: PropTypes.func.isRequired
@@ -144,16 +125,11 @@ Page.propTypes = {
 function mapsStateToProps(state) {
   return {
     totalIncome: state.dashboards.totalIncome,
-    incomes: state.dashboards.incomes,
-    projects: state.dashboards.projects,
-    sales: state.dashboards.sales,
-    customers: state.dashboards.customers,
-    invoices: state.dashboards.invoices,
     projectTasks: state.dashboards.projectTasks,
     saleTasks: state.dashboards.saleTasks,
     invoiceTasks: state.dashboards.invoiceTasks
   }
 }
 
-export default connect(mapsStateToProps, { fetchTotalIncome, fetchIncomes, fetchProjects, fetchSales, fetchCustomers, fetchInvoices, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks })(Page)
+export default connect(mapsStateToProps, { fetchTotalIncome, fetchProjectTasks, fetchSaleTasks, fetchInvoiceTasks })(Page)
 

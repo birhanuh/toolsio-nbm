@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
+import { fetchInvoices } from '../../actions/dashboardActions'
 
 import 'react-vis/dist/style.css'
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas } from 'react-vis'
@@ -8,9 +10,24 @@ import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalB
 // Localization 
 import T from 'i18n-react'
 
-export default function InvoicesCard({invoices}) {
+class InvoicesCard extends Component {
 
-  let useCanvas = false;
+   state = {
+    value: false,
+    isLoading: false
+  }
+
+  componentDidMount = () => {
+    this.props.fetchInvoices()
+      .catch( ({response}) => this.setState({ isLoading: true }) )
+  }
+
+  render() {
+
+  const { value } = this.state
+  const { invoices } = this.props
+
+  let useCanvas = false
   const content = useCanvas ? 'TOGGLE TO SVG' : 'TOGGLE TO CANVAS';
   const BarSeries = useCanvas ? VerticalBarSeriesCanvas : VerticalBarSeries;
 
@@ -76,9 +93,19 @@ export default function InvoicesCard({invoices}) {
       </div>
     </div>  
     )
+  }
 
 }
 
-// Card.propTypes = {
-//   props: PropTypes.object.isRequired
-// }
+InvoicesCard.propTypes = {  
+  fetchInvoices: PropTypes.func.isRequired
+}
+
+function mapStateToProps(state) {
+  return {
+    invoices: state.dashboards.invoices
+  }
+}
+
+export default connect(mapStateToProps, { fetchInvoices }) (InvoicesCard)
+
