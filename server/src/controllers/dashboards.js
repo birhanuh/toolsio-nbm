@@ -68,7 +68,8 @@ export default {
               count: { $sum: 1},
               sum: { $sum: '$total'}
             }
-          },{$group: 
+          },
+          {$group: 
             {
               _id: '$_id.month', 
               totalCount: { $sum: '$count' },
@@ -115,7 +116,8 @@ export default {
               }, 
               count: { '$sum': 1 }
             }
-          },{$group: 
+          },
+          {$group: 
             {
               _id: '$_id.month', 
               totalCount: { $sum: '$count' },
@@ -161,7 +163,8 @@ export default {
               },
               count: { $sum: 1}
             }
-          },{$group: 
+          },
+          {$group: 
             {
               _id: '$_id.month', 
               totalCount: { $sum: '$count' },

@@ -198,6 +198,7 @@
     },   
     "last_month": "Last month",
     "this_month": "This month", 
+    "average": "Avg", 
     "no_tasks_users": "No tasks by other users",
     "tasks_pending_invoices": "You have <strong>%{pendings_number}</strong> pending invoices",
     "tasks_overdue_invoices": "You have <strong>%{overdues_number}</strong> overdue invoices",

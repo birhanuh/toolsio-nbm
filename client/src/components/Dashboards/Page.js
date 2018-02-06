@@ -7,7 +7,11 @@ import { fetchTotalIncome, fetchIncomes, fetchProjects, fetchSales, fetchCustome
 import T from 'i18n-react'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
-import GraphCard from './GraphCard'
+import IncomesCard from './IncomesCard'
+import ProjectsCard from './ProjectsCard'
+import SalesCard from './SalesCard'
+import CustomersCard from './CustomersCard'
+import InvoicesCard from './InvoicesCard'
 import TextCard from './TextCard'
 
 class Page extends Component {
@@ -76,7 +80,9 @@ class Page extends Component {
   }
 
   render() {
-     
+    
+    const { totalIncome, incomes, projects, sales, customers, invoices, projectTasks, saleTasks, invoiceTasks } = this.props
+
     return ( 
       <div className="row column">  
 
@@ -84,37 +90,37 @@ class Page extends Component {
 
         <div className="ui four column grid">
           <div className="column">
-            <TextCard totalIncome={this.props.totalIncome} />
+            <TextCard totalIncome={totalIncome} />
           </div>
           <div className="column">
-            <GraphCard incomes={this.props.incomes} />
+            <IncomesCard incomes={incomes} />
           </div>
           <div className="column">
-            <GraphCard projects={this.props.projects} />
+            <ProjectsCard projects={projects} />
           </div>
           <div className="column">  
-            <GraphCard sales={this.props.sales} />
+            <SalesCard sales={sales} />
           </div>
         </div>
 
         <div className="ui two column grid">
           <div className="four wide column">
-            <GraphCard customers={this.props.customers} />
+            <CustomersCard customers={customers} />
           </div>
           <div className="twelve wide column">
-            <GraphCard invoices={this.props.invoices} /> 
+            <InvoicesCard invoices={invoices} /> 
           </div>
         </div>
 
         <div className="ui three column grid">
           <div className="column">
-            <TextCard projectTasks={this.props.projectTasks} />
+            <TextCard projectTasks={projectTasks} />
           </div>
           <div className="column">
-            <TextCard saleTasks={this.props.saleTasks} />
+            <TextCard saleTasks={saleTasks} />
           </div>
           <div className="column">
-            <TextCard invoiceTasks={this.props.invoiceTasks} />
+            <TextCard invoiceTasks={invoiceTasks} />
           </div>
         </div>
 
