@@ -63,25 +63,25 @@ class Page extends Component {
         <Breadcrumb />
 
         <div className="ui four column grid">
-          <div className="column">
+          <div className="column dashboards">
             <TextCard totalIncome={totalIncome} />
           </div>
-          <div className="column">
+          <div className="column dashboards">
             <IncomesCard />
           </div>
-          <div className="column">
+          <div className="column dashboards">
             <ProjectsCard />
           </div>
-          <div className="column">  
+          <div className="column dashboards">  
             <SalesCard />
           </div>
         </div>
 
         <div className="ui two column grid">
-          <div className="four wide column">
+          <div className="four wide column dashboards">
             <CustomersCard />
           </div>
-          <div className="twelve wide column">
+          <div className="twelve wide column dashboards">
             <InvoicesCard /> 
           </div>
         </div>

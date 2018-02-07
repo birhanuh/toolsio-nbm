@@ -61,61 +61,77 @@ class InvoicesCard extends Component {
     console.log('dataOverdue nvoice: ', dataOverdue )
      console.log('dataPaid invoice: ', dataPaid)
   return (
-    <div className="dashboards">
-      <h4 className="ui header">
-        {invoices && T.translate("dashboards.invoices.header")}
-      </h4>
-      <div className="ui card">
-        <div className="content">
-
-          <div className="image">
-            <XYPlot
-              xType="ordinal"
-              width={600}
-              height={300}
-              >
-              <DiscreteColorLegend
-                style={{position: 'absolute', left: '40px', top: '0px'}}
-                orientation="horizontal" items={[
-                  {
-                    title: 'Apples',
-                    color: '#12939A'
-                  },
-                  {
-                    title: 'Oranges',
-                    color: '#79C7E3'
-                  }
-                ]}
-              />
-              <VerticalGridLines />
-              <HorizontalGridLines />
-              <XAxis tickFormat={v => `Week ${v}`} />
-              <YAxis />
-              <VerticalBarSeries
-                color="#199CD5"
-                data={dataNew}/>
-              <VerticalBarSeries
-                color="#F0730F"
-                data={dataPending}/>
-              <VerticalBarSeries
-                color="#be0a0a"
-                data={dataOverdue}/>
-              <VerticalBarSeries
-                color="#7DA40D"
-                data={dataPaid}/>
-            </XYPlot>
-          </div>
-          <div className="right floated">
-            <div className="meta">{T.translate("dashboards.this_month")}</div>
-            <div className="header">15</div>
-          </div>     
-          <div className="left floated">
-            <div className="meta">{T.translate("dashboards.last_month")}</div>
-            <div className="header">15</div>
-          </div>    
-        </div>
+    <div className="ui card">
+      <div className="content">
+        <div className="right floated">
+          <h4 className="ui header">
+            <i className="file text outline icon"></i>
+          </h4>
+        </div> 
+        <div className="left floated">
+          <h4 className="ui header">
+            { T.translate("dashboards.invoices.header")}
+          </h4>
+        </div>       
       </div>
-    </div>  
+
+      <div className="image">
+        <XYPlot
+          xType="ordinal"
+          width={600}
+          height={300}
+          >
+          <DiscreteColorLegend
+            className="legend-center-top-aligned"
+            orientation="horizontal" items={[
+              {
+                title: 'New',
+                color: '#199CD5'
+              },
+              {
+                title: 'Pending',
+                color: '#F0730F'
+              },
+              {
+                title: 'Overdue',
+                color: '#be0a0a'
+              },
+              {
+                title: 'Paid',
+                color: '#7DA40D'
+              }
+            ]}
+          />
+          <VerticalGridLines />
+          <HorizontalGridLines />
+          <XAxis tickFormat={v => `Week ${v}`} />
+          <YAxis />
+          <VerticalBarSeries
+            color="#199CD5"
+            data={dataNew}/>
+          <VerticalBarSeries
+            color="#F0730F"
+            data={dataPending}/>
+          <VerticalBarSeries
+            color="#be0a0a"
+            data={dataOverdue}/>
+          <VerticalBarSeries
+            color="#7DA40D"
+            data={dataPaid}/>
+        </XYPlot>
+      </div>
+
+      <div className="content"> 
+        <div className="right floated">
+          <div className="meta">{T.translate("dashboards.this_month")}</div>
+          <div className="header">15</div>
+        </div>     
+        <div className="left floated">
+          <div className="meta">{T.translate("dashboards.last_month")}</div>
+          <div className="header">15</div>
+        </div>    
+      </div>
+    </div> 
     )
   }
 

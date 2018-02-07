@@ -524,6 +524,19 @@ i.orange.icon {
   vertical-align: middle;
 }
 
+// React vis
+.legend-right-top-aligned {
+  position: absolute; 
+  right: 40px; 
+  top: 0px;
+}
+
+.legend-center-top-aligned {
+  position: absolute; 
+  left: 30%; 
+  top: 0px;
+}
+
 /* Extra small devices (phones, 433px) */
 @media (max-width: $screen-xs) {
   

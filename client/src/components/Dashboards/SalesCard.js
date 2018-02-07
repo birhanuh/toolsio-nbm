@@ -65,45 +65,53 @@ class SalesCard extends Component {
     }
 
     return (
-      <div className="dashboards">
-        <h4 className="ui header">
-          {T.translate("dashboards.sales.header")}
-        </h4>
-        <div className="ui card">
-          <div className="content">
-
-            <div className="image">
-              <RadialChart
-                className={'donut-chart-example'}
-                innerRadius={55}
-                radius={95}
-                getAngle={d => d.theta}
-                data={data ? data : [{theta: 0}]}
-                onValueMouseOver={v => this.setState({value: v})}
-                onSeriesMouseOut={v => this.setState({value: false})}
-                width={300}
-                height={200}>
-                {value && 
-                  <Hint value={value}>
-                    <div style={tooltipClass}>
-                      <p><strong>Status: </strong><span style={{textTransform: 'capitalize'}}>{value.status}</span></p>
-                      <p><strong>Number: </strong>{value.theta}</p>
-                    </div>
-                  </Hint>
-                }
-              </RadialChart>
-            </div>
-            <div className="right floated">
-              <div className="meta">{T.translate("dashboards.this_month")}</div>
-              <div className="header">{sales && sales[1].totalCount}</div>
-            </div>     
-            <div className="left floated">
-              <div className="meta">{T.translate("dashboards.last_month")}</div>
-              <div className="header">{sales && sales[0].totalCount}</div>
-            </div>    
-          </div>
+      <div className="ui card">
+        <div className="content">
+          <div className="right floated">
+            <h4 className="ui header">
+              <i className="cart icon"></i>
+            </h4>
+          </div> 
+          <div className="left floated">
+            <h4 className="ui header">
+              {T.translate("dashboards.sales.header")}
+            </h4>
+          </div>       
         </div>
-      </div>  
+
+        <div className="image">
+          <RadialChart
+            className={'donut-chart-example'}
+            innerRadius={55}
+            radius={95}
+            getAngle={d => d.theta}
+            data={data ? data : [{theta: 0}]}
+            onValueMouseOver={v => this.setState({value: v})}
+            onSeriesMouseOut={v => this.setState({value: false})}
+            width={300}
+            height={200}>
+            {value && 
+              <Hint value={value}>
+                <div style={tooltipClass}>
+                  <p><strong>Status: </strong><span style={{textTransform: 'capitalize'}}>{value.status}</span></p>
+                  <p><strong>Number: </strong>{value.theta}</p>
+                </div>
+              </Hint>
+            }
+          </RadialChart>
+        </div>
+
+        <div className="content">
+          <div className="right floated">
+            <div className="meta">{T.translate("dashboards.this_month")}</div>
+            <div className="header">{sales && sales[1].totalCount}</div>
+          </div>     
+          <div className="left floated">
+            <div className="meta">{T.translate("dashboards.last_month")}</div>
+            <div className="header">{sales && sales[0].totalCount}</div>
+          </div>    
+        </div>
+      </div> 
       )
   }  
 
