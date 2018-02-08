@@ -298,7 +298,8 @@ export default {
             {
               _id: {
                 _id: '$_id',
-                status: '$status'
+                status: '$status',
+                name: '$name'
               },
               statusCount: { '$sum': 1 }
             }
@@ -309,7 +310,8 @@ export default {
               count: { $sum: '$statusCount' },
               projects: {
                 $push: { 
-                  id: '$_id._id'
+                  _id: '$_id._id',
+                  name: '$_id.name'
                 }
               }
             }
@@ -338,7 +340,8 @@ export default {
             {
               _id: {
                 _id: '$_id',
-                status: '$status'
+                status: '$status',
+                name: '$name'
               },
               statusCount: { '$sum': 1 }
             }
@@ -349,7 +352,8 @@ export default {
               count: { $sum: '$statusCount' },
               sales: {
                 $push: { 
-                  id: '$_id._id'
+                  _id: '$_id._id',
+                  name: '$_id.name'
                 }
               }
             }
@@ -379,7 +383,8 @@ export default {
               _id: {
                 _id: '$_id',
                 status: '$status',
-                customer: '$customer'
+                customer: '$customer',
+                referenceNumber: '$referenceNumber'
               },
               statusCount: { '$sum': 1 }
             }
@@ -390,19 +395,20 @@ export default {
               count: { $sum: '$statusCount' },
               invoices: {
                 $push: { 
-                  id: '$_id._id',
-                  customer: '$_id.customer'
+                  _id: '$_id._id',
+                  project: '$_id.project',
+                  referenceNumber: '$_id.referenceNumber'
                 }
               }
             }
           }], (err, invoices) => {
-        if (err) {
-          callback(err, null)
-          return
-        }
+          if (err) {
+            callback(err, null)
+            return
+          }
 
-        callback(null, invoices)
-      })
+          callback(null, invoices)
+        })
 
       return 
     }

@@ -328,7 +328,7 @@ class Form extends Component {
 
               options={[
                 <option key="default" value="new" disabled>NEW</option>,
-                <option key="pending" value="pending" disabled>PENDING</option>,
+                <option key="pending" value="pending">PENDING</option>,
                 <option key="paid" value="paid">PAID</option>,
                 <option key="overdue" value="overdue">OVERDUE</option>
                 ]
