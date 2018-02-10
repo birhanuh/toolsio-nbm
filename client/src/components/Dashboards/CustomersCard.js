@@ -30,14 +30,14 @@ class CustomersCard extends Component {
       "July", "August", "September", "October", "November", "December"
       ]
 
-    const data = customers && customers[0].data.map(customer => 
+    const data = customers && customers.lastTwoMonths[0].data.map(customer => 
       ({x: new Date(''+monthNames[customer.date.month-1]+' '+customer.date.day+' '+customer.date.year+'').getTime(), y: customer.count})
       )
-
-    const dataAvg = customers && customers[0].data.map(customer => 
-      ({x: new Date(''+monthNames[customer.date.month-1]+' '+customer.date.day+' '+customer.date.year+'').getTime(), y: 4})
+    
+    const dataAvg = data && data.map(xyData => 
+      ({x: xyData.x, y: customers && customers.total.avg})
       )
-
+    
     const MARGIN = {
       bottom: 50
     }
@@ -110,7 +110,7 @@ class CustomersCard extends Component {
         <div className="content">  
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
-            <div className="header">{customers && customers[1].totalCount}</div>
+            <div className="header">{customers && customers.lastTwoMonths[1].totalCount}</div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.average")}</div>

@@ -16,7 +16,7 @@ class InvoiceTasks extends Component {
 
   componentDidMount() {
     this.props.fetchInvoiceTasks()
-      .catch( ({response}) => this.setState({ invoiceTasks: { isLoading: true} }) )
+      .catch( ({response}) => this.setState({ isLoading: true }) )
   }
   
   render() {
@@ -73,7 +73,7 @@ class InvoiceTasks extends Component {
 
       })
 
-    const lists =  (<div className="content">
+    const lists = (<div className="content">
       {pendingNotification}
       <div className="ui ordered list">
         {pendingInvoices}

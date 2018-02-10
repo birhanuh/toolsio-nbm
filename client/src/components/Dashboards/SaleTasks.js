@@ -16,7 +16,7 @@ class SaleTasks extends Component {
 
   componentDidMount() {
     this.props.fetchSaleTasks()
-      .catch( ({response}) => this.setState({ saleTasks: { isLoading: true} }) )
+      .catch( ({response}) => this.setState({ isLoading: true }) )
   }
   
   render() {

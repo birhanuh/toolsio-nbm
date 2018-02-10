@@ -16,7 +16,7 @@ class ProjectTasks extends Component {
   
   componentDidMount() {
     this.props.fetchProjectTasks()
-      .catch( ({response}) => this.setState({ projectTasks: { isLoading: true} }) )
+      .catch( ({response}) => this.setState({ isLoading: true }) )
   }
 
   render() {

@@ -223,13 +223,30 @@ export default {
                 }
               }
             }
-          }], function (err, results) {
+          }], function (err, firstLevelResults) {
             if (err) {
               callback(err, null)
               return
             }
-            callback(null, results)
-            return 
+            Customer.aggregate( [
+              { $group: 
+                { _id: null, 
+                  count: { $sum: 1 },
+                  firstCustomersDate: { $first: "$createdAt" }
+                } 
+            }], function (err, secondLevelResults) {
+
+              let firstCustomersDate = new Date(""+secondLevelResults[0].firstCustomersDate+"")
+              let daysBetween = Customer.daysBetween(firstCustomersDate, new Date())
+              
+              let avg = secondLevelResults[0].count/daysBetween
+
+              let secondLevelResultsUpdated = Object.assign({}, secondLevelResults[0], {avg: avg}) 
+              
+              callback(null, {total: secondLevelResultsUpdated, lastTwoMonths: firstLevelResults})
+            
+              return 
+            })
         })
 
       return 
