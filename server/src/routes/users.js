@@ -1,6 +1,7 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
+import jwt from 'jsonwebtoken'
 import config from '../config'
 
 import User from '../models/user'
@@ -40,7 +41,6 @@ router.post('/register', function(req, res) {
 
         // Push associated account
         user.account = account
-        user.tenantId = account.subdomain
         user.save().then(user => {
           req.login(user, function(err) {
             res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
@@ -110,8 +110,32 @@ router.get('/:resource', (req, res) => {
 router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
-    admin: req.user.admin, tenantId: req.user.tenantId })
+
+  if (req.user.confirmed) {
+    Account.findById(req.user.accountId, function(err, account) { 
+      if (err) {
+        res.status(500).json({ 
+          errors: {
+            confirmation: 'fail',
+            message: err
+          }
+        })
+        return
+      }
+
+      res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+        admin: req.user.admin, subdomain: account.subdomain })
+    })
+  } else {
+    res.status(500).json({ 
+      errors: {
+        confirmation: 'fail',
+        message: 'Please confirm your email to login'
+      }
+    })
+    return
+  }
+
 })
 
 router.post('/logout', function(req, res) {
