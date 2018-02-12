@@ -1,5 +1,6 @@
 import React, { Component }  from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchSales } from '../../actions/dashboardActions'
@@ -16,17 +17,24 @@ class SalesCard extends Component {
     isLoading: false
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.sales) {
+      this.setState({ isLoading: false })
+    }
+  }
+
   componentDidMount = () => {
+    this.setState({ isLoading: true })
     this.props.fetchSales()
-      .catch( ({response}) => this.setState({ isLoading: true }) )
+      .catch( ({response}) => this.setState({ isLoading: false }) )
   }
 
   render() {
 
-    const { value } = this.state
+    const { value, isLoading } = this.state
     const { sales } = this.props
 
-    const data = sales && sales[1].data.map(sale => {
+    const data = sales && sales.lastTwoMonths[1].data.map(sale => {
 
       let saleStatusClass          
       switch(sale.status) {
@@ -65,7 +73,7 @@ class SalesCard extends Component {
     }
 
     return (
-      <div className="ui card">
+      <div className={classnames("ui card dashboards form", { loading: isLoading })}>
         <div className="content">
           <div className="right floated">
             <h4 className="ui header">
@@ -104,13 +112,23 @@ class SalesCard extends Component {
         <div className="content">
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
-            <div className="header">{sales && sales[1].totalCount}</div>
+            <div className="header">{sales && sales.lastTwoMonths[1].totalCount}</div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.last_month")}</div>
-            <div className="header">{sales && sales[0].totalCount}</div>
+            <div className="header">{sales && sales.lastTwoMonths[0].totalCount}</div>
           </div>    
         </div>
+
+        {sales && sales.total.count === 0 &&
+          <div className="content-btn-outer-container">
+            <div className="content-btn-inner-container">
+              <Link to="/sales" className="ui primary outline button small">
+                <i className="check circle outline icon"></i>{T.translate("dashboards.sales.create_first_sale")}
+              </Link>
+            </div>
+          </div>
+        }   
       </div> 
       )
   }  

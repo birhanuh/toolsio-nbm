@@ -168,17 +168,19 @@
     },
     "projects": {
       "header": "Projects",
-      "new_projects": "New projects"
+      "create_first_project": "Create you first Project"
     },
     "sales": {
       "header": "Sales",
-      "new_sales": "New sales"
+      "create_first_sale": "Create you first Sale"
     },
     "customers": {
-      "header": "Customers"
+      "header": "Customers",
+      "create_first_customer": "Create you first Customer"
     },
     "invoices": {
       "header": "Invoices",
+      "create_first_invoice": "Create your first Invoice",
       "paid": "Paid",
       "pending": "Pending",
       "overdue": "Overdue",
@@ -186,6 +188,7 @@
     },  
     "project_tasks": {
       "header": "Project tasks",
+      "no_projects": "You have no Projects",
       "no_new_projects": "You have no new Project",
       "new_projects": "You have *{count}* new Projects.",
       "no_overdued_projects": "You have no overdue Project",
@@ -193,6 +196,7 @@
     },
     "sale_tasks": {
       "header": "Sale tasks",
+      "no_sales": "You have no Sales",
       "no_new_sales": "You have no new Sales",
       "new_sales": "You have *{count}* new Sales.",
       "no_overdued_sales": "You have no overdue Sales",
@@ -200,6 +204,7 @@
     },
     "invoice_tasks": {
       "header": "Invoice tasks",
+      "no_invoices": "You have no Invoices",
       "no_pending_invoices": "You have no pending Invoices",
       "pending_invoices": "You have *{count}* pending Invoices.",
       "no_overuded_invoices": "You have no overuded Invoices",

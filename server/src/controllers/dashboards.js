@@ -81,13 +81,29 @@ export default {
                 }
               }
             }
-          }], function (err, results) {
-          if (err) {
-            callback(err, null)
-            return
-          }
-          callback(null, results)
-          return 
+          }], function (err, firstLevelResults) {
+            
+            if (err) {
+              callback(err, null)
+              return
+            }
+
+            Invoice.aggregate([
+              { $group: 
+                { _id: null, 
+                  count: { $sum: 1 }
+                } 
+            }], function (err, secondLevelResults) {
+
+              if (err) {
+                callback(err, null)
+                return
+              }
+              
+              callback(null, {total: secondLevelResults[0], lastTwoMonths: firstLevelResults})
+            
+              return 
+            })
         })
 
       return 
@@ -128,13 +144,29 @@ export default {
                 }
               }
             }
-          }], function (err, results) {
+          }], function (err, firstLevelResults) {
+            
             if (err) {
               callback(err, null)
               return
             }
-            callback(null, results)
-            return 
+
+            Project.aggregate([
+              { $group: 
+                { _id: null, 
+                  count: { $sum: 1 }
+                } 
+            }], function (err, secondLevelResults) {
+
+              if (err) {
+                callback(err, null)
+                return
+              }
+              
+              callback(null, {total: secondLevelResults[0], lastTwoMonths: firstLevelResults})
+            
+              return 
+            })
         })
 
       return 
@@ -175,13 +207,29 @@ export default {
                 }
               }
             }
-          }], function (err, results) {
+          }], function (err, firstLevelResults) {
+            
             if (err) {
               callback(err, null)
               return
             }
-            callback(null, results)
-            return 
+
+            Sale.aggregate([
+              { $group: 
+                { _id: null, 
+                  count: { $sum: 1 }
+                } 
+            }], function (err, secondLevelResults) {
+
+              if (err) {
+                callback(err, null)
+                return
+              }
+              
+              callback(null, {total: secondLevelResults[0], lastTwoMonths: firstLevelResults})
+            
+              return 
+            })
         })
 
       return 
@@ -228,13 +276,18 @@ export default {
               callback(err, null)
               return
             }
-            Customer.aggregate( [
+            Customer.aggregate([
               { $group: 
                 { _id: null, 
                   count: { $sum: 1 },
                   firstCustomersDate: { $first: "$createdAt" }
                 } 
             }], function (err, secondLevelResults) {
+
+              if (err) {
+                callback(err, null)
+                return
+              }
 
               let firstCustomersDate = new Date(""+secondLevelResults[0].firstCustomersDate+"")
               let daysBetween = Customer.daysBetween(firstCustomersDate, new Date())
@@ -290,13 +343,29 @@ export default {
                 }
               }
             }
-          }], function (err, results) {
-          if (err) {
-            callback(err, null)
-            return
-          }
-          callback(null, results)
-          return 
+          }], function (err, firstLevelResults) {
+            
+            if (err) {
+              callback(err, null)
+              return
+            }
+
+            Sale.aggregate([
+              { $group: 
+                { _id: null, 
+                  count: { $sum: 1 }
+                } 
+            }], function (err, secondLevelResults) {
+
+              if (err) {
+                callback(err, null)
+                return
+              }
+              
+              callback(null, {total: secondLevelResults[0], lastTwoMonths: firstLevelResults})
+            
+              return 
+            })
         })
 
         return
@@ -332,16 +401,32 @@ export default {
                 }
               }
             }
-          }], (err, projects) => {
-        if (err) {
-          callback(err, null)
-          return
-        }
+          }],function (err, firstLevelResults) {
+            
+            if (err) {
+              callback(err, null)
+              return
+            }
 
-        callback(null, projects)
-      })
+            Project.aggregate([
+              { $group: 
+                { _id: null, 
+                  count: { $sum: 1 }
+                } 
+            }], function (err, secondLevelResults) {
 
-      return 
+              if (err) {
+                callback(err, null)
+                return
+              }
+              
+              callback(null, {total: secondLevelResults[0], newDelayed: firstLevelResults})
+            
+              return 
+            })
+        })
+
+      return
     }
 
     // Tasks Sales 
@@ -374,14 +459,30 @@ export default {
                 }
               }
             }
-          }], (err, sales) => {
-        if (err) {
-          callback(err, null)
-          return
-        }
+          }], function (err, firstLevelResults) {
+            
+            if (err) {
+              callback(err, null)
+              return
+            }
 
-        callback(null, sales)
-      })
+            Sale.aggregate([
+              { $group: 
+                { _id: null, 
+                  count: { $sum: 1 }
+                } 
+            }], function (err, secondLevelResults) {
+
+              if (err) {
+                callback(err, null)
+                return
+              }
+              
+              callback(null, {total: secondLevelResults[0], newDelayed: firstLevelResults})
+            
+              return 
+            })
+        })
 
       return 
     }
@@ -418,13 +519,29 @@ export default {
                 }
               }
             }
-          }], (err, invoices) => {
-          if (err) {
-            callback(err, null)
-            return
-          }
+          }], function (err, firstLevelResults) {
+            
+            if (err) {
+              callback(err, null)
+              return
+            }
 
-          callback(null, invoices)
+            Invoice.aggregate([
+              { $group: 
+                { _id: null, 
+                  count: { $sum: 1 }
+                } 
+            }], function (err, secondLevelResults) {
+
+              if (err) {
+                callback(err, null)
+                return
+              }
+              
+              callback(null, {total: secondLevelResults[0], pendingOverdue: firstLevelResults})
+            
+              return 
+            })
         })
 
       return 

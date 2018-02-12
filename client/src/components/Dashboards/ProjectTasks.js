@@ -2,6 +2,7 @@ import React, { Component }  from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import classnames from 'classnames'
 
 import { fetchProjectTasks } from '../../actions/dashboardActions'
 
@@ -14,13 +15,21 @@ class ProjectTasks extends Component {
     isLoading: false
   }
   
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.projectTasks) {
+      this.setState({ isLoading: false })
+    }
+  }
+
   componentDidMount() {
+    this.setState({ isLoading: true })
     this.props.fetchProjectTasks()
-      .catch( ({response}) => this.setState({ isLoading: true }) )
+      .catch( ({response}) => this.setState({ isLoading: false }) )
   }
 
   render() {
     
+    const { isLoading } = this.state
     const { projectTasks } = this.props    
 
     let newNotification   
@@ -29,7 +38,7 @@ class ProjectTasks extends Component {
     let overdueNotification   
     let overdueProjects 
 
-    projectTasks && projectTasks.map(task => {
+    projectTasks && projectTasks.newDelayed.map(task => {
 
       if (task._id === 'new') {
         newNotification = (<div key={task._id} className="ui info message">
@@ -90,11 +99,18 @@ class ProjectTasks extends Component {
 
     return (
       
-      <div className="dashboards">
+      <div className={classnames("dashboards", { loading: isLoading })}>
         <h4 className="ui header">{T.translate("dashboards.project_tasks.header")}</h4>
         <div className="ui card">
           
-            {lists}
+          {projectTasks && (projectTasks.total.count !== 0 ? lists : 
+            <div className="content">
+              <div className="ui info message">
+                <div className="description">
+                  {T.translate("dashboards.project_tasks.no_projects")}
+                </div>
+              </div> 
+            </div>)}
           
         </div>
       </div>  

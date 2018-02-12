@@ -36,6 +36,10 @@
   color: $turquoise !important;
 }
 
+.body-color {
+  color: $body-color !important;
+}
+
 .red {
   color: $red !important;
 }
@@ -513,15 +517,21 @@ i.orange.icon {
 }
 
 // Vertical center
-.vertical-text-align-wrapper {
+.vertical-center-align-container {
   display: table;
   height: 100%;
   width: 100%;
 }
 
-.vertical-text-align-element {
+.vertical-center-align-element {
   display: table-cell;
   vertical-align: middle;
+}
+
+.vertical-center-align-element-absolute {
+  position: absolute; // Remember to give parent container position relative
+  top: 50%;
+  @include transform-translate(-50%);
 }
 
 // React vis

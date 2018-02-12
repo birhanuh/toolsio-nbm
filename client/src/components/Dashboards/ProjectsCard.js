@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchProjects } from '../../actions/dashboardActions'
@@ -16,17 +17,24 @@ class ProjectsCard extends Component {
     isLoading: false
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.projects) {
+      this.setState({ isLoading: false })
+    }
+  }
+
   componentDidMount = () => {
+    this.setState({ isLoading: true })
     this.props.fetchProjects()
-      .catch( ({response}) => this.setState({ isLoading: true }) )
+      .catch( ({response}) => this.setState({ isLoading: false }) )
   }
 
   render() {
 
-    const { value } = this.state
+    const { value, isLoading } = this.state
     const { projects } = this.props
-    
-    const data = projects && projects[1].data.map(project => {
+    console.log('isLoading: ', isLoading)
+    const data = projects && projects.lastTwoMonths[1].data.map(project => {
 
       let projectStatusClass          
       switch(project.status) {
@@ -65,7 +73,7 @@ class ProjectsCard extends Component {
     }
 
     return (
-      <div className="ui card">
+      <div className={classnames("ui card dashboards form", { loading: isLoading })}>
         <div className="content">
           <div className="right floated">
             <h4 className="ui header">
@@ -104,13 +112,23 @@ class ProjectsCard extends Component {
         <div className="content">
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
-            <div className="header">{projects && projects[1].totalCount}</div>
+            <div className="header">{projects && projects.lastTwoMonths[1].totalCount}</div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.last_month")}</div>
-            <div className="header">{projects && projects[0].totalCount}</div>
+            <div className="header">{projects && projects.lastTwoMonths[0].totalCount}</div>
           </div>    
         </div>
+
+        {projects && projects.total.count === 0 &&  
+          <div className="content-btn-outer-container">
+            <div className="content-btn-inner-container">
+              <Link to="/projects" className="ui primary outline button small">
+                <i className="check circle outline icon"></i>{T.translate("dashboards.projects.create_first_project")}
+              </Link>
+            </div>
+          </div>
+        } 
       </div> 
       )
   }

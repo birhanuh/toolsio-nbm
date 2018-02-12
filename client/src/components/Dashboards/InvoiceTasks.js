@@ -2,6 +2,7 @@ import React, { Component }  from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import classnames from 'classnames'
 
 import { fetchInvoiceTasks } from '../../actions/dashboardActions'
 
@@ -14,13 +15,21 @@ class InvoiceTasks extends Component {
     isLoading: false
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.invoiceTasks) {
+      this.setState({ isLoading: false })
+    }
+  }
+
   componentDidMount() {
+    this.setState({ isLoading: true })
     this.props.fetchInvoiceTasks()
-      .catch( ({response}) => this.setState({ isLoading: true }) )
+      .catch( ({response}) => this.setState({ isLoading: false }) )
   }
   
   render() {
     
+    const { isLoading } = this.state
     const { invoiceTasks } = this.props
     
     let pendingNotification   
@@ -29,7 +38,7 @@ class InvoiceTasks extends Component {
     let overdueNotification   
     let overdueInvoices 
 
-    invoiceTasks && invoiceTasks.map(task => {
+    invoiceTasks && invoiceTasks.pendingOverdue.map(task => {
 
       if (task._id === 'pending') {
         pendingNotification = (<div key={task._id} className="ui info message">
@@ -90,11 +99,18 @@ class InvoiceTasks extends Component {
 
     return (
       
-      <div className="dashboards">
+      <div className={classnames("dashboards form", { loading: isLoading })}>
         <h4 className="ui header">{T.translate("dashboards.invoice_tasks.header")}</h4>
         <div className="ui card">
           
-            {lists}
+          {invoiceTasks && (invoiceTasks.total.count !== 0 ? lists : 
+            <div className="content">
+              <div className="ui info message">
+                <div className="description">
+                  {T.translate("dashboards.invoice_tasks.no_invoices")}
+                </div>
+              </div> 
+            </div>)}
           
         </div>
       </div>  

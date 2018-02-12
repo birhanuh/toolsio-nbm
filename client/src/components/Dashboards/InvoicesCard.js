@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchInvoices } from '../../actions/dashboardActions'
@@ -16,14 +17,21 @@ class InvoicesCard extends Component {
     isLoading: false
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.invoices) {
+      this.setState({ isLoading: false })
+    }
+  }
+
   componentDidMount = () => {
+    this.setState({ isLoading: true })
     this.props.fetchInvoices()
-      .catch( ({response}) => this.setState({ isLoading: true }) )
+      .catch( ({response}) => this.setState({ isLoading: false }) )
   }
 
   render() {
 
-  const { value } = this.state
+  const { value, isLoading } = this.state
   const { invoices } = this.props
 
   let dataNew = []
@@ -31,7 +39,7 @@ class InvoicesCard extends Component {
   let dataOverdue = []
   let dataPaid = []
 
-  const data = invoices && invoices[1].data.map(invoice => {
+  const data = invoices && invoices.lastTwoMonths[1].data.map(invoice => {
 
     let invoiceStatusClass          
     switch(invoice.status) {
@@ -56,12 +64,13 @@ class InvoicesCard extends Component {
     }
     
     })
+
   console.log('dataNew invoice: ', dataNew)
    console.log('dataPending invoice: ', dataPending)
     console.log('dataOverdue nvoice: ', dataOverdue )
      console.log('dataPaid invoice: ', dataPaid)
   return (
-    <div className="ui card">
+    <div className={classnames("ui card dashboards form", { loading: isLoading })}>
       <div className="content">
         <div className="right floated">
           <h4 className="ui header">
@@ -79,7 +88,7 @@ class InvoicesCard extends Component {
         <XYPlot
           xType="ordinal"
           width={600}
-          height={300}
+          height={200}
           >
           <DiscreteColorLegend
             className="legend-center-top-aligned"
@@ -124,13 +133,23 @@ class InvoicesCard extends Component {
       <div className="content"> 
         <div className="right floated">
           <div className="meta">{T.translate("dashboards.this_month")}</div>
-          <div className="header">15</div>
+          <div className="header">{invoices && invoices.lastTwoMonths[1].totalCount}</div>
         </div>     
         <div className="left floated">
           <div className="meta">{T.translate("dashboards.last_month")}</div>
-          <div className="header">15</div>
+          <div className="header">{invoices && invoices.lastTwoMonths[0].totalCount}</div>
         </div>    
       </div>
+
+       {invoices && invoices.total.count === 0 &&
+          <div className="content-btn-outer-container">
+            <div className="content-btn-inner-container">
+              <Link to="/invoices" className="ui primary outline button small">
+                <i className="check circle outline icon"></i>{T.translate("dashboards.invoices.create_first_invoice")}
+              </Link>
+            </div>
+          </div>
+        }  
     </div> 
     )
   }

@@ -1,5 +1,6 @@
 import React, { Component }  from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchIncomes } from '../../actions/dashboardActions'
@@ -16,21 +17,28 @@ class IncomesCard extends Component {
     isLoading: false
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.incomes) {
+      this.setState({ isLoading: false })
+    }
+  }
+
   componentDidMount = () => {
+    this.setState({ isLoading: true })
     this.props.fetchIncomes()
-      .catch( ({response}) => this.setState({ isLoading: true }) )
+      .catch( ({response}) => this.setState({ isLoading: false }) )
   }
 
   render() {
 
-    const { value } = this.state
+    const { value, isLoading } = this.state
     const { incomes } = this.props
 
     const monthNames = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
       ]
 
-    const data = incomes && incomes[0].data.map(income => 
+    const data = incomes && incomes.lastTwoMonths[0].data.map(income => 
       ({x: new Date(''+monthNames[income.date.month-1]+' '+income.date.day+' '+income.date.year+'').getTime(), y: income.sum})
       )
 
@@ -39,7 +47,7 @@ class IncomesCard extends Component {
     }
 
     return (
-      <div className="ui card">
+      <div className="ui card dashboards">
         <div className="content">
           <div className="right floated">
             <h4 className="ui header">
@@ -80,16 +88,25 @@ class IncomesCard extends Component {
         <div className="content">
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
-            <div className="header">{incomes && incomes[1].totalSum}</div>
+            <div className="header">{incomes ? incomes.lastTwoMonths[1].totalSum : '-'}</div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.last_month")}</div>
-            <div className="header">{incomes && incomes[0].totalSum}</div>
+            <div className="header">{incomes ? incomes.lastTwoMonths[0].totalSum : '-'}</div>
           </div>    
-        </div>
+        </div> 
+
+        {incomes && incomes.total.count === 0 && 
+          <div className="content-btn-outer-container">
+            <div className="content-btn-inner-container">
+              <Link to="/invoices" className="ui primary outline button small">
+                <i className="check circle outline icon"></i>{T.translate("dashboards.invoices.create_first_invoice")}
+              </Link>
+            </div>
+          </div>
+        }          
       </div>
       )
-
   }
 }
 

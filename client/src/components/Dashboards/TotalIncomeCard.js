@@ -14,26 +14,36 @@ class TotalIncomeCard extends Component {
     isLoading: false
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.totalIncome) {
+      this.setState({ isLoading: false })
+    }
+  }
+
   componentDidMount() {
+    this.setState({ isLoading: true })
     this.props.fetchTotalIncome()
       .catch( ({response}) => this.setState({ totalIncome: { isLoading: true} }) )
   }
   
   render() {
 
+    const { isLoading } = this.state
     const { totalIncome } = this.props
 
-    return (
-      
-      <div className="dashboards">
-        <h4 className="ui header">{T.translate("dashboards.total_income.header")}</h4>
-        <div className="ui card" style={{height: '285px', display: 'table'}}>
-          <div className="content" style={{display: 'table-cell', verticalAlign: 'middle'}}>
-            <h1 className="ui header green centered bold">{totalIncome && totalIncome[0].sum}</h1>
-            <div className="description center aligned">{T.translate("dashboards.total_income.description")}</div>
-          </div>
+    return (    
+    
+      <div className={classnames("ui card dashboards form", { loading: isLoading })}>
+        <div className="content">
+          <h4 className="ui header body-color">
+            {T.translate("dashboards.total_income.header")}
+          </h4>
         </div>
-      </div>  
+        <div className="content" style={{display: 'table-cell', verticalAlign: 'middle', borderTop: 'none'}}>
+          <h1 className="ui header green centered bold">{totalIncome && totalIncome[0].sum}</h1>
+          <div className="description center aligned">{T.translate("dashboards.total_income.description")}</div>
+        </div>
+      </div>
     )
   }
 

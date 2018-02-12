@@ -465,12 +465,28 @@ nav.ui.menu .item>a {
   }
 }
 
-.dashboards > .ui.card {
+.ui.card.dashboards {
   width: 100%;
+  min-height: 315px;
 }
 
-.dashboards > .ui.card > .image {
+.ui.card.dashboards > .image {
   background: #ffffff;
+}
+
+.ui.card.dashboards > .content-btn-outer-container {
+  @extend .vertical-center-align-container;
+  position: absolute;
+  top: 0;
+  height: 315px;
+  background: #ffffff;
+  opacity: 0.85;
+  z-index: 1;
+  .content-btn-inner-container {
+    @extend .vertical-center-align-element;
+    text-align: center;
+    z-index: 2;
+  }
 }
 
 .sub-header {
