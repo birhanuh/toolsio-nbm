@@ -160,7 +160,7 @@ class Form extends Component {
       const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
       this.setState({ isLoading: true })
       this.props.saveCustomer({ _id, name, vatNumber, includeContactOnInvoice, contact, address })
-        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 

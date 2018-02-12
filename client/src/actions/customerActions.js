@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { SET_CUSTOMERS, ADD_CUSTOMER, CUSTOMER_FETCHED, CUSTOMER_UPDATED, CUSTOMER_DELETED } from './types'
 
+// Action creators 
 export function addCustomer(customer) {
   return {
     type: ADD_CUSTOMER,
@@ -36,6 +37,7 @@ export function customerDeleted(id) {
   }  
 }
 
+// Thunk actions
 export function createCustomer(customer) {
   return dispatch => {
     return axios.post('/api/customers', customer)

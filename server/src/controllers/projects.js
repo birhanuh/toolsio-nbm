@@ -20,7 +20,7 @@ export default {
 
     let id = req.params.id
 
-    Project.findById(id).populate([{ path: 'customer', select: '_id'}, { path: 'customer', select: 'name'}, { path: 'tasks'}, { path: 'invoice', select: '_id' }]).exec(function(err, project) {
+    Project.findById(id).populate([{ path: 'customer', select: 'name'}, { path: 'tasks'}, { path: 'invoice', select: '_id' }]).exec(function(err, project) {
       if (err) {
         callback(err, null)
         return
@@ -33,6 +33,7 @@ export default {
   create: (req, callback) => {
 
     let body = req.body
+    delete body['_id']
 
     Project.create(body, (err, project) => {
       if (err) {
@@ -68,24 +69,23 @@ export default {
         return
       }
 
-      // Remove relateded tasks
-      Task.remove({ _creator: id }, (err, task) => {
+      // Remove associated Task
+      Task.remove({ _creator: project._id }, (err, task) => {
         if (err) {
           callback(err, null)
           return
         }
-        callback(null, null)
       })
 
-      // Remove relateded invoice
-      Invoice.remove({ project: id }, (err, invoice) => {
+      // Remove associated Invoice
+      Invoice.remove({ project: project._id }, (err, invoice) => {
         if (err) {
           callback(err, null)
           return
         }
-        callback(null, null)
       })
       
+      callback(null, null)
     })
   }
 }

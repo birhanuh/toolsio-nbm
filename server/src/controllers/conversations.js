@@ -187,7 +187,7 @@ export default {
   },
 
   create: (req, callback) => {
-    console.log('conversationId: ', req.body)
+    
     if (req.body.recipientId) {
 
       const conversation = new Conversation({

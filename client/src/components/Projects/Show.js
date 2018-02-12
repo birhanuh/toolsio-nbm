@@ -7,14 +7,14 @@ import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchProject, deleteProject } from '../../actions/projectActions'
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 import TaskForm from './Tasks/Form'
 
 // Localization 
 import T from 'i18n-react'
 
 import $ from 'jquery'
-
-import Breadcrumb from '../Layouts/Breadcrumb'
 
 // Modal
 $.fn.modal = require('semantic-ui-modal')
@@ -100,17 +100,17 @@ class Show extends Component {
 
         <div className="twelve wide column">
           <div className="ui segment">    
-            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
+            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
             <dl className="dl-horizontal">
               <dt>{T.translate("projects.show.customer")}</dt>
-              <dd>{customer && <Link to={`/customers/show/${customer._id}`}>{customer.name}</Link>}</dd>
+              <dd>{customer ? <Link to={`/customers/show/${customer._id}`}>{customer.name}</Link> : '-'}</dd>
               {/*<dt>{T.translate("projects.show.user")}</dt>
               <dd>{project.user.first_name}</dd>*/}
               <dt>{T.translate("projects.show.deadline")}</dt>
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("projects.show.status")}</dt>
               <dd>
-                <div className={classnames("ui tiny uppercase label", {blue: status === 'new', orange: status === 'on going', green: status === 'finished' || status === 'delivered', red: status === 'delayed'})}> 
+                <div className={classnames("ui tiny uppercase label", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}> 
                   {status}
                 </div>
               </dd>

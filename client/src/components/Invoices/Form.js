@@ -52,7 +52,7 @@ class Form extends Component {
           project: nextProps.invoice.project && nextProps.invoice.project._id
         },
         step2: {
-          deadline: moment(nextProps.invoice.deadline),
+          deadline: nextProps.invoice.deadline ? moment(nextProps.invoice.deadline) : null,
           paymentTerm: nextProps.invoice.paymentTerm,
           interestInArrears: nextProps.invoice.interestInArrears,
           status: nextProps.invoice.status,
@@ -141,7 +141,7 @@ class Form extends Component {
 
       this.setState({ isLoading: true })
       this.props.saveInvoice({ _id, sale, project, deadline, paymentTerm, interestInArrears, status, description })
-        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 
@@ -186,15 +186,26 @@ class Form extends Component {
   }
 
   handleChangeDate(deadline) {
-    this.setState({
-      deadline: deadline
-    })
+    if (!!this.state.errors['deadline']) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors['deadline']
+      
+      this.setState({
+        step2: { ...this.state.step2, deadline: deadline },
+        errors
+      })
+    } else {
+      this.setState({
+        step2: { ...this.state.step2, deadline: deadline }
+      })
+    }
   } 
 
   render() {
     const { _id, step1, step2, sale, project, errors, isLoading, currentStep } = this.state
-    
-     const salesOptions = map(this.props.sales, (sale) => 
+    console.log("project ", project)
+    const salesOptions = map(this.props.sales, (sale) => 
       <option key={sale._id} value={sale._id}>{sale.name}</option>
     )
 
@@ -203,7 +214,7 @@ class Form extends Component {
     )
 
     const paymentTermOptions = Array(99).fill().map((key, value) => 
-      <option key={key} value={value}>{value}</option>
+      <option key={value} value={value}>{value}</option>
     )
 
     const saleAndProjectDetails = (
@@ -228,7 +239,7 @@ class Form extends Component {
               error={errors.message && errors.message.errors && errors.message.errors.sale && errors.message.errors.sale.message}
               formClass="inline field"
 
-              options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_sale")}</option>,
+              options={[<option key="default" value="">{T.translate("invoices.form.select_sale")}</option>,
                 salesOptions]}
             />
 
@@ -242,7 +253,7 @@ class Form extends Component {
               error={errors.message && errors.message.errors && errors.message.errors.project && errors.message.errors.project.message}
               formClass="inline field"
 
-              options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_project")}</option>,
+              options={[<option key="default" value="">{T.translate("invoices.form.select_project")}</option>,
                 projectsOptions]}
             />
           </fieldset>
@@ -269,14 +280,14 @@ class Form extends Component {
           <fieldset className="custom-fieldset">
             <legend className="custom-legend">{T.translate("invoices.form.select_payment_term_or_deadline")}</legend>
 
-            <div  className={classnames("inline field", { error: !!errors.deadline })}>
+            <div  className={classnames("inline field", { error: !!(errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message) })}>
               <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={step2.deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span>{errors.password}</span>
+              <span className="red">{errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message}</span>
             </div>
             
             <div className="ui horizontal divider">Or</div>
@@ -316,7 +327,8 @@ class Form extends Component {
               formClass="inline field"
 
               options={[
-                <option key="default" value="pending" disabled>PENDING</option>,
+                <option key="default" value="new" disabled>NEW</option>,
+                <option key="pending" value="pending">PENDING</option>,
                 <option key="paid" value="paid">PAID</option>,
                 <option key="overdue" value="overdue">OVERDUE</option>
                 ]
@@ -358,9 +370,9 @@ class Form extends Component {
             {/*<dt>{T.translate("invoices.show.user")}</dt>
             <dd>{invoice.user.first_name}</dd>*/}  
             <dt>{T.translate("invoices.show.deadline")}</dt>
-            <dd>{step2.deadline.toString()}</dd>
+            <dd>{step2.deadline ? step2.deadline.toString() : '-'}</dd>
             <dt>{T.translate("invoices.show.status")}</dt>
-            <dd><div className="ui uppercase tiny label orange">pending</div></dd>
+            <dd><div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div></dd>
             <dt>{T.translate("invoices.show.payment_term")}</dt>
             <dd>{step2.paymentTerm ? step2.paymentTerm : '-'}</dd>
             <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
@@ -379,12 +391,12 @@ class Form extends Component {
                 <dd>{sale.name}</dd>
                 <dt>{T.translate("invoices.form.sale.status")}</dt>
                 <dd>
-                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
-                    {project.status}
+                  <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+                    {sale.status}
                   </div>
                 </dd>
                 <dt>{T.translate("invoices.form.sale.customer")}</dt>
-                <dd>{sale.customer.name}</dd>
+                <dd>{sale.customer && sale.customer.name}</dd>
               </dl>
             </div>
           }
@@ -399,7 +411,7 @@ class Form extends Component {
                 <dd>{project.name}</dd>
                 <dt>{T.translate("invoices.form.project.status")}</dt>
                 <dd>
-                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
                     {project.status}
                   </div>
                 </dd>

@@ -19,7 +19,7 @@ export default {
 
     Invioce.count({}, function( err, count){
 
-      Invioce.find(search).sort(sort).skip(start).limit(length).populate([{path: 'sale', select: 'name total'}, {path: 'project', select: 'name total' }, {path: 'customer', select: 'name'}]).exec((err, invoices) => {
+      Invioce.find(search).sort(sort).skip(start).limit(length).populate([{path: 'sale', select: 'name total status'}, {path: 'project', select: 'name total status' }, {path: 'customer', select: 'name'}]).exec((err, invoices) => {
         if (err) {
           callback(err, null)
           return
@@ -29,26 +29,71 @@ export default {
 
         const invoicesFiltered = invoices.map(invoice => {
          
-          let statusClass
-          
+          let invoiceStatusClass          
           switch(invoice.status) {
+            case 'new':
+              invoiceStatusClass = 'blue'
+              break
             case 'pending':
-              statusClass = 'orange'
+              invoiceStatusClass = 'orange'
               break
             case 'overdue':
-              statusClass = 'red'
+              invoiceStatusClass = 'red'
               break
             case 'paid':
-              statusClass = 'green' 
+              invoiceStatusClass = 'green' 
               break
             default:
-              statusClass = 'undefined' 
+              invoiceStatusClass = 'undefined' 
           }
           
-          let status = "<div class=\"ui uppercase tiny label "+statusClass+"\">"+
-            invoice.status+
-          "</div>"
-          
+          let saleStatusClass          
+          switch(invoice.sale && invoice.sale.status) {
+            case 'new':
+              saleStatusClass = 'blue'
+              break
+            case 'in progress':
+              saleStatusClass = 'orange'
+              break
+            case 'overdue':
+              saleStatusClass = 'red'
+              break
+            case 'ready':
+              saleStatusClass = 'green' 
+              break
+            case 'delivered':
+              saleStatusClass = 'turquoise' 
+              break
+             case 'delayed':
+              saleStatusClass = 'red' 
+              break
+            default:
+              saleStatusClass = 'undefined' 
+          }
+     
+          let projectStatusClass          
+          switch(invoice.project && invoice.project.status) {
+            case 'new':
+              projectStatusClass = 'blue'
+              break
+            case 'in progress':
+              projectStatusClass = 'orange'
+              break
+            case 'overdue':
+              projectStatusClass = 'red'
+              break
+            case 'finished':
+              projectStatusClass = 'green' 
+              break
+            case 'delivered':
+              projectStatusClass = 'turquoise' 
+              break
+            case 'delayed':
+              projectStatusClass = 'red' 
+              break  
+            default:
+              projectStatusClass = 'undefined' 
+          }
           let actions = 
             "<div class=\"ui small buttons\">" +
               "<a href=\"/invoices/edit/"+invoice._id+"\" class=\"ui icon basic button green\"><i class=\"edit icon\"></i></a>" +
@@ -57,11 +102,14 @@ export default {
 
           invoicesList =
             [
-            (invoice.sale && invoice.sale.name) || (invoice.project && invoice.project.name),
+            (invoice.sale && "<span class=\""+saleStatusClass+"\">"+invoice.sale.name+"</span>") || 
+              (invoice.project && "<span class=\""+projectStatusClass+"\">"+invoice.project.name+"</span>"),
             invoice.createdAt,
             invoice.customer.name,
             invoice.project && invoice.project.total || invoice.sale && invoice.sale.total,
-            status, 
+            "<div class=\"ui uppercase tiny label "+invoiceStatusClass+"\">"+
+              invoice.status+
+            "</div>", 
             actions        
           ]
 
@@ -69,7 +117,7 @@ export default {
         })
 
         invoices = {      
-           draw: parseInt(query.draw),
+          draw: parseInt(query.draw),
           total: count,
           list: invoicesFiltered
         }

@@ -440,42 +440,6 @@ nav.ui.menu .item>a {
   margin: 0 auto;
 }
 
-// Label
-.ui[class*="right floated"].label {
-    float: right;
-    margin-top: 0;
-    margin-left: .5em;
-}
-
-.ui.orange.label, .ui.orange.labels .label {
-  background-color: $orange !important;
-  border-color: $orange !important;
-}
-
-.ui.blue.label, .ui.blue.labels .label {
-  background-color: $blue !important;
-  border-color: $blue !important;
-}
-
-.ui.green.label, .ui.green.labels .label {
-  background-color: $green !important;
-  border-color: $green !important;
-}
-
-.ui.red.label, .ui.red.labels .label {
-  background-color: $red !important;
-  border-color: $red !important;
-}
-
-// Line break
-.x-light-turquoise-hr {
-  border-top: 1px solid $x-light-turquoise;
-}
-
-.medium-grey-hr {
-  border-top: 1px solid $medium-grey;
-}
-
 // Thumbnail
 .thumbnail {
   @include border-radius(0);
@@ -495,15 +459,33 @@ nav.ui.menu .item>a {
   border-bottom: none;
 }
 
-.panel-transparent-header {
-  .ui.top.attached.header {
-    padding: 0.78571429rem 0;
-    background: none;
-    border: none;
+.ui.two.cards.sales, .ui.two.cards.projects {
+  .card a.ui.header {
+    margin-top: -20px;
   }
-  .ui.bottom.attached.segment {
-    border-top: 1px solid $light-grey;
-    @include border-radius(3px);
+}
+
+.ui.card.dashboards {
+  width: 100%;
+  min-height: 315px;
+}
+
+.ui.card.dashboards > .image {
+  background: #ffffff;
+}
+
+.ui.card.dashboards > .content-btn-outer-container {
+  @extend .vertical-center-align-container;
+  position: absolute;
+  top: 0;
+  height: 315px;
+  background: #ffffff;
+  opacity: 0.85;
+  z-index: 1;
+  .content-btn-inner-container {
+    @extend .vertical-center-align-element;
+    text-align: center;
+    z-index: 2;
   }
 }
 
@@ -526,38 +508,6 @@ nav.ui.menu .item>a {
   height: 0.875em;
 }
 
-.ui.progress.success .bar {
-  background-color: $green !important;
-}
-
-.ui.progress.info .bar {
-  background-color: $light-blue !important;
-}
-
-.ui.progress.error .bar {
-  background-color: $red !important;
-}
-
-.ui.progress.warning .bar {
-  background-color: $orange !important;
-}
-
-i.green.icon {
-  color: $green !important;
-}
-
-i.blue.icon {
-  color: $blue !important;
-}
-
-i.red.icon {
-  color: $red !important;
-}
-
-i.orange.icon {
-  color: $orange !important;
-}
-
 // Dropdown
 .dropdown-menu {
   min-width: 180px;
@@ -572,6 +522,13 @@ dl.dl-horizontal {
     font-weight: bold;
   }
 } 
+
+// Label
+.ui[class*="right floated"].label {
+    float: right;
+    margin-top: 0;
+    margin-left: .5em;
+}
 
 // Custome note box
 .bs-callout {
@@ -876,12 +833,6 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
   padding-right: 10px !important;
 }
 
-.ui.two.cards.sales, .ui.two.cards.projects {
-  .card a.ui.header {
-    margin-top: -20px;
-  }
-}
-
 // Invoices
 .invoice.show {
   .ui.huge.corner {
@@ -891,6 +842,9 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
     font-size: 0.6em;
     margin: 23px auto 15px 15px;
     @include transform-rotate(45deg) 
+  }
+  .ui.header a {
+    width: auto;
   }
 }
 

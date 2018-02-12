@@ -41,8 +41,7 @@ export default function List({ conversations, deleteConversation, account }) {
     <div>
       { conversations.length === 0 ? emptyMessage : conversationsList }
     </div>   
-  )
-  
+  ) 
 
 }
 

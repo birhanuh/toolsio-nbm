@@ -7,6 +7,8 @@ import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchCustomer, deleteCustomer } from '../../actions/customerActions'
 
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -15,8 +17,6 @@ import $ from 'jquery'
 // Modal
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
-
-import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Show extends Component {
   
@@ -118,20 +118,21 @@ class Show extends Component {
         </div>
       </div>
     )
+    console.log('project: ', projects)
 
     const projectsList = map(projects, (project) => 
       <div key={project._id} className="ui segment">
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/projects/show/${project._id}`} className="ui header">
-              <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}>
+              <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}>
                 {project.name}
               </h3>
             </Link>
           </div>
 
           <div className="four wide column">
-            <div className={classnames("ui uppercase tiny right label", {blue: project.status === 'new', orange: project.status === 'on going', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+            <div className={classnames("ui uppercase tiny right label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}> 
               {project.status}
             </div>
           </div>
@@ -156,14 +157,14 @@ class Show extends Component {
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/sales/show/${sale._id}`} className="ui header">
-              <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
+              <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}>
                 {sale.name}
               </h3>
             </Link>
           </div>
 
           <div className="four wide column">
-            <div className={classnames("ui uppercase tiny right label", {blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+            <div className={classnames("ui uppercase tiny right label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}> 
               {sale.status}
             </div>
           </div>
@@ -189,20 +190,20 @@ class Show extends Component {
         <div className="ui three column grid">
           <div className="eight wide column">
             <Link to={`/invoices/show/${invoice._id}`} className="ui header">
-              <h3 className={classnames({orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
+              <h3 className={classnames({blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
                 {invoice.referenceNumber}
               </h3>
             </Link>
           </div>
 
           <div className="four wide column">
-            <div className={classnames("ui uppercase tiny label", {orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
+            <div className={classnames("ui uppercase tiny label", {blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
             {invoice.status}
             </div>
           </div>
 
           <div className="four wide column">
-            <span>{invoice.deadline}</span>
+            <span>{invoice.deadline || invoice.paymentTerm}</span>
           </div>
 
         </div>
@@ -231,8 +232,8 @@ class Show extends Component {
               
               <dt>{T.translate("customers.show.include_contact_on_invoice")}</dt>
               <dd>
-                {includeContactOnInvoice ? <i className="check circle outline icon green"></i> :
-                  <i className="minus circle outline icon red"></i>
+                {includeContactOnInvoice ? <i className="check circle icon green"></i> :
+                  <i className="minus circle icon red"></i>
                 }
               </dd>
 

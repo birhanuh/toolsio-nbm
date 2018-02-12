@@ -6,6 +6,8 @@ import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { fetchInvoice, deleteInvoice } from '../../../actions/invoiceActions'
 
+import Breadcrumb from '../../Layouts/Breadcrumb'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -110,12 +112,19 @@ class Page extends Component {
 
     return (
       <div className="ui stackable grid invoice show">
+
+        <Breadcrumb />
+
         <div className="twelve wide column">
           <div className="ui segment">    
-            <h1 className="ui header">{T.translate("invoices.show.header")}
-              <div className="sub header inline-block-i pl-1">{(sale && sale.name) || (project && project.name)}</div>
+            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
+              
+              {project && <Link to={`/projects/show/${project._id}`} className={classnames("sub header inline-block-i pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({project.name})</Link>}
+
+              {sale && <Link to={`/sales/show/${sale._id}`} className={classnames("sub header inline-block-i pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({sale.name})</Link>}
+
             </h1> 
-            <div className={classnames("ui uppercase huge right corner label", {orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
+            <div className={classnames("ui uppercase huge right corner label", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
               <p>{status}</p>
             </div>
 

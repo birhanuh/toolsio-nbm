@@ -18,7 +18,7 @@ export default {
 
     let id = req.params.id
 
-    Invoice.findById(id).populate([{path: 'sale', populate: { path: 'items' }}, {path: 'project', populate: { path: 'tasks' }}, {path: 'customer'}]).exec(function(err, invoice) {
+    Invoice.findById(id).populate([{path: 'sale', populate: {path: 'items'} }, {path: 'project', populate: {path: 'tasks'} }, { path: 'customer', select: 'name vatNumber address' } ]).exec(function(err, invoice) {
       if (err) {
         callback(err, null)
         return
@@ -31,6 +31,7 @@ export default {
   create: (req, callback) => {  
 
     let body = req.body
+    delete body['_id']
 
     Invoice.create(body, function(err, invoice) {
       if (err) {
@@ -65,6 +66,22 @@ export default {
         callback(err, null)
         return
       }
+
+      // Update associated associated Project
+      Project.findByIdAndUpdate(invoice.project, { invoice: null }, (err, invoice) => {
+        if (err) {
+          callback(err, null)
+          return
+        }
+      })
+      
+      // Update associated associated Sale
+      Sale.findByIdAndUpdate(invoice.sale, { invoice: null }, (err, invoice) => {
+        if (err) {
+          callback(err, null)
+          return
+        }
+      })
 
       callback(null, null)
     })

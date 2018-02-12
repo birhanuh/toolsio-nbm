@@ -20,7 +20,7 @@ export default function Sale({sale}) {
         <dt>{T.translate("invoices.show.sale.status")}</dt>
         <dd>
           { sale && 
-            <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'on going', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+            <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
                   {sale.status}
                 </div>
           }

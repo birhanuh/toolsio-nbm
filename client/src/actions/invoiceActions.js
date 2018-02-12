@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { SET_INVOICES, ADD_INVOICE, INVOICE_FETCHED, INVOICE_UPDATED, INVOICE_DELETED } from './types'
 
+// Action creators 
 export function setInvoices(invoices) {
   return {
     type: SET_INVOICES,
@@ -36,6 +37,7 @@ export function invoiceDeleted(id) {
   }  
 }
 
+// Thunk actions
 export function createInvoice(invoice) {
   return dispatch => {
     return axios.post('/api/invoices', invoice)

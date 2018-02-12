@@ -157,39 +157,63 @@
     "sign_out": "Sign out"
   },
   "dashboards": {
-    "header": "Dashboard",
+    "header": "Dashboards",
     "description": "Summary of your business activties are shown infographically.",
-    "invoices": "Invoices",
-    "all_income": "All income",
-    "all_income_description": "Cumulative of all of your incomes (paid-invoices) statred since using this sevice.",
-    "customers": "Customers",
-    "paid_invoices": "Paid invoces",
-    "tasks": "Tasks",
-    "projects": "Projects",
-    "sales": "Sales",
-    "summary": "Summary",
-    "today": "Today",
-    "sales_and_projects": "Sales and Projects",
-    "incomes": "Incomes",
-    "last_week": "Last week",
-    "this_week": "This week",
-    "average_visits_per_week": "Average visits/week",
-    "this_week_visits": "This week visits",
-    "invoicing_performance": "Invoicing performance",
-    "new_projects": "New projects",
-    "preparing_sales": "Preparing sales",
-    "no_tasks_invoice": "No tasks for invoice",
-    "no_tasks_project": "No tasks for project",
-    "no_tasks_sale": "No tasks for sale",
+    "total_income": {
+      "header": "Total income",
+      "description": "Cumulative of all of your incomes (paid-invoices) statred since using this sevice."
+    },
+    "incomes": {
+      "header": "Incomes"
+    },
+    "projects": {
+      "header": "Projects",
+      "create_first_project": "Create you first Project"
+    },
+    "sales": {
+      "header": "Sales",
+      "create_first_sale": "Create you first Sale"
+    },
+    "customers": {
+      "header": "Customers",
+      "create_first_customer": "Create you first Customer"
+    },
+    "invoices": {
+      "header": "Invoices",
+      "create_first_invoice": "Create your first Invoice",
+      "paid": "Paid",
+      "pending": "Pending",
+      "overdue": "Overdue",
+      "invoicing_performance": "Invoicing performance"
+    },  
+    "project_tasks": {
+      "header": "Project tasks",
+      "no_projects": "You have no Projects",
+      "no_new_projects": "You have no new Project",
+      "new_projects": "You have *{count}* new Projects.",
+      "no_overdued_projects": "You have no overdue Project",
+      "overdued_sales": "You have *{count}* overdued Projects."
+    },
+    "sale_tasks": {
+      "header": "Sale tasks",
+      "no_sales": "You have no Sales",
+      "no_new_sales": "You have no new Sales",
+      "new_sales": "You have *{count}* new Sales.",
+      "no_overdued_sales": "You have no overdue Sales",
+      "overdued_sales": "You have *{count}* overdued Sales."
+    },
+    "invoice_tasks": {
+      "header": "Invoice tasks",
+      "no_invoices": "You have no Invoices",
+      "no_pending_invoices": "You have no pending Invoices",
+      "pending_invoices": "You have *{count}* pending Invoices.",
+      "no_overuded_invoices": "You have no overuded Invoices",
+      "overdued_invoices": "You have *{count}* overdued Invoices."
+    },   
+    "last_month": "Last month",
+    "this_month": "This month", 
+    "average": "Avg", 
     "no_tasks_users": "No tasks by other users",
-    "tasks_pending_invoices": "You have <strong>%{pendings_number}</strong> pending invoices",
-    "tasks_overdue_invoices": "You have <strong>%{overdues_number}</strong> overdue invoices",
-    "tasks_send_customer": "Send invoice <strong>%{invoice_name}</strong> to <small class=\"text-x-light-dark-grey\">%{customer_name}</small>",
-    "tasks_remind_customer": "Remind <strong>%{customer_name}</strong> to pay for <small class=\"text-x-light-dark-grey\">%{invoice_name}</small> invoice",
-    "tasks_new_projects": "You have <strong>%{news_number}</strong> new projects",
-    "tasks_delayed_projects": "You have <strong>%{delayeds_number}</strong> delayed projects",
-    "tasks_waiting_sales": "You have <strong>%{waitings_number}</strong> waiting sales",
-    "tasks_user_invoices": "<strong>%{user_name}</strong> is currently working on <strong>%{invoices_number}</strong>",
     "first_invoice": "Create your fisrt Invoice",
     "first_project": "Create your fisrt Project",
     "first_sale": "Add your fisrt Sale",
@@ -198,7 +222,7 @@
   "projects": {
     "page": {
       "header": "Projects",
-      "empty_projects_header": "There are no projects",
+      "empty_projects_header": "There are no Projects",
       "empty_projects_message": "Click Create new Project button above to create your first Project.",
       "create_new_project": "Create new project",
       "status": "Status",
@@ -292,7 +316,7 @@
   "sales": {
     "page": {
       "header": "Sales",
-      "empty_sales_header": "There are no sales",
+      "empty_sales_header": "There are no Sales",
       "empty_sales_message": "Click Create new Sale button above to create your first Sale.",
       "create_new_sale": "Create new sale",
       "status": "Status",
@@ -385,7 +409,8 @@
     "page": {
       "header": "Customers",
       "add_new_customer": "Add new Customer",
-      "empty_customers": "There are no customers. Click Add new Customer button above to create your first Customer.",
+      "empty_customers_header": "There are no Customers",
+      "empty_customers_message": "Click Add new Customer button above to create your first Customer.",
       "description": "All added Customers are shown here.",
       "name": "Name",
       "contacts": "Contacts",
@@ -447,7 +472,8 @@
       "header": "Invoices",
       "are_you_sure": "Are you sure?",
       "create_new_invoice": "Create new Invoice",
-      "empty_invoices_message": "There are no Invoices. Click Create new Invoice button above to create your first Invoice.",
+      "empty_invoices_header": "There are no Invoices",
+      "empty_invoices_message": "Click Create new Invoice button above to create your first Invoice.",
       "description": "All created Invoices are shown here.",
       "sale_project": "Sale/Project",
       "deadline": "Deadline",

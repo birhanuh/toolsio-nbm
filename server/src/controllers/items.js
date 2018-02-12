@@ -32,6 +32,7 @@ export default {
   create: (req, callback) => {  
 
     let body = req.body
+    delete body['_id']
 
     Item.create(body, (err, item) => {
       if (err) {
@@ -69,13 +70,12 @@ export default {
         return
       }
 
-      // Remove Item from this Sale
+      // Remove this Item from associated Sale
       Sale.findByIdAndUpdate(item._creator, { $pull: { items: id}, $inc: {total: -item.price} }, (err, Sale) => {
         if (err) {
           callback(err, null)
           return
         }
-        callback(null, null)
       })
 
       callback(null, null)

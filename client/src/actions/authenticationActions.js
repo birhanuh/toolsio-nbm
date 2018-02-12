@@ -2,6 +2,7 @@ import axios from 'axios'
 import { setAuthorizationToken } from '../utils'
 import { SET_CURRENT_ACCOUNT } from './types'
 
+// Action creators 
 export function setCurrentAccount(account) {
   return {
     type: SET_CURRENT_ACCOUNT,
@@ -9,6 +10,7 @@ export function setCurrentAccount(account) {
   }
 }
 
+// Thunk actions
 export function signupRequest(accountAndUser) {
   return dispatch => {
     return axios.post('/users/register', accountAndUser).then(res => {

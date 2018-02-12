@@ -89,14 +89,25 @@ class Form extends Component {
       this.setState({ isLoading: true })
 
       this.props.saveProject({ _id, name, customer, deadline, status, description })
-        .catch( ( {response} ) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
 
   handleChangeDate(deadline) {
-    this.setState({
-      deadline: deadline
-    })
+    if (!!this.state.errors['deadline']) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors['deadline']
+      
+      this.setState({
+        deadline: deadline,
+        errors
+      })
+    } else {
+      this.setState({
+        deadline: deadline
+      })
+    }
   } 
 
   render() {
@@ -130,14 +141,14 @@ class Form extends Component {
               formClass="inline field"
             />
                           
-            <div  className={classnames("inline field", { error: !!errors['deadline'] })}>
+            <div  className={classnames("inline field", { error: !!(errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message) })}>
               <label className="" htmlFor="date">{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span>{errors.deadline}</span>
+              <span className="red">{errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message}</span>
             </div>
             
             <SelectField
@@ -178,7 +189,7 @@ class Form extends Component {
 
                 options={[
                   <option key="default" value="new" disabled>NEW</option>,
-                  <option key="on going" value="on going">ON GOING</option>,
+                  <option key="in progress" value="in progress">IN PROGRESS</option>,
                   <option key="finished" value="finished">FINISHED</option>,
                   <option key="delayed" value="delayed">DELAYED</option>,
                   <option key="delivered" value="delivered">DELIVERED</option>

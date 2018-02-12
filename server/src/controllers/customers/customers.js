@@ -20,13 +20,13 @@ export default {
   findById: (req, callback) => {
 
     let id = req.params.id
-
-    Customer.findById(id).populate([{ path: 'sales', select: 'name status deadline' }, { path: 'projects', select: 'name status deadline' }, { path: 'invoices', select: 'referenceNumber status deadline' }]).exec(function(err, customer) {
+    
+    Customer.findById(id).populate([{ path: 'sales', select: 'name status deadline' }, { path: 'projects', select: 'name status deadline' }, { path: 'invoices', select: 'referenceNumber status deadline paymentTerm' }]).exec(function(err, customer) {
       if (err) {
         callback(err, null)
         return
       }
-
+      
       callback(null, customer)
     })
   },
@@ -34,12 +34,14 @@ export default {
   create: (req, callback) => {  
 
     let body = req.body
-
+    delete body['_id']
+    
     Customer.create(body, (err, customer) => {
       if (err) {
         callback(err, null)
         return
       }
+
       callback(null, customer)
     })
   },
@@ -68,33 +70,6 @@ export default {
         callback(err, null)
         return
       }
-
-      // Remove Project from this Customer
-      Project.findByIdAndUpdate(customer._id, { $pull: { projects: id} }, (err, project) => {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        callback(null, null)
-      })
-
-      // Remove Sale from this Customer
-      Sale.findByIdAndUpdate(customer._id, { $pull: { sales: id} }, (err, sale) => {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        callback(null, null)
-      })
-
-       // Remove Invoice from this Customer
-      Invoice.findByIdAndUpdate(customer._id, { $pull: { invoices: id} }, (err, invoice) => {
-        if (err) {
-          callback(err, null)
-          return
-        }
-        callback(null, null)
-      })
 
       callback(null, null)
     })

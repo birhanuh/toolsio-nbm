@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ADD_PROJECT, SET_PROJECTS, PROJECT_FETCHED, PROJECT_UPDATED, PROJECT_DELETED, ADD_TASK, TASK_UPDATED, TASK_DELETED } from './types'
 
+// Action crators
 export function addProject(project) {
   return {
     type: ADD_PROJECT,
@@ -57,6 +58,7 @@ export function taskDeleted(task) {
   }
 }
 
+// Thunk actions
 export function createProject(project) {
   return dispatch => {
     return axios.post('/api/projects', project)

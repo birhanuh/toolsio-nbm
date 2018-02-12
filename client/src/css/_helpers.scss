@@ -36,6 +36,10 @@
   color: $turquoise !important;
 }
 
+.body-color {
+  color: $body-color !important;
+}
+
 .red {
   color: $red !important;
 }
@@ -50,6 +54,100 @@
 
 .blue {
   color: $blue !important;
+}
+
+.turquoise-graph {
+  color: $turquoise !important;
+  color: $turquoise !important;
+}
+
+.red-graph {
+  stroke: $red !important;
+  fill: $red !important;
+}
+
+.orange-graph {
+  stroke: $orange !important;
+  fill: $orange !important;
+}
+
+.green-graph {
+  stroke: $green !important;
+  fill: $green !important;
+}
+
+.blue-graph {
+  stroke: $blue !important;
+  fill: $blue !important;
+}
+
+// Label
+.ui.turquoise.label, .ui.turquoise.labels .label {
+  background-color: $turquoise !important;
+  border-color: $turquoise !important;
+  color: #fff !important;
+}
+
+.ui.orange.label, .ui.orange.labels .label {
+  background-color: $orange !important;
+  border-color: $orange !important;
+}
+
+.ui.blue.label, .ui.blue.labels .label {
+  background-color: $blue !important;
+  border-color: $blue !important;
+}
+
+.ui.green.label, .ui.green.labels .label {
+  background-color: $green !important;
+  border-color: $green !important;
+}
+
+.ui.red.label, .ui.red.labels .label {
+  background-color: $red !important;
+  border-color: $red !important;
+}
+
+// Progress bar
+.ui.progress.success .bar {
+  background-color: $green !important;
+}
+
+.ui.progress.info .bar {
+  background-color: $light-blue !important;
+}
+
+.ui.progress.error .bar {
+  background-color: $red !important;
+}
+
+.ui.progress.warning .bar {
+  background-color: $orange !important;
+}
+
+i.green.icon {
+  color: $green !important;
+}
+
+i.blue.icon {
+  color: $blue !important;
+}
+
+i.red.icon {
+  color: $red !important;
+}
+
+i.orange.icon {
+  color: $orange !important;
+}
+
+// Line break
+.x-light-turquoise-hr {
+  border-top: 1px solid $x-light-turquoise;
+}
+
+.medium-grey-hr {
+  border-top: 1px solid $medium-grey;
 }
 
 .xx-light-grey {
@@ -419,15 +517,34 @@
 }
 
 // Vertical center
-.vertical-text-align-wrapper {
+.vertical-center-align-container {
   display: table;
   height: 100%;
   width: 100%;
 }
 
-.vertical-text-align-element {
+.vertical-center-align-element {
   display: table-cell;
   vertical-align: middle;
+}
+
+.vertical-center-align-element-absolute {
+  position: absolute; // Remember to give parent container position relative
+  top: 50%;
+  @include transform-translate(-50%);
+}
+
+// React vis
+.legend-right-top-aligned {
+  position: absolute; 
+  right: 40px; 
+  top: 0px;
+}
+
+.legend-center-top-aligned {
+  position: absolute; 
+  left: 30%; 
+  top: 0px;
 }
 
 /* Extra small devices (phones, 433px) */
