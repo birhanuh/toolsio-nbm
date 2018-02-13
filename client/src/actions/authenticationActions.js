@@ -62,3 +62,11 @@ export function logout() {
       })
   }
 }
+
+export function confirmEmail(token) {
+  return dispatch => {
+    return axios.get(`/users/confirmation/${token}`)  
+  }
+}
+
+

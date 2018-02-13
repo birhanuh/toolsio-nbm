@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 app.use(session({
-  secret: config.secret,
+  secret: config.jwtSecret,
   resave: false,
   saveUninitialized: false,
   //cookie: {secure: true}

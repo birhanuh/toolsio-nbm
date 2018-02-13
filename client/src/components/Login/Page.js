@@ -1,5 +1,9 @@
 import React, { Component } from 'react' 
+import { PropTypes } from 'prop-types'
 import Form from './Form'
+import { connect } from 'react-redux'
+import { confirmEmail } from '../../actions/authenticationActions'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
 // Localization 
@@ -8,6 +12,31 @@ import T from 'i18n-react'
 import logo from '../../images/logo-square.png'
 
 class Page extends Component {
+
+  componentDidMount = () => {
+
+    const { match } = this.props
+
+    if (match.params.token) {
+      this.props.confirmEmail(match.params.token)
+        .then(res => {
+        
+          if (res.data.confirmed) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("log_in.confirm_email.success")
+            })
+          } else {
+            this.props.addFlashMessage({
+              type: 'info',
+              text: T.translate("log_in.confirm_email.info")
+            })
+          }
+
+        })
+    }
+  }
+
   render() {
     return (       
       <div>
@@ -36,4 +65,9 @@ class Page extends Component {
   }
 }
 
-export default Page
+Page.propTypes = {
+  confirmEmail: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
+}
+
+export default connect(null, { confirmEmail, addFlashMessage }) (Page)

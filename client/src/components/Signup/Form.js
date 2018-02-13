@@ -124,7 +124,7 @@ class Form extends Component {
             type: 'success',
             text: 'You have signed up successfully!'
           })
-          this.context.router.history.push('/dashboard')
+          this.context.router.history.push('/dashboards')
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )

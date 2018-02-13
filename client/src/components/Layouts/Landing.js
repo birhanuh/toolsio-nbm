@@ -194,7 +194,7 @@ class Landing extends Component {
                         <label>{T.translate("landing.contacts.message")}</label>
                         <textarea placeholder={T.translate("landing.contacts.message")+'...'}></textarea>
                       </div>
-                      <button className="ui primary button" type="submit">{T.translate("button.send")}</button>
+                      <button className="ui primary button" type="submit">{T.translate("landing.contacts.send")}</button>
                     </form> 
                   </div>
                 </div>  

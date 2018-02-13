@@ -2,6 +2,10 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer'
+
+// Config
+require('dotenv').config()
 import config from '../config'
 
 import User from '../models/user'
@@ -28,6 +32,14 @@ let LocalStrategy = require('passport-local').Strategy
 //       })
 //     )
 // })
+
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
+  }
+})
 
 router.post('/register', function(req, res) {
   const { account, user } = req.body
@@ -62,6 +74,25 @@ router.post('/register', function(req, res) {
           }
         })
       )
+
+      // Create emailToken
+      jwt.sign({
+        id: user._id,
+        email: user.email
+      }, config.jwtSecret, { expiresIn: '1d' }, (err, emailToken) => {
+        if (err) {
+          console.log('err token: ', err)
+        }
+        
+        const url = `http://localhost:3000/login/confirmation/${emailToken}`
+
+        transporter.sendMail({
+          to: user.email,
+          subject: 'Confirm Email (Toolsio)',
+          html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
+        })
+      })
+
     }).catch(err => 
       res.status(500).json({ 
         errors: {
@@ -81,29 +112,10 @@ router.post('/register', function(req, res) {
 })
 
 // Get user by email or all users
-router.get('/:resource', (req, res) => {
-  if (req.params.resource === 'email') {
-    User.find({ email: req.params.email }).then(user => {
-      res.json( { user }) 
-    })
-  } else if (req.params.resource === 'all') {
-    User.find({}).select('firstName').exec(function(err, users) {
-      if (err) {
-        res.status(500).json({ 
-          errors: {
-            confirmation: 'fail',
-            message: err
-          }
-        })
-        return
-      }
-     
-      res.json({ 
-        confirmation: 'success',
-        results: users 
-      })
-    })
-  }
+router.get('/:email', (req, res) => {
+  User.find({ email: req.params.email }).then(user => {
+    res.json( { user }) 
+  })
 })
 
 // Login User
@@ -135,6 +147,31 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
     })
     return
   }
+
+})
+
+// Confirm email
+router.get('/confirmation/:token/', (req, res) => {
+  
+  const { id } = jwt.verify(req.params.token, config.jwtSecret)
+
+  User.findByIdAndUpdate({ _id: id }, { confirmed: true }, {new: true}, (err, user) => {
+    if (err) {
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
+      })
+      return
+    }
+
+    if (user !== null) {
+      res.json({ confirmed: true })
+    } else {
+      res.json({ confirmed: false })
+    }
+  })
 
 })
 
