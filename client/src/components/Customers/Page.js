@@ -14,7 +14,7 @@ import $ from 'jquery'
 // Datatables
 window.JSZip = require('jszip')
 //require('pdfmake')
-import 'datatables.net-se'
+$.fn.dataTable = require('datatables.net')
 import 'datatables.net-buttons-se'
 import 'datatables.net-buttons/js/buttons.flash'
 import 'datatables.net-buttons/js/buttons.html5'

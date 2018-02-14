@@ -42,6 +42,7 @@
       "name": "Name",
       "email": "Email",
       "message": "Message",
+      "send": "Send",
       "create": {
         "notice": "Thank you for your message. We will contact you soon!",
         "error": "Can not send message."
@@ -90,6 +91,10 @@
     "new_to_us": "New to us?",
     "email_required": "Email is required",
     "password_required": "Password is required",
+    "confirma_email": {
+      "info": "Your token has expired. Request a new token by clicking here <a href=\"/reqest-taken/\">Request token</a>",
+      "success": "You have confirmed your email in successfully!"
+    },
     "subdomain": {
       "header": "Enter your subdomain",
       "subdomain": "Your subdomain is most likely your company name",

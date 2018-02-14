@@ -88,7 +88,11 @@ class IncomesCard extends Component {
         <div className="content">
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
-            <div className="header">{incomes ? incomes.lastTwoMonths[1].totalSum : '-'}</div>
+            <div className="header">
+              {incomes ? incomes.lastTwoMonths[1].totalSum : '-'}
+              {incomes && (incomes.lastTwoMonths[0].totalSum > incomes.lastTwoMonths[1].totalSum ) ? <i className="long arrow down red icon"></i> : 
+                <i className="long arrow up green icon"></i>}
+              </div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.last_month")}</div>

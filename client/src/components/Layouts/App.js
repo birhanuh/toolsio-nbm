@@ -49,8 +49,8 @@ class App extends Component {
 
   render() {
     let landingPage = window.location.pathname === '/' ? true : false
-    let authPages = window.location.pathname === '/login' || window.location.pathname === '/signup'
-      || window.location.pathname === '/subdomain' ? true : false
+    let authPages = window.location.pathname.indexOf('/login') === 0 || window.location.pathname.indexOf('/signup') === 0
+      || window.location.pathname.indexOf('/subdomain') === 0 ? true : false
 
     let internalPages = (landingPage || authPages) ? false : true 
 
@@ -71,7 +71,8 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Landing} />
               <Route path="/signup" component={Signup} />
-              <Route path="/login" component={Login} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/login/confirmation/:token" component={Login} />
               <Route path="/subdomain" component={Subdomain} />
               <Route path="/dashboards" component={requireAuth(Dashboards)} />
               <Route exact path="/projects" component={requireAuth(ProjectsPage)} />

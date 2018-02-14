@@ -118,7 +118,11 @@ class CustomersCard extends Component {
         <div className="content">  
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
-            <div className="header">{customers && customers.lastTwoMonths[1].totalCount}</div>
+            <div className="header">
+              {customers && customers.lastTwoMonths[1].totalCount}
+              {customers && (customers.total.avg.toFixed(2) > customers.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+                <i className="long arrow up green icon"></i>}
+            </div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.average")}</div>
