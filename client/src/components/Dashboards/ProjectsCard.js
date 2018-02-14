@@ -112,7 +112,11 @@ class ProjectsCard extends Component {
         <div className="content">
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
-            <div className="header">{projects && projects.lastTwoMonths[1].totalCount}</div>
+            <div className="header">
+              {projects && projects.lastTwoMonths[1].totalCount}
+              {projects && (projects.lastTwoMonths[0].totalCount > projects.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+              <i className="long arrow up green icon"></i>}
+            </div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.last_month")}</div>
