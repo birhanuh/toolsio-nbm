@@ -5,8 +5,12 @@ import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
 // Config
-require('dotenv').config()
 import config from '../config'
+
+let env = process.env.NODE_ENV || 'development'
+
+// Mongodb connection
+import db from '../db'
 
 import User from '../models/user'
 import Account from '../models/account'
@@ -41,74 +45,56 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-router.post('/register', function(req, res) {
+router.post('/register', async (req, res) => {
   const { account, user } = req.body
 
-  User.create(user).then(user => {
-    Account.create(account).then(account => {
-      
-      // Push associated user
-      account.users.push(user)
-      account.save().then(account => {
+  let accountCreated = await Account.create(account)
 
-        // Push associated account
-        user.account = account
-        user.save().then(user => {
-          req.login(user, function(err) {
-            res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
-              admin: user.admin, subdomain: user.account.subdomain })
-          })
-        }).catch(err => 
-          res.status(500).json({ 
-            errors: {
-              confirmation: 'fail',
-              message: err
-            }
-          })
-        )
-      }).catch(err => 
-        res.status(500).json({ 
-          errors: {
-            confirmation: 'fail',
-            message: err
-          }
-        })
-      )
+  // Connect to specific subdomain db
+  if (env === 'development') {
+    db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_DEVELOPMENT)
+  } else if (env === 'test') {
+    db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_TEST)
+  }
 
-      // Create emailToken
-      jwt.sign({
-        id: user._id,
-        email: user.email
-      }, config.jwtSecret, { expiresIn: '1d' }, (err, emailToken) => {
-        if (err) {
-          console.log('err token: ', err)
-        }
-        
-        const url = `http://localhost:3000/login/confirmation/${emailToken}`
+  let userCreated = await User.create(user)
 
-        transporter.sendMail({
-          to: user.email,
-          subject: 'Confirm Email (Toolsio)',
-          html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
-        })
-      })
+  // Push associated userCreated
+  accountCreated.users.push(userCreated)
+  accountCreated.save()
 
-    }).catch(err => 
+  req.login(userCreated, function(err) {
+    if (err) {
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
           message: err
         }
       })
-    )
-  }).catch(err => 
-    res.status(500).json({ 
-      errors: {
-        confirmation: 'fail',
-        message: err
-      }
+      return
+    }
+    res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
+      admin: userCreated.admin, subdomain: accountCreated.subdomain })
+  })
+
+  // Create emailToken
+  jwt.sign({
+    id: userCreated._id,
+    email: userCreated.email
+  }, config.jwtSecret, { expiresIn: '1d' }, (err, emailToken) => {
+    if (err) {
+      console.log('err token: ', err)
+    }
+    
+    const url = `http://localhost:3000/login/confirmation/${emailToken}`
+
+    transporter.sendMail({
+      to: userCreated.email,
+      subject: 'Confirm Email (Toolsio)',
+      html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
     })
-  )
+  })
+
 })
 
 // Get user by email or all users
@@ -122,22 +108,11 @@ router.get('/:email', (req, res) => {
 router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-
   if (req.user.confirmed) {
-    Account.findById(req.user.accountId, function(err, account) { 
-      if (err) {
-        res.status(500).json({ 
-          errors: {
-            confirmation: 'fail',
-            message: err
-          }
-        })
-        return
-      }
-
-      res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
-        admin: req.user.admin, subdomain: account.subdomain })
-    })
+    console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`)
+    res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+      admin: req.user.admin })
+    
   } else {
     res.status(500).json({ 
       errors: {

@@ -289,12 +289,16 @@ export default {
                 return
               }
 
-              let firstCustomersDate = new Date(""+secondLevelResults[0].firstCustomersDate+"")
-              let daysBetween = Customer.daysBetween(firstCustomersDate, new Date())
+              let secondLevelResultsUpdated = []
               
-              let avg = secondLevelResults[0].count/daysBetween
+              if (secondLevelResults.lenght !== 0) {
+                let firstCustomersDate = new Date(""+secondLevelResults[0].firstCustomersDate+"")
+                let daysBetween = Customer.daysBetween(firstCustomersDate, new Date())
+              
+                let avg = secondLevelResults[0].count/daysBetween
 
-              let secondLevelResultsUpdated = Object.assign({}, secondLevelResults[0], {avg: avg}) 
+                secondLevelResultsUpdated = Object.assign({}, secondLevelResults[0], {avg: avg}) 
+              }
               
               callback(null, {total: secondLevelResultsUpdated, lastTwoMonths: firstLevelResults})
             

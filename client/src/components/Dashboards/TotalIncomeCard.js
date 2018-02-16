@@ -23,7 +23,7 @@ class TotalIncomeCard extends Component {
   componentDidMount() {
     this.setState({ isLoading: true })
     this.props.fetchTotalIncome()
-      .catch( ({response}) => this.setState({ totalIncome: { isLoading: true} }) )
+      .catch( ({response}) => this.setState({ isLoading: false }) )
   }
   
   render() {

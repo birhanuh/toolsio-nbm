@@ -77,7 +77,7 @@ export default {
   validateSubdomainInput: (data) => {
     let errors = {}
 
-    if (!data.subdomain) {
+    if (!data) {
       errors["subdomain"] = {
         message: T.translate("log_in.subdomain.subdomain_required")
       }

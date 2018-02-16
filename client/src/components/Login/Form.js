@@ -13,6 +13,7 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      subdomain: localStorage.getItem('account') !== null ? JSON.parse(localStorage.getItem('account')).subdomain : '',
       user: {
         email: '',
         password: ''

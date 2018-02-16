@@ -10,7 +10,7 @@ export default (state = initialState, action = {}) => {
   switch(action.type) {
     case SET_CURRENT_ACCOUNT:
       return {
-        isAuthenticated: !isEmpty(action.account),
+        isAuthenticated: !isEmpty(action.account.email),
         account: action.account
       }
       

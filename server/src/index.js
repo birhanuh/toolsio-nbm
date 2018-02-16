@@ -48,7 +48,7 @@ app.use(session({
     //instance: mongoose, // optional 
     host: 'localhost', // optional 
     //port: 27017, // optional 
-    db: 'toolsio', // optional 
+    db: 'passportjs_sessions', // optional 
     collection: 'sessions', // optional 
     expire: 86400 // optional 
   })
@@ -92,12 +92,12 @@ app.listen(app.get('port'), () =>
 //const io = require('socket.io').listen(8080)
 //socketEvents(io)
 
-// Connect to mognodb
-if (env === 'development') {
-  db.connect(process.env.DB_HOST+process.env.DB_DEVELOPMENT)
-} else if (env === 'test') {
-  db.connect(process.env.DB_HOST+process.env.DB_TEST)
-}
+// // Connect to mognodb
+// if (env === 'development') {
+//   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+// } else if (env === 'test') {
+//   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+// }
 
 
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
-import { subdomainRequest } from '../../actions/authenticationActions'
+import { isSubdomainExist } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import classnames from 'classnames'
 
@@ -46,16 +46,17 @@ class Subdomain extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    
+ 
     if (this.isValid()) {
       this.setState({ errros: {}, isLoading: true })
-      this.props.subdomainRequest(this.state.user).then(
-        () => {
+      this.props.isSubdomainExist(this.state.subdomain).then(
+        (res) => {
           this.props.addFlashMessage({
             type: 'success',
             text: 'You are on your company page, now login with your credentials!'
           })
-          this.context.router.history.push(`http://${this.state.subdomain}.lvh.me:3000/login`)
+          localStorage.setItem('account', JSON.stringify(res.data.result))
+          window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )  
@@ -82,7 +83,7 @@ class Subdomain extends Component {
 
             <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
               <div className="ui right labeled input">
-                <input type="text" name="email" placeholder={T.translate("log_in.subdomain.subdomain")} 
+                <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
                   value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
                 <div className="ui label">toolsio.com</div>  
               </div>
@@ -107,7 +108,7 @@ class Subdomain extends Component {
 }
 
 Subdomain.propTypes = {
-  subdomainRequest: PropTypes.func.isRequired,
+  isSubdomainExist: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired
 }
 
@@ -115,5 +116,5 @@ Subdomain.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(null, { subdomainRequest, addFlashMessage })(Subdomain)
+export default connect(null, { isSubdomainExist, addFlashMessage })(Subdomain)
 

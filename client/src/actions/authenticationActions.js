@@ -21,19 +21,9 @@ export function signupRequest(accountAndUser) {
   }
 }
 
-export function isAccountExists(subdomain) {
+export function isSubdomainExist(subdomain) {
   return dispatch => {
     return axios.get(`/accounts/${subdomain}`)
-  }
-}
-
-export function subdomainRequest(subdomain) {
-  return dispatch => {
-    return axios.get(`/accounts/${subdomain}`)
-      .then(res => {
-        localStorage.setItem('account', JSON.stringify(res.data))
-        dispatch(setCurrentAccount(res.data))
-      })
   }
 }
 

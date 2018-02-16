@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { InputField, SelectField } from '../../utils/FormFields'
 import classnames from 'classnames'
@@ -50,22 +51,26 @@ class Form extends Component {
     const field = e.target.name
     const val = e.target.value
     if (val !== '') {
-      this.props.isAccountExists(val).then(res => {
+      this.props.isSubdomainExist(val).then(res => {
         let errors = this.state.errors
         let invalid
-        if (res.data.account[0]) {
+
+        if (res.data.result !== null) {
           errors['message'] = {
             errors: {
               subdomain: {
-                message: 'There is account with such '+field+ '.'
+                message: 'There is an account with such '+field+ ' subdomain.'
               }  
             }  
           }
           invalid = true
-        } else {
+        } 
+
+        if (res.data.result === null) {
           errors[field] = ''
           invalid = false
         }
+
         this.setState({ errors, invalid })
       })
     }
@@ -119,12 +124,13 @@ class Form extends Component {
       const { account, user } = this.state
       // Make submit
       this.props.signupRequest({account, user}).then(
-        (response) => {
+        (res) => {
           this.props.addFlashMessage({
             type: 'success',
             text: 'You have signed up successfully!'
           })
-          this.context.router.history.push('/dashboards')
+          console.log('res: ', res) 
+          window.location = `http://${this.props.account.subdomain}.lvh.me:3000/login`
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )
@@ -133,7 +139,8 @@ class Form extends Component {
 
   render() {
     const { account, user, errors, isLoading, invalid } = this.state
-    
+   
+    console.log('accountProp', this.props.account)
     return (            
       <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
@@ -233,8 +240,9 @@ class Form extends Component {
 Form.propTypes = {
   signupRequest: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
-  isAccountExists: PropTypes.func.isRequired,
-  isUserExists: PropTypes.func.isRequired
+  isSubdomainExist: PropTypes.func.isRequired,
+  isUserExists: PropTypes.func.isRequired,
+  account: PropTypes.object
 }
 
 // Contexttype definition
@@ -242,6 +250,12 @@ Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default Form
+function mapStateToProps(state) {
+  return {
+    account: state.authentication.account
+  } 
+}
+
+export default connect(mapStateToProps, {}) (Form)
 
 
