@@ -33,8 +33,8 @@ class ProjectsCard extends Component {
 
     const { value, isLoading } = this.state
     const { projects } = this.props
-    console.log('isLoading: ', isLoading)
-    const data = projects && projects.lastTwoMonths[1].data.map(project => {
+   
+    const data = projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[1].data.map(project => {
 
       let projectStatusClass          
       switch(project.status) {
@@ -113,18 +113,18 @@ class ProjectsCard extends Component {
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
             <div className="header">
-              {projects && projects.lastTwoMonths[1].totalCount}
-              {projects && (projects.lastTwoMonths[0].totalCount > projects.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+              {projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[1].totalCount}
+              {projects && projects.lastTwoMonths.length !== 0 && (projects.lastTwoMonths[0].totalCount > projects.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
               <i className="long arrow up green icon"></i>}
             </div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.last_month")}</div>
-            <div className="header">{projects && projects.lastTwoMonths[0].totalCount}</div>
+            <div className="header">{projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[0].totalCount}</div>
           </div>    
         </div>
 
-        {projects && projects.total.count === 0 &&  
+        {(!!projects || (projects && projects.total && projects.total.count === 0)) &&  
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/projects" className="ui primary outline button small">

@@ -50,7 +50,7 @@ router.post('/register', async (req, res) => {
 
   let accountCreated = await Account.create(account)
 
-  // Connect to specific subdomain db
+  // Connect to subdomain db
   if (env === 'development') {
     db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_DEVELOPMENT)
   } else if (env === 'test') {
@@ -109,7 +109,6 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
   if (req.user.confirmed) {
-    console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`)
     res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
       admin: req.user.admin })
     
@@ -176,8 +175,18 @@ passport.deserializeUser(function(id, done) {
   })
 })
 
-passport.use(new LocalStrategy({usernameField: 'email'},
-  function(email, password, done) {
+passport.use(new LocalStrategy({
+            usernameField: 'email',
+            passReqToCallback: true},
+  function(req, email, password, done) {
+
+    // Connect to subdomain db
+    if (env === 'development') {
+      db.connect(process.env.DB_HOST+sreq.body.subdomain+process.env.DB_DEVELOPMENT)
+    } else if (env === 'test') {
+      db.connect(process.env.DB_HOST+sreq.body.subdomain+process.env.DB_TEST)
+    }
+
     User.getUserByEmail(email, function(err, user) {
       if (err) throw err
       if (!user) {

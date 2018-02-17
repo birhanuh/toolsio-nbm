@@ -291,7 +291,7 @@ export default {
 
               let secondLevelResultsUpdated = []
               
-              if (secondLevelResults.lenght !== 0) {
+              if (secondLevelResults.length !== 0) {
                 let firstCustomersDate = new Date(""+secondLevelResults[0].firstCustomersDate+"")
                 let daysBetween = Customer.daysBetween(firstCustomersDate, new Date())
               

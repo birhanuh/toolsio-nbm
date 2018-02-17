@@ -39,7 +39,7 @@ class InvoicesCard extends Component {
   let dataOverdue = []
   let dataPaid = []
 
-  const data = invoices && invoices.lastTwoMonths[1].data.map(invoice => {
+  const data = invoices && invoices.lastTwoMonths.length !== 0 && invoices.lastTwoMonths[1].data.map(invoice => {
 
     let invoiceStatusClass          
     switch(invoice.status) {
@@ -134,18 +134,18 @@ class InvoicesCard extends Component {
         <div className="right floated">
           <div className="meta">{T.translate("dashboards.this_month")}</div>
           <div className="header">
-            {invoices && invoices.lastTwoMonths[1].totalCount}
-            {invoices && (invoices.lastTwoMonths[0].totalCount > invoices.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+            {invoices && invoices.lastTwoMonths.length !== 0 && invoices.lastTwoMonths[1].totalCount}
+            {invoices && invoices.lastTwoMonths.length !== 0 && (invoices.lastTwoMonths[0].totalCount > invoices.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
               <i className="long arrow up green icon"></i>}
           </div>
         </div>     
         <div className="left floated">
           <div className="meta">{T.translate("dashboards.last_month")}</div>
-          <div className="header">{invoices && invoices.lastTwoMonths[0].totalCount}</div>
+          <div className="header">{invoices && invoices.lastTwoMonths.length !== 0 && invoices.lastTwoMonths[0].totalCount}</div>
         </div>    
       </div>
 
-       {invoices && invoices.total.count === 0 &&
+       {(!!invoices || (invoices && invoices.total && invoices.total.count === 0)) &&
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/invoices" className="ui primary outline button small">

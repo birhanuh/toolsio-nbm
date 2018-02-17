@@ -82,7 +82,7 @@ class InvoiceTasks extends Component {
 
       })
 
-    const lists = (<div className="content">
+    const list = (<div className="content">
       {pendingNotification}
       <div className="ui ordered list">
         {pendingInvoices}
@@ -103,14 +103,14 @@ class InvoiceTasks extends Component {
         <h4 className="ui header">{T.translate("dashboards.invoice_tasks.header")}</h4>
         <div className="ui card">
           
-          {invoiceTasks && (invoiceTasks.total.count !== 0 ? lists : 
+          {(!!invoiceTasks || (invoiceTasks && invoiceTasks.total && invoiceTasks.total.count === 0)) ? 
             <div className="content">
               <div className="ui info message">
                 <div className="description">
                   {T.translate("dashboards.invoice_tasks.no_invoices")}
                 </div>
               </div> 
-            </div>)}
+            </div> : list }
           
         </div>
       </div>  

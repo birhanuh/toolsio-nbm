@@ -34,7 +34,7 @@ class SalesCard extends Component {
     const { value, isLoading } = this.state
     const { sales } = this.props
 
-    const data = sales && sales.lastTwoMonths[1].data.map(sale => {
+    const data = sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[1].data.map(sale => {
 
       let saleStatusClass          
       switch(sale.status) {
@@ -113,18 +113,18 @@ class SalesCard extends Component {
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
             <div className="header">
-              {sales && sales.lastTwoMonths[1].totalCount}
-              {sales && (sales.lastTwoMonths[0].totalCount > sales.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+              {sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[1].totalCount}
+              {sales && sales.lastTwoMonths.length !== 0 && (sales.lastTwoMonths[0].totalCount > sales.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
               <i className="long arrow up green icon"></i>}
             </div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.last_month")}</div>
-            <div className="header">{sales && sales.lastTwoMonths[0].totalCount}</div>
+            <div className="header">{sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[0].totalCount}</div>
           </div>    
         </div>
 
-        {sales && sales.total.count === 0 &&
+        {(!!sales || (sales && sales.total && sales.total.count === 0)) &&
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/sales" className="ui primary outline button small">

@@ -82,7 +82,7 @@ class SaleTasks extends Component {
 
       })
 
-    const lists = (<div className="content">
+    const list = (<div className="content">
       {newNotification}
       <div className="ui ordered list">
         {newSales}
@@ -103,14 +103,14 @@ class SaleTasks extends Component {
         <h4 className="ui header">{T.translate("dashboards.sale_tasks.header")}</h4>
         <div className="ui card">
           
-          {saleTasks && (saleTasks.total.count !== 0 ? lists : 
+          {(!!saleTasks || (saleTasks && saleTasks.total && saleTasks.total.count === 0)) ? 
             <div className="content">
               <div className="ui info message">
                 <div className="description">
                   {T.translate("dashboards.sale_tasks.no_sales")}
                 </div>
               </div> 
-            </div>)}
+            </div> : list }
           
         </div>
       </div>  

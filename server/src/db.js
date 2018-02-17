@@ -4,8 +4,11 @@ import Promise from 'bluebird'
 export default {
   connect: (mongoURI) => {     
     
+    // Promisify mongoose with bluebird
+    mongoose.Promise = require('bluebird')
+
     // Close previous connection
-    mongoose.connection.close()
+    //mongoose.connection.close()
 
     // Connect to new one
     mongoose.connect(mongoURI, {useMongoClient: true})
@@ -15,9 +18,6 @@ export default {
     .catch((error) => {
       console.log('DB CONNECTION FAILED: '+error)
     })
-
-    // Promisify mongoose with bluebird
-    mongoose.Promise = require('bluebird')
   },
 
   dropCollection: function(collectionName) {  

@@ -9,12 +9,15 @@ import classnames from 'classnames'
 // Localization 
 import T from 'i18n-react'
 
+// Parse subdomain 
+let subdomain = window.location.hostname.split('.').length >= 3 ? window.location.hostname.split('.')[0] : false
+
 class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      subdomain: localStorage.getItem('account') !== null ? JSON.parse(localStorage.getItem('account')).subdomain : '',
-      user: {
+      account: {
+        subdomain: subdomain !== null ? subdomain : '',
         email: '',
         password: ''
       },
@@ -28,15 +31,15 @@ class Form extends Component {
   }
 
   handleChange(e) {
-    let updatedUser = Object.assign({}, this.state.user)
-    updatedUser[e.target.name] = e.target.value
+    let updatedAccount = Object.assign({}, this.state.account)
+    updatedAccount[e.target.name] = e.target.value
     this.setState({
-      user: updatedUser
+      account: updatedAccount
     })
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateLoginInput(this.state.user)
+    const { errors, isValid } = Validation.validateLoginInput(this.state.account)
 
     let updatedErrors = Object.assign({}, this.state.errors)
     updatedErrors.message.errors = errors
@@ -53,7 +56,7 @@ class Form extends Component {
     
     if (this.isValid()) {
       this.setState({ errros: {}, isLoading: true })
-      this.props.loginRequest(this.state.user).then(
+      this.props.loginRequest(this.state.account).then(
         () => {
           this.props.addFlashMessage({
             type: 'success',
@@ -79,7 +82,7 @@ class Form extends Component {
               <div className="ui right icon input">
                 <i className="user icon"></i>
                 <input type="text" name="email" placeholder={T.translate("log_in.email")} 
-                  value={this.state.user.email} onChange={this.handleChange.bind(this)} />
+                  value={this.state.account.email} onChange={this.handleChange.bind(this)} />
               </div>
               <span className="red">{errors.message && errors.message.errors && errors.message.errors.email && errors.message.errors.email.message}</span>
             </div>  
@@ -87,7 +90,7 @@ class Form extends Component {
               <div className="ui right icon input">
                 <i className="lock icon"></i>
                 <input type="password" name="password" placeholder={T.translate("log_in.password")}
-                  value={this.state.user.password} onChange={this.handleChange.bind(this)} />                
+                  value={this.state.account.password} onChange={this.handleChange.bind(this)} />                
               </div>
               <span className="red">{errors.message && errors.message.errors && errors.message.errors.password && errors.message.errors.password.message}</span>
             </div>

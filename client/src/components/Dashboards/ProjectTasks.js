@@ -82,7 +82,7 @@ class ProjectTasks extends Component {
 
       })
 
-      const lists = (<div className="content">
+      const list = (<div className="content">
         {newNotification}
         <div className="ui ordered list">
           {newProjects}
@@ -103,14 +103,14 @@ class ProjectTasks extends Component {
         <h4 className="ui header">{T.translate("dashboards.project_tasks.header")}</h4>
         <div className="ui card">
           
-          {projectTasks && (projectTasks.total.count !== 0 ? lists : 
+          {(!!projectTasks || (projectTasks && projectTasks.total && projectTasks.total.count === 0)) ? 
             <div className="content">
               <div className="ui info message">
                 <div className="description">
                   {T.translate("dashboards.project_tasks.no_projects")}
                 </div>
               </div> 
-            </div>)}
+            </div> : list }
           
         </div>
       </div>  
