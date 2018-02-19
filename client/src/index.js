@@ -7,7 +7,7 @@ import { createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from './rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { setAuthorizationToken } from './utils'
+import { Authorization } from './utils'
 import { setCurrentAccount } from './actions/authenticationActions'
 
 // Localization 
@@ -24,6 +24,10 @@ const store = createStore(
     applyMiddleware(thunk)
   )
 )
+
+// Parse subdomain 
+let subdomain =  Authorization.getSubdomainFromUrl()
+subdomain && Authorization.setSubdomain(subdomain)
 
 if (localStorage.account) {
   // Retrieve the object from storage

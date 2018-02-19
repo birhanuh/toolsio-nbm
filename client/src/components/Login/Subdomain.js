@@ -1,10 +1,11 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Validation } from '../../utils'
+import classnames from 'classnames'
 import { isSubdomainExist } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import classnames from 'classnames'
+
+import { Validation, Authorization } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -23,6 +24,25 @@ class Subdomain extends Component {
       },
       isLoading: false
     }
+  }
+
+  componentDidMount = () => {
+    // Fetch Sale when id is present in params
+    const subdomain = Authorization.getSubdomainFromUrl()
+    
+    if (subdomain) {
+      this.setState({ errros: {}, isLoading: true })
+      this.props.isSubdomainExist(subdomain).then(
+        (res) => {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: 'You are on your company page, now login with your credentials!'
+          })
+          window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`
+        },
+        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
+      )  
+    } 
   }
   
   handleChange(e) {
@@ -55,7 +75,22 @@ class Subdomain extends Component {
             type: 'success',
             text: 'You are on your company page, now login with your credentials!'
           })
-          window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`
+          
+          if (res.data.result !== null) {
+            window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`  
+          } else {
+
+            let errors = { subdomain: { message: 'There is no account with such subdomain!' } }
+
+            let updatedErrors = Object.assign({}, this.state.errors)
+            updatedErrors.message.errors = errors
+
+            this.setState({ errors: updatedErrors })
+
+            this.setState({ 
+              isLoading: false
+            })
+          }          
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )  

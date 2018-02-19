@@ -19,24 +19,6 @@ let router = express.Router()
 
 let LocalStrategy = require('passport-local').Strategy
 
-// Register User
-// router.post('/register', function(req, res) {
-
-//   User.create(req.body)
-//     .then(user => 
-//       req.login(user._id, function(err) {
-//         res.json({ success: true })
-//       })
-//     ).catch(err => 
-//       res.status(500).json({ 
-//         errors: {
-//           confirmation: 'fail',
-//           message: err
-//         }
-//       })
-//     )
-// })
-
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -52,16 +34,32 @@ router.post('/register', async (req, res) => {
 
   // Connect to subdomain db
   if (env === 'development') {
-    db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_DEVELOPMENT)
+    await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_DEVELOPMENT)
   } else if (env === 'test') {
-    db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_TEST)
+    await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_TEST)
   }
 
   let userCreated = await User.create(user)
 
+  // Connect to subdomain db
+  if (env === 'development') {
+    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+  } else if (env === 'test') {
+    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+  }
+
   // Push associated userCreated
-  accountCreated.users.push(userCreated)
-  accountCreated.save()
+  if (userCreated) {
+    accountCreated.save()
+      .then(account => {
+        account.users.push(userCreated)
+      })
+      .catch(err => 
+        console.log('new account err', err)
+      )
+  } else {
+    console.log('userCreated is null')
+  }  
 
   req.login(userCreated, function(err) {
     if (err) {
@@ -105,23 +103,71 @@ router.get('/:email', (req, res) => {
 })
 
 // Login User
-router.post('/login', passport.authenticate('local'), function(req, res) {
-  // If this function gets called, authentication was successful.
-  // `req.user` contains the authenticated user.
-  if (req.user.confirmed) {
-    res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
-      admin: req.user.admin })
+// router.post('/login', passport.authenticate('local'), function(req, res) {
+//   // If this function gets called, authentication was successful.
+//   // `req.user` contains the authenticated user.
+//   if (req.user.confirmed) {
+//     res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+//       admin: req.user.admin })
     
-  } else {
-    res.status(500).json({ 
-      errors: {
-        confirmation: 'fail',
-        message: 'Please confirm your email to login'
-      }
-    })
-    return
-  }
+//   } else {
+//     res.status(500).json({ 
+//       errors: {
+//         confirmation: 'fail',
+//         message: 'Please confirm your email to login'
+//       }
+//     })
+//   }
 
+// })
+
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    
+    if (err) { 
+      return next(err); 
+    }
+
+    if (!user) { 
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: {
+            errors: {
+              email: {
+                message: 'Incorrect email.'
+              },
+              password: {
+                message: 'Incorrect password.'
+              }
+            }
+          }
+        }
+      })
+      return
+    }
+    
+    if (user) {
+      req.logIn(user, function(err) {
+        if (err) { 
+          return next(err) 
+        }
+
+        if (user.confirmed) {
+          res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
+            admin: user.admin })        
+        } else {
+          res.status(500).json({ 
+            errors: {
+              confirmation: 'fail',
+              message: 'Please confirm your email to login'
+            }
+          })
+        }
+      })
+      return
+    }
+  })(req, res, next)
 })
 
 // Confirm email
@@ -178,50 +224,33 @@ passport.deserializeUser(function(id, done) {
 passport.use(new LocalStrategy({
             usernameField: 'email',
             passReqToCallback: true},
-  function(req, email, password, done) {
+  async function(req, email, password, done) {
 
     // Connect to subdomain db
     if (env === 'development') {
-      db.connect(process.env.DB_HOST+sreq.body.subdomain+process.env.DB_DEVELOPMENT)
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
     } else if (env === 'test') {
-      db.connect(process.env.DB_HOST+sreq.body.subdomain+process.env.DB_TEST)
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
     }
 
     User.getUserByEmail(email, function(err, user) {
-      if (err) throw err
+      if (err) {
+        return done(err)
+      }
+
       if (!user) {
-        return done(null, false, {
-          errors: {
-            confirmation: 'fail',
-            message: {
-              errors: {
-                email: {
-                  message: 'Incorrect email.'
-                }
-              }
-            }
-          }
-        })
+        return done(null, false)
       }
       
       User.comparePassword(password, user.password, function(err, isMatch) {
-        if(err) throw err
+        if (err) {
+          return done(err)
+        }
         
         if(isMatch){
           return done(null, user)
         } else {
-          return done(null, false, {
-            errors: {
-              confirmation: 'fail',
-              message: {
-                errors: {
-                  password: {
-                    message: 'Incorrect password.'
-                  }
-                }
-              }
-            }
-          })
+          return done(null, false,)
         }
       })
     })

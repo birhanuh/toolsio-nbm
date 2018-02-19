@@ -37,6 +37,23 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
+// Get Homepage
+app.use(async (req, res, next) => {
+
+  if (req.headers.subdomain) {
+    // Connect to subdomain db
+    if (env === 'development') {
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
+      console.log('Middleware with no mount path')
+    } else if (env === 'test') {
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
+      console.log('Middleware with no mount path')
+    }
+  }
+
+  next()
+})
+
 app.use(session({
   secret: config.jwtSecret,
   resave: false,
@@ -92,12 +109,16 @@ app.listen(app.get('port'), () =>
 //const io = require('socket.io').listen(8080)
 //socketEvents(io)
 
-// // Connect to mognodb
-// if (env === 'development') {
-//   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-// } else if (env === 'test') {
-//   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-// }
+// Connect to mognodb
+if (env === 'development') {
+  db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+} else if (env === 'test') {
+  db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+}
 
+// If the Node process ends, close the Mongoose connection 
+process.on('SIGINT', function() {  
+  db.close() 
+})
 
 

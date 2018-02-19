@@ -14,9 +14,9 @@ router.get('/:subdomain', async (req, res) => {
 
   // Connect to accounts db
   if (env === 'development') {
-    db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
   } else if (env === 'test') {
-    db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
   }
 
   let account = await Account.find({ subdomain: req.params.subdomain })

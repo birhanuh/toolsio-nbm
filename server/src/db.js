@@ -11,7 +11,7 @@ export default {
     //mongoose.connection.close()
 
     // Connect to new one
-    mongoose.connect(mongoURI, {useMongoClient: true})
+    return mongoose.connect(mongoURI, {useMongoClient: true})
     .then(() => {
       console.log('DB CONNECTION SUCCESS: '+mongoURI)
     })
