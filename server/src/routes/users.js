@@ -155,7 +155,7 @@ router.post('/login', function(req, res, next) {
 
         if (user.confirmed) {
           res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
-            admin: user.admin })        
+            admin: user.admin, subdomain: req.headers.subdomain })        
         } else {
           res.status(500).json({ 
             errors: {

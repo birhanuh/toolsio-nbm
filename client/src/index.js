@@ -26,7 +26,7 @@ const store = createStore(
 )
 
 // Parse subdomain 
-let subdomain =  Authorization.getSubdomainFromUrl()
+let subdomain =  Authorization.getSubdomain()
 subdomain && Authorization.setSubdomain(subdomain)
 
 if (localStorage.account) {

@@ -28,7 +28,7 @@ class Subdomain extends Component {
 
   componentDidMount = () => {
     // Fetch Sale when id is present in params
-    const subdomain = Authorization.getSubdomainFromUrl()
+    const subdomain = Authorization.getSubdomain()
     
     if (subdomain) {
       this.setState({ errros: {}, isLoading: true })

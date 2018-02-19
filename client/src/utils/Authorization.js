@@ -17,7 +17,7 @@ export default {
     }
   },
 
-  getSubdomainFromUrl: () => {
+  getSubdomain: () => {
     // Parse subdomain 
     let subdomain = window.location.hostname
 

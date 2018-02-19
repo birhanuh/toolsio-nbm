@@ -142,7 +142,6 @@ class Form extends Component {
   render() {
     const { account, user, errors, isLoading, invalid } = this.state
    
-    console.log('accountProp', this.props.account)
     return (            
       <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">

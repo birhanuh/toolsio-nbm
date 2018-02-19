@@ -116,12 +116,15 @@ class HeaderNav extends Component {
       <div>
         <div className="ui large top fixed menu transition hidden pointing menu">
           <div className="ui container">
-            <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
-            <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
-            <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
-            <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
-            <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
-            <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
+
+            <div className="left menu">
+              <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
+              <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
+              <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
+              <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
+              <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
+            </div>
          
             <div className="right menu">
               <div className="item">                     
@@ -149,13 +152,16 @@ class HeaderNav extends Component {
               <Link className="toc item" to="/">
                 <i className="sidebar icon"></i>
               </Link> 
-              <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
-              <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
-              <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
-              <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
-              <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
-              <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
-           
+
+              <div className="left menu">
+                <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
+                <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
+                <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
+                <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+                <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
+                <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
+              </div>
+
               <div className="right item">                                                   
                 <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
                 <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>     

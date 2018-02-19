@@ -14,7 +14,6 @@ export function setCurrentAccount(account) {
 export function signupRequest(accountAndUser) {
   return dispatch => {
     return axios.post('/users/register', accountAndUser).then(res => {
-      //document.cookie = "_id="+res.data._id+"; firstName="+res.data.firstName+"; lastName="+res.data.firstName+"; email="+res.data.email+""
       localStorage.setItem('account', JSON.stringify(res.data))
       dispatch(setCurrentAccount(res.data))
     })
@@ -37,6 +36,7 @@ export function loginRequest(data) {
   return dispatch => {
     return axios.post('/users/login', data)
       .then(res => {
+        //document.cookie = "_id="+res.data._id+"; firstName="+res.data.firstName+"; lastName="+res.data.firstName+"; email="+res.data.email+""
         localStorage.setItem('account', JSON.stringify(res.data))
         dispatch(setCurrentAccount(res.data))
       })
