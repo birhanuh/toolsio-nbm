@@ -149,7 +149,7 @@ class Form extends Component {
       })
     }
 
-    return isValid;
+    return isValid
   }
 
   handleSubmit = (e) => {

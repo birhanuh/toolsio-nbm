@@ -78,7 +78,7 @@ class Form extends Component {
       this.setState({ errors: updatedErrors })
     }
 
-    return isValid;
+    return isValid
   }
 
   handleSubmit = (e) => {
