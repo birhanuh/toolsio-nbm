@@ -59,7 +59,7 @@ describe("components", function() {
 
     beforeEach(()=>{
       const storeStateMock = {
-        auth: {
+        authentication: {
           account: Account 
         },
         flashMessages: []

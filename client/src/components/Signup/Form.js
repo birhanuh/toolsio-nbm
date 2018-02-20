@@ -83,7 +83,7 @@ class Form extends Component {
     const field = e.target ? e.target.name : 'email'
     const val = e.target ? e.target.value : e
     if (val !== '') {
-      this.props.isUserExists(val).then(res => {
+      this.props.isUserExist(val).then(res => {
         let errors = this.state.errors
         let invalid
         if (res.data.user[0]) {
@@ -242,7 +242,7 @@ Form.propTypes = {
   signupRequest: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   isSubdomainExist: PropTypes.func.isRequired,
-  isUserExists: PropTypes.func.isRequired
+  isUserExist: PropTypes.func.isRequired
 }
 
 // Contexttype definition
@@ -252,7 +252,7 @@ Form.contextTypes = {
 
 function mapStateToProps(state) {
   return {
-    account: state.authentication.account
+    account: state.authentication && state.authentication.account
   } 
 }
 

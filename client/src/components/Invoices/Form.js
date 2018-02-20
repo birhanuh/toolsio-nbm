@@ -204,7 +204,7 @@ class Form extends Component {
 
   render() {
     const { _id, step1, step2, sale, project, errors, isLoading, currentStep } = this.state
-    console.log("project ", project)
+
     const salesOptions = map(this.props.sales, (sale) => 
       <option key={sale._id} value={sale._id}>{sale.name}</option>
     )

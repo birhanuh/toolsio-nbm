@@ -17,7 +17,7 @@ class Page extends Component {
 
     const { match } = this.props
 
-    if (match.params.token) {
+    if (match && match.params.token) {
       this.props.confirmEmail(match.params.token)
         .then(res => {
         

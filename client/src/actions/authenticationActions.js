@@ -26,7 +26,7 @@ export function isSubdomainExist(subdomain) {
   }
 }
 
-export function isUserExists(email) {
+export function isUserExist(email) {
   return dispatch => {
     return axios.get(`/users/${email}`)
   }
