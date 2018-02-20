@@ -27,6 +27,15 @@ $(document).ready(function()  {
 
   //$('.ui.sidebar').sidebar({ context: $('#app') }).sidebar('setting', 'transition', 'overlay')
 
+  //jQuery for page scrolling feature - requires jQuery Easing plugin
+  $('.pointing.menu .left.menu a').bind('click', function() {
+    var $anchor = $(this)
+    $('html, body').stop().animate({
+        scrollTop: $($anchor.attr('href')).offset().top - 50
+    }, 1500, 'easeInOutExpo')
+    event.preventDefault()
+  })
+
   $('.back-to-top').click(function() {
     $("html, body").animate({ scrollTop: 0 }, 1000)
     return false
@@ -42,18 +51,4 @@ $(window).scroll(function() {
   } else {
     $('.back-to-top').fadeOut()
   }
-})
-
-/* ==============================================
-2.Smooth Scroll To Anchor
-=============================================== */
-//jQuery for page scrolling feature - requires jQuery Easing plugin
-$(function()  {
-  $('.pointing.menu a').bind('click', function() {
-    var $anchor = $(this)
-    $('html, body').stop().animate({
-        scrollTop: $($anchor.attr('href')).offset().top - 50
-    }, 1500, 'easeInOutExpo')
-    event.preventDefault()
-  })
 })

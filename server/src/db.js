@@ -1,12 +1,17 @@
 import mongoose from 'mongoose'
 import Promise from 'bluebird'
 
-// Promisify mongoose with bluebird
-mongoose.Promise = require('bluebird')
-
 export default {
-  connect: (mongoURI) => { 
-    mongoose.connect(mongoURI, {useMongoClient: true})
+  connect: (mongoURI) => {     
+    
+    // Promisify mongoose with bluebird
+    mongoose.Promise = require('bluebird')
+
+    // Close previous connection
+    //mongoose.connection.close()
+
+    // Connect to new one
+    return mongoose.connect(mongoURI, {useMongoClient: true})
     .then(() => {
       console.log('DB CONNECTION SUCCESS: '+mongoURI)
     })

@@ -1,10 +1,11 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Validation } from '../../utils'
+import classnames from 'classnames'
 import { loginRequest } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import classnames from 'classnames'
+
+import { Validation, Authorization } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'

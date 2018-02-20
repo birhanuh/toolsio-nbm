@@ -1,7 +1,7 @@
 import Validation from './Validation'
-import setAuthorizationToken from './setAuthorizationToken'
+import Authorization from './Authorization'
 
 export {
   Validation,
-  setAuthorizationToken
+  Authorization
 }

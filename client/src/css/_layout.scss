@@ -419,6 +419,9 @@ nav.ui.menu {
   .ui.centered.grid {
     display: grid;
   }
+  .labeled.input .ui.label {
+    line-height: inherit;
+  }
 }
 
 // Logo

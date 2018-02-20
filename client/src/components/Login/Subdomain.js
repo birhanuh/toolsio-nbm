@@ -1,10 +1,11 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Validation } from '../../utils'
-import { subdomainRequest } from '../../actions/authenticationActions'
-import { addFlashMessage } from '../../actions/flashMessageActions'
 import classnames from 'classnames'
+import { isSubdomainExist } from '../../actions/authenticationActions'
+import { addFlashMessage } from '../../actions/flashMessageActions'
+
+import { Validation, Authorization } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -23,6 +24,25 @@ class Subdomain extends Component {
       },
       isLoading: false
     }
+  }
+
+  componentDidMount = () => {
+    // Fetch Sale when id is present in params
+    const subdomain = Authorization.getSubdomain()
+    
+    if (subdomain) {
+      this.setState({ errros: {}, isLoading: true })
+      this.props.isSubdomainExist(subdomain).then(
+        (res) => {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: 'You are on your company page, now login with your credentials!'
+          })
+          window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`
+        },
+        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
+      )  
+    } 
   }
   
   handleChange(e) {
@@ -46,16 +66,31 @@ class Subdomain extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    
+ 
     if (this.isValid()) {
       this.setState({ errros: {}, isLoading: true })
-      this.props.subdomainRequest(this.state.user).then(
-        () => {
+      this.props.isSubdomainExist(this.state.subdomain).then(
+        (res) => {
           this.props.addFlashMessage({
             type: 'success',
             text: 'You are on your company page, now login with your credentials!'
           })
-          this.context.router.history.push(`http://${this.state.subdomain}.lvh.me:3000/login`)
+          
+          if (res.data.result !== null) {
+            window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`  
+          } else {
+
+            let errors = { subdomain: { message: 'There is no account with such subdomain!' } }
+
+            let updatedErrors = Object.assign({}, this.state.errors)
+            updatedErrors.message.errors = errors
+
+            this.setState({ errors: updatedErrors })
+
+            this.setState({ 
+              isLoading: false
+            })
+          }          
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )  
@@ -82,7 +117,7 @@ class Subdomain extends Component {
 
             <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
               <div className="ui right labeled input">
-                <input type="text" name="email" placeholder={T.translate("log_in.subdomain.subdomain")} 
+                <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
                   value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
                 <div className="ui label">toolsio.com</div>  
               </div>
@@ -107,7 +142,7 @@ class Subdomain extends Component {
 }
 
 Subdomain.propTypes = {
-  subdomainRequest: PropTypes.func.isRequired,
+  isSubdomainExist: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired
 }
 
@@ -115,5 +150,5 @@ Subdomain.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(null, { subdomainRequest, addFlashMessage })(Subdomain)
+export default connect(null, { isSubdomainExist, addFlashMessage })(Subdomain)
 

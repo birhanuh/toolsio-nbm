@@ -7,7 +7,7 @@ import { createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from './rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { setAuthorizationToken } from './utils'
+import { Authorization } from './utils'
 import { setCurrentAccount } from './actions/authenticationActions'
 
 // Localization 
@@ -25,10 +25,14 @@ const store = createStore(
   )
 )
 
+// Parse subdomain 
+let subdomain =  Authorization.getSubdomain()
+subdomain && Authorization.setSubdomain(subdomain)
+
 if (localStorage.account) {
   // Retrieve the object from storage
-  var Account = localStorage.getItem('account')
-  store.dispatch(setCurrentAccount(JSON.parse(Account)))
+  var account = localStorage.getItem('account')
+  store.dispatch(setCurrentAccount(JSON.parse(account)))
 }
 console.log('cookie: ', document.cookie)
 // Localization setup

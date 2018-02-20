@@ -5,8 +5,12 @@ import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
 // Config
-require('dotenv').config()
 import config from '../config'
+
+let env = process.env.NODE_ENV || 'development'
+
+// Mongodb connection
+import db from '../db'
 
 import User from '../models/user'
 import Account from '../models/account'
@@ -14,24 +18,6 @@ import Account from '../models/account'
 let router = express.Router()
 
 let LocalStrategy = require('passport-local').Strategy
-
-// Register User
-// router.post('/register', function(req, res) {
-
-//   User.create(req.body)
-//     .then(user => 
-//       req.login(user._id, function(err) {
-//         res.json({ success: true })
-//       })
-//     ).catch(err => 
-//       res.status(500).json({ 
-//         errors: {
-//           confirmation: 'fail',
-//           message: err
-//         }
-//       })
-//     )
-// })
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -41,74 +27,72 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-router.post('/register', function(req, res) {
+router.post('/register', async (req, res) => {
   const { account, user } = req.body
 
-  User.create(user).then(user => {
-    Account.create(account).then(account => {
-      
-      // Push associated user
-      account.users.push(user)
-      account.save().then(account => {
+  let accountCreated = await Account.create(account)
 
-        // Push associated account
-        user.account = account
-        user.save().then(user => {
-          req.login(user, function(err) {
-            res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
-              admin: user.admin, subdomain: user.account.subdomain })
-          })
-        }).catch(err => 
-          res.status(500).json({ 
-            errors: {
-              confirmation: 'fail',
-              message: err
-            }
-          })
-        )
-      }).catch(err => 
-        res.status(500).json({ 
-          errors: {
-            confirmation: 'fail',
-            message: err
-          }
-        })
-      )
+  // Connect to subdomain db
+  if (env === 'development') {
+    await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_DEVELOPMENT)
+  } else if (env === 'test') {
+    await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_TEST)
+  }
 
-      // Create emailToken
-      jwt.sign({
-        id: user._id,
-        email: user.email
-      }, config.jwtSecret, { expiresIn: '1d' }, (err, emailToken) => {
-        if (err) {
-          console.log('err token: ', err)
-        }
-        
-        const url = `http://localhost:3000/login/confirmation/${emailToken}`
+  let userCreated = await User.create(user)
 
-        transporter.sendMail({
-          to: user.email,
-          subject: 'Confirm Email (Toolsio)',
-          html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
-        })
+  // Connect to subdomain db
+  if (env === 'development') {
+    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+  } else if (env === 'test') {
+    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+  }
+
+  // Push associated userCreated
+  if (userCreated) {
+    accountCreated.save()
+      .then(account => {
+        account.users.push(userCreated)
       })
+      .catch(err => 
+        console.log('new account err', err)
+      )
+  } else {
+    console.log('userCreated is null')
+  }  
 
-    }).catch(err => 
+  req.login(userCreated, function(err) {
+    if (err) {
       res.status(500).json({ 
         errors: {
           confirmation: 'fail',
           message: err
         }
       })
-    )
-  }).catch(err => 
-    res.status(500).json({ 
-      errors: {
-        confirmation: 'fail',
-        message: err
-      }
+      return
+    }
+    res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
+      admin: userCreated.admin, subdomain: accountCreated.subdomain })
+  })
+
+  // Create emailToken
+  jwt.sign({
+    id: userCreated._id,
+    email: userCreated.email
+  }, config.jwtSecret, { expiresIn: '1d' }, (err, emailToken) => {
+    if (err) {
+      console.log('err token: ', err)
+    }
+    
+    const url = `http://localhost:3000/login/confirmation/${emailToken}`
+
+    transporter.sendMail({
+      to: userCreated.email,
+      subject: 'Confirm Email (Toolsio)',
+      html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
     })
-  )
+  })
+
 })
 
 // Get user by email or all users
@@ -119,35 +103,71 @@ router.get('/:email', (req, res) => {
 })
 
 // Login User
-router.post('/login', passport.authenticate('local'), function(req, res) {
-  // If this function gets called, authentication was successful.
-  // `req.user` contains the authenticated user.
+// router.post('/login', passport.authenticate('local'), function(req, res) {
+//   // If this function gets called, authentication was successful.
+//   // `req.user` contains the authenticated user.
+//   if (req.user.confirmed) {
+//     res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+//       admin: req.user.admin })
+    
+//   } else {
+//     res.status(500).json({ 
+//       errors: {
+//         confirmation: 'fail',
+//         message: 'Please confirm your email to login'
+//       }
+//     })
+//   }
 
-  if (req.user.confirmed) {
-    Account.findById(req.user.accountId, function(err, account) { 
-      if (err) {
-        res.status(500).json({ 
-          errors: {
-            confirmation: 'fail',
-            message: err
+// })
+
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    
+    if (err) { 
+      return next(err); 
+    }
+
+    if (!user) { 
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: {
+            errors: {
+              email: {
+                message: 'Incorrect email.'
+              },
+              password: {
+                message: 'Incorrect password.'
+              }
+            }
           }
-        })
-        return
-      }
+        }
+      })
+      return
+    }
+    
+    if (user) {
+      req.logIn(user, function(err) {
+        if (err) { 
+          return next(err) 
+        }
 
-      res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
-        admin: req.user.admin, subdomain: account.subdomain })
-    })
-  } else {
-    res.status(500).json({ 
-      errors: {
-        confirmation: 'fail',
-        message: 'Please confirm your email to login'
-      }
-    })
-    return
-  }
-
+        if (user.confirmed) {
+          res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
+            admin: user.admin, subdomain: req.headers.subdomain })        
+        } else {
+          res.status(500).json({ 
+            errors: {
+              confirmation: 'fail',
+              message: 'Please confirm your email to login'
+            }
+          })
+        }
+      })
+      return
+    }
+  })(req, res, next)
 })
 
 // Confirm email
@@ -201,43 +221,36 @@ passport.deserializeUser(function(id, done) {
   })
 })
 
-passport.use(new LocalStrategy({usernameField: 'email'},
-  function(email, password, done) {
+passport.use(new LocalStrategy({
+            usernameField: 'email',
+            passReqToCallback: true},
+  async function(req, email, password, done) {
+
+    // Connect to subdomain db
+    if (env === 'development') {
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
+    } else if (env === 'test') {
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
+    }
+
     User.getUserByEmail(email, function(err, user) {
-      if (err) throw err
+      if (err) {
+        return done(err)
+      }
+
       if (!user) {
-        return done(null, false, {
-          errors: {
-            confirmation: 'fail',
-            message: {
-              errors: {
-                email: {
-                  message: 'Incorrect email.'
-                }
-              }
-            }
-          }
-        })
+        return done(null, false)
       }
       
       User.comparePassword(password, user.password, function(err, isMatch) {
-        if(err) throw err
+        if (err) {
+          return done(err)
+        }
         
         if(isMatch){
           return done(null, user)
         } else {
-          return done(null, false, {
-            errors: {
-              confirmation: 'fail',
-              message: {
-                errors: {
-                  password: {
-                    message: 'Incorrect password.'
-                  }
-                }
-              }
-            }
-          })
+          return done(null, false,)
         }
       })
     })

@@ -33,12 +33,12 @@ class IncomesCard extends Component {
 
     const { value, isLoading } = this.state
     const { incomes } = this.props
-
+  
     const monthNames = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
       ]
 
-    const data = incomes && incomes.lastTwoMonths[0].data.map(income => 
+    const data = incomes && incomes.lastTwoMonths.length !== 0 && incomes.lastTwoMonths[0].data.map(income => 
       ({x: new Date(''+monthNames[income.date.month-1]+' '+income.date.day+' '+income.date.year+'').getTime(), y: income.sum})
       )
 
@@ -80,7 +80,7 @@ class IncomesCard extends Component {
             <HorizontalGridLines />
             <LineSeries
               style={{strokeLinejoin: "round"}}
-              data={data}/>
+              data={data ? data : []}/>
             <XAxis tickLabelAngle={-90} />
             <YAxis />
           </XYPlot>
@@ -89,18 +89,18 @@ class IncomesCard extends Component {
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
             <div className="header">
-              {incomes ? incomes.lastTwoMonths[1].totalSum : '-'}
-              {incomes && (incomes.lastTwoMonths[0].totalSum > incomes.lastTwoMonths[1].totalSum ) ? <i className="long arrow down red icon"></i> : 
+              {incomes && incomes.lastTwoMonths.length !== 0 ? incomes.lastTwoMonths[1].totalSum : '-'}
+              {incomes && incomes.lastTwoMonths.length !== 0 && (incomes.lastTwoMonths[0].totalSum > incomes.lastTwoMonths[1].totalSum ) ? <i className="long arrow down red icon"></i> : 
                 <i className="long arrow up green icon"></i>}
               </div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.last_month")}</div>
-            <div className="header">{incomes ? incomes.lastTwoMonths[0].totalSum : '-'}</div>
+            <div className="header">{incomes && incomes.lastTwoMonths.length !== 0 ? incomes.lastTwoMonths[0].totalSum : '-'}</div>
           </div>    
         </div> 
 
-        {incomes && incomes.total.count === 0 && 
+        {(incomes || (incomes && incomes.total && incomes.total.count === 0)) && 
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/invoices" className="ui primary outline button small">

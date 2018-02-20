@@ -1,3 +1,12 @@
+// Account
+export const Account = {
+  _id: 1,
+  subdomain: 'company',
+  industry: 'IT',
+  contact: { phoneNumber: '12345678910' },
+  address: { street: 'Street 1', postalCode: '1234', region: 'Espoo', country: 'Finland' }
+}
+
 // Sale
 export const Sale = {
   _id: 1,
@@ -111,11 +120,58 @@ export const Customers = [{
   address: { street: 'Street 1', postalCode: '1234', region: 'Espoo', country: 'Finland' }
 }]
 
-// Account
-export const Account = {
+// Invoice
+export const Invoice = {
   _id: 1,
-  subdomain: 'company',
-  industry: 'IT',
-  contact: { phoneNumber: '12345678910' },
-  address: { street: 'Street 1', postalCode: '1234', region: 'Espoo', country: 'Finland' }
+  sale: Sale,
+  project: Project,
+  customer: Customer,
+  createdAt: new Date().toDateString(),
+  deadline: new Date().toDateString(),
+  paymentTerm: '',
+  interestInArrears: 2,
+  status: 'new',
+  referenceNumber: 1234567890,
+  description: 'Invoice 1 description...' 
 }
+
+export const Invoice2 = {
+  _id: 2,
+  sale: Sale2,
+  project: Project2,
+  customer: Customer2,
+  createdAt: new Date().toDateString(),
+  deadline: new Date().toDateString(),
+  paymentTerm: '',
+  interestInArrears: 2,
+  status: 'new',
+  referenceNumber: 1234567890,
+  description: 'Invoice 2 description...' 
+}
+
+export const Invoices = [{
+  _id: 1,
+  sale: Sale._id,
+  project: Project._id,
+  customer: Customer,
+  createdAt: new Date().toDateString(),
+  deadline: new Date().toDateString(),
+  paymentTerm: '',
+  interestInArrears: 2,
+  status: 'new',
+  referenceNumber: 1234567890,
+  description: 'Invoice 1 description...' 
+},
+{
+ _id: 2,
+  sale: Sale2._id,
+  project: Project2._id,
+  customer: Customer2,
+  createdAt: new Date().toDateString(),
+  deadline: new Date().toDateString(),
+  paymentTerm: '',
+  interestInArrears: 2,
+  status: 'new',
+  referenceNumber: 1234567890,
+  description: 'Invoice 2 description...' 
+}]

@@ -23,14 +23,14 @@ class TotalIncomeCard extends Component {
   componentDidMount() {
     this.setState({ isLoading: true })
     this.props.fetchTotalIncome()
-      .catch( ({response}) => this.setState({ totalIncome: { isLoading: true} }) )
+      .catch( ({response}) => this.setState({ isLoading: false }) )
   }
   
   render() {
 
     const { isLoading } = this.state
     const { totalIncome } = this.props
-
+   
     return (    
     
       <div className={classnames("ui card dashboards form", { loading: isLoading })}>
@@ -40,7 +40,7 @@ class TotalIncomeCard extends Component {
           </h4>
         </div>
         <div className="content" style={{display: 'table-cell', verticalAlign: 'middle', borderTop: 'none'}}>
-          <h1 className="ui header green centered bold">{totalIncome && totalIncome[0].sum}</h1>
+          <h1 className="ui header green centered bold">{!!totalIncome ? '0' : (totalIncome && totalIncome.length !== 0 && totalIncome[0].sum)}</h1>
           <div className="description center aligned">{T.translate("dashboards.total_income.description")}</div>
         </div>
       </div>

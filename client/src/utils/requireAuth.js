@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addFlashMessage } from '../actions/flashMessageActions'
+import { Authorization } from './'
 
 export default function(ComposedComponent) {
 
@@ -12,7 +13,12 @@ export default function(ComposedComponent) {
           type: 'error',
           text: 'You need to login to access this page!'
         })
-        this.context.router.history.push('/login')
+
+        if (Authorization.getSubdomain()) {
+          this.context.router.history.push('/login')
+        } else {
+          this.context.router.history.push('/subdomain')
+        }
       }
     }
 

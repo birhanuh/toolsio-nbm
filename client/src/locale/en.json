@@ -64,11 +64,8 @@
     "notice": "All (*) fields are mandatory. Enter correct information.",
     "already_a_user": "Already a user?",
     "log_in_here": "Sign in here",
-    "sign_up": "Sign up",
-    "notice": "All (*) fields are mandatory. Enter correct information.",
-    "sign_up": "Sign up",    
+    "sign_up": "Sign up",   
     "account": {
-      "subdomain": "Enter your subdomain",
       "industry": "Industry",
       "select_industry": "-Select Industry-",
       "subdomain": "Subdomain",
@@ -119,9 +116,6 @@
       "invite_user": "Invite User",
       "email": "Email",
       "description": "Invited users and send new invitation form are availble here."
-    },
-    "edit": {
-      "header": "Edit user"
     },
     "show": {
       "header": "Account",
@@ -520,7 +514,6 @@
       "select_days": "-Select days-",
       "select_sale": "-Select Sale-",
       "select_project": "-Select Project-",
-      "user": "User",
       "deadline": "Deadline",
       "status": "Status",
       "payment_term": "Payment term (in Days)",

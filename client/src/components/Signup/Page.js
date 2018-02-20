@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Form from './Form'
-import { signupRequest, isAccountExists, isUserExists} from '../../actions/authenticationActions'
+import { signupRequest, isSubdomainExist, isUserExist} from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 
@@ -13,7 +13,7 @@ import logo from '../../images/logo-square.png';
 
 class Page extends Component {
   render() {
-    const { signupRequest, isAccountExists, isUserExists, addFlashMessage, account } = this.props
+    const { signupRequest, isSubdomainExist, isUserExist, addFlashMessage, account } = this.props
     
     return (          
       <div>
@@ -26,9 +26,8 @@ class Page extends Component {
         
         <FlashMessagesList />
         
-        <Form signupRequest={signupRequest} isAccountExists={isAccountExists} 
-        isUserExists={isUserExists} addFlashMessage={addFlashMessage}
-        account={account}/> 
+        <Form signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
+        isUserExist={isUserExist} addFlashMessage={addFlashMessage} /> 
 
         <div className="ui message"> 
           {T.translate("sign_up.already_a_user")}&nbsp;<a href="/login">{T.translate("sign_up.log_in_here")}</a>
@@ -46,17 +45,10 @@ class Page extends Component {
 Page.propTypes = {
   signupRequest: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
-  isAccountExists: PropTypes.func.isRequired,
-  isUserExists: PropTypes.func.isRequired,
-  account: PropTypes.object.isRequired
+  isSubdomainExist: PropTypes.func.isRequired,
+  isUserExist: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
-  return {
-    account: state.authentication.account
-  } 
-}
-
-export default connect(mapStateToProps, { signupRequest, addFlashMessage, isAccountExists, isUserExists })(Page)
+export default connect(null, { signupRequest, addFlashMessage, isSubdomainExist, isUserExist })(Page)
 
 

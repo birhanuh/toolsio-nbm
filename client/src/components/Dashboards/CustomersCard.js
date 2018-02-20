@@ -38,7 +38,7 @@ class CustomersCard extends Component {
       "July", "August", "September", "October", "November", "December"
       ]
 
-    const data = customers && customers.lastTwoMonths[0].data.map(customer => 
+    const data = customers && customers.lastTwoMonths.length !== 0 && customers.lastTwoMonths[0].data.map(customer => 
       ({x: new Date(''+monthNames[customer.date.month-1]+' '+customer.date.day+' '+customer.date.year+'').getTime(), y: customer.count})
       )
     
@@ -107,10 +107,10 @@ class CustomersCard extends Component {
           <HorizontalGridLines />
           <LineSeries
             style={{strokeLinejoin: "round"}}
-            data={data}
+            data={data ? data : []}
             />
           <LineSeries
-            data={dataAvg}/>
+            data={dataAvg ? dataAvg : []}/>
           <XAxis tickLabelAngle={-90} />
           <YAxis />
         </XYPlot>
@@ -119,18 +119,18 @@ class CustomersCard extends Component {
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
             <div className="header">
-              {customers && customers.lastTwoMonths[1].totalCount}
-              {customers && (customers.total.avg.toFixed(2) > customers.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+              {customers && customers.lastTwoMonths.length !== 0 && customers.lastTwoMonths[1].totalCount}
+              {customers && customers.lastTwoMonths.length !== 0 && (customers.total.avg.toFixed(2) > customers.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
                 <i className="long arrow up green icon"></i>}
             </div>
           </div>     
           <div className="left floated">
             <div className="meta">{T.translate("dashboards.average")}</div>
-            <div className="header">{customers && customers.total.avg.toFixed(2)}</div>
+            <div className="header">{customers && customers.lastTwoMonths.length !== 0 && customers.total.avg.toFixed(2)}</div>
           </div>    
         </div>
 
-        {customers && customers.total.count === 0 && 
+        {(customers || (customers && customers.total && customers.total.count === 0)) && 
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/customers" className="ui primary outline button small">

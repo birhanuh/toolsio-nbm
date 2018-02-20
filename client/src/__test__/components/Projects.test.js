@@ -46,7 +46,7 @@ describe("components", function() {
 
       // const formComponent = shallow(<Form />)
       // const tree = toJson(formComponent)
-      // console.log(tree
+      // console.log(tree)
 
     })
   })

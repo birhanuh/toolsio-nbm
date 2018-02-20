@@ -37,8 +37,8 @@ describe("components", function() {
       props = {
         signupRequest: jest.fn(),
         addFlashMessage: jest.fn(),
-        isAccountExists: jest.fn(),
-        isUserExists: jest.fn(),
+        isSubdomainExist: jest.fn(),
+        isUserExist: jest.fn(),
       }
 
       wrapper = mount(<BrowserRouter><Provider store={store}><Form {...props} /></Provider></BrowserRouter>)
@@ -53,8 +53,8 @@ describe("components", function() {
 
       expect(wrapper.find(Form).prop('signupRequest')).toEqual(props.signupRequest)
       expect(wrapper.find(Form).prop('addFlashMessage')).toEqual(props.addFlashMessage)
-      expect(wrapper.find(Form).prop('isAccountExists')).toEqual(props.isAccountExists)
-      expect(wrapper.find(Form).prop('isUserExists')).toEqual(props.isUserExists)
+      expect(wrapper.find(Form).prop('isSubdomainExist')).toEqual(props.isSubdomainExist)
+      expect(wrapper.find(Form).prop('isUserExist')).toEqual(props.isUserExist)
     })
 
   })
@@ -74,8 +74,8 @@ describe("components", function() {
       props = {
         signupRequest: jest.fn(),
         addFlashMessage: jest.fn(),
-        isAccountExists: jest.fn(),
-        isUserExists: jest.fn(),
+        isSubdomainExist: jest.fn(),
+        isUserExist: jest.fn(),
       }
 
       wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
@@ -90,8 +90,8 @@ describe("components", function() {
 
       expect(wrapper.find(Page).prop('signupRequest')).toEqual(props.signupRequest)
       expect(wrapper.find(Page).prop('addFlashMessage')).toEqual(props.addFlashMessage)
-      expect(wrapper.find(Page).prop('isAccountExists')).toEqual(props.isAccountExists)
-      expect(wrapper.find(Page).prop('isUserExists')).toEqual(props.isUserExists)
+      expect(wrapper.find(Page).prop('isSubdomainExist')).toEqual(props.isSubdomainExist)
+      expect(wrapper.find(Page).prop('isUserExist')).toEqual(props.isUserExist)
     })
 
   })
