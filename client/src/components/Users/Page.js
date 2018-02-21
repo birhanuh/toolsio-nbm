@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import List from './List' 
 import { connect } from 'react-redux'
-import { fetchUsers } from '../../actions/customerActions'
-
-// Localization 
-import T from 'i18n-react'
+import { fetchUsers } from '../../actions/userActions'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
+import Form from './Form'
 
 class Page extends Component {
 
@@ -21,22 +19,21 @@ class Page extends Component {
 
         <Breadcrumb />
 
-        <div className="ui vertical segment">
-          <Link className="ui primary button" to="/users/new">
-            <i className="add circle icon"></i>
-            {T.translate("users.page.add_new_customer")}
-          </Link>
-        </div>  
+        <div className="ui text container"> 
+        
+          <Form />  
 
-        <List users={this.props.users} />   
+          <List users={this.props.users} />   
+
+        </div>
       </div>  
     )
   }
 }
 
 Page.propTypes = {
-  users: React.PropTypes.array.isRequired,
-  fetchUsers: React.PropTypes.func.isRequired
+  users: PropTypes.array.isRequired,
+  fetchUsers: PropTypes.func.isRequired
 }
 
 function mapSateToProps(state) {

@@ -108,8 +108,10 @@
     "users": {
       "header": "Users",
       "empty_users_header": "There are no Users",
+      "empty_users_message": "Enter email and click Send button above to send your first invitation.",
       "authorized_user": "Authorized user",
       "invite_user": "Invite User",
+      "invite_user_message": "Send invitation for the user whom you want to join this accout",
       "first_name": "First name",
       "last_name": "Last name",
       "email": "Email",

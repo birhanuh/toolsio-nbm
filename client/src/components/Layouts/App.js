@@ -21,6 +21,7 @@ import InvoicesPage from '../Invoices/Page'
 import InvoicesFormPage from '../Invoices/FormPage'
 import InvoicesShow from '../Invoices/Show/Page'
 import ConversationsPage from '../Conversations/Page'
+import UsersPage from '../Users/Page'
 
 import HeaderNav from './HeaderNav'
 import Sidebar from './Sidebar'
@@ -94,6 +95,7 @@ class App extends Component {
               <Route exact path="/conversations" component={requireAuth(ConversationsPage)} />
               <Route exact path="/conversations/:type" component={requireAuth(ConversationsPage)} />
               <Route exact path="/conversations/:type/show/:id" component={requireAuth(ConversationsPage)} /> 
+              <Route exact path="/users" component={requireAuth(UsersPage)} /> 
             </Switch>
           </div>
         </section>

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Tr from './Tr'
 
 // Localization 
@@ -6,10 +7,26 @@ import T from 'i18n-react'
 
 export default function List({ users}) {
   const emptyMessage = (
-    <p className="ui info message">{T.translate("account.users.empty_users")}</p>
+    <tbody>
+      <tr>
+        <td colSpan="4" className="p-3">
+          <div className="ui info message">
+            <div className="header">{T.translate("account.users.empty_users_header")}</div>
+            <p>{T.translate("account.users.empty_users_message")}</p>
+          </div>
+        </td>
+      </tr>
+    </tbody>
   )
 
   const usersList = (
+    <tbody>
+      { users.map(user => <Tr user={user} key={user._id} />) }
+    </tbody>   
+    
+  )
+
+  return (
     <table className="ui very compact striped selectable table">
        <thead>
           <tr>
@@ -19,19 +36,13 @@ export default function List({ users}) {
             <th>{T.translate("account.users.accepted")}</th>
           </tr>
         </thead>
-        <tbody>
-          { users.map(user => <Tr user={user} key={user._id} />) }
-        </tbody>
+        
+        { users.length === 0 ? emptyMessage : usersList }
+      
     </table>
-  )
-
-  return (
-    <div>
-      { users.length === 0 ? emptyMessage : usersList }
-    </div>   
   )
 }
 
 List.propTypes = {
-  users: React.PropTypes.array.isRequired
+  users: PropTypes.array.isRequired
 }
