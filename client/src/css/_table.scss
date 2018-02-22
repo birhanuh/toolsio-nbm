@@ -1,4 +1,8 @@
 // Table
+.ui.compact.table thead th {
+  padding: .52857143em .78571429em;
+}
+
 .table > thead > tr > th {
   border-bottom: 1px solid $light-turquoise;
 }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchIncomes } from '../../actions/dashboardActions'
 
-import {XYPlot, XAxis, YAxis, LineSeries, VerticalGridLines, HorizontalGridLines, DiscreteColorLegend } from 'react-vis'
+import {XYPlot, XAxis, YAxis, LineSeries, HorizontalGridLines, DiscreteColorLegend } from 'react-vis'
 
 // Localization 
 import T from 'i18n-react'
@@ -31,7 +31,7 @@ class IncomesCard extends Component {
 
   render() {
 
-    const { value, isLoading } = this.state
+    const { isLoading } = this.state
     const { incomes } = this.props
   
     const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -47,7 +47,7 @@ class IncomesCard extends Component {
     }
 
     return (
-      <div className="ui card dashboards">
+      <div className={classnames("ui card dashboards form", { loading: isLoading })}>
         <div className="content">
           <div className="right floated">
             <h4 className="ui header">

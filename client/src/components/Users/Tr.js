@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 
 export default function Tr({user}) {
   
@@ -8,8 +7,8 @@ export default function Tr({user}) {
   
   return (
     <tr>
-      <td>{user.first_name}</td>
-      <td>{user.last_name}</td>
+      <td>{user.firstName}</td>
+      <td>{user.lastName}</td>
       <td>{user.email}</td>
       <td><span>{accepted}</span></td>
     </tr>

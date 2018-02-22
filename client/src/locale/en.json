@@ -97,7 +97,8 @@
       "subdomain": "Your subdomain is most likely your company name",
       "continue_button": "Continue",
       "subdomain_required": "Subdomain is required",
-      "dont_have_an_account": "Don't have an account? Sign up for free now!"
+      "no__account": "There is no account with such subdomain! Go to Sign up page to sign for free!",
+      "on_your_account_page": "You are now on your account page, continue by login with your credentials!"
     }
   },
   "account": {
@@ -116,7 +117,8 @@
       "last_name": "Last name",
       "email": "Email",
       "accepted": "Accepted",
-      "description": "Invited users and send new invitation form are availble here."
+      "description": "Invited users and send new invitation form are availble here.",
+      "invitation_success_message": "Your invitation is sent to *{email}*"
     },
     "show": {
       "header": "Account",

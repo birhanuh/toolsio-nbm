@@ -79,12 +79,12 @@ router.post('/register', async (req, res) => {
   jwt.sign({
     id: userCreated._id,
     email: userCreated.email
-  }, config.jwtSecret, { expiresIn: '1d' }, (err, emailToken) => {
+  }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
     if (err) {
       console.log('err token: ', err)
     }
     
-    const url = `http://localhost:3000/login/confirmation/${emailToken}`
+    const url = `http://lvh.me:3000/login/confirmation/${emailToken}`
 
     transporter.sendMail({
       to: userCreated.email,
@@ -95,11 +95,55 @@ router.post('/register', async (req, res) => {
 
 })
 
-// Get user by email or all users
+// Get user by email
 router.get('/:email', (req, res) => {
   User.find({ email: req.params.email }).then(user => {
     res.json( { user }) 
   })
+})
+
+// Get user by email or all users
+router.get('/all/users', (req, res) => {
+  User.find({}).select('firstName lastName email confirmed').exec((err, users) => {
+    if (err) {
+      res.status(500).json({ 
+        errors: {
+          confirmation: 'fail',
+          message: err
+        }
+      })
+      return
+    }
+    res.json({
+      confirmation: 'success',
+      results: users
+    }) 
+  })
+})
+
+// Confirm email
+router.post('/invitation', (req, res) => {
+  
+  const email = req.params.email 
+  const account = req.headers.subdomain
+
+  // Create emailToken
+  jwt.sign({
+    email: email
+  }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
+    if (err) {
+      console.log('err token: ', err)
+    }
+    
+    const url = `http://lvh.me:3000/signup?invitationToken=${emailToken}`
+
+    transporter.sendMail({
+      to: userCreated.email,
+      subject: 'Invitation Email (Toolsio)',
+      html: `You are invited to join ${account}. Please click this link to accept you invitation and sign up: <a href="${url}">${url}</a>`
+    })
+  })
+
 })
 
 // Login User

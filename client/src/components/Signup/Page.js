@@ -13,7 +13,7 @@ import logo from '../../images/logo-square.png';
 
 class Page extends Component {
   render() {
-    const { signupRequest, isSubdomainExist, isUserExist, addFlashMessage, account } = this.props
+    const { signupRequest, isSubdomainExist, isUserExist, addFlashMessage } = this.props
     
     return (          
       <div>

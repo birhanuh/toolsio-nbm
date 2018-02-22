@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { InputField } from '../../utils/FormFields'
 import { sendInvitation } from '../../actions/userActions'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 
 // Localization 
 import T from 'i18n-react'
@@ -58,6 +59,12 @@ class Form extends Component {
       this.setState({ isLoading: true })
 
       this.props.sendInvitation({ email })
+        .then((res) => {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("account.users.invitation_success_message", email)
+          })
+        })
         .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) )
     }
     
@@ -101,9 +108,10 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  sendInvitation: PropTypes.func.isRequired
+  sendInvitation: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
 }
 
-export default connect(null, { sendInvitation }) (Form)
+export default connect(null, { sendInvitation, addFlashMessage }) (Form)
 
 
