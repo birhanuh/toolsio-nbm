@@ -99,20 +99,20 @@ router.post('/register', async (req, res) => {
       await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
     }
 
-    const accountExisted = await Account.findOne({ subdomain: account})
+    const accountInvitedTo = await Account.findOne({ subdomain: account})
     
     // Connect to subdomain db
     if (env === 'development') {
-      await db.connect(process.env.DB_HOST+accountExisted.subdomain+process.env.DB_DEVELOPMENT)
+      await db.connect(process.env.DB_HOST+accountInvitedTo.subdomain+process.env.DB_DEVELOPMENT)
     } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+accountExisted.subdomain+process.env.DB_TEST)
+      await db.connect(process.env.DB_HOST+accountInvitedTo.subdomain+process.env.DB_TEST)
     }
 
     let userCreated = await User.create(user)
     
     // Push associated userCreated
     if (userCreated) {
-      accountExisted.save()
+      accountInvitedTo.save()
         .then(account => {
           account.users.push(userCreated._id)
         })
@@ -135,7 +135,7 @@ router.post('/register', async (req, res) => {
         return
       }
       res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
-        admin: userCreated.admin, subdomain: accountExisted.subdomain })
+        admin: userCreated.admin, subdomain: accountInvitedTo.subdomain })
     })
 
     // Create emailToken
@@ -147,7 +147,7 @@ router.post('/register', async (req, res) => {
         console.log('err token: ', err)
       }
       
-      const url = `http://${accountExisted}.lvh.me:3000/login/confirmation/${emailToken}`
+      const url = `http://${accountInvitedTo}.lvh.me:3000/login/confirmation/${emailToken}`
 
       transporter.sendMail({
         to: userCreated.email,

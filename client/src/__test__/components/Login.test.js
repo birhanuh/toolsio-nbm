@@ -29,7 +29,7 @@ describe("components", function() {
    
   describe("<Form />", function() {  
 
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {}
 
       store = mockStore(storeStateMock)
@@ -57,22 +57,30 @@ describe("components", function() {
 
   describe("<Page />", function() {  
 
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
-        authentication: {
-          account: Account 
-        },
         flashMessages: []
       }
 
       store = mockStore(storeStateMock)
 
-      wrapper = mount(<BrowserRouter><Provider store={store}><Page /></Provider></BrowserRouter>)
+      props = {
+        confirmEmail: jest.fn(),
+        addFlashMessage: jest.fn()
+      }
+
+      wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
     })
 
     it('renders connected component', function() { 
       
       expect(wrapper.find(Page).length).toEqual(1)
+    })
+
+    it('check Prop matchs', function() { 
+
+      expect(wrapper.find(Page).prop('confirmEmail')).toEqual(props.confirmEmail)
+      expect(wrapper.find(Page).prop('addFlashMessage')).toEqual(props.addFlashMessage)
     })
 
   })

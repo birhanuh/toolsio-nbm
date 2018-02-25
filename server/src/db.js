@@ -23,7 +23,7 @@ export default {
   dropCollection: function(collectionName) {  
        
     /* Clean collections */
-    mongoose.connection.collections[collectionName].drop( function(err) {
+    return mongoose.connection.collections[collectionName].drop( function(err) {
       console.log('collection dropped')
     })
   },
@@ -31,13 +31,13 @@ export default {
   close: function(collectionName) {  
      
     /* Close connection */
-    mongoose.connection.close()
+    return mongoose.connection.close()
   },
 
   drop: function(collectionName) {  
      
     /* Drop the DB */
-    mongoose.connection.db.dropDatabase()
+    return mongoose.connection.db.dropDatabase()
   }
 
 }

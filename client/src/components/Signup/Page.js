@@ -20,7 +20,7 @@ class Page extends Component {
   
     let form 
 
-    if (match.params.token) {
+    if (match && match.params.token) {
       form = <Invitation signupRequest={signupRequest} 
         isUserExist={isUserExist} addFlashMessage={addFlashMessage} />  
 
