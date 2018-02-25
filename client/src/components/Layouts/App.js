@@ -71,7 +71,8 @@ class App extends Component {
           <div className={classnames({'sixteen wide column': internalPages, 'six wide column': authPages})}>
             <Switch>
               <Route exact path="/" component={Landing} />
-              <Route path="/signup" component={Signup} />
+              <Route exact path="/signup" component={Signup} />
+              <Route exact path="/signup/invitation/:token" component={Signup} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/login/confirmation/:token" component={Login} />
               <Route path="/subdomain" component={Subdomain} />

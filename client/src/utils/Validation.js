@@ -54,6 +54,44 @@ export default {
     }
   },
 
+  validateInvitationRegistrationInput: (data) => {
+    let errors = {}
+
+    if (!data.user.email) {
+      errors["email"] = {
+        message: T.translate("log_in.email_required")
+      }
+    } else {
+      if (!Validator.isEmail(data.user.email)) {
+        errors["email"] = {
+          message: T.translate("sign_un.email_format_required") 
+        } 
+      }
+    }  
+    if (!data.user.password) {
+      errors["password"] = {
+        message: T.translate("sign_up.password_required")
+      } 
+    }
+    if (!data.user.confirmPassword) {
+      errors["confirmPassword"] = {
+        message: T.translate("sign_up.password_confirmation_required")
+      }
+    }
+    if (data.user.password && data.confirmPassword) {
+      if (!Validator.equals(data.password, data.confirmPassword)) {
+        errors["confirmPassword"] = {
+          message: T.translate("sign_up.password_match_required")
+        } 
+      }
+    } 
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
   validateLoginInput: (data) => {
     let errors = {}
 
@@ -324,6 +362,21 @@ export default {
     if (!data.body) {
       errors['body'] = {
         message: T.translate("conversations.form.body_required")
+      }
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
+  validateUserInvitationInput: (data) => {
+    let errors = {}
+
+    if (!data.email) {
+      errors['email'] = {
+        message: T.translate("account.users.email_required")
       }
     }
     

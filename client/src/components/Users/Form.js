@@ -53,17 +53,19 @@ class Form extends Component {
   }
 
   handleSubmit = (e) => {
+    e.preventDefault()
 
     if (this.isValid()) {
       const { email } = this.state
       this.setState({ isLoading: true })
-
-      this.props.sendInvitation({ email })
+      
+      this.props.sendInvitation({ email: email })
         .then((res) => {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("account.users.invitation_success_message", email)
+            text: T.translate("account.users.invitation_success_message", {email: email})
           })
+          this.setState({ email: '', isLoading: false })
         })
         .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) )
     }
@@ -91,8 +93,8 @@ class Form extends Component {
               value={email} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Email"
-              error={errors && errors.email}
-              formClass="inline field"
+              error={errors && errors.email && errors.email.message}
+              formClass="field"
             />
 
             <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("account.users.invite_user")}</button> 

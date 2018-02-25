@@ -19,6 +19,6 @@ export function fetchUsers() {
 
 export function sendInvitation(email) {
   return dispatch => {
-    return axios.post('/users/invitation', email)
+    return axios.post('/users/account/invitation', email)
   }
 }

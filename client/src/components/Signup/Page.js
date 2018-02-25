@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Form from './Form'
+import Invitation from './Invitation'
+import { Authorization } from '../../utils'
 import { signupRequest, isSubdomainExist, isUserExist} from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import FlashMessagesList from '../../flash/FlashMessagesList'
@@ -13,8 +15,22 @@ import logo from '../../images/logo-square.png';
 
 class Page extends Component {
   render() {
-    const { signupRequest, isSubdomainExist, isUserExist, addFlashMessage } = this.props
-    
+
+    const { signupRequest, isSubdomainExist, isUserExist, addFlashMessage, match } = this.props
+  
+    let form 
+
+    if (match.params.token) {
+      form = <Invitation signupRequest={signupRequest} 
+        isUserExist={isUserExist} addFlashMessage={addFlashMessage} />  
+
+      // Set Invitation token to Req header
+      Authorization.setInvitationToken(match.params.token)
+    } else {
+      form = <Form signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
+        isUserExist={isUserExist} addFlashMessage={addFlashMessage} /> 
+    }
+
     return (          
       <div>
         <h2 className="ui teal image header">
@@ -26,8 +42,7 @@ class Page extends Component {
         
         <FlashMessagesList />
         
-        <Form signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
-        isUserExist={isUserExist} addFlashMessage={addFlashMessage} /> 
+        {form}
 
         <div className="ui message"> 
           {T.translate("sign_up.already_a_user")}&nbsp;<a href="/login">{T.translate("sign_up.log_in_here")}</a>
