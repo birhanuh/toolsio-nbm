@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
-import { InputField, SelectField } from '../../utils/FormFields'
+import { InputField } from '../../utils/FormFields'
 import classnames from 'classnames'
 
 // Localization 
@@ -96,10 +96,10 @@ class Form extends Component {
   }
 
   render() {
-    const { account, user, errors, isLoading, invalid } = this.state
+    const { user, errors, isLoading, invalid } = this.state
    
     return (            
-      <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
+      <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
            
           { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 

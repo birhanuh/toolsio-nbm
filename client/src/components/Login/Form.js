@@ -70,7 +70,7 @@ class Form extends Component {
     const { errors, isLoading } = this.state
    
     return (  
-        <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
+        <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
             { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
