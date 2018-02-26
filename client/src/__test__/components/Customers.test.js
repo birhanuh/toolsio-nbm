@@ -9,8 +9,8 @@ import toJson from 'enzyme-to-json'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
-import 'datatables.net-se'
-jest.mock('datatables.net-se', () => ({ dataTable: jest.fn() }))
+// import 'datatables.net-se'
+// jest.mock('datatables.net-se', () => ({ dataTable: jest.fn() }))
 
 // Configure Adapter
 configure({ adapter: new Adapter() })
@@ -34,13 +34,13 @@ describe("components", function() {
 
   describe("<Form />", function() { 
     
-    beforeEach(()=>{
+    beforeEach(() => {
       props = {
         customers: Customers,
         saveCustomer: jest.fn()
       }
 
-      component = shallow(<Form {...props}/>)
+      component = shallow(<Form {...props} />)
     })
 
     it('renders correctly', () => { 
@@ -56,7 +56,7 @@ describe("components", function() {
    
   describe("<FormPage />", function() {  
 
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
         customers: {
           Customer,
@@ -96,7 +96,7 @@ describe("components", function() {
 
   describe("<Page />", function() {  
 
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
         customers: Customers
       }

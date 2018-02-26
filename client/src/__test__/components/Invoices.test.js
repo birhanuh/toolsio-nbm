@@ -43,7 +43,7 @@ describe("components", function() {
 
     it('renders correctly', () => { 
       
-      expect(component.find('button').hasClass('ui primary')).toBe(true)
+      expect(component.find('form').hasClass('ui form')).toBe(true)
 
     })
   })
