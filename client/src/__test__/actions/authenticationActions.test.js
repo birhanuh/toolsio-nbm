@@ -20,16 +20,16 @@ describe("actoins", () => {
   })  
 
   // Async Action Creator
-  xit('should excute signupRequest()', () => {
-    const accountAndUser = {}
+  it('should excute signupRequest()', () => {
+    const account = {}
 
     const store = mockStore({})
 
     // Return the promise
-    return store.dispatch(signupRequest(accountAndUser))
+    return store.dispatch(signupRequest(account))
       .then(() => {
         const actions = store.getActions()
-        expect(actions[0]).toEqual(setCurrentAccount(accountAndUser))
+        expect(actions[0]).toEqual(setCurrentAccount(account))
       })
   })
   

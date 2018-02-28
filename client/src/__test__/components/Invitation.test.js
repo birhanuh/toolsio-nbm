@@ -13,7 +13,10 @@ import thunk from 'redux-thunk'
 configure({ adapter: new Adapter() })
 
 // Components 
-import Subdomain from '../../components/Login/Subdomain'
+import Invitation from '../../components/Signup/Invitation'
+
+// Factories
+import { Account } from '../factories'
 
 // Setups
 const middlewares = [thunk] // add your middlewares like `redux-thunk`
@@ -23,34 +26,39 @@ let store, props, component, wrapper
 
 describe("components", function() { 
    
-  describe("<Subdomain />", function() {  
+  describe("<Invitation />", function() {  
 
     beforeEach(() => {
-      const storeStateMock = {}
+      const storeStateMock = {
+        authentication: {
+          account: Account 
+        }
+      }
 
       store = mockStore(storeStateMock)
 
       props = {
-        isSubdomainExist: jest.fn(),
-        addFlashMessage: jest.fn()
+        signupRequest: jest.fn(),
+        addFlashMessage: jest.fn(),
+        isUserExist: jest.fn()
       }
 
-      wrapper = mount(<BrowserRouter><Provider store={store}><Subdomain {...props} /></Provider></BrowserRouter>)
+      wrapper = mount(<BrowserRouter><Provider store={store}><Invitation {...props} /></Provider></BrowserRouter>)
     })
 
     it('renders connected component', function() { 
       
-      expect(wrapper.find(Subdomain).length).toEqual(1)
+      expect(wrapper.find(Invitation).length).toEqual(1)
     })
 
     it('check Prop matchs', function() { 
 
-      expect(wrapper.find(Subdomain).prop('isSubdomainExist')).toEqual(props.isSubdomainExist)
-      expect(wrapper.find(Subdomain).prop('addFlashMessage')).toEqual(props.addFlashMessage)
+      expect(wrapper.find(Invitation).prop('signupRequest')).toEqual(props.signupRequest)
+      expect(wrapper.find(Invitation).prop('addFlashMessage')).toEqual(props.addFlashMessage)
+      expect(wrapper.find(Invitation).prop('isUserExist')).toEqual(props.isUserExist)
     })
 
   })
-
 
 })
 

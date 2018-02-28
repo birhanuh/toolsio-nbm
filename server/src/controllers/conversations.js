@@ -59,6 +59,7 @@ export default {
         })
       })
       
+      callback(null, conversations)
     })
 
   },

@@ -1,8 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-
-// Localization 
-import T from 'i18n-react'
 
 // React-vis style 
 import 'react-vis/dist/styles/plot.scss'
@@ -23,8 +19,6 @@ import InvoiceTasks from './InvoiceTasks'
 class Page extends Component {
 
   render() {
-    
-    const { totalIncome, projectTasks, saleTasks, invoiceTasks } = this.props
 
     return ( 
       <div className="row column">  

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { setAuthorizationToken } from '../utils'
+//import { setAuthorizationToken } from '../utils'
 import { SET_CURRENT_ACCOUNT } from './types'
 
 // Action creators 

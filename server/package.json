@@ -4,12 +4,11 @@
   "description": "A Project tracking and Sales management tool.",
   "main": "./src/index.js",
   "directories": {
-    "test": "./src/__tests__"
+    "test": "./src/__test__"
   },
   "scripts": {
     "start": "nodemon --watch src --exec babel-node -- src/index.js",
-    "test": "jest",
-    "tst": "wdio"
+    "test": "jest './src/__test__'"
   },
   "repository": {
     "type": "git",

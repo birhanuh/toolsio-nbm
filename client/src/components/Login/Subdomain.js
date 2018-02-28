@@ -32,11 +32,11 @@ class Subdomain extends Component {
     
     if (subdomain) {
       this.setState({ errros: {}, isLoading: true })
-      this.props.isSubdomainExist(subdomain).then(
-        (res) => {
+      this.props.isSubdomainExist(subdomain)
+        .then((res) => {
           this.props.addFlashMessage({
             type: 'success',
-            text: 'You are on your company page, now login with your credentials!'
+            text: T.translate("log_in.subdomain.on_your_account_page")
           })
           window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`
         },
@@ -73,14 +73,14 @@ class Subdomain extends Component {
         (res) => {
           this.props.addFlashMessage({
             type: 'success',
-            text: 'You are on your company page, now login with your credentials!'
+            text: T.translate("log_in.subdomain.on_your_account_page")
           })
           
           if (res.data.result !== null) {
             window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`  
           } else {
 
-            let errors = { subdomain: { message: 'There is no account with such subdomain!' } }
+            let errors = { subdomain: { message: T.translate("log_in.subdomain.no_account") } }
 
             let updatedErrors = Object.assign({}, this.state.errors)
             updatedErrors.message.errors = errors

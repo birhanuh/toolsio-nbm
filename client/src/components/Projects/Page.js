@@ -36,8 +36,9 @@ class Page extends Component {
         
         <div className="row column">     
           <List projects={this.props.projects} />  
-        </div>       
-      </div>   
+        </div>    
+
+      </div>  
     )
   }
 }

@@ -8,6 +8,7 @@ module.exports = merge(common, {
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
+    host: "lvh.me",
     port: 3000,    
     allowedHosts: [
       '.lvh.me'

@@ -75,14 +75,12 @@ describe("Account", () => {
   })
 
   it('deletes Account', (done) => { 
+  
+    Account.findByIdAndRemove(accountCreated._id, (error, account) => {
+      expect(account).not.toBeNull()
 
-    FactoryGirl.build('account').then(account => {
-      Account.findByIdAndRemove(accountCreated._id, accountCreated, (error, account) => {
-        expect(account).not.toBeNull()
-
-        done()
-      })
-    })  
+      done()
+    })
   })
 
 })

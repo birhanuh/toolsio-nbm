@@ -30,38 +30,145 @@ const transporter = nodemailer.createTransport({
 router.post('/register', async (req, res) => {
   const { account, user } = req.body
 
-  let accountCreated = await Account.create(account)
+  if (account) {
+    const accountCreated = await Account.create(account)
 
-  // Connect to subdomain db
-  if (env === 'development') {
-    await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_DEVELOPMENT)
-  } else if (env === 'test') {
-    await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_TEST)
-  }
+    // Connect to subdomain db
+    if (env === 'development') {
+      await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_DEVELOPMENT)
+    } else if (env === 'test') {
+      await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_TEST)
+    }
 
-  let userCreated = await User.create(user)
+    let userCreated = await User.create(user)
 
-  // Connect to subdomain db
-  if (env === 'development') {
-    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-  } else if (env === 'test') {
-    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-  }
+    // Push associated userCreated
+    if (userCreated) {
+      accountCreated.save()
+        .then(account => {
+          account.users.push(userCreated._id)
+        })
+        .catch(err => 
+          console.log('new account err', err)
+        )
+    } else {
+      console.log('userCreated is null')
+    }  
 
-  // Push associated userCreated
-  if (userCreated) {
-    accountCreated.save()
-      .then(account => {
-        account.users.push(userCreated)
+    req.login(userCreated, function(err) {
+      
+      if (err) {
+        res.status(500).json({ 
+          errors: {
+            confirmation: 'fail',
+            message: err
+          }
+        })
+        return
+      }
+      res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
+        admin: userCreated.admin, subdomain: accountCreated.subdomain })
+    })
+
+    // Create emailToken
+    jwt.sign({
+      id: userCreated._id,
+      email: userCreated.email
+    }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
+      if (err) {
+        console.log('err token: ', err)
+      }
+      
+      const url = `http://${accountCreated}.lvh.me:3000/login/confirmation/${emailToken}`
+
+      transporter.sendMail({
+        to: userCreated.email,
+        subject: 'Confirm Email (Toolsio)',
+        html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
       })
-      .catch(err => 
-        console.log('new account err', err)
-      )
-  } else {
-    console.log('userCreated is null')
-  }  
+    })
+  }
 
-  req.login(userCreated, function(err) {
+  if (req.headers.invitation) {
+    const { account } = jwt.verify(req.headers.invitation, config.jwtSecret)
+    
+    // Connect to subdomain db
+    if (env === 'development') {
+      await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+    } else if (env === 'test') {
+      await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+    }
+
+    const accountInvitedTo = await Account.findOne({ subdomain: account})
+    
+    // Connect to subdomain db
+    if (env === 'development') {
+      await db.connect(process.env.DB_HOST+accountInvitedTo.subdomain+process.env.DB_DEVELOPMENT)
+    } else if (env === 'test') {
+      await db.connect(process.env.DB_HOST+accountInvitedTo.subdomain+process.env.DB_TEST)
+    }
+
+    let userCreated = await User.create(user)
+    
+    // Push associated userCreated
+    if (userCreated) {
+      accountInvitedTo.save()
+        .then(account => {
+          account.users.push(userCreated._id)
+        })
+        .catch(err => 
+          console.log('new account err', err)
+        )
+    } else {
+      console.log('userCreated is null')
+    }
+
+    req.login(userCreated, function(err) {
+      
+      if (err) {
+        res.status(500).json({ 
+          errors: {
+            confirmation: 'fail',
+            message: err
+          }
+        })
+        return
+      }
+      res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
+        admin: userCreated.admin, subdomain: accountInvitedTo.subdomain })
+    })
+
+    // Create emailToken
+    jwt.sign({
+      id: userCreated._id,
+      email: userCreated.email
+    }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
+      if (err) {
+        console.log('err token: ', err)
+      }
+      
+      const url = `http://${accountInvitedTo}.lvh.me:3000/login/confirmation/${emailToken}`
+
+      transporter.sendMail({
+        to: userCreated.email,
+        subject: 'Confirm Email (Toolsio)',
+        html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
+      })
+    })  
+  }
+
+})
+
+// Get user by email
+router.get('/:email', (req, res) => {
+  User.find({ email: req.params.email }).then(user => {
+    res.json( { user }) 
+  })
+})
+
+// Get user by email or all users
+router.get('/all/users', (req, res) => {
+  User.find({}).select('firstName lastName email confirmed').exec((err, users) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -71,35 +178,42 @@ router.post('/register', async (req, res) => {
       })
       return
     }
-    res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
-      admin: userCreated.admin, subdomain: accountCreated.subdomain })
+    res.json({
+      confirmation: 'success',
+      results: users
+    }) 
   })
+})
+
+// Confirm email
+router.post('/account/invitation', (req, res) => {
+  
+  const email = req.body.email 
+  const account = req.headers.subdomain
 
   // Create emailToken
   jwt.sign({
-    id: userCreated._id,
-    email: userCreated.email
-  }, config.jwtSecret, { expiresIn: '1d' }, (err, emailToken) => {
+    email: email,
+    account: account
+  }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
     if (err) {
       console.log('err token: ', err)
     }
-    
-    const url = `http://localhost:3000/login/confirmation/${emailToken}`
-
+     
+    const url = `http://${account}.lvh.me:3000/signup/invitation/${emailToken}`
+    console.log('url: ', url)
     transporter.sendMail({
-      to: userCreated.email,
-      subject: 'Confirm Email (Toolsio)',
-      html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
+      to: email,
+      subject: 'Invitation Email (Toolsio)',
+      html: `You are invited to join ${account}. Please click this link to accept you invitation and sign up: <a href="${url}">${url}</a>`
     })
+
+    res.json({
+      confirmation: 'success',
+      result: true
+    }) 
   })
 
-})
-
-// Get user by email or all users
-router.get('/:email', (req, res) => {
-  User.find({ email: req.params.email }).then(user => {
-    res.json( { user }) 
-  })
 })
 
 // Login User
@@ -152,7 +266,7 @@ router.post('/login', function(req, res, next) {
         if (err) { 
           return next(err) 
         }
-
+   
         if (user.confirmed) {
           res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
             admin: user.admin, subdomain: req.headers.subdomain })        
@@ -237,7 +351,7 @@ passport.use(new LocalStrategy({
       if (err) {
         return done(err)
       }
-
+       console.log("email ", user)
       if (!user) {
         return done(null, false)
       }

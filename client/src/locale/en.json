@@ -65,6 +65,7 @@
     "already_a_user": "Already a user?",
     "log_in_here": "Sign in here",
     "sign_up": "Sign up",   
+    "success_create": "You have signed up successfully!",
     "account": {
       "industry": "Industry",
       "select_industry": "-Select Industry-",
@@ -97,7 +98,8 @@
       "subdomain": "Your subdomain is most likely your company name",
       "continue_button": "Continue",
       "subdomain_required": "Subdomain is required",
-      "dont_have_an_account": "Don't have an account? Sign up for free now!"
+      "no__account": "There is no account with such subdomain! Go to Sign up page to sign for free!",
+      "on_your_account_page": "You are now on your account page, continue by login with your credentials!"
     }
   },
   "account": {
@@ -105,17 +107,20 @@
     "edit": {
       "header": "Edit accout information"
     },    
-    "user": {
-      "first_name": "First name",
-      "last_name": "Last name",
-      "email": "Email"
-    },
     "users": {
       "header": "Users",
+      "empty_users_header": "There are no Users",
+      "empty_users_message": "Enter email and click Send button above to send your first invitation.",
       "authorized_user": "Authorized user",
       "invite_user": "Invite User",
+      "invite_user_message": "Send invitation for the user whom you want to join this accout",
+      "first_name": "First name",
+      "last_name": "Last name",
       "email": "Email",
-      "description": "Invited users and send new invitation form are availble here."
+      "email_required": "Email required",
+      "accepted": "Accepted",
+      "description": "Invited users and send new invitation form are availble here.",
+      "invitation_success_message": "Your invitation is sent to *{email}*"
     },
     "show": {
       "header": "Account",
@@ -253,8 +258,8 @@
       "deadline_required": "Deadline is required",
       "customer_required": "Customer is required",
       "flash": {
-        "success_create": "Project *{name}* is created!",
-        "success_update": "Project *{name}* is updated!"
+        "success_create": "*{name}* is created!",
+        "success_update": "*{name}* is updated!"
       },
       "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
     },
@@ -276,8 +281,8 @@
       "cancel": "Cancel",
       "confirmation_msg": "Are you sure to delete this Project?",
       "flash": {
-        "success_delete": "Project *{name}* is deleted",
-        "error_delete": "Project *{name}* couldn't be deleted, try again after refreshing the page"
+        "success_delete": "*{name}* is deleted",
+        "error_delete": "*{name}* couldn't be deleted, try again after refreshing the page"
       }
     },
     "tasks": {
@@ -346,8 +351,8 @@
       "deadline_required": "Deadline is required",
       "customer_required": "Customer is required",
       "flash": {
-        "success_create": "Sale *{name}* is created!",
-        "success_update": "Sale *{name}* is updated!"
+        "success_create": "*{name}* is created!",
+        "success_update": "*{name}* is updated!"
       },
       "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
     },    
@@ -369,8 +374,8 @@
       "cancel": "Cancel",
       "confirmation_msg": "Are you sure to delete this sale?",
       "flash": {
-        "success_delete": "Sale *{name}* is deleted!",
-        "error_delete": "Sale *{name}* couldn't be deleted, try again after refreshing the page"
+        "success_delete": "*{name}* is deleted!",
+        "error_delete": "*{name}* couldn't be deleted, try again after refreshing the page"
       }
     },
     "items": {
@@ -436,8 +441,8 @@
       "regoin_required": "Region is required.",
       "country_required": "Country is required.",
       "flash": {
-        "success_create": "Customer *{name}* is created!",
-        "success_update": "Customer *{name}* is updated!"
+        "success_create": "*{name}* is created!",
+        "success_update": "*{name}* is updated!"
       }
     },
     "show": {
@@ -461,8 +466,8 @@
       },
       "confirmation_msg": "Are you sure to delete this customer?",
       "flash": {
-        "success_delete": "Customer *{name}* is deleted!",
-        "error_delete": "Customer *{name}* couldn't be deleted, try again after refreshing the page"
+        "success_delete": "*{name}* is deleted!",
+        "error_delete": "*{name}* couldn't be deleted, try again after refreshing the page"
       }
     }
   },
@@ -528,8 +533,8 @@
       "deadline_or_payment_required": "Select either Deadline or Payment term.",
       "intereset_in_arrears_required": "Interset in arrears is required.",
       "flash": {
-        "success_create": "Invoice *{name}* created!",
-        "success_update": "Invoice *{name}* is updated!"
+        "success_create": "*{name}* created!",
+        "success_update": "*{name}* is updated!"
       }
     },
     "show": {
@@ -601,8 +606,8 @@
       },
       "confirmation_msg": "Are you sure to delete this invoice?",      
       "flash": {
-        "success_delete": "Invoice *{name}* is deleted!",
-        "error_delete": "Invoice *{name}* couldn't be deleted, try again after refreshing the page"
+        "success_delete": "*{name}* is deleted!",
+        "error_delete": "*{name}* couldn't be deleted, try again after refreshing the page"
       }
     }
   },

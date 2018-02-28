@@ -21,6 +21,7 @@ import InvoicesPage from '../Invoices/Page'
 import InvoicesFormPage from '../Invoices/FormPage'
 import InvoicesShow from '../Invoices/Show/Page'
 import ConversationsPage from '../Conversations/Page'
+import UsersPage from '../Users/Page'
 
 import HeaderNav from './HeaderNav'
 import Sidebar from './Sidebar'
@@ -70,7 +71,8 @@ class App extends Component {
           <div className={classnames({'sixteen wide column': internalPages, 'six wide column': authPages})}>
             <Switch>
               <Route exact path="/" component={Landing} />
-              <Route path="/signup" component={Signup} />
+              <Route exact path="/signup" component={Signup} />
+              <Route exact path="/signup/invitation/:token" component={Signup} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/login/confirmation/:token" component={Login} />
               <Route path="/subdomain" component={Subdomain} />
@@ -94,6 +96,7 @@ class App extends Component {
               <Route exact path="/conversations" component={requireAuth(ConversationsPage)} />
               <Route exact path="/conversations/:type" component={requireAuth(ConversationsPage)} />
               <Route exact path="/conversations/:type/show/:id" component={requireAuth(ConversationsPage)} /> 
+              <Route exact path="/users" component={requireAuth(UsersPage)} /> 
             </Switch>
           </div>
         </section>

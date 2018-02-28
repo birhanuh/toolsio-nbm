@@ -31,7 +31,7 @@ describe("components", function() {
 
   describe("<Form />", function() { 
     
-    beforeEach(()=>{
+    beforeEach(() => {
       props = {
         projects: Projects,
         sales: Sales,
@@ -43,14 +43,14 @@ describe("components", function() {
 
     it('renders correctly', () => { 
       
-      expect(component.find('button').hasClass('ui primary')).toBe(true)
+      expect(component.find('form').hasClass('ui form')).toBe(true)
 
     })
   })
    
   describe("<FormPage />", function() {  
 
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
         invoices: Invoices,
         projects: Projects,
@@ -93,7 +93,7 @@ describe("components", function() {
 
   describe("<Page />", function() {  
 
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
         invoices: Invoices
       }
@@ -121,7 +121,7 @@ describe("components", function() {
 
   describe("<Show />", function() {  
     
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
         invoices: {
           Invoices,

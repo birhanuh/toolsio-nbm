@@ -31,7 +31,7 @@ describe("components", function() {
 
   describe("<Form />", function() { 
     
-    beforeEach(()=>{
+    beforeEach(() => {
       props = {
         customers: Customers,
         saveSale: jest.fn(),
@@ -49,7 +49,7 @@ describe("components", function() {
    
   describe("<FormPage />", function() {  
 
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
         sales: {
           Sales,
@@ -92,7 +92,7 @@ describe("components", function() {
 
   describe("<Page />", function() {  
 
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
         sales: Sales
       }
@@ -120,7 +120,7 @@ describe("components", function() {
 
   describe("<Show />", function() {  
     
-    beforeEach(()=>{
+    beforeEach(() => {
       const storeStateMock = {
         sales: {
           Sales,

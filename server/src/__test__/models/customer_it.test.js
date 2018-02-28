@@ -10,6 +10,9 @@ import FactoryGirl from '../factories'
 // Schema
 import Customer from '../../models/customer'
 
+import 'datatables.net-se'
+jest.mock('datatables.net-se', () => ({ dataTable: jest.fn() }))
+
 let customerCreated = {}
 
 describe("Customer", () => { 

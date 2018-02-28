@@ -118,7 +118,6 @@ class Show extends Component {
         </div>
       </div>
     )
-    console.log('project: ', projects)
 
     const projectsList = map(projects, (project) => 
       <div key={project._id} className="ui segment">

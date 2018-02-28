@@ -76,13 +76,11 @@ describe("User", () => {
 
   it('deletes User', (done) => { 
 
-    FactoryGirl.build('user').then(user => {
-      User.findByIdAndRemove(userCreated._id, userCreated, (error, user) => {
-        expect(user).not.toBeNull()
+    User.findByIdAndRemove(userCreated._id, (error, user) => {
+      expect(user).not.toBeNull()
 
-        done()
-      })
-    })  
+      done()
+    })
   })
 
 })

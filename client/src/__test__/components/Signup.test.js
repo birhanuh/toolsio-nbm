@@ -29,8 +29,12 @@ describe("components", function() {
    
   describe("<Form />", function() {  
 
-    beforeEach(()=>{
-      const storeStateMock = {}
+    beforeEach(() => {
+      const storeStateMock = {
+        authentication: {
+          account: Account 
+        }
+      }
 
       store = mockStore(storeStateMock)
 
@@ -38,7 +42,7 @@ describe("components", function() {
         signupRequest: jest.fn(),
         addFlashMessage: jest.fn(),
         isSubdomainExist: jest.fn(),
-        isUserExist: jest.fn(),
+        isUserExist: jest.fn()
       }
 
       wrapper = mount(<BrowserRouter><Provider store={store}><Form {...props} /></Provider></BrowserRouter>)
@@ -61,11 +65,8 @@ describe("components", function() {
 
   describe("<Page />", function() {  
 
-    beforeEach( () => {
+    beforeEach(() => {
       const storeStateMock = {
-        authentication: {
-          account: Account 
-        },
         flashMessages: []
       }
 
@@ -75,7 +76,7 @@ describe("components", function() {
         signupRequest: jest.fn(),
         addFlashMessage: jest.fn(),
         isSubdomainExist: jest.fn(),
-        isUserExist: jest.fn(),
+        isUserExist: jest.fn()
       }
 
       wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)

@@ -1,6 +1,6 @@
 import { SET_DASHBOARDS_TOTAL_INCOME, SET_DASHBOARDS_INCOMES, SET_DASHBOARDS_PROJECTS, SET_DASHBOARDS_SALES, SET_DASHBOARDS_INVOICES, SET_DASHBOARDS_CUSTOMERS, SET_DASHBOARDS_PROJECT_TASKS, SET_DASHBOARDS_SALE_TASKS, SET_DASHBOARDS_INVOICE_TASKS } from '../actions/types'
 
-export default function dashboards(state={}, action={}) {
+export default function dashboards(state={totalIncome: {}, incomes: {lastTwoMonths: []}, projects: {lastTwoMonths: []}, sales: {lastTwoMonths: []}, customers: {lastTwoMonths: []}, invoices: {lastTwoMonths: []}, projectTasks: {newDelayed: []}, saleTasks: {newDelayed: []}, invoiceTasks: {pendingOverdue: []}}, action={}) {
 
   switch(action.type) {
     case SET_DASHBOARDS_TOTAL_INCOME:
