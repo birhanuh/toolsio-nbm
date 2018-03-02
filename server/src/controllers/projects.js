@@ -19,9 +19,9 @@ export default {
         }
 
         let projectsCount = {      
-          total: 100,
+          total: count,
           length: length,
-          pages: Math.ceil(100/length),
+          pages: Math.ceil(count/length),
           list: projects
         }
 
