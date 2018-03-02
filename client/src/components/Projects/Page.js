@@ -17,23 +17,7 @@ class Page extends Component {
     super(props)
     this.state = {
       start: 0,
-      length: 10,
-      total: this.props.projects ? this.props.projects.total : 0,
-      pageNumbers: {
-        first: 1,
-        second: 2,
-        third: 3,
-        fourth: 4,
-        fifth: 5
-      }
-    }
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.projects) {
-      this.setState({
-        total: nextProps.projects.total
-      })
+      length: 10
     }
   }
 
@@ -51,61 +35,79 @@ class Page extends Component {
 
   }
 
-  handlePrevious = (event) => {
-    event.preventDefault()
-
-    const { pageNumbers } = this.state
-    
-    if (pageNumbers.first > 1) {
-      pageNumbers && this.setState({
-        pageNumbers: {...pageNumbers, first: pageNumbers.first-1, second: pageNumbers.second-1, third: pageNumbers.third-1, fourth: pageNumbers.fourth-1, fifth: pageNumbers.fifth-1}
-      })    
-    }
-  }
-
-  handleNext = (event) => {
-    event.preventDefault()
-
-    const { length, total, pageNumbers } = this.state
-    
-    if (pageNumbers.fifth < (total/length)) {
-      pageNumbers && this.setState({
-        pageNumbers: {...pageNumbers, first: pageNumbers.first+1, second: pageNumbers.second+1, third: pageNumbers.third+1, fourth: pageNumbers.fourth+1, fifth: pageNumbers.fifth+1}
-      })
-    }
-  }
-
   render() {
 
-    const { start, length, total, pageNumbers } = this.state
+    const { length } = this.state
 
     const { projects, match } = this.props
     
-    let currentPage = Math.ceil(match.params.start/match.params.length) + 1
+    let currentPage = 0
+    let start = (match && match.params && match.params.start) ? match.params.start : 0
+    
+    if (projects && projects.pages) {
+      if ((start/length) < (parseInt(projects.pages)-5)) {
+        currentPage = (match && match.params && match.params.start) ? Math.ceil(match.params.start/match.params.length) + 1 : 1
+      } else {
+        currentPage = projects && projects.pages && parseInt(projects.pages)-4
+      }  
+    }
 
+    // Active page
+    let activePage = (match && match.params && match.params.start) ? Math.ceil(match.params.start/match.params.length) + 1 : 1
+    
+    // Prevoius link
+    let previousLink 
+
+    if (currentPage && currentPage === 1 || currentPage < 0) {
+      previousLink = (<div className="item disabled">
+          <i className="angle left icon"></i>
+        </div>)
+    } else {
+      previousLink = (<Link to={currentPage && currentPage === 1 ? `/projects/${parseInt(start)}/${length}` : `/projects/${parseInt(start)-10}/${length}`} className={classnames("item", {disabled: currentPage && currentPage === 1 || currentPage < 0 })} >
+          <i className="angle left icon"></i>
+        </Link>)
+    }
+
+    // Next link
+    let nextLink 
+
+    if (currentPage && currentPage+4 === projects.pages) {      
+      nextLink = (<div className="item disabled">
+        <i className="angle right icon"></i>
+      </div>)
+    } else {
+      nextLink = (<Link to={!!match ? `/projects/${50}/${length}` : (currentPage && currentPage+4 === (projects.pages) ? `/projects/${parseInt(match.params.start)}/${length}` : `/projects/${parseInt(match.params.start)+10}/${length}`)} className={classnames("item", {disabled: currentPage && currentPage+4 === projects.pages})}>
+          <i className="angle right icon"></i>
+      </Link>)
+    }
+   
     let paginationElement = (
       <div className="ui right floated pagination menu">
-        <a className={classnames("item", {disabled: pageNumbers.first === 1 })} onClick={this.handlePrevious.bind(this)}>
-          <i className="angle left icon"></i>
-        </a>
-        <Link to={`/projects/${start}/${length}`} className={classnames("item", {active: currentPage === pageNumbers.first})}>
-          {pageNumbers.first}
+        {previousLink}
+        { currentPage > 0 &&
+          <Link to={`/projects/${((currentPage)*10)-10}/${length}`} className={classnames("item", {active: activePage === currentPage})}>
+            {currentPage}
+          </Link>
+        }
+        {currentPage+1 > 0 &&
+          <Link to={`/projects/${((currentPage+1)*10)-10}/${length}`} className={classnames("item", {active: activePage === currentPage+1})}>
+            {currentPage+1}
+          </Link>
+        }
+        {currentPage+2 > 0 &&
+          <Link to={`/projects/${((currentPage+2)*10)-10}/${length}`} className={classnames("item", {active: activePage === currentPage+2})}>
+            {currentPage+2}
+          </Link>
+        }
+        {currentPage+3 > 0 &&
+          <Link to={`/projects/${((currentPage+3)*10)-10}/${length}`} className={classnames("item", {active: activePage === currentPage+3})}>
+            {currentPage+3}
+          </Link>
+        }
+        <Link to={`/projects/${((currentPage+4)*10)-10}/${length}`} className={classnames("item 4", {active: activePage === currentPage+4})}>
+          {currentPage+4}
         </Link>
-        <Link to={`/projects/${start+10}/${length}`} className={classnames("item", {active: currentPage === pageNumbers.second})}>
-          {pageNumbers.second}
-        </Link>
-        <Link to={`/projects/${start+20}/${length}`} className={classnames("item", {active: currentPage === pageNumbers.third})}>
-          {pageNumbers.third}
-        </Link>
-        <Link to={`/projects/${start+30}/${length}`} className={classnames("item", {active: currentPage === pageNumbers.fourth})}>
-          {pageNumbers.fourth}
-        </Link>
-         <Link to={`/projects/${start+40}/${length}`} className={classnames("item", {active: currentPage === pageNumbers.fifth})}>
-          {pageNumbers.fifth}
-        </Link>
-        <a className={classnames("item", {disabled: pageNumbers.fifth === (total/length)})} onClick={this.handleNext.bind(this)}>
-          <i className="angle right icon"></i>
-        </a>
+        {nextLink}
       </div>
       )
 
