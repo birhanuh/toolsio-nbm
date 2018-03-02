@@ -81,6 +81,7 @@ class App extends Component {
               <Route exact path="/projects/edit/:id" component={requireAuth(ProjectsFormPage)} /> 
               <Route exact path="/projects/show/:id" component={requireAuth(ProjectsShow)} />
               <Route exact path="/projects/new" component={requireAuth(ProjectsFormPage)} />
+              <Route exact path="/projects/:start/:length" component={requireAuth(ProjectsPage)} />
               <Route exact path="/sales" component={requireAuth(SalesPage)} />
               <Route exact path="/sales/edit/:id" component={requireAuth(SalesFormPage)} /> 
               <Route exact path="/sales/new" component={requireAuth(SalesFormPage)} />

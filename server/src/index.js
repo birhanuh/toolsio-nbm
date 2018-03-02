@@ -39,14 +39,17 @@ app.use(cookieParser())
 
 // Get Homepage
 app.use(async (req, res, next) => {
+  
+  // Parse subdomain 
+  let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
 
-  if (req.headers.subdomain) {
+  if (subdomain) {
     // Connect to subdomain db
     if (env === 'development') {
-      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
+      await db.connect(process.env.DB_HOST+subdomain+process.env.DB_DEVELOPMENT)
       console.log('Middleware with no mount path')
     } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
+      await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
       console.log('Middleware with no mount path')
     }
   }

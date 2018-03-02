@@ -6,13 +6,27 @@ export default {
   
   find: (req, callback) => {
     
-    Project.find({}).select('-tasks').populate({ path: 'customer', select: 'name' }).exec((err, projects) => {
-      if (err) {
-        callback(err, null)
-        return
-      }
+    let query = req.query
 
-      callback(null, projects)
+    let start = parseInt(query.start)
+    let length = parseInt(query.length)
+
+    Project.count({}, (err, count) => {
+      Project.find({}).skip(start).limit(length).select('-tasks').populate({ path: 'customer', select: 'name' }).exec((err, projects) => {
+        if (err) {
+          callback(err, null)
+          return
+        }
+
+        let projectsCount = {      
+          total: 100,
+          length: length,
+          pages: Math.ceil(100/length),
+          list: projects
+        }
+
+        callback(null, projectsCount)
+      })
     })
   },
 
