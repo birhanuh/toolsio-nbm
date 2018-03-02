@@ -19,6 +19,7 @@ import $ from 'jquery'
 // Modal
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
+$.fn.progress = require('semantic-ui-progress')
 
 class Show extends Component {
   
@@ -31,6 +32,7 @@ class Show extends Component {
       customer: this.props.project ? this.props.project.customer : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
+      progress: this.props.project ? this.props.project.progress : 0,
       tasks: this.props.project ? this.props.project.tasks : []
     }
   }
@@ -52,6 +54,7 @@ class Show extends Component {
         customer: nextProps.project.customer,
         status: nextProps.project.status,
         description: nextProps.project.description,
+        progress: nextProps.project.progress,
         tasks: nextProps.project.tasks
       })
     }
@@ -90,6 +93,26 @@ class Show extends Component {
     
   }
 
+  handleIncreaseProgress = (event) => {
+    event.preventDefault()
+
+    const { percent } = this.state
+
+    $(event.target.id).progress({
+      percent: percent+10
+    })
+  }
+
+  handleDecreaseProgress = (event) => {
+    event.preventDefault()
+
+    const { percent } = this.state
+
+    $(event.target.id).progress({
+      percent: percent-10
+    })
+  }
+
   render() {
     const { _id, name, deadline, customer, status, description, tasks } = this.state
     
@@ -119,6 +142,19 @@ class Show extends Component {
               <dd>
                 {description ? description : '-'}
               </dd>    
+
+              <dt>{T.translate("projects.show.progress")}</dt>
+              <dd>
+                <div className="ui turquoise progress" id="progress">
+                  <div className="bar"></div>
+                  <div className="label">22% finished</div>
+                </div>
+
+                <div className="ui icon buttons">
+                  <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
+                  <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
+                </div>
+              </dd>
             </dl>  
 
             <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
@@ -162,7 +198,7 @@ function mapStateToProps(state, props) {
   const { match } = props
   if (match.params.id) {
     return {
-      project: state.projects.find(item => item._id === match.params.id)
+      project: state.projects && state.projects.list && state.projects.list.find(item => item._id === match.params.id)
     }
   } 
 }

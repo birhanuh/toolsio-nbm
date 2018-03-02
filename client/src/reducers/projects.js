@@ -23,18 +23,22 @@ export default function projects(state = [], action = {}) {
       })
 
     case PROJECT_FETCHED: 
-      const index = state.findIndex(item => item._id === action.project._id)
-      
+    
+      const index = state.list && state.list.findIndex(item => item._id === action.project._id)
+    
       if (index > -1) {
-        return state.map(item => {
-          if (item._id === action.project._id) return action.project
-          return item
-        })
-      } else {
-        return [
+        return {
           ...state,
-          action.project
-        ]
+          list: state.list.map(item => {
+            if (item._id === action.project._id) return action.project
+            return item
+          })
+        }
+      } else {
+        return {
+          ...state,          
+          list: [action.project]
+        }
       }
 
     case ADD_TASK:
