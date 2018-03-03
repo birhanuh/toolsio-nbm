@@ -43,6 +43,9 @@ class Show extends Component {
     if (match.params.id) {
       this.props.fetchProject(match.params.id)
     } 
+
+    // Progress
+    //$("#progress").progress('increment')
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -96,25 +99,33 @@ class Show extends Component {
   handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { percent } = this.state
+    const { progress } = this.state
 
-    $(event.target.id).progress({
-      percent: percent+10
-    })
+    if (progress <= 90) {
+      this.setState({
+        progress: progress+10
+      })
+    }
+
+    $("#progress").progress('increment')
   }
 
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { percent } = this.state
+    const { progress } = this.state
 
-    $(event.target.id).progress({
-      percent: percent-10
-    })
+    if (progress >= 10) {
+      this.setState({
+        progress: progress-10
+      })
+    }
+
+    $("#progress").progress('decrement')
   }
 
   render() {
-    const { _id, name, deadline, customer, status, description, tasks } = this.state
+    const { _id, name, deadline, customer, status, description, progress, tasks } = this.state
     
     return (
       <div className="ui stackable grid">
@@ -145,12 +156,13 @@ class Show extends Component {
 
               <dt>{T.translate("projects.show.progress")}</dt>
               <dd>
-                <div className="ui turquoise progress" id="progress">
-                  <div className="bar"></div>
-                  <div className="label">22% finished</div>
+                <div id="progress" className="ui indicating progress mb-3 mt-2 active" data-value="1" data-percent={progress} data-total={progress}>
+                  <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
+                    <div className="progress">{progress}%</div>
+                  </div>
                 </div>
 
-                <div className="ui icon buttons">
+                <div className="ui icon tiny buttons">
                   <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
                   <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
                 </div>
