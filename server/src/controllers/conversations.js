@@ -20,46 +20,64 @@ export default {
       let messages = []
       let allConversations = []
       let countUnread = 0
+      let countSent = 0
       let countDraft = 0
 
-      conversations.map(conversation => {
-        Message.find({ conversationId: conversation._id }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
-          if(err) {
-            callback(err, null)
-            return
-          }
-          console.log('message: ', message)
-          if (message.length !== 0 && !currentUserId.equals(message[0].author._id)) {
-            
-            messages.push(message[0])
-            allConversations.push(message)
-            
-            if (!message[0].isRead) {
-              countUnread += 1
+      if (conversations.length === 0 ) {
+        let allConversationsUnreadDraftEmpty = {
+          countUnread: countUnread,
+          countSent: countSent,
+          countDraft: countDraft,
+          conversations: messages
+        }
+
+        callback(null, allConversationsUnreadDraftEmpty)
+      } else {
+        conversations.map(conversation => {
+          Message.find({ conversationId: conversation._id }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
+            if(err) {
+              callback(err, null)
+              return
+            }
+   
+            if (message.length !== 0 && !currentUserId.equals(message[0].author._id)) {
+              
+              messages.push(message[0])
+              allConversations.push(message)
+              
+              if (!message[0].isRead) {
+                countUnread += 1
+              }
+
+              if (!message.isDraft) {
+                countDraft += 1
+              }
+
+            } else {
+              allConversations.push([])
             }
 
-            if (!message.isDraft) {
-              countDraft += 1
-            }
-
-          } else {
-            allConversations.push([])
-          }
-
-          if(allConversations.length === conversations.length) {
+            if (currentUserId.equals(message[0].author._id)) {
             
-            let allConversationsUnreadDraft = {
-              countUnread: countUnread,
-              countDraft: countDraft,
-              conversations: messages
+              countSent += 1
             }
 
-            callback(null, allConversationsUnreadDraft)
-          }
+            if(allConversations.length === conversations.length) {
+              
+              let allConversationsUnreadDraft = {
+                countUnread: countUnread,
+                countSent: countSent,
+                countDraft: countDraft,
+                conversations: messages
+              }
+
+              // Count sent messages
+              callback(null, allConversationsUnreadDraft)
+            }
+          })
         })
-      })
-      
-      callback(null, conversations)
+      }
+
     })
 
   },
@@ -74,6 +92,7 @@ export default {
     let messages = []
     let allConversations = []
     let countUnread = 0
+    let countSent = 0
     let countDraft = 0
 
     if (id === 'inbox') {
@@ -84,42 +103,60 @@ export default {
           return
         }
 
-        conversations.map(conversation => {
-          Message.find({ conversationId: conversation._id }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
-            if(err) {
-              callback(err, null)
-              return
-            }
+        if (conversations.length === 0 ) {
+          let allConversationsUnreadDraftEmpty = {
+            countUnread: countUnread,
+            countSent: countSent,
+            countDraft: countDraft,
+            conversations: messages
+          }
 
-            if (message.length !== 0 && !currentUserId.equals(message[0].author._id)) {
-              
-              messages.push(message[0])
-              allConversations.push(message)
-
-              if (!message[0].isRead) {
-                countUnread += 1
+          callback(null, allConversationsUnreadDraftEmpty)
+        } else {
+          conversations.map(conversation => {
+            Message.find({ conversationId: conversation._id }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
+              if(err) {
+                callback(err, null)
+                return
               }
 
-              if (!message.isDraft) {
-                countDraft += 1
+              if (message.length !== 0 && !currentUserId.equals(message[0].author._id)) {
+                
+                messages.push(message[0])
+                allConversations.push(message)
+
+                if (!message[0].isRead) {
+                  countUnread += 1
+                }
+
+                if (!message.isDraft) {
+                  countDraft += 1
+                }
+              } else {
+                allConversations.push([])
               }
-            } else {
-              allConversations.push([])
-            }
 
-            if(allConversations.length === conversations.length) {
-
-              let allConversationsUnreadDraft = {
-                countUnread: countUnread,
-                countDraft: countDraft,
-                conversations: messages
+              // Count sent messages
+              if (currentUserId.equals(message[0].author._id)) {
+            
+                countSent += 1
               }
 
-              callback(null, allConversationsUnreadDraft)
-            }
+              if(allConversations.length === conversations.length) {
+
+                let allConversationsUnreadDraft = {
+                  countUnread: countUnread,
+                  countSent: countSent,
+                  countDraft: countDraft,
+                  conversations: messages
+                }
+
+                callback(null, allConversationsUnreadDraft)
+              }
+            })
           })
-        })
-        
+
+        } 
       }) 
       return
     } 
@@ -131,41 +168,53 @@ export default {
           return
         }
 
-        conversations.map(conversation => {
-          Message.find({ conversationId: conversation._id, author: {_id: req.session.passport.user} }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
-            if(err) {
-              callback(err, null)
-              return
-            }
+        if (conversations.length === 0 ) {
+          let allConversationsUnreadDraftEmpty = {
+            countUnread: countUnread,
+            countSent: countSent,
+            countDraft: countDraft,
+            conversations: messages
+          }
 
-            if (message.length !== 0) {
-              
-              messages.push(message[0])
-              allConversations.push(message)
-
-              if (!message[0].isRead) {
-                countUnread += 1
+          callback(null, allConversationsUnreadDraftEmpty)
+        } else {
+          conversations.map(conversation => {
+            Message.find({ conversationId: conversation._id, author: {_id: req.session.passport.user} }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
+              if(err) {
+                callback(err, null)
+                return
               }
 
-              if (!message.isDraft) {
-                countDraft += 1
-              }
-            } else {
-              allConversations.push([])
-            }
+              if (message.length !== 0) {
+                
+                messages.push(message[0])
+                allConversations.push(message)
 
-            if(allConversations.length === conversations.length) {
-              let allConversationsUnreadDraft = {
-                countUnread: countUnread,
-                countDraft: countDraft,
-                conversations: messages
+                if (!message[0].isRead) {
+                  countUnread += 1
+                }
+
+                if (!message.isDraft) {
+                  countDraft += 1
+                }
+              } else {
+                allConversations.push([])
               }
 
-              callback(null, allConversationsUnreadDraft)
-            }
+              if(allConversations.length === conversations.length) {
+                let allConversationsUnreadDraft = {
+                  countUnread: countUnread,
+                  countSent: messages.length,
+                  countDraft: countDraft,
+                  conversations: messages
+                }
+
+                callback(null, allConversationsUnreadDraft)
+              }
+            })
           })
-        })
         
+        }       
       }) 
       return
     }

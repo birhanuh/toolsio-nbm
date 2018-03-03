@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 export default function Tr({user}) {
   
-  const accepted = user.accepted ? <i className="check green icon"></i> : <i className="check orange icon"></i>
+  const accepted = user.accepted ? <i className="check green icon"></i> : <i className="close red icon"></i>
   
   return (
     <tr>
