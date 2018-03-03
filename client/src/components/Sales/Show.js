@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchSale, deleteSale } from '../../actions/saleActions'
+import { SelectField } from '../../utils/FormFields'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -71,6 +72,12 @@ class Show extends Component {
     $('.small.modal.sale').modal('hide')
   }
 
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
   handleDelete(id, event) {
     event.preventDefault()
     
@@ -110,9 +117,24 @@ class Show extends Component {
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("sales.show.status")}</dt>
               <dd>
-                <div className={classnames("ui tiny uppercase label", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}> 
-                  {status}
-                </div>
+                <SelectField
+                  label=""
+                  name="status"
+                  type="select"
+                  value={status} 
+                  formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}
+                  onChange={this.handleChange.bind(this)} 
+                  error=""
+
+                  options={[
+                    <option key="default" value="new" disabled>NEW</option>,
+                    <option key="in progress" value="in progress">IN PROGRESS</option>,
+                    <option key="ready" value="ready">READY</option>,
+                    <option key="delayed" value="delayed">DELAYED</option>,
+                    <option key="delivered" value="delivered">DELIVERED</option>
+                    ]
+                  }
+                />
               </dd>
              
               <dt>{T.translate("sales.show.description")}</dt>
@@ -162,7 +184,7 @@ function mapStateToProps(state, props) {
   const { match } = props
   if (match.params.id) {
     return {
-      sale: state.sales.find(item => item._id === match.params.id)
+      sale: state.sales && state.sales.list && state.sales.list.find(item => item._id === match.params.id)
     }
   } 
 }

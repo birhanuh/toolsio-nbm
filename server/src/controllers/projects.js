@@ -18,14 +18,14 @@ export default {
           return
         }
 
-        let projectsCount = {      
+        let projectsTotatlPages = {      
           total: count,
           length: length,
           pages: Math.ceil(count/length),
           list: projects
         }
 
-        callback(null, projectsCount)
+        callback(null, projectsTotatlPages)
       })
     })
   },
@@ -34,7 +34,7 @@ export default {
 
     let id = req.params.id
 
-    Project.findById(id).populate([{ path: 'customer', select: 'name'}, { path: 'tasks'}, { path: 'invoice', select: '_id' }]).exec(function(err, project) {
+    Project.findById(id).populate([{ path: 'customer', select: 'name'}, { path: 'tasks'}, { path: 'invoice', select: '_id' }]).exec((err, project) => {
       if (err) {
         callback(err, null)
         return
@@ -63,7 +63,7 @@ export default {
     let id = req.params.id
     let body = req.body
     console.log('body', body)
-    Project.findByIdAndUpdate(id, body, {new: true}).populate([{ path: 'customer', select: 'name'}, { path: 'tasks'}, { path: 'invoice', select: '_id' }]).exec(function(err, project) {
+    Project.findByIdAndUpdate(id, body, {new: true}).populate([{ path: 'customer', select: 'name'}, { path: 'tasks'}, { path: 'invoice', select: '_id' }]).exec((err, project) => {
       if (err) {
         callback(err, null)
         return

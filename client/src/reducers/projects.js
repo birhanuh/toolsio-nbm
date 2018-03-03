@@ -52,7 +52,7 @@ export default function projects(state = [], action = {}) {
       }
 
     case ADD_TASK:
-      const creatorIndexAddTask = state.list.findIndex(item => item._id === action.task._creator)
+      const creatorIndexAddTask = state.list && state.list.findIndex(item => item._id === action.task._creator)
       if (creatorIndexAddTask > -1) {
         return {
           ...state,
@@ -67,7 +67,7 @@ export default function projects(state = [], action = {}) {
       }
 
     case TASK_UPDATED:
-      const creatorIndexUpdateTask = state.list.findIndex(item => item._id === action.task._creator)
+      const creatorIndexUpdateTask = state.list && state.list.findIndex(item => item._id === action.task._creator)
       if (creatorIndexUpdateTask > -1) {
         return {
           ...state,

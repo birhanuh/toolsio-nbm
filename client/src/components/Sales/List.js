@@ -5,7 +5,7 @@ import Card from './Card'
 // Localization 
 import T from 'i18n-react'
 
-export default function List({ sales, deleteSale }) {
+export default function List({ sales }) {
   const emptyMessage = (
     <div className="ui info message">
       <div className="header">
@@ -17,7 +17,7 @@ export default function List({ sales, deleteSale }) {
 
   const salesList = (
     <div className="ui two cards sales">
-      { sales.map(sale => <Card sale={sale} key={sale._id} deleteSale={deleteSale} />) }
+      { sales.map(sale => <Card sale={sale} key={sale._id} />) }
     </div>
   )
 
@@ -29,6 +29,5 @@ export default function List({ sales, deleteSale }) {
 }
 
 List.propTypes = {
-  sales: PropTypes.array.isRequired,
-  deleteSale: PropTypes.func.isRequired
+  sales: PropTypes.array.isRequired
 }

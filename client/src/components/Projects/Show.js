@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
+import { SelectField } from '../../utils/FormFields'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -77,6 +78,19 @@ class Show extends Component {
     $('.small.modal.project').modal('hide')
   }
 
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+
+    const { _id } = this.state
+
+    this.props.updateProject({ _id, status: e.target.value })
+      .then(() => {
+        console.log('updateProject status')
+      })
+  }
+
   handleDelete(id, event) {
     event.preventDefault()
     
@@ -122,7 +136,7 @@ class Show extends Component {
 
       this.props.updateProject({ _id, progress: progressUpdated })
         .then(() => {
-          console.log('updateProject')
+          console.log('updateProject progress')
         })
     }
   }
@@ -130,7 +144,7 @@ class Show extends Component {
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { _id, progress } = this.state
+    const { _id, status, progress } = this.state
 
     if (progress >= 10) {
       this.setState({
@@ -153,7 +167,7 @@ class Show extends Component {
 
       this.props.updateProject({ _id, progress: progressUpdated })
         .then(() => {
-          console.log('updateProject')
+          console.log('updateProject progress')
         })
     }
   }
@@ -178,9 +192,24 @@ class Show extends Component {
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("projects.show.status")}</dt>
               <dd>
-                <div className={classnames("ui tiny uppercase label", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}> 
-                  {status}
-                </div>
+                <SelectField
+                  label=""
+                  name="status"
+                  type="select"
+                  value={status} 
+                  formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
+                  onChange={this.handleChange.bind(this)} 
+                  error=""
+
+                  options={[
+                    <option key="default" value="new" disabled>NEW</option>,
+                    <option key="in progress" value="in progress">IN PROGRESS</option>,
+                    <option key="finished" value="finished">FINISHED</option>,
+                    <option key="delayed" value="delayed">DELAYED</option>,
+                    <option key="delivered" value="delivered">DELIVERED</option>
+                    ]
+                  }
+                  />
               </dd>
              
               <dt>{T.translate("projects.show.description")}</dt>
