@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { fetchProject, deleteProject } from '../../actions/projectActions'
+import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -99,29 +99,63 @@ class Show extends Component {
   handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { progress } = this.state
+    const { _id, progress } = this.state
 
     if (progress <= 90) {
       this.setState({
         progress: progress+10
       })
-    }
 
-    $("#progress").progress('increment')
+      $("#progress").progress({
+        percent: progress,
+        label: 'percent',
+        text: {
+          percent: `${progress+10}%`
+        },
+        className : {
+          active: 'success'
+        }
+      })
+
+      // Update Project
+      let progressUpdated = progress+10
+
+      this.props.updateProject({ _id, progress: progressUpdated })
+        .then(() => {
+          console.log('updateProject')
+        })
+    }
   }
 
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { progress } = this.state
+    const { _id, progress } = this.state
 
     if (progress >= 10) {
       this.setState({
         progress: progress-10
       })
-    }
 
-    $("#progress").progress('decrement')
+      $("#progress").progress({
+        percent: progress,
+        label: 'percent',
+        text: {
+          percent: `${progress-10}%`
+        },
+        className : {
+          active: 'success'
+        }
+      })
+
+      // Update Project
+      let progressUpdated = progress-10
+
+      this.props.updateProject({ _id, progress: progressUpdated })
+        .then(() => {
+          console.log('updateProject')
+        })
+    }
   }
 
   render() {
@@ -156,15 +190,17 @@ class Show extends Component {
 
               <dt>{T.translate("projects.show.progress")}</dt>
               <dd>
-                <div id="progress" className="ui indicating progress mb-3 mt-2 active" data-value="1" data-percent={progress} data-total={progress}>
-                  <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
-                    <div className="progress">{progress}%</div>
+                <div style={{width: "50%"}}>
+                  <div id="progress" className="ui success progress mb-3 mt-2">
+                    <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
+                      <div className="progress">{progress}%</div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="ui icon tiny buttons">
-                  <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
-                  <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
+                  <div className="ui icon mini buttons">
+                    <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
+                    <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
+                  </div>
                 </div>
               </dd>
             </dl>  
@@ -197,6 +233,7 @@ class Show extends Component {
 
 Show.propTypes = {
   fetchProject: PropTypes.func.isRequired,
+  updateProject: PropTypes.func.isRequired,
   deleteProject: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   project: PropTypes.object
@@ -215,4 +252,4 @@ function mapStateToProps(state, props) {
   } 
 }
 
-export default connect(mapStateToProps, { fetchProject, deleteProject, addFlashMessage } )(Show)
+export default connect(mapStateToProps, { fetchProject, updateProject, deleteProject, addFlashMessage } )(Show)

@@ -26,9 +26,9 @@ class FormPage  extends Component {
     this.props.fetchCustomers()
   }
 
-  saveProject = ({ _id, name, customer, deadline, status, description }) => {
+  saveProject = ({ _id, name, customer, deadline, status, progress, description }) => {
     if (_id) {
-      return this.props.updateProject({ _id, name, customer, deadline, status, description })
+      return this.props.updateProject({ _id, name, customer, deadline, status, progress, description })
         .then(() => 
           { 
             this.setState({ redirect: true }) 
@@ -40,7 +40,7 @@ class FormPage  extends Component {
             this.context.router.history.push('/projects')
         })   
     } else {        
-      return this.props.createProject({ _id, name, customer, deadline, status, description })
+      return this.props.createProject({ _id, name, customer, deadline, status, progress, description })
         .then(() => 
           { 
             this.setState({ redirect: true }) 
@@ -80,7 +80,7 @@ function mapStateToProps(state, props) {
   const { match } = props
   if (match.params.id) {
     return {
-      project: state.projects.find(item => item._id === match.params.id),
+      project: state.projects && state.projects.list && state.projects.list.find(item => item._id === match.params.id),
       customers: state.customers
     }
   } 

@@ -39,8 +39,8 @@ export default function Card({project}) {
               <td>{project.deadline}</td>
               <td>{project.customer ? project.customer.name: <p className="blue">{T.translate("projects.page.no_customer")}</p>}</td>
               <td>
-                <div className="ui progress success small mb-0">
-                  <div className="bar">
+                <div className="ui progress success small mb-0" data-percent={project.progress}>
+                  <div className="bar" style={{width: `${project.progress}%`}}>
                     <div className="progress"></div>
                   </div>
                 </div>

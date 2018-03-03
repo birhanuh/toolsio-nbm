@@ -14,6 +14,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 // Localization 
 import T from 'i18n-react'
 
+import $ from 'jquery'
+$.fn.progress = require('semantic-ui-progress')
+
 import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Form extends Component {
@@ -25,6 +28,7 @@ class Form extends Component {
       deadline: this.props.project ? moment(this.props.project.deadline, "MM-DD-YYYY") : moment(),
       customer: this.props.project ? (this.props.project.customer ? this.props.project.customer._id : '') : '',
       status: this.props.project ? this.props.project.status : '',
+      progress: this.props.project ? this.props.project.progress : 0,
       description: this.props.project ? this.props.project.description : '',
       errors: {
         message: {
@@ -43,6 +47,7 @@ class Form extends Component {
         deadline: moment(nextProps.project.deadline),
         customer: nextProps.project.customer,
         status: nextProps.project.status,
+        progress: nextProps.project.progress,
         description: nextProps.project.description
       })
     }
@@ -85,10 +90,10 @@ class Form extends Component {
 
     // Validation
     if (this.isValid()) { 
-      const { _id, name, deadline, customer, status, description } = this.state
+      const { _id, name, deadline, customer, status, progress, description } = this.state
       this.setState({ isLoading: true })
 
-      this.props.saveProject({ _id, name, customer, deadline, status, description })
+      this.props.saveProject({ _id, name, customer, deadline, status, progress, description })
         .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -110,8 +115,54 @@ class Form extends Component {
     }
   } 
 
+  handleIncreaseProgress = (event) => {
+    event.preventDefault()
+
+    const { _id, progress } = this.state
+
+    if (progress <= 90) {
+      this.setState({
+        progress: progress+10
+      })
+
+      $("#progress").progress({
+        percent: progress,
+        label: 'percent',
+        text: {
+          percent : `${progress+10}%`
+        },
+        className : {
+          active: 'success'
+        }
+      })
+    }
+  }
+
+  handleDecreaseProgress = (event) => {
+    event.preventDefault()
+
+    const { _id, progress } = this.state
+
+    if (progress >= 10) {
+      this.setState({
+        progress: progress-10
+      })
+
+      $("#progress").progress({
+        percent: progress,
+        label: 'percent',
+        text: {
+          percent : `${progress-10}%`
+        },
+        className : {
+          active: 'success'
+        }
+      })
+    }
+  }
+
   render() {
-    const { _id, name, deadline, customer, status, description, errors, isLoading } = this.state
+    const { _id, name, deadline, customer, status, progress, description, errors, isLoading } = this.state
  
     const customersOptions = map(this.props.customers, (customer) => 
       <option key={customer._id} value={customer._id}>{customer.name}</option>
@@ -196,6 +247,21 @@ class Form extends Component {
                   ]
                 }
               />
+            }
+
+            { _id &&
+              <div className="inline field progress">
+                <div id="progress" className="ui success progress mb-3 mt-2">
+                  <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
+                    <div className="progress">{progress}%</div>
+                  </div>
+                </div>
+
+                <div className="ui icon mini buttons">
+                  <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
+                  <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
+                </div>
+              </div>
             }
               
             {/*

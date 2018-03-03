@@ -252,12 +252,25 @@ select.date {
   font-size: 1em;
 }
 
+.ui.form .inline.field.progress {
+  display: inline-block;
+  margin-left: 27% !important;
+  width: 73%;
+  div:first-child {
+    display: block;
+  }
+  div:first-child + div {
+    display: inline-flex;
+  }
+}
+
 .ui.form .inline.field> .header, .ui.form .inline.field>button:first-child, .ui.form .inline.field>a {
   display: inline-block;
   margin-left: 27% !important;
   margin-top: 0;
   margin-bottom: 0;
 }
+
 .ui.form .field.error span, .ui.form .input.error span  {
   display: inherit;
   text-align: left;
