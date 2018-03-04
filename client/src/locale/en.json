@@ -136,7 +136,8 @@
       "edit": "Edit",
       "cancel": "Cancel",
       "form": {
-        "success_update": "Account information updated!"
+        "success_update_account": "Account information updated!",
+        "success_update_user": "User information updated!"
       }
     },   
     "users": {

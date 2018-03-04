@@ -92,6 +92,53 @@ export default {
     }
   },
 
+  validateAccountInput: (data) => {
+    let errors = {}
+
+    if (!data.subdomain) {
+      errors["subdomain"] = {
+       message: T.translate("sign_up.account.subdomain_required")
+      }
+    } 
+    if (!data.industry) {
+      errors["industry"] = {
+        message: T.translate("sign_up.account.industry_required")
+      }
+    }
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
+  validateUserInput: (data) => {
+    let errors = {}
+
+    if (!data.user.password) {
+      errors["password"] = {
+        message: T.translate("sign_up.password_required")
+      } 
+    }
+    if (!data.user.confirmPassword) {
+      errors["confirmPassword"] = {
+        message: T.translate("sign_up.password_confirmation_required")
+      }
+    }
+    if (data.user.password && data.confirmPassword) {
+      if (!Validator.equals(data.password, data.confirmPassword)) {
+        errors["confirmPassword"] = {
+          message: T.translate("sign_up.password_match_required")
+        } 
+      }
+    }    
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
   validateLoginInput: (data) => {
     let errors = {}
 

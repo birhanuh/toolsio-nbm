@@ -131,7 +131,14 @@ class AccountForm extends Component {
       const { _id, subdomain, industry, logo, contact, address } = this.state
       this.setState({ isLoading: true })
       this.props.updateAccount({ _id, subdomain, industry, logo, contact, address })
-        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+        .then((res) => {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("account..form.success_update_account")
+          })
+        },
+        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
+      ) 
     }
   }
 

@@ -56,13 +56,12 @@ class UserForm extends Component {
       
       const { user } = this.state
       // Make submit
-      this.props.signupRequest({ user}).then(
-        (res) => {
+      this.props.updateUser({ user})
+        .then((res) => {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("sign_up.success_create")
+            text: T.translate("account.form.success_update_user")
           })
-          window.location = `http://${this.props.account.subdomain}.lvh.me:3000/login`
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )
