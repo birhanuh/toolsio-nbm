@@ -179,7 +179,7 @@ export default {
           callback(null, allConversationsUnreadDraftEmpty)
         } else {
           conversations.map(conversation => {
-            Message.find({ conversationId: conversation._id, author: {_id: req.session.passport.user} }).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
+            Message.find({ conversationId: conversation._id}).sort({createdAt: 'asc'}).limit(1).populate({ path: 'author', select: 'firstName lastName' }).exec((err, message) => {
               if(err) {
                 callback(err, null)
                 return
@@ -190,12 +190,14 @@ export default {
                 messages.push(message[0])
                 allConversations.push(message)
 
-                if (!message[0].isRead) {
-                  countUnread += 1
-                }
+                if (!currentUserId.equals(message[0].author._id)) {
+                  if (!message[0].isRead) {
+                    countUnread += 1
+                  }
 
-                if (!message.isDraft) {
-                  countDraft += 1
+                  if (!message.isDraft) {
+                    countDraft += 1
+                  }
                 }
               } else {
                 allConversations.push([])

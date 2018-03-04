@@ -34,7 +34,7 @@ class ProjectsCard extends Component {
     const { value, isLoading } = this.state
     const { projects } = this.props
    
-    const data = projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[1].data.map(project => {
+    const data = projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[1] && projects.lastTwoMonths[1].data.map(project => {
 
       let projectStatusClass          
       switch(project.status) {
@@ -71,7 +71,7 @@ class ProjectsCard extends Component {
       padding: '5px', 
       borderRadius: '5px'
     }
-
+    
     return (
       <div className={classnames("ui card dashboards form", { loading: isLoading })}>
         <div className="content">
@@ -113,8 +113,8 @@ class ProjectsCard extends Component {
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
             <div className="header">
-              {projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[1].totalCount}
-              {projects && projects.lastTwoMonths.length !== 0 && (projects.lastTwoMonths[0].totalCount > projects.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+              {projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[1] && projects.lastTwoMonths[1].totalCount}
+              {projects && projects.lastTwoMonths.length !== 0 && (projects.lastTwoMonths[0].totalCount > projects.lastTwoMonths[1] && projects.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
               <i className="long arrow up green icon"></i>}
             </div>
           </div>     
@@ -124,7 +124,7 @@ class ProjectsCard extends Component {
           </div>    
         </div>
 
-        {(!!projects || (projects && projects.total && projects.total.count === 0)) &&  
+        {projects && projects.total && projects.total.count === 0 &&  
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/projects" className="ui primary outline button small">

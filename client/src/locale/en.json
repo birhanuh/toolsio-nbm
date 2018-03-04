@@ -156,7 +156,7 @@
     "calender": "Calender",
     "inbox": "Inbox",
     "tasks": "Tasks",
-    "unread_messages": "You have %{unread_messages_number} new messages",
+    "unread_messages": "You have *{unread_messages_number}* new messages",
     "notifications": "See all notifications",
     "sign_out": "Sign out"
   },

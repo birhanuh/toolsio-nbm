@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../actions/authenticationActions'
+import { fetchConversations } from '../../actions/conversationActions'
 
 import $ from 'jquery'
 $.fn.dropdown = require('semantic-ui-dropdown')
@@ -27,6 +28,9 @@ class HeaderNav extends Component {
       // you can use any ui transition
       transition: 'vertical flip'
     })
+
+    // Fetch Inbox conversations
+    this.props.fetchConversations('inbox')
   }
 
    handleToggleBar = (e) => {
@@ -45,6 +49,20 @@ class HeaderNav extends Component {
 
   render() {
     const { isAuthenticated, account } = this.props.authentication
+    const { countUnread, conversations } = this.props.conversations
+    
+    let latestFiveUnreadMessages 
+
+    if (conversations && conversations.length !== 0) {
+      latestFiveUnreadMessages = conversations.map((conversation, index) => {
+
+        if (!conversation.isRead && index === 4) {
+          latestFiveUnreadMessages = <a className="item"><strong>{conversation.title}</strong></a>
+        }
+      }) 
+    } else {
+      latestFiveUnreadMessages = <a className="item"><strong>{T.translate("internal_navigation.unread_messages", {unread_messages_number: 0})}</strong></a> 
+    } 
 
     const userLinks = (
       <div>
@@ -80,11 +98,10 @@ class HeaderNav extends Component {
             </div>
             <div className="ui dropdown item">
               <i className="mail envelop icon"></i>
-              <div className="ui mini blue label envelop">1</div>
+              {countUnread !== 0 && <div className="ui mini blue label envelop">{countUnread}</div>}
               <div className="menu">
-                <a className="item"><strong>Okay, right back at you in...</strong></a>
-                <a className="item"><strong>Hi, I have sent you...</strong></a>                
-                 <Link to="/conversations" className="item"><strong className="blue">{T.translate("internal_navigation.notifications")}</strong></Link>
+                {latestFiveUnreadMessages}               
+                <Link to="/conversations" className="item"><strong className="blue">{T.translate("internal_navigation.see_all_messages")}</strong></Link>
               </div>
             </div>
             <div className="ui medium dropdown item">
@@ -198,8 +215,9 @@ HeaderNav.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    authentication: state.authentication
+    authentication: state.authentication,
+    conversations: state.conversations
   }
 }
 
-export default connect(mapStateToProps, { logout })(HeaderNav)
+export default connect(mapStateToProps, { logout, fetchConversations }) (HeaderNav)

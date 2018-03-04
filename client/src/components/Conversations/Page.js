@@ -62,7 +62,6 @@ class Page extends Component {
       console.log('sent')
     } else if (!match.params.id) {
       this.props.fetchConversations()
-      console.log('undefined')
     }
 
   }

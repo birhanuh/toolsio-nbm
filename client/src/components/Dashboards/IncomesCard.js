@@ -100,7 +100,7 @@ class IncomesCard extends Component {
           </div>    
         </div> 
 
-        {(incomes || (incomes && incomes.total && incomes.total.count === 0)) && 
+        {incomes && incomes.total && incomes.total.count === 0 && 
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/invoices" className="ui primary outline button small">
