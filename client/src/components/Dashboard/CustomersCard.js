@@ -60,7 +60,7 @@ class CustomersCard extends Component {
     }
    
     return (
-      <div className={classnames("ui card dashboards form", { loading: isLoading })}>
+      <div className={classnames("ui card dashboard form", { loading: isLoading })}>
         <div className="content">
           <div className="right floated">
             <h4 className="ui header">
@@ -69,7 +69,7 @@ class CustomersCard extends Component {
           </div> 
           <div className="left floated">
             <h4 className="ui header">
-              {T.translate("dashboards.customers.header")}
+              {T.translate("dashboard.customers.header")}
             </h4>
           </div>       
         </div>
@@ -117,7 +117,7 @@ class CustomersCard extends Component {
         </div>
         <div className="content">  
           <div className="right floated">
-            <div className="meta">{T.translate("dashboards.this_month")}</div>
+            <div className="meta">{T.translate("dashboard.this_month")}</div>
             <div className="header">
               {customers && customers.lastTwoMonths.length !== 0 && customers.lastTwoMonths[1] && customers.lastTwoMonths[1].totalCount}
               {customers && customers.lastTwoMonths.length !== 0 && (customers.total.avg.toFixed(2) > customers.lastTwoMonths[1] && customers.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
@@ -125,7 +125,7 @@ class CustomersCard extends Component {
             </div>
           </div>     
           <div className="left floated">
-            <div className="meta">{T.translate("dashboards.average")}</div>
+            <div className="meta">{T.translate("dashboard.average")}</div>
             <div className="header">{customers && customers.lastTwoMonths.length !== 0 && customers.total.avg.toFixed(2)}</div>
           </div>    
         </div>
@@ -134,7 +134,7 @@ class CustomersCard extends Component {
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/customers" className="ui primary outline button small">
-                <i className="check circle outline icon"></i>{T.translate("dashboards.customers.create_first_customer")}
+                <i className="check circle outline icon"></i>{T.translate("dashboard.customers.create_first_customer")}
               </Link>
             </div>
           </div>
@@ -151,7 +151,7 @@ CustomersCard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    customers: state.dashboards.customers
+    customers: state.dashboard.customers
   }
 }
 

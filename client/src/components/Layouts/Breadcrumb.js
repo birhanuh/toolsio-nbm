@@ -11,9 +11,9 @@ export default function Breadcrumb(props, context) {
   let currentPageDescription
 
   switch(true) {
-    case currentPage.includes('/dashboards'): 
-      currentPageTitle = "dashboards.header"
-      currentPageDescription = "dashboards.description"
+    case currentPage.includes('/dashboard'): 
+      currentPageTitle = "dashboard.header"
+      currentPageDescription = "dashboard.description"
       break
     case currentPage.includes('/settings'): 
       currentPageTitle = "settings.page.header"

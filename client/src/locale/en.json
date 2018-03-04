@@ -104,9 +104,31 @@
   },
   "account": {
     "header": "Account",
-    "edit": {
-      "header": "Edit accout information"
-    },    
+    "description": "Compnay and Pseronal profile details.",
+    "page": {
+      "account": "Account",
+      "user": "User",
+      "url": "URL",
+      "subdomain": "Subdomain",
+      "industry": "Industry",
+      "phone_number": "Phone number",
+      "email": "Email",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "zip": "Zip",
+      "town": "Town",
+      "country": "Country",
+      "delete_account": "Delete this accout",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "member_since": "Member since",
+      "days": "*{days}* days",
+      "edit": "Edit",
+      "form": {
+        "success_update": "Account information updated!"
+      }
+    },   
     "users": {
       "header": "Users",
       "empty_users_header": "There are no Users",
@@ -121,31 +143,6 @@
       "accepted": "Accepted",
       "description": "Invited users and send new invitation form are availble here.",
       "invitation_success_message": "Your invitation is sent to *{email}*"
-    },
-    "show": {
-      "header": "Account",
-      "company": "Company",
-      "url": "URL",
-      "subdomain": "Subdomain",
-      "industry": "Industry",
-      "phone_number": "Phone number",
-      "email": "Email",
-      "address1": "Address 1",
-      "address2": "Address 2",
-      "zip": "Zip",
-      "town": "Town",
-      "country": "Country",
-      "delete_account": "Delete this accout",
-      "description": "Compnay and Pseronal profile details.",
-      "current_user": {
-        "member_since": "Member since",
-        "days": "%{days} days",
-        "update": null,
-        "success_update": "Account information updated!"
-      }
-    },
-    "update": {
-      "success_update": "Account updated!"
     }
   },
   "internal_navigation": {
@@ -160,8 +157,8 @@
     "notifications": "See all notifications",
     "sign_out": "Sign out"
   },
-  "dashboards": {
-    "header": "Dashboards",
+  "dashboard": {
+    "header": "Dashboard",
     "description": "Summary of your business activties are shown infographically.",
     "total_income": {
       "header": "Total income",

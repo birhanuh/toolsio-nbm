@@ -11,9 +11,9 @@ export function setCurrentAccount(account) {
 }
 
 // Thunk actions
-export function signupRequest(accountAndUser) {
+export function signupRequest(accountUser) {
   return dispatch => {
-    return axios.post('/users/register', accountAndUser).then(res => {
+    return axios.post('/users/register', accountUser).then(res => {
       localStorage.setItem('account', JSON.stringify(res.data))
       dispatch(setCurrentAccount(res.data))
     })

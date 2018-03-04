@@ -70,7 +70,7 @@ class InvoicesCard extends Component {
     console.log('dataOverdue nvoice: ', dataOverdue )
      console.log('dataPaid invoice: ', dataPaid)
   return (
-    <div className={classnames("ui card dashboards form", { loading: isLoading })}>
+    <div className={classnames("ui card dashboard form", { loading: isLoading })}>
       <div className="content">
         <div className="right floated">
           <h4 className="ui header">
@@ -79,7 +79,7 @@ class InvoicesCard extends Component {
         </div> 
         <div className="left floated">
           <h4 className="ui header">
-            { T.translate("dashboards.invoices.header")}
+            { T.translate("dashboard.invoices.header")}
           </h4>
         </div>       
       </div>
@@ -132,7 +132,7 @@ class InvoicesCard extends Component {
 
       <div className="content"> 
         <div className="right floated">
-          <div className="meta">{T.translate("dashboards.this_month")}</div>
+          <div className="meta">{T.translate("dashboard.this_month")}</div>
           <div className="header">
             {invoices && invoices.lastTwoMonths.length !== 0 && invoices.lastTwoMonths[1].totalCount}
             {invoices && invoices.lastTwoMonths.length !== 0 && (invoices.lastTwoMonths[0].totalCount > invoices.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
@@ -140,7 +140,7 @@ class InvoicesCard extends Component {
           </div>
         </div>     
         <div className="left floated">
-          <div className="meta">{T.translate("dashboards.last_month")}</div>
+          <div className="meta">{T.translate("dashboard.last_month")}</div>
           <div className="header">{invoices && invoices.lastTwoMonths.length !== 0 && invoices.lastTwoMonths[0].totalCount}</div>
         </div>    
       </div>
@@ -149,7 +149,7 @@ class InvoicesCard extends Component {
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/invoices" className="ui primary outline button small">
-                <i className="check circle outline icon"></i>{T.translate("dashboards.invoices.create_first_invoice")}
+                <i className="check circle outline icon"></i>{T.translate("dashboard.invoices.create_first_invoice")}
               </Link>
             </div>
           </div>
@@ -166,7 +166,7 @@ InvoicesCard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    invoices: state.dashboards.invoices
+    invoices: state.dashboard.invoices
   }
 }
 

@@ -69,7 +69,7 @@ class HeaderNav extends Component {
         <nav className="ui fixed stackable menu">
           <div className="left menu">
             <div className="logo item">
-              <Link to="/dashboards">
+              <Link to="/dashboard">
                 <img src={logoInverted} alt="logo-inverted" />
               </Link>
             </div>
@@ -113,10 +113,10 @@ class HeaderNav extends Component {
                   {T.translate("internal_navigation.tasks")}
                   <div className="ui right floated blue label">1</div>
                 </a>
-                <a className="item">
+                <Link to="/account" className="item">
                   <i className="settings icon"></i>
                   {T.translate("internal_navigation.settings")}
-                </a>
+                </Link>
                 <div className="divider"></div>
                 <a className="item" to="#" onClick={this.logout.bind(this)} >
                   <i className="sign out icon"></i>

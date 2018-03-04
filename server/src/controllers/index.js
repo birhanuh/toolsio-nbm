@@ -7,7 +7,7 @@ import items from'./items'
 import invoices from'./invoices/invoices'
 import invoices_datatable from'./invoices/datatable'
 import conversations from'./conversations'
-import dashboards from'./dashboards'
+import dashboard from'./dashboard'
 
 module.exports = {
   projects,
@@ -19,5 +19,5 @@ module.exports = {
   invoices,
   invoices_datatable,
   conversations,
-  dashboards
+  dashboard
 }
