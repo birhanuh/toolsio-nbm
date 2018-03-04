@@ -111,20 +111,30 @@
       "url": "URL",
       "subdomain": "Subdomain",
       "industry": "Industry",
-      "phone_number": "Phone number",
-      "email": "Email",
-      "address1": "Address 1",
-      "address2": "Address 2",
-      "zip": "Zip",
-      "town": "Town",
-      "country": "Country",
+      "contact": {
+        "header": "Contacts",
+        "phone_number": "Phone number",
+        "email": "Email"
+      },
+      "address": {
+        "header": "Address",
+        "street": "Street",
+        "postal_code": "Postal code",
+        "region": "Region",
+        "country": "Country",
+        "select_country": "Select country",
+        "select_region": "Select region"
+      },
       "delete_account": "Delete this accout",
       "first_name": "First name",
       "last_name": "Last name",
       "email": "Email",
+      "password": "Password",
+      "confirm_password": "Confirm password",
       "member_since": "Member since",
       "days": "*{days}* days",
       "edit": "Edit",
+      "cancel": "Cancel",
       "form": {
         "success_update": "Account information updated!"
       }

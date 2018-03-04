@@ -39,6 +39,10 @@ export default function Breadcrumb(props, context) {
       currentPageTitle = "conversations.page.header"
       currentPageDescription = "conversations.page.description"
       break
+    case currentPage.includes('/account'): 
+      currentPageTitle = "account.header"
+      currentPageDescription = "account.description"
+      break
     case currentPage.includes('/users'): 
       currentPageTitle = "account.users.header"
       currentPageDescription = "account.users.description"

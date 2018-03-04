@@ -8,7 +8,10 @@ import { InputField, SelectField } from '../../utils/FormFields'
 // Localization 
 import T from 'i18n-react'
 
-class Form extends Component {
+// Country region selector 
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
+
+class AccountForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -17,14 +20,14 @@ class Form extends Component {
       logo: this.props.account ? this.props.account.logo : '',
       industry: this.props.account ? this.props.account.industry : '',
       address: {
-        street: this.props.account ? this.props.account.address.street: '',
-        postalCode: this.props.account ? this.props.account.address.postalCode : '',
-        region: this.props.account ? this.props.account.address.region : '',
-        country: this.props.account ? this.props.account.address.country : ''
+        street: this.props.account ? (this.props.account.address ? this.props.account.address.street : '') : '',
+        postalCode: this.props.account ? (this.props.account.address ? this.props.account.address.postalCode : '') : '',
+        region: this.props.account ? (this.props.account.address ? this.props.account.address.region : '') : '',
+        country: this.props.account ? (this.props.account.address ? this.props.account.address.country : '') : ''
       },
       contact: {
-        phoneNumber: this.props.account ? this.props.account.contact.phoneNumber : '',
-        email: this.props.account ? this.props.account.contact.email : ''
+        phoneNumber: this.props.account ? (this.props.account.contact ? this.props.account.contact.phoneNumber : '') : '',
+        email: this.props.account ? (this.props.account.contact ? this.props.account.contact.email : '') : ''
       },
       errors: {
         message: {
@@ -43,14 +46,14 @@ class Form extends Component {
         logo: nextProps.account.logo,
         industry: nextProps.account.industry,
         address: {
-          street: nextProps.account.address.street,
-          postalCode: nextProps.account.address.postalCode,
-          region: nextProps.account.address.region,
-          country: nextProps.account.address.country
+          street: nextProps.account.address && nextProps.account.address.street,
+          postalCode: nextProps.account.address && nextProps.account.address.postalCode,
+          region: nextProps.account.address && nextProps.account.address.region,
+          country: nextProps.account.address && nextProps.account.address.country
         },
         contact: {
-          phoneNumber: nextProps.account.contact.phoneNumber,
-          email: nextProps.account.contact.email
+          phoneNumber: nextProps.account.contact && nextProps.account.contact.phoneNumber,
+          email: nextProps.account.contact && nextProps.account.contact.email
         }
       })
     }
@@ -145,136 +148,125 @@ class Form extends Component {
   }
 
   render() {
-    const { id, subdomain, industry, logo, contact, address } = this.state
+    const { _id, subdomain, industry, logo, contact, address, errors, isLoading } = this.state
 
-    return (  
-      <div className="ui stackable grid">
+    return ( 
 
-        <Breadcrumb />
+      <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
-        <div className="ui text container ui segment">  
+        { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+        <InputField
+          label={T.translate("account.page.subdomain")}
+          name="subdomain" 
+          value={subdomain} 
+          onChange={this.handleChange.bind(this)} 
+          placeholder="Name"
+          error={errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors['subdomain'].message}
+          formClass="field"
+        />
+        <SelectField
+          type="select"
+          name="industry"
+          value={industry ? industry : '-'} 
+          label={T.translate("account.page.industry")}
+          onChange={this.handleChange.bind(this)} 
+          error={errors.message && errors.message.errors && errors.message.errors.industry && errors.message.errors['industry'].message}
+          formClass="field"
 
-            <div className="inline field">  
-               {_id ? <h1 className="ui header">{T.translate("accounts.form.edit_account")}</h1> : <h1 className="ui header">{T.translate("accounts.form.new_account")}</h1>}
-            </div>
+          options={[
+            <option key="default" value="" disabled>{T.translate("account.page.select_industry")}</option>,
+            <option key="human resource" value="human resource">Human resource</option>,
+            <option key="fashion" value="fashion">Fashion</option>,
+            <option key="import/export" value="import/export">Import/Export</option>,
+            <option key="store" value="store">Store</option>,
+            <option key="technology" value="technology">Technology</option>
+            ]
+          }
+        />
+         <fieldset className="custom-fieldset">
+          <legend className="custom-legend">{T.translate("account.page.contact.header")}</legend>
+          <InputField
+            label={T.translate("account.page.contact.phone_number")}
+            name="phoneNumber" 
+            value={contact.phoneNumber} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder="Phone number"
+            error={errors.message && errors.message.errors && errors.message.errors['contact.phoneNumber'] && errors.message.errors['contact.phoneNumber'].message}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("account.page.contact.email")}
+            name="email" 
+            value={contact.email} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder="Email"
+            error={errors.message && errors.message.errors && errors.message.errors['contact.email'] && errors.message.errors['contact.email'].message}
+            formClass="field"
+          />
+        </fieldset>
+        <fieldset className="custom-fieldset">
+          <legend className="custom-legend">{T.translate("account.page.address.header")}</legend>
+          <InputField
+            label={T.translate("account.page.address.street")}
+            name="street" 
+            value={address.street} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder="Street"
+            error={errors.message && errors.message.errors && errors.message.errors['address.street'] && errors.message.errors['address.street'].message}
+            formClass="field"
+          />
+          <InputField
+            label={T.translate("account.page.address.postal_code")}
+            name="postalCode" 
+            value={address.postalCode} 
+            onChange={this.handleChange.bind(this)} 
+            placeholder="Postal code"
+            error={errors.message && errors.message.errors && errors.message.errors['address.postalCode'] && errors.message.errors['address.postalCode'].message}
+            formClass="field"
+          />
+          <div className={classnames("field", {error: errors.message && errors.message.errors && errors.message.errors['address.country']})}>              
+            <label>{T.translate("account.page.address.country")}</label>
+            <CountryDropdown
+              defaultOptionLabel={T.translate("account.page.address.select_country")}
+              value={address.country}
+              onChange={(val) => this.selectCountry(val)} 
+              error={errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message} />
+            
+            <span className={classnames({red: errors.message && errors.message.errors && errors.message.errors['address.country']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message}</span>  
+          </div>  
+          <div className={classnames("field", {error: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>              
+            <label>{T.translate("account.page.address.region")}</label> 
+            <RegionDropdown
+              defaultOptionLabel={T.translate("account.page.address.select_region")}
+              disabled={address.country === ''}
+              country={address.country}
+              value={address.region}
+              onChange={(val) => this.selectRegion(val)} 
+              error={errors.message && errors.message.errors && errors.message.errors['address.region'] && errors.message.errors['address.region'].message}/>
+            
+            <span className={classnames({red: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.region'].message}</span>  
+          </div>
+          
+        </fieldset>
 
-            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
-
-            <InputField
-              label={T.translate("accounts.show.name")}
-              name="name" 
-              value={name} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder="Name"
-              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message.errors['name'].message}
-              formClass="inline field"
-            />
-            <InputField
-              label={T.translate("accounts.show.vat_number")}
-              name="vatNumber" 
-              value={vatNumber} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder="Vat number"
-              error={errors.message && errors.message.errors && errors.message.errors.vatNumber && errors.message.errors['vatNumber'].message}
-              formClass="inline field"
-            />
-             <fieldset className="custom-fieldset">
-              <legend className="custom-legend">{T.translate("accounts.show.contact.header")}</legend>
-              <InputField
-                label={T.translate("accounts.show.contact.phone_number")}
-                name="phoneNumber" 
-                value={contact.phoneNumber} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder="Phone number"
-                error={errors.message && errors.message.errors && errors.message.errors['contact.phoneNumber'] && errors.message.errors['contact.phoneNumber'].message}
-                formClass="inline field"
-              />
-              <InputField
-                label={T.translate("accounts.show.contact.email")}
-                name="email" 
-                value={contact.email} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder="Email"
-                error={errors.message && errors.message.errors && errors.message.errors['contact.email'] && errors.message.errors['contact.email'].message}
-                formClass="inline field"
-              />
-            </fieldset>
-            <div className="inline field">              
-              <label>{T.translate("accounts.show.include_contact_on_invoice")}</label> 
-              <div className="ui toggle checkbox">
-                <input 
-                  type="checkbox" 
-                  name="includeContactOnInvoice" 
-                  value={includeContactOnInvoice}
-                  onChange={this.handleChange.bind(this)} />
-                <label></label>
-              </div>
-            </div>
-            <fieldset className="custom-fieldset">
-              <legend className="custom-legend">{T.translate("accounts.show.address.header")}</legend>
-              <InputField
-                label={T.translate("accounts.show.address.street")}
-                name="street" 
-                value={address.street} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder="Street"
-                error={errors.message && errors.message.errors && errors.message.errors['address.street'] && errors.message.errors['address.street'].message}
-                formClass="inline field"
-              />
-              <InputField
-                label={T.translate("accounts.show.address.postal_code")}
-                name="postalCode" 
-                value={address.postalCode} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder="Postal code"
-                error={errors.message && errors.message.errors && errors.message.errors['address.postalCode'] && errors.message.errors['address.postalCode'].message}
-                formClass="inline field"
-              />
-              <div className={classnames("inline field", {error: errors.message && errors.message.errors && errors.message.errors['address.country']})}>              
-                <label>{T.translate("accounts.show.address.country")}</label>
-                <CountryDropdown
-                  defaultOptionLabel={T.translate("accounts.form.select_country")}
-                  value={address.country}
-                  onChange={(val) => this.selectCountry(val)} 
-                  error={errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message} />
-                
-                <span className={classnames({red: errors.message && errors.message.errors && errors.message.errors['address.country']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message}</span>  
-              </div>  
-              <div className={classnames("inline field", {error: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>              
-                <label>{T.translate("accounts.show.address.region")}</label> 
-                <RegionDropdown
-                  defaultOptionLabel={T.translate("accounts.form.select_region")}
-                  disabled={address.country === ''}
-                  country={address.country}
-                  value={address.region}
-                  onChange={(val) => this.selectRegion(val)} 
-                  error={errors.message && errors.message.errors && errors.message.errors['address.region'] && errors.message.errors['address.region'].message}/>
-                
-                <span className={classnames({red: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.region'].message}</span>  
-              </div>
-              
-            </fieldset>
-
-            <div className="inline field">  
-              <Link className="ui primary outline button" to="/accounts">
-                <i className="minus circle icon"></i>
-                {T.translate("accounts.form.cancel")}
-              </Link>  
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("accounts.form.save")}</button>
-            </div>  
-          </form> 
+        <div className="field">  
+          <Link className="ui primary outline button" to="/dashboard">
+            <i className="minus circle icon"></i>
+            {T.translate("account.page.cancel")}
+          </Link>  
+          <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.edit")}</button>
         </div>  
-      </div>
+      </form> 
     )
   }
 }
 
-Form.propTypes = {
+AccountForm.propTypes = {
   updateAccount: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
   account: PropTypes.object
 }
 
-export default Form
+export default AccountForm
 

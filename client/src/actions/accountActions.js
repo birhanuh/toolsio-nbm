@@ -17,7 +17,7 @@ export function accountUpdated(account) {
 
 export function fetchAccount(subdomain) {
   return dispatch => {
-    return axios.get(`/account/${subdomain}`)
+    return axios.get(`/accounts/${subdomain}`)
       .then(res => {
         dispatch(accountFetched(res.data.result))
       })
@@ -26,7 +26,7 @@ export function fetchAccount(subdomain) {
 
 export function updateAccount(account) {
   return dispatch => {
-    return axios.put(`/account/update/${account.subdomain}`, account)
+    return axios.put(`/accounts/update/${account.subdomain}`, account)
       .then(res => { 
         dispatch(accountUpdated(res.data.result)) 
       })
