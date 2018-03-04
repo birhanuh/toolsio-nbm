@@ -68,9 +68,9 @@ export function createProject(project) {
   }
 }
 
-export function fetchProjects() {
+export function fetchProjects(start, length) {
   return dispatch => {
-    return axios.get('/api/projects')
+    return axios.get(`/api/projects?start=${start}&length=${length}`)
       .then(res => {
         dispatch(setProjects(res.data.results))
       })

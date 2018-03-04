@@ -103,7 +103,7 @@ class InvoiceTasks extends Component {
         <h4 className="ui header">{T.translate("dashboards.invoice_tasks.header")}</h4>
         <div className="ui card">
           
-          {(!!invoiceTasks || (invoiceTasks && invoiceTasks.total && invoiceTasks.total.count === 0)) ? 
+          {invoiceTasks && invoiceTasks.total && invoiceTasks.total.count === 0 ? 
             <div className="content">
               <div className="ui info message">
                 <div className="description">

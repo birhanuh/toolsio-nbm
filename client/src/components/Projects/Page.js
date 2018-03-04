@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import classnames from 'classnames'
 import List from './List' 
+import { Pagination } from '../../utils'
 import { connect } from 'react-redux'
 import { fetchProjects } from '../../actions/projectActions'
 
@@ -12,11 +14,34 @@ import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Page extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      start: 0,
+      length: 10
+    }
+  }
+
   componentDidMount() {
-    this.props.fetchProjects()
+
+    const { start, length} = this.state
+    
+    const { match } = this.props
+
+    if (!!match.params.start) {   
+      this.props.fetchProjects(match.params.start, match.params.length)
+    } else {
+      this.props.fetchProjects(start, length)
+    }
+
   }
 
   render() {
+
+    const { length } = this.state
+
+    const { projects, match } = this.props
+
     return (
       <div className="row column">  
 
@@ -35,10 +60,15 @@ class Page extends Component {
         </div> 
         
         <div className="row column">     
-          <List projects={this.props.projects} />  
+          { projects && projects.list && <List projects={this.props.projects.list} /> }
         </div>    
 
-      </div>  
+        <div className="ui clearing vertical segment border-bottom-none">
+         
+          <Pagination path="projects" list={projects} match={match} length={length} />           
+           
+        </div>   
+      </div>   
     )
   }
 }

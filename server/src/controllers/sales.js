@@ -6,13 +6,27 @@ export default {
   
   find: (req, callback) => {
     
-     Sale.find({}).select('-items').populate({ path: 'customer', select: 'name' }).exec((err, sales) => {
-      if (err) {
-        callback(err, null)
-        return
-      }
+    let query = req.query
+    
+    let start = parseInt(query.start)
+    let length = parseInt(query.length)
 
-      callback(null, sales)
+    Sale.count({}, (err, count) => {
+      Sale.find({}).skip(start).limit(length).select('-items').populate({ path: 'customer', select: 'name' }).exec((err, sales) => {
+        if (err) {
+          callback(err, null)
+          return
+        }
+
+        let salesTotalPages = {      
+          total: count,
+          length: length,
+          pages: Math.ceil(count/length),
+          list: sales
+        }
+
+        callback(null, salesTotalPages)
+      })
     })
   },
 
@@ -50,7 +64,7 @@ export default {
     let id = req.params.id
     let body = req.body
 
-    Sale.findByIdAndUpdate(id, body, {new: true}, (err, sale) => {
+    Sale.findByIdAndUpdate(id, body, {new: true}).populate([{ path: 'customer', select: 'name'}, { path: 'items' }, { path: 'invoice', select: '_id' }]).exec((err, sale) => {
       if (err) {
         callback(err, null)
         return

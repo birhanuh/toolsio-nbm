@@ -206,6 +206,46 @@ select {
   background: url('../images/up-down-arrow-error.png') #FFF6F6 no-repeat 95% 50% !important;
 }
 
+.inline.field.show {
+  select.ui.dropdown, .ui.selection.dropdown {
+    min-height: 2.5em;
+    line-height: 0.9;
+  }
+}
+
+.inline.field.show.blue {
+  select.ui.dropdown, .ui.selection.dropdown {
+    color: $blue;
+    border: 1px solid $blue;
+  }
+}
+
+.inline.field.show.orange {
+  select.ui.dropdown, .ui.selection.dropdown {
+    color: $orange;
+    border: 1px solid $orange;
+  }
+}
+
+.inline.field.show.green {
+  select.ui.dropdown, .ui.selection.dropdown {
+    color: $green;
+    border: 1px solid $green;
+  }
+}
+
+.inline.field.show.turquoise {
+  select.ui.dropdown, .ui.selection.dropdown {
+    color: $turquoise;
+    border: 1px solid $turquoise;
+  }
+}
+.inline.field.show.red {
+  select.ui.dropdown, .ui.selection.dropdown {
+    color: $red;
+    border: 1px solid $red;
+  }
+}
 select.date {
   background-position: 93% 50%;
 }
@@ -252,12 +292,25 @@ select.date {
   font-size: 1em;
 }
 
+.ui.form .inline.field.progress {
+  display: inline-block;
+  margin-left: 27% !important;
+  width: 73%;
+  div:first-child {
+    display: block;
+  }
+  div:first-child + div {
+    display: inline-flex;
+  }
+}
+
 .ui.form .inline.field> .header, .ui.form .inline.field>button:first-child, .ui.form .inline.field>a {
   display: inline-block;
   margin-left: 27% !important;
   margin-top: 0;
   margin-bottom: 0;
 }
+
 .ui.form .field.error span, .ui.form .input.error span  {
   display: inherit;
   text-align: left;

@@ -23,6 +23,7 @@ class Page extends Component {
     super(props) 
     this.state = {
       countUnread: this.props.conversations.countUnread,
+      countSent: this.props.conversations.countSent,
       countDraft: this.props.conversations.countDraft,
       conversations: this.props.conversations.conversations
     }
@@ -32,6 +33,7 @@ class Page extends Component {
     if (nextProps.conversations) {
       this.setState({
         countUnread: nextProps.conversations.countUnread,
+        countSent: nextProps.conversations.countSent,
         countDraft: nextProps.conversations.countDraft,
         conversations: nextProps.conversations.conversations
       })
@@ -60,29 +62,35 @@ class Page extends Component {
       console.log('sent')
     } else if (!match.params.id) {
       this.props.fetchConversations()
-      console.log('undefined')
     }
 
   }
 
   render() {
     
-    const { countUnread, countDraft, conversations } = this.state
+    const { countUnread, countSent, countDraft, conversations } = this.state
     const { match } = this.props
 
     let countUnreadElement
+    let countSentElement
     let countDraftElement
 
     if (countUnread !== 0) {
       countUnreadElement = <div className="ui small blue label">{countUnread}</div>  
     } else {
-      countUnreadElement = <div></div>
+      countUnreadElement = <div className="ui small blue label">0</div>  
+    }
+
+    if (countSent !== 0) {
+      countSentElement = <div className="ui small orange label">{countSent}</div>  
+    } else {
+      countSentElement =<div className="ui small orange label">0</div>  
     }
 
     if (countDraft !== 0) {
       countDraftElement = <div className="ui small green label">{countDraft}</div>  
     } else {
-      countDraftElement = <div></div>
+      countDraftElement =<div className="ui small green label">0</div>  
     }
 
     return (
@@ -113,6 +121,9 @@ class Page extends Component {
               </div>
             </Link>
             <Link to="/conversations/sent" className={classnames('item', {active: match.params.type === "sent"})}>
+
+              {countSentElement}
+
               <div>
                 <i className="send outline icon"></i>&nbsp;
                 {T.translate("conversations.page.sent")}

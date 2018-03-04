@@ -38,7 +38,7 @@ class CustomersCard extends Component {
       "July", "August", "September", "October", "November", "December"
       ]
 
-    const data = customers && customers.lastTwoMonths.length !== 0 && customers.lastTwoMonths[0].data.map(customer => 
+    const data = customers && customers.lastTwoMonths.length !== 0 && customers.lastTwoMonths[0] && customers.lastTwoMonths[0].data.map(customer => 
       ({x: new Date(''+monthNames[customer.date.month-1]+' '+customer.date.day+' '+customer.date.year+'').getTime(), y: customer.count})
       )
     
@@ -119,8 +119,8 @@ class CustomersCard extends Component {
           <div className="right floated">
             <div className="meta">{T.translate("dashboards.this_month")}</div>
             <div className="header">
-              {customers && customers.lastTwoMonths.length !== 0 && customers.lastTwoMonths[1].totalCount}
-              {customers && customers.lastTwoMonths.length !== 0 && (customers.total.avg.toFixed(2) > customers.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+              {customers && customers.lastTwoMonths.length !== 0 && customers.lastTwoMonths[1] && customers.lastTwoMonths[1].totalCount}
+              {customers && customers.lastTwoMonths.length !== 0 && (customers.total.avg.toFixed(2) > customers.lastTwoMonths[1] && customers.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
                 <i className="long arrow up green icon"></i>}
             </div>
           </div>     
@@ -130,7 +130,7 @@ class CustomersCard extends Component {
           </div>    
         </div>
 
-        {(customers || (customers && customers.total && customers.total.count === 0)) && 
+        {customers && customers.total && customers.total.count === 0 && 
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
               <Link to="/customers" className="ui primary outline button small">

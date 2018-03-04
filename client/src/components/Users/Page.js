@@ -14,6 +14,10 @@ class Page extends Component {
   }
 
   render() {
+
+    const { users, account } = this.props
+    let usersNotCurrentUserIncluded = users.filter(user => user.email !== account.email)
+
     return (
       <div className="row column">  
 
@@ -23,7 +27,7 @@ class Page extends Component {
         
           <Form />  
 
-          <List users={this.props.users} />   
+          <List users={usersNotCurrentUserIncluded} />   
 
         </div>
       </div>  
@@ -38,7 +42,8 @@ Page.propTypes = {
 
 function mapSateToProps(state) {
   return {
-    users: state.users
+    users: state.users,
+    account: state.authentication.account
   }
 }
 

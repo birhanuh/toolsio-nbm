@@ -86,9 +86,9 @@ export function deleteSale(id) {
   }
 }
 
-export function fetchSales() {
+export function fetchSales(start, length) {
   return dispatch => {
-    return axios.get('/api/sales')
+    return axios.get(`/api/sales?start=${start}&length=${length}`)
       .then(res => {
         dispatch(setSales(res.data.results))
       })

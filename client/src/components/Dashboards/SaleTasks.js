@@ -103,7 +103,7 @@ class SaleTasks extends Component {
         <h4 className="ui header">{T.translate("dashboards.sale_tasks.header")}</h4>
         <div className="ui card">
           
-          {(!!saleTasks || (saleTasks && saleTasks.total && saleTasks.total.count === 0)) ? 
+          {saleTasks && saleTasks.total && saleTasks.total.count === 0 ? 
             <div className="content">
               <div className="ui info message">
                 <div className="description">

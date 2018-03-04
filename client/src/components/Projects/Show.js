@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { fetchProject, deleteProject } from '../../actions/projectActions'
+import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
+import { SelectField } from '../../utils/FormFields'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -19,6 +20,7 @@ import $ from 'jquery'
 // Modal
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
+$.fn.progress = require('semantic-ui-progress')
 
 class Show extends Component {
   
@@ -31,6 +33,7 @@ class Show extends Component {
       customer: this.props.project ? this.props.project.customer : '',
       status: this.props.project ? this.props.project.status : '',
       description: this.props.project ? this.props.project.description : '',
+      progress: this.props.project ? this.props.project.progress : 0,
       tasks: this.props.project ? this.props.project.tasks : []
     }
   }
@@ -41,6 +44,9 @@ class Show extends Component {
     if (match.params.id) {
       this.props.fetchProject(match.params.id)
     } 
+
+    // Progress
+    //$("#progress").progress('increment')
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -52,6 +58,7 @@ class Show extends Component {
         customer: nextProps.project.customer,
         status: nextProps.project.status,
         description: nextProps.project.description,
+        progress: nextProps.project.progress,
         tasks: nextProps.project.tasks
       })
     }
@@ -69,6 +76,19 @@ class Show extends Component {
 
     // Show modal
     $('.small.modal.project').modal('hide')
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+
+    const { _id } = this.state
+
+    this.props.updateProject({ _id, status: e.target.value })
+      .then(() => {
+        console.log('updateProject status')
+      })
   }
 
   handleDelete(id, event) {
@@ -90,8 +110,70 @@ class Show extends Component {
     
   }
 
+  handleIncreaseProgress = (event) => {
+    event.preventDefault()
+
+    const { _id, progress } = this.state
+
+    if (progress <= 90) {
+      this.setState({
+        progress: progress+10
+      })
+
+      $("#progress").progress({
+        percent: progress,
+        label: 'percent',
+        text: {
+          percent: `${progress+10}%`
+        },
+        className : {
+          active: 'success'
+        }
+      })
+
+      // Update Project
+      let progressUpdated = progress+10
+
+      this.props.updateProject({ _id, progress: progressUpdated })
+        .then(() => {
+          console.log('updateProject progress')
+        })
+    }
+  }
+
+  handleDecreaseProgress = (event) => {
+    event.preventDefault()
+
+    const { _id, status, progress } = this.state
+
+    if (progress >= 10) {
+      this.setState({
+        progress: progress-10
+      })
+
+      $("#progress").progress({
+        percent: progress,
+        label: 'percent',
+        text: {
+          percent: `${progress-10}%`
+        },
+        className : {
+          active: 'success'
+        }
+      })
+
+      // Update Project
+      let progressUpdated = progress-10
+
+      this.props.updateProject({ _id, progress: progressUpdated })
+        .then(() => {
+          console.log('updateProject progress')
+        })
+    }
+  }
+
   render() {
-    const { _id, name, deadline, customer, status, description, tasks } = this.state
+    const { _id, name, deadline, customer, status, description, progress, tasks } = this.state
     
     return (
       <div className="ui stackable grid">
@@ -110,15 +192,46 @@ class Show extends Component {
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("projects.show.status")}</dt>
               <dd>
-                <div className={classnames("ui tiny uppercase label", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}> 
-                  {status}
-                </div>
+                <SelectField
+                  label=""
+                  name="status"
+                  type="select"
+                  value={status} 
+                  formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
+                  onChange={this.handleChange.bind(this)} 
+                  error=""
+
+                  options={[
+                    <option key="default" value="new" disabled>NEW</option>,
+                    <option key="in progress" value="in progress">IN PROGRESS</option>,
+                    <option key="finished" value="finished">FINISHED</option>,
+                    <option key="delayed" value="delayed">DELAYED</option>,
+                    <option key="delivered" value="delivered">DELIVERED</option>
+                    ]
+                  }
+                  />
               </dd>
              
               <dt>{T.translate("projects.show.description")}</dt>
               <dd>
                 {description ? description : '-'}
               </dd>    
+
+              <dt>{T.translate("projects.show.progress")}</dt>
+              <dd>
+                <div style={{width: "50%"}}>
+                  <div id="progress" className="ui success progress mb-3 mt-2">
+                    <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
+                      <div className="progress">{progress}%</div>
+                    </div>
+                  </div>
+
+                  <div className="ui icon mini buttons">
+                    <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
+                    <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
+                  </div>
+                </div>
+              </dd>
             </dl>  
 
             <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
@@ -149,6 +262,7 @@ class Show extends Component {
 
 Show.propTypes = {
   fetchProject: PropTypes.func.isRequired,
+  updateProject: PropTypes.func.isRequired,
   deleteProject: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   project: PropTypes.object
@@ -162,9 +276,9 @@ function mapStateToProps(state, props) {
   const { match } = props
   if (match.params.id) {
     return {
-      project: state.projects.find(item => item._id === match.params.id)
+      project: state.projects && state.projects.list && state.projects.list.find(item => item._id === match.params.id)
     }
   } 
 }
 
-export default connect(mapStateToProps, { fetchProject, deleteProject, addFlashMessage } )(Show)
+export default connect(mapStateToProps, { fetchProject, updateProject, deleteProject, addFlashMessage } )(Show)
