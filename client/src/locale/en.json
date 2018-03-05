@@ -104,7 +104,7 @@
   },
   "account": {
     "header": "Account",
-    "description": "Compnay and Pseronal profile details.",
+    "description": "Account and User details.",
     "page": {
       "account": "Account",
       "user": "User",
@@ -135,6 +135,9 @@
       "days": "*{days}* days",
       "edit": "Edit",
       "cancel": "Cancel",
+      "change_avatar": "Change avatar",
+      "change_logo": "Upload logo",
+      "upload": "Upload",
       "form": {
         "success_update_account": "Account information updated!",
         "success_update_user": "User information updated!"

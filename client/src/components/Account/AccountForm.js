@@ -8,8 +8,19 @@ import { InputField, SelectField } from '../../utils/FormFields'
 // Localization 
 import T from 'i18n-react'
 
+import $ from 'jquery'
+
+import moment from 'moment'
+
+// Modal
+$.fn.dimmer = require('semantic-ui-dimmer')
+
 // Country region selector 
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
+
+
+// Images
+import logoPlaceholderMedium from '../../images/logo-placeholder.svg'
 
 class AccountForm extends Component {
   constructor(props) {
@@ -29,11 +40,13 @@ class AccountForm extends Component {
         phoneNumber: this.props.account ? (this.props.account.contact ? this.props.account.contact.phoneNumber : '') : '',
         email: this.props.account ? (this.props.account.contact ? this.props.account.contact.email : '') : ''
       },
+      file: '',
       errors: {
         message: {
           errors: {}
         }
       },
+      isChange: false,
       isLoading: false
     }
   }
@@ -57,6 +70,13 @@ class AccountForm extends Component {
         }
       })
     }
+  }
+
+  componentDidMount() {
+
+    $('.ui.card .image').dimmer({
+      on: 'hover'
+    })
   }
 
   handleChange = (e) => {
@@ -154,123 +174,179 @@ class AccountForm extends Component {
     this.setState({ address: updatedAddress })
   }
 
+  uploadToS3 = (file, signedRequest) => {
+    const options = {
+      headers: {
+        "Content-Type": file.type
+      }
+    }
+    await this.props.uploadLogo(signedRequest, file, options)
+  }
+
+  formatFileName = filename => {
+    const date = moment().format("DDMMYYYY")
+    const randomString = Math.random()
+      .toString(36)
+      .substring(2, 7)
+    const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-")
+    const newFileName = `images/${date}-${randomString}-${cleanFileName}`
+    return newFileName.substring(0, 60)
+  }
+
+  handleImageUpload = (e) => {
+    e.preventDefault()
+
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
   render() {
-    const { _id, subdomain, industry, logo, contact, address, errors, isLoading } = this.state
+    const { _id, subdomain, industry, logo, contact, address, errors, isChange, isLoading } = this.state
 
     return ( 
 
-      <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+      <div className="twelve wide column"> 
+        <div className="ui items segment">
+          <div className="ui item">    
+            <div className="image">
+              <div className="ui card">
+                <div className="blurring dimmable image">
+                  <div className="ui dimmer">
+                    <div className="content">
+                      <div className="center">
+                        <input type="file" name="file" width="100%" className="ui inverted button" onChange={this.handleImageUpload.bind(this)} />
+                      </div>
+                    </div>
+                  </div>
+                  <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
+                </div>
+              </div>
 
-        { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
+              <button disabled={isChange} className="ui primary centered aligned button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
+            </div>
+            <div className="content">
+              <h1 className="ui header">{T.translate("account.page.account")}</h1>
+              
+              <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
-        <InputField
-          label={T.translate("account.page.subdomain")}
-          name="subdomain" 
-          value={subdomain} 
-          onChange={this.handleChange.bind(this)} 
-          placeholder="Name"
-          error={errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors['subdomain'].message}
-          formClass="field"
-        />
-        <SelectField
-          type="select"
-          name="industry"
-          value={industry ? industry : '-'} 
-          label={T.translate("account.page.industry")}
-          onChange={this.handleChange.bind(this)} 
-          error={errors.message && errors.message.errors && errors.message.errors.industry && errors.message.errors['industry'].message}
-          formClass="field"
+              { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-          options={[
-            <option key="default" value="" disabled>{T.translate("account.page.select_industry")}</option>,
-            <option key="human resource" value="human resource">Human resource</option>,
-            <option key="fashion" value="fashion">Fashion</option>,
-            <option key="import/export" value="import/export">Import/Export</option>,
-            <option key="store" value="store">Store</option>,
-            <option key="technology" value="technology">Technology</option>
-            ]
-          }
-        />
-         <fieldset className="custom-fieldset">
-          <legend className="custom-legend">{T.translate("account.page.contact.header")}</legend>
-          <InputField
-            label={T.translate("account.page.contact.phone_number")}
-            name="phoneNumber" 
-            value={contact.phoneNumber} 
-            onChange={this.handleChange.bind(this)} 
-            placeholder="Phone number"
-            error={errors.message && errors.message.errors && errors.message.errors['contact.phoneNumber'] && errors.message.errors['contact.phoneNumber'].message}
-            formClass="field"
-          />
-          <InputField
-            label={T.translate("account.page.contact.email")}
-            name="email" 
-            value={contact.email} 
-            onChange={this.handleChange.bind(this)} 
-            placeholder="Email"
-            error={errors.message && errors.message.errors && errors.message.errors['contact.email'] && errors.message.errors['contact.email'].message}
-            formClass="field"
-          />
-        </fieldset>
-        <fieldset className="custom-fieldset">
-          <legend className="custom-legend">{T.translate("account.page.address.header")}</legend>
-          <InputField
-            label={T.translate("account.page.address.street")}
-            name="street" 
-            value={address.street} 
-            onChange={this.handleChange.bind(this)} 
-            placeholder="Street"
-            error={errors.message && errors.message.errors && errors.message.errors['address.street'] && errors.message.errors['address.street'].message}
-            formClass="field"
-          />
-          <InputField
-            label={T.translate("account.page.address.postal_code")}
-            name="postalCode" 
-            value={address.postalCode} 
-            onChange={this.handleChange.bind(this)} 
-            placeholder="Postal code"
-            error={errors.message && errors.message.errors && errors.message.errors['address.postalCode'] && errors.message.errors['address.postalCode'].message}
-            formClass="field"
-          />
-          <div className={classnames("field", {error: errors.message && errors.message.errors && errors.message.errors['address.country']})}>              
-            <label>{T.translate("account.page.address.country")}</label>
-            <CountryDropdown
-              defaultOptionLabel={T.translate("account.page.address.select_country")}
-              value={address.country}
-              onChange={(val) => this.selectCountry(val)} 
-              error={errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message} />
-            
-            <span className={classnames({red: errors.message && errors.message.errors && errors.message.errors['address.country']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message}</span>  
-          </div>  
-          <div className={classnames("field", {error: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>              
-            <label>{T.translate("account.page.address.region")}</label> 
-            <RegionDropdown
-              defaultOptionLabel={T.translate("account.page.address.select_region")}
-              disabled={address.country === ''}
-              country={address.country}
-              value={address.region}
-              onChange={(val) => this.selectRegion(val)} 
-              error={errors.message && errors.message.errors && errors.message.errors['address.region'] && errors.message.errors['address.region'].message}/>
-            
-            <span className={classnames({red: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.region'].message}</span>  
+              <InputField
+                label={T.translate("account.page.subdomain")}
+                name="subdomain" 
+                value={subdomain} 
+                onChange={this.handleChange.bind(this)} 
+                placeholder="Name"
+                error={errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors['subdomain'].message}
+                formClass="field"
+              />
+              <SelectField
+                type="select"
+                name="industry"
+                value={industry ? industry : '-'} 
+                label={T.translate("account.page.industry")}
+                onChange={this.handleChange.bind(this)} 
+                error={errors.message && errors.message.errors && errors.message.errors.industry && errors.message.errors['industry'].message}
+                formClass="field"
+
+                options={[
+                  <option key="default" value="" disabled>{T.translate("account.page.select_industry")}</option>,
+                  <option key="human resource" value="human resource">Human resource</option>,
+                  <option key="fashion" value="fashion">Fashion</option>,
+                  <option key="import/export" value="import/export">Import/Export</option>,
+                  <option key="store" value="store">Store</option>,
+                  <option key="technology" value="technology">Technology</option>
+                  ]
+                }
+              />
+               <fieldset className="custom-fieldset">
+                <legend className="custom-legend">{T.translate("account.page.contact.header")}</legend>
+                <InputField
+                  label={T.translate("account.page.contact.phone_number")}
+                  name="phoneNumber" 
+                  value={contact.phoneNumber} 
+                  onChange={this.handleChange.bind(this)} 
+                  placeholder="Phone number"
+                  error={errors.message && errors.message.errors && errors.message.errors['contact.phoneNumber'] && errors.message.errors['contact.phoneNumber'].message}
+                  formClass="field"
+                />
+                <InputField
+                  label={T.translate("account.page.contact.email")}
+                  name="email" 
+                  value={contact.email} 
+                  onChange={this.handleChange.bind(this)} 
+                  placeholder="Email"
+                  error={errors.message && errors.message.errors && errors.message.errors['contact.email'] && errors.message.errors['contact.email'].message}
+                  formClass="field"
+                />
+              </fieldset>
+              <fieldset className="custom-fieldset">
+                <legend className="custom-legend">{T.translate("account.page.address.header")}</legend>
+                <InputField
+                  label={T.translate("account.page.address.street")}
+                  name="street" 
+                  value={address.street} 
+                  onChange={this.handleChange.bind(this)} 
+                  placeholder="Street"
+                  error={errors.message && errors.message.errors && errors.message.errors['address.street'] && errors.message.errors['address.street'].message}
+                  formClass="field"
+                />
+                <InputField
+                  label={T.translate("account.page.address.postal_code")}
+                  name="postalCode" 
+                  value={address.postalCode} 
+                  onChange={this.handleChange.bind(this)} 
+                  placeholder="Postal code"
+                  error={errors.message && errors.message.errors && errors.message.errors['address.postalCode'] && errors.message.errors['address.postalCode'].message}
+                  formClass="field"
+                />
+                <div className={classnames("field", {error: errors.message && errors.message.errors && errors.message.errors['address.country']})}>              
+                  <label>{T.translate("account.page.address.country")}</label>
+                  <CountryDropdown
+                    defaultOptionLabel={T.translate("account.page.address.select_country")}
+                    value={address.country}
+                    onChange={(val) => this.selectCountry(val)} 
+                    error={errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message} />
+                  
+                  <span className={classnames({red: errors.message && errors.message.errors && errors.message.errors['address.country']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.country'].message}</span>  
+                </div>  
+                <div className={classnames("field", {error: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>              
+                  <label>{T.translate("account.page.address.region")}</label> 
+                  <RegionDropdown
+                    defaultOptionLabel={T.translate("account.page.address.select_region")}
+                    disabled={address.country === ''}
+                    country={address.country}
+                    value={address.region}
+                    onChange={(val) => this.selectRegion(val)} 
+                    error={errors.message && errors.message.errors && errors.message.errors['address.region'] && errors.message.errors['address.region'].message}/>
+                  
+                  <span className={classnames({red: address.country !== '' && errors.message && errors.message.errors && errors.message.errors['address.region']})}>{errors.message && errors.message.errors && errors.message.errors['address.country'] && errors.message.errors['address.region'].message}</span>  
+                </div>
+                
+              </fieldset>
+
+              <div className="field">  
+                <Link className="ui primary outline button" to="/dashboard">
+                  <i className="minus circle icon"></i>
+                  {T.translate("account.page.cancel")}
+                </Link>  
+                <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.edit")}</button>
+              </div>  
+            </form>   
           </div>
-          
-        </fieldset>
 
-        <div className="field">  
-          <Link className="ui primary outline button" to="/dashboard">
-            <i className="minus circle icon"></i>
-            {T.translate("account.page.cancel")}
-          </Link>  
-          <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.edit")}</button>
-        </div>  
-      </form> 
+        </div> 
+      </div>   
+    </div>
+
     )
   }
 }
 
 AccountForm.propTypes = {
   updateAccount: PropTypes.func.isRequired,
+  uploadLogo: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   account: PropTypes.object
 }

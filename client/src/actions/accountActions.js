@@ -32,3 +32,9 @@ export function updateAccount(account) {
       })
   }
 }
+
+export function updateLogo(signedRequest, file, options) {
+  return dispatch => {
+    return axios.put(signedRequest, file, options)
+  }
+}

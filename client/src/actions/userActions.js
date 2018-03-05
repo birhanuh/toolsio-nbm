@@ -35,3 +35,9 @@ export function updateUser(user) {
     return axios.post('/users/account/update', user)
   }
 }
+
+export function updateAvatar(signedRequest, file, options) {
+  return dispatch => {
+    return axios.put(signedRequest, file, options)
+  }
+}
