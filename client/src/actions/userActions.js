@@ -36,8 +36,17 @@ export function updateUser(user) {
   }
 }
 
-export function updateAvatar(signedRequest, file, options) {
+export function uploadAvatar(signedRequest, file, options) {
   return dispatch => {
     return axios.put(signedRequest, file, options)
+  }
+}
+
+export function saveAvatar(_id, url) {
+  return dispatch => {
+    return axios.put(`/user/account/update/${_id}`, url)
+      .then(res => { 
+        dispatch(userUpdated(res.data.result)) 
+      })
   }
 }

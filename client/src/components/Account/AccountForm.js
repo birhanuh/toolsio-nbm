@@ -1,7 +1,9 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+require('babel-polyfill')
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { InputField, SelectField } from '../../utils/FormFields'
 
@@ -40,7 +42,7 @@ class AccountForm extends Component {
         phoneNumber: this.props.account ? (this.props.account.contact ? this.props.account.contact.phoneNumber : '') : '',
         email: this.props.account ? (this.props.account.contact ? this.props.account.contact.email : '') : ''
       },
-      file: '',
+      file: null,
       errors: {
         message: {
           errors: {}
@@ -174,12 +176,13 @@ class AccountForm extends Component {
     this.setState({ address: updatedAddress })
   }
 
-  uploadToS3 = (file, signedRequest) => {
+  uploadToS3 = async (file, signedRequest) => {
     const options = {
       headers: {
         "Content-Type": file.type
       }
     }
+    
     await this.props.uploadLogo(signedRequest, file, options)
   }
 
@@ -193,12 +196,26 @@ class AccountForm extends Component {
     return newFileName.substring(0, 60)
   }
 
-  handleImageUpload = (e) => {
-    e.preventDefault()
+  handleOnDrop = async files => {
 
     this.setState({
-      [e.target.name]: e.target.value
+      'file': files[0]
     })
+  }
+
+  handleSubmitImage = async () => {
+    const { subdomain, file } = this.state
+    const response = await this.props.s3Sign({
+      variables: {
+        filename: this.formatFileName(file.name),
+        filetype: file.type
+      }
+    })
+
+    const { signedRequest, url } = response.data.signS3
+    await this.uploadToS3(file, signedRequest)
+
+    await this.props.updateLogo(subdomain, url)
   }
 
   render() {
@@ -215,7 +232,9 @@ class AccountForm extends Component {
                   <div className="ui dimmer">
                     <div className="content">
                       <div className="center">
-                        <input type="file" name="file" width="100%" className="ui inverted button" onChange={this.handleImageUpload.bind(this)} />
+                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false}>
+                          <p>{T.translate("account.page.change_logo")}</p>
+                        </Dropzone>
                       </div>
                     </div>
                   </div>
@@ -347,6 +366,7 @@ class AccountForm extends Component {
 AccountForm.propTypes = {
   updateAccount: PropTypes.func.isRequired,
   uploadLogo: PropTypes.func.isRequired,
+  saveLogo: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   account: PropTypes.object
 }

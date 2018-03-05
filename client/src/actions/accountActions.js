@@ -33,8 +33,17 @@ export function updateAccount(account) {
   }
 }
 
-export function updateLogo(signedRequest, file, options) {
+export function uploadLogo(signedRequest, file, options) {
   return dispatch => {
     return axios.put(signedRequest, file, options)
+  }
+}
+
+export function saveLogo(subdomain, url) {
+  return dispatch => {
+    return axios.put(`/accounts/update/${subdomain}`, url)
+      .then(res => { 
+        dispatch(accountUpdated(res.data.result)) 
+      })
   }
 }

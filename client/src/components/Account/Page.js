@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Authorization } from '../../utils'
-import { fetchAccount, updateAccount, uploadLogo } from '../../actions/accountActions'
-import { updateUser, uploadAvatar } from '../../actions/userActions'
+import { fetchAccount, updateAccount, uploadLogo, saveLogo } from '../../actions/accountActions'
+import { updateUser, uploadAvatar, saveAvatar } from '../../actions/userActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 
 import AccountForm from './AccountForm'
@@ -32,9 +32,9 @@ class Page extends Component {
 
         <Breadcrumb />
 
-          <AccountForm account={this.props.account} updateAccount={this.props.updateAccount} uploadLogo={this.props.uploadLogo} addFlashMessage={addFlashMessage}  />
+          <AccountForm account={this.props.account} updateAccount={this.props.updateAccount} uploadLogo={this.props.uploadLogo} saveLogo={this.props.saveLogo} addFlashMessage={addFlashMessage}  />
              
-          <UserForm user={this.props.user} updateUser={this.props.updateUser} uploadAvatar={this.props.uploadAvatar} addFlashMessage={addFlashMessage}  />
+          <UserForm user={this.props.user} updateUser={this.props.updateUser} uploadAvatar={this.props.uploadAvatar} saveAvatar={this.props.saveAvatar} addFlashMessage={addFlashMessage}  />
 
       </div>  
     )
@@ -43,8 +43,11 @@ class Page extends Component {
 
 Page.propTypes = {
   updateAccount: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
   uploadLogo: PropTypes.func.isRequired,
-  updateAvatar: PropTypes.func.isRequired
+  uploadAvatar: PropTypes.func.isRequired,
+  saveLogo: PropTypes.func.isRequired,
+  saveAvatar: PropTypes.func.isRequired
 }
 
 function mapSateToProps(state) {
@@ -54,4 +57,5 @@ function mapSateToProps(state) {
   }
 }
 
-export default connect(mapSateToProps, { fetchAccount, updateAccount, updateUser })(Page)
+export default connect(mapSateToProps, { fetchAccount, updateAccount, updateUser, uploadLogo, uploadAvatar, saveLogo, saveAvatar })(Page)
+

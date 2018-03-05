@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+require('babel-polyfill')
 import { Link } from 'react-router-dom'
 import { Validation } from '../../utils'
 import { InputField } from '../../utils/FormFields'
@@ -198,6 +199,8 @@ class UserForm extends Component {
 // Proptypes definition
 UserForm.propTypes = {
   updateUser: PropTypes.func.isRequired,
+  uploadAvatar: PropTypes.func.isRequired,
+  saveAvatar: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 }
