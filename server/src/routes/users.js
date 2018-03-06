@@ -44,9 +44,10 @@ router.post('/register', async (req, res) => {
 
     // Push associated userCreated
     if (userCreated) {
+      accountCreated.users.push(userCreated._id)
       accountCreated.save()
         .then(account => {
-          account.users.push(userCreated._id)
+          console.log('user pushed to new account', account)
         })
         .catch(err => 
           console.log('new account err', err)

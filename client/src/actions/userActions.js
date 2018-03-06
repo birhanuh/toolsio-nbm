@@ -36,17 +36,15 @@ export function updateUser(user) {
   }
 }
 
-export function uploadAvatar(signedRequest, file, options) {
+export function s3SignAvatar(_id, variables) {
   return dispatch => {
-    return axios.put(signedRequest, file, options)
+    return axios.put(`/users/update/${_id}`, variables)
   }
 }
 
-export function saveAvatar(_id, url) {
+// Save File to S3
+export function uploadAvatar(signedRequest, file, options) {
   return dispatch => {
-    return axios.put(`/user/account/update/${_id}`, url)
-      .then(res => { 
-        dispatch(userUpdated(res.data.result)) 
-      })
+    return axios.put(signedRequest, file, options)
   }
 }

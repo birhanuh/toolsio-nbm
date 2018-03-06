@@ -177,6 +177,7 @@ class AccountForm extends Component {
   }
 
   uploadToS3 = async (file, signedRequest) => {
+    console.log('type ', file.type)
     const options = {
       headers: {
         "Content-Type": file.type
@@ -192,7 +193,7 @@ class AccountForm extends Component {
       .toString(36)
       .substring(2, 7)
     const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-")
-    const newFileName = `images/${date}-${randomString}-${cleanFileName}`
+    const newFileName = `logos/${date}-${randomString}-${cleanFileName}`
     return newFileName.substring(0, 60)
   }
 
@@ -205,17 +206,15 @@ class AccountForm extends Component {
 
   handleSubmitImage = async () => {
     const { subdomain, file } = this.state
-    const response = await this.props.s3Sign({
+    const response = await this.props.s3SignLogo(subdomain, {
       variables: {
         filename: this.formatFileName(file.name),
         filetype: file.type
       }
     })
 
-    const { signedRequest, url } = response.data.signS3
+    const { signedRequest, url } = response.data.result
     await this.uploadToS3(file, signedRequest)
-
-    await this.props.updateLogo(subdomain, url)
   }
 
   render() {
@@ -242,7 +241,7 @@ class AccountForm extends Component {
                 </div>
               </div>
 
-              <button disabled={isChange} className="ui primary centered aligned button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
+              <button disabled={isChange} className="ui primary centered aligned button" onClick={this.handleSubmitImage.bind(this)}><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
             </div>
             <div className="content">
               <h1 className="ui header">{T.translate("account.page.account")}</h1>

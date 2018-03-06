@@ -26,24 +26,22 @@ export function fetchAccount(subdomain) {
 
 export function updateAccount(account) {
   return dispatch => {
-    return axios.put(`/accounts/update/${account.subdomain}`, account)
+    return axios.put(`/accounts/${account.subdomain}`, account)
       .then(res => { 
         dispatch(accountUpdated(res.data.result)) 
       })
   }
 }
 
+export function s3SignLogo(subdomain, variables) {
+  return dispatch => {
+    return axios.put(`/accounts/${subdomain}`, variables)
+  }
+}
+
+// Save File to S3
 export function uploadLogo(signedRequest, file, options) {
   return dispatch => {
     return axios.put(signedRequest, file, options)
-  }
-}
-
-export function saveLogo(subdomain, url) {
-  return dispatch => {
-    return axios.put(`/accounts/update/${subdomain}`, url)
-      .then(res => { 
-        dispatch(accountUpdated(res.data.result)) 
-      })
   }
 }
