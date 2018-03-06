@@ -365,7 +365,6 @@ class AccountForm extends Component {
 AccountForm.propTypes = {
   updateAccount: PropTypes.func.isRequired,
   uploadLogo: PropTypes.func.isRequired,
-  saveLogo: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   account: PropTypes.object
 }

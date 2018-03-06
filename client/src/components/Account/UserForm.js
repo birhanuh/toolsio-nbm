@@ -200,7 +200,6 @@ class UserForm extends Component {
 UserForm.propTypes = {
   updateUser: PropTypes.func.isRequired,
   uploadAvatar: PropTypes.func.isRequired,
-  saveAvatar: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 }
