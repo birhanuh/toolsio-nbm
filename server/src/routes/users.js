@@ -328,7 +328,7 @@ router.post('/logout', function(req, res) {
 })
 
 // Update User fields, Upload to S3
-router.put('/update/avatar/:id', async (req, res) => {
+router.post('/avatar', async (req, res) => {
 
   let variables = req.body.variables
 
@@ -350,17 +350,56 @@ router.put('/update/avatar/:id', async (req, res) => {
 
   const signedRequest = await s3Bucket.getSignedUrl('putObject', s3Params)
   const url = `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${variables.filename}`
-   
-  User.findByIdAndUpdate(req.params.id, {avatar: url}, (err, user) => {
-    if (err) {
-      console.log(err)
-      return
-    }
-
-    console.log('avatar field updated', user)
-  })
 
   res.json( { result: {signedRequest: signedRequest, url: url} }) 
+})
+
+// Update Account fields
+router.put('/update/:id', async (req, res) => {
+
+  const subdomain = req.headers.subdomain
+
+  // Connect to accounts db
+  if (env === 'development') {
+    await db.connect(process.env.DB_HOST+subdomain+process.env.DB_DEVELOPMENT)
+  } else if (env === 'test') {
+    await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
+  }
+  
+  let user = await User.findOne({ _id: req.params.id })
+  let previousUrl = user.avatar
+
+  const s3Bucket = new AWS.S3({
+    signatureVersion: 'v4',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    Bucket: process.env.S3_BUCKET,
+    region: 'eu-central-1'
+  })
+
+  const s3Params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: 'avatars'+previousUrl
+  }
+
+  s3Bucket.deleteObject(s3Params, (err, data) => {
+    if (err) {
+      console.log('err', err)
+      return
+    }
+    console.log('Deleted from s3Bucket', data)
+  })
+  
+  User.findByIdAndUpdate(req.params.id, req.body, {new: true}).exec((err, user) => {
+    if (err) {
+      console.log('err', err)
+      return
+    } 
+
+    console.log('User updated', user)
+    res.json({ result: user })    
+  })
+ 
 })
 
 passport.serializeUser(function(user, done) {

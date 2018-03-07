@@ -25,17 +25,18 @@ export function fetchAccount(subdomain) {
 }
 
 export function updateAccount(account) {
+  console.log('account ', account)
   return dispatch => {
-    return axios.put(`/accounts/${account.subdomain}`, account)
+    return axios.put(`/accounts/update/${account._id}`, account)
       .then(res => { 
         dispatch(accountUpdated(res.data.result)) 
       })
   }
 }
 
-export function s3SignLogo(subdomain, variables) {
+export function s3SignLogo(variables) {
   return dispatch => {
-    return axios.put(`/accounts/logo/${subdomain}`, variables)
+    return axios.post('/accounts/logo', variables)
   }
 }
 

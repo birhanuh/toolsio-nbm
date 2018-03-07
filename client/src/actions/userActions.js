@@ -52,12 +52,9 @@ export function updateUser(user) {
   }
 }
 
-export function s3SignAvatar(_id, variables) {
+export function s3SignAvatar(variables) {
   return dispatch => {
-    return axios.put(`/users/update/avatar/${_id}`, variables).
-      then(res=> {
-        dispatch(userUpdated(res.data.result.url))
-      })
+    return axios.post('/users/avatar/', variables)
   }
 }
 

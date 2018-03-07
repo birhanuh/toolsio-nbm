@@ -37,7 +37,8 @@ class UserForm extends Component {
           errors: {}
         }
       },
-      isLoading: false
+      isLoadingLogo: false,
+      isLoadingForm: false
     }
   }
   
@@ -85,7 +86,7 @@ class UserForm extends Component {
 
     if (this.isValid()) { 
       // Empty errros state for each submit
-      this.setState({ errros: {}, isLoading: true })
+      this.setState({ errros: {}, isLoadingForm: true })
       
       const { user } = this.state
       // Make submit
@@ -96,12 +97,12 @@ class UserForm extends Component {
             text: T.translate("account.form.success_update_user")
           })
         },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
+        ({ response }) => this.setState({ errors: response.data.errors, isLoadingForm: false })
       )
     }  
   }
 
-  uploadToS3 = async (file, signedRequest) => {
+  uploadToS3 = async (url, file, signedRequest) => {
 
     const options = {
       headers: {
@@ -109,7 +110,27 @@ class UserForm extends Component {
       }
     }
     
-    await this.props.uploadAvatar(signedRequest, file, options)
+    const uploadAvatarResponse = await this.props.uploadAvatar(signedRequest, file, options)
+
+    if (uploadAvatarResponse.status === 200) {
+      this.setState({
+        avatar: url
+      })
+
+      const { _id, avatar } = this.state
+
+      this.setState({ isLoadingAvatar: true })
+      this.props.updateUser({ _id, avatar})
+        .then((res) => {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("account.form.success_update_user")
+          })
+          this.setState({ isLoadingAvatar: false })
+        },
+        ({ response }) => this.setState({ errors: response.data.errors, isLoadingForm: false })
+      )
+    }
   }
 
   formatFileName = filename => {
@@ -118,7 +139,7 @@ class UserForm extends Component {
       .toString(36)
       .substring(2, 7)
     const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-")
-    const newFileName = `logos/${date}-${randomString}-${cleanFileName}`
+    const newFileName = `avatars/${date}-${randomString}-${cleanFileName}`
     return newFileName.substring(0, 60)
   }
 
@@ -131,7 +152,7 @@ class UserForm extends Component {
 
   handleSubmitImage = async () => {
     const { _id, file } = this.state
-    const response = await this.props.s3SignAvatar(_id, {
+    const response = await this.props.s3SignAvatar({
       variables: {
         filename: this.formatFileName(file.name),
         filetype: file.type
@@ -139,11 +160,11 @@ class UserForm extends Component {
     })
 
     const { signedRequest, url } = response.data.result
-    await this.uploadToS3(file, signedRequest)
+    await this.uploadToS3(url, file, signedRequest)
   }
 
   render() {
-    const { _id, firstName, lastName, avatar, password, confirmPassword, errors, isLoading } = this.state
+    const { _id, firstName, lastName, avatar, password, confirmPassword, errors, isLoadingAvatar, isLoadingForm } = this.state
     
     return (            
 
@@ -151,7 +172,7 @@ class UserForm extends Component {
         <div className="ui items segment user">
           <div className="ui item">    
             <div className="image">
-              <div className="ui card circular image">
+              <div className={classnames("ui card circular image form", { loading: isLoadingAvatar })}>
                 <div className="blurring dimmable image">
                   <div className="ui dimmer">
                     <div className="content">
@@ -166,13 +187,13 @@ class UserForm extends Component {
                 </div>
               </div>
 
-              <button disabled={isLoading} onClick={this.handleSubmitImage.bind(this)} className="fluid ui primary button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
+              <button disabled={isLoadingAvatar} onClick={this.handleSubmitImage.bind(this)} className="fluid ui primary button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
              
             </div>
             <div className="content">                
-              <h1 className="ui header">{T.translate("account.page.user")}</h1> 
+              <h1 className="ui header mt-2 mb-3">{T.translate("account.page.user")}</h1> 
 
-              <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+              <form className={classnames("ui large form", { loading: isLoadingForm })} onSubmit={this.handleSubmit.bind(this)}>
              
                 { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
                 
@@ -222,7 +243,7 @@ class UserForm extends Component {
                     <i className="minus circle icon"></i>
                     {T.translate("account.page.cancel")}
                   </Link>  
-                  <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.edit")}</button>
+                  <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.edit")}</button>
                 </div>  
               </form>       
 
