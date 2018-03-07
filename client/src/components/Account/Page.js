@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Authorization } from '../../utils'
 import { fetchAccount, updateAccount, uploadLogo, s3SignLogo } from '../../actions/accountActions'
-import { updateUser, uploadAvatar, s3SignAvatar } from '../../actions/userActions'
+import { fetchUser, updateUser, uploadAvatar, s3SignAvatar } from '../../actions/userActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 
 import AccountForm from './AccountForm'
@@ -23,12 +23,17 @@ class Page extends Component {
 
     // Fetch account
     this.props.fetchAccount(subdomain)
+
+    // Fetch account
+    const { currentAccount } = this.props
+    this.props.fetchUser(currentAccount && currentAccount.email)
+
   }
 
   render() {
     
     return (
-      <div className="ui stackable grid">  
+      <div className="ui stackable grid account">  
 
         <Breadcrumb />
 
@@ -48,12 +53,16 @@ Page.propTypes = {
   uploadAvatar: PropTypes.func.isRequired,  s3SignLogo: PropTypes.func.isRequired
 }
 
-function mapSateToProps(state) {
+function mapSateToProps(state, props) {
+  
+  const { currentAccount } = props
+  
   return {
     account: state.account,
-    user: state.authentication.account
+    user: state.users.find(item => item.email === currentAccount.email)
   }
 }
 
-export default connect(mapSateToProps, { fetchAccount, updateAccount, updateUser, uploadLogo, uploadAvatar, s3SignLogo })(Page)
+export default connect(mapSateToProps, { fetchAccount, updateAccount, fetchUser, updateUser, uploadLogo, uploadAvatar, s3SignLogo, s3SignAvatar })(Page)
+
 

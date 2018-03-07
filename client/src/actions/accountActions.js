@@ -35,7 +35,7 @@ export function updateAccount(account) {
 
 export function s3SignLogo(subdomain, variables) {
   return dispatch => {
-    return axios.put(`/accounts/${subdomain}`, variables)
+    return axios.put(`/accounts/logo/${subdomain}`, variables)
   }
 }
 

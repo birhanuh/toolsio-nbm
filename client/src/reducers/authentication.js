@@ -3,15 +3,15 @@ import isEmpty from 'lodash/isEmpty'
 
 const initialState = {
   isAuthenticated: false,
-  account: {}
+  currentAccount: {}
 }
 
 export default (state = initialState, action = {}) => {
   switch(action.type) {
     case SET_CURRENT_ACCOUNT:
       return {
-        isAuthenticated: action.account && !isEmpty(action.account.email),
-        account: action.account
+        isAuthenticated: action.currentAccount && !isEmpty(action.currentAccount.email),
+        currentAccount: action.currentAccount
       }
       
     default: return state

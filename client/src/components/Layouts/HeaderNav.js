@@ -30,7 +30,7 @@ class HeaderNav extends Component {
     })
 
     // Fetch Inbox conversations
-    this.props.fetchConversations('inbox')
+    //this.props.fetchConversations('inbox')
   }
 
    handleToggleBar = (e) => {
@@ -48,7 +48,7 @@ class HeaderNav extends Component {
   }
 
   render() {
-    const { isAuthenticated, account } = this.props.authentication
+    const { isAuthenticated, currentAccount } = this.props.authentication
     const { countUnread, conversations } = this.props.conversations
     
     let latestFiveUnreadMessages 
@@ -106,7 +106,7 @@ class HeaderNav extends Component {
             </div>
             <div className="ui medium dropdown item">
               <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-              {account.firstName}<i className="dropdown icon"></i>
+              {currentAccount.firstName}<i className="dropdown icon"></i>
               <div className="menu">
                 <a className="item">
                   <i className="tasks icon"></i>

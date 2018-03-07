@@ -122,7 +122,7 @@
         "postal_code": "Postal code",
         "region": "Region",
         "country": "Country",
-        "select_country": "Select country",
+        "select_country": "-Select country-",
         "select_region": "Select region"
       },
       "delete_account": "Delete this accout",
@@ -135,8 +135,8 @@
       "days": "*{days}* days",
       "edit": "Edit",
       "cancel": "Cancel",
-      "change_avatar": "Change avatar",
-      "change_logo": "Upload logo",
+      "select_avatar": "Select avatar",
+      "select_logo": "Select logo",
       "upload": "Upload",
       "form": {
         "success_update_account": "Account information updated!",

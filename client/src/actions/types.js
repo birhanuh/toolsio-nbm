@@ -10,8 +10,8 @@ export const ACCOUNT_UPDATED = 'ACCOUNT_UPDATED'
 // RECIPIENTS
 export const SET_USERS = 'SET_USERS'
 export const USER_UPDATED = 'USER_UPDATED'
+export const USER_FETCHED = 'USER_FETCHED'
 
-// SALES
 export const SET_SALES = 'SET_SALES'
 export const ADD_SALE = 'ADD_SALE'
 export const SALE_FETCHED = 'SALE_FETCHED'

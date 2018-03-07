@@ -261,6 +261,31 @@ nav.ui.menu {
   width: 100px;
 }
 
+// Account page
+.ui.user {
+  .ui.card {
+    box-shadow: none;
+  }
+  .ui.card > .image {
+    background: transparent;
+  }
+  .ui.card.image {
+    border: 1px solid $light-grey;
+  }
+}
+
+.ui.account {
+  .ui.card {
+    box-shadow: none;
+  }
+  .ui.card > .image {
+    background: transparent;
+  }
+  .ui.card .ui.image {
+    border: 1px solid $light-grey;
+  }
+}
+
 // Toggle styles
 .ui.visible.sidebar.collapsed {
   span {

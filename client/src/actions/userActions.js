@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { SET_USERS, USER_UPDATED } from './types'
+import { SET_USERS, USER_UPDATED, USER_FETCHED } from './types'
 
 export function setUsers(users) {
   return {
@@ -8,10 +8,26 @@ export function setUsers(users) {
   }
 }
 
+export function userFetched(user) {
+  return {
+    type: USER_FETCHED,
+    user
+  }
+}
+
 export function userUpdated(user) {
   return {
     type: USER_UPDATED,
     user
+  }
+}
+
+export function fetchUser(email) {
+  return dispatch => {
+    return axios.get(`/users/${email}`)
+      .then(res => {
+        dispatch(userFetched(res.data.result))
+      })
   }
 }
 
@@ -32,13 +48,16 @@ export function sendInvitation(email) {
 
 export function updateUser(user) {
   return dispatch => {
-    return axios.post('/users/account/update', user)
+    return axios.put(`/users/update/${user._id}`, user)
   }
 }
 
 export function s3SignAvatar(_id, variables) {
   return dispatch => {
-    return axios.put(`/users/update/${_id}`, variables)
+    return axios.put(`/users/update/avatar/${_id}`, variables).
+      then(res=> {
+        dispatch(userUpdated(res.data.result.url))
+      })
   }
 }
 

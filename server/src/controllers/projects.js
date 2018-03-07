@@ -62,7 +62,7 @@ export default {
 
     let id = req.params.id
     let body = req.body
-    console.log('body', body)
+
     Project.findByIdAndUpdate(id, body, {new: true}).populate([{ path: 'customer', select: 'name'}, { path: 'tasks'}, { path: 'invoice', select: '_id' }]).exec((err, project) => {
       if (err) {
         callback(err, null)

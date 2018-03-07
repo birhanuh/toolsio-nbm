@@ -37,7 +37,8 @@ export default function(ComposedComponent) {
 
   Authenticate.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    currentAccount: PropTypes.object.isRequired
   }
 
   Authenticate.contextTypes = {
@@ -46,7 +47,8 @@ export default function(ComposedComponent) {
 
   function mapStateToProps(state) {
     return {
-      isAuthenticated: state.authentication.isAuthenticated
+      isAuthenticated: state.authentication.isAuthenticated,
+      currentAccount: state.authentication.currentAccount
     }
   }
 

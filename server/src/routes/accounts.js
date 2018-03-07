@@ -30,8 +30,8 @@ router.get('/:subdomain', async (req, res) => {
 
 })
 
-// Upload to S3
-router.put('/:subdomain', async (req, res) => {
+// Update Account fields, Upload to S3
+router.put('/logo/:subdomain', async (req, res) => {
 
   let variables = req.body.variables
 
@@ -63,7 +63,7 @@ router.put('/:subdomain', async (req, res) => {
  
   Account.findOne({ subdomain: req.params.subdomain }).exec((err, account) => {
     if (err) {
-      console(err)
+      console.log(err)
       return
     } 
 

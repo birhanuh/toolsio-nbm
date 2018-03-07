@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 require('babel-polyfill')
 import { Link } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { InputField } from '../../utils/FormFields'
 import classnames from 'classnames'
@@ -27,8 +28,8 @@ class UserForm extends Component {
       _id: this.props.user ? this.props.user._id : null,
       firstName: this.props.user ? this.props.user.firstName : '',
       lastName: this.props.user ? this.props.user.lastName : '',
-      password: '',
-      confirmPassword: '',
+      password: this.props.user ? this.props.user.password : '',
+      confirmPassword: this.props.user ? this.props.user.confirmPassword : '',
       avatar: this.props.user ? this.props.user.avatar : '',
       file: '',
       errors: {
@@ -36,13 +37,25 @@ class UserForm extends Component {
           errors: {}
         }
       },
-      isChange: false,
       isLoading: false
     }
   }
   
-  componentDidMount() {
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.user) {
+      this.setState({
+        _id: nextProps.user._id,
+        firstName: nextProps.user.firstName,
+        lastName: nextProps.user.lastName,
+        password: nextProps.user.password,
+        confirmPassword: nextProps.user.confirmPassword,
+        avatar: nextProps.user.avatar,
+      })
+    }
+  }
 
+  componentDidMount() {
+     console.log('user ', this.props.user)
     $('.ui.card .image').dimmer({
       on: 'hover'
     })
@@ -88,47 +101,72 @@ class UserForm extends Component {
     }  
   }
 
+  uploadToS3 = async (file, signedRequest) => {
+
+    const options = {
+      headers: {
+        "Content-Type": file.type
+      }
+    }
+    
+    await this.props.uploadAvatar(signedRequest, file, options)
+  }
+
   formatFileName = filename => {
     const date = moment().format("DDMMYYYY")
     const randomString = Math.random()
       .toString(36)
       .substring(2, 7)
     const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-")
-    const newFileName = `images/${date}-${randomString}-${cleanFileName}`
+    const newFileName = `logos/${date}-${randomString}-${cleanFileName}`
     return newFileName.substring(0, 60)
   }
 
-  handleImageUpload = (e) => {
-    e.preventDefault()
+  handleOnDrop = async files => {
 
     this.setState({
-      [e.target.name]: e.target.value
+      'file': files[0]
     })
   }
 
+  handleSubmitImage = async () => {
+    const { _id, file } = this.state
+    const response = await this.props.s3SignAvatar(_id, {
+      variables: {
+        filename: this.formatFileName(file.name),
+        filetype: file.type
+      }
+    })
+
+    const { signedRequest, url } = response.data.result
+    await this.uploadToS3(file, signedRequest)
+  }
+
   render() {
-    const { _id, firstName, lastName, avatar, password, confirmPassword, errors, isChange, isLoading } = this.state
-   
+    const { _id, firstName, lastName, avatar, password, confirmPassword, errors, isLoading } = this.state
+    
     return (            
 
       <div className="twelve wide column"> 
-        <div className="ui items segment">
+        <div className="ui items segment user">
           <div className="ui item">    
             <div className="image">
-              <div className="ui card">
+              <div className="ui card circular image">
                 <div className="blurring dimmable image">
                   <div className="ui dimmer">
                     <div className="content">
                       <div className="center">
-                        <input type="file" name="file" className="ui inverted button" onChange={this.handleImageUpload.bind(this)} />
+                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ui inverted button">
+                          {T.translate("account.page.select_avatar")}
+                        </Dropzone>
                       </div>
                     </div>
                   </div>
-                  <img className="ui image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
+                  <img src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
                 </div>
               </div>
 
-              <button disabled={isChange} className="ui primary centered aligned button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
+              <button disabled={isLoading} onClick={this.handleSubmitImage.bind(this)} className="fluid ui primary button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
              
             </div>
             <div className="content">                
@@ -200,8 +238,9 @@ class UserForm extends Component {
 UserForm.propTypes = {
   updateUser: PropTypes.func.isRequired,
   uploadAvatar: PropTypes.func.isRequired,
+  s3SignAvatar: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object
 }
 
 // Contexttype definition

@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
+import AWS from 'aws-sdk'
 
 // Config
 import config from '../config'
@@ -162,8 +163,8 @@ router.post('/register', async (req, res) => {
 
 // Get user by email
 router.get('/:email', (req, res) => {
-  User.find({ email: req.params.email }).then(user => {
-    res.json( { user }) 
+  User.findOne({ email: req.params.email }).then(user => {
+    res.json( { result: user }) 
   })
 })
 
@@ -324,6 +325,42 @@ router.post('/logout', function(req, res) {
     }
     res.json({ success: true })
   })
+})
+
+// Update User fields, Upload to S3
+router.put('/update/avatar/:id', async (req, res) => {
+
+  let variables = req.body.variables
+
+  const s3Bucket = new AWS.S3({
+    signatureVersion: 'v4',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    Bucket: process.env.S3_BUCKET,
+    region: 'eu-central-1'
+  })
+
+  const s3Params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: variables.filename,
+    Expires: 60,
+    ContentType: variables.filetype,
+    ACL: 'public-read'
+  }
+
+  const signedRequest = await s3Bucket.getSignedUrl('putObject', s3Params)
+  const url = `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${variables.filename}`
+   
+  User.findByIdAndUpdate(req.params.id, {avatar: url}, (err, user) => {
+    if (err) {
+      console.log(err)
+      return
+    }
+
+    console.log('avatar field updated', user)
+  })
+
+  res.json( { result: {signedRequest: signedRequest, url: url} }) 
 })
 
 passport.serializeUser(function(user, done) {

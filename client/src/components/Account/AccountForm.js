@@ -48,7 +48,6 @@ class AccountForm extends Component {
           errors: {}
         }
       },
-      isChange: false,
       isLoading: false
     }
   }
@@ -177,7 +176,7 @@ class AccountForm extends Component {
   }
 
   uploadToS3 = async (file, signedRequest) => {
-    console.log('type ', file.type)
+
     const options = {
       headers: {
         "Content-Type": file.type
@@ -218,12 +217,12 @@ class AccountForm extends Component {
   }
 
   render() {
-    const { _id, subdomain, industry, logo, contact, address, errors, isChange, isLoading } = this.state
+    const { _id, subdomain, industry, logo, contact, address, errors, isLoading } = this.state
 
     return ( 
 
       <div className="twelve wide column"> 
-        <div className="ui items segment">
+        <div className="ui items segment account">
           <div className="ui item">    
             <div className="image">
               <div className="ui card">
@@ -231,17 +230,17 @@ class AccountForm extends Component {
                   <div className="ui dimmer">
                     <div className="content">
                       <div className="center">
-                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false}>
-                          <p>{T.translate("account.page.change_logo")}</p>
+                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ui inverted button">
+                          {T.translate("account.page.select_logo")}
                         </Dropzone>
                       </div>
                     </div>
                   </div>
-                  <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
+                  <img className="ui rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
                 </div>
               </div>
 
-              <button disabled={isChange} className="ui primary centered aligned button" onClick={this.handleSubmitImage.bind(this)}><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
+              <button disabled={isLoading} className="fluid ui primary button" onClick={this.handleSubmitImage.bind(this)}><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
             </div>
             <div className="content">
               <h1 className="ui header">{T.translate("account.page.account")}</h1>
@@ -364,6 +363,7 @@ class AccountForm extends Component {
 
 AccountForm.propTypes = {
   updateAccount: PropTypes.func.isRequired,
+  s3SignLogo: PropTypes.func.isRequired,
   uploadLogo: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   account: PropTypes.object
