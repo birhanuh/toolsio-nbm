@@ -29,7 +29,11 @@ const transporter = nodemailer.createTransport({
 })
 
 router.post('/register', async (req, res) => {
+
   const { account, user } = req.body
+
+  // Assign empty default values for mongoose capablity to return all fields 
+  //let updatedAccount = Object.assign({}, account, {contact: {email: '', phoneNumber: ''}, address: { street: '', postalCode: '', region: '', country: '' }, logo: ''})
 
   if (account) {
     const accountCreated = await Account.create(account)
@@ -43,20 +47,7 @@ router.post('/register', async (req, res) => {
 
     let userCreated = await User.create(user)
 
-    // Push associated userCreated
-    if (userCreated) {
-      accountCreated.users.push(userCreated._id)
-      accountCreated.save()
-        .then(account => {
-          console.log('user pushed to new account', account)
-        })
-        .catch(err => 
-          console.log('new account err', err)
-        )
-    } else {
-      console.log('userCreated is null')
-    }  
-
+    // Login userCreated
     req.login(userCreated, function(err) {
       
       if (err) {
@@ -70,7 +61,7 @@ router.post('/register', async (req, res) => {
       }
       res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
         admin: userCreated.admin, subdomain: accountCreated.subdomain })
-    })
+    }) 
 
     // Create emailToken
     jwt.sign({
@@ -162,8 +153,19 @@ router.post('/register', async (req, res) => {
 })
 
 // Get user by email
-router.get('/:email', (req, res) => {
+router.get('/:email', async (req, res) => {
+
+  // Connect to subdomain db
+  if (req.headers.subdomain) {
+    if (env === 'development') {
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
+    } else if (env === 'test') {
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
+    }
+  }
+
   User.findOne({ email: req.params.email }).then(user => {
+
     res.json( { result: user }) 
   })
 })
@@ -390,7 +392,7 @@ router.put('/update/:id', async (req, res) => {
     console.log('Deleted from s3Bucket', data)
   })
   
-  User.findByIdAndUpdate(req.params.id, req.body, {new: true}).exec((err, user) => {
+  User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, user) => {
     if (err) {
       console.log('err', err)
       return

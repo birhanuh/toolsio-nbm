@@ -29,8 +29,8 @@ class UserForm extends Component {
       firstName: this.props.user ? this.props.user.firstName : '',
       lastName: this.props.user ? this.props.user.lastName : '',
       password: this.props.user ? this.props.user.password : '',
-      confirmPassword: this.props.user ? this.props.user.confirmPassword : '',
-      avatar: this.props.user ? this.props.user.avatar : '',
+      confirmPassword: '',
+      avatar: '',
       file: '',
       errors: {
         message: {
@@ -41,22 +41,9 @@ class UserForm extends Component {
       isLoadingForm: false
     }
   }
-  
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.user) {
-      this.setState({
-        _id: nextProps.user._id,
-        firstName: nextProps.user.firstName,
-        lastName: nextProps.user.lastName,
-        password: nextProps.user.password,
-        confirmPassword: nextProps.user.confirmPassword,
-        avatar: nextProps.user.avatar,
-      })
-    }
-  }
 
   componentDidMount() {
-     console.log('user ', this.props.user)
+    
     $('.ui.card .image').dimmer({
       on: 'hover'
     })
@@ -164,8 +151,9 @@ class UserForm extends Component {
   }
 
   render() {
+
     const { _id, firstName, lastName, avatar, password, confirmPassword, errors, isLoadingAvatar, isLoadingForm } = this.state
-    
+  
     return (            
 
       <div className="twelve wide column"> 

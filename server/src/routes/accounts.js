@@ -91,7 +91,7 @@ router.put('/update/:id', async (req, res) => {
     console.log('Deleted from s3Bucket', data)
   })
   
-  Account.findByIdAndUpdate(req.params.id, req.body, {new: true}).exec((err, account) => {
+  Account.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, account) => {
     if (err) {
       console.log('err', err)
       return

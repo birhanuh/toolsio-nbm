@@ -47,7 +47,7 @@ class Form extends Component {
     }  
   }
 
-  checkAccountExist(e) {
+  checkAccountAndEmailExist(e) {
     const field = e.target.name
     const val = e.target.value
     if (val !== '') {
@@ -69,36 +69,8 @@ class Form extends Component {
         if (res.data.result === null) {
           errors[field] = ''
           invalid = false
-
-          // Then check for user email in this account
-          this.checkUserExist(this.state.user.email)
         }
 
-        this.setState({ errors, invalid })
-      })
-    }
-  }
-
-  checkUserExist(e) {
-    const field = e.target ? e.target.name : 'email'
-    const val = e.target ? e.target.value : e
-    if (val !== '') {
-      this.props.isUserExist(val).then(res => {
-        let errors = this.state.errors
-        let invalid
-        if (res.data.user[0]) {
-          errors['message'] = {
-            errors: {
-              email: {
-                message: 'There is user with such '+field+ '.'
-              }  
-            }  
-          }
-          invalid = true
-        } else {
-          errors[field] = ''
-          invalid = false
-        }
         this.setState({ errors, invalid })
       })
     }
@@ -132,7 +104,7 @@ class Form extends Component {
             type: 'success',
             text: T.translate("sign_up.success_create")
           })
-          window.location = `http://${this.props.account.subdomain}.lvh.me:3000/login`
+          window.location = `http://${this.props.currentAccount.subdomain}.lvh.me:3000/login`
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )
@@ -173,7 +145,6 @@ class Form extends Component {
             id='email'
             label={T.translate("sign_up.email")}
             onChange={this.handleChange.bind(this)} 
-            onBlur={account && account.subdomain !== '' && this.checkUserExist.bind(this)} 
             placeholder={T.translate("sign_up.email")}
             error={errors.message && errors.message.errors && errors.message.errors['email'] && errors.message.errors['email'].message}
             formClass="field"
@@ -223,7 +194,7 @@ class Form extends Component {
             <label>{T.translate("sign_up.account.subdomain")}</label>
             <div className="ui right labeled input">
               <input type="text" name="subdomain" id="subdomain" placeholder={T.translate("sign_up.account.subdomain")} 
-                onBlur={this.checkAccountExist.bind(this)} value={account.subdomain} onChange={this.handleChange.bind(this)} />
+                onBlur={this.checkAccountAndEmailExist.bind(this)} value={account.subdomain} onChange={this.handleChange.bind(this)} />
               <div className="ui label">toolsio.com</div>  
             </div>
             <span className="red">{errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors.subdomain.message}</span>
@@ -252,7 +223,7 @@ Form.contextTypes = {
 
 function mapStateToProps(state) {
   return {
-    account: state.authentication && state.authentication.account
+    currentAccount: state.authentication && state.authentication.currentAccount
   } 
 }
 

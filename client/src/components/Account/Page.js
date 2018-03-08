@@ -32,14 +32,16 @@ class Page extends Component {
 
   render() {
     
+    const { account, user } = this.props
+    
     return (
       <div className="ui stackable grid account">  
 
         <Breadcrumb />
 
-          <AccountForm account={this.props.account} updateAccount={this.props.updateAccount} uploadLogo={this.props.uploadLogo} addFlashMessage={addFlashMessage} s3SignLogo={this.props.s3SignLogo} />
+          { account && account.address && account.contact && <AccountForm account={account} updateAccount={this.props.updateAccount} uploadLogo={this.props.uploadLogo} addFlashMessage={addFlashMessage} s3SignLogo={this.props.s3SignLogo} /> }
              
-          <UserForm user={this.props.user} updateUser={this.props.updateUser} uploadAvatar={this.props.uploadAvatar} addFlashMessage={addFlashMessage} s3SignAvatar={this.props.s3SignAvatar} />
+          { user && <UserForm user={user} updateUser={this.props.updateUser} uploadAvatar={this.props.uploadAvatar} addFlashMessage={addFlashMessage} s3SignAvatar={this.props.s3SignAvatar} /> }
 
       </div>  
     )
@@ -59,7 +61,7 @@ function mapSateToProps(state, props) {
   
   return {
     account: state.account,
-    user: state.users.find(item => item.email === currentAccount.email)
+    user: state.users && state.users.find(item => item.email === currentAccount.email)
   }
 }
 
