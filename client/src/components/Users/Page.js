@@ -15,8 +15,8 @@ class Page extends Component {
 
   render() {
 
-    const { users, account } = this.props
-    let usersNotCurrentUserIncluded = users.filter(user => user.email !== account.email)
+    const { users, currentAccount } = this.props
+    let usersNotCurrentUserIncluded = users.filter(user => user.email !== currentAccount.email)
 
     return (
       <div className="row column">  
@@ -43,7 +43,7 @@ Page.propTypes = {
 function mapSateToProps(state) {
   return {
     users: state.users,
-    account: state.authentication.account
+    currentAccount: state.authentication.currentAccount
   }
 }
 

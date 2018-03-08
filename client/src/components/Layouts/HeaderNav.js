@@ -148,7 +148,7 @@ class HeaderNav extends Component {
                 <Link className="ui inverted button"  to="/login">{T.translate("log_in.log_in")}</Link>     
               </div>
               <div className="item">   
-                <Link className="ui inverted button" to="http://lvh.me:3000/signup">{T.translate("sign_up.sign_up")}</Link>    
+                <a className="ui inverted button" href={process.env.HTP+process.env.DNS+"/signup"}>{T.translate("sign_up.sign_up")}</a>    
               </div>
             </div>  
           </div>
@@ -181,7 +181,7 @@ class HeaderNav extends Component {
 
               <div className="right item">                                                   
                 <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
-                <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>     
+                <a className="ui inverted button" href={process.env.HTP+process.env.DNS+"/signup"}>{T.translate("sign_up.sign_up")}</a>     
               </div>  
             </div>
           </div>

@@ -104,7 +104,7 @@ class Form extends Component {
             type: 'success',
             text: T.translate("sign_up.success_create")
           })
-          window.location = `http://${this.props.currentAccount.subdomain}.lvh.me:3000/login`
+          window.location = `${process.env.HTP}${this.props.currentAccount.subdomain}.${process.env.DNS}/login`
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )
