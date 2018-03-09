@@ -33,15 +33,15 @@ class TotalIncomeCard extends Component {
    
     return (    
     
-      <div className={classnames("ui card dashboards form", { loading: isLoading })}>
+      <div className={classnames("ui card dashboard form", { loading: isLoading })}>
         <div className="content">
           <h4 className="ui header body-color">
-            {T.translate("dashboards.total_income.header")}
+            {T.translate("dashboard.total_income.header")}
           </h4>
         </div>
         <div className="content" style={{display: 'table-cell', verticalAlign: 'middle', borderTop: 'none'}}>
           <h1 className="ui header green centered bold">{!!totalIncome ? '0' : (totalIncome && totalIncome.length !== 0 && totalIncome[0].sum)}</h1>
-          <div className="description center aligned">{T.translate("dashboards.total_income.description")}</div>
+          <div className="description center aligned">{T.translate("dashboard.total_income.description")}</div>
         </div>
       </div>
     )
@@ -55,7 +55,7 @@ TotalIncomeCard.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    totalIncome: state.dashboards.totalIncome
+    totalIncome: state.dashboard.totalIncome
   }
 }
 

@@ -1,10 +1,33 @@
 import axios from 'axios'
-import { SET_USERS } from './types'
+import { SET_USERS, USER_UPDATED, USER_FETCHED } from './types'
 
 export function setUsers(users) {
   return {
     type: SET_USERS,
     users
+  }
+}
+
+export function userFetched(user) {
+  return {
+    type: USER_FETCHED,
+    user
+  }
+}
+
+export function userUpdated(user) {
+  return {
+    type: USER_UPDATED,
+    user
+  }
+}
+
+export function fetchUser(email) {
+  return dispatch => {
+    return axios.get(`/users/${email}`)
+      .then(res => {
+        dispatch(userFetched(res.data.result))
+      })
   }
 }
 
@@ -20,5 +43,24 @@ export function fetchUsers() {
 export function sendInvitation(email) {
   return dispatch => {
     return axios.post('/users/account/invitation', email)
+  }
+}
+
+export function updateUser(user) {
+  return dispatch => {
+    return axios.put(`/users/update/${user._id}`, user)
+  }
+}
+
+export function s3SignAvatar(variables) {
+  return dispatch => {
+    return axios.post('/users/avatar/', variables)
+  }
+}
+
+// Save File to S3
+export function uploadAvatar(signedRequest, file, options) {
+  return dispatch => {
+    return axios.put(signedRequest, file, options)
   }
 }

@@ -3,18 +3,18 @@ import axios from 'axios'
 import { SET_CURRENT_ACCOUNT } from './types'
 
 // Action creators 
-export function setCurrentAccount(account) {
+export function setCurrentAccount(currentAccount) {
   return {
     type: SET_CURRENT_ACCOUNT,
-    account
+    currentAccount
   }
 }
 
 // Thunk actions
-export function signupRequest(accountAndUser) {
+export function signupRequest(accountUser) {
   return dispatch => {
-    return axios.post('/users/register', accountAndUser).then(res => {
-      localStorage.setItem('account', JSON.stringify(res.data))
+    return axios.post('/users/register', accountUser).then(res => {
+      localStorage.setItem('currentAccount', JSON.stringify(res.data))
       dispatch(setCurrentAccount(res.data))
     })
   }
@@ -37,7 +37,7 @@ export function loginRequest(data) {
     return axios.post('/users/login', data)
       .then(res => {
         //document.cookie = "_id="+res.data._id+"; firstName="+res.data.firstName+"; lastName="+res.data.firstName+"; email="+res.data.email+""
-        localStorage.setItem('account', JSON.stringify(res.data))
+        localStorage.setItem('currentAccount', JSON.stringify(res.data))
         dispatch(setCurrentAccount(res.data))
       })
   }
@@ -47,7 +47,7 @@ export function logout() {
   return dispatch => {
     return axios.post('/users/logout')
       .then(() => {        
-        localStorage.removeItem('account')
+        localStorage.removeItem('currentAccount')
         dispatch(setCurrentAccount({}))  
       })
   }

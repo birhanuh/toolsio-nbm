@@ -59,7 +59,7 @@ class Form extends Component {
             type: 'success',
             text: 'You have signed in successfully!'
           })
-          this.context.router.history.push('/dashboards')
+          this.context.router.history.push('/dashboard')
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )  

@@ -43,7 +43,7 @@ class SaleTasks extends Component {
       if (task._id === 'new') {
         newNotification = (<div key={task._id} className="ui info message">
             <div className="description">
-              {T.translate("dashboards.sale_tasks.new_sales", {count: task.count})}
+              {T.translate("dashboard.sale_tasks.new_sales", {count: task.count})}
             </div>
           </div>
           )
@@ -54,7 +54,7 @@ class SaleTasks extends Component {
       } else if (task._id !== 'new') {
         newNotification = (<div key={"no-new"} className="ui info message">
             <div className="description">
-              {T.translate("dashboards.sale_tasks.no_new_sales")}
+              {T.translate("dashboard.sale_tasks.no_new_sales")}
             </div>
           </div>
           )
@@ -63,7 +63,7 @@ class SaleTasks extends Component {
       if (task._id === 'overdue') {
         overdueNotification = (<div key={task._id} className="ui negative message">
             <div className="description">
-              {T.translate("dashboards.sale_tasks.overdued_sales", {count: task.count})}
+              {T.translate("dashboard.sale_tasks.overdued_sales", {count: task.count})}
             </div>
           </div>
           )
@@ -74,7 +74,7 @@ class SaleTasks extends Component {
       } else if (task._id !== 'overdue') {
         overdueNotification = (<div key={"no-overdue"} className="ui negative message">
             <div className="description">
-              {T.translate("dashboards.sale_tasks.no_overdued_sales")}
+              {T.translate("dashboard.sale_tasks.no_overdued_sales")}
             </div>
           </div>
           )
@@ -99,15 +99,15 @@ class SaleTasks extends Component {
 
     return (
       
-      <div className={classnames("dashboards", { loading: isLoading })}>
-        <h4 className="ui header">{T.translate("dashboards.sale_tasks.header")}</h4>
+      <div className={classnames("dashboard", { loading: isLoading })}>
+        <h4 className="ui header">{T.translate("dashboard.sale_tasks.header")}</h4>
         <div className="ui card">
           
           {saleTasks && saleTasks.total && saleTasks.total.count === 0 ? 
             <div className="content">
               <div className="ui info message">
                 <div className="description">
-                  {T.translate("dashboards.sale_tasks.no_sales")}
+                  {T.translate("dashboard.sale_tasks.no_sales")}
                 </div>
               </div> 
             </div> : list }
@@ -125,7 +125,7 @@ SaleTasks.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    saleTasks: state.dashboards.saleTasks
+    saleTasks: state.dashboard.saleTasks
   }
 }
 

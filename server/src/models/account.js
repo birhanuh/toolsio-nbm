@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt'
 
 // Account Schema 
 const accountSchema = mongoose.Schema({
-  users: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
   subdomain: { type: String, required: [true, "Subdomain is required."] }, 
   industry: { type: String, required: [true, "Industry is required."] },
   address: {
@@ -13,20 +12,12 @@ const accountSchema = mongoose.Schema({
     country: { type: String }
   },
   contact: {
-    phoneNumber: { type: String, match: [/\d{6,14}/, "Wrong Phone number fromat."], validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} },
-    email: { type: String, match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Wrong Email fromat."], validate: { validator: contactValidator, message: 'Either Phone number or email should be filled.'} }
+    phoneNumber: { type: String, match: [/\d{6,14}/, "Wrong Phone number fromat."] },
+    email: { type: String, match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Wrong Email fromat."] }
   },
-  logo: { data: Buffer, contentType: String }
+  logo: { type: String }
 },{
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
 })
-
-function contactValidator() {
-  if (this.contact.phoneNumber === '' && this.contact.email === '') {
-    return false
-  } else {
-    return true
-  }
-}
 
 module.exports = mongoose.model('account', accountSchema)

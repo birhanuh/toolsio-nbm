@@ -261,6 +261,31 @@ nav.ui.menu {
   width: 100px;
 }
 
+// Account page
+.ui.user {
+  .ui.card {
+    box-shadow: none;
+  }
+  .ui.card > .image {
+    background: transparent;
+  }
+  .ui.card.image {
+    border: 1px solid $light-grey;
+  }
+}
+
+.ui.account {
+  .ui.card {
+    box-shadow: none;
+  }
+  .ui.card > .image {
+    background: transparent;
+  }
+  .ui.card .ui.image {
+    border: 1px solid $light-grey;
+  }
+}
+
 // Toggle styles
 .ui.visible.sidebar.collapsed {
   span {
@@ -468,16 +493,16 @@ nav.ui.menu .item>a {
   }
 }
 
-.ui.card.dashboards, .dashboards .ui.card {
+.ui.card.dashboard, .dashboard .ui.card {
   width: 100%;
   min-height: 315px;
 }
 
-.ui.card.dashboards > .image {
+.ui.card.dashboard > .image {
   background: #ffffff;
 }
 
-.ui.card.dashboards > .content-btn-outer-container {
+.ui.card.dashboard > .content-btn-outer-container {
   @extend .vertical-center-align-container;
   position: absolute;
   top: 0;

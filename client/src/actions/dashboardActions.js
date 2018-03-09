@@ -68,7 +68,7 @@ export function setInvoiceTasks(invoiceTasks) {
 // Thunk actions
 export function fetchTotalIncome() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=total-income')
+    return axios.get('/api/dashboard?type=total-income')
       .then(res => {
         dispatch(setTotalIncome(res.data.results))
       })
@@ -77,7 +77,7 @@ export function fetchTotalIncome() {
 
 export function fetchIncomes() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=incomes')
+    return axios.get('/api/dashboard?type=incomes')
       .then(res => {
         dispatch(setIncomes(res.data.results))
       })
@@ -86,7 +86,7 @@ export function fetchIncomes() {
 
 export function fetchProjects() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=projects')
+    return axios.get('/api/dashboard?type=projects')
       .then(res => {
         dispatch(setProjects(res.data.results))
       })
@@ -95,7 +95,7 @@ export function fetchProjects() {
 
 export function fetchSales() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=sales')
+    return axios.get('/api/dashboard?type=sales')
       .then(res => {
         dispatch(setSales(res.data.results))
       })
@@ -104,7 +104,7 @@ export function fetchSales() {
 
 export function fetchInvoices() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=invoices')
+    return axios.get('/api/dashboard?type=invoices')
       .then(res => {
         dispatch(setInvoices(res.data.results))
       })
@@ -113,7 +113,7 @@ export function fetchInvoices() {
 
 export function fetchCustomers() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=customers')
+    return axios.get('/api/dashboard?type=customers')
       .then(res => {
         dispatch(setCustomers(res.data.results))
       })
@@ -122,7 +122,7 @@ export function fetchCustomers() {
 
 export function fetchProjectTasks() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=project-tasks')
+    return axios.get('/api/dashboard?type=project-tasks')
       .then(res => {
         dispatch(setProjectTasks(res.data.results))
       })
@@ -131,7 +131,7 @@ export function fetchProjectTasks() {
 
 export function fetchSaleTasks() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=sale-tasks')
+    return axios.get('/api/dashboard?type=sale-tasks')
       .then(res => {
         dispatch(setSaleTasks(res.data.results))
       })
@@ -140,7 +140,7 @@ export function fetchSaleTasks() {
 
 export function fetchInvoiceTasks() {
   return dispatch => {
-    return axios.get('/api/dashboards?type=invoice-tasks')
+    return axios.get('/api/dashboard?type=invoice-tasks')
       .then(res => {
         dispatch(setInvoiceTasks(res.data.results))
       })

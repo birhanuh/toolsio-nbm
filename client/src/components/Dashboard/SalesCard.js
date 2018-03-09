@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component }  from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import { fetchProjects } from '../../actions/dashboardActions'
+import { fetchSales } from '../../actions/dashboardActions'
 
 import { RadialChart, Hint } from 'react-vis'
 
 // Localization 
 import T from 'i18n-react'
 
-class ProjectsCard extends Component {
+class SalesCard extends Component {
 
   state = {
     value: false,
@@ -18,49 +18,49 @@ class ProjectsCard extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.projects) {
+    if (nextProps.sales) {
       this.setState({ isLoading: false })
     }
   }
 
   componentDidMount = () => {
     this.setState({ isLoading: true })
-    this.props.fetchProjects()
+    this.props.fetchSales()
       .catch( ({response}) => this.setState({ isLoading: false }) )
   }
 
   render() {
 
     const { value, isLoading } = this.state
-    const { projects } = this.props
-   
-    const data = projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[1] && projects.lastTwoMonths[1].data.map(project => {
+    const { sales } = this.props
 
-      let projectStatusClass          
-      switch(project.status) {
+    const data = sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[1] && sales.lastTwoMonths[1].data.map(sale => {
+
+      let saleStatusClass          
+      switch(sale.status) {
         case 'new':
-          projectStatusClass = 'blue-graph'
+          saleStatusClass = 'blue-graph'
           break
         case 'in progress':
-          projectStatusClass = 'orange-graph'
+          saleStatusClass = 'orange-graph'
           break
         case 'overdue':
-          projectStatusClass = 'red-graph'
+          saleStatusClass = 'red-graph'
           break
-        case 'finished':
-          projectStatusClass = 'green-graph' 
+        case 'ready':
+          saleStatusClass = 'green-graph' 
           break
         case 'delivered':
-          projectStatusClass = 'turquoise-graph' 
+          saleStatusClass = 'turquoise-graph' 
           break
-        case 'delayed':
-          projectStatusClass = 'red-graph' 
-          break  
+         case 'delayed':
+          saleStatusClass = 'red-graph' 
+          break
         default:
-          projectStatusClass = 'undefined' 
+          saleStatusClass = 'undefined'
       }
 
-      return ({theta: project.count, status: project.status, className: ''+projectStatusClass+''})
+      return ({theta: sale.count, status: sale.status, className: ''+saleStatusClass+''})
       })
 
     const tooltipClass = {
@@ -71,18 +71,18 @@ class ProjectsCard extends Component {
       padding: '5px', 
       borderRadius: '5px'
     }
-    
+
     return (
-      <div className={classnames("ui card dashboards form", { loading: isLoading })}>
+      <div className={classnames("ui card dashboard form", { loading: isLoading })}>
         <div className="content">
           <div className="right floated">
             <h4 className="ui header">
-              <i className="suitcase icon"></i>
+              <i className="cart icon"></i>
             </h4>
           </div> 
           <div className="left floated">
             <h4 className="ui header">
-              {T.translate("dashboards.projects.header")}
+              {T.translate("dashboard.sales.header")}
             </h4>
           </div>       
         </div>
@@ -111,41 +111,42 @@ class ProjectsCard extends Component {
 
         <div className="content">
           <div className="right floated">
-            <div className="meta">{T.translate("dashboards.this_month")}</div>
+            <div className="meta">{T.translate("dashboard.this_month")}</div>
             <div className="header">
-              {projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[1] && projects.lastTwoMonths[1].totalCount}
-              {projects && projects.lastTwoMonths.length !== 0 && (projects.lastTwoMonths[0].totalCount > projects.lastTwoMonths[1] && projects.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
+              {sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[1] && sales.lastTwoMonths[1].totalCount}
+              {sales && sales.lastTwoMonths.length !== 0 && (sales.lastTwoMonths[0].totalCount > sales.lastTwoMonths[1] && sales.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
               <i className="long arrow up green icon"></i>}
             </div>
           </div>     
           <div className="left floated">
-            <div className="meta">{T.translate("dashboards.last_month")}</div>
-            <div className="header">{projects && projects.lastTwoMonths.length !== 0 && projects.lastTwoMonths[0].totalCount}</div>
+            <div className="meta">{T.translate("dashboard.last_month")}</div>
+            <div className="header">{sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[0].totalCount}</div>
           </div>    
         </div>
 
-        {projects && projects.total && projects.total.count === 0 &&  
+        {sales && sales.total && sales.total.count === 0 &&
           <div className="content-btn-outer-container">
             <div className="content-btn-inner-container">
-              <Link to="/projects" className="ui primary outline button small">
-                <i className="check circle outline icon"></i>{T.translate("dashboards.projects.create_first_project")}
+              <Link to="/sales" className="ui primary outline button small">
+                <i className="check circle outline icon"></i>{T.translate("dashboard.sales.create_first_sale")}
               </Link>
             </div>
           </div>
-        } 
+        }   
       </div> 
       )
-  }
+  }  
+
 }
 
-ProjectsCard.propTypes = {  
-  fetchProjects: PropTypes.func.isRequired
+SalesCard.propTypes = {
+  fetchSales: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
   return {
-    projects: state.dashboards.projects
+    sales: state.dashboard.sales
   }
 }
 
-export default connect(mapStateToProps, { fetchProjects }) (ProjectsCard)
+export default connect(mapStateToProps, { fetchSales }) (SalesCard)

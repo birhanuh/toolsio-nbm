@@ -43,7 +43,7 @@ class ProjectTasks extends Component {
       if (task._id === 'new') {
         newNotification = (<div key={task._id} className="ui info message">
             <div className="description">
-              {T.translate("dashboards.project_tasks.new_projects", {count: task.count})}
+              {T.translate("dashboard.project_tasks.new_projects", {count: task.count})}
             </div>
           </div>
           )
@@ -54,7 +54,7 @@ class ProjectTasks extends Component {
       } else if (task._id !== 'new') {
         newNotification = (<div key={"no-new"} className="ui info message">
             <div className="description">
-              {T.translate("dashboards.project_tasks.no_new_projects")}
+              {T.translate("dashboard.project_tasks.no_new_projects")}
             </div>
           </div>
           )
@@ -63,7 +63,7 @@ class ProjectTasks extends Component {
       if (task._id === 'overdue') {
         overdueNotification = (<div key={task._id} className="ui negative message">
             <div className="description">
-              {T.translate("dashboards.project_tasks.overdued_projects", {count: task.count})}
+              {T.translate("dashboard.project_tasks.overdued_projects", {count: task.count})}
             </div>
           </div>
           )
@@ -74,7 +74,7 @@ class ProjectTasks extends Component {
       } else if (task._id !== 'overdue') {
         overdueNotification = (<div key={"no-overdue"} className="ui negative message">
             <div className="description">
-              {T.translate("dashboards.project_tasks.no_overdued_projects")}
+              {T.translate("dashboard.project_tasks.no_overdued_projects")}
             </div>
           </div>
           )
@@ -99,15 +99,15 @@ class ProjectTasks extends Component {
 
     return (
       
-      <div className={classnames("dashboards", { loading: isLoading })}>
-        <h4 className="ui header">{T.translate("dashboards.project_tasks.header")}</h4>
+      <div className={classnames("dashboard", { loading: isLoading })}>
+        <h4 className="ui header">{T.translate("dashboard.project_tasks.header")}</h4>
         <div className="ui card">
           
           {projectTasks && projectTasks.total && projectTasks.total.count === 0 ? 
             <div className="content">
               <div className="ui info message">
                 <div className="description">
-                  {T.translate("dashboards.project_tasks.no_projects")}
+                  {T.translate("dashboard.project_tasks.no_projects")}
                 </div>
               </div> 
             </div> : list }
@@ -124,7 +124,7 @@ ProjectTasks.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    projectTasks: state.dashboards.projectTasks
+    projectTasks: state.dashboard.projectTasks
   }
 }
 

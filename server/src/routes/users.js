@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
+import AWS from 'aws-sdk'
 
 // Config
 import config from '../config'
@@ -28,6 +29,7 @@ const transporter = nodemailer.createTransport({
 })
 
 router.post('/register', async (req, res) => {
+
   const { account, user } = req.body
 
   if (account) {
@@ -42,19 +44,7 @@ router.post('/register', async (req, res) => {
 
     let userCreated = await User.create(user)
 
-    // Push associated userCreated
-    if (userCreated) {
-      accountCreated.save()
-        .then(account => {
-          account.users.push(userCreated._id)
-        })
-        .catch(err => 
-          console.log('new account err', err)
-        )
-    } else {
-      console.log('userCreated is null')
-    }  
-
+    // Login userCreated
     req.login(userCreated, function(err) {
       
       if (err) {
@@ -68,7 +58,7 @@ router.post('/register', async (req, res) => {
       }
       res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
         admin: userCreated.admin, subdomain: accountCreated.subdomain })
-    })
+    }) 
 
     // Create emailToken
     jwt.sign({
@@ -91,13 +81,6 @@ router.post('/register', async (req, res) => {
 
   if (req.headers.invitation) {
     const { account } = jwt.verify(req.headers.invitation, config.jwtSecret)
-    
-    // Connect to subdomain db
-    if (env === 'development') {
-      await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-    } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-    }
 
     const accountInvitedTo = await Account.findOne({ subdomain: account})
     
@@ -160,9 +143,20 @@ router.post('/register', async (req, res) => {
 })
 
 // Get user by email
-router.get('/:email', (req, res) => {
-  User.find({ email: req.params.email }).then(user => {
-    res.json( { user }) 
+router.get('/:email', async (req, res) => {
+
+  // Connect to subdomain db
+  if (req.headers.subdomain) {
+    if (env === 'development') {
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
+    } else if (env === 'test') {
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
+    }
+  }
+
+  User.findOne({ email: req.params.email }).then(user => {
+
+    res.json( { result: user }) 
   })
 })
 
@@ -325,6 +319,81 @@ router.post('/logout', function(req, res) {
   })
 })
 
+// Update User fields, Upload to S3
+router.post('/avatar', async (req, res) => {
+
+  let variables = req.body.variables
+
+  const s3Bucket = new AWS.S3({
+    signatureVersion: 'v4',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    Bucket: process.env.S3_BUCKET,
+    region: 'eu-central-1'
+  })
+
+  const s3Params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: variables.filename,
+    Expires: 60,
+    ContentType: variables.filetype,
+    ACL: 'public-read'
+  }
+
+  const signedRequest = await s3Bucket.getSignedUrl('putObject', s3Params)
+  const url = `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${variables.filename}`
+
+  res.json( { result: {signedRequest: signedRequest, url: url} }) 
+})
+
+// Update Account fields
+router.put('/update/:id', async (req, res) => {
+
+  const subdomain = req.headers.subdomain
+
+  // Connect to accounts db
+  if (env === 'development') {
+    await db.connect(process.env.DB_HOST+subdomain+process.env.DB_DEVELOPMENT)
+  } else if (env === 'test') {
+    await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
+  }
+  
+  let user = await User.findOne({ _id: req.params.id })
+  let previousUrl = user.avatar
+
+  const s3Bucket = new AWS.S3({
+    signatureVersion: 'v4',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    Bucket: process.env.S3_BUCKET,
+    region: 'eu-central-1'
+  })
+
+  const s3Params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: 'avatars'+previousUrl
+  }
+
+  s3Bucket.deleteObject(s3Params, (err, data) => {
+    if (err) {
+      console.log('err', err)
+      return
+    }
+    console.log('Deleted from s3Bucket', data)
+  })
+  
+  User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, user) => {
+    if (err) {
+      console.log('err', err)
+      return
+    } 
+
+    console.log('User updated', user)
+    res.json({ result: user })    
+  })
+ 
+})
+
 passport.serializeUser(function(user, done) {
   done(null, user._id)
 })
@@ -339,13 +408,6 @@ passport.use(new LocalStrategy({
             usernameField: 'email',
             passReqToCallback: true},
   async function(req, email, password, done) {
-
-    // Connect to subdomain db
-    if (env === 'development') {
-      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
-    } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
-    }
 
     User.getUserByEmail(email, function(err, user) {
       if (err) {

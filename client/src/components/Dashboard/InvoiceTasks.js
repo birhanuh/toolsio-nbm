@@ -43,7 +43,7 @@ class InvoiceTasks extends Component {
       if (task._id === 'pending') {
         pendingNotification = (<div key={task._id} className="ui info message">
             <div className="description">
-              {T.translate("dashboards.invoice_tasks.pending_invoices", {count: task.count})}
+              {T.translate("dashboard.invoice_tasks.pending_invoices", {count: task.count})}
             </div>
           </div>
           )
@@ -54,7 +54,7 @@ class InvoiceTasks extends Component {
       } else if (task._id !== 'pending' && task._id !== 'overdue') {
         pendingNotification = (<div key={"no-new"} className="ui info message">
             <div className="description">
-              {T.translate("dashboards.invoice_tasks.no_pending_invoices")}
+              {T.translate("dashboard.invoice_tasks.no_pending_invoices")}
             </div>
           </div>
           )
@@ -63,7 +63,7 @@ class InvoiceTasks extends Component {
       if (task._id === 'overdue') {
         overdueNotification = (<div key={task._id} className="ui negative message">
             <div className="description">
-              {T.translate("dashboards.invoice_tasks.overdued_invoices", {count: task.count})}
+              {T.translate("dashboard.invoice_tasks.overdued_invoices", {count: task.count})}
             </div>
           </div>
           )
@@ -74,7 +74,7 @@ class InvoiceTasks extends Component {
       } else if (task._id !== 'overdue' && task._id !== 'pending') {
         overdueNotification = (<div key={"no-overdue"} className="ui negative message">
             <div className="description">
-              {T.translate("dashboards.invoice_tasks.no_overdued_invoices")}
+              {T.translate("dashboard.invoice_tasks.no_overdued_invoices")}
             </div>
           </div>
           )
@@ -99,15 +99,15 @@ class InvoiceTasks extends Component {
 
     return (
       
-      <div className={classnames("dashboards form", { loading: isLoading })}>
-        <h4 className="ui header">{T.translate("dashboards.invoice_tasks.header")}</h4>
+      <div className={classnames("dashboard form", { loading: isLoading })}>
+        <h4 className="ui header">{T.translate("dashboard.invoice_tasks.header")}</h4>
         <div className="ui card">
           
           {invoiceTasks && invoiceTasks.total && invoiceTasks.total.count === 0 ? 
             <div className="content">
               <div className="ui info message">
                 <div className="description">
-                  {T.translate("dashboards.invoice_tasks.no_invoices")}
+                  {T.translate("dashboard.invoice_tasks.no_invoices")}
                 </div>
               </div> 
             </div> : list }
@@ -124,7 +124,7 @@ InvoiceTasks.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    invoiceTasks: state.dashboards.invoiceTasks
+    invoiceTasks: state.dashboard.invoiceTasks
   }
 }
 

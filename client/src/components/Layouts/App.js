@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
 
-import Dashboards from '../Dashboards/Page'
+import Dashboard from '../Dashboard/Page'
 import Landing from './Landing'
 import Signup from '../Signup/Page'
 import Login from '../Login/Page'
 import Subdomain from '../Login/Subdomain'
 import requireAuth from '../../utils/requireAuth'
+import Account from '../Account/Page'
 import ProjectsPage from '../Projects/Page'
 import ProjectsFormPage from '../Projects/FormPage'
 import ProjectsShow from '../Projects/Show'
@@ -76,7 +77,8 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route exact path="/login/confirmation/:token" component={Login} />
               <Route path="/subdomain" component={Subdomain} />
-              <Route path="/dashboards" component={requireAuth(Dashboards)} />
+              <Route path="/dashboard" component={requireAuth(Dashboard)} />
+              <Route exact path="/account" component={requireAuth(Account)} />
               <Route exact path="/projects" component={requireAuth(ProjectsPage)} />
               <Route exact path="/projects/edit/:id" component={requireAuth(ProjectsFormPage)} /> 
               <Route exact path="/projects/show/:id" component={requireAuth(ProjectsShow)} />

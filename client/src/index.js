@@ -29,10 +29,10 @@ const store = createStore(
 let subdomain =  Authorization.getSubdomain()
 subdomain && Authorization.setSubdomain(subdomain)
 
-if (localStorage.account) {
+if (localStorage.currentAccount) {
   // Retrieve the object from storage
-  var account = localStorage.getItem('account')
-  store.dispatch(setCurrentAccount(JSON.parse(account)))
+  var currentAccount = localStorage.getItem('currentAccount')
+  store.dispatch(setCurrentAccount(JSON.parse(currentAccount)))
 }
 console.log('cookie: ', document.cookie)
 // Localization setup

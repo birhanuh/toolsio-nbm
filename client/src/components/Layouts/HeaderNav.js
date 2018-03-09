@@ -48,7 +48,7 @@ class HeaderNav extends Component {
   }
 
   render() {
-    const { isAuthenticated, account } = this.props.authentication
+    const { isAuthenticated, currentAccount } = this.props.authentication
     const { countUnread, conversations } = this.props.conversations
     
     let latestFiveUnreadMessages 
@@ -69,7 +69,7 @@ class HeaderNav extends Component {
         <nav className="ui fixed stackable menu">
           <div className="left menu">
             <div className="logo item">
-              <Link to="/dashboards">
+              <Link to="/dashboard">
                 <img src={logoInverted} alt="logo-inverted" />
               </Link>
             </div>
@@ -106,17 +106,17 @@ class HeaderNav extends Component {
             </div>
             <div className="ui medium dropdown item">
               <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-              {account.firstName}<i className="dropdown icon"></i>
+              {currentAccount.firstName}<i className="dropdown icon"></i>
               <div className="menu">
                 <a className="item">
                   <i className="tasks icon"></i>
                   {T.translate("internal_navigation.tasks")}
                   <div className="ui right floated blue label">1</div>
                 </a>
-                <a className="item">
+                <Link to="/account" className="item">
                   <i className="settings icon"></i>
                   {T.translate("internal_navigation.settings")}
-                </a>
+                </Link>
                 <div className="divider"></div>
                 <a className="item" to="#" onClick={this.logout.bind(this)} >
                   <i className="sign out icon"></i>
@@ -148,7 +148,7 @@ class HeaderNav extends Component {
                 <Link className="ui inverted button"  to="/login">{T.translate("log_in.log_in")}</Link>     
               </div>
               <div className="item">   
-                <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+                <a className="ui inverted button" href={process.env.HTP+process.env.DNS+"/signup"}>{T.translate("sign_up.sign_up")}</a>    
               </div>
             </div>  
           </div>
@@ -181,7 +181,7 @@ class HeaderNav extends Component {
 
               <div className="right item">                                                   
                 <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
-                <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>     
+                <a className="ui inverted button" href={process.env.HTP+process.env.DNS+"/signup"}>{T.translate("sign_up.sign_up")}</a>     
               </div>  
             </div>
           </div>

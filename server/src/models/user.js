@@ -13,7 +13,7 @@ const UserSchema = new Schema({
   password: { type: String, required: [true, "Password is required."] },
   confirmed: { type: Boolean, default: false },
   admin: { type: Boolean, default: false },
-  avatar: { data: Buffer, contentType: String },
+  avatar: { type: String },
   meta: {
     age: Number,
     gender: String
