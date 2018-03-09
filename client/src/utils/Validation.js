@@ -25,14 +25,14 @@ export default {
         message: T.translate("sign_up.password_required")
       } 
     }
-    if (!data.user.confirmPassword) {
-      errors["confirmPassword"] = {
+    if (!data.user.confirm_password) {
+      errors["confirm_password"] = {
         message: T.translate("sign_up.password_confirmation_required")
       }
     }
-    if (data.user.password && data.confirmPassword) {
-      if (!Validator.equals(data.password, data.confirmPassword)) {
-        errors["confirmPassword"] = {
+    if (data.user.password && data.confirm_password) {
+      if (!Validator.equals(data.password, data.confirm_password)) {
+        errors["confirm_password"] = {
           message: T.translate("sign_up.password_match_required")
         } 
       }
@@ -73,14 +73,14 @@ export default {
         message: T.translate("sign_up.password_required")
       } 
     }
-    if (!data.user.confirmPassword) {
-      errors["confirmPassword"] = {
+    if (!data.user.confirm_password) {
+      errors["confirm_password"] = {
         message: T.translate("sign_up.password_confirmation_required")
       }
     }
-    if (data.user.password && data.confirmPassword) {
-      if (!Validator.equals(data.password, data.confirmPassword)) {
-        errors["confirmPassword"] = {
+    if (data.user.password && data.confirm_password) {
+      if (!Validator.equals(data.password, data.confirm_password)) {
+        errors["confirm_password"] = {
           message: T.translate("sign_up.password_match_required")
         } 
       }
@@ -120,14 +120,14 @@ export default {
         message: T.translate("sign_up.password_required")
       } 
     }
-    if (!data.user.confirmPassword) {
-      errors["confirmPassword"] = {
+    if (!data.user.confirm_password) {
+      errors["confirm_password"] = {
         message: T.translate("sign_up.password_confirmation_required")
       }
     }
-    if (data.user.password && data.confirmPassword) {
-      if (!Validator.equals(data.password, data.confirmPassword)) {
-        errors["confirmPassword"] = {
+    if (data.user.password && data.confirm_password) {
+      if (!Validator.equals(data.password, data.confirm_password)) {
+        errors["confirm_password"] = {
           message: T.translate("sign_up.password_match_required")
         } 
       }

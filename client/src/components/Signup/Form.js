@@ -17,11 +17,11 @@ class Form extends Component {
         industry: ''
       },
       user: {
-        firstName: '',
-        lastName: '',
+        first_name: '',
+        last_name: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirm_password: ''
       },
       errors: {
         message: {
@@ -39,8 +39,8 @@ class Form extends Component {
         account: { ...this.state.account, [e.target.name]: e.target.value }
       })
     }
-    else if (e.target.name === "firstName" || e.target.name === "lastName" || e.target.name === "email"
-        || e.target.name === "password" || e.target.name === "confirmPassword") {
+    else if (e.target.name === "first_name" || e.target.name === "last_name" || e.target.name === "email"
+        || e.target.name === "password" || e.target.name === "confirm_password") {
       this.setState({
         user: { ...this.state.user, [e.target.name]: e.target.value }
       })
@@ -121,19 +121,19 @@ class Form extends Component {
           { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
           
           <InputField
-            id='firstName'
+            id='first_name'
             label={T.translate("sign_up.first_name")}
-            name="firstName" 
-            value={user.firstName} 
+            name="first_name" 
+            value={user.first_name} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.first_name")}
             formClass="field"
           />
           <InputField
-            id='lastName'
+            id='last_name'
             label={T.translate("sign_up.last_name")}
-            name="lastName" 
-            value={user.lastName} 
+            name="last_name" 
+            value={user.last_name} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.last_name")}
             formClass="field"
@@ -162,13 +162,13 @@ class Form extends Component {
           />
           <InputField
             type="password"
-            name="confirmPassword" 
-            value={user.confirmPassword} 
-            id="confirmPassword"
+            name="confirm_password" 
+            value={user.confirm_password} 
+            id="confirm_password"
             label={T.translate("sign_up.confirm_password")}
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.confirm_password")}
-            error={errors.confirmPassword}
+            error={errors.confirm_password}
             formClass="field"
           />
           <SelectField

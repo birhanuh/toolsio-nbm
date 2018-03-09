@@ -30,40 +30,39 @@ const transporter = nodemailer.createTransport({
 
 router.post('/register', async (req, res) => {
 
-  const { account, user } = req.body
+  const { subdomain, industry } = req.body.account
+  const { first_name, last_name, email, password } = req.body.user
 
-  if (account) {
-    const accountCreated = await Account.create(account)
+  if (subdomain) {
+    //const accountCreated = await Account.create(account)
+    console.log('account ', subdomain +' x '+industry)
+    //let userCreated = await User.create(user)
+    //let userCreated = await User.forge({ user }, { hasTimestamps: true })
+    User.forge({ account: subdomain, first_name, last_name, email, password }, { hasTimestamps: true }).save()
+      .then(user => console.log('user ', user))
+      .catch(err => console.log('err ', err))
 
-    // Connect to subdomain db
-    if (env === 'development') {
-      await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_DEVELOPMENT)
-    } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+accountCreated.subdomain+process.env.DB_TEST)
-    }
-
-    let userCreated = await User.create(user)
-
-    // Login userCreated
-    req.login(userCreated, function(err) {
+     
+    // // Login userCreated
+    // req.login(userCreated, function(err) {
       
-      if (err) {
-        res.status(500).json({ 
-          errors: {
-            confirmation: 'fail',
-            message: err
-          }
-        })
-        return
-      }
-      res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
-        admin: userCreated.admin, subdomain: accountCreated.subdomain })
-    }) 
+    //   if (err) {
+    //     res.status(500).json({ 
+    //       errors: {
+    //         confirmation: 'fail',
+    //         message: err
+    //       }
+    //     })
+    //     return
+    //   }
+    //   res.json({ id: userCreated.id, firstName: userCreated.first_name, lastName: userCreated.last_name, email: userCreated.email, 
+    //     admin: userCreated.admin, account: userCreated.account })
+    //}) 
 
     // Create emailToken
     jwt.sign({
-      id: userCreated._id,
-      email: userCreated.email
+      id: user._id,
+      email: user.email
     }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
       if (err) {
         console.log('err token: ', err)
@@ -72,7 +71,7 @@ router.post('/register', async (req, res) => {
       const url = `http://${accountCreated}.lvh.me:3000/login/confirmation/${emailToken}`
 
       transporter.sendMail({
-        to: userCreated.email,
+        to: user.email,
         subject: 'Confirm Email (Toolsio)',
         html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
       })
