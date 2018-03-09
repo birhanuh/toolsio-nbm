@@ -30,17 +30,17 @@ class AccountForm extends Component {
     this.state = {
       _id: this.props.account ? this.props.account._id : null,
       subdomain: this.props.account ? this.props.account.subdomain : '',
-      logo: this.props.account ? this.props.account.logo : '',
+      logo: this.props.account ? (this.props.account ? this.props.account.logo : '') : '',
       industry: this.props.account ? this.props.account.industry : '',
       address: {
-        street: this.props.account.address ? this.props.account.address.street : '',
-        postalCode: this.props.account.address ? this.props.account.address.postalCode : '',
-        region: this.props.account.address ? this.props.account.address.region : '',
-        country: this.props.account.address ? this.props.account.address.country : ''
+        street: this.props.account ? (this.props.account.address ? this.props.account.address.street : '') : '',
+        postalCode: this.props.account ? (this.props.account.address ? this.props.account.address.postalCode : '') : '',
+        region: this.props.account ? (this.props.account.address ? this.props.account.address.region : '') : '',
+        country: this.props.account ? (this.props.account.address ? this.props.account.address.country : '') : ''
       },
       contact: {
-        phoneNumber: this.props.account.contact ? this.props.account.contact.phoneNumber : '',
-        email: this.props.account.contact ? this.props.account.contact.email : ''
+        phoneNumber: this.props.account ? (this.props.account.contact ? this.props.account.contact.phoneNumber : '') : '',
+        email: this.props.account ? (this.props.account.contact ? this.props.account.contact.email : '') : ''
       },
       file: null,
       errors: {
@@ -53,6 +53,27 @@ class AccountForm extends Component {
     }
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.account) {
+      this.setState({
+        _id: nextProps.account._id,
+        subdomain: nextProps.account.subdomain,
+        logo: nextProps.account.logo,
+        industry: nextProps.account.industry,
+        address: {
+          street: nextProps.account.address && nextProps.account.address.street,
+          postalCode: nextProps.account.address && nextProps.account.address.postalCode,
+          region: nextProps.account.address && nextProps.account.address.region,
+          country: nextProps.account.address && nextProps.account.address.country
+        },
+        contact: {
+          phoneNumber: nextProps.account.contact && nextProps.account.contact.phoneNumber,
+          email: nextProps.account.contact && nextProps.account.contact.email
+        }
+      })
+    }
+  }
+  
   componentDidMount() {
 
     $('.ui.card .image').dimmer({
@@ -219,7 +240,7 @@ class AccountForm extends Component {
 
   render() {
     const { _id, subdomain, industry, logo, contact, address, errors, isLoadingLogo, isLoadingForm } = this.state
-
+    console.log('sdfsdf ', industry ? industry : '-')
     return ( 
 
       <div className="twelve wide column"> 

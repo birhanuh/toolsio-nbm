@@ -30,7 +30,7 @@ class HeaderNav extends Component {
     })
 
     // Fetch Inbox conversations
-    //this.props.fetchConversations('inbox')
+    this.props.fetchConversations('inbox')
   }
 
    handleToggleBar = (e) => {

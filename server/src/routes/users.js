@@ -32,9 +32,6 @@ router.post('/register', async (req, res) => {
 
   const { account, user } = req.body
 
-  // Assign empty default values for mongoose capablity to return all fields 
-  //let updatedAccount = Object.assign({}, account, {contact: {email: '', phoneNumber: ''}, address: { street: '', postalCode: '', region: '', country: '' }, logo: ''})
-
   if (account) {
     const accountCreated = await Account.create(account)
 
@@ -84,13 +81,6 @@ router.post('/register', async (req, res) => {
 
   if (req.headers.invitation) {
     const { account } = jwt.verify(req.headers.invitation, config.jwtSecret)
-    
-    // Connect to subdomain db
-    if (env === 'development') {
-      await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-    } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-    }
 
     const accountInvitedTo = await Account.findOne({ subdomain: account})
     
@@ -418,13 +408,6 @@ passport.use(new LocalStrategy({
             usernameField: 'email',
             passReqToCallback: true},
   async function(req, email, password, done) {
-
-    // Connect to subdomain db
-    if (env === 'development') {
-      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
-    } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
-    }
 
     User.getUserByEmail(email, function(err, user) {
       if (err) {

@@ -39,7 +39,7 @@ class Page extends Component {
 
         <Breadcrumb />
 
-          { account && account.address && account.contact && <AccountForm account={account} updateAccount={this.props.updateAccount} uploadLogo={this.props.uploadLogo} addFlashMessage={addFlashMessage} s3SignLogo={this.props.s3SignLogo} /> }
+          { account && <AccountForm account={account} updateAccount={this.props.updateAccount} uploadLogo={this.props.uploadLogo} addFlashMessage={addFlashMessage} s3SignLogo={this.props.s3SignLogo} /> }
              
           { user && <UserForm user={user} updateUser={this.props.updateUser} uploadAvatar={this.props.uploadAvatar} addFlashMessage={addFlashMessage} s3SignAvatar={this.props.s3SignAvatar} /> }
 

@@ -111,6 +111,7 @@
       "url": "URL",
       "subdomain": "Subdomain",
       "industry": "Industry",
+      "select_industry": "-Select Industry-",
       "contact": {
         "header": "Contacts",
         "phone_number": "Phone number",

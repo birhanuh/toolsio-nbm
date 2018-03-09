@@ -52,6 +52,13 @@ app.use(async (req, res, next) => {
       await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
       console.log('Middleware with no mount path')
     }
+  } else {
+    // Connect to mognodb
+    if (env === 'development') {
+      db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+    } else if (env === 'test') {
+      db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+    }
   }
 
   next()

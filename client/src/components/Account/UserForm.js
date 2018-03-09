@@ -28,7 +28,7 @@ class UserForm extends Component {
       _id: this.props.user ? this.props.user._id : null,
       firstName: this.props.user ? this.props.user.firstName : '',
       lastName: this.props.user ? this.props.user.lastName : '',
-      password: this.props.user ? this.props.user.password : '',
+      password: '',
       confirmPassword: '',
       avatar: '',
       file: '',
@@ -39,6 +39,17 @@ class UserForm extends Component {
       },
       isLoadingLogo: false,
       isLoadingForm: false
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.user) {
+      this.setState({
+        _id: nextProps.user._id,
+        firstName: nextProps.user.firstName,
+        lastName: nextProps.user.lastName,
+        avatar: nextProps.user.avatar,
+      })
     }
   }
 
