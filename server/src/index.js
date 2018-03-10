@@ -38,48 +38,42 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 // Get Homepage
-app.use(async (req, res, next) => {
+// app.use(async (req, res, next) => {
   
-  // Parse subdomain 
-  let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
+//   // Parse subdomain 
+//   let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
 
-  if (subdomain) {
-    // Connect to subdomain db
-    if (env === 'development') {
-      await db.connect(process.env.DB_HOST+subdomain+process.env.DB_DEVELOPMENT)
-      console.log('Middleware with no mount path')
-    } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
-      console.log('Middleware with no mount path')
-    }
-  } else {
-    // Connect to mognodb
-    if (env === 'development') {
-      db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-    } else if (env === 'test') {
-      db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-    }
-  }
+//   if (subdomain) {
+//     // Connect to subdomain db
+//     if (env === 'development') {
+//       await db.connect(process.env.DB_HOST+subdomain+process.env.DB_DEVELOPMENT)
+//       console.log('Middleware with no mount path')
+//     } else if (env === 'test') {
+//       await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
+//       console.log('Middleware with no mount path')
+//     }
+//   } else {
+//     // Connect to mognodb
+//     if (env === 'development') {
+//       db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+//     } else if (env === 'test') {
+//       db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+//     }
+//   }
 
-  next()
-})
+//   next()
+// })
 
-// app.use(session({
-//   secret: config.jwtSecret,
-//   resave: false,
-//   saveUninitialized: false,
-//   //cookie: {secure: true}
-//   cookie: { maxAge: 2628000000 },
-//   store: new (require('express-sessions'))({
-//     storage: 'mongodb',
-//     //instance: mongoose, // optional 
-//     host: 'localhost', // optional 
-//     //port: 27017, // optional 
-//     db: 'passportjs_sessions', // optional 
-//     collection: 'sessions', // optional 
-//     expire: 86400 // optional 
-//   })
-// }))
+app.use(session({
+  secret: config.jwtSecret,
+  resave: false,
+  saveUninitialized: false,
+  //cookie: {secure: true}
+  cookie: { maxAge: 2628000000 },
+  store: new (require('connect-pg-simple')(session))({
+    conString : process.env.DB_HOST + process.env.DB_DEVELOPMENT
+  })
+}))
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -111,9 +105,9 @@ app.use((req, res) => {
 })
 
 // Set port
-app.set('port', process.env.PORT)
+app.set('port', process.env.SERVER_PORT)
 app.listen(app.get('port'), () => 
-  console.log('Server started on port: ' + process.env.PORT)
+  console.log('Server started on port: ' + process.env.SERVER_PORT)
 )
 
 //const io = require('socket.io').listen(8080)

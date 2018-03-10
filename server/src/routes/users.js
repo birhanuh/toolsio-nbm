@@ -34,35 +34,30 @@ router.post('/register', async (req, res) => {
   const { first_name, last_name, email, password } = req.body.user
 
   if (subdomain) {
-    //const accountCreated = await Account.create(account)
-    console.log('account ', subdomain +' x '+industry)
-    //let userCreated = await User.create(user)
-    //let userCreated = await User.forge({ user }, { hasTimestamps: true })
-    User.forge({ account: subdomain, first_name, last_name, email, password }, { hasTimestamps: true }).save()
-      .then(user => console.log('user ', user))
-      .catch(err => console.log('err ', err))
+    const accountCreated = await Account.forge({ subdomain, industry }, { hasTimestamps: true }).save()
 
-     
-    // // Login userCreated
-    // req.login(userCreated, function(err) {
-      
-    //   if (err) {
-    //     res.status(500).json({ 
-    //       errors: {
-    //         confirmation: 'fail',
-    //         message: err
-    //       }
-    //     })
-    //     return
-    //   }
-    //   res.json({ id: userCreated.id, firstName: userCreated.first_name, lastName: userCreated.last_name, email: userCreated.email, 
-    //     admin: userCreated.admin, account: userCreated.account })
-    //}) 
+    let userCreated = await User.forge({ account: subdomain, first_name, last_name, email, password }, { hasTimestamps: true }).save()
+    
+    // Login userCreated
+    req.login(userCreated.attributes, function(err) {
+      console.log('userCreated.attributes ', userCreated.attributes)
+      if (err) {
+        res.status(500).json({ 
+          errors: {
+            confirmation: 'fail',
+            message: err
+          }
+        })
+        return
+      }
+      res.json({ id: userCreated.attributes.id, first_name: userCreated.attributes.first_name, last_name: userCreated.attributes.last_name, email: userCreated.attributes.email, 
+        admin: userCreated.attributes.admin, account: userCreated.attributes.account })
+    }) 
 
     // Create emailToken
     jwt.sign({
-      id: user._id,
-      email: user.email
+      id: userCreated.attributes.id,
+      email: userCreated.attributes.email
     }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
       if (err) {
         console.log('err token: ', err)
@@ -71,7 +66,7 @@ router.post('/register', async (req, res) => {
       const url = `http://${accountCreated}.lvh.me:3000/login/confirmation/${emailToken}`
 
       transporter.sendMail({
-        to: user.email,
+        to: userCreated.attributes.email,
         subject: 'Confirm Email (Toolsio)',
         html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
       })
@@ -92,20 +87,20 @@ router.post('/register', async (req, res) => {
 
     let userCreated = await User.create(user)
     
-    // Push associated userCreated
-    if (userCreated) {
+    // Push associated userCreated.attributes
+    if (userCreated.attributes) {
       accountInvitedTo.save()
         .then(account => {
-          account.users.push(userCreated._id)
+          account.users.push(userCreated.attributes.id)
         })
         .catch(err => 
           console.log('new account err', err)
         )
     } else {
-      console.log('userCreated is null')
+      console.log('userCreated.attributes is null')
     }
 
-    req.login(userCreated, function(err) {
+    req.login(userCreated.attributes, function(err) {
       
       if (err) {
         res.status(500).json({ 
@@ -116,14 +111,14 @@ router.post('/register', async (req, res) => {
         })
         return
       }
-      res.json({ _id: userCreated._id, firstName: userCreated.firstName, lastName: userCreated.lastName, email: userCreated.email, 
-        admin: userCreated.admin, subdomain: accountInvitedTo.subdomain })
+      res.json({ id: userCreated.attributes.id, first_name: userCreated.attributes.first_name, last_name: userCreated.attributes.last_name, email: userCreated.attributes.email, 
+        admin: userCreated.attributes.admin, subdomain: accountInvitedTo.subdomain })
     })
 
     // Create emailToken
     jwt.sign({
-      id: userCreated._id,
-      email: userCreated.email
+      id: userCreated.attributes.id,
+      email: userCreated.attributes.email
     }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
       if (err) {
         console.log('err token: ', err)
@@ -132,7 +127,7 @@ router.post('/register', async (req, res) => {
       const url = `http://${accountInvitedTo}.lvh.me:3000/login/confirmation/${emailToken}`
 
       transporter.sendMail({
-        to: userCreated.email,
+        to: userCreated.attributes.email,
         subject: 'Confirm Email (Toolsio)',
         html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
       })
@@ -153,15 +148,15 @@ router.get('/:email', async (req, res) => {
     }
   }
 
-  User.findOne({ email: req.params.email }).then(user => {
-
-    res.json( { result: user }) 
-  })
+  User.where({ email: req.params.email }).fetch()
+    .then(user => {
+      res.json( { result: user }) 
+    })
 })
 
 // Get user by email or all users
 router.get('/all/users', (req, res) => {
-  User.find({}).select('firstName lastName email confirmed').exec((err, users) => {
+  User.find({}).select('first_name last_name email confirmed').exec((err, users) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -214,7 +209,7 @@ router.post('/account/invitation', (req, res) => {
 //   // If this function gets called, authentication was successful.
 //   // `req.user` contains the authenticated user.
 //   if (req.user.confirmed) {
-//     res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, email: req.user.email, 
+//     res.json({ id: req.user.id, first_name: req.user.first_name, last_name: req.user.last_name, email: req.user.email, 
 //       admin: req.user.admin })
     
 //   } else {
@@ -259,9 +254,9 @@ router.post('/login', function(req, res, next) {
         if (err) { 
           return next(err) 
         }
-   
+        console.log('user ', user)
         if (user.confirmed) {
-          res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, 
+          res.json({ id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, 
             admin: user.admin, subdomain: req.headers.subdomain })        
         } else {
           res.status(500).json({ 
@@ -282,7 +277,7 @@ router.get('/confirmation/:token/', (req, res) => {
   
   const { id } = jwt.verify(req.params.token, config.jwtSecret)
 
-  User.findByIdAndUpdate({ _id: id }, { confirmed: true }, {new: true}, (err, user) => {
+  User.findByIdAndUpdate({ id: id }, { confirmed: true }, {new: true}, (err, user) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -357,7 +352,7 @@ router.put('/update/:id', async (req, res) => {
     await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
   }
   
-  let user = await User.findOne({ _id: req.params.id })
+  let user = await User.findOne({ id: req.params.id })
   let previousUrl = user.avatar
 
   const s3Bucket = new AWS.S3({
@@ -394,13 +389,17 @@ router.put('/update/:id', async (req, res) => {
 })
 
 passport.serializeUser(function(user, done) {
-  done(null, user._id)
+  done(null, user.id)
 })
 
 passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user)
-  })
+  User.where({ id: id }).fetch()
+    .then(user => {
+      done(null, user)
+    })
+    .catch(err => {
+      done(err, null)
+    })
 })
 
 passport.use(new LocalStrategy({
@@ -408,27 +407,27 @@ passport.use(new LocalStrategy({
             passReqToCallback: true},
   async function(req, email, password, done) {
 
-    User.getUserByEmail(email, function(err, user) {
-      if (err) {
-        return done(err)
-      }
-       console.log("email ", user)
-      if (!user) {
-        return done(null, false)
-      }
-      
-      User.comparePassword(password, user.password, function(err, isMatch) {
-        if (err) {
-          return done(err)
-        }
-        
-        if(isMatch){
-          return done(null, user)
+    let query = {email: email}
+    User.where(query).fetch()
+      .then(user => {
+        if (user) {
+          User.comparePassword(password, user.attributes.password, function(err, isMatch) {
+            if (err) {
+              return done(err)
+            }
+            
+            if(isMatch){
+              return done(null, user.attributes)
+            } else {
+              return done(null, false,)
+            }
+          })
         } else {
-          return done(null, false,)
+          return done(null, false)
         }
       })
-    })
+      .catch(err => { throw err })
+
   }
 ))
 

@@ -12,21 +12,16 @@ import db from '../db'
 
 // Get regisetred user
 router.get('/:subdomain', async (req, res) => {
+  
+  Account.where({ subdomain: req.params.subdomain }).fetch()
+  .then(account => {
 
-  // Connect to accounts db
-  if (env === 'development') {
-    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-  } else if (env === 'test') {
-    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-  }
-
-  let account = await Account.find({ subdomain: req.params.subdomain })
-
-  if (account.length !== 0 ) {    
-    res.json( { result: account[0] }) 
-  } else {
-    res.json( { result: null }) 
-  }
+    if (account ) {    
+      res.json( { result: account }) 
+    } else {
+      res.json( { result: null }) 
+    }
+  }) 
 
 })
 

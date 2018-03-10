@@ -36,7 +36,7 @@ export function loginRequest(data) {
   return dispatch => {
     return axios.post('/users/login', data)
       .then(res => {
-        //document.cookie = "_id="+res.data._id+"; firstName="+res.data.firstName+"; lastName="+res.data.firstName+"; email="+res.data.email+""
+        //document.cookie = "_id="+res.data._id+"; first_name="+res.data.first_name+"; lastName="+res.data.first_name+"; email="+res.data.email+""
         localStorage.setItem('currentAccount', JSON.stringify(res.data))
         dispatch(setCurrentAccount(res.data))
       })

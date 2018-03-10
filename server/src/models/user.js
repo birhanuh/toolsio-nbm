@@ -33,10 +33,6 @@ export default bookshelf.Model.extend({
     })
   }
 }, {
-  getUserByEmail: (email, callback) => {
-    let query = {email: email}
-    this.query({where: {query}}, callback)
-  },
 
   comparePassword: (candidatePassword, hash, callback) => {
     bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
