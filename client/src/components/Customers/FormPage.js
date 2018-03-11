@@ -21,9 +21,9 @@ class FormPage  extends Component {
     } else {}
   }
 
-  saveCustomer = ({ _id, name, vatNumber, contact, includeContactOnInvoice, address }) => {
+  saveCustomer = ({ _id, name, vat_number, contact, is_contact_included_in_invoice, address }) => {
     if (_id) {
-      return this.props.updateCustomer({ _id, name, vatNumber, contact, includeContactOnInvoice, address })
+      return this.props.updateCustomer({ _id, name, vat_number, contact, is_contact_included_in_invoice, address })
         .then(() => 
           { 
             this.setState({ redirect: true }) 
@@ -35,7 +35,7 @@ class FormPage  extends Component {
             this.context.router.history.push('/customers')
           })   
     } else {        
-      return this.props.createCustomer({ _id, name, vatNumber, contact, includeContactOnInvoice, address })
+      return this.props.createCustomer({ _id, name, vat_number, contact, is_contact_included_in_invoice, address })
         .then(() => 
           { 
             this.setState({ redirect: true }) 

@@ -32,49 +32,49 @@ class Page extends Component {
     
     this.props.fetchCustomers()
 
-    $('.table').dataTable({
-      processing: true,
-      responsive: true,
-      language: {
-        emptyTable: '<div class="ui info message m-3"><div class="header">'+T.translate("customers.page.empty_customers_header")+'</div><p>'+T.translate("customers.page.empty_customers_message")+'</p></div>',
-        processing: "<img src='"+ajaxLoader+"'>",
-        //info: '_START_ to _END_ of _TOTAL_',
-        infoEmpty: '',
-        search: '',
-        searchPlaceholder: 'Search Name, Vat number and Contacts',
-        lengthMenu: '_MENU_',
-        paginate: {
-          previous: '<i class="left chevron icon"></i>',
-          next: '<i class="right chevron icon"></i>'
-        },
-        aria: {
-          paginate: {
-            previous: 'Previous',
-            next: 'Next'
-          }
-        }
-      },
-      serverSide: true,
-      ajax: {
-        url: "api/customers_datatable",
-        dataFilter: function(data) {
-          var json = $.parseJSON(data)
-          json.recordsTotal = json.results.total
-          json.recordsFiltered = json.results.total
-          json.data = json.results.list
+    // $('.table').dataTable({
+    //   processing: true,
+    //   responsive: true,
+    //   language: {
+    //     emptyTable: '<div class="ui info message m-3"><div class="header">'+T.translate("customers.page.empty_customers_header")+'</div><p>'+T.translate("customers.page.empty_customers_message")+'</p></div>',
+    //     processing: "<img src='"+ajaxLoader+"'>",
+    //     //info: '_START_ to _END_ of _TOTAL_',
+    //     infoEmpty: '',
+    //     search: '',
+    //     searchPlaceholder: 'Search Name, Vat number and Contacts',
+    //     lengthMenu: '_MENU_',
+    //     paginate: {
+    //       previous: '<i class="left chevron icon"></i>',
+    //       next: '<i class="right chevron icon"></i>'
+    //     },
+    //     aria: {
+    //       paginate: {
+    //         previous: 'Previous',
+    //         next: 'Next'
+    //       }
+    //     }
+    //   },
+    //   serverSide: true,
+    //   ajax: {
+    //     url: "api/customers_datatable",
+    //     dataFilter: function(data) {
+    //       var json = $.parseJSON(data)
+    //       json.recordsTotal = json.results.total
+    //       json.recordsFiltered = json.results.total
+    //       json.data = json.results.list
 
-          return JSON.stringify(json) // return JSON string
-        }
-      },
-      lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-      columnDefs: [ {
-        targets: 'not-sortable',
-        orderable: false
-        }, {
-        //targets: 'align-center',
-        //className: 'center aligned'
-      } ]
-    })
+    //       return JSON.stringify(json) // return JSON string
+    //     }
+    //   },
+    //   lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+    //   columnDefs: [ {
+    //     targets: 'not-sortable',
+    //     orderable: false
+    //     }, {
+    //     //targets: 'align-center',
+    //     //className: 'center aligned'
+    //   } ]
+    // })
   }
 
   componentWillUnmount = () => {

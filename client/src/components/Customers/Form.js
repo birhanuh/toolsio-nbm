@@ -26,14 +26,14 @@ class Form extends Component {
       name: this.props.customer ? this.props.customer.name : '',
       address: {
         street: this.props.customer ? this.props.customer.address.street: '',
-        postalCode: this.props.customer ? this.props.customer.address.postalCode : '',
+        postal_code: this.props.customer ? this.props.customer.address.postal_code : '',
         region: this.props.customer ? this.props.customer.address.region : '',
         country: this.props.customer ? this.props.customer.address.country : ''
       },
-      vatNumber: this.props.customer ? this.props.customer.vatNumber : '',
-      includeContactOnInvoice: this.props.customer ? this.props.customer.includeContactOnInvoice : false,
+      vat_number: this.props.customer ? this.props.customer.vat_number : '',
+      is_contact_included_in_invoice: this.props.customer ? this.props.customer.is_contact_included_in_invoice : false,
       contact: {
-        phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
+        phone_number: this.props.customer ? this.props.customer.contact.phone_number : '',
         email: this.props.customer ? this.props.customer.contact.email : ''
       },
       errors: {
@@ -52,14 +52,14 @@ class Form extends Component {
         name: nextProps.customer.name,
         address: {
           street: nextProps.customer.address.street,
-          postalCode: nextProps.customer.address.postalCode,
+          postal_code: nextProps.customer.address.postal_code,
           region: nextProps.customer.address.region,
           country: nextProps.customer.address.country
         },
-        vatNumber: nextProps.customer.vatNumber,
-        includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
+        vat_number: nextProps.customer.vat_number,
+        is_contact_included_in_invoice: nextProps.customer.is_contact_included_in_invoice,
         contact: {
-          phoneNumber: nextProps.customer.contact.phoneNumber,
+          phone_number: nextProps.customer.contact.phone_number,
           email: nextProps.customer.contact.email
         }
       })
@@ -69,19 +69,19 @@ class Form extends Component {
   componentDidMount = () => {
     let classContextThis = this
     
-    if (this.state.includeContactOnInvoice === true) {
+    if (this.state.is_contact_included_in_invoice === true) {
       $('.ui.toggle.checkbox').checkbox('check')
     }
 
     $('.ui.toggle.checkbox').checkbox({
       onChecked: function() {
          classContextThis.setState({
-          includeContactOnInvoice: true
+          is_contact_included_in_invoice: true
         })
       },
       onUnchecked: function() {
         classContextThis.setState({
-          includeContactOnInvoice: false
+          is_contact_included_in_invoice: false
         })
       }
     })
@@ -95,13 +95,13 @@ class Form extends Component {
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
 
-      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+      if (e.target.name === "email" || e.target.name === "phone_number") {
 
          this.setState({
           contact: { ...this.state.contact, [e.target.name]: e.target.value },
           errors
         })
-      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
+      } else if (e.target.name === "street" || e.target.name === "postal_code" || e.target.name === "region"
         || e.target.name === "country") {
 
          this.setState({
@@ -116,12 +116,12 @@ class Form extends Component {
       }
     } else {
 
-      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+      if (e.target.name === "email" || e.target.name === "phone_number") {
 
          this.setState({
           contact: { ...this.state.contact, [e.target.name]: e.target.value },
         })
-      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
+      } else if (e.target.name === "street" || e.target.name === "postal_code" || e.target.name === "region"
         || e.target.name === "country") {
         
          this.setState({
@@ -156,10 +156,10 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid()) { 
-      const { _id, name, vatNumber, contact, includeContactOnInvoice, address } = this.state
+    if (true) { 
+      const { _id, name, vat_number, contact, is_contact_included_in_invoice, address } = this.state
       this.setState({ isLoading: true })
-      this.props.saveCustomer({ _id, name, vatNumber, includeContactOnInvoice, contact, address })
+      this.props.saveCustomer({ _id, name, vat_number, is_contact_included_in_invoice, contact, address })
         .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -177,7 +177,7 @@ class Form extends Component {
   }
 
   render() {
-    const { _id, name, vatNumber, contact, includeContactOnInvoice, address, errors, isLoading } = this.state
+    const { _id, name, vat_number, contact, is_contact_included_in_invoice, address, errors, isLoading } = this.state
     
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
     //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
@@ -210,22 +210,22 @@ class Form extends Component {
             />
             <InputField
               label={T.translate("customers.show.vat_number")}
-              name="vatNumber" 
-              value={vatNumber} 
+              name="vat_number" 
+              value={vat_number} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Vat number"
-              error={errors.message && errors.message.errors && errors.message.errors.vatNumber && errors.message.errors['vatNumber'].message}
+              error={errors.message && errors.message.errors && errors.message.errors.vat_number && errors.message.errors['vat_number'].message}
               formClass="inline field"
             />
              <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
               <InputField
                 label={T.translate("customers.show.contact.phone_number")}
-                name="phoneNumber" 
-                value={contact.phoneNumber} 
+                name="phone_number" 
+                value={contact.phone_number} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Phone number"
-                error={errors.message && errors.message.errors && errors.message.errors['contact.phoneNumber'] && errors.message.errors['contact.phoneNumber'].message}
+                error={errors.message && errors.message.errors && errors.message.errors['contact.phone_number'] && errors.message.errors['contact.phone_number'].message}
                 formClass="inline field"
               />
               <InputField
@@ -243,8 +243,8 @@ class Form extends Component {
               <div className="ui toggle checkbox">
                 <input 
                   type="checkbox" 
-                  name="includeContactOnInvoice" 
-                  value={includeContactOnInvoice}
+                  name="is_contact_included_in_invoice" 
+                  value={is_contact_included_in_invoice}
                   onChange={this.handleChange.bind(this)} />
                 <label></label>
               </div>
@@ -262,11 +262,11 @@ class Form extends Component {
               />
               <InputField
                 label={T.translate("customers.show.address.postal_code")}
-                name="postalCode" 
-                value={address.postalCode} 
+                name="postal_code" 
+                value={address.postal_code} 
                 onChange={this.handleChange.bind(this)} 
                 placeholder="Postal code"
-                error={errors.message && errors.message.errors && errors.message.errors['address.postalCode'] && errors.message.errors['address.postalCode'].message}
+                error={errors.message && errors.message.errors && errors.message.errors['address.postal_code'] && errors.message.errors['address.postal_code'].message}
                 formClass="inline field"
               />
               <div className={classnames("inline field", {error: errors.message && errors.message.errors && errors.message.errors['address.country']})}>              
