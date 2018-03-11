@@ -1,31 +1,27 @@
-import mongoose from 'mongoose'
-import Project from './project'
+import bookshelf from '../../db/bookshelf'
 
-const taskSchema = new mongoose.Schema({
-  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "project" },
-  name: { type: String, required: [true, "Name is required."] },
-  hours: { type: Number, min: 1, max: 8, required: [true, "Hours is required."] },
-  paymentType: { type: String, required: [true, "Payment type is required."] },
-  price: { type: Number, required: [true, "Price is required."] },
-  vat: { type: Number, min: 1, max: 100, required: [true, "Vat is required."] }
-},{
-  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
-})
+export default bookshelf.Model.extend({
+  
+  tableName: 'tasks',
 
-taskSchema.post('save', function (doc, next) {
+  project: function() {
+    return this.belongsTo('Project', 'project_id');
+  }
 
-  // Push task and increment total value to related Project object
-  Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id}, $inc: {total: this.price} }, { new: true }, (err, project) => {
-    if (err) {
-      errors: {
-        cantUpdateProject: {
-          message: err
-        } 
-      }
-    }
-  })
+}, { dependents: ['projects']});
 
-  next()
-})
+// taskSchema.post('save', function (doc, next) {
 
-module.exports = mongoose.model('task', taskSchema)
+//   // Push task and increment total value to related Project object
+//   Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id}, $inc: {total: this.price} }, { new: true }, (err, project) => {
+//     if (err) {
+//       errors: {
+//         cantUpdateProject: {
+//           message: err
+//         } 
+//       }
+//     }
+//   })
+
+//   next()
+// })

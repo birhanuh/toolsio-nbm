@@ -39,8 +39,8 @@ router.post('/register', async (req, res) => {
     let userCreated = await User.forge({ account: subdomain, first_name, last_name, email, password }, { hasTimestamps: true }).save()
     
     // Login userCreated
-    req.login(userCreated.attributes, function(err) {
-      console.log('userCreated.attributes ', userCreated.attributes)
+    req.login(userCreated, function(err) {
+ 
       if (err) {
         res.status(500).json({ 
           errors: {
@@ -50,14 +50,14 @@ router.post('/register', async (req, res) => {
         })
         return
       }
-      res.json({ id: userCreated.attributes.id, first_name: userCreated.attributes.first_name, last_name: userCreated.attributes.last_name, email: userCreated.attributes.email, 
-        admin: userCreated.attributes.admin, account: userCreated.attributes.account })
+      res.json({ id: userCreated.get('id'), first_name: userCreated.get('first_name'), last_name: userCreated.get('last_name'), email: userCreated.get('email'), 
+        admin: userCreated.get('admin'), account: userCreated.get('account') })
     }) 
 
     // Create emailToken
     jwt.sign({
-      id: userCreated.attributes.id,
-      email: userCreated.attributes.email
+      id: userCreated.get('id'),
+      email: userCreated.get('email')
     }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
       if (err) {
         console.log('err token: ', err)
@@ -66,7 +66,7 @@ router.post('/register', async (req, res) => {
       const url = `http://${accountCreated}.lvh.me:3000/login/confirmation/${emailToken}`
 
       transporter.sendMail({
-        to: userCreated.attributes.email,
+        to: userCreated.get('email'),
         subject: 'Confirm Email (Toolsio)',
         html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
       })
@@ -87,20 +87,20 @@ router.post('/register', async (req, res) => {
 
     let userCreated = await User.create(user)
     
-    // Push associated userCreated.attributes
-    if (userCreated.attributes) {
+    // Push associated userCreated.get('
+    if (userCreated) {
       accountInvitedTo.save()
         .then(account => {
-          account.users.push(userCreated.attributes.id)
+          account.users.push(userCreated.get('id'))
         })
         .catch(err => 
           console.log('new account err', err)
         )
     } else {
-      console.log('userCreated.attributes is null')
+      console.log('userCreated is null')
     }
 
-    req.login(userCreated.attributes, function(err) {
+    req.login(userCreated, function(err) {
       
       if (err) {
         res.status(500).json({ 
@@ -111,14 +111,14 @@ router.post('/register', async (req, res) => {
         })
         return
       }
-      res.json({ id: userCreated.attributes.id, first_name: userCreated.attributes.first_name, last_name: userCreated.attributes.last_name, email: userCreated.attributes.email, 
-        admin: userCreated.attributes.admin, subdomain: accountInvitedTo.subdomain })
+      res.json({ id: userCreated.get('id'), first_name: userCreated.get('first_name'), last_name: userCreated.get('last_name'), email: userCreated.get('email'), 
+        admin: userCreated.get('admin'), subdomain: userCreated.get('account') })
     })
 
     // Create emailToken
     jwt.sign({
-      id: userCreated.attributes.id,
-      email: userCreated.attributes.email
+      id: userCreated.get('id'),
+      email: userCreated.get('email')
     }, config.jwtSecret, { expiresIn: '7d' }, (err, emailToken) => {
       if (err) {
         console.log('err token: ', err)
@@ -127,7 +127,7 @@ router.post('/register', async (req, res) => {
       const url = `http://${accountInvitedTo}.lvh.me:3000/login/confirmation/${emailToken}`
 
       transporter.sendMail({
-        to: userCreated.attributes.email,
+        to: userCreated.get('email'),
         subject: 'Confirm Email (Toolsio)',
         html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
       })
@@ -156,7 +156,7 @@ router.get('/:email', async (req, res) => {
 
 // Get user by email or all users
 router.get('/all/users', (req, res) => {
-  User.find({}).select('first_name last_name email confirmed').exec((err, users) => {
+  User.find({}).select('first_name last_name email is_confirmed').exec((err, users) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -208,7 +208,7 @@ router.post('/account/invitation', (req, res) => {
 // router.post('/login', passport.authenticate('local'), function(req, res) {
 //   // If this function gets called, authentication was successful.
 //   // `req.user` contains the authenticated user.
-//   if (req.user.confirmed) {
+//   if (req.user.get('is_confirmed')) {
 //     res.json({ id: req.user.id, first_name: req.user.first_name, last_name: req.user.last_name, email: req.user.email, 
 //       admin: req.user.admin })
     
@@ -254,10 +254,10 @@ router.post('/login', function(req, res, next) {
         if (err) { 
           return next(err) 
         }
-        console.log('user ', user)
-        if (user.confirmed) {
-          res.json({ id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, 
-            admin: user.admin, subdomain: req.headers.subdomain })        
+    
+        if (user.get('is_confirmed')) {
+          res.json({ id: user.get('id'), first_name: user.get('first_name'), last_name: user.get('last_name'), email: user.get('email'), 
+            admin: user.get('admin'), account: user.get('account') })        
         } else {
           res.status(500).json({ 
             errors: {
@@ -277,7 +277,7 @@ router.get('/confirmation/:token/', (req, res) => {
   
   const { id } = jwt.verify(req.params.token, config.jwtSecret)
 
-  User.findByIdAndUpdate({ id: id }, { confirmed: true }, {new: true}, (err, user) => {
+  User.findByIdAndUpdate({ id: id }, { is_confirmed: true }, {new: true}, (err, user) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -289,9 +289,9 @@ router.get('/confirmation/:token/', (req, res) => {
     }
 
     if (user !== null) {
-      res.json({ confirmed: true })
+      res.json({ is_confirmed: true })
     } else {
-      res.json({ confirmed: false })
+      res.json({ is_confirmed: false })
     }
   })
 
@@ -389,7 +389,7 @@ router.put('/update/:id', async (req, res) => {
 })
 
 passport.serializeUser(function(user, done) {
-  done(null, user.id)
+  done(null, user.get('id'))
 })
 
 passport.deserializeUser(function(id, done) {
@@ -411,15 +411,15 @@ passport.use(new LocalStrategy({
     User.where(query).fetch()
       .then(user => {
         if (user) {
-          User.comparePassword(password, user.attributes.password, function(err, isMatch) {
+          User.comparePassword(password, user.get('password'), function(err, isMatch) {
             if (err) {
               return done(err)
             }
             
             if(isMatch){
-              return done(null, user.attributes)
+              return done(null, user)
             } else {
-              return done(null, false,)
+              return done(null, false)
             }
           })
         } else {

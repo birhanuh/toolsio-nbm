@@ -39,6 +39,10 @@ export default bookshelf.Model.extend({
       if (err) throw err
       callback(null, isMatch)
     })
+  },
+
+  byEmail: (email) => {
+    return this.forge().query({where:{ email: email }}).fetch();
   }
 });
 

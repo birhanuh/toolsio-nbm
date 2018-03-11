@@ -1,40 +1,54 @@
-import mongoose from 'mongoose' 
-import Customer from'./customer'
+import bookshelf from '../../db/bookshelf'
+import Promise from 'bluebird'
 
-const projectSchema = new mongoose.Schema({
-  name: { type: String, required: [true, "Name is required."] },
-  deadline: { type: Date, required: [true, "Deadline is required."] },
-  customer: { type: mongoose.Schema.Types.ObjectId, ref: "customer", required: [true, "Customer is required."] },
-  status: { type: String, required: [true, "Status is required."] },
-  description: { type: String, default: '' },
-  progress: { type: Number, default: 0 },
-  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "task" }],
-  total: { type: Number, default: 0 },
+export default bookshelf.Model.extend({
+  
+  tableName: 'projects',
+  
+  tasks: function() {
+    return this.hasMany('Task', 'project_id');
+  },
 
-  invoice: { type: mongoose.Schema.Types.ObjectId, ref: "invoice" }
-},{
-  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
-})
+  invoice: function() {
+    return this.belongsTo('Invoice', 'invoice_id');
+  },
 
-projectSchema.pre('validate', function(next) {
-  this.status = "new"
-  next()
-}) 
+  customer: function() {
+    return this.belongsTo('Customer', 'customer_id');
+  },
 
-projectSchema.post('save', function(doc, next) {
+  initialize: function() {
+    this.on('creating', this.setDefaultStatus);
+  },
 
-  // Push project to related Customer object
-  Customer.findByIdAndUpdate(this.customer, { $push: { projects: this._id }}, { new: true }, (err, customer) => {
-    if (err) {
-      errors: {
-        cantUpdateCustomer: {
-          message: err
-        } 
-      }
-    }
-  })
+  setDefaultStatus: function(model, attrs, options) {
+    return new Promise(function(resolve, reject) {
 
-  next()
-})
+      let defaultStatus = 'new'
+      
+      model.set('status', defaultStatus)
+      resolve(defaultStatus)       
+    })
+  }
 
-module.exports = mongoose.model('project', projectSchema)
+});
+
+
+
+// projectSchema.post('save', function(doc, next) {
+
+//   // Push project to related Customer object
+//   Customer.findByIdAndUpdate(this.customer, { $push: { projects: this._id }}, { new: true }, (err, customer) => {
+//     if (err) {
+//       errors: {
+//         cantUpdateCustomer: {
+//           message: err
+//         } 
+//       }
+//     }
+//   })
+
+//   next()
+// })
+
+// module.exports = mongoose.model('project', projectSchema)
