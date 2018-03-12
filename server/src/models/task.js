@@ -1,14 +1,14 @@
-import bookshelf from '../../db/bookshelf'
+// import bookshelf from '../../db/bookshelf'
 
-export default bookshelf.Model.extend({
+// export default bookshelf.Model.extend({
   
-  tableName: 'tasks',
+//   tableName: 'tasks',
 
-  project: function() {
-    return this.belongsTo('Project', 'project_id');
-  }
+//   project: function() {
+//     return this.belongsTo('Project', 'project_id');
+//   }
 
-}, { dependents: ['projects']});
+// }, { dependents: ['projects']});
 
 // taskSchema.post('save', function (doc, next) {
 

@@ -31,11 +31,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       is_confirmed: {
-        allowNull: false,
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       is_admin: {
-        allowNull: false,
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {

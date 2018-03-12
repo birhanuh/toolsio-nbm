@@ -77,7 +77,7 @@ export default {
     let body = req.body
     delete body['_id']
 
-    Project.forge(body, { hasTimestamps: true }).save()
+    Project.create(body, { hasTimestamps: true })
       .then(project => {
         callback(null, project)
       })
@@ -91,7 +91,7 @@ export default {
     let id = req.params.id
     let body = req.body
 
-    Project({id: id}).save(body, {patch: true})
+    Project.update({id: id}).save(body, {patch: true})
       .then(project => {
         callback(null, project)
       })
@@ -104,7 +104,7 @@ export default {
 
     let id = req.params.id
 
-    Project.destory({id: id})
+    Project.destory({ where: {id: id} })
       .then(project => {
         if (err) {
           callback(err, null)

@@ -5,12 +5,14 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
+import { makeExecutableSchema } from 'graphql-tools'
 
 // Init app
 const app = express()
 
-import accounts from './routes/accounts'
-import users from './routes/users'
+//import accounts from './routes/accounts'
+//import users from './routes/users'
 import api from './routes/api'
 //import routes from './routes/index'
 
@@ -20,6 +22,14 @@ import config from './config'
 
 // Mongodb connection
 import db from './db'
+
+import typeDefs from './schema'
+import resolvers from './resolvers'
+
+export const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+})
 
 // Authentication package 
 import session from 'express-session'
@@ -31,10 +41,18 @@ import socketEvents from './socket/socketEvents'
 //app.set('view engine', 'jade')
 //app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects'])
 
+const graphqlEndPoint = '/graphql'
+
 // BodyParser and Cookie parser Middleware(Setup code)
+
 app.use(logger('dev'))
-app.use(bodyParser.json())
+
+app.use(graphqlEndPoint, bodyParser.json(), graphqlExpress({ schema }))
+
+app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint }))
+
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use(cookieParser())
 
 // Get Homepage
@@ -63,7 +81,7 @@ app.use(cookieParser())
 
 //   next()
 // })
-
+/**
 app.use(session({
   secret: config.jwtSecret,
   resave: false,
@@ -74,7 +92,7 @@ app.use(session({
     conString : process.env.DB_HOST + process.env.DB_DEVELOPMENT
   })
 }))
-
+**/
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -89,8 +107,8 @@ if (env === 'development') {
 //   next()  
 // })
 
-app.use('/accounts', accounts)
-app.use('/users', users)
+// app.use('/accounts', accounts)
+// app.use('/users', users)
 app.use('/api', api)
 //app.use('/', routes)
 

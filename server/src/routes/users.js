@@ -13,8 +13,7 @@ let env = process.env.NODE_ENV || 'development'
 // Mongodb connection
 import db from '../db'
 
-import User from '../models/user'
-import Account from '../models/account'
+import models from '../models'
 
 let router = express.Router()
 
@@ -34,9 +33,9 @@ router.post('/register', async (req, res) => {
   const { first_name, last_name, email, password } = req.body.user
 
   if (subdomain) {
-    const accountCreated = await Account.forge({ subdomain, industry }, { hasTimestamps: true }).save()
+    const accountCreated = await models.accounts.create({ subdomain, industry }, { hasTimestamps: true })
 
-    let userCreated = await User.forge({ account: subdomain, first_name, last_name, email, password }, { hasTimestamps: true }).save()
+    let userCreated = await models.create({ account: subdomain, first_name, last_name, email, password }, { hasTimestamps: true })
     
     // Login userCreated
     req.login(userCreated, function(err) {
@@ -76,7 +75,7 @@ router.post('/register', async (req, res) => {
   if (req.headers.invitation) {
     const { account } = jwt.verify(req.headers.invitation, config.jwtSecret)
 
-    const accountInvitedTo = await Account.findOne({ subdomain: account})
+    const accountInvitedTo = await models.accounts.findOne({ where: {subdomain: account} })
     
     // Connect to subdomain db
     if (env === 'development') {
@@ -85,7 +84,7 @@ router.post('/register', async (req, res) => {
       await db.connect(process.env.DB_HOST+accountInvitedTo.subdomain+process.env.DB_TEST)
     }
 
-    let userCreated = await User.create(user)
+    let userCreated = await models.users.create(user)
     
     // Push associated userCreated.get('
     if (userCreated) {
@@ -148,7 +147,7 @@ router.get('/:email', async (req, res) => {
     }
   }
 
-  User.where({ email: req.params.email }).fetch()
+  models.users.findOne({ where: {email: req.params.email} })
     .then(user => {
       res.json( { result: user }) 
     })
@@ -156,7 +155,7 @@ router.get('/:email', async (req, res) => {
 
 // Get user by email or all users
 router.get('/all/users', (req, res) => {
-  User.find({}).select('first_name last_name email is_confirmed').exec((err, users) => {
+  models.users.find({}).select('first_name last_name email is_confirmed').exec((err, users) => {
     if (err) {
       res.status(500).json({ 
         errors: {
@@ -352,7 +351,7 @@ router.put('/update/:id', async (req, res) => {
     await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
   }
   
-  let user = await User.findOne({ id: req.params.id })
+  let user = await models.users.findById(req.params.id)
   let previousUrl = user.avatar
 
   const s3Bucket = new AWS.S3({
@@ -393,7 +392,7 @@ passport.serializeUser(function(user, done) {
 })
 
 passport.deserializeUser(function(id, done) {
-  User.where({ id: id }).fetch()
+  model.users.findById(id)
     .then(user => {
       done(null, user)
     })
@@ -407,11 +406,10 @@ passport.use(new LocalStrategy({
             passReqToCallback: true},
   async function(req, email, password, done) {
 
-    let query = {email: email}
-    User.where(query).fetch()
+    model.users.findOne({ where: {email: email} })
       .then(user => {
         if (user) {
-          User.comparePassword(password, user.get('password'), function(err, isMatch) {
+          model.users.comparePassword(password, user.get('password'), function(err, isMatch) {
             if (err) {
               return done(err)
             }

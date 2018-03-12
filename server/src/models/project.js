@@ -1,37 +1,37 @@
-import bookshelf from '../../db/bookshelf'
-import Promise from 'bluebird'
+// import bookshelf from '../../db/bookshelf'
+// import Promise from 'bluebird'
 
-export default bookshelf.Model.extend({
+// export default bookshelf.Model.extend({
   
-  tableName: 'projects',
+//   tableName: 'projects',
   
-  tasks: function() {
-    return this.hasMany('Task', 'project_id');
-  },
+//   tasks: function() {
+//     return this.hasMany('Task', 'project_id');
+//   },
 
-  invoice: function() {
-    return this.belongsTo('Invoice', 'invoice_id');
-  },
+//   invoice: function() {
+//     return this.belongsTo('Invoice', 'invoice_id');
+//   },
 
-  customer: function() {
-    return this.belongsTo('Customer', 'customer_id');
-  },
+//   customer: function() {
+//     return this.belongsTo('Customer', 'customer_id');
+//   },
 
-  initialize: function() {
-    this.on('creating', this.setDefaultStatus);
-  },
+//   initialize: function() {
+//     this.on('creating', this.setDefaultStatus);
+//   },
 
-  setDefaultStatus: function(model, attrs, options) {
-    return new Promise(function(resolve, reject) {
+//   setDefaultStatus: function(model, attrs, options) {
+//     return new Promise(function(resolve, reject) {
 
-      let defaultStatus = 'new'
+//       let defaultStatus = 'new'
       
-      model.set('status', defaultStatus)
-      resolve(defaultStatus)       
-    })
-  }
+//       model.set('status', defaultStatus)
+//       resolve(defaultStatus)       
+//     })
+//   }
 
-});
+// });
 
 
 
