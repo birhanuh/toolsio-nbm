@@ -8,8 +8,8 @@ export default (sequelize, DataTypes) => {
     Conversation.belongsToMany(models.User, {
       through: 'participants',
       foreignKey: {
-        name: 'userId',
-        field: 'user_id'
+        name: 'conversationId',
+        field: 'conversation_id'
       }
     })
   }

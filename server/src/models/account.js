@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
     region: DataTypes.STRING,
     country: DataTypes.STRING,
     logoUrl: DataTypes.STRING
-  }, {underscored: true})
+  })
 
   Account.associate = function(models) {
     // 1:M

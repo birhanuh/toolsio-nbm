@@ -4,10 +4,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
     payment_term: {
-      type: DataTypes.STRING
+      type: DataTypes.INTEGER
     },
     interest_in_arrears: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull : false
     },
     status: {
@@ -15,15 +15,15 @@ export default (sequelize, DataTypes) => {
       allowNull : false
     },
     reference_number: {
-      type: DataTypes.STRING,
+      type: DataTypes.DOUBLE,
       allowNull : false
     },
-    description: DataTypes.STRING,
+    description: DataTypes.TEXT,
     total: {
       type: DataTypes.INTEGER,
       allowNull : false
     }
-  }, {underscored: true})
+  })
 
   Invoice.associate = (models) => {
     // 1:M

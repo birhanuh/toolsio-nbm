@@ -14,15 +14,15 @@ export default (sequelize, DataTypes) => {
     avatar_url: DataTypes.STRING,
     is_confirmed: DataTypes.BOOLEAN,
     is_admin: DataTypes.BOOLEAN
-  }, {underscored: true})
+  })
 
   User.associate = (models) => {
     // M:M
     User.belongsToMany(models.Conversation, {
       through: 'participants',
       foreignKey: {
-        name: 'conversationId',
-        field: 'conversation_id'
+        name: 'userId',
+        field: 'user_id'
       }
     })
   }

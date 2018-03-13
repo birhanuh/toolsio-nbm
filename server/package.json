@@ -37,6 +37,7 @@
     "graphql-tools": "^2.21.0",
     "jsonwebtoken": "^8.1.1",
     "lodash": "^4.17.4",
+    "merge-graphql-schemas": "^1.5.0",
     "mongoose": "^4.11.4",
     "morgan": "^1.8.1",
     "nodemailer": "^4.4.2",

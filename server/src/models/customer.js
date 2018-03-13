@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
     postal_code: DataTypes.INTEGER,
     region: DataTypes.STRING,
     country: DataTypes.STRING
-  }, {underscored: true})
+  })
 
   Customer.associate = (models) => {
 

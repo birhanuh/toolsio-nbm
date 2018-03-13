@@ -2,7 +2,7 @@ export default (sequelize, DataTypes) => {
   const Message = sequelize.define('messages', {
     title: DataTypes.STRING,
     body: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull : false
     },
     is_read: DataTypes.BOOLEAN,

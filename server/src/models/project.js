@@ -12,12 +12,12 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false
     },
-    description: DataTypes.STRING,
+    description: DataTypes.TEXT,
     total: {
       type: DataTypes.INTEGER,
       allowNull : false
     }
-  }, {underscored: true})
+  })
 
   Project.associate = (models) => {
     // 1:M

@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import { makeExecutableSchema } from 'graphql-tools'
+import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 
 // Init app
 const app = express()
@@ -23,10 +24,15 @@ import config from './config'
 // Mongodb connection
 import db from './db'
 
+// Models
 import models from './models'
 
-import typeDefs from './schema'
-import resolvers from './resolvers'
+// Schema
+const types = fileLoader(path.join(__dirname + '/types'))
+const typeDefs = mergeTypes(types) 
+
+// Resolvers
+const resolvers =  mergeResolvers(fileLoader(path.join(__dirname + '/resolvers'))) 
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -129,7 +135,7 @@ app.set('port', process.env.SERVER_PORT)
 
 
 // sync() will create all table if then doesn't exist in database
-models.sequelize.sync({ force: true }).then(() => {
+models.sequelize.sync().then(() => {
   app.listen(app.get('port'), () => 
     console.log('Server started on port: ' + process.env.SERVER_PORT)
   )

@@ -17,7 +17,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false
     },
     vat: DataTypes.INTEGER,
-  }, {underscored: true})
+  })
 
   Item.associate = (models) => {
     // 1:M
