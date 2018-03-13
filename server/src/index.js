@@ -9,9 +9,16 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 
+// Authentication package 
+import session from 'express-session'
+import passport from 'passport'
+
+import socketEvents from './socket/socketEvents'
+
 // Init app
 const app = express()
 
+// Routes
 //import accounts from './routes/accounts'
 //import users from './routes/users'
 import api from './routes/api'
@@ -39,23 +46,23 @@ const schema = makeExecutableSchema({
   resolvers
 })
 
-// Authentication package 
-import session from 'express-session'
-import passport from 'passport'
-
-import socketEvents from './socket/socketEvents'
-
 // View Engine
 //app.set('view engine', 'jade')
 //app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects'])
 
-const graphqlEndPoint = '/graphql'
-
 // BodyParser and Cookie parser Middleware(Setup code)
-
 app.use(logger('dev'))
 
-app.use(graphqlEndPoint, bodyParser.json(), graphqlExpress({ schema }))
+const graphqlEndPoint = '/graphql'
+
+app.use(graphqlEndPoint, bodyParser.json(), 
+  graphqlExpress({ 
+    schema,
+    context: {
+      models
+    }
+  })
+)
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint }))
 
@@ -135,7 +142,7 @@ app.set('port', process.env.SERVER_PORT)
 
 
 // sync() will create all table if then doesn't exist in database
-models.sequelize.sync().then(() => {
+models.sequelize.sync({ force: true }).then(() => {
   app.listen(app.get('port'), () => 
     console.log('Server started on port: ' + process.env.SERVER_PORT)
   )

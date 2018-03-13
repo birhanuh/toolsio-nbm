@@ -5,8 +5,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull : false
     },
-    is_read: DataTypes.BOOLEAN,
-    is_drafted: DataTypes.BOOLEAN
+    is_read: {
+      type: DataTypes.BOOLEAN,
+      field: 'is_read'
+    },
+    isDrafted: {
+      type: DataTypes.BOOLEAN,
+      field: 'is_drafted'
+    }
   }, {underscored: true})
 
   Message.associate = (models) => {

@@ -1,27 +1,48 @@
 export default (sequelize, DataTypes) => {
   var Invoice = sequelize.define('invoices', {
     deadline: {
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      validate: {     
+        isDate: true // only allow date strings
+      } 
     },
-    payment_term: {
-      type: DataTypes.INTEGER
-    },
-    interest_in_arrears: {
+    paymentTerm: {
       type: DataTypes.INTEGER,
-      allowNull : false
+      field: 'payment_term',
+      validate: {     
+        isInt: true, // checks for int
+      } 
+    },
+    interestInArrears: {
+      type: DataTypes.INTEGER,
+      allowNull : false,
+      field: 'interest_in_arrears',
+      validate: {     
+        isInt: true // checks for int
+      } 
     },
     status: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isAlpha: true // will only allow letters
+      } 
     },
-    reference_number: {
+    referenceNumber: {
       type: DataTypes.DOUBLE,
-      allowNull : false
+      allowNull : false,
+      field: 'reference_number',
+      validate: {     
+        isDecimal: true // checks for any numbers
+      } 
     },
     description: DataTypes.TEXT,
     total: {
       type: DataTypes.INTEGER,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isInt: true // checks for int
+      } 
     }
   })
 

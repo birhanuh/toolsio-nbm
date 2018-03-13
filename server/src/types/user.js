@@ -11,4 +11,13 @@ export default `
     isAdmin: Boolean!
   }
 
+  type Query {
+    getUser(id: Int!): User!
+    getAllUsers: [User!]!
+  }
+
+  type Mutation {
+    createUser(firstName: String!, lastName: String!, email: String!, password: String!): User!
+  }
+
 `

@@ -3,13 +3,23 @@ export default (sequelize, DataTypes) => {
     subdomain: {
       type: DataTypes.STRING,
       allowNull : false,
-      unique: true
+      unique: true,
+      validate: {     
+        is: /\A[\w\-]+\Z/i, // contains invalid characters
+        notContains: 'www' // don't allow www substrings
+      } 
     },
     industry: {
       type: DataTypes.STRING,
       allowNull : false
     },
-    phoneNumber: DataTypes.STRING,
+    phoneNumber: {
+      type: DataTypes.STRING,
+      field: 'phone_number',
+      validate: {     
+        is: /\d{6,14}/,  // checks for phone format with RegExp) 
+      } 
+    },
     email: DataTypes.STRING,
     street: DataTypes.STRING,
     postalCode: DataTypes.STRING,

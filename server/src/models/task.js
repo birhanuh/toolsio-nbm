@@ -8,15 +8,27 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false
     },
-    payment_type: {
+    paymentType: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      field: 'payment_type',
+      validate: {     
+        isAlpha: true // will only allow letters
+      } 
     },
     price: {
       type: DataTypes.DECIMAL,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isDecimal: true // checks for any numbers
+      } 
     },
-    vat: DataTypes.INTEGER,
+    vat: {
+      type: DataTypes.INTEGER,
+      validate: {     
+        isInt: true, // checks for int
+      } 
+    }
   })
 
   Task.associate = (models) => {

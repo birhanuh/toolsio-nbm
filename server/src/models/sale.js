@@ -6,16 +6,25 @@ export default (sequelize, DataTypes) => {
     },
     deadline: {
       type: DataTypes.DATE,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isDate: true, // only allow date strings
+      } 
     },
     status: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
     },
     description: DataTypes.TEXT,
     total: {
       type: DataTypes.INTEGER,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isInt: true // checks for int
+      } 
     }
   })
 

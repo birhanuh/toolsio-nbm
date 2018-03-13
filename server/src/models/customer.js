@@ -4,18 +4,40 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false
     },
-    vat_number: {
+    vatNumber: {
       type: DataTypes.INTEGER,
       allowNull : false,
-      unique: true
+      unique: true,
+      field: 'vat_number',
+      validate: {     
+        isDecimal: true // checks for any numbers
+      } 
     },
-    phone_number: DataTypes.STRING,
-    email: DataTypes.STRING,
-    is_contact_included_in_invoice: {
+    phoneNumber: {
+      type: DataTypes.STRING,
+      field: 'phone_number',
+      validate: {     
+        is: /\d{6,14}/  // checks for phone format with RegExp) 
+      } 
+    },
+    email: {
+      type: DataTypes.STRING,
+      validate: {     
+        isEmail: true // checks for email format (foo@bar.com) 
+      } 
+    },
+    isContactIncludedInInvoice: {
       type: DataTypes.BOOLEAN,
-      allowNull : false
+      allowNull : false,
+      defaultValue : false,
+      field: 'is_contact_included_in_invoice'
     },
-    street: DataTypes.STRING,
+    street: {
+      type: DataTypes.STRING,
+      validate: {     
+        isDecimal: true // checks for any numbers
+      } 
+    },
     postal_code: DataTypes.INTEGER,
     region: DataTypes.STRING,
     country: DataTypes.STRING

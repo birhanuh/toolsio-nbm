@@ -10,13 +10,24 @@ export default (sequelize, DataTypes) => {
     },
     quantity: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isInt: true, // checks for int
+      } 
     },
     price: {
       type: DataTypes.DECIMAL,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isDecimal: true, // checks for any numbers
+      } 
     },
-    vat: DataTypes.INTEGER,
+    vat: {
+      type: DataTypes.INTEGER,
+      validate: {     
+        isInt: true // checks for int
+      } 
+    }
   })
 
   Item.associate = (models) => {
