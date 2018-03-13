@@ -1,7 +1,18 @@
-import mongoose from 'mongoose'
+export default (sequelize, DataTypes) => {
+  const Conversation = sequelize.define('conversations', {
+ 
+  })
 
-const ConversationSchema = new mongoose.Schema({
-  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}]
-})
+  Conversation.associate = (models) => {
+    // M:M
+    Conversation.belongsToMany(models.User, {
+      through: 'participants',
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id'
+      }
+    })
+  }
 
-module.exports = mongoose.model('conversation', ConversationSchema)
+  return Conversation
+}

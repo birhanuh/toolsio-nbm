@@ -1,42 +1,32 @@
-// import bookshelf from '../../db/bookshelf'
+export default (sequelize, DataTypes) => {
+  const Customer = sequelize.define('customers', {
+    name: { 
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    vat_number: {
+      type: DataTypes.INTEGER,
+      allowNull : false,
+      unique: true
+    },
+    phone_number: DataTypes.STRING,
+    email: DataTypes.STRING,
+    is_contact_included_in_invoice: {
+      type: DataTypes.BOOLEAN,
+      allowNull : false
+    },
+    street: DataTypes.STRING,
+    postal_code: DataTypes.INTEGER,
+    region: DataTypes.STRING,
+    country: DataTypes.STRING
+  }, {underscored: true})
 
-// export default bookshelf.Model.extend({
-  
-//   tableName: 'customers',
-  
-//   projects: function() {
-//     return this.hasMany('Project', 'customer_id');
-//   },
+  Customer.associate = (models) => {
 
-//   sales: function() {
-//     return this.hasMany('Sale', 'customer_id');
-//   },
+  }
 
-//   invoices: function() {
-//     return this.hasMany('Invoice', 'customer_id');
-//   },
-
-//   initialize: function() {
-//     this.on('saving', this.validateContact);
-//     this.on('creating', this.setDefaultIsContactIncludedInInvoice);
-//   },
-
-//   validateContact: function() {
-//     if (!this.get('email') ||  !this.get('phone_number')) throw new Error('Either Phone number or email is required.');
-//   },
-
-//   setDefaultIsContactIncludedInInvoice: function() {
-//     this.set('is_contact_included_in_invoice', false)
-//   },
-
-//   validationErrors: function () {
-//     let output = {};
-
-//     function addError(propertyName, errorName) {
-//       let propertyErrors = output[propertyName] || [];
-//       propertyErrors.push(errorName);
-//       output[propertyName] = propertyErrors;
-//     }
+  return Customer
+}
 
 // },
 // {

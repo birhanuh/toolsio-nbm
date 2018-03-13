@@ -1,43 +1,56 @@
-import mongoose from 'mongoose'
-import Customer from'./customer'
-
-const saleSchema = new mongoose.Schema({
-  name: { type: String, required: [true, "Name is required."] },
-  deadline: { type: Date, required: [true, "Deadline is required."] },  
-  customer: { type: mongoose.Schema.Types.ObjectId, ref: "customer", required: [true, "Customer is required."] },
-  status: { type: String, required: [true, "Status is required."] },
-  description: { type: String, default: '' },
-  items: [{ type: mongoose.Schema.Types.ObjectId, ref: "item" }],
-  total: { type: Number, default: 0 },
-
-  invoice: { type: mongoose.Schema.Types.ObjectId, ref: "invoice" }
-},{
-  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
-})
-
-saleSchema.pre('validate', function(next) {
-  this.status = "new"
-  next()
-}) 
-
-saleSchema.post('save', function(doc, next) {
-
-  // Push sale to related Customer object
-  Customer.findByIdAndUpdate(this.customer, { $push: { sales: this._id }}, { new: true }, (err, customer) => {
-    if (err) {
-      errors: {
-        cantUpdateCustomer: {
-          message: err
-        } 
-      }
+export default (sequelize, DataTypes) => {
+  const Sale = sequelize.define('sales', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    deadline: {
+      type: DataTypes.DATE,
+      allowNull : false
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    description: DataTypes.STRING,
+    total: {
+      type: DataTypes.INTEGER,
+      allowNull : false
     }
-  })
+  }, {underscored: true})
 
-  next()
-})
+  Sale.associate = (models) => {
+    // 1:M
+    Sale.belongsTo(models.Customer, {
+      foreignKey: {
+        name: 'customerId',
+        field: 'customer_id'
+      }
+    })
 
-saleSchema.methods.addItems = (items) => {
-  this.items.push(items)
+    // 1:1
+    Sale.belongsTo(models.Invoice, {
+      foreignKey: 'invoice_id'
+    })
+  }
+
+  return Sale
 }
 
-module.exports = mongoose.model('sale', saleSchema)
+
+// saleSchema.post('save', function(doc, next) {
+
+//   // Push sale to related Customer object
+//   Customer.findByIdAndUpdate(this.customer, { $push: { sales: this._id }}, { new: true }, (err, customer) => {
+//     if (err) {
+//       errors: {
+//         cantUpdateCustomer: {
+//           message: err
+//         } 
+//       }
+//     }
+//   })
+
+//   next()
+// })
+

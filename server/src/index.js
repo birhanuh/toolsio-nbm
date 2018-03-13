@@ -23,10 +23,12 @@ import config from './config'
 // Mongodb connection
 import db from './db'
 
+import models from './models'
+
 import typeDefs from './schema'
 import resolvers from './resolvers'
 
-export const schema = makeExecutableSchema({
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers
 })
@@ -124,9 +126,14 @@ app.use((req, res) => {
 
 // Set port
 app.set('port', process.env.SERVER_PORT)
-app.listen(app.get('port'), () => 
-  console.log('Server started on port: ' + process.env.SERVER_PORT)
-)
+
+
+// sync() will create all table if then doesn't exist in database
+models.sequelize.sync({ force: true }).then(() => {
+  app.listen(app.get('port'), () => 
+    console.log('Server started on port: ' + process.env.SERVER_PORT)
+  )
+})
 
 //const io = require('socket.io').listen(8080)
 //socketEvents(io)

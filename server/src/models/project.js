@@ -1,37 +1,44 @@
-// import bookshelf from '../../db/bookshelf'
-// import Promise from 'bluebird'
+export default (sequelize, DataTypes) => {
+  const Project = sequelize.define('projects', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    deadline: {
+      type: DataTypes.DATE,
+      allowNull : false
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    description: DataTypes.STRING,
+    total: {
+      type: DataTypes.INTEGER,
+      allowNull : false
+    }
+  }, {underscored: true})
 
-// export default bookshelf.Model.extend({
-  
-//   tableName: 'projects',
-  
-//   tasks: function() {
-//     return this.hasMany('Task', 'project_id');
-//   },
+  Project.associate = (models) => {
+    // 1:M
+    Project.belongsTo(models.Customer, {
+      foreignKey: {
+        name: 'customerId',
+        field: 'customer_id'
+      }
+    })
 
-//   invoice: function() {
-//     return this.belongsTo('Invoice', 'invoice_id');
-//   },
+    // 1:1
+    Project.belongsTo(models.Invoice, {
+      foreignKey: {
+        name: 'invoiceId',
+        field: 'invoice_id'
+      }
+    })
+  }
 
-//   customer: function() {
-//     return this.belongsTo('Customer', 'customer_id');
-//   },
-
-//   initialize: function() {
-//     this.on('creating', this.setDefaultStatus);
-//   },
-
-//   setDefaultStatus: function(model, attrs, options) {
-//     return new Promise(function(resolve, reject) {
-
-//       let defaultStatus = 'new'
-      
-//       model.set('status', defaultStatus)
-//       resolve(defaultStatus)       
-//     })
-//   }
-
-// });
+  return Project
+}
 
 
 

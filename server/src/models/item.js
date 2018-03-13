@@ -1,32 +1,49 @@
-import mongoose from 'mongoose'
-import Sale from './sale'
+export default (sequelize, DataTypes) => {
+  const Item = sequelize.define('items', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    unit: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    quantity: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    price: {
+      type: DataTypes.DECIMAL,
+      allowNull : false
+    },
+    vat: DataTypes.INTEGER,
+  }, {underscored: true})
 
-const itemSchema = new mongoose.Schema({
-  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "sale" },
-  name: { type: String, required: [true, "Name is required."] },
-  unit: { type: String, required: [true, "Unit is required."] },
-  quantity: { type: Number, required: [true, "Quantity is required."] },
-  price: { type: Number, required: [true, "Price is required."] },
-  vat: { type: Number, min: 1, max: 100, required: [true, "Vat is required."] }
-},{
-  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
-})
-
-itemSchema.post('save', function (doc, next) {
-
-  // Push items and increment total to related Sale object
-  Sale.findByIdAndUpdate(this._creator, { $push: {items: this._id}, $inc: {total: this.price} }, { new: true }, (err, sale) => {
-    if (err) {
-      errors: {
-        cant_update_sale: {
-          message: err
-        } 
+  Item.associate = (models) => {
+    // 1:M
+    Item.belongsTo(models.Sale, {
+      foreignKey: {
+        name: 'saleId',
+        field: 'sale_id'
       }
-    }
-  })
+    })
+  }
 
-  next()
-})
+  return Item
+}
 
-module.exports = mongoose.model('item', itemSchema)
+//   // Push items and increment total to related Sale object
+//   Sale.findByIdAndUpdate(this._creator, { $push: {items: this._id}, $inc: {total: this.price} }, { new: true }, (err, sale) => {
+//     if (err) {
+//       errors: {
+//         cant_update_sale: {
+//           message: err
+//         } 
+//       }
+//     }
+//   })
+
+//   next()
+// })
+
 

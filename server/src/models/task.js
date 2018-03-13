@@ -1,14 +1,36 @@
-// import bookshelf from '../../db/bookshelf'
+export default (sequelize, DataTypes) => {
+  const Task = sequelize.define('tasks', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    hours: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    payment_type: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    price: {
+      type: DataTypes.DECIMAL,
+      allowNull : false
+    },
+    vat: DataTypes.INTEGER,
+  }, {underscored: true})
 
-// export default bookshelf.Model.extend({
-  
-//   tableName: 'tasks',
+  Task.associate = (models) => {
+    // 1:M
+    Task.belongsTo(models.Project, {
+      foreignKey: {
+        name: 'projectId',
+        field: 'project_id'
+      }
+    })
+  }
 
-//   project: function() {
-//     return this.belongsTo('Project', 'project_id');
-//   }
-
-// }, { dependents: ['projects']});
+  return Task
+}
 
 // taskSchema.post('save', function (doc, next) {
 
