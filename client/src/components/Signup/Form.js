@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { InputField, SelectField } from '../../utils/FormFields'
 import classnames from 'classnames'
-import { gql, graphql } from 'react-apollo'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -101,14 +102,14 @@ class Form extends Component {
       // Make submit
       this.props.mutate({variables: user})
         .then(res => {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: T.translate("sign_up.success_create")
-            })
-           // window.location = `${process.env.HTP}${this.props.currentAccount.account}.${process.env.DNS}/dashboard`
-          },
-          .catch(err => this.setState({ errors: response.data.errors, isLoading: false }))
-      )
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("sign_up.success_create")
+          })
+         // window.location = `${process.env.HTP}${this.props.currentAccount.account}.${process.env.DNS}/dashboard`
+        })
+        .catch(err => this.setState({ errors: err.data.errors, isLoading: false }))
+
     }  
   }
 

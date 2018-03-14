@@ -5,6 +5,6 @@ export default {
   },
 
   Mutation: {
-    createUser: (parent, args, {models}) => models.User.create(args)
+    createUser: (parent, args, { models }) => models.User.create(args)
   }    
 }

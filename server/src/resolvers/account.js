@@ -7,8 +7,8 @@ export default {
   Mutation: {
     createAccount: async (parent, args, { models, user }) => {
       try {
-        await models.Account.create({...args, owner: user.id})
-        return true
+        const account = await models.Account.create({...args, owner: user.id})
+        return account
       } catch (err) {
         console.log(err)
         return false

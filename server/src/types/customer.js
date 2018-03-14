@@ -16,4 +16,13 @@ export default `
     invoices: [Invoice!]
   }
 
+  type Query {
+    getCustomer(id: Int!): Customer!
+    getAllCustomers: [Customer!]!
+  }
+
+  type Mutation {
+    createCustomer(name: String!, vatNumber: Int!, email: String!, phoneNumber: String!, isContactIncludedInInvoice: Boolean street: String, postalCode: String, region: String, country: String): Customer!
+  }
+
 `
