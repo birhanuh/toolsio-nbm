@@ -48,6 +48,9 @@ class HeaderNav extends Component {
   }
 
   render() {
+    const isAuthenticated = false 
+    const currentAccount = {}
+    /*
     const { isAuthenticated, currentAccount } = this.props.authentication
     const { countUnread, conversations } = this.props.conversations
     
@@ -63,7 +66,7 @@ class HeaderNav extends Component {
     } else {
       latestFiveUnreadMessages = <a className="item"><strong>{T.translate("internal_navigation.unread_messages", {unread_messages_number: 0})}</strong></a> 
     } 
-
+    */
     const userLinks = (
       <div>
         <nav className="ui fixed stackable menu">
@@ -96,6 +99,7 @@ class HeaderNav extends Component {
                 </a>
               </div>
             </div>
+            {/*
             <div className="ui dropdown item">
               <i className="mail envelop icon"></i>
               {countUnread !== 0 && <div className="ui mini blue label envelop">{countUnread}</div>}
@@ -124,6 +128,7 @@ class HeaderNav extends Component {
                 </a>   
               </div>
             </div>
+          */}
           </div>
         </nav>
       </div>
@@ -209,15 +214,8 @@ class HeaderNav extends Component {
 }
 
 HeaderNav.propTypes = {
-  authentication: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired,
+  // authentication: PropTypes.object.isRequired,
+  // logout: PropTypes.func.isRequired,
 }
 
-function mapStateToProps(state) {
-  return {
-    authentication: state.authentication,
-    conversations: state.conversations
-  }
-}
-
-export default connect(mapStateToProps, { logout, fetchConversations }) (HeaderNav)
+export default HeaderNav

@@ -58,12 +58,11 @@ class Page extends Component {
 
 // Proptypes definition
 Page.propTypes = {
-  signupRequest: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
-  isSubdomainExist: PropTypes.func.isRequired,
-  isUserExist: PropTypes.func.isRequired
+  // addFlashMessage: PropTypes.func.isRequired,
+  // isSubdomainExist: PropTypes.func.isRequired,
+  // isUserExist: PropTypes.func.isRequired
 }
 
-export default connect(null, { signupRequest, addFlashMessage, isSubdomainExist, isUserExist })(Page)
+export default Page
 
 

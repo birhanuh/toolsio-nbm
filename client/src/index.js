@@ -1,7 +1,6 @@
 //var React = require('react') // ES5 version
 import React from 'react' // ES6 version
 import { render } from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
 //import { Provider } from 'react-redux'
 import { createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
@@ -28,15 +27,15 @@ const httpLink = createHttpLink({
 })
 
 // middleWares and afterwares
-const middlewareLink = setContext(() => {
+const middlewareLink = setContext(() => ({
   headers: {
-    'subdomain':Authorization.getSubdomain(), // Parse subdomain 
+    'subdomain': Authorization.getSubdomain(), // Parse subdomain 
     'x-token': localStorage.getItem('token'),
     'x-refresh-token': localStorage.getItem('refresh-token')
   }
-})
+}))
 
-const afterwareLink = new ApolloLink((operation, forward) => forward(operation).map(response) => {
+const afterwareLink = new ApolloLink((operation, forward) => {
   const { headers } = operation.getContext()
 
   if (headers) {
@@ -99,8 +98,6 @@ T.setTexts(require("./locale/" +language+ ".json"))
 
 render(
   <ApolloProvider client={client}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </ApolloProvider>, document.getElementById('app'))
 

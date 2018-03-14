@@ -16,6 +16,7 @@
     "datatables.net-buttons-se": "^1.5.0",
     "datatables.net-responsive-se": "^2.2.1",
     "datatables.net-se": "^1.10.16",
+    "graphql": "^0.13.1",
     "graphql-tag": "^2.8.0",
     "i18n-react": "^0.6.3",
     "jquery": "^3.2.1",

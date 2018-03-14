@@ -94,7 +94,7 @@ class Form extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    if (this.isValid()) { 
+    if (true) { 
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoading: true })
       
@@ -102,13 +102,15 @@ class Form extends Component {
       // Make submit
       this.props.mutate({variables: user})
         .then(res => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("sign_up.success_create")
-          })
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("sign_up.success_create")
+          // })
          // window.location = `${process.env.HTP}${this.props.currentAccount.account}.${process.env.DNS}/dashboard`
+         console.log('res', res)
         })
-        .catch(err => this.setState({ errors: err.data.errors, isLoading: false }))
+        //.catch(err => this.setState({ errors: err.data.errors, isLoading: false }))
+        .catch(err => console.log('err', err))
 
     }  
   }
@@ -212,14 +214,20 @@ class Form extends Component {
 
 // Proptypes definition
 Form.propTypes = {
-  addFlashMessage: PropTypes.func.isRequired,
-  isSubdomainExist: PropTypes.func.isRequired,
-  isUserExist: PropTypes.func.isRequired
+  // addFlashMessage: PropTypes.func.isRequired,
+  // isSubdomainExist: PropTypes.func.isRequired,
+  // isUserExist: PropTypes.func.isRequired
 }
 
 const registerMutation = gql`
   mutation($firstName: String, $lastName: String, $email: String!, $password: String!) {
-    register(firstName: $firstName, lastName: $lastName, email: $email, password: $password)
+    createUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+      success
+      errors {
+        path
+        message
+      }
+    }
   }
 `
 

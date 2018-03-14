@@ -17,7 +17,10 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       unique: true,
       validate: {     
-        isEmail: true // checks for email format (foo@bar.com) 
+        isEmail: { // checks for email format (foo@bar.com) 
+          arg: true,
+          msg: 'Invalid email format'
+        }
       } 
     },
     password: {
@@ -50,7 +53,7 @@ export default (sequelize, DataTypes) => {
         return new Promise(function(resolve, reject) {
 
           // only hash the password if it has been modified (or is new)
-          if (!user.changed('password')) return reject(err)
+          if (!user.changed('password')) return 
       
           bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
             if (err) return reject(err)

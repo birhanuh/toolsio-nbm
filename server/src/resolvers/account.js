@@ -1,3 +1,6 @@
+
+import formatErrors from '../middlewares/formatErrors'
+
 export default {
   Query: {
     getAccount: (parent, {id}, {models}) => models.Account.findOne({ where: {id} }),
@@ -8,10 +11,16 @@ export default {
     createAccount: async (parent, args, { models, user }) => {
       try {
         const account = await models.Account.create({...args, owner: user.id})
-        return account
+        return {
+          success: true,
+          account
+        }
       } catch (err) {
         console.log(err)
-        return false
+        return {
+          success: false,
+          errors: formatErrors(err, models)
+        }
       }
     }  
   }    
