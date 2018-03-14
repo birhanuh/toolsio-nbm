@@ -8,7 +8,7 @@ import logger from 'morgan'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
-
+import cors from 'cors'
 // Authentication package 
 import session from 'express-session'
 import passport from 'passport'
@@ -50,6 +50,9 @@ const schema = makeExecutableSchema({
 //app.set('view engine', 'jade')
 //app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects'])
 
+// Allow CORS 
+app.use(cors('*'))
+
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger('dev'))
 
@@ -59,7 +62,10 @@ app.use(graphqlEndPoint, bodyParser.json(),
   graphqlExpress({ 
     schema,
     context: {
-      models
+      models,
+      user: {
+        id: 1
+      }
     }
   })
 )
@@ -142,7 +148,7 @@ app.set('port', process.env.SERVER_PORT)
 
 
 // sync() will create all table if then doesn't exist in database
-models.sequelize.sync({ force: true }).then(() => {
+models.sequelize.sync().then(() => {
   app.listen(app.get('port'), () => 
     console.log('Server started on port: ' + process.env.SERVER_PORT)
   )
@@ -163,4 +169,16 @@ models.sequelize.sync({ force: true }).then(() => {
 //   db.close() 
 // })
 
+/*
+mutation {
+  createUser(firstName: "test1", lastName: "test1", email: "test1@toolsio.com", password: "pw" ) {
+    id
+    firstName
+    lastName
+    email
+    password
+    isConfirmed
+  }
+}
+*/
 

@@ -5,7 +5,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       unique: true,
       validate: {     
-        is: /\A[\w\-]+\Z/i, // contains invalid characters
+        not: /\A[\w\-]+\Z/i, // contains invalid characters
         notContains: 'www' // don't allow www substrings
       } 
     },
@@ -22,10 +22,19 @@ export default (sequelize, DataTypes) => {
     },
     email: DataTypes.STRING,
     street: DataTypes.STRING,
-    postalCode: DataTypes.STRING,
+    postalCode: {
+      type: DataTypes.STRING,
+      field: 'postal_code',
+      validate: {     
+        isDecimal: true // checks for any numbers
+      } 
+    },
     region: DataTypes.STRING,
     country: DataTypes.STRING,
-    logoUrl: DataTypes.STRING
+    logoUrl: {
+      type: DataTypes.STRING,
+      field: 'logo_url'
+    }
   })
 
   Account.associate = function(models) {

@@ -9,6 +9,7 @@ import rootReducer from './reducers/rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { Authorization } from './utils'
 import { setCurrentAccount } from './actions/authenticationActions'
+import { ApolloClient, createNetworInterface, Provider } from 'react-apollo'
 
 // Localization 
 import T from 'i18n-react'
@@ -16,6 +17,15 @@ import T from 'i18n-react'
 import App from './components/Layouts/App'
 //import routes from './routes'
 
+const networInterface = createNetworInterface({
+  uri: 'http://localhost:8080/graphql'
+})
+
+const client = new ApolloClient({
+  networInterface
+})
+
+/*
 // A state for the entire project created by Redux
 const store = createStore(
   rootReducer,
@@ -24,6 +34,7 @@ const store = createStore(
     applyMiddleware(thunk)
   )
 )
+*/
 
 // Parse subdomain 
 let subdomain =  Authorization.getSubdomain()
@@ -48,7 +59,7 @@ T.setTexts(require("./locale/" +language+ ".json"))
 
 render(
   <BrowserRouter>
-    <Provider store={store}>
+    <Provider client={client}>
       <App />
     </Provider>
   </BrowserRouter>, document.getElementById('app'))

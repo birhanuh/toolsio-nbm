@@ -48,9 +48,10 @@ export default (sequelize, DataTypes) => {
       },
       beforeCreate: (user, options) => {
         return new Promise(function(resolve, reject) {
+
           // only hash the password if it has been modified (or is new)
-          if (!user.changed('password')) reject()
-          console.log('password ', user.password)
+          if (!user.changed('password')) return reject(err)
+      
           bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
             if (err) return reject(err)
 

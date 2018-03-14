@@ -26,14 +26,14 @@ class Form extends Component {
       name: this.props.customer ? this.props.customer.name : '',
       address: {
         street: this.props.customer ? this.props.customer.address.street: '',
-        postal_code: this.props.customer ? this.props.customer.address.postal_code : '',
+        postalCode: this.props.customer ? this.props.customer.address.postalCode : '',
         region: this.props.customer ? this.props.customer.address.region : '',
         country: this.props.customer ? this.props.customer.address.country : ''
       },
-      vat_number: this.props.customer ? this.props.customer.vat_number : '',
-      is_contact_included_in_invoice: this.props.customer ? this.props.customer.is_contact_included_in_invoice : false,
+      vatNumber: this.props.customer ? this.props.customer.vatNumber : '',
+      isContactIncludedInInvoice: this.props.customer ? this.props.customer.isContactIncludedInInvoice : false,
       contact: {
-        phone_number: this.props.customer ? this.props.customer.contact.phone_number : '',
+        phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
         email: this.props.customer ? this.props.customer.contact.email : ''
       },
       errors: {
@@ -52,14 +52,14 @@ class Form extends Component {
         name: nextProps.customer.name,
         address: {
           street: nextProps.customer.address.street,
-          postal_code: nextProps.customer.address.postal_code,
+          postalCode: nextProps.customer.address.postalCode,
           region: nextProps.customer.address.region,
           country: nextProps.customer.address.country
         },
-        vat_number: nextProps.customer.vat_number,
-        is_contact_included_in_invoice: nextProps.customer.is_contact_included_in_invoice,
+        vatNumber: nextProps.customer.vatNumber,
+        isContactIncludedInInvoice: nextProps.customer.isContactIncludedInInvoice,
         contact: {
-          phone_number: nextProps.customer.contact.phone_number,
+          phoneNumber: nextProps.customer.contact.phoneNumber,
           email: nextProps.customer.contact.email
         }
       })
@@ -69,19 +69,19 @@ class Form extends Component {
   componentDidMount = () => {
     let classContextThis = this
     
-    if (this.state.is_contact_included_in_invoice === true) {
+    if (this.state.isContactIncludedInInvoice === true) {
       $('.ui.toggle.checkbox').checkbox('check')
     }
 
     $('.ui.toggle.checkbox').checkbox({
       onChecked: function() {
          classContextThis.setState({
-          is_contact_included_in_invoice: true
+          isContactIncludedInInvoice: true
         })
       },
       onUnchecked: function() {
         classContextThis.setState({
-          is_contact_included_in_invoice: false
+          isContactIncludedInInvoice: false
         })
       }
     })
@@ -95,13 +95,13 @@ class Form extends Component {
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
 
-      if (e.target.name === "email" || e.target.name === "phone_number") {
+      if (e.target.name === "email" || e.target.name === "phoneNumber") {
 
          this.setState({
           contact: { ...this.state.contact, [e.target.name]: e.target.value },
           errors
         })
-      } else if (e.target.name === "street" || e.target.name === "postal_code" || e.target.name === "region"
+      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
         || e.target.name === "country") {
 
          this.setState({
@@ -116,12 +116,12 @@ class Form extends Component {
       }
     } else {
 
-      if (e.target.name === "email" || e.target.name === "phone_number") {
+      if (e.target.name === "email" || e.target.name === "phoneNumber") {
 
          this.setState({
           contact: { ...this.state.contact, [e.target.name]: e.target.value },
         })
-      } else if (e.target.name === "street" || e.target.name === "postal_code" || e.target.name === "region"
+      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
         || e.target.name === "country") {
         
          this.setState({
@@ -157,9 +157,9 @@ class Form extends Component {
 
     // Validation
     if (true) { 
-      const { _id, name, vat_number, contact, is_contact_included_in_invoice, address } = this.state
+      const { _id, name, vatNumber, contact, isContactIncludedInInvoice, address } = this.state
       this.setState({ isLoading: true })
-      this.props.saveCustomer({ _id, name, vat_number, is_contact_included_in_invoice, contact, address })
+      this.props.saveCustomer({ _id, name, vatNumber, isContactIncludedInInvoice, contact, address })
         .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
     }
   }
@@ -177,7 +177,7 @@ class Form extends Component {
   }
 
   render() {
-    const { _id, name, vat_number, contact, is_contact_included_in_invoice, address, errors, isLoading } = this.state
+    const { _id, name, vatNumber, contact, isContactIncludedInInvoice, address, errors, isLoading } = this.state
     
     //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
     //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
@@ -210,22 +210,22 @@ class Form extends Component {
             />
             <InputField
               label={T.translate("customers.show.vat_number")}
-              name="vat_number" 
-              value={vat_number} 
+              name="vatNumber" 
+              value={vatNumber} 
               onChange={this.handleChange.bind(this)} 
-              placeholder="Vat number"
-              error={errors.message && errors.message.errors && errors.message.errors.vat_number && errors.message.errors['vat_number'].message}
+              placeholder={T.translate("customers.show.vat_number")}
+              error={errors.message && errors.message.errors && errors.message.errors.vatNumber && errors.message.errors['vatNumber'].message}
               formClass="inline field"
             />
              <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
               <InputField
                 label={T.translate("customers.show.contact.phone_number")}
-                name="phone_number" 
-                value={contact.phone_number} 
+                name="phoneNumber" 
+                value={contact.phoneNumber} 
                 onChange={this.handleChange.bind(this)} 
-                placeholder="Phone number"
-                error={errors.message && errors.message.errors && errors.message.errors['contact.phone_number'] && errors.message.errors['contact.phone_number'].message}
+                placeholder={T.translate("customers.show.contact.phone_number")}
+                error={errors.message && errors.message.errors && errors.message.errors['contact.phoneNumber'] && errors.message.errors['contact.phoneNumber'].message}
                 formClass="inline field"
               />
               <InputField
@@ -233,18 +233,18 @@ class Form extends Component {
                 name="email" 
                 value={contact.email} 
                 onChange={this.handleChange.bind(this)} 
-                placeholder="Email"
+                placeholder={T.translate("customers.show.contact.email")}
                 error={errors.message && errors.message.errors && errors.message.errors['contact.email'] && errors.message.errors['contact.email'].message}
                 formClass="inline field"
               />
             </fieldset>
             <div className="inline field">              
-              <label>{T.translate("customers.show.include_contact_on_invoice")}</label> 
+              <label>{T.translate("customers.show.include_contact_in_invoice")}</label> 
               <div className="ui toggle checkbox">
                 <input 
                   type="checkbox" 
-                  name="is_contact_included_in_invoice" 
-                  value={is_contact_included_in_invoice}
+                  name="isContactIncludedInInvoice" 
+                  value={isContactIncludedInInvoice}
                   onChange={this.handleChange.bind(this)} />
                 <label></label>
               </div>
@@ -256,17 +256,17 @@ class Form extends Component {
                 name="street" 
                 value={address.street} 
                 onChange={this.handleChange.bind(this)} 
-                placeholder="Street"
+                placeholder={T.translate("customers.show.address.street")}
                 error={errors.message && errors.message.errors && errors.message.errors['address.street'] && errors.message.errors['address.street'].message}
                 formClass="inline field"
               />
               <InputField
                 label={T.translate("customers.show.address.postal_code")}
-                name="postal_code" 
-                value={address.postal_code} 
+                name="postalCode" 
+                value={address.postalCode} 
                 onChange={this.handleChange.bind(this)} 
-                placeholder="Postal code"
-                error={errors.message && errors.message.errors && errors.message.errors['address.postal_code'] && errors.message.errors['address.postal_code'].message}
+                placeholder={T.translate("customers.show.address.postal_code")}
+                error={errors.message && errors.message.errors && errors.message.errors['address.postalCode'] && errors.message.errors['address.postalCode'].message}
                 formClass="inline field"
               />
               <div className={classnames("inline field", {error: errors.message && errors.message.errors && errors.message.errors['address.country']})}>              

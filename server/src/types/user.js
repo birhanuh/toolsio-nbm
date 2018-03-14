@@ -6,7 +6,7 @@ export default `
     lastName: String 
     email: String!
     password: String! 
-    avatarUrl: Boolean
+    avatarUrl: String
     isConfirmed: Boolean!
     isAdmin: Boolean!
   }
@@ -17,7 +17,7 @@ export default `
   }
 
   type Mutation {
-    createUser(firstName: String!, lastName: String!, email: String!, password: String!): User!
+    createUser(firstName: String, lastName: String, email: String!, password: String!, avatarUrl: String): User!
   }
 
 `

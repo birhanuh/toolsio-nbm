@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { InputField, SelectField } from '../../utils/FormFields'
 import classnames from 'classnames'
+import { gql, graphql } from 'react-apollo'
 
 // Localization 
 import T from 'i18n-react'
@@ -17,11 +18,11 @@ class Form extends Component {
         industry: ''
       },
       user: {
-        first_name: '',
-        last_name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
-        confirm_password: ''
+        confirmPassword: ''
       },
       errors: {
         message: {
@@ -39,8 +40,8 @@ class Form extends Component {
         account: { ...this.state.account, [e.target.name]: e.target.value }
       })
     }
-    else if (e.target.name === "first_name" || e.target.name === "last_name" || e.target.name === "email"
-        || e.target.name === "password" || e.target.name === "confirm_password") {
+    else if (e.target.name === "firstName" || e.target.name === "lastName" || e.target.name === "email"
+        || e.target.name === "password" || e.target.name === "confirmPassword") {
       this.setState({
         user: { ...this.state.user, [e.target.name]: e.target.value }
       })
@@ -98,15 +99,15 @@ class Form extends Component {
       
       const { account, user } = this.state
       // Make submit
-      this.props.signupRequest({account, user}).then(
-        (res) => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("sign_up.success_create")
-          })
-          window.location = `${process.env.HTP}${this.props.currentAccount.account}.${process.env.DNS}/dashboard`
-        },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
+      this.props.mutate({variables: user})
+        .then(res => {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sign_up.success_create")
+            })
+           // window.location = `${process.env.HTP}${this.props.currentAccount.account}.${process.env.DNS}/dashboard`
+          },
+          .catch(err => this.setState({ errors: response.data.errors, isLoading: false }))
       )
     }  
   }
@@ -121,19 +122,19 @@ class Form extends Component {
           { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
           
           <InputField
-            id='first_name'
+            id='firstName'
             label={T.translate("sign_up.first_name")}
-            name="first_name" 
-            value={user.first_name} 
+            name="firstName" 
+            value={user.firstName} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.first_name")}
             formClass="field"
           />
           <InputField
-            id='last_name'
+            id='lastName'
             label={T.translate("sign_up.last_name")}
-            name="last_name" 
-            value={user.last_name} 
+            name="lastName" 
+            value={user.lastName} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.last_name")}
             formClass="field"
@@ -162,13 +163,13 @@ class Form extends Component {
           />
           <InputField
             type="password"
-            name="confirm_password" 
-            value={user.confirm_password} 
-            id="confirm_password"
+            name="confirmPassword" 
+            value={user.confirmPassword} 
+            id="confirmPassword"
             label={T.translate("sign_up.confirm_password")}
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.confirm_password")}
-            error={errors.confirm_password}
+            error={errors.confirmPassword}
             formClass="field"
           />
           <SelectField
@@ -210,23 +211,17 @@ class Form extends Component {
 
 // Proptypes definition
 Form.propTypes = {
-  signupRequest: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   isSubdomainExist: PropTypes.func.isRequired,
   isUserExist: PropTypes.func.isRequired
 }
 
-// Contexttype definition
-Form.contextTypes = {
-  router: PropTypes.object.isRequired
-}
+const registerMutation = gql`
+  mutation($firstName: String, $lastName: String, $email: String!, $password: String!) {
+    register(firstName: $firstName, lastName: $lastName, email: $email, password: $password)
+  }
+`
 
-function mapStateToProps(state) {
-  return {
-    currentAccount: state.authentication && state.authentication.currentAccount
-  } 
-}
-
-export default connect(mapStateToProps, {}) (Form)
+export default graphql(registerMutation)(Form)
 
 

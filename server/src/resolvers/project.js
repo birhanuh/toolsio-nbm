@@ -1,5 +1,20 @@
 export default {
-  
+  Query: {
+    getProject: (parent, {id}, {models}) => models.Project.findOne({ where: {id} }),
+    getAllProjects: (parent, args, {models}) => models.Project.findAll()
+  },
+
+  Mutation: {
+    createProject: async (parent, args, { models }) => {
+      try {
+        await models.Project.create(args)
+        return true
+      } catch (err) {
+        console.log(err)
+        return false
+      }
+    }  
+  }      
 }
 
 import { GraphQLScalarType } from 'graphql';
