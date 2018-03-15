@@ -1,6 +1,7 @@
 export default {
 
   // secret
-  jwtSecret: 'somesecretkeyforjsonwebtoken'
+  jwtSecret: 'somesecretkeyforjsonwebtoken',
+  jwtSecret2: 'somesecretkeyforjsonwebtokentwo'
 
 }

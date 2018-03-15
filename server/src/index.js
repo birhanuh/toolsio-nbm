@@ -65,7 +65,9 @@ app.use(graphqlEndPoint, bodyParser.json(),
       models,
       user: {
         id: 1
-      }
+      },
+      SECRET: config.jwtSecret,
+      SECRET2: config.jwtSecret2
     }
   })
 )
@@ -171,13 +173,14 @@ models.sequelize.sync().then(() => {
 
 /*
 mutation {
-  createUser(firstName: "test1", lastName: "test1", email: "test1@toolsio.com", password: "pw" ) {
-    id
-    firstName
-    lastName
-    email
-    password
-    isConfirmed
+  registerUser(firstName: "test1", lastName: "test1", email: "test3@toolsio.com", password: "sfpws" ) {
+    success
+    user {
+      id
+    }
+    errors {
+      message
+    }
   }
 }
 */

@@ -25,7 +25,13 @@ export default (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {
+        len: { 
+          args: [5, 100],
+          msg: 'Password needs to be at least 5 characters'
+        }
+      }
     },
     avatarUrl: {
       type: DataTypes.STRING,

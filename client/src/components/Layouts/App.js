@@ -59,8 +59,10 @@ class App extends Component {
     return (
       <div className="pusher">
         
-        { !authPages && <HeaderNav /> }
-
+        <BrowserRouter>
+          { !authPages && <HeaderNav /> }
+        </BrowserRouter>
+        
         { internalPages && 
           <Sidebar />
         }

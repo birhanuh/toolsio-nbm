@@ -431,3 +431,77 @@ passport.use(new LocalStrategy({
 
 module.exports = router
 
+
+// export function loginUserPassport({email, password}, models) {
+//   passport.authenticate('local', function(err, user, info) {
+    
+//     if (err) { 
+//       if(err) throw err
+//     }
+
+//     if (!user) { 
+//       // user not found
+//       return {
+//         success: false,     
+//         errors: [{ 
+//           path: 'password',
+//           message: 'Incorrect email or password.'
+//         }]
+//       } 
+//     }
+    
+//     if (user) {    
+//       if (user.get('is_confirmed')) {
+//         return {
+//           success: true,     
+//           user: user
+//         }       
+//       } else {
+//         return {
+//           success: false,     
+//           errors: [{ 
+//             path: 'confirmation',
+//             message: 'Please confirm your email.'
+//           }]
+//         } 
+//       }
+//     }
+//   })
+// }
+
+// passport.serializeUser(function(user, done) {
+//   done(null, user.get('id'))
+// })
+
+// passport.deserializeUser(function(id, done) {
+//   models.User.findById(id)
+//     .then(user => {
+//       done(null, user)
+//     })
+//     .catch(err => {
+//       done(err, null)
+//     })
+// })
+
+// passport.use(new LocalStrategy({usernameField: 'email'},
+//   function(email, password, done) {
+    
+//     models.User.findOne({ where: {email: email}, raw: true })
+//       .then(user => {
+//         if (user) {
+//           models.User.comparePassword(password, user.get('password'), function(err, isMatch) {
+//             if (err) { return done(err); }
+            
+//             if(isMatch){
+//               return done(null, user)
+//             } else {
+//               return done(null, false)
+//             }
+//           })
+//         } else {
+//           return done(null, false)
+//         }
+//       })
+//       .catch(err => { throw err })
+//   }
+// ))

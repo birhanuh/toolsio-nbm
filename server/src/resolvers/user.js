@@ -1,5 +1,6 @@
 
 import { formatErrors } from '../middlewares/formatErrors'
+import { loginUserWithToken } from '../utils/authentication'
 
 export default {
   Query: {
@@ -8,20 +9,9 @@ export default {
   },
 
   Mutation: {
-
-    createUser: async (parent, { password, ...args }, { models }) => {
+    loginUser: (parent, { email, password }, { models, SECRET, SECRET2 }) => loginUserWithToken(email, password, models, SECRET, SECRET2),
+    registerUser: async (parent, args, { models }) => {
       try {
-
-        if (password.length < 5) {
-
-          return {
-            success: false,     
-            errors: [{ // checks for email format (foo@bar.com) 
-              path: 'password',
-              message: 'Password needs to be at least 5 characters'
-            }]
-          } 
-        }
 
         const user = await models.User.create(args)
         return {

@@ -221,7 +221,7 @@ Form.propTypes = {
 
 const registerMutation = gql`
   mutation($firstName: String, $lastName: String, $email: String!, $password: String!) {
-    createUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+    registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
       success
       errors {
         path
