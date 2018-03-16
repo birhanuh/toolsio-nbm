@@ -78,7 +78,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(cookieParser())
 
-// Add user middleware
+// Add token exist checker middleware
 app.use(async (req, res, next) => {
   
   // Parse subdomain 
