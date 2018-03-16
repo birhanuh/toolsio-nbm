@@ -12,6 +12,7 @@ import cors from 'cors'
 // Authentication package 
 import session from 'express-session'
 import passport from 'passport'
+import jwt from 'jsonwebtoken'
 
 import socketEvents from './socket/socketEvents'
 
@@ -33,6 +34,7 @@ import db from './db'
 
 // Models
 import models from './models'
+import refreshToken from './utils/authentication'
 
 // Schema
 const types = fileLoader(path.join(__dirname + '/types'))
@@ -59,17 +61,15 @@ app.use(logger('dev'))
 const graphqlEndPoint = '/graphql'
 
 app.use(graphqlEndPoint, bodyParser.json(), 
-  graphqlExpress({ 
+  graphqlExpress(req => ({ 
     schema,
     context: {
       models,
-      user: {
-        id: 1
-      },
+      user: req.user,
       SECRET: config.jwtSecret,
       SECRET2: config.jwtSecret2
     }
-  })
+  }))
 )
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint }))
@@ -78,32 +78,34 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(cookieParser())
 
-// Get Homepage
-// app.use(async (req, res, next) => {
+// Add user middleware
+app.use(async (req, res, next) => {
   
-//   // Parse subdomain 
-//   let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
+  // Parse subdomain 
+  //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
 
-//   if (subdomain) {
-//     // Connect to subdomain db
-//     if (env === 'development') {
-//       await db.connect(process.env.DB_HOST+subdomain+process.env.DB_DEVELOPMENT)
-//       console.log('Middleware with no mount path')
-//     } else if (env === 'test') {
-//       await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
-//       console.log('Middleware with no mount path')
-//     }
-//   } else {
-//     // Connect to mognodb
-//     if (env === 'development') {
-//       db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-//     } else if (env === 'test') {
-//       db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-//     }
-//   }
+   // Parse token 
+  let token = req.headers['x-token']
 
-//   next()
-// })
+  if (token) {
+    try {
+      const { user } = jwt.verify(token, config.secret)
+      req.user = user
+    
+    } catch (err) {
+      let refreshToken = req.headers['x-refresh-token']
+      const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2)
+      if (newTokens.token && newTokens.refreshToken) {
+        res.set('Access-Control-Expose-Headers', 'x-token', 'x-refresh-token')
+        res.set('x-token', newTokens.token)
+        res.set('x-refresh-token', newTokens.refreshToken)
+      }
+      req.user = newTokens.user
+    }
+  }
+  next()
+})
+
 /**
 app.use(session({
   secret: config.jwtSecret,

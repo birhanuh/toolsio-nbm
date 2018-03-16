@@ -20,7 +20,8 @@ export default `
   }
 
   type Mutation {
-    createAccount(owner: Int!, subdomain: String!, industry: String!, phoneNumber: String, email: String, street: String, postalCode: Int, region: String, country: String, logoUrl: String): Account!
+    createAccount(owner: Int!, subdomain: String!, industry: String!): Account!
+    updateAccount(industry: String!, phoneNumber: String, email: String, street: String, postalCode: Int, region: String, country: String, logoUrl: String): Account!
   }
 
 `

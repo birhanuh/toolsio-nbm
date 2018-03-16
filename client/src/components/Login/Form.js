@@ -19,11 +19,7 @@ class Form extends Component {
     extendObservable(this, {
       email: '',
       password: '',
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      errors: {},
       isLoading: false
     })
   }
@@ -62,10 +58,16 @@ class Form extends Component {
           // })
           // this.context.router.history.push('/dashboard')
           console.log('res', res)
-          const { success, token, refreshToken } = res.data.loginUser
+          const { success, token, refreshToken, errors } = res.data.loginUser
           if (true) {
             localStorage.setItem('token', token)
             localStorage.setItem('refreshToken', refreshToken)
+            // this.context.router.history.push('/dashboard')
+          } else {
+            let errorsList 
+            errors.map(error => errorsList[errors.path] = error.message)
+            console.log('err', errorsList)
+            //this.errors = errorsList
           }
         })
         //.catch(err => this.setState({ errors: err.data.errors, isLoading: false }))

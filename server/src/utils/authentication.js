@@ -41,34 +41,34 @@ export const createTokens = async (user, secret, secret2) => {
   return [createToken, createRefreshToken];
 };
 
-export const refreshTokens = async (token, refreshToken, models, SECRET) => {
-  let userId = -1
+export const refreshTokens = async (token, refreshToken, models, SECRET, SECRET2) => {
+  let userId = 0
 
   try {
     const { user: { id } } = jwt.decode(refreshToken)
     userId = id
   } catch(err) {
-    return {}
+    return
   }
 
   if (!userId) {
-    return {}
+    return
   }
 
   const user = await models.User.findOne({ where: { id: userId }, raw: true })
 
   if (!user) {
     // user not found
-    return {} 
+    return 
   }
 
   try {
-    jwt.verify(refreshToken, user.refreshSecret)
+    jwt.verify(refreshToken, user.password + SECRET2)
   } catch (err) {
-    return {}
+    return
   }
 
-  const [newToken, newRefreshToken] = await createToken(user, SECRET, user.refreshSecret)
+  const [newToken, newRefreshToken] = await createToken(user, SECRET, user.password + SECRET2)
   return {    
     token, newToken,
     refreshToken: newRefreshToken,
