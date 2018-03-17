@@ -1,7 +1,7 @@
 export default `
 
   type Invoice {
-    deadline: Date
+    deadline: Date!
     paymentTerm: Int
     interestInArrears:Int!
     status: String!
@@ -9,6 +9,8 @@ export default `
     description: String
     total: Int!
     customer: Customer!
+    project: Project
+    sale: Sale
   }
 
   type Query {
@@ -17,6 +19,6 @@ export default `
   }
 
   type Mutation {
-    createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String!, referenceNumber: Int!, description: String, total: Int!): Invoice!
+    createInvoice(deadline: Date!, paymentTerm: Int, interestInArrears: Int!, status: String!, referenceNumber: Int!, description: String, total: Int!, projectId: Int, saleId: Int): Invoice!
   }
 `

@@ -21,7 +21,6 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     total: {
       type: DataTypes.INTEGER,
-      allowNull : false,
       validate: {     
         isInt: true // checks for int
       } 
@@ -37,13 +36,6 @@ export default (sequelize, DataTypes) => {
       }
     })
 
-    // 1:1
-    Project.belongsTo(models.Invoice, {
-      foreignKey: {
-        name: 'invoiceId',
-        field: 'invoice_id'
-      }
-    })
   }
 
   return Project

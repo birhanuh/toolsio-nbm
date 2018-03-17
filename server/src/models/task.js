@@ -6,7 +6,10 @@ export default (sequelize, DataTypes) => {
     },
     hours: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isAlpha: true // will only allow letters
+      } 
     },
     paymentType: {
       type: DataTypes.STRING,
@@ -32,7 +35,7 @@ export default (sequelize, DataTypes) => {
   })
 
   Task.associate = (models) => {
-    // 1:M
+    // 1:N
     Task.belongsTo(models.Project, {
       foreignKey: {
         name: 'projectId',

@@ -22,7 +22,7 @@ export default `
   }
 
   type Mutation {
-    createCustomer(name: String!, vatNumber: Int!, email: String!, phoneNumber: String!, isContactIncludedInInvoice: Boolean street: String, postalCode: String, region: String, country: String): Customer!
+    createCustomer(name: String!, vatNumber: Int!, email: String!, phoneNumber: String!, isContactIncludedInInvoice: Boolean, street: String, postalCode: String, region: String, country: String): Customer!
   }
 
 `

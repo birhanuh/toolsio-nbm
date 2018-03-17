@@ -22,12 +22,12 @@ const app = express()
 // Routes
 //import accounts from './routes/accounts'
 //import users from './routes/users'
-import api from './routes/api'
+//import api from './routes/api'
 //import routes from './routes/index'
 
 // Config
 require('dotenv').config()
-import config from './config'
+import jwtConfig from './config/jwt'
 
 // Mongodb connection
 import db from './db'
@@ -66,8 +66,8 @@ app.use(graphqlEndPoint, bodyParser.json(),
     context: {
       models,
       user: req.user,
-      SECRET: config.jwtSecret,
-      SECRET2: config.jwtSecret2
+      SECRET: jwtConfig.jwtSecret,
+      SECRET2: jwtConfig.jwtSecret2
     }
   }))
 )
@@ -134,7 +134,7 @@ if (env === 'development') {
 
 // app.use('/accounts', accounts)
 // app.use('/users', users)
-app.use('/api', api)
+//app.use('/api', api)
 //app.use('/', routes)
 
 // Middleware function
@@ -183,6 +183,16 @@ mutation {
     errors {
       message
     }
+  }
+}
+
+mutation {
+  createProject(name: "Project1", deadline: 1521243824165, status: "new", description: "Desc", customerId: 1) {
+    id
+    name
+    deadline
+    status
+    description
   }
 }
 */

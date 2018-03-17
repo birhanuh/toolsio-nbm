@@ -5,6 +5,8 @@ import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -85,16 +87,21 @@ class Form extends Component {
     return isValid
   }
 
-  handleSubmit(event) {
+  handleSubmit = async (event) => {
      event.preventDefault()
 
     // Validation
     if (this.isValid()) { 
-      const { _id, name, deadline, customer, status, progress, description } = this.state
       this.setState({ isLoading: true })
 
-      this.props.saveProject({ _id, name, customer, deadline, status, progress, description })
-        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
+      let response
+
+      try {
+        response = await this.props.mutate({ variables: { this.state })
+      } catch {
+        console.log('redirect to login page')
+        return
+      }
     }
   }
 
@@ -300,9 +307,21 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  saveProject: PropTypes.func.isRequired,
-  project: PropTypes.object,
-  customers: PropTypes.array.isRequired
+  // saveProject: PropTypes.func.isRequired,
+  // project: PropTypes.object,
+  // customers: PropTypes.array.isRequired
 }
 
-export default Form
+const registerMutation = gql`
+  mutation($firstName: String, $lastName: String, $email: String!, $password: String!) {
+    registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+export default graphql(registerMutation)(Form)

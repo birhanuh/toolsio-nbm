@@ -1,7 +1,7 @@
 import express from 'express'
 const router = express.Router()
 import controllers from '../controllers'
-import { authenticate, ensureAuthenticated } from '../middlewares/authenticate'
+import { authentication, ensureAuthenticated } from '../middlewares/authentication'
 
 // POST recources (authenticate middleware function called when request comes and it checks for toke validation,
 // if every thing is ok, it procced to the route code but, if there no-toket or token-is-invalid then middlewaer 

@@ -29,7 +29,7 @@ export default (sequelize, DataTypes) => {
       } 
     },
     referenceNumber: {
-      type: DataTypes.DOUBLE,
+      type: DataTypes.DECIMAL,
       allowNull : false,
       field: 'reference_number',
       validate: {     
@@ -47,11 +47,41 @@ export default (sequelize, DataTypes) => {
   })
 
   Invoice.associate = (models) => {
-    // 1:M
+    // 1:N
     Invoice.belongsTo(models.Customer, {
       foreignKey: {
-        name: 'customerId',
-        field: 'customer_id'
+        through: 'projects',
+        foreignKey: {
+          name: 'customerId',
+          field: 'customer_id'
+        }
+      }
+    })
+
+    // 1:N
+    Invoice.belongsTo(models.Customer, {
+      foreignKey: {
+        through: 'sales',
+        foreignKey: {
+          name: 'customerId',
+          field: 'customer_id'
+        }
+      }
+    })
+
+    // 1:1
+    Invoice.belongsTo(models.Project, {
+      foreignKey: {
+        name: 'projectId',
+        field: 'project_id'
+      }
+    })
+
+    // 1:1
+    Invoice.belongsTo(models.Sale, {
+      foreignKey: {
+        name: 'saleId',
+        field: 'sale_id'
       }
     })
 

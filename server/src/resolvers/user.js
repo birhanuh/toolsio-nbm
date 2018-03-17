@@ -1,5 +1,5 @@
 
-import { formatErrors } from '../middlewares/formatErrors'
+import { formatErrors } from '../utils/formatErrors'
 import { loginUserWithToken } from '../utils/authentication'
 
 export default {

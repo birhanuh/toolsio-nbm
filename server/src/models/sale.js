@@ -21,7 +21,6 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     total: {
       type: DataTypes.INTEGER,
-      allowNull : false,
       validate: {     
         isInt: true // checks for int
       } 
@@ -29,7 +28,7 @@ export default (sequelize, DataTypes) => {
   })
 
   Sale.associate = (models) => {
-    // 1:M
+    // 1:N
     Sale.belongsTo(models.Customer, {
       foreignKey: {
         name: 'customerId',
@@ -37,10 +36,6 @@ export default (sequelize, DataTypes) => {
       }
     })
 
-    // 1:1
-    Sale.belongsTo(models.Invoice, {
-      foreignKey: 'invoice_id'
-    })
   }
 
   return Sale

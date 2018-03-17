@@ -5,7 +5,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false
     },
     vatNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull : false,
       unique: true,
       field: 'vat_number',
@@ -38,7 +38,7 @@ export default (sequelize, DataTypes) => {
         isDecimal: true // checks for any numbers
       } 
     },
-    postal_code: DataTypes.INTEGER,
+    postal_code: DataTypes.DECIMAL,
     region: DataTypes.STRING,
     country: DataTypes.STRING
   })

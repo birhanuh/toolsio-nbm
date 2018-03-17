@@ -2,7 +2,7 @@ import Sequelize from 'sequelize'
 import path from 'path'
 
 const env = process.env.NODE_ENV || 'development'
-const config = require(__dirname + '/../config/config.json')[env]
+const config = require(__dirname + '/../config/sequelize.json')[env]
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config)
 
@@ -15,8 +15,7 @@ const models = {
   Sale: sequelize.import('./sale'),
   Item: sequelize.import('./item'),
   Invoice: sequelize.import('./invoice'),
-  Message: sequelize.import('./messaging/message'),
-  Conversation: sequelize.import('./messaging/conversation')
+  Message: sequelize.import('./message')
 }
 
 Object.keys(models).forEach(modelName => {

@@ -1,5 +1,5 @@
 export default `
-
+  
   type Sale {
     id: Int!
     name: String!
@@ -8,6 +8,7 @@ export default `
     description:  String!
     items: [Item!]
     total: Int!
+    customer: Customer!
     invoice: Invoice
   }
 
@@ -17,7 +18,7 @@ export default `
   }
 
   type Mutation {
-    createSale(name: String!, deadline: Date!, status: String!, description: String, total: Int): Sale!
+    createSale(name: String!, deadline: Date!, status: String!, description: String, total: Int, customerId: Int!): Sale!
   }
 
 `

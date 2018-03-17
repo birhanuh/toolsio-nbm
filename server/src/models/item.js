@@ -6,10 +6,13 @@ export default (sequelize, DataTypes) => {
     },
     unit: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isAlpha: true // will only allow letters
+      } 
     },
     quantity: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull : false,
       validate: {     
         isInt: true, // checks for int
@@ -31,7 +34,7 @@ export default (sequelize, DataTypes) => {
   })
 
   Item.associate = (models) => {
-    // 1:M
+    // 1:n
     Item.belongsTo(models.Sale, {
       foreignKey: {
         name: 'saleId',

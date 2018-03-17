@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer'
 import AWS from 'aws-sdk'
 
 // Config
-import config from '../config'
+import config from '../config/jwt'
 
 let env = process.env.NODE_ENV || 'development'
 

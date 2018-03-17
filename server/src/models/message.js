@@ -16,11 +16,12 @@ export default (sequelize, DataTypes) => {
   }, {underscored: true})
 
   Message.associate = (models) => {
-    // 1:M
-    Message.belongsTo(models.Conversation, {
+    // 1:N
+    Message.belongsTo(models.User, {
+      through: 'participants',
       foreignKey: {
-        name: 'conversationId',
-        field: 'conversation_id'
+        name: 'messageId',
+        field: 'message_id'
       }
     })
 

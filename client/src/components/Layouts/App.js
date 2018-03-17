@@ -7,7 +7,7 @@ import Landing from './Landing'
 import Signup from '../Signup/Page'
 import Login from '../Login/Page'
 import Subdomain from '../Login/Subdomain'
-import requireAuth from '../../utils/requireAuth'
+import PrivateRoute from '../../utils/requireAuth'
 import Account from '../Account/Page'
 import ProjectsPage from '../Projects/Page'
 import ProjectsFormPage from '../Projects/FormPage'
@@ -80,29 +80,29 @@ class App extends Component {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/login/confirmation/:token" component={Login} />
                 <Route path="/subdomain" component={Subdomain} />
-                <Route path="/dashboard" component={requireAuth(Dashboard)} />
-                <Route exact path="/account" component={requireAuth(Account)} />
-                <Route exact path="/projects" component={requireAuth(ProjectsPage)} />
-                <Route exact path="/projects/edit/:id" component={requireAuth(ProjectsFormPage)} /> 
-                <Route exact path="/projects/show/:id" component={requireAuth(ProjectsShow)} />
-                <Route exact path="/projects/new" component={requireAuth(ProjectsFormPage)} />
-                <Route exact path="/projects/:start/:length" component={requireAuth(ProjectsPage)} />
-                <Route exact path="/sales" component={requireAuth(SalesPage)} />
-                <Route exact path="/sales/edit/:id" component={requireAuth(SalesFormPage)} /> 
-                <Route exact path="/sales/new" component={requireAuth(SalesFormPage)} />
-                <Route exact path="/sales/show/:id" component={requireAuth(SalesShow)} />
-                <Route exact path="/customers" component={requireAuth(CustomersPage)} />
-                <Route exact path="/customers/edit/:id" component={requireAuth(CustomersFormPage)} /> 
-                <Route exact path="/customers/new" component={requireAuth(CustomersFormPage)} />
-                <Route exact path="/customers/show/:id" component={requireAuth(CustomersShow)} /> 
-                <Route exact path="/invoices" component={requireAuth(InvoicesPage)} />
-                <Route exact path="/invoices/edit/:id" component={requireAuth(InvoicesFormPage)} /> 
-                <Route exact path="/invoices/new" component={requireAuth(InvoicesFormPage)} />
-                <Route exact path="/invoices/show/:id" component={requireAuth(InvoicesShow)} /> 
-                <Route exact path="/conversations" component={requireAuth(ConversationsPage)} />
-                <Route exact path="/conversations/:type" component={requireAuth(ConversationsPage)} />
-                <Route exact path="/conversations/:type/show/:id" component={requireAuth(ConversationsPage)} /> 
-                <Route exact path="/users" component={requireAuth(UsersPage)} /> 
+                <Route path="/dashboard" component={Dashboard} />
+                <Route exact path="/account" component={Account} />
+                <Route exact path="/projects" component={ProjectsPage} />
+                <Route exact path="/projects/edit/:id" component={ProjectsFormPage} /> 
+                <Route exact path="/projects/show/:id" component={ProjectsShow} />
+                <Route exact path="/projects/new" component={ProjectsFormPage} />
+                <Route exact path="/projects/:start/:length" component={ProjectsPage} />
+                <PrivateRoute exact path="/sales" component={SalesPage} />
+                <Route exact path="/sales/edit/:id" component={SalesFormPage} /> 
+                <Route exact path="/sales/new" component={SalesFormPage} />
+                <Route exact path="/sales/show/:id" component={SalesShow} />
+                <Route exact path="/customers" component={CustomersPage} />
+                <Route exact path="/customers/edit/:id" component={CustomersFormPage} /> 
+                <Route exact path="/customers/new" component={CustomersFormPage} />
+                <Route exact path="/customers/show/:id" component={CustomersShow} /> 
+                <Route exact path="/invoices" component={InvoicesPage} />
+                <Route exact path="/invoices/edit/:id" component={InvoicesFormPage} /> 
+                <Route exact path="/invoices/new" component={InvoicesFormPage} />
+                <Route exact path="/invoices/show/:id" component={InvoicesShow} /> 
+                <Route exact path="/conversations" component={ConversationsPage} />
+                <Route exact path="/conversations/:type" component={ConversationsPage} />
+                <Route exact path="/conversations/:type/show/:id" component={ConversationsPage} /> 
+                <Route exact path="/users" component={UsersPage} /> 
               </Switch>
             </BrowserRouter>
           </div>

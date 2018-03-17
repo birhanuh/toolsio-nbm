@@ -23,7 +23,7 @@ export default (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     street: DataTypes.STRING,
     postalCode: {
-      type: DataTypes.STRING,
+      type: DataTypes.DECIMAL,
       field: 'postal_code',
       validate: {     
         isDecimal: true // checks for any numbers
@@ -38,7 +38,7 @@ export default (sequelize, DataTypes) => {
   })
 
   Account.associate = function(models) {
-    // 1:M
+    // 1:1
     Account.belongsTo(models.User, {
       foreignKey: 'owner'
     })
