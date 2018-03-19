@@ -28,11 +28,7 @@ class Task extends Component {
         hours: "",
         price: "",
         vat: "",
-        errors: {
-          message: {
-            errors: {}
-          }
-        },
+        errors: {},
         isLoading: false
       },
       editTask: {
@@ -43,11 +39,7 @@ class Task extends Component {
         hours: "",
         price: "",
         vat: "",
-        errors: {
-          message: {
-            errors: {}
-          }
-        },
+        errors: {},
         isLoading: false
       }
     }

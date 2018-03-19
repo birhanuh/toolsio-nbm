@@ -2,7 +2,10 @@ export default (sequelize, DataTypes) => {
   const Task = sequelize.define('tasks', {
     name: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        notEmpty: true, // don't allow empty strings
+      } 
     },
     hours: {
       type: DataTypes.STRING,
@@ -14,10 +17,10 @@ export default (sequelize, DataTypes) => {
     paymentType: {
       type: DataTypes.STRING,
       allowNull : false,
-      field: 'payment_type',
       validate: {     
         isAlpha: true // will only allow letters
-      } 
+      },
+      field: 'payment_type'
     },
     price: {
       type: DataTypes.DECIMAL,
@@ -28,9 +31,18 @@ export default (sequelize, DataTypes) => {
     },
     vat: {
       type: DataTypes.INTEGER,
+      allowNull : true,
       validate: {     
-        isInt: true, // checks for int
+        isInt: true // checks for int
       } 
+    }
+  }, {
+    hooks: {
+      beforeValidate: (task, options) => {
+        if (task.vat === "") {
+          task.vat = null
+        }
+      }
     }
   })
 

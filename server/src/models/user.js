@@ -6,11 +6,19 @@ export default (sequelize, DataTypes) => {
   const User = sequelize.define('users', {
     firstName: {
       type: DataTypes.STRING,
-      field: 'first_name'
+      field: 'first_name',
+      notEmpty: false,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
     },
     lastName: {
       type: DataTypes.STRING,
-      field: 'last_name'
+      field: 'last_name',
+      notEmpty: false,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
     },
     email: {
       type: DataTypes.STRING,

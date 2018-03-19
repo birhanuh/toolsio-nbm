@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // Datepicker 
@@ -32,11 +32,7 @@ class Form extends Component {
       status: this.props.project ? this.props.project.status : '',
       progress: this.props.project ? this.props.project.progress : 0,
       description: this.props.project ? this.props.project.description : '',
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      errors: {},
       isLoading: false
     }
   }
@@ -94,13 +90,25 @@ class Form extends Component {
     if (this.isValid()) { 
       this.setState({ isLoading: true })
 
+      const { name, deadline, customer, status, progress, description } = this.state
+
       let response
 
       try {
-        response = await this.props.mutate({ variables: { this.state })
-      } catch {
+        response = await this.props.createProject({ variables: { name, deadline, customer, status, progress, description }})
+      } catch(err) {
         console.log('redirect to login page')
         return
+      }
+
+      const { success, errors } = response.data.createProject;
+
+      if (success) {
+        this.props.history.push('/projects')
+      } else {
+        let errorsList 
+        errors.map(error => errorsList[errors.path] = error.message)
+        console.log('err', errorsList)
       }
     }
   }
@@ -171,8 +179,8 @@ class Form extends Component {
   render() {
     const { _id, name, deadline, customer, status, progress, description, errors, isLoading } = this.state
  
-    const customersOptions = map(this.props.customers, (customer) => 
-      <option key={customer._id} value={customer._id}>{customer.name}</option>
+    const customersOptions = ({ data: {getCustomers = []} }) => map(getCustomers, (customer) => 
+      <option key={customer.id} value={customer._id}>{customer.name}</option>
     )
     
     return (
@@ -187,7 +195,7 @@ class Form extends Component {
               {_id ? <h1 className="ui header">{T.translate("projects.form.edit_project")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}
             </div>
             
-            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             <InputField
               label={T.translate("projects.form.name")}
@@ -195,18 +203,18 @@ class Form extends Component {
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message.errors.name.message}
+              error={errors.name}
               formClass="inline field"
             />
                           
-            <div  className={classnames("inline field", { error: !!(errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message) })}>
+            <div  className={classnames("inline field", { error: !!errors.deadline })}>
               <label className="" htmlFor="date">{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span className="red">{errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message}</span>
+              <span className="red">{errors.deadline}</span>
             </div>
             
             <SelectField
@@ -214,7 +222,7 @@ class Form extends Component {
               name="customer"
               value={customer ? (typeof customer === 'object' ? customer._id : customer) : ''} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
+              error={errors.customer}
               formClass="inline field"
 
               options={[<option key="default" value="" disabled>{T.translate("projects.form.select_customer")}</option>,
@@ -242,7 +250,7 @@ class Form extends Component {
                 type="select"
                 value={status} 
                 onChange={this.handleChange.bind(this)} 
-                error={errors.message && errors.message.errors && errors.message.errors.status && errors.message['status'].message}
+                error={errors.staus}
                 formClass="inline field"
 
                 options={[
@@ -312,9 +320,9 @@ Form.propTypes = {
   // customers: PropTypes.array.isRequired
 }
 
-const registerMutation = gql`
-  mutation($firstName: String, $lastName: String, $email: String!, $password: String!) {
-    registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+const createProject = gql`
+  mutation createProject($firstName: String, $lastName: String, $email: String!, $password: String!) {
+    createProject(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
       success
       errors {
         path
@@ -324,4 +332,25 @@ const registerMutation = gql`
   }
 `
 
-export default graphql(registerMutation)(Form)
+const updateProject = gql`
+  mutation updateProject($id: Int!, $firstName: String, $lastName: String, $email: String!, $password: String!) {
+    createProject(id: $id, firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const CreateUpdateProjectMutations =  compose(
+  graphql(createProject, {
+    name : 'createProject'
+  }),
+  graphql(updateProject, {
+    name: 'updateProject'
+  })
+)(Form)
+
+export default CreateUpdateProjectMutations

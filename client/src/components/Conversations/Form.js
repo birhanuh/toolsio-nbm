@@ -17,11 +17,7 @@ class Form extends Component {
       recipientId: '',
       title: '',
       body: '',
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      errors: {},
       isLoading: false
     }
   }
@@ -90,13 +86,13 @@ class Form extends Component {
              <h1 className="ui header">{T.translate("conversations.form.new_message")}</h1>
           </div>
 
-          { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
+          { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
           <SelectField
             name="recipientId"
             value={recipientId} 
             onChange={this.handleChange.bind(this)} 
-            error={errors.message && errors.message.errors && errors.message.errors.recipientId && errors.message.errors.recipientId.message}
+            error={errors.recipientId}
             formClass="field"
 
             options={[<option key="default" value="" disabled>{T.translate("conversations.form.select_recipient")}</option>,
@@ -109,7 +105,7 @@ class Form extends Component {
             value={title} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("conversations.form.title")}
-            error={errors.message && errors.message.errors && errors.message.errors.title && errors.message.errors['title'].message}
+            error={errors.title}
             formClass="field"
           />
           
@@ -119,7 +115,7 @@ class Form extends Component {
             value={body} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("conversations.form.body")}
-            error={errors.message && errors.message.errors && errors.message.errors.body && errors.message.errors['body'].message}
+            error={errors.body}
             formClass="field"
           /> 
 

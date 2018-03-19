@@ -28,11 +28,7 @@ class Item extends Component {
         quantity: "",
         price: "",
         vat: "",
-        errors: {
-          message: {
-            errors: {}
-          }
-        },
+        errors: {},
         isLoading: false
       },
       editItem: {
@@ -43,11 +39,7 @@ class Item extends Component {
         quantity: "",
         price: "",
         vat: "",
-        errors: {
-          message: {
-            errors: {}
-          }
-        },
+        errors: {},
         isLoading: false
       }
     }

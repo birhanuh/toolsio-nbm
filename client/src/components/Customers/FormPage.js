@@ -70,25 +70,17 @@ class FormPage  extends Component {
 }
 
 FormPage.propTypes = {
-  createCustomer: PropTypes.func.isRequired,
-  fetchCustomer: PropTypes.func.isRequired,
-  updateCustomer: PropTypes.func.isRequired
+  // createCustomer: PropTypes.func.isRequired,
+  // fetchCustomer: PropTypes.func.isRequired,
+  // updateCustomer: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state, props) {
-  const { match } = props
-  if (match.params.id) {
-    return {
-      customer: state.customers.find(item => item._id === match.params.id)
-    }
-  } 
-  return { customer: null }
-}
+
 
 FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, { createCustomer, fetchCustomer, updateCustomer })(FormPage)
+export default FormPage
 
 

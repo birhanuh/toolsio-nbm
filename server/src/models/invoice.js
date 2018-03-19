@@ -2,24 +2,26 @@ export default (sequelize, DataTypes) => {
   var Invoice = sequelize.define('invoices', {
     deadline: {
       type: DataTypes.DATE,
+      allowNull : true,
       validate: {     
         isDate: true // only allow date strings
       } 
     },
     paymentTerm: {
       type: DataTypes.INTEGER,
-      field: 'payment_term',
-      validate: {     
+      allowNull : true, 
+      validate: {    
         isInt: true, // checks for int
-      } 
+      }, 
+      field: 'payment_term',
     },
     interestInArrears: {
       type: DataTypes.INTEGER,
       allowNull : false,
-      field: 'interest_in_arrears',
       validate: {     
         isInt: true // checks for int
-      } 
+      },
+      field: 'interest_in_arrears'
     },
     status: {
       type: DataTypes.STRING,
@@ -31,10 +33,10 @@ export default (sequelize, DataTypes) => {
     referenceNumber: {
       type: DataTypes.DECIMAL,
       allowNull : false,
-      field: 'reference_number',
       validate: {     
         isDecimal: true // checks for any numbers
-      } 
+      },
+      field: 'reference_number'
     },
     description: DataTypes.TEXT,
     total: {
@@ -43,6 +45,20 @@ export default (sequelize, DataTypes) => {
       validate: {     
         isInt: true // checks for int
       } 
+    }
+  }, {
+    hooks: {
+      beforeValidate: (invoice, options) => {
+        if (invoice.deadline === "" && invoice.paymentTerm === "") {
+          throw new Error("Either deadline or payment term is required")
+        }
+        if (invoice.deadline === "") {
+          invoice.deadline = null
+        }
+        if (invoice.paymentTerm === "") {
+          invoice.paymentTerm = null
+        }
+      }
     }
   })
 

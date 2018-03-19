@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchCustomers } from '../../actions/customerActions'
+import { graphql} from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -30,7 +32,7 @@ class Page extends Component {
 
   componentDidMount() {
     
-    this.props.fetchCustomers()
+    //this.props.fetchCustomers()
 
     // $('.table').dataTable({
     //   processing: true,
@@ -120,13 +122,24 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  fetchCustomers: PropTypes.func.isRequired
+  //fetchCustomers: PropTypes.func.isRequired
 }
 
-function mapSateToProps(state) {
-  return {
-    customers: state.customers
+// function mapSateToProps(state) {
+//   return {
+//     customers: state.customers
+//   }
+// }
+
+const getCustomersQuery = gql`
+  query {
+    getCustomers {
+      id
+      name
+      vatNumber
+      phoneNumber
+      email
+    }
   }
-}
-
-export default connect(mapSateToProps, { fetchCustomers })(Page)
+`
+export default graphql(getCustomersQuery)(Page)

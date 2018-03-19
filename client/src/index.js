@@ -1,6 +1,7 @@
 //var React = require('react') // ES5 version
 import React from 'react' // ES6 version
 import { render } from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 //import { Provider } from 'react-redux'
 import { createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
@@ -98,6 +99,8 @@ T.setTexts(require("./locale/" +language+ ".json"))
 
 render(
   <ApolloProvider client={client}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </ApolloProvider>, document.getElementById('app'))
 

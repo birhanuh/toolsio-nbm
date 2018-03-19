@@ -175,10 +175,16 @@ models.sequelize.sync().then(() => {
 
 /*
 mutation {
-  registerUser(firstName: "test1", lastName: "test1", email: "test3@toolsio.com", password: "sfpws" ) {
+  registerUser(firstName: "test", lastName: "test1", email: 
+    "test1@toolsio.com", password: "ppppp", subdomain: "test1", industry: "test" ) {
     success
     user {
       id
+      email
+    }
+    account {
+      subdomain
+      industry
     }
     errors {
       message
@@ -187,13 +193,32 @@ mutation {
 }
 
 mutation {
-  createProject(name: "Project1", deadline: 1521243824165, status: "new", description: "Desc", customerId: 1) {
-    id
-    name
-    deadline
-    status
-    description
+  createProject(name: "", deadline: 1521243824165, status: "new", description: "Desc", customerId: 1) {
+    success
+    errors {
+      path
+      message
+    }
   }
 }
+
+  mutation createCustomer($name: String!, $vatNumber: String!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
+    createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
+      postalCode: $postalCode, region: $region, country: $country) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+
+query {
+  getAllProjects {
+    name
+    deadline
+  }
+}
+
 */
 

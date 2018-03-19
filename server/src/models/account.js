@@ -3,37 +3,89 @@ export default (sequelize, DataTypes) => {
     subdomain: {
       type: DataTypes.STRING,
       allowNull : false,
-      unique: true,
       validate: {     
+        unique: true,
         not: /\A[\w\-]+\Z/i, // contains invalid characters
         notContains: 'www' // don't allow www substrings
       } 
     },
     industry: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      field: 'phone_number',
+      allowNull : true,
       validate: {     
         is: /\d{6,14}/,  // checks for phone format with RegExp) 
+      },
+      field: 'phone_number'
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull : true,
+      validate: {     
+        isEmail: true // checks for email format (foo@bar.com) 
       } 
     },
-    email: DataTypes.STRING,
-    street: DataTypes.STRING,
+    street: {
+      type: DataTypes.STRING,
+      allowNull : true,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
+    },
     postalCode: {
       type: DataTypes.DECIMAL,
-      field: 'postal_code',
+      allowNull : true,
       validate: {     
         isDecimal: true // checks for any numbers
+      },
+      field: 'postal_code' 
+    },
+    region: {
+      type: DataTypes.STRING,
+      allowNull : true,
+      validate: {     
+        isAlpha: true  // will only allow letters
       } 
     },
-    region: DataTypes.STRING,
-    country: DataTypes.STRING,
+    country: {
+      type: DataTypes.STRING,
+      allowNull : true,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
+    },
     logoUrl: {
       type: DataTypes.STRING,
       field: 'logo_url'
+    }
+  }, {
+    hooks: {
+      beforeValidate: (account, options) => {
+        if (account.phoneNumber === "") {
+          account.phoneNumber = null
+        }
+        if (account.email === "") {
+          account.email = null
+        }
+        if (account.street === "") {
+          account.street = null
+        }
+        if (account.postalCode === "") {
+          account.postalCode = null
+        }
+        if (account.region === "") {
+          account.region = null
+        }
+        if (account.country === "") {
+          account.country = null
+        }
+      }
     }
   })
 

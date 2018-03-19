@@ -6,6 +6,8 @@ import List from './List'
 import { Pagination } from '../../utils'
 import { connect } from 'react-redux'
 import { fetchProjects } from '../../actions/projectActions'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -28,11 +30,11 @@ class Page extends Component {
     
     const { match } = this.props
 
-    if (!!match.params.start) {   
-      this.props.fetchProjects(match.params.start, match.params.length)
-    } else {
-      this.props.fetchProjects(start, length)
-    }
+    // if (!!match.params.start) {   
+    //   this.props.fetchProjects(match.params.start, match.params.length)
+    // } else {
+    //   this.props.fetchProjects(start, length)
+    // }
 
   }
 
@@ -40,7 +42,8 @@ class Page extends Component {
 
     const { length } = this.state
 
-    const { projects, match } = this.props
+    const { match } = this.props
+    const { getProjects } = this.props.data
 
     return (
       <div className="row column">  
@@ -60,12 +63,12 @@ class Page extends Component {
         </div> 
         
         <div className="row column">     
-          { projects && projects.list && <List projects={this.props.projects.list} /> }
+          { getProjects && getProjects.list && <List projects={getProjects} /> }
         </div>    
 
         <div className="ui clearing vertical segment border-bottom-none">
          
-          <Pagination path="projects" list={projects} match={match} length={length} />           
+          <Pagination path="projects" list={getProjects} match={match} length={length} />           
            
         </div>   
       </div>   
@@ -74,13 +77,19 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  fetchProjects: PropTypes.func.isRequired
+  //fetchProjects: PropTypes.func.isRequired
 }
 
-function mapSateToProps(state) {
-  return {
-    projects: state.projects
-  }
+const allProjectsQuery = gql`
+  {
+    getProjects {
+      name 
+      deadline
+      status
+      progress
+      description
+    }
 }
+`
 
-export default connect(mapSateToProps, { fetchProjects })(Page)
+export default graphql(allProjectsQuery)(Page)

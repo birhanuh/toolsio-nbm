@@ -15,8 +15,8 @@ export default `
   }
 
   type Query {
-    getAccount(id: Int!): Account!
-    getAllAccounts: [Account!]!
+    getAccount(subdomain: String!): Account!
+    getAccounts: [Account!]!
   }
 
   type Mutation {

@@ -19,6 +19,7 @@ export default `
   type RegisterResponse {
     success: Boolean!
     user: User
+    account: Account
     errors: [Error!]
   }
 
@@ -30,7 +31,7 @@ export default `
   }
 
   type Mutation {
-    registerUser(firstName: String, lastName: String, email: String!, password: String!, avatarUrl: String): RegisterResponse!
+    registerUser(firstName: String, lastName: String, email: String!, password: String!, avatarUrl: String, subdomain: String!, industry: String!): RegisterResponse!
     loginUser(email: String!, password: String!): LoginResponse!
 
   }

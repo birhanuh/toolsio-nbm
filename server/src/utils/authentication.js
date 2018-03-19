@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 export const createTokens = async (user, secret, secret2) => {
   const createToken = jwt.sign(
     {
-      user: _.pick(user, ['id', 'isConfirmed']),
+      user: _.pick(user, ['id', 'firstName', 'email', 'isAdmin']),
     },
     secret,
     {

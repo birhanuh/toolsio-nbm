@@ -470,7 +470,7 @@
         "phone_number": "Phone number",
         "email": "Email"
       },
-      "include_contact_on_invoice": "Include address on invoice",
+      "include_contact_in_invoice": "Include address in invoice",
       "address": {
         "header": "Address",
         "street": "Street",

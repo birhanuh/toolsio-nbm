@@ -16,14 +16,14 @@ class FormPage  extends Component {
   }
 
   componentDidMount = () => {
-    // Fetch Project when id is present in params
-    const { match } = this.props
-    if (match.params.id) {
-      this.props.fetchProject(match.params.id)
-    } 
+    // // Fetch Project when id is present in params
+    // const { match } = this.props
+    // if (match.params.id) {
+    //   this.props.fetchProject(match.params.id)
+    // } 
 
-    // Fetch Customers
-    this.props.fetchCustomers()
+    // // Fetch Customers
+    // this.props.fetchCustomers()
   }
 
   saveProject = ({ _id, name, customer, deadline, status, progress, description }) => {
@@ -68,31 +68,19 @@ class FormPage  extends Component {
 }
 
 FormPage.propTypes = {
-  createProject: PropTypes.func.isRequired,
-  fetchProject: PropTypes.func.isRequired,
-  updateProject: PropTypes.func.isRequired,
-  fetchCustomers: PropTypes.func.isRequired,
-  customers: PropTypes.array.isRequired,
-  project: PropTypes.object
+  // createProject: PropTypes.func.isRequired,
+  // fetchProject: PropTypes.func.isRequired,
+  // updateProject: PropTypes.func.isRequired,
+  // fetchCustomers: PropTypes.func.isRequired,
+  // customers: PropTypes.array.isRequired,
+  // project: PropTypes.object
 }
 
-function mapStateToProps(state, props) {
-  const { match } = props
-  if (match.params.id) {
-    return {
-      project: state.projects && state.projects.list && state.projects.list.find(item => item._id === match.params.id),
-      customers: state.customers
-    }
-  } 
-  return { 
-    project: null,
-    customers: state.customers
-  }
-}
+
 
 FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, { createProject, fetchProject, updateProject, fetchCustomers })(FormPage)
+export default FormPage
 

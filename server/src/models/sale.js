@@ -2,7 +2,10 @@ export default (sequelize, DataTypes) => {
   const Sale = sequelize.define('sales', {
     name: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        notEmpty: true, // don't allow empty strings
+      } 
     },
     deadline: {
       type: DataTypes.DATE,
@@ -21,9 +24,18 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     total: {
       type: DataTypes.INTEGER,
-      validate: {     
+      allowNull : true,
+      validate: {    
         isInt: true // checks for int
       } 
+    }
+  }, {
+    hooks: {
+      beforeValidate: (sale, options) => {
+        if (sale.total === "") {
+          sale.total = null
+        }
+      }
     }
   })
 

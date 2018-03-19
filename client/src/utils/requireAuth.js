@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Route } from 'react-router-dom'
 import { BrowserRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { addFlashMessage } from '../actions/flashMessageActions'
@@ -65,16 +66,16 @@ const isAuthenticated = () => {
     decode(token)
     decode(refreshToken)
   } catch(err) {
-    return flase 
+    return false 
   }
 
   return true
 }
 
 // Authenticated routes
-export default const PrivateRoute = ({ component: Component, ...rest }) => (
+export const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
 
     isAuthenticated() ? (<Component {...props}/>) : (<Redirect to={{ pathname: '/login', state: {from: props.location}}}/>))  
-    )}/>
+    }/>
 )

@@ -205,9 +205,11 @@ class HeaderNav extends Component {
 
     return (
       <header>    
+       
         {/* Call links conditionally.  */}
-        { isAuthenticated ? userLinks : guestLinks }
+        {/*  { isAuthenticated ? userLinks : guestLinks } */}
 
+        { userLinks }
       </header>
     )
   }

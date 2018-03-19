@@ -2,45 +2,103 @@ export default (sequelize, DataTypes) => {
   const Customer = sequelize.define('customers', {
     name: { 
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
     },
     vatNumber: {
       type: DataTypes.DECIMAL,
-      allowNull : false,
       unique: true,
-      field: 'vat_number',
+      allowNull : false,
       validate: {     
         isDecimal: true // checks for any numbers
-      } 
+      },
+      field: 'vat_number'
     },
     phoneNumber: {
-      type: DataTypes.STRING,
-      field: 'phone_number',
+      type: DataTypes.DECIMAL,
+      allowNull : true,
       validate: {     
-        is: /\d{6,14}/  // checks for phone format with RegExp) 
-      } 
+        isDecimal: true // checks for any numbers
+      },
+      field: 'phone_number'
     },
     email: {
       type: DataTypes.STRING,
+      allowNull : true,
       validate: {     
         isEmail: true // checks for email format (foo@bar.com) 
       } 
     },
     isContactIncludedInInvoice: {
       type: DataTypes.BOOLEAN,
-      allowNull : false,
       defaultValue : false,
+      allowNull : false,
       field: 'is_contact_included_in_invoice'
     },
     street: {
       type: DataTypes.STRING,
-      validate: {     
-        isDecimal: true // checks for any numbers
+      allowNull: true,
+      validate: {    
+        isAlpha: true  // will only allow letters
       } 
     },
-    postal_code: DataTypes.DECIMAL,
-    region: DataTypes.STRING,
-    country: DataTypes.STRING
+    postalCode: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
+      validate: {     
+        isDecimal: true // checks for any numbers
+      },
+      field: 'postal_code'
+    },
+    region: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {    
+        isAlpha: true  // will only allow letters
+      }
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {    
+        isAlpha: true  // will only allow letters
+      }
+    }
+  }, {
+    hooks: {
+      beforeValidate: (customer, options) => {
+        if (customer.email === "" && customer.phoneNumber === "") {
+
+          const type = 'Validation error'
+          const value = ''
+          const emailError = new sequelize.ValidationErrorItem("Either email or phone number is required", type, "email", value)
+          const phoneNumberError = new sequelize.ValidationErrorItem("Either email or phone number is required", type, "phoneNumber", value)
+          
+          // Throw error  
+          throw new sequelize.ValidationError('', [emailError, phoneNumberError])
+        }
+        if (customer.phoneNumber === "") {
+          customer.phoneNumber = null
+        }
+        if (customer.email === "") {
+          customer.email = null
+        }
+        if (customer.street === "") {
+          customer.street = null
+        }
+        if (customer.postalCode === "") {
+          customer.postalCode = null
+        }
+        if (customer.region === "") {
+          customer.region = null
+        }
+        if (customer.country === "") {
+          customer.country = null
+        }
+      }
+    }
   })
 
   Customer.associate = (models) => {

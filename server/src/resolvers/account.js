@@ -3,8 +3,8 @@ import formatErrors from '../utils/formatErrors'
 
 export default {
   Query: {
-    getAccount: (parent, {id}, {models}) => models.Account.findOne({ where: {id} }),
-    getAllAccounts: (parent, args, {models}) => models.Account.findAll()
+    getAccount: (parent, {subdomain}, {models}) => models.Account.findOne({ where: {subdomain} }),
+    getAccounts: (parent, args, {models}) => models.Account.findAll()
   },
 
   Mutation: {

@@ -13,7 +13,7 @@ export const AddElement = ({task, handleNewTaskChange, handleCreate}) => {
           value={task.name} 
           onChange={handleNewTaskChange}  
           placeholder="Name"
-          error={task.errors.message && task.errors.message.errors && task.errors.message.errors.name && task.errors.message.errors.name.message}
+          error={task.errors && task.errors.name}
           formClass="ui small input"
         />
       </td>
@@ -23,7 +23,7 @@ export const AddElement = ({task, handleNewTaskChange, handleCreate}) => {
           type="select"
           value={task.paymentType} 
           onChange={handleNewTaskChange}  
-          error={task.errors.message && task.errors.message.errors && task.errors.message.errors.paymentType && task.errors.message.errors.paymentType.message}
+          error={task.errors && task.errors.paymentType}
           formClass="ui small input"
           options={[
             <option key="default" value="" disabled>{T.translate("projects.tasks.form.select_payment_type")}</option>,
@@ -39,7 +39,7 @@ export const AddElement = ({task, handleNewTaskChange, handleCreate}) => {
           value={task.hours} 
           onChange={handleNewTaskChange}  
           placeholder="0.00"
-          error={task.errors.message && task.errors.message.errors && task.errors.message.errors.hours && task.errors.message.errors.hours.message}
+          error={task.errors && task.errors.hours}
           formClass="ui small input"
         />
       </td>
@@ -49,7 +49,7 @@ export const AddElement = ({task, handleNewTaskChange, handleCreate}) => {
           value={task.price} 
           onChange={handleNewTaskChange} 
           placeholder="0.00"
-          error={task.errors.message && task.errors.message.errors && task.errors.message.errors.price && task.errors.message.errors.price.message}
+          error={task.errors && task.errors.price}
           formClass="ui small input"
         />
       </td>
@@ -59,7 +59,7 @@ export const AddElement = ({task, handleNewTaskChange, handleCreate}) => {
           value={task.vat} 
           onChange={handleNewTaskChange} 
           placeholder="0"
-          error={task.errors.message && task.errors.message.errors && task.errors.message.errors.vat && task.errors.message.errors.vat.message}
+          error={task.errors && task.errors.vat}
           formClass="ui small input"
         />
       </td>
@@ -91,7 +91,7 @@ export const ShowEditElement = ({task, editTask, handleCreate, handleEdit, handl
           value={editTask.name} 
           onChange={handleEditTaskChange}  
           placeholder="Name"
-          error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.name && editTask.errors.message.errors.name.message}
+          error={editTask.errors.message && editTask.errors.name}
           formClass="ui small input"
         />
       </td>
@@ -101,7 +101,7 @@ export const ShowEditElement = ({task, editTask, handleCreate, handleEdit, handl
           type="select"
           value={editTask.paymentType} 
           onChange={handleEditTaskChange}  
-          error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.paymentType && editTask.errors.message.errors.paymentType.message}
+          error={editTask.errors && editTask.errors.paymentType}
           formClass="ui small input"
           options={[
             <option key="default" value="" disabled>{T.translate("projects.tasks.form.select_payment_type")}</option>,
@@ -117,7 +117,7 @@ export const ShowEditElement = ({task, editTask, handleCreate, handleEdit, handl
           value={editTask.hours.toString()} 
           onChange={handleEditTaskChange}  
           placeholder="0.00"
-          error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.hours && editTask.errors.message.errors.hours.message}
+          error={editTask.errors && editTask.errors.hours}
           formClass="ui small input"
         />
       </td>
@@ -127,7 +127,7 @@ export const ShowEditElement = ({task, editTask, handleCreate, handleEdit, handl
           value={editTask.price.toString()} 
           onChange={handleEditTaskChange} 
           placeholder="0.00"
-          error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.price && editTask.errors.message.errors.price.message}
+          error={editTask.errors && editTask.errors.price}
           formClass="ui small input"
         />
       </td>
@@ -137,7 +137,7 @@ export const ShowEditElement = ({task, editTask, handleCreate, handleEdit, handl
           value={editTask.vat.toString()} 
           onChange={handleEditTaskChange} 
           placeholder="0"
-          error={editTask.errors.message && editTask.errors.message.errors && editTask.errors.message.errors.vat && editTask.errors.message.errors.vat.message}
+          error={editTask.errors && editTask.errors.vat}
           formClass="ui small input"
         />
       </td>

@@ -2,7 +2,10 @@ export default (sequelize, DataTypes) => {
   const Item = sequelize.define('items', {
     name: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {     
+        notEmpty: true, // don't allow empty strings
+      } 
     },
     unit: {
       type: DataTypes.STRING,
@@ -26,10 +29,19 @@ export default (sequelize, DataTypes) => {
       } 
     },
     vat: {
-      type: DataTypes.INTEGER,
-      validate: {     
+      type: DataTypes.INTEGER, 
+      allowNull : true,
+      validate: {    
         isInt: true // checks for int
       } 
+    }
+  }, {
+    hooks: {
+      beforeValidate: (item, options) => {
+        if (item.vat === "") {
+          item.vat = null
+        }
+      }
     }
   })
 

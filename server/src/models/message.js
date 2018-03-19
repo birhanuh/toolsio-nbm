@@ -1,16 +1,21 @@
 export default (sequelize, DataTypes) => {
   const Message = sequelize.define('messages', {
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
     body: {
       type: DataTypes.TEXT,
       allowNull : false
     },
     is_read: {
       type: DataTypes.BOOLEAN,
+      defaultValue : false,
       field: 'is_read'
     },
     isDrafted: {
       type: DataTypes.BOOLEAN,
+      defaultValue : false,
       field: 'is_drafted'
     }
   }, {underscored: true})

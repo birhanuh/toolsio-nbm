@@ -28,11 +28,7 @@ class Form extends Component {
       customer: this.props.sale ? (this.props.sale.customer ? this.props.sale.customer._id : '') : '',
       status: this.props.sale ? this.props.sale.status : '',
       description: this.props.sale ? this.props.sale.description : '',
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      errors: {},
       isLoading: false
     }
   }
@@ -131,7 +127,7 @@ class Form extends Component {
               {_id ? <h1 className="ui header">{T.translate("sales.form.edit_sale")}</h1> : <h1 className="ui header">{T.translate("sales.form.new_sale")}</h1>}        
             </div>
 
-            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
             <InputField
               label={T.translate("sales.form.name")}
@@ -139,18 +135,18 @@ class Form extends Component {
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message.errors.name.message}
+              error={errors.name}
               formClass="inline field"
             />
 
-            <div  className={classnames("inline field", { error: !!(errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message) })}>
+            <div  className={classnames("inline field", { error: !!errors.deadline })}>
               <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span className="red">{errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message}</span>
+              <span className="red">{errors.deadline}</span>
             </div>
 
             <SelectField
@@ -158,7 +154,7 @@ class Form extends Component {
               name="customer"
               value={customer ? (typeof customer === 'object' ? customer._id : customer) : ''} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
+              error={errors.customer}
               formClass="inline field"
               
               options={[<option key="default" value="" disabled>{T.translate("sales.form.select_customer")}</option>,
@@ -186,7 +182,7 @@ class Form extends Component {
                 type="select"
                 value={status} 
                 onChange={this.handleChange.bind(this)} 
-                error={errors.message && errors.message.errors && errors.message.errors.status && errors.message.errors.status.message}
+                error={errors.status}
                 formClass="inline field"
 
                 options={[
