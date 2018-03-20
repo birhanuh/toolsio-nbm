@@ -3,7 +3,7 @@ import { loginUserWithToken } from '../utils/authentication'
 
 export default {
   Query: {
-    getUser: (parent, {id}, {models}) => models.User.findOne({ where: {id} }),
+    getUser: (parent, {id}, {models}) => models.User.findOne({ where: {id} }, { raw: true }),
     getAllUsers: (parent, args, {models}) => models.User.findAll()
   },
 
@@ -15,33 +15,24 @@ export default {
       const { subdomain, industry } = args
 
       try {
+        const response = await models.squelize.transaction(async () => {
+          const account = await models.Account.findOne({ where: {subdomain} }, { raw: true })
+          const user = await  models.User.create({ firstName, lastName, email, password })
 
-        const userBuild = await models.User.build({ firstName, lastName, email, password })
-        const accountBuild = await models.Account.build({ subdomain, industry })
-
-        if (!!userBuild && !!accountBuild) {
-          const user = await userBuild.save()
-          const account = await accountBuild.save()
-
-          return {
-            success: true,
-            user,
-            account
-          }
-        } else {
-          console.log("errors ", userBuild.errors)
-          return {
-            success: false,
-            errors: formatErrors(userBuild || accountBuild, models)
-          }
+          return user
+        })
+        return {
+          success: true,
+          response,
         }
       } catch(err) {
         console.log(err)
         return {
           success: false,
           errors: formatErrors(err, models)
-        }
+        }       
       }
+
     }
   }    
 }

@@ -214,7 +214,7 @@ mutation {
   }
 
 query {
-  getAllProjects {
+  getProjects {
     name
     deadline
   }

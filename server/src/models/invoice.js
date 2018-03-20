@@ -26,6 +26,7 @@ export default (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
       allowNull : false,
+      defaultValue : "new",
       validate: {     
         isAlpha: true // will only allow letters
       } 

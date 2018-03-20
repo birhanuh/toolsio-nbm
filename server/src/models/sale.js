@@ -17,6 +17,7 @@ export default (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
       allowNull : false,
+      defaultValue : "new",
       validate: {     
         isAlpha: true  // will only allow letters
       } 
@@ -28,14 +29,6 @@ export default (sequelize, DataTypes) => {
       validate: {    
         isInt: true // checks for int
       } 
-    }
-  }, {
-    hooks: {
-      beforeValidate: (sale, options) => {
-        if (sale.total === "") {
-          sale.total = null
-        }
-      }
     }
   })
 

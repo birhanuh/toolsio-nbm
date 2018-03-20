@@ -12,7 +12,6 @@ export default `
     tasks: [Task!]
     total: Int
     customer: Customer!
-    invoice: Invoice
   }
 
   type GetProjectsResponse {
@@ -21,6 +20,7 @@ export default `
     status: String!
     description: String
     progress: Int
+    customer: Customer!
   }
 
   type CreateProjectResponse {
@@ -35,7 +35,7 @@ export default `
   }
 
   type Mutation {
-    createProject(name: String!, deadline: Date!, status: String!, description: String, total: Int, customerId: Int!): CreateProjectResponse!
+    createProject(name: String!, deadline: Date!, status: String!, progress: Int, description: String, total: Int, customerId: Int!): CreateProjectResponse!
   }
 
 `

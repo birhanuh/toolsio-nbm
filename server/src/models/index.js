@@ -15,7 +15,8 @@ const models = {
   Sale: sequelize.import('./sale'),
   Item: sequelize.import('./item'),
   Invoice: sequelize.import('./invoice'),
-  Message: sequelize.import('./message')
+  Message: sequelize.import('./messaging/message'),
+  Conversation: sequelize.import('./messaging/conversation')
 }
 
 Object.keys(models).forEach(modelName => {

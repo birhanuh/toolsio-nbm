@@ -39,10 +39,7 @@ export default (sequelize, DataTypes) => {
     },
     street: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {    
-        isAlpha: true  // will only allow letters
-      } 
+      allowNull: true
     },
     postalCode: {
       type: DataTypes.DECIMAL,
@@ -54,17 +51,11 @@ export default (sequelize, DataTypes) => {
     },
     region: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {    
-        isAlpha: true  // will only allow letters
-      }
+      allowNull: true
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {    
-        isAlpha: true  // will only allow letters
-      }
+      allowNull: true
     }
   }, {
     hooks: {

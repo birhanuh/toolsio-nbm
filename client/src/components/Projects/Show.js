@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
@@ -41,7 +42,13 @@ class Show extends Component {
   componentDidMount = () => {
     // Fetch Project when id is present in params
     const { match } = this.props
-    if (match.params.id) {
+
+    // Check if param id is an int
+    const projectId = parseInt(match.params.id, 10)
+    
+    if (!projectId) {
+      return <Redirect to="/projects" />
+    } else {
       this.props.fetchProject(match.params.id)
     } 
 

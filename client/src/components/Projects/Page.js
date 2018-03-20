@@ -26,7 +26,7 @@ class Page extends Component {
 
   componentDidMount() {
 
-    const { start, length} = this.state
+    const { start, length } = this.state
     
     const { match } = this.props
 
@@ -63,7 +63,7 @@ class Page extends Component {
         </div> 
         
         <div className="row column">     
-          { getProjects && getProjects.list && <List projects={getProjects} /> }
+          { getProjects && <List projects={getProjects} /> }
         </div>    
 
         <div className="ui clearing vertical segment border-bottom-none">
@@ -88,6 +88,9 @@ const allProjectsQuery = gql`
       status
       progress
       description
+      customer {
+        name
+      }
     }
 }
 `

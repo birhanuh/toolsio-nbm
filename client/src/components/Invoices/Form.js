@@ -116,7 +116,7 @@ class Form extends Component {
     const { errors, isValid } = Validation.validateInvoiceInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors.errors = errors
 
     if (!isValid) {
       this.setState({ 

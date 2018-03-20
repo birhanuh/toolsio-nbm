@@ -23,7 +23,7 @@ export default (sequelize, DataTypes) => {
   Message.associate = (models) => {
     // 1:N
     Message.belongsTo(models.User, {
-      through: 'participants',
+      through: models.Conversation,
       foreignKey: {
         name: 'messageId',
         field: 'message_id'

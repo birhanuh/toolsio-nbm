@@ -46,9 +46,9 @@ class Task extends Component {
   }
 
   handleNewTaskChange = (e) => {
-    if (!!this.state.newTask.errors.message.errors[e.target.name]) {
+    if (!!this.state.newTask.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.newTask.errors)
-      delete errors.message.errors[e.target.name]
+      delete errors[e.target.name]
 
       let updatedTask = Object.assign({}, this.state.newTask)
       updatedTask._creator = this.props.creator
@@ -74,7 +74,7 @@ class Task extends Component {
     
     if (!isValid) {
       let updatedTask = Object.assign({}, this.state.newTask)
-      updatedTask.errors.message.errors = errors
+      updatedTask.errors = errors
       this.setState({
         newTask: updatedTask
       })

@@ -3,7 +3,7 @@ import formatErrors from '../utils/formatErrors'
 
 export default {
   Query: {
-    getAccount: (parent, {subdomain}, {models}) => models.Account.findOne({ where: {subdomain} }),
+    getAccount: (parent, {subdomain}, {models}) => models.Account.findOne({ where: {subdomain} }, { raw: true }),
     getAccounts: (parent, args, {models}) => models.Account.findAll()
   },
 

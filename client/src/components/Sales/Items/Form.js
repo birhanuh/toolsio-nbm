@@ -46,9 +46,9 @@ class Item extends Component {
   }
 
   handleNewItemChange = (e) => {
-    if (!!this.state.newItem.errors.message.errors[e.target.name]) {
+    if (!!this.state.newItem.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.newItem.errors)
-      delete errors.message.errors[e.target.name]
+      delete errors[e.target.name]
 
       let updatedItem = Object.assign({}, this.state.newItem)
       updatedItem._creator = this.props.creator
@@ -74,7 +74,7 @@ class Item extends Component {
     
     if (!isValid) {
       let updatedItem = Object.assign({}, this.state.newItem)
-      updatedItem.errors.message.errors = errors
+      updatedItem.errors = errors
       this.setState({
         newItem: updatedItem
       })

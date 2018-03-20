@@ -5,6 +5,8 @@ import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -22,12 +24,13 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.sale ? this.props.sale._id : null,
+      id: this.props.sale ? this.props.sale.id : null,
       name: this.props.sale ? this.props.sale.name : '',
-      deadline: this.props.sale ? moment(this.props.sale.deadline, "MM-DD-YYYY") : moment(),
-      customer: this.props.sale ? (this.props.sale.customer ? this.props.sale.customer._id : '') : '',
-      status: this.props.sale ? this.props.sale.status : '',
+      deadline: this.props.sale ? moment(this.props.sale.deadline).format("MM-DD-YYYY") : moment(),
+      customerId: this.props.sale ? this.props.sale.customerId : '',
+      status: this.props.sale ? this.props.sale.status : 'new',
       description: this.props.sale ? this.props.sale.description : '',
+      total: this.props.sale ? this.props.sale.total : 0,
       errors: {},
       isLoading: false
     }
@@ -36,21 +39,22 @@ class Form extends Component {
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.sale) {
       this.setState({
-        _id: nextProps.sale._id,
+        id: nextProps.sale.id,
         name: nextProps.sale.name,
         deadline: moment(nextProps.sale.deadline),
-        customer: nextProps.sale.customer._id,
+        customerId: nextProps.sale.customerId,
         status: nextProps.sale.status,
-        description: nextProps.sale.description
+        description: nextProps.sale.description,
+        total: nextProps.sale.total
       })
     }
   }
 
   handleChange = (e) => {
-    if (!!this.state.errors.message.errors[e.target.name]) {
+    if (!!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors.message.errors[e.target.name]
+      delete errors[e.target.name]
 
       this.setState({
         [e.target.name]: e.target.value,
@@ -68,7 +72,7 @@ class Form extends Component {
     const { errors, isValid } = Validation.validateSaleInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ errors: updatedErrors })
@@ -81,13 +85,33 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (this.isValid()) { 
-      const { _id, name, deadline, customer, status, description } = this.state
+    if (true) { 
       this.setState({ isLoading: true })
+
+      const { name, deadline, status, description, total, customerId } = this.state
       
-      this.props.saveSale({ _id, name, customer, deadline, status, description })
-        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
-    }
+      this.props.createSaleMutation({ variables: { name, deadline, status, description, total, customerId: parseInt(customerId) }})
+        .then(res => {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("projects.form.flash.success_update", { name: name})
+          // })  
+          // this.context.router.history.push('/projects')
+          
+
+          const { success, project, errors } = res.data.createSale
+
+          if (success) {
+            this.context.router.history.push('/sales')
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
+    }    
   }
 
   handleChangeDate(deadline) {
@@ -108,10 +132,12 @@ class Form extends Component {
   } 
 
   render() {
-    const { _id, name, deadline, customer, status, description, errors, isLoading } = this.state
+    const { id, name, deadline, customerId, status, description, errors, isLoading } = this.state
     
-    const customersOptions = map(this.props.customers, (customer) => 
-      <option key={customer._id} value={customer._id}>{customer.name}</option>
+    const { getCustomers } = this.props.getCustomersQuery
+  
+    const customersOptions = map(getCustomers, (customer) => 
+      <option key={customer.id} value={customer.id}>{customer.name}</option>
     )
 
     return (  
@@ -124,7 +150,7 @@ class Form extends Component {
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
-              {_id ? <h1 className="ui header">{T.translate("sales.form.edit_sale")}</h1> : <h1 className="ui header">{T.translate("sales.form.new_sale")}</h1>}        
+              {id ? <h1 className="ui header">{T.translate("sales.form.edit_sale")}</h1> : <h1 className="ui header">{T.translate("sales.form.new_sale")}</h1>}        
             </div>
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
@@ -151,10 +177,10 @@ class Form extends Component {
 
             <SelectField
               label={T.translate("sales.form.customer")}
-              name="customer"
-              value={customer ? (typeof customer === 'object' ? customer._id : customer) : ''} 
+              name="customerId"
+              value={customerId ? customerId : ''} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.customer}
+              error={errors.customerId}
               formClass="inline field"
               
               options={[<option key="default" value="" disabled>{T.translate("sales.form.select_customer")}</option>,
@@ -175,7 +201,7 @@ class Form extends Component {
                 </div>
             }
 
-            { _id &&
+            { id &&
               <SelectField
                 label={T.translate("sales.form.status")}
                 name="status"
@@ -220,10 +246,65 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  saveSale: PropTypes.func.isRequired,
-  sale: PropTypes.object,
-  customers: PropTypes.array.isRequired
+  // saveSale: PropTypes.func.isRequired,
+  // sale: PropTypes.object,
+  // customers: PropTypes.array.isRequired
 }
 
-export default Form
+Form.contextTypes = {
+  router: PropTypes.object.isRequired
+}
+
+const createSaleMutation = gql`
+  mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
+    createSale(name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
+      success
+      project {
+        name
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const updateSaleMutation = gql`
+  mutation updateSale($id: Int!, $name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
+    updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
+      success
+      project {
+        name
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const getCustomersQuery = gql`
+  query {
+    getCustomers {
+      id
+      name
+    }
+  }
+`
+
+const MutationsAndQuery =  compose(
+  graphql(createSaleMutation, {
+    name : 'createSaleMutation'
+  }),
+  graphql(updateSaleMutation, {
+    name: 'updateSaleMutation'
+  }),
+  graphql(getCustomersQuery, {
+    name: 'getCustomersQuery'
+  })
+)(Form)
+
+export default MutationsAndQuery
 

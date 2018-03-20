@@ -8,9 +8,9 @@ export default `
     phoneNumber: String 
     isContactIncludedInInvoice: Boolean!
     street: String
-    postalCode: String! 
+    postalCode: String
     region: String 
-    country:String!
+    country:String
     projects: [Project!]
     sales: [Sale!]
     invoices: [Invoice!]

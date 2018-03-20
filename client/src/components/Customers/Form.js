@@ -160,12 +160,14 @@ class Form extends Component {
 
       this.setState({ isLoading: true })
          
-      this.props.createCustomer({variables: { name, vatNumber, phoneNumber, email, isContactIncludedInInvoice, street, postalCode, region, country } })
+      this.props.createCustomerMutation({variables: { name, vatNumber, phoneNumber, email, isContactIncludedInInvoice, street, postalCode, region, country } })
         .then(res => {
+          
           // this.props.addFlashMessage({
           //   type: 'success',
-          //   text: T.translate("sign_up.success_create")
-          // })
+          //   text: T.translate("customers.form.flash.success_update", { name: name})
+          // })  
+          // this.context.router.history.push('/customers')
 
           const { success, errors } = res.data.createCustomer
          
@@ -344,7 +346,7 @@ Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createCustomer = gql`
+const createCustomerMutation = gql`
   mutation createCustomer($name: String!, $vatNumber: String!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
     createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
       postalCode: $postalCode, region: $region, country: $country) {
@@ -356,7 +358,7 @@ const createCustomer = gql`
     }
   }
 `
-const updateCustomer = gql`
+const updateCustomerMutation = gql`
   mutation updateCustomer($id: Int!, $name: String!, $vatNumber: Int!, $email: String, $phoneNumber: String, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: Int, $region: String, $country: String) {
     updateCustomer(id: $id, name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, postalCode: $postalCode, region: $region, country: $country) {
       success
@@ -368,11 +370,11 @@ const updateCustomer = gql`
   }
 `
 const CreateUpdateCustomerMutations =  compose(
-  graphql(createCustomer, {
-    name : 'createCustomer'
+  graphql(createCustomerMutation, {
+    name : 'createCustomerMutation'
   }),
-  graphql(updateCustomer, {
-    name: 'updateCustomer'
+  graphql(updateCustomerMutation, {
+    name: 'updateCustomerMutation'
   })
 )(Form)
 

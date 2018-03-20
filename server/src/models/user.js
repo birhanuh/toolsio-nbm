@@ -89,7 +89,7 @@ export default (sequelize, DataTypes) => {
   User.associate = (models) => {
     // M:N
     User.belongsToMany(models.Message, {
-      through: 'participants',
+      through: models.Conversation,
       foreignKey: {
         name: 'userId',
         field: 'user_id'

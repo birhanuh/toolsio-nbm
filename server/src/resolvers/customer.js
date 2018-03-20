@@ -2,7 +2,7 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getCustomer: (parent, {id}, {models}) => models.Customer.findOne({ where: {id} }),
+    getCustomer: (parent, {id}, {models}) => models.Customer.findOne({ where: {id} }, { raw: true }),
     getCustomers: (parent, args, {models}) => models.Customer.findAll()
   },
 
