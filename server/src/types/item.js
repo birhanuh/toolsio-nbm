@@ -12,7 +12,7 @@ export default `
 
   type CreateItemResponse {
     success: Boolean!
-    task: Task 
+    item: Item 
     errors: [Error!]
   }
 

@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
-import { createItem, updateItem, deleteItem } from '../../../actions/saleActions'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { AddElement, ShowEditElement } from './Tr'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // Localization 
@@ -26,7 +25,7 @@ class Item extends Component {
         saleId: this.props.saleId,
         name: "",
         unit: "",
-        quantity: "",
+        quantity: 0,
         price: "",
         vat: "",
         errors: {},
@@ -37,7 +36,7 @@ class Item extends Component {
         saleId: null,
         name: "",
         unit: "",
-        quantity: "",
+        quantity: 0,
         price: "",
         vat: "",
         errors: {},
@@ -91,13 +90,23 @@ class Item extends Component {
     if (this.isValidNewItem()) { 
       const { saleId, name, unit, quantity, price, vat } = this.state.newItem
 
-      let updatedItem = Object.assign({}, this.state.newItem)
-      updatedItem.isLoading = true
-       this.setState({
-        newItem: updatedItem
-      })
-      this.props.createItem({ saleId, name, unit, quantity, price, vat }).then(
-        () => {
+      this.props.createItemMutation({
+        variables: { saleId, name, unit, quantity, price, vat },
+        update: (proxy, { data: { createItem } }) => {
+          const { success, task } = createItem
+
+          if (!success) {
+            return
+          }
+          /*
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getSaleQuery })
+          // Add our comment from the mutation to the end.
+          data.getSale.tasks.push(task)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getSaleQuery, data }) */
+        }})
+      .then(res => {
           let updatedItem = Object.assign({}, this.state.newItem)
           updatedItem.saleId = null
           updatedItem.name = ""
@@ -110,18 +119,31 @@ class Item extends Component {
             newItem: updatedItem
           })
 
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("sales.items.form.flash.success_add", { name: name})
-          })
-        },
-        ({ response }) => {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("sales.items.form.flash.success_add", { name: name})
+          // })
+
+          const { success, task, errors } = res.data.createItem
+
+          if (!success) {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            let updatedItem = Object.assign({}, this.state.newItem)
+            updatedItem.errors = errorsList
+            updatedItem.isLoading = false
+            
+            this.setState({ newItem: updatedItem })
+          }
+        })
+        .catch(err => {
           let updatedItem = Object.assign({}, this.state.newItem)
-          updatedItem.errors.message.errors = response.data.errors.message.errors
+          updatedItem.errors = err 
           updatedItem.isLoading = false
+
           this.setState({ newItem: updatedItem })
-        }
-      )  
+        })
     }
   }
 
@@ -200,35 +222,60 @@ class Item extends Component {
     if (this.isValidEditItem()) { 
       const { id, saleId, name, unit, quantity, price, vat } = this.state.editItem
       
-      let updatedItem = Object.assign({}, this.state.editItem)
-      updatedItem.isLoading = true
-       this.setState({
-        editItem: updatedItem
-      })
-      this.props.updateItem({ id, saleId, name, unit, quantity, price, vat }).then(
-        (response) => {
+      this.props.updateItemMutation({
+        variables: { id, saleId, name, unit, quantity, price, vat },
+        update: (proxy, { data: { updateItem } }) => {
+          const { success, task } = updateItem
+
+          if (!success) {
+            return
+          }
+          /*
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getSaleQuery })
+          // Add our comment from the mutation to the end.
+          data.getSale.tasks.push(task)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getSaleQuery, data }) */
+        }})
+      .then(res => {
           let updatedItem = Object.assign({}, this.state.editItem)
+          updatedItem.saleId = null
+          updatedItem.name = ""
+          updatedItem.unit = ""
+          updatedItem.quantity = ""
+          updatedItem.price = ""
+          updatedItem.vat = ""
           updatedItem.isLoading = false
-          this.setState({
+           this.setState({
             editItem: updatedItem
           })
 
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("sales.items.form.flash.success_update", { name: name})
-          })
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("sales.items.form.flash.success_update", { name: name})
+          // })
 
-          // Hide edit tr and show show tr
-          $('#'+id+' td.edit-item').hide()
-          $('#'+id+' td.show-item').show()   
-        },
-        ({ response }) => {
+          const { success, task, errors } = res.data.updateItem
+
+          if (!success) {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            let updatedItem = Object.assign({}, this.state.editItem)
+            updatedItem.errors = errorsList
+            updatedItem.isLoading = false
+            
+            this.setState({ editItem: updatedItem })
+          }
+        })
+        .catch(err => {
           let updatedItem = Object.assign({}, this.state.editItem)
-          updatedItem.errors.message.errors = response.data.errors.message.errors
+          updatedItem.errors = err 
           updatedItem.isLoading = false
+
           this.setState({ editItem: updatedItem })
-        }
-      )  
+        }) 
     }
   }
 
@@ -336,11 +383,11 @@ Item.propTypes = {
   //addFlashMessage: PropTypes.func.isRequired
 }
 
-const createItemkMutation = gql`
-  mutation createItemk($name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $projectId: Int!) {
-    createItemk(name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, projectId: $projectId) {
+const createItemMutation = gql`
+  mutation createItem($name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $saleId: Int!) {
+    createItem(name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, saleId: $saleId) {
       success
-      task {
+      item {
         id
         name
         unit
@@ -355,5 +402,34 @@ const createItemkMutation = gql`
     }
   }
 `
-export default graphql(createItemkMutation)(Item)
+const updateItemMutation = gql`
+  mutation updateItem($id: id, $name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $saleId: Int!) {
+    updateItem(id: $id, name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, saleId: $saleId) {
+      success
+      item {
+        id
+        name
+        unit
+        quantity
+        price
+        vat
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const MutationsAndQuery =  compose(
+  graphql(createItemMutation, {
+    name : 'createItemMutation'
+  }),
+   graphql(updateItemMutation, {
+    name : 'updateItemMutation'
+  })
+)(Item)
+
+export default MutationsAndQuery
 

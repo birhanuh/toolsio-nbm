@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
-import { createTask, updateTask, deleteTask } from '../../../actions/projectActions'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { AddElement, ShowEditElement } from './Tr'
 import { graphql, compose } from 'react-apollo'
@@ -92,11 +91,6 @@ class Task extends Component {
     if (this.isValidNewTask()) { 
       const { projectId, name, paymentType, hours, price, vat } = this.state.newTask
 
-      let updatedTask = Object.assign({}, this.state.newTask)
-      updatedTask.isLoading = true
-       this.setState({
-        newTask: updatedTask
-      })
       this.props.createTaskMutation({ 
         variables: { projectId, name, paymentType, hours, price, vat },
         update: (proxy, { data: { createTask } }) => {
@@ -105,12 +99,13 @@ class Task extends Component {
           if (!success) {
             return
           }
+          /*
           // Read the data from our cache for this query.
           const data = proxy.readQuery({ query: getProjectQuery })
           // Add our comment from the mutation to the end.
           data.getProject.tasks.push(task)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getProjectQuery, data })
+          proxy.writeQuery({ query: getProjectQuery, data }) */
         }})
         .then(res => {
           let updatedTask = Object.assign({}, this.state.newTask)
@@ -231,35 +226,62 @@ class Task extends Component {
     if (this.isValidEditTask()) { 
       const { id, projectId, name, paymentType, hours, price, vat } = this.state.editTask
       
-      let updatedTask = Object.assign({}, this.state.editTask)
-      updatedTask.isLoading = true
-       this.setState({
-        editTask: updatedTask
-      })
-      this.props.updateTask({ id, projectId, name, paymentType, hours, price, vat }).then(
-        (response) => {
+      this.props.updateTaskMutation({ 
+        variables: { id, projectId, name, paymentType, hours, price, vat },
+        update: (proxy, { data: { updateTask } }) => {
+          const { success, task } = updateTask
+
+          if (!success) {
+            return
+          }
+          /*
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getProjectQuery })
+          // Add our comment from the mutation to the end.
+          data.getProject.tasks.push(task)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getProjectQuery, data }) */
+        }})
+        .then(res => {
           let updatedTask = Object.assign({}, this.state.editTask)
+          updatedTask.projectId = null
+          updatedTask.name = ""
+          updatedTask.paymentType = ""
+          updatedTask.hours = ""
+          updatedTask.price = ""
+          updatedTask.vat = ""
           updatedTask.isLoading = false
+          
           this.setState({
             editTask: updatedTask
           })
 
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("projects.tasks.form.flash.success_update", { name: name})
-          })
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("projects.tasks.form.flash.success_add", { name: name})
+          // })
 
-          // Hide edit tr and show show tr
-          $('#'+id+' td.edit-task').hide()
-          $('#'+id+' td.show-task').show()   
-        },
-        ({ response }) => {
+          const { success, task, errors } = res.data.updateTask
+
+          if (!success) {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            let updatedTask = Object.assign({}, this.state.editTask)
+            updatedTask.errors = errorsList
+            updatedTask.isLoading = false
+            
+            this.setState({ editTask: updatedTask })
+          }
+
+        })
+        .catch(err => {
           let updatedTask = Object.assign({}, this.state.editTask)
-          updatedTask.errors.message.errors = response.data.errors.message.errors
+          updatedTask.errors = err 
           updatedTask.isLoading = false
+
           this.setState({ editTask: updatedTask })
-        }
-      )  
+        })
     }
   }
 
@@ -387,20 +409,11 @@ const createTaskMutation = gql`
   }
 `
 
-const getProjectQuery = gql`
-  query getProject($id: Int!) {
-    getProject(id: $id) {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        id
-        name
-      }
-      tasks {
+const updateTaskMutation = gql`
+  mutation updateTask($id: id, $name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
+    updateTask(id: $id, name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
+      success
+      task {
         id
         name
         hours
@@ -408,20 +421,60 @@ const getProjectQuery = gql`
         price
         vat
       }
+      errors {
+        path
+        message
+      }
     }
   }
 `
+
+// const getProjectQuery = gql`
+//   query getProject($id: Int!) {
+//     getProject(id: $id) {
+//       id
+//       name 
+//       deadline
+//       status
+//       progress
+//       description
+//       customer {
+//         id
+//         name
+//       }
+//       tasks {
+//         id
+//         name
+//         hours
+//         paymentType
+//         price
+//         vat
+//       }
+//     }
+//   }
+// `
+// const MutationsAndQuery =  compose(
+//   graphql(createTaskMutation, {
+//     name : 'createTaskMutation'
+//   }),
+//   graphql(getProjectQuery, {
+//     name: 'getProjectQuery',
+//     options: (props) => ({
+//       variables: {
+//         id: props.match.params.id 
+//       }
+//     })
+//   })
+// )(Task)
+
+// export default MutationsAndQuery
+
 const MutationsAndQuery =  compose(
   graphql(createTaskMutation, {
     name : 'createTaskMutation'
   }),
-  graphql(getProjectQuery, {
-    name: 'getProjectQuery',
-    options: (props) => ({
-      variables: {
-        id: 1
-      }
-    })
+   graphql(updateTaskMutation, {
+    name : 'updateTaskMutation'
   })
 )(Task)
 
