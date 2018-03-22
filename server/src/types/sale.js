@@ -12,6 +12,7 @@ export default `
   }
 
   type GetSalesResponse {
+    id: Int!
     name: String!
     deadline: Date!
     status: String!
@@ -19,19 +20,21 @@ export default `
     customer: Customer!
   }
 
-  type CreateSaleResponse {
+  type CreateUpdateSaleResponse {
     success: Boolean!
     sale: Sale 
     errors: [Error!]
   }
 
   type Query {
-    getSale(id: Int!): Sale!
-    getAllSales: [GetSalesResponse!]!
+    getSale(id: Int!): Sale
+    getSales: [GetSalesResponse!]!
   }
 
   type Mutation {
-    createSale(name: String!, deadline: Date!, status: String!, description: String, total: Int, customerId: Int!): CreateSaleResponse!
+    createSale(name: String!, deadline: Date!, status: String!, description: String, total: Int, customerId: Int!): CreateUpdateSaleResponse!
+    updateSale(id: Int!, name: String!, deadline: Date!, status: String!, description: String, 
+      total: Int, customerId: Int!): CreateUpdateSaleResponse!
   }
 
 `

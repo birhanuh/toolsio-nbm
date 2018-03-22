@@ -17,7 +17,7 @@ export default function Card({sale}) {
           {sale.status}
         </div>
         
-        <Link to={`/sales/show/${sale._id}`} className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'in progress', red: sale.status === 'delayed', green: sale.status === 'ready', turquoise: sale.status === 'delivered'})}>
+        <Link to={`/sales/show/${sale.id}`} className={classnames("ui header", {blue: sale.status === 'new', orange: sale.status === 'in progress', red: sale.status === 'delayed', green: sale.status === 'ready', turquoise: sale.status === 'delivered'})}>
           <h3>
             {sale.name}
           </h3>

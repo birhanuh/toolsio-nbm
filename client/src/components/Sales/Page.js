@@ -76,12 +76,13 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  fetchSales: PropTypes.func.isRequired,
+  //fetchSales: PropTypes.func.isRequired,
 }
 
-const allProjectsQuery = gql`
+const getSalesQuery = gql`
   {
     getSales {
+      id
       name 
       deadline
       status
@@ -93,4 +94,4 @@ const allProjectsQuery = gql`
 }
 `
 
-export default graphql(allProjectsQuery)(Page)
+export default graphql(getSalesQuery)(Page)

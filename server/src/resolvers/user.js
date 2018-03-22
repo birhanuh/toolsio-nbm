@@ -15,15 +15,17 @@ export default {
       const { subdomain, industry } = args
 
       try {
-        const response = await models.squelize.transaction(async () => {
-          const account = await models.Account.findOne({ where: {subdomain} }, { raw: true })
+        const response = await models.sequelize.transaction(async () => {
+
           const user = await  models.User.create({ firstName, lastName, email, password })
+          await models.Account.create({ subdomain, industry, owner: user.id })
 
           return user
         })
+      
         return {
           success: true,
-          response,
+          response
         }
       } catch(err) {
         console.log(err)

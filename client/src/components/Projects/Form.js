@@ -25,30 +25,30 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: this.props.project ? this.props.project.id : null,
-      name: this.props.project ? this.props.project.name : '',
-      deadline: this.props.project ? moment(this.props.project.deadline).format("MM-DD-YYYY") : moment(),
-      customerId: this.props.project ? this.props.project.customerId : '',
-      status: this.props.project ? this.props.project.status : 'new',
-      progress: this.props.project ? this.props.project.progress : 0,
-      description: this.props.project ? this.props.project.description : '',
-      total: this.props.project ? this.props.project.total : 0,
+      id: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.id : null,
+      name: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.name : '',
+      deadline: !!this.props.getProjectQuery.getProject ? moment(this.props.getProjectQuery.getProject.deadline).format("MM-DD-YYYY") : moment(),
+      customerId: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.customerId : '',
+      status: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.status : 'new',
+      progress: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.progress : 0,
+      description: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.description : '',
+      total: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.total : 0,
       errors: {},
       isLoading: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.project) {
+    if (nextProps.getProjectQuery.getProject) {
       this.setState({
-        id: nextProps.project.id,
-        name: nextProps.project.name,
-        deadline: moment(nextProps.project.deadline),
-        customerId: nextProps.project.customerId,
-        status: nextProps.project.status,
-        progress: nextProps.project.progress,
-        description: nextProps.project.description,
-        total: nextProps.project.total
+        id: nextProps.getProjectQuery.getProject.id,
+        name: nextProps.getProjectQuery.getProject.name,
+        deadline: moment(nextProps.getProjectQuery.getProject.deadline),
+        customerId: nextProps.getProjectQuery.getProject.customerId,
+        status: nextProps.getProjectQuery.getProject.status,
+        progress: nextProps.getProjectQuery.getProject.progress,
+        description: nextProps.getProjectQuery.getProject.description,
+        total: nextProps.getProjectQuery.getProject.total
       })
     }
   }
@@ -92,9 +92,61 @@ class Form extends Component {
     if (true) { 
       this.setState({ isLoading: true })
 
-      const { name, deadline, status, progress, description, total, customerId } = this.state
+      const { id, name, deadline, status, progress, description, total, customerId } = this.state
       
-      this.props.createProjectMutation({ variables: { name, deadline, status, progress, description, total, customerId: parseInt(customerId) }})
+      if (id) {
+        this.props.updateProjectMutation({ 
+        variables: { id, name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+        update: (proxy, { data: { updateProject } }) => {
+          const { success, project } = updateProject
+
+          if (!success) {
+            return
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getProjectsQuery })
+          // Add our comment from the mutation to the end.
+          data.getProjects.push(project)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getProjectsQuery, data })
+        }})
+        .then(res => {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("projects.form.flash.success_update", { name: name})
+          // })  
+          // this.context.router.history.push('/projects')
+          
+
+          const { success, project, errors } = res.data.updateProject
+
+          if (success) {
+            this.context.router.history.push('/projects')
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
+      }
+
+      this.props.createProjectMutation({ 
+        variables: { name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+        update: (proxy, { data: { createProject } }) => {
+          const { success, project } = createProject
+
+          if (!success) {
+            return
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getProjectsQuery })
+          // Add our comment from the mutation to the end.
+          data.getProjects.push(project)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getProjectsQuery, data })
+        }})
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',
@@ -187,7 +239,7 @@ class Form extends Component {
     const { getCustomers } = this.props.getCustomersQuery
   
     const customersOptions = map(getCustomers, (customer) => 
-      <option key={customer.id} value={customer.id}>{customer.name}</option>
+      <option key={customer.id} value={customer.id.toString()}>{customer.name}</option>
     )
     
     return (
@@ -336,7 +388,15 @@ const createProjectMutation = gql`
     createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
       success
       project {
-        name
+        id
+        name 
+        deadline
+        status
+        progress
+        description
+        customer {
+          name
+        }
       }
       errors {
         path
@@ -351,7 +411,12 @@ const updateProjectMutation = gql`
     updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
       success
       project {
-        name
+        id
+        name 
+        deadline
+        status
+        progress
+        description
       }
       errors {
         path
@@ -370,6 +435,42 @@ const getCustomersQuery = gql`
   }
 `
 
+const getProjectQuery = gql`
+  query getProject($id: Int!) {
+    getProject(id: $id) {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      tasks {
+        id
+        name
+        hours
+        paymentType
+        price
+        vat
+      }
+    }
+  }
+`
+
+const getProjectsQuery = gql`
+  {
+    getProjects {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        name
+      }
+    }
+}
+`
 const MutationsAndQuery =  compose(
   graphql(createProjectMutation, {
     name : 'createProjectMutation'
@@ -379,6 +480,17 @@ const MutationsAndQuery =  compose(
   }),
   graphql(getCustomersQuery, {
     name: 'getCustomersQuery'
+  }),
+  graphql(getProjectQuery, {
+    name: 'getProjectQuery',
+    options: (props) => ({
+      variables: {
+        id: props.match.params.id ? parseInt(props.match.params.id) : 0
+      }
+    })
+  }),
+  graphql(getProjectsQuery, {
+    name: 'getProjectsQuery'
   })
 )(Form)
 

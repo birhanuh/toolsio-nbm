@@ -80,9 +80,10 @@ Page.propTypes = {
   //fetchProjects: PropTypes.func.isRequired
 }
 
-const allProjectsQuery = gql`
+const getProjectsQuery = gql`
   {
     getProjects {
+      id
       name 
       deadline
       status
@@ -95,4 +96,4 @@ const allProjectsQuery = gql`
 }
 `
 
-export default graphql(allProjectsQuery)(Page)
+export default graphql(getProjectsQuery)(Page)

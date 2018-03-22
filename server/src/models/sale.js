@@ -26,6 +26,7 @@ export default (sequelize, DataTypes) => {
     total: {
       type: DataTypes.INTEGER,
       allowNull : true,
+      defaultValue : 0,
       validate: {    
         isInt: true // checks for int
       } 

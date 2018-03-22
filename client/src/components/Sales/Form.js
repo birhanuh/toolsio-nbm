@@ -24,28 +24,28 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: this.props.sale ? this.props.sale.id : null,
-      name: this.props.sale ? this.props.sale.name : '',
-      deadline: this.props.sale ? moment(this.props.sale.deadline).format("MM-DD-YYYY") : moment(),
-      customerId: this.props.sale ? this.props.sale.customerId : '',
-      status: this.props.sale ? this.props.sale.status : 'new',
-      description: this.props.sale ? this.props.sale.description : '',
-      total: this.props.sale ? this.props.sale.total : 0,
+      id: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.id : null,
+      name: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.name : '',
+      deadline: !!this.props.getSaleQuery.getSale ? moment(this.props.getSaleQuery.getSale.deadline).format("MM-DD-YYYY") : moment(),
+      customerId: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.customer.id : '',
+      status: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.status : 'new',
+      description: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.description : '',
+      total: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.total : 0,
       errors: {},
       isLoading: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.sale) {
+    if (nextProps.getSaleQuery.getSale) {
       this.setState({
-        id: nextProps.sale.id,
-        name: nextProps.sale.name,
-        deadline: moment(nextProps.sale.deadline),
-        customerId: nextProps.sale.customerId,
-        status: nextProps.sale.status,
-        description: nextProps.sale.description,
-        total: nextProps.sale.total
+        id: nextProps.getSaleQuery.getSale.id,
+        name: nextProps.getSaleQuery.getSale.name,
+        deadline: moment(nextProps.getSaleQuery.getSale.deadline),
+        customerId: nextProps.getSaleQuery.getSale.customer.id,
+        status: nextProps.getSaleQuery.getSale.status,
+        description: nextProps.getSaleQuery.getSale.description,
+        total: nextProps.getSaleQuery.getSale.total
       })
     }
   }
@@ -88,18 +88,72 @@ class Form extends Component {
     if (true) { 
       this.setState({ isLoading: true })
 
-      const { name, deadline, status, description, total, customerId } = this.state
+      const { id, name, deadline, status, description, total, customerId } = this.state
       
-      this.props.createSaleMutation({ variables: { name, deadline, status, description, total, customerId: parseInt(customerId) }})
+      if (id) {
+        this.props.updateSaleMutation({ 
+        variables: { id, name, deadline, status, description, total, customerId: parseInt(customerId) },
+        update: (proxy, { data: { updateSale } }) => {
+          const { success, sale } = updateSale
+          console.log('sale ', sale)
+          if (!success) {
+            return
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getSalesQuery })
+          // Add our comment from the mutation to the end.
+          data.getSales.map(item => {
+            if (item.id === sale.id) return sale
+          })
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getSalesQuery, data })
+        }})
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',
-          //   text: T.translate("projects.form.flash.success_update", { name: name})
+          //   text: T.translate("sales.form.flash.success_update", { name: name})
           // })  
-          // this.context.router.history.push('/projects')
+          // this.context.router.history.push('/sales')
           
 
-          const { success, project, errors } = res.data.createSale
+          const { success, sale, errors } = res.data.updateSale
+
+          if (success) {
+            this.context.router.history.push('/sales')
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
+      }
+
+      this.props.createSaleMutation({ 
+        variables: { name, deadline, status, description, total, customerId: parseInt(customerId) },
+        update: (proxy, { data: { createSale } }) => {
+          const { success, sale } = createSale
+
+          if (!success) {
+            return
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getSalesQuery });
+          // Add our comment from the mutation to the end.
+          data.getSales.push(sale);
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getSalesQuery, data });
+        }})
+        .then(res => {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("sales.form.flash.success_update", { name: name})
+          // })  
+          // this.context.router.history.push('/sales')
+          
+
+          const { success, sale, errors } = res.data.createSale
 
           if (success) {
             this.context.router.history.push('/sales')
@@ -137,7 +191,7 @@ class Form extends Component {
     const { getCustomers } = this.props.getCustomersQuery
   
     const customersOptions = map(getCustomers, (customer) => 
-      <option key={customer.id} value={customer.id}>{customer.name}</option>
+      <option key={customer.id} value={customer.id.toString()}>{customer.name}</option>
     )
 
     return (  
@@ -259,8 +313,12 @@ const createSaleMutation = gql`
   mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
     createSale(name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
       success
-      project {
-        name
+      sale {
+        id
+        name 
+        deadline
+        status
+        description
       }
       errors {
         path
@@ -274,8 +332,12 @@ const updateSaleMutation = gql`
   mutation updateSale($id: Int!, $name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
     updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
       success
-      project {
+      sale {
+        id
         name
+        deadline
+        status
+        description
       }
       errors {
         path
@@ -294,6 +356,44 @@ const getCustomersQuery = gql`
   }
 `
 
+const getSaleQuery = gql`
+  query getSale($id: Int!) {
+    getSale(id: $id) {
+      id
+      name 
+      deadline
+      status
+      description
+      customer {
+        id
+        name
+      }
+      items {
+        id
+        name
+        unit
+        quantity
+        price
+        vat
+      }
+    }
+  }
+`
+
+const getSalesQuery = gql`
+  {
+    getSales {
+      id
+      name 
+      deadline
+      status
+      description
+      customer {
+        name
+      }
+    }
+}
+`
 const MutationsAndQuery =  compose(
   graphql(createSaleMutation, {
     name : 'createSaleMutation'
@@ -303,6 +403,17 @@ const MutationsAndQuery =  compose(
   }),
   graphql(getCustomersQuery, {
     name: 'getCustomersQuery'
+  }),
+  graphql(getSaleQuery, {
+    name: 'getSaleQuery',
+    options: (props) => ({
+      variables: {
+        id: props.match.params.id ? parseInt(props.match.params.id) : 0
+      }
+    })
+  }),
+  graphql(getSalesQuery, {
+    name: 'getSalesQuery'
   })
 )(Form)
 

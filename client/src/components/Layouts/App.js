@@ -10,16 +10,16 @@ import Subdomain from '../Login/Subdomain'
 import { PrivateRoute } from '../../utils/requireAuth'
 import Account from '../Account/Page'
 import ProjectsPage from '../Projects/Page'
-import ProjectsFormPage from '../Projects/FormPage'
+import ProjectsForm from '../Projects/Form'
 import ProjectsShow from '../Projects/Show'
 import SalesPage from '../Sales/Page'
-import SalesFormPage from '../Sales/FormPage'
+import SalesForm from '../Sales/Form'
 import SalesShow from '../Sales/Show'
 import CustomersPage from '../Customers/Page'
-import CustomersFormPage from '../Customers/FormPage'
+import CustomersForm from '../Customers/Form'
 import CustomersShow from '../Customers/Show'
 import InvoicesPage from '../Invoices/Page'
-import InvoicesFormPage from '../Invoices/FormPage'
+import InvoicesForm from '../Invoices/Form'
 import InvoicesShow from '../Invoices/Show/Page'
 import ConversationsPage from '../Conversations/Page'
 import UsersPage from '../Users/Page'
@@ -80,21 +80,21 @@ class App extends Component {
               <Route path="/dashboard" component={Dashboard} />
               <Route exact path="/account" component={Account} />
               <Route exact path="/projects" component={ProjectsPage} />
-              <Route exact path="/projects/edit/:id" component={ProjectsFormPage} /> 
+              <Route exact path="/projects/edit/:id" component={ProjectsForm} /> 
               <Route exact path="/projects/show/:id" component={ProjectsShow} />
-              <Route exact path="/projects/new" component={ProjectsFormPage} />
+              <Route exact path="/projects/new" component={ProjectsForm} />
               <Route exact path="/projects/:start/:length" component={ProjectsPage} />
               <PrivateRoute exact path="/sales" component={SalesPage} />
-              <Route exact path="/sales/edit/:id" component={SalesFormPage} /> 
-              <Route exact path="/sales/new" component={SalesFormPage} />
+              <Route exact path="/sales/edit/:id" component={SalesForm} /> 
+              <Route exact path="/sales/new" component={SalesForm} />
               <Route exact path="/sales/show/:id" component={SalesShow} />
               <Route exact path="/customers" component={CustomersPage} />
-              <Route exact path="/customers/edit/:id" component={CustomersFormPage} /> 
-              <Route exact path="/customers/new" component={CustomersFormPage} />
+              <Route exact path="/customers/edit/:id" component={CustomersForm} /> 
+              <Route exact path="/customers/new" component={CustomersForm} />
               <Route exact path="/customers/show/:id" component={CustomersShow} /> 
               <Route exact path="/invoices" component={InvoicesPage} />
-              <Route exact path="/invoices/edit/:id" component={InvoicesFormPage} /> 
-              <Route exact path="/invoices/new" component={InvoicesFormPage} />
+              <Route exact path="/invoices/edit/:id" component={InvoicesForm} /> 
+              <Route exact path="/invoices/new" component={InvoicesForm} />
               <Route exact path="/invoices/show/:id" component={InvoicesShow} /> 
               <Route exact path="/conversations" component={ConversationsPage} />
               <Route exact path="/conversations/:type" component={ConversationsPage} />

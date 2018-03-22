@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { createItem, updateItem, deleteItem } from '../../../actions/saleActions'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { AddElement, ShowEditElement } from './Tr'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -22,7 +23,7 @@ class Item extends Component {
     this.state = {
       itemToBeDeleated: {},
       newItem: {
-        _creator: this.props.creator,
+        saleId: this.props.saleId,
         name: "",
         unit: "",
         quantity: "",
@@ -32,8 +33,8 @@ class Item extends Component {
         isLoading: false
       },
       editItem: {
-        _id: null,
-        _creator: null,
+        id: null,
+        saleId: null,
         name: "",
         unit: "",
         quantity: "",
@@ -51,7 +52,7 @@ class Item extends Component {
       delete errors[e.target.name]
 
       let updatedItem = Object.assign({}, this.state.newItem)
-      updatedItem._creator = this.props.creator
+      updatedItem.saleId = this.props.saleId
       updatedItem[e.target.name] = e.target.value
 
       this.setState({
@@ -60,7 +61,7 @@ class Item extends Component {
       })
     } else {
       let updatedItem = Object.assign({}, this.state.newItem)
-      updatedItem._creator = this.props.creator
+      updatedItem.saleId = this.props.saleId
       updatedItem[e.target.name] = e.target.value
 
       this.setState({
@@ -88,17 +89,17 @@ class Item extends Component {
 
     // Validation
     if (this.isValidNewItem()) { 
-      const { _creator, name, unit, quantity, price, vat } = this.state.newItem
+      const { saleId, name, unit, quantity, price, vat } = this.state.newItem
 
       let updatedItem = Object.assign({}, this.state.newItem)
       updatedItem.isLoading = true
        this.setState({
         newItem: updatedItem
       })
-      this.props.createItem({ _creator, name, unit, quantity, price, vat }).then(
+      this.props.createItem({ saleId, name, unit, quantity, price, vat }).then(
         () => {
           let updatedItem = Object.assign({}, this.state.newItem)
-          updatedItem._creator = null
+          updatedItem.saleId = null
           updatedItem.name = ""
           updatedItem.unit = ""
           updatedItem.quantity = ""
@@ -130,8 +131,8 @@ class Item extends Component {
       delete errors.message.errors[e.target.name]
 
       let updatedItem = Object.assign({}, this.state.editItem)
-      updatedItem._id = item._id
-      updatedItem._creator = item._creator
+      updatedItem.id = item.id
+      updatedItem.saleId = item.saleId
       updatedItem[e.target.name] = e.target.value
 
       this.setState({
@@ -140,8 +141,8 @@ class Item extends Component {
       })
     } else {
       let updatedItem = Object.assign({}, this.state.editItem)
-      updatedItem._id = item._id
-      updatedItem._creator = item._creator
+      updatedItem.id = item.id
+      updatedItem.saleId = item.saleId
       updatedItem[e.target.name] = e.target.value
 
       this.setState({
@@ -154,12 +155,12 @@ class Item extends Component {
     event.preventDefault()
 
     //Hide show tr and show edit tr
-    $('#'+item._id+' td.show-item').hide()
-    $('#'+item._id+' td.edit-item').show()
+    $('#'+item.id+' td.show-item').hide()
+    $('#'+item.id+' td.edit-item').show()
     
     let updatedItem = Object.assign({}, this.state.editItem)
-    updatedItem._id = item._id
-    updatedItem._creator = item._creator
+    updatedItem.id = item.id
+    updatedItem.saleId = item.saleId
     updatedItem.name = item.name
     updatedItem.unit = item.unit
     updatedItem.quantity = item.quantity
@@ -174,8 +175,8 @@ class Item extends Component {
     event.preventDefault()
 
     // Hide edit tr and show show tr
-    $('#'+item._id+' td.edit-item').hide()
-    $('#'+item._id+' td.show-item').show()    
+    $('#'+item.id+' td.edit-item').hide()
+    $('#'+item.id+' td.show-item').show()    
   }
 
   isValidEditItem() {
@@ -197,14 +198,14 @@ class Item extends Component {
 
     // Validation
     if (this.isValidEditItem()) { 
-      const { _id, _creator, name, unit, quantity, price, vat } = this.state.editItem
+      const { id, saleId, name, unit, quantity, price, vat } = this.state.editItem
       
       let updatedItem = Object.assign({}, this.state.editItem)
       updatedItem.isLoading = true
        this.setState({
         editItem: updatedItem
       })
-      this.props.updateItem({ _id, _creator, name, unit, quantity, price, vat }).then(
+      this.props.updateItem({ id, saleId, name, unit, quantity, price, vat }).then(
         (response) => {
           let updatedItem = Object.assign({}, this.state.editItem)
           updatedItem.isLoading = false
@@ -218,8 +219,8 @@ class Item extends Component {
           })
 
           // Hide edit tr and show show tr
-          $('#'+_id+' td.edit-item').hide()
-          $('#'+_id+' td.show-item').show()   
+          $('#'+id+' td.edit-item').hide()
+          $('#'+id+' td.show-item').show()   
         },
         ({ response }) => {
           let updatedItem = Object.assign({}, this.state.editItem)
@@ -278,7 +279,7 @@ class Item extends Component {
     const itemsList = (
       items.map(item => 
         <ShowEditElement 
-          key={item._id}
+          key={item.id}
           item={item} 
           editItem={editItem}
           handleCancelEdit={this.handleCancelEdit.bind(this, item)}
@@ -331,11 +332,28 @@ class Item extends Component {
 
 Item.propTypes = {
   items: PropTypes.array.isRequired,
-  creator: PropTypes.string.isRequired,
-  createItem: PropTypes.func.isRequired,
-  updateItem: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  saleId: PropTypes.number.isRequired,
+  //addFlashMessage: PropTypes.func.isRequired
 }
 
-export default connect(null, { createItem, updateItem, deleteItem, addFlashMessage } )(Item)
+const createItemkMutation = gql`
+  mutation createItemk($name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $projectId: Int!) {
+    createItemk(name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, projectId: $projectId) {
+      success
+      task {
+        id
+        name
+        unit
+        quantity
+        price
+        vat
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+export default graphql(createItemkMutation)(Item)
+

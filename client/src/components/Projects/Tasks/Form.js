@@ -6,6 +6,8 @@ import { Validation } from '../../../utils'
 import { createTask, updateTask, deleteTask } from '../../../actions/projectActions'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { AddElement, ShowEditElement } from './Tr'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -22,7 +24,7 @@ class Task extends Component {
     this.state = {
       taskToBeDeleated: {},
       newTask: {
-        _creator: this.props.creator,
+        projectId: this.props.projectId,
         name: "",
         paymentType: "",
         hours: "",
@@ -32,8 +34,8 @@ class Task extends Component {
         isLoading: false
       },
       editTask: {
-        _id: null,
-        _creator: null,
+        id: null,
+        projectId: null,
         name: "",
         paymentType: "",
         hours: "",
@@ -51,7 +53,7 @@ class Task extends Component {
       delete errors[e.target.name]
 
       let updatedTask = Object.assign({}, this.state.newTask)
-      updatedTask._creator = this.props.creator
+      updatedTask.projectId = this.props.projectId
       updatedTask[e.target.name] = e.target.value
 
       this.setState({
@@ -60,7 +62,7 @@ class Task extends Component {
       })
     } else {
       let updatedTask = Object.assign({}, this.state.newTask)
-      updatedTask._creator = this.props.creator
+      updatedTask.projectId = this.props.projectId
       updatedTask[e.target.name] = e.target.value
 
       this.setState({
@@ -88,39 +90,69 @@ class Task extends Component {
 
     // Validation
     if (this.isValidNewTask()) { 
-      const { _creator, name, paymentType, hours, price, vat } = this.state.newTask
+      const { projectId, name, paymentType, hours, price, vat } = this.state.newTask
 
       let updatedTask = Object.assign({}, this.state.newTask)
       updatedTask.isLoading = true
        this.setState({
         newTask: updatedTask
       })
-      this.props.createTask({ _creator, name, paymentType, hours, price, vat }).then(
-        () => {
+      this.props.createTaskMutation({ 
+        variables: { projectId, name, paymentType, hours, price, vat },
+        update: (proxy, { data: { createTask } }) => {
+          const { success, task } = createTask
+
+          if (!success) {
+            return
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getProjectQuery })
+          // Add our comment from the mutation to the end.
+          data.getProject.tasks.push(task)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getProjectQuery, data })
+        }})
+        .then(res => {
           let updatedTask = Object.assign({}, this.state.newTask)
-          updatedTask._creator = null
+          updatedTask.projectId = null
           updatedTask.name = ""
           updatedTask.paymentType = ""
           updatedTask.hours = ""
           updatedTask.price = ""
           updatedTask.vat = ""
           updatedTask.isLoading = false
-           this.setState({
+          
+          this.setState({
             newTask: updatedTask
           })
 
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("projects.tasks.form.flash.success_add", { name: name})
-          })
-        },
-        ({ response }) => {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("projects.tasks.form.flash.success_add", { name: name})
+          // })
+
+          const { success, task, errors } = res.data.createTask
+
+          if (!success) {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            let updatedTask = Object.assign({}, this.state.newTask)
+            updatedTask.errors = errorsList
+            updatedTask.isLoading = false
+            
+            this.setState({ newTask: updatedTask })
+          }
+
+        })
+        .catch(err => {
           let updatedTask = Object.assign({}, this.state.newTask)
-          updatedTask.errors.message.errors = response.data.errors.message.errors
+          updatedTask.errors = err 
           updatedTask.isLoading = false
+
           this.setState({ newTask: updatedTask })
-        }
-      )  
+        })
+        
     }
   }
 
@@ -130,8 +162,8 @@ class Task extends Component {
       delete errors.message.errors[e.target.name]
 
       let updatedTask = Object.assign({}, this.state.editTask)
-      updatedTask._id = task._id
-      updatedTask._creator = task._creator
+      updatedTask.id = task.id
+      updatedTask.projectId = task.projectId
       updatedTask[e.target.name] = e.target.value
 
       this.setState({
@@ -140,8 +172,8 @@ class Task extends Component {
       })
     } else {
       let updatedTask = Object.assign({}, this.state.editTask)
-      updatedTask._id = task._id
-      updatedTask._creator = task._creator
+      updatedTask.id = task.id
+      updatedTask.projectId = task.projectId
       updatedTask[e.target.name] = e.target.value
 
       this.setState({
@@ -154,12 +186,12 @@ class Task extends Component {
     event.preventDefault()
 
     //Hide show tr and show edit tr
-    $('#'+task._id+' td.show-task').hide()
-    $('#'+task._id+' td.edit-task').show()
+    $('#'+task.id+' td.show-task').hide()
+    $('#'+task.id+' td.edit-task').show()
     
     let updatedTask = Object.assign({}, this.state.editTask)
-    updatedTask._id = task._id
-    updatedTask._creator = task._creator
+    updatedTask.id = task.id
+    updatedTask.projectId = task.projectId
     updatedTask.name = task.name
     updatedTask.paymentType = task.paymentType
     updatedTask.hours = task.hours
@@ -174,8 +206,8 @@ class Task extends Component {
     event.preventDefault()
 
     // Hide edit tr and show show tr
-    $('#'+task._id+' td.edit-task').hide()
-    $('#'+task._id+' td.show-task').show()    
+    $('#'+task.id+' td.edit-task').hide()
+    $('#'+task.id+' td.show-task').show()    
   }
 
   isValidEditTask() {
@@ -197,14 +229,14 @@ class Task extends Component {
 
     // Validation
     if (this.isValidEditTask()) { 
-      const { _id, _creator, name, paymentType, hours, price, vat } = this.state.editTask
+      const { id, projectId, name, paymentType, hours, price, vat } = this.state.editTask
       
       let updatedTask = Object.assign({}, this.state.editTask)
       updatedTask.isLoading = true
        this.setState({
         editTask: updatedTask
       })
-      this.props.updateTask({ _id, _creator, name, paymentType, hours, price, vat }).then(
+      this.props.updateTask({ id, projectId, name, paymentType, hours, price, vat }).then(
         (response) => {
           let updatedTask = Object.assign({}, this.state.editTask)
           updatedTask.isLoading = false
@@ -218,8 +250,8 @@ class Task extends Component {
           })
 
           // Hide edit tr and show show tr
-          $('#'+_id+' td.edit-task').hide()
-          $('#'+_id+' td.show-task').show()   
+          $('#'+id+' td.edit-task').hide()
+          $('#'+id+' td.show-task').show()   
         },
         ({ response }) => {
           let updatedTask = Object.assign({}, this.state.editTask)
@@ -278,7 +310,7 @@ class Task extends Component {
     const tasksList = (
       tasks.map(task => 
         <ShowEditElement 
-          key={task._id}
+          key={task.id}
           task={task} 
           editTask={editTask}
           handleCancelEdit={this.handleCancelEdit.bind(this, task)}
@@ -331,11 +363,66 @@ class Task extends Component {
 
 Task.propTypes = {
   tasks: PropTypes.array.isRequired,
-  creator: PropTypes.string.isRequired,
-  createTask: PropTypes.func.isRequired,
-  updateTask: PropTypes.func.isRequired,
-  deleteTask: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  projectId: PropTypes.number.isRequired,
+  //addFlashMessage: PropTypes.func.isRequired
 }
 
-export default connect(null, { createTask, updateTask, deleteTask, addFlashMessage } )(Task)
+const createTaskMutation = gql`
+  mutation createTask($name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
+    createTask(name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
+      success
+      task {
+        id
+        name
+        hours
+        paymentType
+        price
+        vat
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const getProjectQuery = gql`
+  query getProject($id: Int!) {
+    getProject(id: $id) {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        id
+        name
+      }
+      tasks {
+        id
+        name
+        hours
+        paymentType
+        price
+        vat
+      }
+    }
+  }
+`
+const MutationsAndQuery =  compose(
+  graphql(createTaskMutation, {
+    name : 'createTaskMutation'
+  }),
+  graphql(getProjectQuery, {
+    name: 'getProjectQuery',
+    options: (props) => ({
+      variables: {
+        id: 1
+      }
+    })
+  })
+)(Task)
+
+export default MutationsAndQuery

@@ -11,7 +11,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        isAlpha: true // will only allow letters
+        notEmpty: true, // don't allow empty strings
       } 
     },
     quantity: {

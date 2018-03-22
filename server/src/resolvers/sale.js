@@ -1,16 +1,19 @@
+import { requiresAuth } from '../middlewares/authentication'
+import { formatErrors } from '../utils/formatErrors'
+
 export default {
   Query: {
-    getSale: (parent, {id}, {models}) => models.Sale.findOne({ where: {id} }, { raw: true }),
-    getAllSales: (parent, args, {models}) => models.Sale.findAll()
+    getSale: (parent, {id}, { models }) => models.Sale.findOne({ where: {id} }, { raw: true }),
+    getSales: (parent, args, { models }) => models.Sale.findAll()
   },
 
  Mutation: {
-    createSale: (parent, args, { models }) => 
-      models.Sale.create(args)
+    createSale: (parent, args, { models }) => {
+      return models.Sale.create(args)
         .then(sale => {
           return {
             success: true,
-            sale: sale
+            sale
           }
         })
         .catch(err => {
@@ -20,13 +23,32 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    }
-  ,
+    },
+
+    updateSale: (parent, args, { models }) => {
+      return models.Sale.update(args, { where: {id: args.id}, returning: true, plain: true })
+        .then(result => {
+  
+          return {
+            success: true,
+            sale: result[1].dataValues
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })
+    }    
+  
+  },
 
   Sale: {
-    items: ({ id }, args, models) => { 
+    items: ({ id }, args, { models } ) => { 
 
-      return models.Task.findAll({ saleId: id})
+      return models.Item.findAll({ saleId: id})
     },
     
     customer: ({ customerId }, args, { models }) => {

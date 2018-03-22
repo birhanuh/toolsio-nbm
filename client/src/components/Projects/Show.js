@@ -8,6 +8,8 @@ import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
 import { SelectField } from '../../utils/FormFields'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -28,14 +30,14 @@ class Show extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.project ? this.props.project._id : null,
-      name: this.props.project ? this.props.project.name : '',
-      deadline: this.props.project ? this.props.project.deadline : '',
-      customer: this.props.project ? this.props.project.customer : '',
-      status: this.props.project ? this.props.project.status : '',
-      description: this.props.project ? this.props.project.description : '',
-      progress: this.props.project ? this.props.project.progress : 0,
-      tasks: this.props.project ? this.props.project.tasks : []
+      id: this.props.data.getProject ? this.props.data.getProject.id : null,
+      name: this.props.data.getProject ? this.props.data.getProject.name : '',
+      deadline: this.props.data.getProject ? this.props.data.getProject.deadline : '',
+      customer: this.props.data.getProject ? this.props.data.getProject.customer : '',
+      status: this.props.data.getProject ? this.props.data.getProject.status : '',
+      description: this.props.data.getProject ? this.props.data.getProject.description : '',
+      progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
+      tasks: this.props.data.getProject ? this.props.data.getProject.tasks : []
     }
   }
 
@@ -49,24 +51,24 @@ class Show extends Component {
     if (!projectId) {
       return <Redirect to="/projects" />
     } else {
-      this.props.fetchProject(match.params.id)
+      //this.props.getProjectMutation({ variables: {id: projectId} })
     } 
-
     // Progress
     //$("#progress").progress('increment')
+    console.log('sdf ', this.props.data.getProject.deadline)
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.project) {
+    if (nextProps.data.getProject) {
       this.setState({
-        _id: nextProps.project._id,
-        name: nextProps.project.name,
-        deadline: nextProps.project.deadline,
-        customer: nextProps.project.customer,
-        status: nextProps.project.status,
-        description: nextProps.project.description,
-        progress: nextProps.project.progress,
-        tasks: nextProps.project.tasks
+        id: nextProps.data.getProject.id,
+        name: nextProps.data.getProject.name,
+        deadline: nextProps.data.getProject.deadline,
+        customer: nextProps.data.getProject.customer,
+        status: nextProps.data.getProject.status,
+        description: nextProps.data.getProject.description,
+        progress: nextProps.data.getProject.progress,
+        tasks: nextProps.data.getProject.tasks
       })
     }
   }
@@ -90,9 +92,9 @@ class Show extends Component {
       [e.target.name]: e.target.value
     })
 
-    const { _id } = this.state
+    const { id } = this.state
 
-    this.props.updateProject({ _id, status: e.target.value })
+    this.props.updateProject({ id, status: e.target.value })
       .then(() => {
         console.log('updateProject status')
       })
@@ -120,7 +122,7 @@ class Show extends Component {
   handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { _id, progress } = this.state
+    const { id, progress } = this.state
 
     if (progress <= 90) {
       this.setState({
@@ -141,7 +143,7 @@ class Show extends Component {
       // Update Project
       let progressUpdated = progress+10
 
-      this.props.updateProject({ _id, progress: progressUpdated })
+      this.props.updateProject({ id, progress: progressUpdated })
         .then(() => {
           console.log('updateProject progress')
         })
@@ -151,7 +153,7 @@ class Show extends Component {
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { _id, status, progress } = this.state
+    const { id, status, progress } = this.state
 
     if (progress >= 10) {
       this.setState({
@@ -172,7 +174,7 @@ class Show extends Component {
       // Update Project
       let progressUpdated = progress-10
 
-      this.props.updateProject({ _id, progress: progressUpdated })
+      this.props.updateProject({ id, progress: progressUpdated })
         .then(() => {
           console.log('updateProject progress')
         })
@@ -180,8 +182,8 @@ class Show extends Component {
   }
 
   render() {
-    const { _id, name, deadline, customer, status, description, progress, tasks } = this.state
-    
+    const { id, name, deadline, customer, status, description, progress, tasks } = this.state
+
     return (
       <div className="ui stackable grid">
 
@@ -192,7 +194,7 @@ class Show extends Component {
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
             <dl className="dl-horizontal">
               <dt>{T.translate("projects.show.customer")}</dt>
-              <dd>{customer ? <Link to={`/customers/show/${customer._id}`}>{customer.name}</Link> : '-'}</dd>
+              <dd>{customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}</dd>
               {/*<dt>{T.translate("projects.show.user")}</dt>
               <dd>{project.user.first_name}</dd>*/}
               <dt>{T.translate("projects.show.deadline")}</dt>
@@ -243,12 +245,12 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
 
-            { tasks && this.state._id && <TaskForm creator={this.state._id} tasks={this.state.tasks} /> }
+            { tasks && this.state.id && <TaskForm projectId={this.state.id} tasks={this.state.tasks} /> }
             
             <div className="ui divider"></div>
 
             <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("projects.show.delete")}</button>
-            <Link to={`/projects/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("projects.show.edit")}</Link>
+            <Link to={`/projects/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("projects.show.edit")}</Link>
           </div>    
         </div>
 
@@ -259,7 +261,7 @@ class Show extends Component {
           </div>
           <div className="actions">
             <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("projects.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("projects.show.delete")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("projects.show.delete")}</button>
           </div>
         </div>
       </div>
@@ -268,24 +270,42 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  fetchProject: PropTypes.func.isRequired,
-  updateProject: PropTypes.func.isRequired,
-  deleteProject: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
-  project: PropTypes.object
+  //addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state, props) {
-  const { match } = props
-  if (match.params.id) {
-    return {
-      project: state.projects && state.projects.list && state.projects.list.find(item => item._id === match.params.id)
+const getProjectQuery = gql`
+  query getProject($id: Int!) {
+    getProject(id: $id) {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        id
+        name
+      }
+      tasks {
+        id
+        name
+        hours
+        paymentType
+        price
+        vat
+      }
     }
-  } 
-}
+  }
+`
 
-export default connect(mapStateToProps, { fetchProject, updateProject, deleteProject, addFlashMessage } )(Show)
+export default graphql(getProjectQuery, {
+  options: (props) => ({
+    variables: {
+      id: parseInt(props.match.params.id)
+    }
+  })})(Show)
+

@@ -25,6 +25,7 @@ export default (sequelize, DataTypes) => {
     progress: {
       type: DataTypes.INTEGER,
       allowNull : true,
+      defaultValue : 0,
       validate: {    
         isDecimal: true // checks for any numbers
       } 
@@ -33,6 +34,7 @@ export default (sequelize, DataTypes) => {
     total: {
       type: DataTypes.INTEGER,
       allowNull : true,
+      defaultValue : 0,
       validate: {     
         isInt: true // checks for int
       } 

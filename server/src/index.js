@@ -175,26 +175,30 @@ models.sequelize.sync().then(() => {
 
 /*
 mutation {
-  registerUser(firstName: "test", lastName: "test1", email: 
-    "test1@toolsio.com", password: "ppppp", subdomain: "test1", industry: "test" ) {
-    success
-    user {
-      id
-      email
+  registerUser(firstName: "test", lastName: "test", email: 
+      "test1@toolsio.com", password: "ppppp", subdomain: "test", industry: "test" ) {
+      success
+      user {
+        id
+      } 
+      errors {
+        path
+        message
+      }
     }
-    account {
-      subdomain
-      industry
-    }
-    errors {
-      message
-    }
-  }
 }
 
 mutation {
-  createProject(name: "", deadline: 1521243824165, status: "new", description: "Desc", customerId: 1) {
+  createProject(name: "Project 1", deadline: 1521243824165, status: "new", 
+    description: "Desciption 1...", customerId: 1) {
     success
+    project {
+      id
+      name
+      deadline
+      status
+      description
+    }
     errors {
       path
       message
@@ -202,16 +206,16 @@ mutation {
   }
 }
 
-  mutation createCustomer($name: String!, $vatNumber: String!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
-    createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
-      postalCode: $postalCode, region: $region, country: $country) {
-      success
-      errors {
-        path
-        message
-      }
+mutation createCustomer($name: String!, $vatNumber: String!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
+  createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
+    postalCode: $postalCode, region: $region, country: $country) {
+    success
+    errors {
+      path
+      message
     }
   }
+}
 
 query {
   getProjects {

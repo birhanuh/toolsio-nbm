@@ -242,12 +242,11 @@ const RegisterMutations =  compose(
     name : 'registerUser'
   }),
   graphql(getAccountQuery, {
-    options: {
+    options: (props) => ({
       variables: {
-        name: '__NAME__'
-      },
-      forceFetch: true,
-    }
+        subdomain: this.state.account.subdomain
+      }
+    })
   })
 )(Form)
 

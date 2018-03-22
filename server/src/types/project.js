@@ -15,6 +15,7 @@ export default `
   }
 
   type GetProjectsResponse {
+    id: Int!
     name: String!
     deadline: Date!
     status: String!
@@ -23,19 +24,22 @@ export default `
     customer: Customer!
   }
 
-  type CreateProjectResponse {
+  type CreateUpdateProjectResponse {
     success: Boolean!
     project: Project 
     errors: [Error!]
   }
 
   type Query {
-    getProject(id: Int!): Project!
+    getProject(id: Int!): Project
     getProjects: [GetProjectsResponse!]!
   }
 
   type Mutation {
-    createProject(name: String!, deadline: Date!, status: String!, progress: Int, description: String, total: Int, customerId: Int!): CreateProjectResponse!
+    createProject(name: String!, deadline: Date!, status: String!, progress: Int, description: String, 
+      total: Int, customerId: Int!): CreateUpdateProjectResponse!
+    updateProject(id: Int!, name: String!, deadline: Date!, status: String!, progress: Int, description: String, 
+      total: Int, customerId: Int!): CreateUpdateProjectResponse!
   }
 
 `

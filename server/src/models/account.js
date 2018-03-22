@@ -3,9 +3,9 @@ export default (sequelize, DataTypes) => {
     subdomain: {
       type: DataTypes.STRING,
       allowNull : false,
-      validate: {     
-        unique: true,
-        not: /\A[\w\-]+\Z/i, // contains invalid characters
+      unique: true,
+      validate: {    
+        is: ["^[a-z]+$",'i'],     // will only allow letters
         notContains: 'www' // don't allow www substrings
       } 
     },
