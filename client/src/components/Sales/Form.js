@@ -100,13 +100,13 @@ class Form extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getSalesQuery })
+          const data = proxy.readQuery({ query: getCustomersSalesQuery })
           // Add our comment from the mutation to the end.
           data.getSales.map(item => {
             if (item.id === sale.id) return sale
           })
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getSalesQuery, data })
+          proxy.writeQuery({ query: getCustomersSalesQuery, data })
         }})
         .then(res => {
           // this.props.addFlashMessage({
@@ -139,11 +139,11 @@ class Form extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getSalesQuery });
+          const data = proxy.readQuery({ query: getCustomersSalesQuery });
           // Add our comment from the mutation to the end.
           data.getSales.push(sale);
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getSalesQuery, data });
+          proxy.writeQuery({ query: getCustomersSalesQuery, data });
         }})
         .then(res => {
           // this.props.addFlashMessage({
@@ -188,7 +188,7 @@ class Form extends Component {
   render() {
     const { id, name, deadline, customerId, status, description, errors, isLoading } = this.state
     
-    const { getCustomers } = this.props.getCustomersQuery
+    const { getCustomers } = this.props.getCustomersSalesQuery
   
     const customersOptions = map(getCustomers, (customer) => 
       <option key={customer.id} value={customer.id.toString()}>{customer.name}</option>
@@ -347,11 +347,21 @@ const updateSaleMutation = gql`
   }
 `
 
-const getCustomersQuery = gql`
+const getCustomersSalesQuery = gql`
   query {
     getCustomers {
       id
       name
+    }
+    getSales {
+      id
+      name 
+      deadline
+      status
+      description
+      customer {
+        name
+      }
     }
   }
 `
@@ -380,20 +390,6 @@ const getSaleQuery = gql`
   }
 `
 
-const getSalesQuery = gql`
-  {
-    getSales {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        name
-      }
-    }
-}
-`
 const MutationsAndQuery =  compose(
   graphql(createSaleMutation, {
     name : 'createSaleMutation'
@@ -401,8 +397,8 @@ const MutationsAndQuery =  compose(
   graphql(updateSaleMutation, {
     name: 'updateSaleMutation'
   }),
-  graphql(getCustomersQuery, {
-    name: 'getCustomersQuery'
+  graphql(getCustomersSalesQuery, {
+    name: 'getCustomersSalesQuery'
   }),
   graphql(getSaleQuery, {
     name: 'getSaleQuery',
@@ -411,9 +407,6 @@ const MutationsAndQuery =  compose(
         id: props.match.params.id ? parseInt(props.match.params.id) : 0
       }
     })
-  }),
-  graphql(getSalesQuery, {
-    name: 'getSalesQuery'
   })
 )(Form)
 

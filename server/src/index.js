@@ -224,5 +224,19 @@ query {
   }
 }
 
+mutation {
+  createInvoice(deadline: 1521822820714, interestInArrears: 2, status:"new",
+    total: 30, projectId: 1, customerId: 1) {
+    success
+    invoice {
+      id
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+
 */
 

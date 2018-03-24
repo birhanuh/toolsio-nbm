@@ -104,11 +104,11 @@ class Form extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getProjectsQuery })
+          const data = proxy.readQuery({ query: getCustomersProjectsQuery })
           // Add our comment from the mutation to the end.
           data.getProjects.push(project)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getProjectsQuery, data })
+          proxy.writeQuery({ query: getCustomersProjectsQuery, data })
         }})
         .then(res => {
           // this.props.addFlashMessage({
@@ -141,11 +141,11 @@ class Form extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getProjectsQuery })
+          const data = proxy.readQuery({ query: getCustomersProjectsQuery })
           // Add our comment from the mutation to the end.
           data.getProjects.push(project)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getProjectsQuery, data })
+          proxy.writeQuery({ query: getCustomersProjectsQuery, data })
         }})
         .then(res => {
           // this.props.addFlashMessage({
@@ -236,7 +236,7 @@ class Form extends Component {
   render() {
     const { id, name, deadline, customerId, status, progress, description, errors, isLoading } = this.state
     
-    const { getCustomers } = this.props.getCustomersQuery
+    const { getCustomers } = this.props.getCustomersProjectsQuery
   
     const customersOptions = map(getCustomers, (customer) => 
       <option key={customer.id} value={customer.id.toString()}>{customer.name}</option>
@@ -426,11 +426,22 @@ const updateProjectMutation = gql`
   }
 `
 
-const getCustomersQuery = gql`
+const getCustomersProjectsQuery = gql`
   query {
     getCustomers {
       id
       name
+    }
+    getProjects {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        name
+      }
     }
   }
 `
@@ -456,21 +467,6 @@ const getProjectQuery = gql`
   }
 `
 
-const getProjectsQuery = gql`
-  {
-    getProjects {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        name
-      }
-    }
-}
-`
 const MutationsAndQuery =  compose(
   graphql(createProjectMutation, {
     name : 'createProjectMutation'
@@ -478,8 +474,8 @@ const MutationsAndQuery =  compose(
   graphql(updateProjectMutation, {
     name: 'updateProjectMutation'
   }),
-  graphql(getCustomersQuery, {
-    name: 'getCustomersQuery'
+  graphql(getCustomersProjectsQuery, {
+    name: 'getCustomersProjectsQuery'
   }),
   graphql(getProjectQuery, {
     name: 'getProjectQuery',
@@ -488,9 +484,6 @@ const MutationsAndQuery =  compose(
         id: props.match.params.id ? parseInt(props.match.params.id) : 0
       }
     })
-  }),
-  graphql(getProjectsQuery, {
-    name: 'getProjectsQuery'
   })
 )(Form)
 

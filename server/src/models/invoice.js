@@ -32,11 +32,8 @@ export default (sequelize, DataTypes) => {
       } 
     },
     referenceNumber: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.STRING,
       allowNull : false,
-      validate: {     
-        isDecimal: true // checks for any numbers
-      },
       field: 'reference_number'
     },
     description: DataTypes.TEXT,
@@ -50,7 +47,7 @@ export default (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeValidate: (invoice, options) => {
-        if (invoice.deadline === "" && invoice.paymentTerm === "") {
+        if (!invoice.deadline && !invoice.paymentTerm) {
           throw new Error("Either deadline or payment term is required")
         }
         if (invoice.deadline === "") {
@@ -58,6 +55,9 @@ export default (sequelize, DataTypes) => {
         }
         if (invoice.paymentTerm === "") {
           invoice.paymentTerm = null
+        }
+        if (!invoice.projectId && !invoice.paymentTerm) {
+          throw new Error("Either Project or Sale is required")
         }
       }
     }
@@ -67,22 +67,8 @@ export default (sequelize, DataTypes) => {
     // 1:N
     Invoice.belongsTo(models.Customer, {
       foreignKey: {
-        through: 'projects',
-        foreignKey: {
-          name: 'customerId',
-          field: 'customer_id'
-        }
-      }
-    })
-
-    // 1:N
-    Invoice.belongsTo(models.Customer, {
-      foreignKey: {
-        through: 'sales',
-        foreignKey: {
-          name: 'customerId',
-          field: 'customer_id'
-        }
+        name: 'customerId',
+        field: 'customer_id'
       }
     })
 

@@ -76,10 +76,6 @@ class Page extends Component {
   }
 }
 
-Page.propTypes = {
-  //fetchProjects: PropTypes.func.isRequired
-}
-
 const getProjectsQuery = gql`
   {
     getProjects {
@@ -93,7 +89,7 @@ const getProjectsQuery = gql`
         name
       }
     }
-}
+  }
 `
 
 export default graphql(getProjectsQuery)(Page)

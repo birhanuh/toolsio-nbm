@@ -59,7 +59,10 @@ export const SelectField = ({ options, name, value, label, error,
 
 InputField.propTypes = TextAreaField.propTypes = SelectField.propTypes = {  
   name: PropTypes.string.isRequired, 
-  value: PropTypes.string.isRequired, 
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]), 
   label: PropTypes.string, 
   error: PropTypes.string, 
   placeholder: PropTypes.string, 

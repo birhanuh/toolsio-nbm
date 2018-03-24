@@ -17,6 +17,7 @@ export default `
     deadline: Date!
     status: String!
     description: String
+    total: Int
     customer: Customer!
   }
 

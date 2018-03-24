@@ -75,8 +75,8 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
         <br/>
 
         <div className="inline field">    
-          <button className="ui button" onClick={this.handlePrevious.bind(this)}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
-          <button disabled={isLoading} className="ui primary button" onClick={this.handleSubmit.bind(this)}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.save")}</button>
+          <button className="ui button" onClick={handlePrevious}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
+          <button disabled={isLoading} className="ui primary button" onClick={handleSubmit}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.save")}</button>
           
           <Link to="/invoices" className="ui negative block-i mt-3">{T.translate("invoices.form.cancel")}</Link>
         </div>  

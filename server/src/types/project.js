@@ -21,6 +21,7 @@ export default `
     status: String!
     description: String
     progress: Int
+    total: Int
     customer: Customer!
   }
 

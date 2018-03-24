@@ -3,7 +3,7 @@ export default `
   type Customer {
     id: Int!
     name: String!
-    vatNumber: String! 
+    vatNumber: Int! 
     email: String
     phoneNumber: String 
     isContactIncludedInInvoice: Boolean!
@@ -24,7 +24,7 @@ export default `
     phoneNumber: String
   }
 
-  type CreateCustomerResponse {
+  type CreateUpdateCustomerResponse {
     success: Boolean!
     customer: Customer
     errors: [Error!]
@@ -36,8 +36,10 @@ export default `
   }
 
   type Mutation {
-    createCustomer(name: String!, vatNumber: String!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
-      street: String, postalCode: String, region: String, country: String): CreateCustomerResponse!
+    createCustomer(name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
+      street: String, postalCode: Int, region: String, country: String): CreateUpdateCustomerResponse!
+    updateCustomer(id: Int!, name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
+      street: String, postalCode: Int, region: String, country: String): CreateUpdateCustomerResponse!  
   }
 
 `

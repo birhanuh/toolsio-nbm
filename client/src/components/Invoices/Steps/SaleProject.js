@@ -23,10 +23,10 @@ export default function SaleProject({ _id, step1, salesOptions, projectsOptions,
           
           <SelectField
             label={T.translate("invoices.form.sales")}
-            name="sale"
-            value={step1.sale ? step1.sale : ''} 
+            name="saleId"
+            value={step1.saleId ? step1.saleId : ''} 
             onChange={handleChange} 
-            error={errors.message && errors.message.errors && errors.message.errors.sale && errors.message.errors.sale.message}
+            error={errors.sale}
             formClass="inline field"
 
             options={[<option key="default" value="">{T.translate("invoices.form.select_sale")}</option>,
@@ -37,10 +37,10 @@ export default function SaleProject({ _id, step1, salesOptions, projectsOptions,
 
            <SelectField
             label={T.translate("invoices.form.projects")}
-            name="project"
-            value={step1.project ? step1.project : ''} 
+            name="projectId"
+            value={step1.projectId ? step1.projectId : ''} 
             onChange={handleChange} 
-            error={errors.message && errors.message.errors && errors.message.errors.project && errors.message.errors.project.message}
+            error={errors.project}
             formClass="inline field"
 
             options={[<option key="default" value="">{T.translate("invoices.form.select_project")}</option>,

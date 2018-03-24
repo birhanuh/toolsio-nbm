@@ -55,7 +55,6 @@ class Show extends Component {
     } 
     // Progress
     //$("#progress").progress('increment')
-    console.log('sdf ', this.props.data.getProject.deadline)
   }
 
   componentWillReceiveProps = (nextProps) => {

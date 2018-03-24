@@ -1,3 +1,4 @@
+import { requiresAuth } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 
 export default {
@@ -7,8 +8,8 @@ export default {
   },
 
   Mutation: {
-    createCustomer: (parent, args, { models }) => 
-      models.Customer.create(args)
+    createCustomer: (parent, args, { models }) => {
+      return models.Customer.create(args)
         .then(customer => {
           return {
             success: true,
@@ -22,5 +23,24 @@ export default {
             errors: formatErrors(err, models)
           }
         })
+    },
+
+    updateCustomer: (parent, args, { models }) => {
+      return models.Customer.update(args, { where: {id: args.id}, returning: true, plain: true })
+        .then(result => {
+          return {
+            success: true,
+            customer: result[1].dataValues
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })
+    }
+
   }          
 }

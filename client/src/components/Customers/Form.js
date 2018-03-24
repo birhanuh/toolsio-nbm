@@ -159,13 +159,46 @@ class Form extends Component {
       const { id, name, vatNumber, contact: {phoneNumber, email} , isContactIncludedInInvoice, address: { street, postalCode, region, country} } = this.state
 
       this.setState({ isLoading: true })
-         
-      this.props.createCustomerMutation({variables: { name, vatNumber, phoneNumber, email, isContactIncludedInInvoice, street, postalCode, region, country } })
+      
+      if (id) {
+        this.props.updateCustomerMutation({variables: { id, name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, street, postalCode: parseInt(postalCode), region, country } })
+          .then(res => {
+            
+            // this.props.addFlashMessage({
+            //   type: 'success',
+            //   text: T.translate("customers.form.flash.success_update", { name: name})
+            // })  
+            // this.context.router.history.push('/customers')
+
+            const { success, errors } = res.data.createCustomer
+           
+            if (success) {
+              this.context.router.history.push('/customers')
+            } else {
+              let errorsList = {}
+              errors.map(error => {
+                
+                if (error.path === 'phoneNumber' || error.path === 'email') {
+                  errorsList['contact'] = {...errorsList['contact'], [error.path]: error.message }
+                } else if (error.path === 'street' || error.path === 'postalCode' || error.path === 'region' || error.path === 'country') {
+                  errorsList['address'] = {...errorsList['address'], [error.path]: error.message }
+                } else {
+                  errorsList[error.path] = error.message
+                }
+              })
+              this.setState({ errors: errorsList, isLoading: false })
+            }
+           
+          })
+          .catch(err => this.setState({ errors: err, isLoading: false }))
+      }   
+
+      this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, street, postalCode: parseInt(postalCode), region, country } })
         .then(res => {
           
           // this.props.addFlashMessage({
           //   type: 'success',
-          //   text: T.translate("customers.form.flash.success_update", { name: name})
+          //   text: T.translate("customers.form.flash.success_create", { name: name})
           // })  
           // this.context.router.history.push('/customers')
 
@@ -347,7 +380,7 @@ Form.contextTypes = {
 }
 
 const createCustomerMutation = gql`
-  mutation createCustomer($name: String!, $vatNumber: String!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
+  mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: Int, $region: String, $country: String) {
     createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
       postalCode: $postalCode, region: $region, country: $country) {
       success
@@ -359,7 +392,7 @@ const createCustomerMutation = gql`
   }
 `
 const updateCustomerMutation = gql`
-  mutation updateCustomer($id: Int!, $name: String!, $vatNumber: Int!, $email: String, $phoneNumber: String, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: Int, $region: String, $country: String) {
+  mutation updateCustomer($id: Int!, $name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: Int, $region: String, $country: String) {
     updateCustomer(id: $id, name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, postalCode: $postalCode, region: $region, country: $country) {
       success
       errors {
