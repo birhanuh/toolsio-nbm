@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { decode } from 'jwt-decode'
 import List from './List' 
-import { connect } from 'react-redux'
-import { fetchUsers } from '../../actions/userActions'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 import Form from './Form'
@@ -10,14 +11,29 @@ import Form from './Form'
 class Page extends Component {
 
   componentDidMount() {
-    this.props.fetchUsers()
+   
   }
 
   render() {
 
-    const { users, currentAccount } = this.props
-    let usersNotCurrentUserIncluded = users.filter(user => user.email !== currentAccount.email)
+    const { getUsers } = this.props.data
 
+    let currentAccount
+    
+    try {
+      const token = localStorage.getItem('token')
+      const { user, account } = decode('token')
+
+      currentAccount.subdomain = account.subdomain
+      currentAccount.firstName = user.firstName
+      currentAccount.email = user.email
+
+    } catch(err) {
+      console.log('err: ', err)
+    }
+
+    let usersNotCurrentUserIncluded = getUsers && getUsers.filter(user => user.email !== currentAccount.email)
+    
     return (
       <div className="row column">  
 
@@ -35,16 +51,15 @@ class Page extends Component {
   }
 }
 
-Page.propTypes = {
-  users: PropTypes.array.isRequired,
-  fetchUsers: PropTypes.func.isRequired
+const getUsersQuery = gql`
+  {
+    getUsers {
+      id
+      firstName
+      lastName
+      email
+    }
 }
+`
 
-function mapSateToProps(state) {
-  return {
-    users: state.users,
-    currentAccount: state.authentication.currentAccount
-  }
-}
-
-export default connect(mapSateToProps, { fetchUsers })(Page)
+export default graphql(getUsersQuery)(Page)

@@ -8,7 +8,7 @@ import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
 import { SelectField } from '../../utils/FormFields'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
@@ -102,19 +102,21 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
-    let name = this.props.project.name
-
-    this.props.deleteProject(id).then(
-      () => {
-        this.props.addFlashMessage({
-          type: 'success',
-          text: T.translate("projects.show.flash.success_delete", { name: name})
-        })  
+    this.props.deleteProjectMutation({ variables: {id} })
+      .then(() => {
+        // this.props.addFlashMessage({
+        //   type: 'success',
+        //   text: T.translate("projects.show.flash.success_delete", { name: name})
+        // })  
         this.context.router.history.push('/projects')
-      },
-      ({ response }) => {
-      }
-    ) 
+      })
+      .catch(err => {
+        // this.props.addFlashMessage({
+        //   type: 'error',
+        //   text: T.translate("projects.show.flash.error_delete")
+        // })  
+        console.log('error ', err)
+      })
     
   }
 
@@ -276,6 +278,18 @@ Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
+const deleteProjectMutation = gql`
+  mutation deleteProject($id: Int!) {
+    deleteProject(id: $id) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
 const getProjectQuery = gql`
   query getProject($id: Int!) {
     getProject(id: $id) {
@@ -301,10 +315,18 @@ const getProjectQuery = gql`
   }
 `
 
-export default graphql(getProjectQuery, {
-  options: (props) => ({
-    variables: {
-      id: parseInt(props.match.params.id)
-    }
-  })})(Show)
+const MutationsAndQuery =  compose(
+  graphql(deleteProjectMutation, {
+    name : 'deleteProjectMutation'
+  }),
+  graphql(getProjectQuery, {
+    options: (props) => ({
+      variables: {
+        id: parseInt(props.match.params.id)
+      },
+    })
+  })
+)(Show)
+
+export default MutationsAndQuery
 

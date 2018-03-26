@@ -18,20 +18,20 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: this.props.invoice ? this.props.invoice.id : null,
+      id: this.props.data.getInvoice ? this.props.data.getInvoice.id : null,
       step1: {
-        saleId: this.props.invoice ? (this.props.invoice.sale ? this.props.invoice.sale.id : '') : '',
-        projectId: this.props.invoice ? (this.props.invoice.project ? this.props.invoice.project.id : '') : '' 
+        saleId: this.props.data.getInvoice ? (this.props.data.getInvoice.sale ? this.props.data.getInvoice.sale.id : '') : '',
+        projectId: this.props.data.getInvoice ? (this.props.data.getInvoice.project ? this.props.data.getInvoice.project.id : '') : '' 
       },
       step2: {
-        deadline: this.props.invoice ? moment(this.props.invoice.deadline, "MM-DD-YYYY") : moment(),
-        paymentTerm: this.props.invoice ? this.props.invoice.paymentTerm : '',
-        interestInArrears: this.props.invoice ? this.props.invoice.interestInArrears : '',
-        status: this.props.invoice ? this.props.invoice.status : 'new',
-        description: this.props.invoice ? this.props.invoice.description : ''
+        deadline: this.props.data.getInvoice ? moment(this.props.data.getInvoice.deadline, "MM-DD-YYYY") : moment(),
+        paymentTerm: this.props.data.getInvoice ? this.props.data.getInvoice.paymentTerm : '',
+        interestInArrears: this.props.data.getInvoice ? this.props.data.getInvoice.interestInArrears : '',
+        status: this.props.data.getInvoice ? this.props.data.getInvoice.status : 'new',
+        description: this.props.data.getInvoice ? this.props.data.getInvoice.description : ''
       },
-      sale: this.props.invoice ? this.props.invoice.sale : null,
-      project:this.props.invoice ? this.props.invoice.project : null,
+      sale: this.props.data.getInvoice ? this.props.data.getInvoice.sale : null,
+      project:this.props.data.getInvoice ? this.props.data.getInvoice.project : null,
       currentStep: 'step1',
       errors: {},
       isLoading: false
@@ -39,22 +39,22 @@ class Form extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.invoice) {
+    if (nextProps.data.getInvoice) {
       this.setState({
-        id: nextProps.invoice.id,
+        id: nextProps.data.getInvoice.id,
         step1: {
-          saleId: !!nextProps.invoice.sale && nextProps.invoice.sale.id,
-          projectId: !!nextProps.invoice.project && nextProps.invoice.project.id
+          saleId: !!nextProps.data.getInvoice.sale && nextProps.data.getInvoice.sale.id,
+          projectId: !!nextProps.data.getInvoice.project && nextProps.data.getInvoice.project.id
         },
         step2: {
-          deadline: nextProps.invoice.deadline ? moment(nextProps.invoice.deadline) : null,
-          paymentTerm: nextProps.invoice.paymentTerm,
-          interestInArrears: nextProps.invoice.interestInArrears,
-          status: nextProps.invoice.status,
-          description: nextProps.invoice.description
+          deadline: nextProps.data.getInvoice.deadline ? moment(nextProps.data.getInvoice.deadline) : null,
+          paymentTerm: nextProps.data.getInvoice.paymentTerm,
+          interestInArrears: nextProps.data.getInvoice.interestInArrears,
+          status: nextProps.data.getInvoice.status,
+          description: nextProps.data.getInvoice.description
         },
-        sale: nextProps.invoice.sale,
-        project: nextProps.invoice.project,
+        sale: nextProps.data.getInvoice.sale,
+        project: nextProps.data.getInvoice.project,
       })
     }
   }
@@ -407,6 +407,32 @@ const getInvoicesQuery = gql`
   }
 `
 
+const getInvoiceQuery = gql`
+  query getInvoice($id: Int!) {
+    getInvoice(id: $id) {
+      id
+      deadline
+      paymentTerm
+      interestInArrears
+      referenceNumber
+      status
+      createdAt
+      project {
+        id
+        name
+        deadline
+        progress
+        status
+      }
+      sale {
+        id
+        name
+        deadline
+        status
+      }
+    }
+  }
+`
 const Mutations =  compose(
   graphql(createInvoiceMutation, {
     name : 'createInvoiceMutation'
@@ -419,6 +445,13 @@ const Mutations =  compose(
   }),
   graphql(getInvoicesQuery, {
     name : 'getInvoicesQuery'
+  }),
+  graphql(getInvoiceQuery, {
+    options: (props) => ({
+      variables: {
+        id: props.match.params.id ? parseInt(props.match.params.id) : 0
+      },
+    })
   })
 )(Form)
 

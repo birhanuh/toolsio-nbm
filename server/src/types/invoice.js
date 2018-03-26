@@ -6,10 +6,13 @@ export default `
     paymentTerm: Int
     interestInArrears: Int!
     status: String!
+    referenceNumber: String!
     description: String
     total: Int!
+    createdAt: Date!
     project: Project
     sale: Sale
+    customer: Customer!
   }
 
   type GetInvoicesResponse {
@@ -29,8 +32,13 @@ export default `
     errors: [Error!]
   }
 
+  type DeleteInvoiceResponse {
+    success: Boolean!
+    errors: [Error!]
+  }
+
   type Query {
-    getInvoice(id: Int!): Invoice!
+    getInvoice(id: Int!): Invoice
     getInvoices: [GetInvoicesResponse!]!
   }
 
@@ -38,8 +46,11 @@ export default `
     createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String!, 
       , description: String, total: Int!, projectId: Int, saleId: Int, 
       customerId: Int!): CreateUpdateInvoiceResponse!
+    
     updateInvoice(id: Int!, deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String!, 
       , description: String, total: Int!, projectId: Int, saleId: Int, 
       customerId: Int!): CreateUpdateInvoiceResponse!  
+
+    deleteInvoice(id: Int!): DeleteInvoiceResponse!
   }
 `

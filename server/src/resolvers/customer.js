@@ -3,8 +3,8 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getCustomer: (parent, {id}, {models}) => models.Customer.findOne({ where: {id} }, { raw: true }),
-    getCustomers: (parent, args, {models}) => models.Customer.findAll()
+    getCustomer: (parent, {id}, { models }) => models.Customer.findOne({ where: {id} }, { raw: true }),
+    getCustomers: (parent, args, { models }) => models.Customer.findAll()
   },
 
   Mutation: {
@@ -40,7 +40,42 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    }
+    },
 
-  }          
+    deleteCustomer: (parent, args, { models }) => {
+      return models.Customer.destroy({ where: {id: args.id}, force: true })
+        .then(res => {
+          
+          return {
+            success: (res === 1)
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })
+    }      
+
+  },
+
+  Customer: {
+    projects: ({ id }, args, { models } ) => { 
+
+      return models.Project.findAll({ customerId: id})
+    },
+
+    sales: ({ id }, args, { models } ) => { 
+
+      return models.Sale.findAll({ customerId: id})
+    },
+
+    invoices: ({ id }, args, { models } ) => { 
+
+      return models.Invoice.findAll({ customerId: id})
+    }
+  }        
 }
+

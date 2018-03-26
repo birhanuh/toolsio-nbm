@@ -30,16 +30,24 @@ export default `
     errors: [Error!]
   }
 
+  type DeleteCustomerResponse {
+    success: Boolean!
+    errors: [Error!]
+  }
+
   type Query {
-    getCustomer(id: Int!): Customer!
+    getCustomer(id: Int!): Customer
     getCustomers: [GetCustomersResponse!]!
   }
 
   type Mutation {
     createCustomer(name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
       street: String, postalCode: Int, region: String, country: String): CreateUpdateCustomerResponse!
+    
     updateCustomer(id: Int!, name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
-      street: String, postalCode: Int, region: String, country: String): CreateUpdateCustomerResponse!  
+      street: String, postalCode: Int, region: String, country: String): CreateUpdateCustomerResponse! 
+
+    deleteCustomer(id: Int!): DeleteCustomerResponse!   
   }
 
 `

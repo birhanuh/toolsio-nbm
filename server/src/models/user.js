@@ -91,8 +91,8 @@ export default (sequelize, DataTypes) => {
     User.belongsToMany(models.Message, {
       through: models.Conversation,
       foreignKey: {
-        name: 'userId',
-        field: 'user_id'
+        name: 'recipientId',
+        field: 'recipient_id'
       }
     })
   }

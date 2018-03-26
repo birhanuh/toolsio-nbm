@@ -41,7 +41,24 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    }    
+    },
+
+    deleteSale: (parent, args, { models }) => {
+      return models.Sale.destroy({ where: {id: args.id}, force: true })
+        .then(res => {
+          
+          return {
+            success: (res === 1)
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })
+    }         
   
   },
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { InputField, SelectField } from '../../utils/FormFields'
 import classnames from 'classnames'
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // Localization 
@@ -50,7 +50,9 @@ class Form extends Component {
     const val = e.target.value
 
     if (val !== '') {
-      this.props.getAccountQuery({ variables: {subdomain: ""} })
+      this.props.client.query({ 
+        query: getAccountQuery,
+        variables: {subdomain: val} })
         .then(res => {
 
           const { id, subdomain } = res.data.getAccountQuery
@@ -88,7 +90,7 @@ class Form extends Component {
       
       const { account: { subdomain, industry }, user: { firstName, lastName, email, password } } = this.state
       // Make submit
-      this.props.registerUser({variables: { firstName, lastName, email, password, subdomain, industry }})
+      this.props.registerUserMutation({variables: { firstName, lastName, email, password, subdomain, industry }})
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',
@@ -194,8 +196,12 @@ class Form extends Component {
           <div className={classnames("field", { error: !!errors && errors.subdomain })}>
             <label>{T.translate("sign_up.account.subdomain")}</label>
             <div className="ui right labeled input">
-              <input type="text" name="subdomain" id="subdomain" placeholder={T.translate("sign_up.account.subdomain")} 
-                onBlur={this.getAccount.bind(this)} value={account.subdomain} onChange={this.handleChange.bind(this)} />
+              <input type="text" name="subdomain" 
+                id="subdomain" 
+                placeholder={T.translate("sign_up.account.subdomain")} 
+                onBlur={this.getAccount.bind(this)} 
+                value={account.subdomain} 
+                onChange={this.handleChange.bind(this)} />
               <div className="ui label">toolsio.com</div>  
             </div>
             <span className="red">{errors && errors.subdomain}</span>
@@ -216,7 +222,7 @@ Form.propTypes = {
   // isUserExist: PropTypes.func.isRequired
 }
 
-const registerUser = gql`
+const registerUserMutation = gql`
   mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
     registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
       success
@@ -229,27 +235,13 @@ const registerUser = gql`
 `
 
 const getAccountQuery = gql`
-  query getAccountQuery($subdomain: String!) {
-    getAccountQuery(subdomain: $subdomain) {
+  query getAccount($subdomain: String!) {
+    getAccount(subdomain: $subdomain) {
       id
       subdomain
     }
   }
 `
 
-const RegisterMutations =  compose(
-  graphql(registerUser, {
-    name : 'registerUser'
-  }),
-  graphql(getAccountQuery, {
-    options: (props) => ({
-      variables: {
-        subdomain: this.state.account.subdomain
-      }
-    })
-  })
-)(Form)
-
-export default RegisterMutations
-
+export default graphql(registerUserMutation)(Form)
 

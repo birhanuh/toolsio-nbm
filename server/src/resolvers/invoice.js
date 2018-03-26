@@ -4,8 +4,8 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
   
   Query: {
-    getInvoice: (parent, {id}, {models}) => models.Invoice.findOne({ where: {id} }, { raw: true }),
-    getInvoices: (parent, args, {models}) => models.Invoice.findAll()
+    getInvoice: (parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true }),
+    getInvoices: (parent, args, { models }) => models.Invoice.findAll()
   },
 
   Mutation: {
@@ -20,7 +20,7 @@ export default {
         let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()
        
         const invoice = await models.Invoice.create({...args, referenceNumber})
-        console.log('args ', args)
+
         return {
           success: true,
           invoice: invoice
@@ -50,7 +50,24 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    }    
+    },
+
+    deleteInvoice: (parent, args, { models }) => {
+      return models.Invoice.destroy({ where: {id: args.id}, force: true })
+        .then(res => {
+          
+          return {
+            success: (res === 1)
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })
+    }         
   },
 
   GetInvoicesResponse: {
@@ -69,5 +86,23 @@ export default {
 
       return models.Sale.findOne({ where: {id: saleId} }, { raw: true })
     }
-  }         
+  },
+
+  Invoice: {
+
+    customer: ({ customerId }, args, { models }) => {
+
+      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
+    },
+
+    project: ({ projectId }, args, { models }) => {
+
+      return models.Project.findOne({ where: {id: projectId} }, { raw: true })
+    },
+
+    sale: ({ saleId }, args, { models }) => {
+
+      return models.Sale.findOne({ where: {id: saleId} }, { raw: true })
+    }
+  }                
 }

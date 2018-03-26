@@ -15,7 +15,7 @@ export default `
   }
 
   type Query {
-    getAccount(subdomain: String!): Account!
+    getAccount(subdomain: String!): Account
     getAccounts: [Account!]!
   }
 

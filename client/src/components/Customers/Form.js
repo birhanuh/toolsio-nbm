@@ -24,19 +24,19 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: this.props.customer ? this.props.customer.id : null,
-      name: this.props.customer ? this.props.customer.name : '',
+      id: this.props.data.getCustomer ? this.props.data.getCustomer.id : null,
+      name: this.props.data.getCustomer ? this.props.data.getCustomer.name : '',
       address: {
-        street: this.props.customer ? this.props.customer.address.street: '',
-        postalCode: this.props.customer ? this.props.customer.address.postalCode : '',
-        region: this.props.customer ? this.props.customer.address.region : '',
-        country: this.props.customer ? this.props.customer.address.country : ''
+        street: this.props.data.getCustomer ? this.props.data.getCustomer.street: '',
+        postalCode: this.props.data.getCustomer ? this.props.data.getCustomer.postalCode : '',
+        region: this.props.data.getCustomer ? this.props.data.getCustomer.region : '',
+        country: this.props.data.getCustomer ? this.props.data.getCustomer.country : ''
       },
-      vatNumber: this.props.customer ? this.props.customer.vatNumber : '',
-      isContactIncludedInInvoice: this.props.customer ? this.props.customer.isContactIncludedInInvoice : false,
+      vatNumber: this.props.data.getCustomer ? this.props.data.getCustomer.vatNumber : '',
+      isContactIncludedInInvoice: this.props.data.getCustomer ? this.props.data.getCustomer.isContactIncludedInInvoice : false,
       contact: {
-        phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
-        email: this.props.customer ? this.props.customer.contact.email : ''
+        phoneNumber: this.props.data.getCustomer ? this.props.data.getCustomer.phoneNumber : '',
+        email: this.props.data.getCustomer ? this.props.data.getCustomer.email : ''
       },
       errors: {},
       isLoading: false
@@ -44,21 +44,21 @@ class Form extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.customer) {
+    if (nextProps.data.getCustomer) {
       this.setState({
-        id: nextProps.customer.id,
-        name: nextProps.customer.name,
+        id: nextProps.data.getCustomer.id,
+        name: nextProps.data.getCustomer.name,
         address: {
-          street: nextProps.customer.address.street,
-          postalCode: nextProps.customer.address.postalCode,
-          region: nextProps.customer.address.region,
-          country: nextProps.customer.address.country
+          street: nextProps.data.getCustomer.street,
+          postalCode: nextProps.data.getCustomer.postalCode,
+          region: nextProps.data.getCustomer.region,
+          country: nextProps.data.getCustomer.country
         },
-        vatNumber: nextProps.customer.vatNumber,
-        isContactIncludedInInvoice: nextProps.customer.isContactIncludedInInvoice,
+        vatNumber: nextProps.data.getCustomer.vatNumber,
+        isContactIncludedInInvoice: nextProps.data.getCustomer.isContactIncludedInInvoice,
         contact: {
-          phoneNumber: nextProps.customer.contact.phoneNumber,
-          email: nextProps.customer.contact.email
+          phoneNumber: nextProps.data.getCustomer.phoneNumber,
+          email: nextProps.data.getCustomer.email
         }
       })
     }
@@ -402,13 +402,37 @@ const updateCustomerMutation = gql`
     }
   }
 `
-const CreateUpdateCustomerMutations =  compose(
+const getCustomerQuery = gql`
+  query getCustomer($id: Int!) {
+    getCustomer(id: $id) {
+      id
+      name
+      vatNumber
+      phoneNumber
+      email
+      isContactIncludedInInvoice
+      street
+      postalCode
+      region
+      country
+    }
+  }
+`
+
+const MutationsAndQuery =  compose(
   graphql(createCustomerMutation, {
     name : 'createCustomerMutation'
   }),
   graphql(updateCustomerMutation, {
     name: 'updateCustomerMutation'
+  }),
+  graphql(getCustomerQuery, {
+    options: (props) => ({
+      variables: {
+        id: props.match.params.id ? parseInt(props.match.params.id) : 0
+      },
+    })
   })
 )(Form)
 
-export default CreateUpdateCustomerMutations
+export default MutationsAndQuery

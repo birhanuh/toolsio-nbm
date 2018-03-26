@@ -8,7 +8,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull : false
     },
-    is_read: {
+    isRead: {
       type: DataTypes.BOOLEAN,
       defaultValue : false,
       field: 'is_read'
@@ -17,12 +17,16 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue : false,
       field: 'is_drafted'
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      field: 'created_at'
     }
   }, {underscored: true})
 
   Message.associate = (models) => {
     // 1:N
-    Message.belongsTo(models.User, {
+    Message.belongsToMany(models.User, {
       through: models.Conversation,
       foreignKey: {
         name: 'messageId',

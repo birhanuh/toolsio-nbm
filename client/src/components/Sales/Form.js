@@ -24,28 +24,28 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.id : null,
-      name: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.name : '',
-      deadline: !!this.props.getSaleQuery.getSale ? moment(this.props.getSaleQuery.getSale.deadline).format("MM-DD-YYYY") : moment(),
-      customerId: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.customer.id : '',
-      status: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.status : 'new',
-      description: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.description : '',
-      total: !!this.props.getSaleQuery.getSale ? this.props.getSaleQuery.getSale.total : 0,
+      id: !!this.props.data.getSale ? this.props.data.getSale.id : null,
+      name: !!this.props.data.getSale ? this.props.data.getSale.name : '',
+      deadline: !!this.props.data.getSale ? moment(this.props.data.getSale.deadline).format("MM-DD-YYYY") : moment(),
+      customerId: !!this.props.data.getSale ? this.props.data.getSale.customer.id : '',
+      status: !!this.props.data.getSale ? this.props.data.getSale.status : 'new',
+      description: !!this.props.data.getSale ? this.props.data.getSale.description : '',
+      total: !!this.props.data.getSale ? this.props.data.getSale.total : 0,
       errors: {},
       isLoading: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.getSaleQuery.getSale) {
+    if (nextProps.data.getSale) {
       this.setState({
-        id: nextProps.getSaleQuery.getSale.id,
-        name: nextProps.getSaleQuery.getSale.name,
-        deadline: moment(nextProps.getSaleQuery.getSale.deadline),
-        customerId: nextProps.getSaleQuery.getSale.customer.id,
-        status: nextProps.getSaleQuery.getSale.status,
-        description: nextProps.getSaleQuery.getSale.description,
-        total: nextProps.getSaleQuery.getSale.total
+        id: nextProps.data.getSale.id,
+        name: nextProps.data.getSale.name,
+        deadline: moment(nextProps.data.getSale.deadline),
+        customerId: nextProps.data.getSale.customer.id,
+        status: nextProps.data.getSale.status,
+        description: nextProps.data.getSale.description,
+        total: nextProps.data.getSale.total
       })
     }
   }
@@ -401,7 +401,6 @@ const MutationsAndQuery =  compose(
     name: 'getCustomersSalesQuery'
   }),
   graphql(getSaleQuery, {
-    name: 'getSaleQuery',
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0

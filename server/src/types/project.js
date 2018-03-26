@@ -31,6 +31,11 @@ export default `
     errors: [Error!]
   }
 
+  type DeleteProjectResponse {
+    success: Boolean!
+    errors: [Error!]
+  }
+
   type Query {
     getProject(id: Int!): Project
     getProjects: [GetProjectsResponse!]!
@@ -39,8 +44,11 @@ export default `
   type Mutation {
     createProject(name: String!, deadline: Date!, status: String!, progress: Int, description: String, 
       total: Int, customerId: Int!): CreateUpdateProjectResponse!
+    
     updateProject(id: Int!, name: String!, deadline: Date!, status: String!, progress: Int, description: String, 
       total: Int, customerId: Int!): CreateUpdateProjectResponse!
+    
+    deleteProject(id: Int!): DeleteProjectResponse!
   }
 
 `

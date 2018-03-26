@@ -6,7 +6,7 @@ import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { fetchSale, deleteSale } from '../../actions/saleActions'
 import { SelectField } from '../../utils/FormFields'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 
@@ -88,20 +88,22 @@ class Show extends Component {
 
   handleDelete(id, event) {
     event.preventDefault()
-    
-    let name = this.props.sale.name
 
-    this.props.deleteSale(id).then(
-      () => {
-        this.props.addFlashMessage({
-          type: 'success',
-          text: T.translate("sales.show.flash.success_delete", { name: name})
-        })  
+    this.props.deleteSaleMutation({ variables: {id} })
+      .then(() => {
+        // this.props.addFlashMessage({
+        //   type: 'success',
+        //   text: T.translate("sales.show.flash.success_delete", { name: name})
+        // })  
         this.context.router.history.push('/sales')
-      },
-      ({ response }) => {
-      }
-    ) 
+      })
+      .catch(err => {
+        // this.props.addFlashMessage({
+        //   type: 'error',
+        //   text: T.translate("sales.show.flash.error_delete")
+        // })  
+        console.log('error ', err)
+      })
     
   }
 
@@ -185,6 +187,18 @@ Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
+const deleteSaleMutation = gql`
+  mutation deleteSale($id: Int!) {
+    deleteSale(id: $id) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
 const getSaleQuery = gql`
   query getSale($id: Int!) {
     getSale(id: $id) {
@@ -209,9 +223,17 @@ const getSaleQuery = gql`
   }
 `
 
-export default graphql(getSaleQuery, {
-  options: (props) => ({
-    variables: {
-      id: parseInt(props.match.params.id)
-    },
-  })})(Show)
+const MutationsAndQuery =  compose(
+  graphql(deleteSaleMutation, {
+    name : 'deleteSaleMutation'
+  }),
+  graphql(getSaleQuery, {
+    options: (props) => ({
+      variables: {
+        id: parseInt(props.match.params.id)
+      },
+    })
+  })
+)(Show)
+
+export default MutationsAndQuery

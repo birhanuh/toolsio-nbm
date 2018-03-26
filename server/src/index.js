@@ -238,5 +238,17 @@ mutation {
   }
 }
 
+mutation {
+  createMessage(title: "test", body: "Test second...", recipientId: 1 ) {
+      success
+      message {
+        id
+      } 
+      errors {
+        path
+        message
+      }
+    }
+}
 */
 

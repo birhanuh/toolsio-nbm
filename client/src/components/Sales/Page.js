@@ -67,7 +67,7 @@ class Page extends Component {
 
         <div className="ui clearing vertical segment border-bottom-none">
          
-          <Pagination path="sales" list={getSales} match={match} length={length} />           
+          {/*<Pagination path="sales" pages={getSales.pages} match={match} length={length} /> */}          
            
         </div>   
       </div>  

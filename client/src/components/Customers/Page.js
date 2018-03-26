@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Table from './Table' 
-import { fetchCustomers } from '../../actions/customerActions'
 import { graphql} from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -42,7 +41,7 @@ class Page extends Component {
             </div>
           </div>
           <div className="ui left floated vertical segment border-bottom-none">
-            <select class="ui dropdown">
+            <select className="ui dropdown">
               <option value="10" default>10</option>
               <option value="50">50</option>
               <option value="100">100</option>

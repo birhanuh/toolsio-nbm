@@ -66,7 +66,24 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    }    
+    },
+
+    deleteProject: (parent, args, { models }) => {
+      return models.Project.destroy({ where: {id: args.id}, force: true })
+        .then(res => {
+          
+          return {
+            success: (res === 1)
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })
+    }      
   },
 
   Project: {

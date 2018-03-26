@@ -43,6 +43,10 @@ export default (sequelize, DataTypes) => {
       validate: {     
         isInt: true // checks for int
       } 
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      field: 'created_at'
     }
   }, {
     hooks: {

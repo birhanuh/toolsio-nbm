@@ -1,7 +1,7 @@
 export default {
   Query: {
-    getConversation: (parent, {id}, {models}) => models.Conversation.findOne({ where: {id} }),
-    getAllConversations: (parent, args, {models}) => models.Conversation.findAll()
+    getConversation: (parent, { id }, { models }) => models.Conversation.findOne({ where: { id } }),
+    getConversations: (parent, args, { models }) => models.Conversation.findAll()
   },
 
   Mutation: {

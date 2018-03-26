@@ -9,8 +9,8 @@ export default function Table({ invoices }) {
   const emptyMessage = (
     <tbody>
       <tr>
-        <td colspan="4">
-          <div class="ui info message m-3">
+        <td colSpan="5">
+          <div className="ui info message m-3">
             <div className="header">{T.translate("invoices.page.empty_invoices_header")}</div>
             <p>{T.translate("invoices.page.empty_invoices_message")}</p>
           </div>  

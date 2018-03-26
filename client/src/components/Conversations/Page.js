@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Route, Switch } from 'react-router-dom'
 import classnames from 'classnames' 
-import { connect } from 'react-redux'
-import { fetchConversations, fetchInboxOrSent, deleteConversation } from '../../actions/conversationActions'
+import { graphql} from 'react-apollo'
+import gql from 'graphql-tag'
 
 import List from './List'
 import Show from './Show'
@@ -167,19 +167,22 @@ class Page extends Component {
   }
 }
 
-Page.propTypes = {
-  fetchConversations: PropTypes.func.isRequired,
-  fetchInboxOrSent: PropTypes.func.isRequired,
-  deleteConversation: PropTypes.func.isRequired
-}
-
-function mapSateToProps(state) {
-  
-  return {
-    conversations: state.conversations,
-    account: state.authentication.account
+const getCustomersQuery = gql`
+  {
+    getInboxMessages {
+      id
+      title
+      body
+      createdAt
+    }
+    getSentMessages {
+      id
+      title
+      body
+      createdAt
+    }
   }
-}
+`
+export default graphql(getCustomersQuery)(Page)
 
-export default connect(mapSateToProps, { fetchConversations, fetchInboxOrSent, deleteConversation }) (Page)
 

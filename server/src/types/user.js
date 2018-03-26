@@ -11,9 +11,12 @@ export default `
     isAdmin: Boolean!
   }
 
-  type Query {
-    getUser(id: Int!): User!
-    getAllUsers: [User!]!
+  type GetUsersResponse {
+    id: Int!
+    firstName: String
+    lastName: String
+    email: String!
+    isConfirmed: Boolean!
   }
 
   type RegisterResponse {
@@ -27,6 +30,11 @@ export default `
     token: String
     refreshToken: String
     errors: [Error!]
+  }
+
+  type Query {
+    getUser(id: Int!): User!
+    getUsers: [GetUsersResponse!]!
   }
 
   type Mutation {

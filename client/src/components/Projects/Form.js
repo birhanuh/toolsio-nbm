@@ -25,30 +25,30 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.id : null,
-      name: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.name : '',
-      deadline: !!this.props.getProjectQuery.getProject ? moment(this.props.getProjectQuery.getProject.deadline).format("MM-DD-YYYY") : moment(),
-      customerId: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.customerId : '',
-      status: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.status : 'new',
-      progress: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.progress : 0,
-      description: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.description : '',
-      total: !!this.props.getProjectQuery.getProject ? this.props.getProjectQuery.getProject.total : 0,
+      id: !!this.props.data.getProject ? this.props.data.getProject.id : null,
+      name: !!this.props.data.getProject ? this.props.data.getProject.name : '',
+      deadline: !!this.props.data.getProject ? moment(this.props.data.getProject.deadline).format("MM-DD-YYYY") : moment(),
+      customerId: !!this.props.data.getProject ? this.props.data.getProject.customerId : '',
+      status: !!this.props.data.getProject ? this.props.data.getProject.status : 'new',
+      progress: !!this.props.data.getProject ? this.props.data.getProject.progress : 0,
+      description: !!this.props.data.getProject ? this.props.data.getProject.description : '',
+      total: !!this.props.data.getProject ? this.props.data.getProject.total : 0,
       errors: {},
       isLoading: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.getProjectQuery.getProject) {
+    if (nextProps.data.getProject) {
       this.setState({
-        id: nextProps.getProjectQuery.getProject.id,
-        name: nextProps.getProjectQuery.getProject.name,
-        deadline: moment(nextProps.getProjectQuery.getProject.deadline),
-        customerId: nextProps.getProjectQuery.getProject.customerId,
-        status: nextProps.getProjectQuery.getProject.status,
-        progress: nextProps.getProjectQuery.getProject.progress,
-        description: nextProps.getProjectQuery.getProject.description,
-        total: nextProps.getProjectQuery.getProject.total
+        id: nextProps.data.getProject.id,
+        name: nextProps.data.getProject.name,
+        deadline: moment(nextProps.data.getProject.deadline),
+        customerId: nextProps.data.getProject.customerId,
+        status: nextProps.data.getProject.status,
+        progress: nextProps.data.getProject.progress,
+        description: nextProps.data.getProject.description,
+        total: nextProps.data.getProject.total
       })
     }
   }
@@ -478,7 +478,6 @@ const MutationsAndQuery =  compose(
     name: 'getCustomersProjectsQuery'
   }),
   graphql(getProjectQuery, {
-    name: 'getProjectQuery',
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0

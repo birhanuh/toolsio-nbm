@@ -3,8 +3,8 @@ import { loginUserWithToken } from '../utils/authentication'
 
 export default {
   Query: {
-    getUser: (parent, {id}, {models}) => models.User.findOne({ where: {id} }, { raw: true }),
-    getAllUsers: (parent, args, {models}) => models.User.findAll()
+    getUser: (parent, {id}, { models }) => models.User.findOne({ where: {id} }, { raw: true }),
+    getUsers: (parent, args, { models }) => models.User.findAll()
   },
 
   Mutation: {
@@ -15,17 +15,31 @@ export default {
       const { subdomain, industry } = args
 
       try {
-        const response = await models.sequelize.transaction(async () => {
+        const account = await models.Account.findOne({ where: {subdomain}}, { raw: true })
 
-          const user = await  models.User.create({ firstName, lastName, email, password })
-          await models.Account.create({ subdomain, industry, owner: user.id })
+        if (account) {
+          return {
+            success: false,
+            errors: [
+              {
+                path: 'subdomain',
+                message: 'Subdomain is already taken'
+              }
+            ]
+          }
+        } else {
+          const response = await models.sequelize.transaction(async () => {
 
-          return user
-        })
-      
-        return {
-          success: true,
-          response
+            const user = await  models.User.create({ firstName, lastName, email, password })
+            await models.Account.create({ subdomain, industry, owner: user.id })
+
+            return user
+          })
+        
+          return {
+            success: true,
+            response
+          }
         }
       } catch(err) {
         console.log(err)

@@ -7,7 +7,7 @@ export default `
 
   type Query {
     getConversation(id: Int!): Conversation!
-    getAllConversations: [Conversation!]!
+    getConversations: [Conversation!]!
   }
 
   type Mutation {
