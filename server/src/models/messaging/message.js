@@ -13,10 +13,10 @@ export default (sequelize, DataTypes) => {
       defaultValue : false,
       field: 'is_read'
     },
-    isDrafted: {
+    isArchived: {
       type: DataTypes.BOOLEAN,
       defaultValue : false,
-      field: 'is_drafted'
+      field: 'is_archived'
     },
     createdAt: {
       type: DataTypes.DATE,

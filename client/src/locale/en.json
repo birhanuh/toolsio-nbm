@@ -635,18 +635,8 @@
     }
   },
   "messages": {
-    "new": {
-      "header": "New message"
-    },
-    "create": {
-      "success": "Message has been sent!"
-    }
-  },
-  "conversations": {
     "page": {
       "header": "Conversations",
-      "empty_conversations_header": "There are no conversations",
-      "empty_conversations_message": "Click Compose new Conversation button on the left-side panel to compose your first Conversation.",
       "compose_new_conversation": "Compose New Conversatoin",
       "empty_inbox": "Inbox is empty",
       "empty_sent": "Sent is empty",
@@ -655,12 +645,20 @@
       "sent": "Sent",
       "trash": "Trash",
       "remove": "Remove",
-      "draft": "Draft",
+      "archive": "Archive",
       "restore": "Restore",
       "title": "Title",
       "from": "From",
       "body": "Body",
       "description": "Internal messaging serivce, compose, read, reply and delete messages."
+    },
+    "list": {
+      "empty_inbox_header": "Inbox is empty",
+      "empty_inbox_message": "You haven't recieved any messages yet.",
+      "empty_archive_header": "Archive is empty",
+      "empty_archive_message": "Select and check archive checkbox from Inbox or Sent panel to archive messages.",
+      "empty_sent_header": "Sent is empty",
+      "empty_sent_message": "Click Compose new Conversation button on the left-side panel to compose your first Conversation."
     },
     "form": {
       "new_message": "New Message",

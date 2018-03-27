@@ -5,15 +5,15 @@ export default `
     title: String!
     body: String!
     isRead: Boolean!
-    isDrafted: Boolean!
+    isArchived: Boolean!
     author: Int!
     createdAt: Date!
   }
 
-  type GetReadAndDraftedCountsMessageResponse {
+  type GetReadAndArchivedCountsMessageResponse {
     success: Boolean!
     unreadCount: Int!
-    draftedCount: Int 
+    archivedCount: Int 
     errors: [Error!]
   }
 
@@ -27,7 +27,8 @@ export default `
     getMessage(id: Int!): Message
     getInboxMessages: [Message!]!
     getSentMessages: [Message!]!
-    getReadAndDraftedCounts: GetReadAndDraftedCountsMessageResponse!
+    getArchiveMessages: [Message!]!
+    getReadAndArchivedCounts: GetReadAndArchivedCountsMessageResponse!
   }
 
   type Mutation {

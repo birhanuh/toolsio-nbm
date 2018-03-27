@@ -21,7 +21,7 @@ import CustomersShow from '../Customers/Show'
 import InvoicesPage from '../Invoices/Page'
 import InvoicesForm from '../Invoices/Form'
 import InvoicesShow from '../Invoices/Show/Page'
-import ConversationsPage from '../Conversations/Page'
+import MessagesPage from '../Messages/Page'
 import UsersPage from '../Users/Page'
 
 import HeaderNav from './HeaderNav'
@@ -96,9 +96,9 @@ class App extends Component {
               <Route exact path="/invoices/edit/:id" component={InvoicesForm} /> 
               <Route exact path="/invoices/new" component={InvoicesForm} />
               <Route exact path="/invoices/show/:id" component={InvoicesShow} /> 
-              <Route exact path="/conversations" component={ConversationsPage} />
-              <Route exact path="/conversations/:type" component={ConversationsPage} />
-              <Route exact path="/conversations/:type/show/:id" component={ConversationsPage} /> 
+              <Route exact path="/messages" component={MessagesPage} />
+              <Route exact path="/messages/:type" component={MessagesPage} />
+              <Route exact path="/messages/:type/show/:id" component={MessagesPage} /> 
               <Route exact path="/users" component={UsersPage} /> 
             </Switch>
           </div>

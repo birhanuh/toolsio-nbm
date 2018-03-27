@@ -22,7 +22,19 @@ export default {
         order: [['created_at', 'ASC']] }, { raw: true })
     },
 
-    getReadAndDraftedCounts: async (parent, args, { models }) => {
+    getArchiveMessages: (parent, args, { models }) => {
+      return models.Message.findAll({ 
+        where: { isArchived: true },
+        include: [
+          {
+            model: models.User,
+            where: { id: 1 }
+          }
+        ],
+        order: [['created_at', 'ASC']] }, { raw: true })
+    },
+
+    getReadAndArchivedCounts: async (parent, args, { models }) => {
       try {
         const unreadCount = await models.Message.count({ 
           where: { isRead: false },
@@ -33,8 +45,8 @@ export default {
             }
           ]}, { raw: true })
 
-        const draftedCount = await models.Message.count({ 
-          where: { isDrafted: true },
+        const archivedCount = await models.Message.count({ 
+          where: { isArchived: true },
           include: [
             {
               model: models.User,
@@ -45,7 +57,7 @@ export default {
         return {
           success: true,
           unreadCount,
-          draftedCount
+          archivedCount
         }
       } catch(err) {
         console.log(err)
