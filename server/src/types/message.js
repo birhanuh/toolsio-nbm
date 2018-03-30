@@ -19,7 +19,6 @@ export default `
   type CreateMessageResponse {
     success: Boolean!
     message: Message 
-    channel: Channel
     errors: [Error!]
   }
 
@@ -32,7 +31,7 @@ export default `
   }
 
   type Mutation {
-    createMessage(message: String!, channelId: Int!, userId: Int! ): CreateMessageResponse!
+    createMessage(message: String!, channelId: Int! ): CreateMessageResponse!
   }
 
 `

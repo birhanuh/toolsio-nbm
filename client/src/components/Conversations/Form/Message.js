@@ -8,13 +8,14 @@ import gql from 'graphql-tag'
 // Localization 
 import T from 'i18n-react'
 
+const ENTER_KEY = 13
+
 class Message extends Component {
   
   constructor(props) {
     super(props)
     this.state = {
-      id: null,
-      channelId: null,
+      channelId: this.props.channelId ? this.props.channelId: null,
       message: '',
       errors: {},
       isLoading: false
@@ -58,48 +59,58 @@ class Message extends Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault()
-
+    
+    const { message } = this.state
+    
     // Validation
-    if (this.isValid()) { 
-      const { channelId, message } = this.state
+    if (e.keyCode === ENTER_KEY) { 
+      if (!message.trim()) { 
+        return
+      } else {
+        const { channelId, message } = this.state
 
-      this.setState({ isLoading: true })
+        this.setState({ isLoading: true })
 
-      this.props.createMessageMutation({ 
-        variables: { message, channelId: parseInt(channelId) }
-        })
-        .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("conversations.form.flash.success_compose")
-          // })  
-          // this.context.router.history.push('/conversations')
-          
+        this.props.mutate({ 
+          variables: { message, channelId: parseInt(channelId) }
+          })
+          .then(res => {
+            // this.props.addFlashMessage({
+            //   type: 'success',
+            //   text: T.translate("conversations.form.flash.success_compose")
+            // })  
+            // this.context.router.history.push('/conversations')
+            
 
-          const { success, message, errors } = res.data.createMessage
+            const { success, message, errors } = res.data.createMessage
 
-          if (success) {
-            console.log('Message sent', message)
-          } else {
-            let errorsList = {}
-            errors.map(error => errorsList[error.path] = error.message)
+            if (success) {
+              console.log('Message sent', message)
+              // Rest message state
+              this.setState({
+                "message": ''
+              })
 
-            this.setState({ errors: errorsList, isLoading: false })
-          }
-        })
-        .catch(err => this.setState({ errors: err, isLoading: false }))
+              // Reset reload
+              this.setState({ isLoading: false })
+            } else {
+              let errorsList = {}
+              errors.map(error => errorsList[error.path] = error.message)
+
+              this.setState({ errors: errorsList, isLoading: false })
+            }
+          })
+          .catch(err => this.setState({ errors: err, isLoading: false }))
+      }
     }
   }
 
   render() {
-    const { id, message, errors, isLoading } = this.state
-
-    const ENTER_KEY = 13
+    const { message, errors, isLoading } = this.state
 
     return (  
 
-      <form className={classnames("ui form p-3", { loading: isLoading })} >
+      <div className={classnames("ui form p-3", { loading: isLoading })} >
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
         
@@ -108,31 +119,24 @@ class Message extends Component {
           name="message" 
           value={message} 
           onChange={this.handleChange.bind(this)} 
-          onKeyDown={(e) => {
-            if (e.keyCode === ENTER_KEY) {
-              this.handleSubmit.bind(this)
-            }
-          }}
+          onKeyDown={this.handleSubmit.bind(this)}
           placeholder={T.translate("conversations.form.message")}
           error={errors.message}
           formClass="field"
         /> 
 
-      </form> 
+      </div> 
     )
   }
 }
 
 const createMessageMutation = gql`
-  mutation createMessage($message: String!, $channelId: Int!) {
+  mutation ($message: String!, $channelId: Int!) {
     createMessage(message: $message, channelId: $channelId ) {
       success
       message {
         id
       } 
-      conversation {
-        id
-      }
       errors {
         path
         message

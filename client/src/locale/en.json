@@ -649,6 +649,7 @@
       "description": "Internal conversation interface, write, read, reply and delete messages."
     },
     "messages": {
+      "add_member": "Add member",
       "empty_message_header": "Message is empty",
       "empty_message_message": "Create your first message by sending a message to memebers of this channel."
     },
@@ -656,9 +657,11 @@
       "create_channel": "Create Channel",
       "send": "Send",
       "cancel": "Cancel",
+      "add": "Add",
       "create": "Create",
       "title": "Title",
       "message": "Message",
+      "select_users": "-Select users-",
       "channel_name_required": "Channel name is required.",
       "body_required": "Body is required.",
       "flash": {

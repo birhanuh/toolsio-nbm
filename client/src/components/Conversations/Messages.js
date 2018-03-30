@@ -1,21 +1,43 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import MessageForm from './Form/Message'
+import UsersForm from './Form/Users'
 
 // Localization 
 import T from 'i18n-react'
+
+import $ from 'jquery'
+
+// Modal
+$.fn.modal = require('semantic-ui-modal')
+$.fn.dimmer = require('semantic-ui-dimmer')
 
 import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
 
 class Messages extends Component {
 
+  showConfirmationModal(event) {
+    event.preventDefault()
+
+    // Show modal
+    $('.small.modal.add-member').modal('show')
+  }
+
+  hideConfirmationModal(event) {
+    event.preventDefault()
+
+    // Show modal
+    $('.small.modal.add-member').modal('hide')
+  }
+
   render() {
 
-    const { getChannel, getChannelMessages } = this.props.data
-    console.log('getChannel ', getChannel)
+    const { getChannel } = this.props.getChannelQuery
+    
+    const { getChannelMessages } = this.props.getChannelMessagesQuery
+
     const emptyMessage = (
       <div className="ui info message mt-5">
         <h3>{T.translate(`conversations.messages.empty_message_header`)}</h3>
@@ -43,10 +65,34 @@ class Messages extends Component {
 
     return (
       <div className="ui comments">
-        <h3 className="ui dividing header">{getChannel && getChannel.name}</h3>
+
+        <div className="ui clearing vertical segment border-bottom-none">
+          <div className="ui left floated header">
+            <h3 className="header">{getChannel && getChannel.name}</h3>
+          </div>  
+
+          <button id="add-member" className="ui right floated primary button" onClick={this.showConfirmationModal.bind(this)}>
+            <i className="add circle icon"></i>
+            {T.translate("conversations.messages.add_member")}
+          </button>        
+        </div>   
+
+        <div className="ui divider mt-0"></div>
+
         { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
 
-        <MessageForm />
+        <MessageForm channelId={this.props.channelId} />
+
+        <div className="ui small modal add-member">
+          <div className="header">{T.translate("conversations.messages.add_member")}</div>
+          <div className="content">
+          
+            <UsersForm channelId={this.props.channelId} />
+          </div>
+          <div className="actions">
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.show.cancel")}</button>
+          </div>
+        </div>
       </div>   
     ) 
   }
@@ -84,17 +130,19 @@ const getChannelMessagesQuery = gql`
 
 const MutationsAndQuery =  compose(
   graphql(getChannelQuery, {
+    "name": "getChannelQuery",
     options: (props) => ({
       variables: {
         id: parseInt(props.channelId)
-      },
+      }
     })
   }),
   graphql(getChannelMessagesQuery, {
+    "name": "getChannelMessagesQuery",
     options: (props) => ({
       variables: {
         channelId: parseInt(props.channelId)
-      },
+      }
     })
   })
 )(Messages)
