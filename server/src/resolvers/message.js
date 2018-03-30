@@ -4,12 +4,12 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
   
   Query: {
-    getMessage: (parent, { id }, { models }) => models.Message.findOne({ where: { id } }),
+    getMessage: (parent, { id }, { models }) => models.Message.findOne({ where: { id } }, { raw: true }),
 
     getChannelMessages: (parent, args, { models }) => {
       return models.Message.findAll({ 
         where: { channelId: args.channelId },
-        order: [['created_at', 'ASC']] }, { raw: true })
+        order: [['created_at', 'DESC']] }, { raw: true })
     },
 
     getSentMessages: (parent, args, { models }) => {

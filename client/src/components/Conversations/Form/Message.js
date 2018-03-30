@@ -110,7 +110,7 @@ class Message extends Component {
 
     return (  
 
-      <div className={classnames("ui form p-3", { loading: isLoading })} >
+      <div className={classnames("ui form", { loading: isLoading })} >
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
         

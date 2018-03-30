@@ -28,7 +28,7 @@ class Channel extends Component {
 
     const channelList = getChannels && getChannels.map(channel => 
       <Link key={channel.id} to={`/conversations/channel/${channel.id}`} 
-        className={classnames('item', {active: parseInt(channelId) === channel.id})}>
+        className={classnames('item', {active: channelId && parseInt(channelId) === channel.id})}>
         
         <div className="ui small blue label">{channel.getUsersCount}</div>
 
@@ -42,7 +42,7 @@ class Channel extends Component {
     return (
        <div className="ui vertical fluid menu">
         <div className="ui center aligned vertical segment">
-          <Link className="ui primary small button" to="/conversations/new">
+          <Link className="ui primary small button" to="/conversations">
             <i className="plus outline icon"></i>
             {T.translate("conversations.page.add_channel")}
           </Link>
@@ -53,10 +53,6 @@ class Channel extends Component {
       </div>
     )
   }
-}
-
-Channel.propTypes = {
-  channelId: PropTypes.string.isRequired
 }
 
 const getChannelsQuery = gql`

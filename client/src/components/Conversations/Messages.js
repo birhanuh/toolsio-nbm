@@ -64,7 +64,7 @@ class Messages extends Component {
     )
 
     return (
-      <div className="ui comments">
+      <div className="messages">
 
         <div className="ui clearing vertical segment border-bottom-none">
           <div className="ui left floated header">
@@ -79,21 +79,25 @@ class Messages extends Component {
 
         <div className="ui divider mt-0"></div>
 
-        { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
+        <div className="ui comments">
 
+          { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
+
+        </div>   
+        
         <MessageForm channelId={this.props.channelId} />
 
         <div className="ui small modal add-member">
           <div className="header">{T.translate("conversations.messages.add_member")}</div>
           <div className="content">
-          
+
             <UsersForm channelId={this.props.channelId} />
           </div>
           <div className="actions">
             <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.show.cancel")}</button>
           </div>
         </div>
-      </div>   
+      </div>
     ) 
   }
 }

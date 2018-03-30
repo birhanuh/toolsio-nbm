@@ -30,8 +30,6 @@ class Page extends Component {
 
               <Route exact path="/conversations" component={ChannelForm} /> 
 
-              <Route exact path="/conversations/new" component={ChannelForm} /> 
-
               <Route exact path="/conversations/channel/:channelId?" children={() =>
                 <Messages channelId={match.params.channelId} />
               }/>}
