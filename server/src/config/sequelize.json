@@ -1,0 +1,27 @@
+{
+  "development": {
+    "username": "birhanu",
+    "password": null,
+    "database": "toolsio_development",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": "Sequelize.Op",
+    "define": {
+      "underscored": true
+    }
+  },
+  "test": {
+    "username": "birhanu",
+    "password": null,
+    "database": "toolsio_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "toolsio_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

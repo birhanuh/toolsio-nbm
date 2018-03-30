@@ -1,31 +1,76 @@
-import mongoose from 'mongoose'
-import Project from './project'
-
-const taskSchema = new mongoose.Schema({
-  _creator: { type: mongoose.Schema.Types.ObjectId, ref: "project" },
-  name: { type: String, required: [true, "Name is required."] },
-  hours: { type: Number, min: 1, max: 8, required: [true, "Hours is required."] },
-  paymentType: { type: String, required: [true, "Payment type is required."] },
-  price: { type: Number, required: [true, "Price is required."] },
-  vat: { type: Number, min: 1, max: 100, required: [true, "Vat is required."] }
-},{
-  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
-})
-
-taskSchema.post('save', function (doc, next) {
-
-  // Push task and increment total value to related Project object
-  Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id}, $inc: {total: this.price} }, { new: true }, (err, project) => {
-    if (err) {
-      errors: {
-        cantUpdateProject: {
-          message: err
-        } 
+export default (sequelize, DataTypes) => {
+  const Task = sequelize.define('tasks', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      validate: {     
+        notEmpty: true, // don't allow empty strings
+      } 
+    },
+    hours: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      validate: {     
+        notEmpty: true, // don't allow empty strings
+      } 
+    },
+    paymentType: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      validate: {     
+        notEmpty: true, // don't allow empty strings
+      },
+      field: 'payment_type'
+    },
+    price: {
+      type: DataTypes.DECIMAL,
+      allowNull : false,
+      validate: {     
+        isDecimal: true // checks for any numbers
+      } 
+    },
+    vat: {
+      type: DataTypes.INTEGER,
+      allowNull : true,
+      validate: {     
+        isInt: true // checks for int
+      } 
+    }
+  }, {
+    hooks: {
+      beforeValidate: (task, options) => {
+        if (task.vat === "") {
+          task.vat = null
+        }
       }
     }
   })
 
-  next()
-})
+  Task.associate = (models) => {
+    // 1:M
+    Task.belongsTo(models.Project, {
+      foreignKey: {
+        name: 'projectId',
+        field: 'project_id'
+      }
+    })
+  }
 
-module.exports = mongoose.model('task', taskSchema)
+  return Task
+}
+
+// taskSchema.post('save', function (doc, next) {
+
+//   // Push task and increment total value to related Project object
+//   Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id}, $inc: {total: this.price} }, { new: true }, (err, project) => {
+//     if (err) {
+//       errors: {
+//         cantUpdateProject: {
+//           message: err
+//         } 
+//       }
+//     }
+//   })
+
+//   next()
+// })

@@ -5,6 +5,8 @@ import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -23,32 +25,30 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.project ? this.props.project._id : null,
-      name: this.props.project ? this.props.project.name : '',
-      deadline: this.props.project ? moment(this.props.project.deadline, "MM-DD-YYYY") : moment(),
-      customer: this.props.project ? (this.props.project.customer ? this.props.project.customer._id : '') : '',
-      status: this.props.project ? this.props.project.status : '',
-      progress: this.props.project ? this.props.project.progress : 0,
-      description: this.props.project ? this.props.project.description : '',
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      id: !!this.props.data.getProject ? this.props.data.getProject.id : null,
+      name: !!this.props.data.getProject ? this.props.data.getProject.name : '',
+      deadline: !!this.props.data.getProject ? moment(this.props.data.getProject.deadline).format("MM-DD-YYYY") : moment(),
+      customerId: !!this.props.data.getProject ? this.props.data.getProject.customerId : '',
+      status: !!this.props.data.getProject ? this.props.data.getProject.status : 'new',
+      progress: !!this.props.data.getProject ? this.props.data.getProject.progress : 0,
+      description: !!this.props.data.getProject ? this.props.data.getProject.description : '',
+      total: !!this.props.data.getProject ? this.props.data.getProject.total : 0,
+      errors: {},
       isLoading: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.project) {
+    if (nextProps.data.getProject) {
       this.setState({
-        _id: nextProps.project._id,
-        name: nextProps.project.name,
-        deadline: moment(nextProps.project.deadline),
-        customer: nextProps.project.customer,
-        status: nextProps.project.status,
-        progress: nextProps.project.progress,
-        description: nextProps.project.description
+        id: nextProps.data.getProject.id,
+        name: nextProps.data.getProject.name,
+        deadline: moment(nextProps.data.getProject.deadline),
+        customerId: nextProps.data.getProject.customerId,
+        status: nextProps.data.getProject.status,
+        progress: nextProps.data.getProject.progress,
+        description: nextProps.data.getProject.description,
+        total: nextProps.data.getProject.total
       })
     }
   }
@@ -56,10 +56,10 @@ class Form extends Component {
   handleChange = (e) => {
     //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
 
-    if (!!this.state.errors.message.errors[e.target.name]) {
+    if (!!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors.message.errors[e.target.name]
+      delete errors[e.target.name]
 
       this.setState({
         [e.target.name]: e.target.value,
@@ -85,17 +85,89 @@ class Form extends Component {
     return isValid
   }
 
-  handleSubmit(event) {
+  handleSubmit = async (event) => {
      event.preventDefault()
 
     // Validation
-    if (this.isValid()) { 
-      const { _id, name, deadline, customer, status, progress, description } = this.state
+    if (true) { 
       this.setState({ isLoading: true })
 
-      this.props.saveProject({ _id, name, customer, deadline, status, progress, description })
-        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) ) 
-    }
+      const { id, name, deadline, status, progress, description, total, customerId } = this.state
+      
+      if (id) {
+        this.props.updateProjectMutation({ 
+        variables: { id, name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+        update: (proxy, { data: { updateProject } }) => {
+          const { success, project } = updateProject
+
+          if (!success) {
+            return
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getCustomersProjectsQuery })
+          // Add our comment from the mutation to the end.
+          data.getProjects.push(project)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getCustomersProjectsQuery, data })
+        }})
+        .then(res => {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("projects.form.flash.success_update", { name: name})
+          // })  
+          // this.context.router.history.push('/projects')
+          
+
+          const { success, project, errors } = res.data.updateProject
+
+          if (success) {
+            this.context.router.history.push('/projects')
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
+      }
+
+      this.props.createProjectMutation({ 
+        variables: { name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+        update: (proxy, { data: { createProject } }) => {
+          const { success, project } = createProject
+
+          if (!success) {
+            return
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getCustomersProjectsQuery })
+          // Add our comment from the mutation to the end.
+          data.getProjects.push(project)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getCustomersProjectsQuery, data })
+        }})
+        .then(res => {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("projects.form.flash.success_update", { name: name})
+          // })  
+          // this.context.router.history.push('/projects')
+          
+
+          const { success, project, errors } = res.data.createProject
+
+          if (success) {
+            this.context.router.history.push('/projects')
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
+    }    
   }
 
   handleChangeDate(deadline) {
@@ -118,7 +190,7 @@ class Form extends Component {
   handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { _id, progress } = this.state
+    const { id, progress } = this.state
 
     if (progress <= 90) {
       this.setState({
@@ -141,7 +213,7 @@ class Form extends Component {
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { _id, progress } = this.state
+    const { id, progress } = this.state
 
     if (progress >= 10) {
       this.setState({
@@ -162,10 +234,12 @@ class Form extends Component {
   }
 
   render() {
-    const { _id, name, deadline, customer, status, progress, description, errors, isLoading } = this.state
- 
-    const customersOptions = map(this.props.customers, (customer) => 
-      <option key={customer._id} value={customer._id}>{customer.name}</option>
+    const { id, name, deadline, customerId, status, progress, description, errors, isLoading } = this.state
+    
+    const { getCustomers } = this.props.getCustomersProjectsQuery
+  
+    const customersOptions = map(getCustomers, (customer) => 
+      <option key={customer.id} value={customer.id.toString()}>{customer.name}</option>
     )
     
     return (
@@ -177,10 +251,10 @@ class Form extends Component {
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
             <div className="inline field"> 
-              {_id ? <h1 className="ui header">{T.translate("projects.form.edit_project")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}
+              {id ? <h1 className="ui header">{T.translate("projects.form.edit_project")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}
             </div>
             
-            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             <InputField
               label={T.translate("projects.form.name")}
@@ -188,26 +262,26 @@ class Form extends Component {
               value={name} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Name"
-              error={errors.message && errors.message.errors && errors.message.errors.name && errors.message.errors.name.message}
+              error={errors.name}
               formClass="inline field"
             />
                           
-            <div  className={classnames("inline field", { error: !!(errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message) })}>
+            <div  className={classnames("inline field", { error: !!errors.deadline })}>
               <label className="" htmlFor="date">{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
-              <span className="red">{errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message}</span>
+              <span className="red">{errors.deadline}</span>
             </div>
             
             <SelectField
               label={T.translate("projects.form.customer")}
-              name="customer"
-              value={customer ? (typeof customer === 'object' ? customer._id : customer) : ''} 
+              name="customerId"
+              value={customerId && customerId} 
               onChange={this.handleChange.bind(this)} 
-              error={errors.message && errors.message.errors && errors.message.errors.customer && errors.message.errors.customer.message}
+              error={errors.customerId}
               formClass="inline field"
 
               options={[<option key="default" value="" disabled>{T.translate("projects.form.select_customer")}</option>,
@@ -228,14 +302,14 @@ class Form extends Component {
                 </div>
             }
 
-            { _id &&
+            { id &&
               <SelectField
                 label={T.translate("projects.form.status")}
                 name="status"
                 type="select"
                 value={status} 
                 onChange={this.handleChange.bind(this)} 
-                error={errors.message && errors.message.errors && errors.message.errors.status && errors.message['status'].message}
+                error={errors.staus}
                 formClass="inline field"
 
                 options={[
@@ -249,7 +323,7 @@ class Form extends Component {
               />
             }
 
-            { _id &&
+            { id &&
               <div className="inline field progress">
                 <div id="progress" className="ui success progress mb-3 mt-2">
                   <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
@@ -300,9 +374,116 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  saveProject: PropTypes.func.isRequired,
-  project: PropTypes.object,
-  customers: PropTypes.array.isRequired
+  // saveProject: PropTypes.func.isRequired,
+  // project: PropTypes.object,
+  // customers: PropTypes.array.isRequired
 }
 
-export default Form
+Form.contextTypes = {
+  router: PropTypes.object.isRequired
+}
+
+const createProjectMutation = gql`
+  mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
+    createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+      success
+      project {
+        id
+        name 
+        deadline
+        status
+        progress
+        description
+        customer {
+          name
+        }
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const updateProjectMutation = gql`
+  mutation updateProject($id: Int!, $name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
+    updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+      success
+      project {
+        id
+        name 
+        deadline
+        status
+        progress
+        description
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const getCustomersProjectsQuery = gql`
+  query {
+    getCustomers {
+      id
+      name
+    }
+    getProjects {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        name
+      }
+    }
+  }
+`
+
+const getProjectQuery = gql`
+  query getProject($id: Int!) {
+    getProject(id: $id) {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      tasks {
+        id
+        name
+        hours
+        paymentType
+        price
+        vat
+      }
+    }
+  }
+`
+
+const MutationsAndQuery =  compose(
+  graphql(createProjectMutation, {
+    name : 'createProjectMutation'
+  }),
+  graphql(updateProjectMutation, {
+    name: 'updateProjectMutation'
+  }),
+  graphql(getCustomersProjectsQuery, {
+    name: 'getCustomersProjectsQuery'
+  }),
+  graphql(getProjectQuery, {
+    options: (props) => ({
+      variables: {
+        id: props.match.params.id ? parseInt(props.match.params.id) : 0
+      }
+    })
+  })
+)(Form)
+
+export default MutationsAndQuery

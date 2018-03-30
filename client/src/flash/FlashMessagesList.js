@@ -7,20 +7,23 @@ import { deleteFlashMessage } from '../actions/flashMessageActions'
 
 class FlashMessagesList extends Component {
   render() {
-    const messages = this.props.messages.map(message => 
-      <FlashMessage key={message.id} message={message} deleteFlashMessage={this.props.deleteFlashMessage}/>
-    )
+    // const messages = this.props.messages.map(message => 
+    //   <FlashMessage key={message.id} message={message} deleteFlashMessage={this.props.deleteFlashMessage}/>
+    // )
 
+    // return (
+    //   <div className={classnames({'sixteen wide column flash-message': messages.length !== 0})}>{messages}</div>
+    // )
     return (
-      <div className={classnames({'sixteen wide column flash-message': messages.length !== 0})}>{messages}</div>
-    )
+      <div>Fake</div>
+      )
   }
 }
 
 // Proptypes definition
 FlashMessagesList.propTypes = {
-  messages: PropTypes.array.isRequired,
-  deleteFlashMessage: PropTypes.func.isRequired
+  // messages: PropTypes.array.isRequired,
+  // deleteFlashMessage: PropTypes.func.isRequired
 }
 
 // Takes our global state and return just flashMessages
@@ -30,4 +33,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { deleteFlashMessage })(FlashMessagesList)
+export default FlashMessagesList

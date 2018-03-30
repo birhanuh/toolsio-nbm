@@ -17,7 +17,7 @@ export default function List({ sales }) {
 
   const salesList = (
     <div className="ui two cards sales">
-      { sales.map(sale => <Card sale={sale} key={sale._id} />) }
+      { sales.map(sale => <Card sale={sale} key={sale.id} />) }
     </div>
   )
 

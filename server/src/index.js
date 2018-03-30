@@ -5,82 +5,119 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
+import { makeExecutableSchema } from 'graphql-tools'
+import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
+import cors from 'cors'
+// Authentication package 
+import session from 'express-session'
+import passport from 'passport'
+import jwt from 'jsonwebtoken'
+
+import socketEvents from './socket/socketEvents'
 
 // Init app
 const app = express()
 
-import accounts from './routes/accounts'
-import users from './routes/users'
-import api from './routes/api'
+// Routes
+//import accounts from './routes/accounts'
+//import users from './routes/users'
+//import api from './routes/api'
 //import routes from './routes/index'
 
 // Config
 require('dotenv').config()
-import config from './config'
+import jwtConfig from './config/jwt'
 
 // Mongodb connection
 import db from './db'
 
-// Authentication package 
-import session from 'express-session'
-import passport from 'passport'
+// Models
+import models from './models'
+import refreshToken from './utils/authentication'
 
-import socketEvents from './socket/socketEvents'
+// Schema
+const types = fileLoader(path.join(__dirname + '/types'))
+const typeDefs = mergeTypes(types) 
+
+// Resolvers
+const resolvers =  mergeResolvers(fileLoader(path.join(__dirname + '/resolvers'))) 
+
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+})
 
 // View Engine
 //app.set('view engine', 'jade')
 //app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects'])
 
+// Allow CORS 
+app.use(cors('*'))
+
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger('dev'))
-app.use(bodyParser.json())
+
+const graphqlEndPoint = '/graphql'
+
+app.use(graphqlEndPoint, bodyParser.json(), 
+  graphqlExpress(req => ({ 
+    schema,
+    context: {
+      models,
+      user: req.user,
+      SECRET: jwtConfig.jwtSecret,
+      SECRET2: jwtConfig.jwtSecret2
+    }
+  }))
+)
+
+app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint }))
+
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use(cookieParser())
 
-// Get Homepage
+// Add token exist checker middleware
 app.use(async (req, res, next) => {
   
   // Parse subdomain 
-  let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
+  //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
 
-  if (subdomain) {
-    // Connect to subdomain db
-    if (env === 'development') {
-      await db.connect(process.env.DB_HOST+subdomain+process.env.DB_DEVELOPMENT)
-      console.log('Middleware with no mount path')
-    } else if (env === 'test') {
-      await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
-      console.log('Middleware with no mount path')
-    }
-  } else {
-    // Connect to mognodb
-    if (env === 'development') {
-      db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-    } else if (env === 'test') {
-      db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+   // Parse token 
+  let token = req.headers['x-token']
+
+  if (token) {
+    try {
+      const { user } = jwt.verify(token, config.secret)
+      req.user = user
+    
+    } catch (err) {
+      let refreshToken = req.headers['x-refresh-token']
+      const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2)
+      if (newTokens.token && newTokens.refreshToken) {
+        res.set('Access-Control-Expose-Headers', 'x-token', 'x-refresh-token')
+        res.set('x-token', newTokens.token)
+        res.set('x-refresh-token', newTokens.refreshToken)
+      }
+      req.user = newTokens.user
     }
   }
-
   next()
 })
 
+/**
 app.use(session({
   secret: config.jwtSecret,
   resave: false,
   saveUninitialized: false,
   //cookie: {secure: true}
   cookie: { maxAge: 2628000000 },
-  store: new (require('express-sessions'))({
-    storage: 'mongodb',
-    //instance: mongoose, // optional 
-    host: 'localhost', // optional 
-    //port: 27017, // optional 
-    db: 'passportjs_sessions', // optional 
-    collection: 'sessions', // optional 
-    expire: 86400 // optional 
+  store: new (require('connect-pg-simple')(session))({
+    conString : process.env.DB_HOST + process.env.DB_DEVELOPMENT
   })
 }))
-
+**/
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -95,9 +132,9 @@ if (env === 'development') {
 //   next()  
 // })
 
-app.use('/accounts', accounts)
-app.use('/users', users)
-app.use('/api', api)
+// app.use('/accounts', accounts)
+// app.use('/users', users)
+//app.use('/api', api)
 //app.use('/', routes)
 
 // Middleware function
@@ -111,24 +148,135 @@ app.use((req, res) => {
 })
 
 // Set port
-app.set('port', process.env.PORT)
-app.listen(app.get('port'), () => 
-  console.log('Server started on port: ' + process.env.PORT)
-)
+app.set('port', process.env.SERVER_PORT)
+
+
+// sync() will create all table if then doesn't exist in database
+models.sequelize.sync().then(() => {
+  app.listen(app.get('port'), () => 
+    console.log('Server started on port: ' + process.env.SERVER_PORT)
+  )
+})
 
 //const io = require('socket.io').listen(8080)
 //socketEvents(io)
 
-// Connect to mognodb
-if (env === 'development') {
-  db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-} else if (env === 'test') {
-  db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+// // Connect to mognodb
+// if (env === 'development') {
+//   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+// } else if (env === 'test') {
+//   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
+// }
+
+// // If the Node process ends, close the Mongoose connection 
+// process.on('SIGINT', function() {  
+//   db.close() 
+// })
+
+/*
+mutation {
+  registerUser(firstName: "testa", lastName: "testa", email: 
+      "testa@toolsio.com", password: "ppppp", subdomain: "testa", industry: "testa" ) {
+      success
+      user {
+        id
+      } 
+      errors {
+        path
+        message
+      }
+    }
 }
 
-// If the Node process ends, close the Mongoose connection 
-process.on('SIGINT', function() {  
-  db.close() 
-})
+mutation {
+  createProject(name: "Project 1", deadline: 1521243824165, status: "new", 
+    description: "Desciption 1...", customerId: 1) {
+    success
+    project {
+      id
+      name
+      deadline
+      status
+      description
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
 
+mutation createCustomer($name: String!, $vatNumber: String!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
+  createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
+    postalCode: $postalCode, region: $region, country: $country) {
+    success
+    errors {
+      path
+      message
+    }
+  }
+}
+
+query {
+  getProjects {
+    name
+    deadline
+  }
+}
+
+mutation {
+  createInvoice(deadline: 1521822820714, interestInArrears: 2, status:"new",
+    total: 30, projectId: 1, customerId: 1) {
+    success
+    invoice {
+      id
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+
+mutation {
+  createMessage(body: "Testa...", channelId: 1 ) {
+      success
+      message {
+        id
+      } 
+      conversation {
+        id
+      }
+      errors {
+        path
+        message
+      }
+    }
+}
+
+mutation {
+  createChannel(name: "channel1", owner: 1) {
+    success
+    channel {
+      id
+      name
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+
+query {
+  getChannel(id: 1) {
+    id
+    name
+    users {
+      id
+      email
+    }
+  }
+}
+*/
 

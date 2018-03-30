@@ -7,14 +7,16 @@ import Invoice from '../../models/invoice'
 export default {
   
   find: (req, callback) => {
-    Customer.find({}).select('name contact vatNumber').exec((err, customers) => {
-      if (err) {
-        callback(err, null)
-        return
-      }
+   
+    Customer.query({ select: ['name', 'phone_number', 'email', 'vat_number'] }).fetch()
+      .then(customers => {
 
-      callback(null, customers)
-    })
+        callback(null, customers)
+      })
+      .catch(err => { 
+        callback(err, null)
+      })
+
   },
 
   findById: (req, callback) => {
@@ -33,17 +35,19 @@ export default {
 
   create: (req, callback) => {  
 
-    let body = req.body
-    delete body['_id']
-    
-    Customer.create(body, (err, customer) => {
-      if (err) {
-        callback(err, null)
-        return
-      }
+    let { name, vat_number, is_contact_included_in_invoice } = req.body
+    let { email, phone_number } = req.body.contact
+    let { street, postal_code, region, country } = req.body.address
 
-      callback(null, customer)
-    })
+    Customer.forge({name, vat_number, is_contact_included_in_invoice, email, phone_number,
+      street, postal_code, region, country}, { hasTimestamps: true }).save()
+        .then(customer => {
+          callback(null, customer)
+        })
+        .catch(err => { 
+           console.log('test ', err)
+          callback(err, null)
+        })
   },
 
   findByIdAndUpdate: (req, callback) => {

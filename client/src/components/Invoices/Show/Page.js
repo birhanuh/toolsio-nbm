@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
-import { fetchInvoice, deleteInvoice } from '../../../actions/invoiceActions'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import Breadcrumb from '../../Layouts/Breadcrumb'
 
@@ -16,6 +16,8 @@ import $ from 'jquery'
 import Sale from './Sale'
 import Project from './Project'
 
+import moment from 'moment'
+
 // Modal
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
@@ -25,17 +27,17 @@ class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.invoice ? this.props.invoice._id : null,
-      sale: this.props.invoice ? this.props.invoice.sale : null,
-      project: this.props.invoice ? this.props.invoice.project : null,
-      customer: this.props.invoice ? this.props.invoice.customer : null,
-      createdAt: this.props.invoice ? this.props.invoice.createdAt : '',
-      deadline: this.props.invoice ? this.props.invoice.deadline : '',
-      paymentTerm: this.props.invoice ? this.props.invoice.paymentTerm : '',
-      interestInArrears: this.props.invoice ? this.props.invoice.interestInArrears : '',
-      status: this.props.invoice ? this.props.invoice.status : '',
-      referenceNumber: this.props.invoice ? this.props.invoice.referenceNumber : '',
-      description: this.props.invoice ? this.props.invoice.description : ''
+      id: this.props.data.getInvoice ? this.props.data.getInvoice.id : null,
+      sale: this.props.data.getInvoice ? this.props.data.getInvoice.sale : null,
+      project: this.props.data.getInvoice ? this.props.data.getInvoice.project : null,
+      customer: this.props.data.getInvoice ? this.props.data.getInvoice.customer : null,
+      createdAt: this.props.data.getInvoice ? this.props.data.getInvoice.createdAt : '',
+      deadline: this.props.data.getInvoice ? this.props.data.getInvoice.deadline : '',
+      paymentTerm: this.props.data.getInvoice ? this.props.data.getInvoice.paymentTerm : '',
+      interestInArrears: this.props.data.getInvoice ? this.props.data.getInvoice.interestInArrears : '',
+      status: this.props.data.getInvoice ? this.props.data.getInvoice.status : '',
+      referenceNumber: this.props.data.getInvoice ? this.props.data.getInvoice.referenceNumber : '',
+      description: this.props.data.getInvoice ? this.props.data.getInvoice.description : ''
     }
   }
 
@@ -43,24 +45,24 @@ class Page extends Component {
     // Fetch Invoice when id is present in params
     const { match } = this.props
     if (match.params.id) {
-      this.props.fetchInvoice(match.params.id)
+      //this.props.fetchInvoice(match.params.id)
     } 
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.invoice) {
+    if (nextProps.data.getInvoice) {
       this.setState({
-        _id: nextProps.invoice._id,
-        sale: nextProps.invoice.sale,
-        project: nextProps.invoice.project,
-        customer: nextProps.invoice.customer,
-        createdAt: nextProps.invoice.createdAt,
-        deadline: nextProps.invoice.deadline,
-        paymentTerm: nextProps.invoice.paymentTerm,
-        interestInArrears: nextProps.invoice.interestInArrears,
-        status: nextProps.invoice.status,
-        referenceNumber: nextProps.invoice.referenceNumber,
-        description: nextProps.invoice.description
+        id: nextProps.data.getInvoice.id,
+        sale: nextProps.data.getInvoice.sale,
+        project: nextProps.data.getInvoice.project,
+        customer: nextProps.data.getInvoice.customer,
+        createdAt: nextProps.data.getInvoice.createdAt,
+        deadline: nextProps.data.getInvoice.deadline,
+        paymentTerm: nextProps.data.getInvoice.paymentTerm,
+        interestInArrears: nextProps.data.getInvoice.interestInArrears,
+        status: nextProps.data.getInvoice.status,
+        referenceNumber: nextProps.data.getInvoice.referenceNumber,
+        description: nextProps.data.getInvoice.description
       })
     }
   }
@@ -82,31 +84,33 @@ class Page extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
-    let name = this.state.name
-
-    this.props.deleteInvoice(id).then(
-      () => {
-        this.props.addFlashMessage({
-          type: 'success',
-          text: T.translate("invoices.show.flash.success_delete", { name: name})
-        })  
+    this.props.deleteInvoiceMutation({ variables: {id} })
+      .then(() => {
+        // this.props.addFlashMessage({
+        //   type: 'success',
+        //   text: T.translate("invoices.show.flash.success_delete", { name: name})
+        // })  
         this.context.router.history.push('/invoices')
-      },
-      ({ response }) => {
-      }
-    ) 
+      })
+      .catch(err => {
+        // this.props.addFlashMessage({
+        //   type: 'error',
+        //   text: T.translate("invoices.show.flash.error_delete")
+        // })  
+        console.log('error ', err)
+      })
     
   }
 
   render() {
-    const { _id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, createdAt } = this.state
+    const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, createdAt } = this.state
 
     const customerContact = (      
       <div>
         <dt>{T.translate("invoices.show.customer.contact.phone_number")}</dt>
-        <dd>{customer && customer.contact && (customer.contact.phoneNumber ? customer.contact.phoneNumber : '-')}</dd>
+        <dd>{customer ? customer.phoneNumber : '-'}</dd>
         <dt>{T.translate("invoices.show.customer.contact.email")}</dt>
-        <dd>{customer && customer.contact && (customer.contact.email ? customer.contact.email : '-')}</dd>
+        <dd>{customer ? customer.email : '-'}</dd>
       </div>
     )
 
@@ -119,9 +123,9 @@ class Page extends Component {
           <div className="ui segment">    
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
               
-              {project && <Link to={`/projects/show/${project._id}`} className={classnames("sub header inline-block-i pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({project.name})</Link>}
+              {project && <Link to={`/projects/show/${project.id}`} className={classnames("sub header inline-block-i pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({project.name})</Link>}
 
-              {sale && <Link to={`/sales/show/${sale._id}`} className={classnames("sub header inline-block-i pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({sale.name})</Link>}
+              {sale && <Link to={`/sales/show/${sale.id}`} className={classnames("sub header inline-block-i pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({sale.name})</Link>}
 
             </h1> 
             <div className={classnames("ui uppercase huge right corner label", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
@@ -132,9 +136,9 @@ class Page extends Component {
               <div className="ui left floated vertical segment p-0 m-0">
                 <dl className="dl-horizontal">      
                   <dt>{T.translate("invoices.show.date_of_an_invoice")}</dt>
-                  <dd>{createdAt}</dd>
+                  <dd>{moment(createdAt).format("YYYY-MM-DD")}</dd>
                   <dt>{T.translate("invoices.show.deadline")}</dt>
-                  <dd>{deadline ? deadline : '-'}</dd>
+                  <dd>{deadline ? moment(deadline).format("YYYY-MM-DD") : '-'}</dd>
                   <dt>{T.translate("invoices.show.payment_term")}</dt>
                   <dd>{paymentTerm ? paymentTerm : '-'}</dd>
                   <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
@@ -148,20 +152,20 @@ class Page extends Component {
               <div className="ui right floated vertical segment p-0 m-0">
                 <dl className="dl-horizontal">
                   <dt>{T.translate("invoices.show.customer.name")}</dt>
-                  <dd>{customer && <Link to={`/customers/show/${customer._id}`}>{customer.name}</Link>}</dd>          
+                  <dd>{customer && <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link>}</dd>          
                   <dt>{T.translate("invoices.show.customer.vat_number")}</dt>
                   <dd>{customer && customer.vatNumber}</dd>
                   
                   { customer && customer.includeContactOnInvoice && customerContact }
 
                   <dt>{T.translate("invoices.show.customer.address.street")}</dt>
-                  <dd>{customer && customer.address && customer.address.street}</dd>
+                  <dd>{customer && customer.street}</dd>
                   <dt>{T.translate("invoices.show.customer.address.postal_code")}</dt>
-                  <dd>{customer && customer.address && customer.address.postalCode}</dd>
+                  <dd>{customer && customer.postalCode}</dd>
                   <dt>{T.translate("invoices.show.customer.address.region")}</dt>
-                  <dd>{customer && customer.address && customer.address.region}</dd>
+                  <dd>{customer && customer.region}</dd>
                   <dt>{T.translate("invoices.show.customer.address.country")}</dt>
-                  <dd>{customer && customer.address && customer.address.country}</dd>
+                  <dd>{customer && customer.country}</dd>
                 </dl>  
               </div>
             </div>
@@ -175,18 +179,18 @@ class Page extends Component {
             <div className="ui clearing vertical segment border-bottom-none pt-0">
               <div className="ui right floated vertical segment p-0 m-0">
                 <dl className="dl-horizontal">                
-                <dt>{T.translate("account.user.first_name")}</dt>
-                <dd>{this.props.account.firstName}</dd> 
-                <dt>{T.translate("account.user.last_name")}</dt>
+                <dt>{T.translate("account.page.first_name")}</dt>
+               {/* <dd>{this.props.account.firstName}</dd> 
+                <dt>{T.translate("account.page.last_name")}</dt>
                 <dd>{this.props.account.lastName}</dd> 
-                <dt>{T.translate("account.user.email")}</dt>
-                <dd>{this.props.account.email}</dd> 
+                <dt>{T.translate("account.page.email")}</dt>
+                <dd>{this.props.account.email}</dd> */}
               </dl>  
               </div>
             </div>
 
             <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("invoices.show.delete")}</button>
-            <Link to={`/invoices/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
+            <Link to={`/invoices/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
           </div>    
         </div>
 
@@ -197,7 +201,7 @@ class Page extends Component {
           </div>
           <div className="actions">
             <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("invoices.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("invoices.show.delete")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("invoices.show.delete")}</button>
           </div>
         </div>
       </div>
@@ -206,23 +210,76 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  fetchInvoice: PropTypes.func.isRequired,
-  deleteInvoice: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  //addFlashMessage: PropTypes.func.isRequired
 }
 
 Page.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state, props) {
-  const { match } = props
-  if (match.params.id) {
-    return {
-      invoice: state.invoices.find(item => item._id === match.params.id),
-      account: state.authentication.account
+const deleteInvoiceMutation = gql`
+  mutation deleteInvoice($id: Int!) {
+    deleteInvoice(id: $id) {
+      success
+      errors {
+        path
+        message
+      }
     }
-  } 
-}
+  }
+`
 
-export default connect(mapStateToProps, { fetchInvoice, deleteInvoice, addFlashMessage } )(Page)
+const getInvoiceQuery = gql`
+  query getInvoice($id: Int!) {
+    getInvoice(id: $id) {
+      id
+      deadline
+      paymentTerm
+      interestInArrears
+      referenceNumber
+      status
+      createdAt
+      project {
+        id
+        name
+        deadline
+        progress
+        status
+      }
+      sale {
+        id
+        name
+        deadline
+        status
+      }
+      customer {
+        id
+        name
+        vatNumber
+        phoneNumber
+        email
+        isContactIncludedInInvoice
+        street
+        postalCode
+        region
+        country
+      }
+    }
+  }
+`
+
+const MutationsAndQuery =  compose(
+  graphql(deleteInvoiceMutation, {
+    name : 'deleteInvoiceMutation'
+  }),
+  graphql(getInvoiceQuery, {
+    options: (props) => ({
+      variables: {
+        id: parseInt(props.match.params.id)
+      },
+    })
+  })
+)(Page)
+
+export default MutationsAndQuery
+

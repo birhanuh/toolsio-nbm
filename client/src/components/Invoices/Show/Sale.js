@@ -8,7 +8,7 @@ import classnames from 'classnames'
 // Localization 
 import T from 'i18n-react'
 
-export default function Sale({sale}) {
+export default function Sale({ sale }) {
   return(
     <div>
       <h3 className="ui header">{T.translate("invoices.show.sale.header")}</h3>

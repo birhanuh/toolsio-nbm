@@ -29,14 +29,14 @@ export default function Details({ _id, step2, handleChangeDate, handleChange, ha
         <fieldset className="custom-fieldset">
           <legend className="custom-legend">{T.translate("invoices.form.select_payment_term_or_deadline")}</legend>
 
-          <div  className={classnames("inline field", { error: !!(errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message) })}>
+          <div  className={classnames("inline field", { error: !!errors.deadline })}>
             <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
             <DatePicker
               dateFormat="DD/MM/YYYY"
               selected={step2.deadline}
               onChange={handleChangeDate}
             />
-            <span className="red">{errors.message && errors.message.errors && errors.message.errors.deadline && errors.message.errors.deadline.message}</span>
+            <span className="red">{errors.deadline}</span>
           </div>
           
           <div className="ui horizontal divider">Or</div>
@@ -47,10 +47,10 @@ export default function Details({ _id, step2, handleChangeDate, handleChange, ha
             value={step2.paymentTerm ? step2.paymentTerm.toString() : ''} 
             onChange={handleChange} 
             placeholder="Name"
-            error={errors.message && errors.message.errors && errors.message.errors.paymentTerm && errors.message.errors.paymentTerm.message}
+            error={errors.paymentTerm}
               formClass="inline field"
 
-            options={[<option key="default" value="" disabled>{T.translate("invoices.form.select_days")}</option>,
+            options={[<option key="default" value="">{T.translate("invoices.form.select_days")}</option>,
               paymentTermOptions]}
           />
         </fieldset>  
@@ -61,7 +61,7 @@ export default function Details({ _id, step2, handleChangeDate, handleChange, ha
           value={step2.interestInArrears && step2.interestInArrears.toString()} 
           onChange={handleChange} 
           placeholder="0%"
-          error={errors.message && errors.message.errors && errors.message.errors.interestInArrears && errors.message.errors.interestInArrears.message}
+          error={errors.interestInArrears}
             formClass="inline field"
         />
         
@@ -72,7 +72,7 @@ export default function Details({ _id, step2, handleChangeDate, handleChange, ha
             type="select"
             value={step2.status && step2.status} 
             onChange={handleChange} 
-            error={errors.message && errors.message.errors && errors.message.errors.status && errors.message['status'].message}
+            error={errors.status}
             formClass="inline field"
 
             options={[

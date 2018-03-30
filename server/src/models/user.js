@@ -1,82 +1,108 @@
-import mongoose from 'mongoose' 
 import bcrypt from 'bcrypt'
-
-const Schema = mongoose.Schema
+import Promise from 'bluebird'
 const SALT_WORK_FACTOR = 10
 
-// User Schema 
-const UserSchema = new Schema({
-  accountId: { type: mongoose.Schema.Types.ObjectId, ref: "account" },
-  firstName: { type: String /**, index: true**/ }, 
-  lastName: { type: String },
-  email: { type: String, required: [true, "Email is required."], index: {unique: true, dropDups: true} },
-  password: { type: String, required: [true, "Password is required."] },
-  confirmed: { type: Boolean, default: false },
-  admin: { type: Boolean, default: false },
-  avatar: { type: String },
-  meta: {
-    age: Number,
-    gender: String
-  }
-},{
-  timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp. 
-})
+export default (sequelize, DataTypes) => {
+  const User = sequelize.define('users', {
+    firstName: {
+      type: DataTypes.STRING,
+      field: 'first_name',
+      notEmpty: false,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      field: 'last_name',
+      notEmpty: false,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      unique: true,
+      validate: {     
+        isEmail: { // checks for email format (foo@bar.com) 
+          arg: true,
+          msg: 'Invalid email format'
+        }
+      } 
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      validate: {
+        len: { 
+          args: [5, 100],
+          msg: 'Password needs to be at least 5 characters'
+        }
+      }
+    },
+    avatarUrl: {
+      type: DataTypes.STRING,
+      field: 'avatar_url'
+    },
+    isConfirmed: {
+      type: DataTypes.BOOLEAN,
+      allowNull : false,
+      defaultValue : false,
+      field: 'is_confirmed'
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull : false,
+      defaultValue : false,
+      field: 'is_admin'
+    }
+  }, {
+    hooks: {
+      beforeValidate: (user, options) => {
+        user.isAdmin = user.length === 0
+        user.isConfirmed = user.length === 0
+      },
+      beforeCreate: (user, options) => {
+        return new Promise(function(resolve, reject) {
 
-UserSchema.pre('save', function(next) {
-  let user = this
+          // only hash the password if it has been modified (or is new)
+          if (!user.changed('password')) return 
+      
+          bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+            if (err) return reject(err)
 
-  // only hash the password if it has been modified (or is new)
-  if (!user.isModified('password')) return next()
-
-  // generate a salt
-  bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
-    if (err) return next(err)
-
-    // hash the password using our new salt
-    bcrypt.hash(user.password, salt, (err, hash) => {
-      if (err) return next(err)
-
-      // override the cleartext password with the hashed one
-      user.password = hash
-      next()
-    })
-  })
-})
-
-UserSchema.post('save', (error, doc, next) => {
-  if (error.name === 'MongoError' && error.code === 11000) {
-    let message = {
-      errors: {
-        email: {
-          message: 'There is user with such email.'
-        } 
+            // hash the password using our new salt
+            return bcrypt.hash(user.password, salt, (err, hash) => {
+              if (err) return reject(err)
+             
+              // override the cleartext password with the hashed one
+              user.password = hash
+              resolve(hash)
+            })
+          })
+        })
       }
     }
-    next(message)
-  } else {
-    next(error)
-  }
-})
-
-let User = module.exports = mongoose.model('user', UserSchema)
-
-module.exports.getUserByEmail = (email, callback) => {
-  let query = {email: email}
-  User.findOne(query, callback)
-}
-
-module.exports.comparePassword = (candidatePassword, hash, callback) => {
-  bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
-    if (err) throw err
-    callback(null, isMatch)
   })
-}
 
-// module.exports.createUser = function(newUser, callback) {
-//   bcrypt.genSalt(10, function(err, salt) {
-//     bcrypt.hash(newUser.password, salt, function(err, hash) {
-//       newUser.password = hash;
-//       newUser.save(callback);
-//     })
-//   })
-// }
+  User.associate = (models) => {
+    // N:M
+    User.belongsToMany(models.Channel, {
+      through: models.Member,
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id'
+      }
+    })
+  }
+
+  User.comparePassword = (candidatePassword, hash, callback) => {
+    bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
+      if (err) throw err
+      callback(null, isMatch)
+    })
+  }
+
+  return User
+}

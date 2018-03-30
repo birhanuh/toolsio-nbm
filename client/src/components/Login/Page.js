@@ -66,8 +66,8 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  confirmEmail: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  // confirmEmail: PropTypes.func.isRequired,
+  // addFlashMessage: PropTypes.func.isRequired
 }
 
-export default connect(null, { confirmEmail, addFlashMessage }) (Page)
+export default Page

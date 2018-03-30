@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 
 export const InputField = ({ type, name, value, id, label, 
-  error, placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {
+  error, placeholder, onChange, onBlur, labelHorizontal, formClass}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>
       { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }
@@ -13,7 +13,7 @@ export const InputField = ({ type, name, value, id, label,
         value={value} 
         id={id}
         onChange={onChange} 
-        onBlur={checkUserExists}
+        onBlur={onBlur}
         placeholder={placeholder} 
       />
       <span className={classnames({red: !!error})}>{error}</span>
@@ -22,7 +22,7 @@ export const InputField = ({ type, name, value, id, label,
 }  
 
 export const TextAreaField = ({ name, value, id, label, error, 
-  placeholder, onChange, checkUserExists, labelHorizontal, formClass}) => {  
+  placeholder, onChange, onKeyDown, labelHorizontal, formClass}) => {  
   return (
     <div className={classnames(formClass, { error: !!error })}>
       { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }
@@ -31,9 +31,10 @@ export const TextAreaField = ({ name, value, id, label, error,
         value={value} 
         id={id}
         onChange={onChange} 
-        onBlur={checkUserExists}
-        placeholder={placeholder}>
-      </textarea>
+        onKeyDown={onKeyDown}
+        placeholder={placeholder}
+        tabIndex="0"
+      />
       <span className={classnames({red: !!error})}>{error}</span>
     </div>
   )
@@ -59,12 +60,15 @@ export const SelectField = ({ options, name, value, label, error,
 
 InputField.propTypes = TextAreaField.propTypes = SelectField.propTypes = {  
   name: PropTypes.string.isRequired, 
-  value: PropTypes.string.isRequired, 
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]), 
   label: PropTypes.string, 
   error: PropTypes.string, 
   placeholder: PropTypes.string, 
   onChange: PropTypes.func.isRequired,
-  checkUserExists: PropTypes.func
+  onBlur: PropTypes.func
 }
 
 InputField.defaultProps = {

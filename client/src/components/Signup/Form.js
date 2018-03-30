@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { InputField, SelectField } from '../../utils/FormFields'
 import classnames from 'classnames'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -23,11 +25,7 @@ class Form extends Component {
         password: '',
         confirmPassword: ''
       },
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      errors: {},
       isLoading: false,
       invalid: false
     }
@@ -47,32 +45,26 @@ class Form extends Component {
     }  
   }
 
-  checkAccountAndEmailExist(e) {
+  getAccount = (e) => {
     const field = e.target.name
     const val = e.target.value
+
     if (val !== '') {
-      this.props.isSubdomainExist(val).then(res => {
-        let errors = this.state.errors
-        let invalid
+      this.props.client.query({ 
+        query: getAccountQuery,
+        variables: {subdomain: val} })
+        .then(res => {
 
-        if (res.data.result !== null) {
-          errors['message'] = {
-            errors: {
-              subdomain: {
-                message: 'There is an account with such '+field+ ' subdomain.'
-              }  
-            }  
+          const { id, subdomain } = res.data.getAccountQuery
+
+          if (subdomain) {
+
+            let updatedErrors = Object.assign({}, this.state.errors)
+            updatedErrors = {subdomain: 'There is an account with such '+field+ ' subdomain.'}
+
+            this.setState({ errors: updatedErrors })
           }
-          invalid = true
-        } 
-
-        if (res.data.result === null) {
-          errors[field] = ''
-          invalid = false
-        }
-
-        this.setState({ errors, invalid })
-      })
+        })
     }
   }
 
@@ -92,22 +84,33 @@ class Form extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    if (this.isValid()) { 
+    if (true) { 
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoading: true })
       
-      const { account, user } = this.state
+      const { account: { subdomain, industry }, user: { firstName, lastName, email, password } } = this.state
       // Make submit
-      this.props.signupRequest({account, user}).then(
-        (res) => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("sign_up.success_create")
-          })
-          window.location = `${process.env.HTP}${this.props.currentAccount.subdomain}.${process.env.DNS}/login`
-        },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
-      )
+      this.props.registerUserMutation({variables: { firstName, lastName, email, password, subdomain, industry }})
+        .then(res => {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("sign_up.success_create")
+          // })
+          // window.location = `${process.env.HTP}${this.props.currentAccount.account}.${process.env.DNS}/dashboard`
+
+          const { success, token, refreshToken, errors } = res.data.registerUser
+         
+          if (success) {
+            console.log('res', res.data)
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+         
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
+
     }  
   }
 
@@ -118,7 +121,7 @@ class Form extends Component {
       <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
            
-          { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+          {/*{ !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }*/} 
           
           <InputField
             id='firstName'
@@ -146,7 +149,7 @@ class Form extends Component {
             label={T.translate("sign_up.email")}
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.email")}
-            error={errors.message && errors.message.errors && errors.message.errors['email'] && errors.message.errors['email'].message}
+            error={errors && errors.email}
             formClass="field"
           />
           <InputField
@@ -157,7 +160,7 @@ class Form extends Component {
             label={T.translate("sign_up.password")}
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.password")}
-            error={errors.message && errors.message.errors && errors.message.errors['password'] && errors.message.errors['password'].message}
+            error={errors && errors.password}
             formClass="field"
           />
           <InputField
@@ -177,7 +180,7 @@ class Form extends Component {
             value={account.industry} 
             label={T.translate("sign_up.account.industry")}
             onChange={this.handleChange.bind(this)} 
-            error={errors.message && errors.message.errors && errors.message.errors.industry && errors.message.errors['industry'].message}
+            error={errors && errors.industry}
             formClass="field"
 
             options={[
@@ -190,14 +193,18 @@ class Form extends Component {
               ]
             }
           />
-          <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
+          <div className={classnames("field", { error: !!errors && errors.subdomain })}>
             <label>{T.translate("sign_up.account.subdomain")}</label>
             <div className="ui right labeled input">
-              <input type="text" name="subdomain" id="subdomain" placeholder={T.translate("sign_up.account.subdomain")} 
-                onBlur={this.checkAccountAndEmailExist.bind(this)} value={account.subdomain} onChange={this.handleChange.bind(this)} />
+              <input type="text" name="subdomain" 
+                id="subdomain" 
+                placeholder={T.translate("sign_up.account.subdomain")} 
+                onBlur={this.getAccount.bind(this)} 
+                value={account.subdomain} 
+                onChange={this.handleChange.bind(this)} />
               <div className="ui label">toolsio.com</div>  
             </div>
-            <span className="red">{errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors.subdomain.message}</span>
+            <span className="red">{errors && errors.subdomain}</span>
           </div>  
 
           <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
@@ -210,23 +217,31 @@ class Form extends Component {
 
 // Proptypes definition
 Form.propTypes = {
-  signupRequest: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
-  isSubdomainExist: PropTypes.func.isRequired,
-  isUserExist: PropTypes.func.isRequired
+  // addFlashMessage: PropTypes.func.isRequired,
+  // isSubdomainExist: PropTypes.func.isRequired,
+  // isUserExist: PropTypes.func.isRequired
 }
 
-// Contexttype definition
-Form.contextTypes = {
-  router: PropTypes.object.isRequired
-}
+const registerUserMutation = gql`
+  mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
+    registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
 
-function mapStateToProps(state) {
-  return {
-    currentAccount: state.authentication && state.authentication.currentAccount
-  } 
-}
+const getAccountQuery = gql`
+  query getAccount($subdomain: String!) {
+    getAccount(subdomain: $subdomain) {
+      id
+      subdomain
+    }
+  }
+`
 
-export default connect(mapStateToProps, {}) (Form)
-
+export default graphql(registerUserMutation)(Form)
 

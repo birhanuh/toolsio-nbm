@@ -5,7 +5,9 @@ import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { TextAreaField } from '../../utils/FormFields'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { fetchConversation, createConversation, deleteConversation } from '../../actions/conversationActions'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
+
 
 // Localization 
 import T from 'i18n-react'
@@ -28,11 +30,7 @@ class Show extends Component {
       title: this.props.conversation ? this.props.conversation.title : '',
       body: '',
       conversation: this.props.conversation ? this.props.conversation[0] : [],
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      errors: {},
       isLoading: false
     }
   }
@@ -94,7 +92,7 @@ class Show extends Component {
     const { errors, isValid } = Validation.validateConversationReplyInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ 
@@ -129,7 +127,7 @@ class Show extends Component {
       () => {
         this.props.addFlashMessage({
           type: 'success',
-          text: T.translate("conversations.show.flash.success_delete", { name: name})
+          text: T.translate("messages.show.flash.success_delete", { name: name})
         })  
         this.context.router.history.push('/conversations')
       },
@@ -174,26 +172,26 @@ class Show extends Component {
               name="body" 
               value={body} 
               onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("conversations.show.write_reply")}
+              placeholder={T.translate("messages.show.write_reply")}
               formClass="field"
             />
-            <button disabled={isLoading} className="ui primary small button" onClick={this.handleReply.bind(this)}><i className="edit icon"></i>{T.translate("conversations.show.reply")}</button>
+            <button disabled={isLoading} className="ui primary small button" onClick={this.handleReply.bind(this)}><i className="edit icon"></i>{T.translate("messages.show.reply")}</button>
           </form>
         </div>
         
         <div className="ui divider mt-5"></div>  
 
-        <button className="ui negative button mt-3" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("conversations.show.delete_conversation")}</button>
+        <button className="ui negative button mt-3" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("messages.show.delete_conversation")}</button>
 
 
         <div className="ui small modal conversation">
           <div className="header">Confirmation</div>
           <div className="content">
-            <p className="red">{T.translate("conversations.show.confirmation_msg")}</p>
+            <p className="red">{T.translate("messages.show.confirmation_msg")}</p>
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, conversationId)}>{T.translate("conversations.show.delete")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("messages.show.cancel")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, conversationId)}>{T.translate("messages.show.delete")}</button>
           </div>
         </div>
 
@@ -203,26 +201,54 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  fetchConversation: PropTypes.func.isRequired,
-  createConversation: PropTypes.func.isRequired,
-  deleteConversation: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  //addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state, props) {
-  
-  const { match } = props
-  
-  if (match.params.id) {
-
-    return {
-      conversation: state.conversations.conversations && state.conversations.conversations.filter(item => Array.isArray(item) && item[0].conversationId === match.params.id)
+const createMessageMutation = gql`
+  mutation createMessage($title: String!, $body: String!, $recipientId: Int!) {
+    createMessage(title: $title, body: $body, recipientId: $recipientId ) {
+      success
+      message {
+        id
+      } 
+      errors {
+        path
+        message
+      }
     }
-  } 
-}
+  }
+`
 
-export default connect(mapStateToProps, { fetchConversation, createConversation, deleteConversation, addFlashMessage } )(Show)
+const getConversationQuery = gql`
+  query getConversation($id: Int!) {
+    getConversation(id: $id) {
+      id
+      messages {
+        id
+        title
+        body
+        createdAt
+        author
+      }
+    }
+  }
+`
+
+const MutationsAndQuery =  compose(
+  graphql(createMessageMutation, {
+    name : 'createMessageMutation'
+  }),
+  graphql(getConversationQuery, {
+    options: (props) => ({
+      variables: {
+        id: parseInt(props.match.params.id)
+      },
+    })
+  })
+)(Show)
+
+export default MutationsAndQuery

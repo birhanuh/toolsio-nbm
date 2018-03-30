@@ -24,7 +24,7 @@ class Page extends Component {
       <div className="row column">  
 
         <Breadcrumb />
-
+        {/*
         <div className="ui four column grid">
           <div className="column">
             <TotalIncomeCard />
@@ -60,7 +60,7 @@ class Page extends Component {
             <InvoiceTasks />
           </div>
         </div>
-
+        */}
       </div>  
     )
   }  

@@ -1,7 +1,7 @@
 import express from 'express'
 import AWS from 'aws-sdk'
 
-import Account from '../models/account'
+import models from '../models'
 
 let router = express.Router()
 
@@ -12,21 +12,16 @@ import db from '../db'
 
 // Get regisetred user
 router.get('/:subdomain', async (req, res) => {
+  
+  models.accounts.findOne({ subdomain: req.params.subdomain })
+  .then(account => {
 
-  // Connect to accounts db
-  if (env === 'development') {
-    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
-  } else if (env === 'test') {
-    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-  }
-
-  let account = await Account.find({ subdomain: req.params.subdomain })
-
-  if (account.length !== 0 ) {    
-    res.json( { result: account[0] }) 
-  } else {
-    res.json( { result: null }) 
-  }
+    if (account ) {    
+      res.json( { result: account }) 
+    } else {
+      res.json( { result: null }) 
+    }
+  }) 
 
 })
 
@@ -67,7 +62,7 @@ router.put('/update/:id', async (req, res) => {
     await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
   }
   
-  let account = await Account.findOne({ _id: req.params.id })
+  let account = await models.accounts.findOne({ _id: req.params.id })
   let previousUrl = account.logo
  
   const s3Bucket = new AWS.S3({

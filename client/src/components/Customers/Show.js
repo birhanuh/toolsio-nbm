@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import map from 'lodash/map'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { fetchCustomer, deleteCustomer } from '../../actions/customerActions'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -23,23 +23,23 @@ class Show extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      _id: this.props.customer ? this.props.customer._id : null,
-      name: this.props.customer ? this.props.customer.name : '',
+      id: this.props.data.getCustomer ? this.props.data.getCustomer.id : null,
+      name: this.props.data.getCustomer ? this.props.data.getCustomer.name : '',
       address: {
-        street: this.props.customer ? this.props.customer.address.street: '',
-        postalCode: this.props.customer ? this.props.customer.address.postalCode : '',
-        region: this.props.customer ? this.props.customer.address.region : '',
-        country: this.props.customer ? this.props.customer.address.country : ''
+        street: this.props.data.getCustomer ? this.props.data.getCustomer.street: '',
+        postalCode: this.props.data.getCustomer ? this.props.data.getCustomer.postalCode : '',
+        region: this.props.data.getCustomer ? this.props.data.getCustomer.region : '',
+        country: this.props.data.getCustomer ? this.props.data.getCustomer.country : ''
       },
-      vatNumber: this.props.customer ? this.props.customer.vatNumber : '',
-      includeContactOnInvoice: this.props.customer ? this.props.customer.includeContactOnInvoice : false,
+      vatNumber: this.props.data.getCustomer ? this.props.data.getCustomer.vatNumber : '',
+      isContactIncludedInInvoice: this.props.data.getCustomer ? this.props.data.getCustomer.isContactIncludedInInvoice : false,
       contact: {
-        phoneNumber: this.props.customer ? this.props.customer.contact.phoneNumber : '',
-        email: this.props.customer ? this.props.customer.contact.email : ''
+        phoneNumber: this.props.data.getCustomer ? this.props.data.getCustomer.phoneNumber : '',
+        email: this.props.data.getCustomer ? this.props.data.getCustomer.email : ''
       },
-      sales: this.props.customer ? this.props.sales : null,
-      projects: this.props.customer ? this.props.projects : null,
-      invoices: this.props.customer ? this.props.invoices : null,
+      sales: this.props.data.getCustomer ? this.props.data.getCustomer.sales : null,
+      projects: this.props.data.getCustomer ? this.props.data.getCustomer.projects : null,
+      invoices: this.props.data.getCustomer ? this.props.data.getCustomer.invoices : null,
     }
   }
 
@@ -47,30 +47,30 @@ class Show extends Component {
     // Fetch Customer when id is present in params
     const { match } = this.props
     if (match.params.id) {
-      this.props.fetchCustomer(match.params.id)
+      //this.props.fetchCustomer(match.params.id)
     } 
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.customer) {
+    if (nextProps.data.getCustomer) {
       this.setState({
-        _id: nextProps.customer._id,
-        name: nextProps.customer.name,
+        id: nextProps.data.getCustomer.id,
+        name: nextProps.data.getCustomer.name,
         address: {
-          street: nextProps.customer.address.street,
-          postalCode: nextProps.customer.address.postalCode,
-          region: nextProps.customer.address.region,
-          country: nextProps.customer.address.country
+          street: nextProps.data.getCustomer.street,
+          postalCode: nextProps.data.getCustomer.postalCode,
+          region: nextProps.data.getCustomer.region,
+          country: nextProps.data.getCustomer.country
         },
-        vatNumber: nextProps.customer.vatNumber,
-        includeContactOnInvoice: nextProps.customer.includeContactOnInvoice,
+        vatNumber: nextProps.data.getCustomer.vatNumber,
+        isContactIncludedInInvoice: nextProps.data.getCustomer.isContactIncludedInInvoice,
         contact: {
-          phoneNumber: nextProps.customer.contact.phoneNumber,
-          email: nextProps.customer.contact.email
+          phoneNumber: nextProps.data.getCustomer.phoneNumber,
+          email: nextProps.data.getCustomer.email
         },
-        sales: nextProps.customer.sales,
-        projects: nextProps.customer.projects,
-        invoices: nextProps.customer.invoices,
+        sales: nextProps.data.getCustomer.sales,
+        projects: nextProps.data.getCustomer.projects,
+        invoices: nextProps.data.getCustomer.invoices,
       })
     }
   }
@@ -92,24 +92,26 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
-    let name = this.state.name
-
-    this.props.deleteCustomer(id).then(
-      () => {
-        this.props.addFlashMessage({
-          type: 'success',
-          text: T.translate("customers.show.flash.success_delete", { name: name})
-        })  
+    this.props.deleteCustomerMutation({ variables: {id} })
+      .then(() => {
+        // this.props.addFlashMessage({
+        //   type: 'success',
+        //   text: T.translate("customers.show.flash.success_delete", { name: name})
+        // })  
         this.context.router.history.push('/customers')
-      },
-      ({ response }) => {
-      }
-    ) 
+      })
+      .catch(err => {
+        // this.props.addFlashMessage({
+        //   type: 'error',
+        //   text: T.translate("customers.show.flash.error_delete")
+        // })  
+        console.log('error ', err)
+      })
     
   }
 
   render() {
-    const { _id, name, vatNumber, contact, includeContactOnInvoice, address, projects, sales, invoices } = this.state
+    const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, projects, sales, invoices } = this.state
     
     const emptyProjectsMessage = (
       <div className="ui mini info message">
@@ -120,10 +122,10 @@ class Show extends Component {
     )
 
     const projectsList = map(projects, (project) => 
-      <div key={project._id} className="ui segment">
+      <div key={project.id} className="ui segment">
         <div className="ui three column grid">
           <div className="eight wide column">
-            <Link to={`/projects/show/${project._id}`} className="ui header">
+            <Link to={`/projects/show/${project.id}`} className="ui header">
               <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}>
                 {project.name}
               </h3>
@@ -152,10 +154,10 @@ class Show extends Component {
     )
 
     const salesList = map(sales, (sale) => 
-      <div key={sale._id} className="ui segment">
+      <div key={sale.id} className="ui segment">
         <div className="ui three column grid">
           <div className="eight wide column">
-            <Link to={`/sales/show/${sale._id}`} className="ui header">
+            <Link to={`/sales/show/${sale.id}`} className="ui header">
               <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}>
                 {sale.name}
               </h3>
@@ -185,10 +187,10 @@ class Show extends Component {
     )
 
     const invoicesList = map(invoices, (invoice) => 
-       <div key={invoice._id} className="ui segment">
+       <div key={invoice.id} className="ui segment">
         <div className="ui three column grid">
           <div className="eight wide column">
-            <Link to={`/invoices/show/${invoice._id}`} className="ui header">
+            <Link to={`/invoices/show/${invoice.id}`} className="ui header">
               <h3 className={classnames({blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
                 {invoice.referenceNumber}
               </h3>
@@ -231,7 +233,7 @@ class Show extends Component {
               
               <dt>{T.translate("customers.show.include_contact_on_invoice")}</dt>
               <dd>
-                {includeContactOnInvoice ? <i className="check circle icon green"></i> :
+                {isContactIncludedInInvoice ? <i className="check circle icon green"></i> :
                   <i className="minus circle icon red"></i>
                 }
               </dd>
@@ -264,7 +266,7 @@ class Show extends Component {
             <div className="ui divider"></div>
 
             <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("customers.show.delete")}</button>
-            <Link to={`/customers/edit/${_id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("customers.show.edit")}</Link>
+            <Link to={`/customers/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("customers.show.edit")}</Link>
           </div>    
         </div>
 
@@ -275,7 +277,7 @@ class Show extends Component {
           </div>
           <div className="actions">
             <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("customers.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, _id)}>{T.translate("customers.show.delete")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("customers.show.delete")}</button>
           </div>
         </div>
       </div>
@@ -284,22 +286,74 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  fetchCustomer: PropTypes.func.isRequired,
-  deleteCustomer: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  //addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state, props) {
-  const { match } = props
-  if (match.params.id) {
-    return {
-      customer: state.customers.find(item => item._id === match.params.id)
+const deleteCustomerMutation = gql`
+  mutation deleteCustomer($id: Int!) {
+    deleteCustomer(id: $id) {
+      success
+      errors {
+        path
+        message
+      }
     }
-  } 
-}
+  }
+`
 
-export default connect(mapStateToProps, { fetchCustomer, deleteCustomer, addFlashMessage } )(Show)
+const getCustomerQuery = gql`
+  query getCustomer($id: Int!) {
+    getCustomer(id: $id) {
+      id
+      name
+      vatNumber
+      phoneNumber
+      email
+      isContactIncludedInInvoice
+      street
+      postalCode
+      region
+      country
+      projects {
+        id
+        name
+        deadline
+        progress
+        status
+      }
+      sales {
+        id
+        name
+        deadline
+        status
+      }
+      invoices {
+        id
+        deadline
+        paymentTerm
+        interestInArrears
+        referenceNumber
+        status
+      }
+    }
+  }
+`
+
+const MutationsAndQuery =  compose(
+  graphql(deleteCustomerMutation, {
+    name : 'deleteCustomerMutation'
+  }),
+  graphql(getCustomerQuery, {
+    options: (props) => ({
+      variables: {
+        id: parseInt(props.match.params.id)
+      },
+    })
+  })
+)(Show)
+
+export default MutationsAndQuery

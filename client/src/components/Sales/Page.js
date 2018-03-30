@@ -5,6 +5,8 @@ import List from './List'
 import { Pagination } from '../../utils'
 import { connect } from 'react-redux'
 import { fetchSales } from '../../actions/saleActions'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -27,11 +29,11 @@ class Page extends Component {
     
     const { match } = this.props
 
-    if (!!match.params.start) {   
-      this.props.fetchSales(match.params.start, match.params.length)
-    } else {
-      this.props.fetchSales(start, length)
-    }
+    // if (!!match.params.start) {   
+    //   this.props.fetchSales(match.params.start, match.params.length)
+    // } else {
+    //   this.props.fetchSales(start, length)
+    // }
 
   }
 
@@ -39,7 +41,8 @@ class Page extends Component {
 
     const { length } = this.state
 
-    const { sales, match } = this.props
+    const { match } = this.props
+    const { getSales } = this.props.data
 
     return (
       <div className="row column">  
@@ -59,12 +62,12 @@ class Page extends Component {
         </div>   
 
          <div className="row column">     
-          { sales && sales.list && <List sales={this.props.sales.list} /> }
+          { getSales && <List sales={getSales} /> }
         </div>    
 
         <div className="ui clearing vertical segment border-bottom-none">
          
-          <Pagination path="sales" list={sales} match={match} length={length} />           
+          {/*<Pagination path="sales" pages={getSales.pages} match={match} length={length} /> */}          
            
         </div>   
       </div>  
@@ -73,13 +76,22 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  fetchSales: PropTypes.func.isRequired,
+  //fetchSales: PropTypes.func.isRequired,
 }
 
-function mapSateToProps(state) {
-  return {
-    sales: state.sales
-  }
+const getSalesQuery = gql`
+  {
+    getSales {
+      id
+      name 
+      deadline
+      status
+      description
+      customer {
+        name
+      }
+    }
 }
+`
 
-export default connect(mapSateToProps, { fetchSales })(Page)
+export default graphql(getSalesQuery)(Page)

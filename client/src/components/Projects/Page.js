@@ -6,6 +6,8 @@ import List from './List'
 import { Pagination } from '../../utils'
 import { connect } from 'react-redux'
 import { fetchProjects } from '../../actions/projectActions'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -24,15 +26,15 @@ class Page extends Component {
 
   componentDidMount() {
 
-    const { start, length} = this.state
+    const { start, length } = this.state
     
     const { match } = this.props
 
-    if (!!match.params.start) {   
-      this.props.fetchProjects(match.params.start, match.params.length)
-    } else {
-      this.props.fetchProjects(start, length)
-    }
+    // if (!!match.params.start) {   
+    //   this.props.fetchProjects(match.params.start, match.params.length)
+    // } else {
+    //   this.props.fetchProjects(start, length)
+    // }
 
   }
 
@@ -40,7 +42,8 @@ class Page extends Component {
 
     const { length } = this.state
 
-    const { projects, match } = this.props
+    const { match } = this.props
+    const { getProjects } = this.props.data
 
     return (
       <div className="row column">  
@@ -60,12 +63,12 @@ class Page extends Component {
         </div> 
         
         <div className="row column">     
-          { projects && projects.list && <List projects={this.props.projects.list} /> }
+          { getProjects && <List projects={getProjects} /> }
         </div>    
 
         <div className="ui clearing vertical segment border-bottom-none">
          
-          <Pagination path="projects" list={projects} match={match} length={length} />           
+          {/*<Pagination path="projects" pages={getProjects.pages} match={match} length={length} /> */}          
            
         </div>   
       </div>   
@@ -73,14 +76,20 @@ class Page extends Component {
   }
 }
 
-Page.propTypes = {
-  fetchProjects: PropTypes.func.isRequired
-}
-
-function mapSateToProps(state) {
-  return {
-    projects: state.projects
+const getProjectsQuery = gql`
+  {
+    getProjects {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        name
+      }
+    }
   }
-}
+`
 
-export default connect(mapSateToProps, { fetchProjects })(Page)
+export default graphql(getProjectsQuery)(Page)

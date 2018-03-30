@@ -2,34 +2,30 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-export default function Tr({conversation, deleteConversation, account}) {
-  
-  let conversationTypePath
+export default function Tr({ message, account, type }) {
 
-  if (conversation.author._id === account._id) {
-    conversationTypePath = `/conversations/sent/show/${conversation.conversationId}`
-  } else if (conversation.author._id !== account._id) {
-    conversationTypePath = `/conversations/inbox/show/${conversation.conversationId}`
+  const handleDelete = (id, event) => {
+    event.preventDefault()
+     
   }
 
   return (
 
     <tr>
       <td>
-        <Link to={conversationTypePath}>
-          {conversation.isRead ? conversation.title : <strong>{conversation.title}</strong>}
+        <Link to={ !!type ? `/conversations/${type}/show/${message.id}` : `/conversations/show/${message.id}`}>
+          {message.isRead ? message.title : <strong>{message.title}</strong>}
         </Link>  
       </td>
-      <td>{conversation.isRead ? conversation._id : <strong>{conversation._id}</strong> }</td>
-      <td>{conversation.isRead ? conversation.body : <strong>{conversation.body}</strong> }</td>      
+      <td>{message.isRead ? message.id : <strong>{message.id}</strong> }</td>
+      <td>{message.isRead ? message.body : <strong>{message.body}</strong> }</td>      
       <td className="ui center aligned">
-        <button className="ui icon basic mini button red" onClick={deleteConversation(conversation._id)}><i className="trash icon"></i></button>
+        <button className="ui icon basic mini button red" onClick={handleDelete.bind(this, message.id)}><i className="trash icon"></i></button>
       </td>
     </tr>
   )
 }
 
 Tr.propTypes = {
-  conversation: PropTypes.object.isRequired,
-  deleteConversation: PropTypes.func.isRequired
+  message: PropTypes.object.isRequired
 }

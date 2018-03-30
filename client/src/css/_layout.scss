@@ -418,6 +418,17 @@ nav.ui.menu {
   max-width: inherit;
 }
 
+.messages {
+  .ui.comments {
+    grid-row: 2;
+    grid-column: 3;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    max-height: 400px;
+  }
+}
+
 // footer
 #footer {
   padding: 10px;

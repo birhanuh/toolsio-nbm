@@ -17,7 +17,7 @@ export default function List({ projects }) {
 
   const projectsList = (
     <div className="ui two cards sales">
-      { projects.map(project => <Card project={project} key={project._id} />) }
+      { projects.map(project => <Card project={project} key={project.id} />) }
     </div>
   )
 

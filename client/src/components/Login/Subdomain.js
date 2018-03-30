@@ -38,7 +38,7 @@ class Subdomain extends Component {
             type: 'success',
             text: T.translate("log_in.subdomain.on_your_account_page")
           })
-          window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`
+          window.location = ''+process.env.HTP+res.data.result.subdomain+'.'+process.env.DNS+'/login'
         },
         ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
       )  
