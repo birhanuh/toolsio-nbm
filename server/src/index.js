@@ -9,12 +9,17 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import cors from 'cors'
-// Authentication package 
+
+// Authentication packages 
 import session from 'express-session'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
 
-import socketEvents from './socket/socketEvents'
+// Subscription packages 
+import { createServer } from 'http'
+import { execute, subscribe } from 'graphql'
+import { PubSub } from 'graphql-subscriptions'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 // Init app
 const app = express()
@@ -150,16 +155,27 @@ app.use((req, res) => {
 // Set port
 app.set('port', process.env.SERVER_PORT)
 
+const server = createServer(app)
 
 // sync() will create all table if then doesn't exist in database
 models.sequelize.sync().then(() => {
-  app.listen(app.get('port'), () => 
+  // app.listen(app.get('port'), () => 
+  //   console.log('Server started on port: ' + process.env.SERVER_PORT)
+  // )
+  server.listen(app.get('port'), () => {
+    new SubscriptionServer({
+      execute,
+      subscribe,
+      schema: schema,
+    }, {
+      server: server,
+      path: '/subscriptions',
+    })
     console.log('Server started on port: ' + process.env.SERVER_PORT)
-  )
+  })
 })
 
-//const io = require('socket.io').listen(8080)
-//socketEvents(io)
+
 
 // // Connect to mognodb
 // if (env === 'development') {

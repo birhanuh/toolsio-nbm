@@ -1,5 +1,4 @@
-//var React = require('react') // ES5 version
-import React from 'react' // ES6 version
+import React from 'react' 
 import { render } from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 //import { Provider } from 'react-redux'
@@ -7,61 +6,15 @@ import { createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers/rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { Authorization } from './utils'
 import { setCurrentAccount } from './actions/authenticationActions'
 // Apollo
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from 'react-apollo'
-import { setContext } from 'apollo-link-context'
-import { ApolloLink } from 'apollo-link'
 
 // Localization 
 import T from 'i18n-react'
 
 import App from './components/Layouts/App'
-//import routes from './routes'
-
-const httpLink = createHttpLink({
-  uri: 'http://localhost:8080/graphql'
-})
-
-// middleWares and afterwares
-const middlewareLink = setContext(() => ({
-  headers: {
-    'subdomain': Authorization.getSubdomain(), // Parse subdomain 
-    'x-token': localStorage.getItem('token'),
-    'x-refresh-token': localStorage.getItem('refresh-token')
-  }
-}))
-
-const afterwareLink = new ApolloLink((operation, forward) => {
-  const { headers } = operation.getContext()
-
-  if (headers) {
-    const token = headers.get('x-token')
-    const refreshToken = headers.get('x-refresh-token')
-
-    if (token) {
-      localStorage.setItem('token', token)
-    }
-
-    if (refreshToken) {
-      localStorage.setItem('refreshToken', refreshToken)
-    }
-  }
-
-  return forward(operation)
-})
-
-// Use with apollo-client
-const link = afterwareLink.concat(middlewareLink.concat(httpLink))
-
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache()
-})
+import client from './apollo'
 
 /*
 // A state for the entire project created by Redux
