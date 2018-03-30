@@ -175,8 +175,8 @@ models.sequelize.sync().then(() => {
 
 /*
 mutation {
-  registerUser(firstName: "test", lastName: "test", email: 
-      "test1@toolsio.com", password: "ppppp", subdomain: "test", industry: "test" ) {
+  registerUser(firstName: "testa", lastName: "testa", email: 
+      "testa@toolsio.com", password: "ppppp", subdomain: "testa", industry: "testa" ) {
       success
       user {
         id
@@ -239,16 +239,44 @@ mutation {
 }
 
 mutation {
-  createMessage(title: "test", body: "Test second...", recipientId: 1 ) {
+  createMessage(body: "Testa...", channelId: 1 ) {
       success
       message {
         id
       } 
+      conversation {
+        id
+      }
       errors {
         path
         message
       }
     }
+}
+
+mutation {
+  createChannel(name: "channel1", owner: 1) {
+    success
+    channel {
+      id
+      name
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+
+query {
+  getChannel(id: 1) {
+    id
+    name
+    users {
+      id
+      email
+    }
+  }
 }
 */
 

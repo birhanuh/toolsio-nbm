@@ -68,7 +68,7 @@ export default (sequelize, DataTypes) => {
   })
 
   Invoice.associate = (models) => {
-    // 1:N
+    // 1:M
     Invoice.belongsTo(models.Customer, {
       foreignKey: {
         name: 'customerId',

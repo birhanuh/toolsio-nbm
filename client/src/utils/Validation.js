@@ -280,14 +280,21 @@ export default {
   validateConversationInput: (data) => {
     let errors = {}
 
-    if (!data.recipientId) {
-      errors['recipientId'] = T.translate("conversations.form.recipient_required")
-    }
-    if (!data.title) {
-      errors['title'] = T.translate("conversations.form.title_required")
-    }
     if (!data.body) {
       errors['body'] = T.translate("conversations.form.body_required")
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
+  validateChannelInput: (data) => {
+    let errors = {}
+
+    if (!data.name) {
+      errors['name'] = T.translate("conversations.form.channel_name_required")
     }
     
     return {

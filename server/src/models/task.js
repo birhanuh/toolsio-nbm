@@ -47,7 +47,7 @@ export default (sequelize, DataTypes) => {
   })
 
   Task.associate = (models) => {
-    // 1:N
+    // 1:M
     Task.belongsTo(models.Project, {
       foreignKey: {
         name: 'projectId',

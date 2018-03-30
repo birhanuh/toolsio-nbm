@@ -2,37 +2,37 @@ export default `
 
   type Message {
     id: Int!
-    title: String!
-    body: String!
+    message: String!
     isRead: Boolean!
-    isArchived: Boolean!
-    author: Int!
+    channelId: Int!
+    userId: Int!
     createdAt: Date!
+    user: User!
   }
 
-  type GetReadAndArchivedCountsMessageResponse {
+  type GetUnreadCountsMessageResponse {
     success: Boolean!
     unreadCount: Int!
-    archivedCount: Int 
     errors: [Error!]
   }
 
   type CreateMessageResponse {
     success: Boolean!
     message: Message 
+    channel: Channel
     errors: [Error!]
   }
 
   type Query {
     getMessage(id: Int!): Message
+    getChannelMessages(channelId: Int!): [Message!]!
     getInboxMessages: [Message!]!
     getSentMessages: [Message!]!
-    getArchiveMessages: [Message!]!
-    getReadAndArchivedCounts: GetReadAndArchivedCountsMessageResponse!
+    getUnreadCounts: GetUnreadCountsMessageResponse!
   }
 
   type Mutation {
-    createMessage(title: String!, body: String!, recipientId: Int!): CreateMessageResponse!
+    createMessage(message: String!, channelId: Int!, userId: Int! ): CreateMessageResponse!
   }
 
 `

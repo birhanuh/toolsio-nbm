@@ -13,7 +13,7 @@ export default function Tr({ message, account, type }) {
 
     <tr>
       <td>
-        <Link to={ !!type ? `/messages/${type}/show/${message.id}` : `/messages/show/${message.id}`}>
+        <Link to={ !!type ? `/conversations/${type}/show/${message.id}` : `/conversations/show/${message.id}`}>
           {message.isRead ? message.title : <strong>{message.title}</strong>}
         </Link>  
       </td>

@@ -49,7 +49,7 @@ class Form extends Component {
     this.errors = {password: 'me'}
     if (true) {
       this.setState({ errors: {}, isLoading: true })
-      this.props.mutate({variables: {email, password}})
+      this.props.mutate({variables: { email, password }})
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',

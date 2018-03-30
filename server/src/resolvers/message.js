@@ -5,6 +5,19 @@ export default {
   
   Query: {
     getMessage: (parent, { id }, { models }) => models.Message.findOne({ where: { id } }),
+
+    getChannelMessages: (parent, args, { models }) => {
+      return models.Message.findAll({ 
+        where: { channelId: args.channelId },
+        order: [['created_at', 'ASC']] }, { raw: true })
+    },
+
+    getSentMessages: (parent, args, { models }) => {
+      return models.Message.findAll({ 
+        where: { userId: 1 },
+        order: [['created_at', 'ASC']] }, { raw: true })
+    },
+
     getInboxMessages: (parent, args, { models }) => {
       return models.Message.findAll({ 
         include: [
@@ -16,25 +29,7 @@ export default {
         order: [['created_at', 'ASC']] }, { raw: true })
     },
 
-    getSentMessages: (parent, args, { models }) => {
-      return models.Message.findAll({ 
-        where: { author: 1 },
-        order: [['created_at', 'ASC']] }, { raw: true })
-    },
-
-    getArchiveMessages: (parent, args, { models }) => {
-      return models.Message.findAll({ 
-        where: { isArchived: true },
-        include: [
-          {
-            model: models.User,
-            where: { id: 1 }
-          }
-        ],
-        order: [['created_at', 'ASC']] }, { raw: true })
-    },
-
-    getReadAndArchivedCounts: async (parent, args, { models }) => {
+    getUnreadCounts: async (parent, args, { models }) => {
       try {
         const unreadCount = await models.Message.count({ 
           where: { isRead: false },
@@ -45,19 +40,9 @@ export default {
             }
           ]}, { raw: true })
 
-        const archivedCount = await models.Message.count({ 
-          where: { isArchived: true },
-          include: [
-            {
-              model: models.User,
-              where: { id: 1 }
-            }
-          ]}, { raw: true })
-        console.log('unreadCount ', unreadCount)
         return {
           success: true,
-          unreadCount,
-          archivedCount
+          unreadCount
         }
       } catch(err) {
         console.log(err)
@@ -67,16 +52,14 @@ export default {
         }
       }
 
-    },
+    }
   },
 
   Mutation: {
     createMessage: async (parent, args, { models, user }) => {
       try {
-        console.log('user ', user)
-        const message = await models.Message.create({ ...args, author: 1 })
-
-        await models.Conversation.create({ recipientId: args.recipientId, messageId: message.id })
+        
+        const message = await models.Message.create({ ...args, userId: 1 })
 
         return {
           success: true,
@@ -90,5 +73,12 @@ export default {
         }
       }
     }  
+  },
+
+  Message: {
+    user: ({ userId }, args, { models }) => {
+
+      return models.User.findOne({ where: {id: userId} }, { raw: true })
+    } 
   }        
 }

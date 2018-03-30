@@ -46,7 +46,7 @@ export default (sequelize, DataTypes) => {
   })
 
   Item.associate = (models) => {
-    // 1:n
+    // 1:M
     Item.belongsTo(models.Sale, {
       foreignKey: {
         name: 'saleId',

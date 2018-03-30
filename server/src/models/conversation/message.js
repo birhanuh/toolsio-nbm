@@ -1,10 +1,6 @@
 export default (sequelize, DataTypes) => {
   const Message = sequelize.define('messages', {
-    title: {
-      type: DataTypes.STRING,
-      allowNull : false
-    },
-    body: {
+    message: {
       type: DataTypes.TEXT,
       allowNull : false
     },
@@ -13,29 +9,26 @@ export default (sequelize, DataTypes) => {
       defaultValue : false,
       field: 'is_read'
     },
-    isArchived: {
-      type: DataTypes.BOOLEAN,
-      defaultValue : false,
-      field: 'is_archived'
-    },
     createdAt: {
       type: DataTypes.DATE,
       field: 'created_at'
     }
-  }, {underscored: true})
+  })
 
   Message.associate = (models) => {
-    // 1:N
-    Message.belongsToMany(models.User, {
-      through: models.Conversation,
+    // 1:M
+    Message.belongsTo(models.Channel, {
       foreignKey: {
-        name: 'messageId',
-        field: 'message_id'
+        name: 'channelId',
+        field: 'channel_id'
       }
     })
 
     Message.belongsTo(models.User, {
-      foreignKey: 'author'
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id'
+      }
     })
   }
 

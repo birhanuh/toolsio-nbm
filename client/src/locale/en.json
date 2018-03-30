@@ -634,59 +634,37 @@
       "success_import": "Invoice is imported!"
     }
   },
-  "messages": {
+  "conversations": {
     "page": {
       "header": "Conversations",
-      "compose_new_conversation": "Compose New Conversatoin",
-      "empty_inbox": "Inbox is empty",
-      "empty_sent": "Sent is empty",
+      "add_channel": "Add Channel",
+      "no_channel": "No Channels",
+      "empty_message": "Message is empty",
       "empty_trash": "Empty trash",
-      "inbox": "Inbox",
-      "sent": "Sent",
-      "trash": "Trash",
       "remove": "Remove",
       "archive": "Archive",
       "restore": "Restore",
-      "title": "Title",
       "from": "From",
-      "body": "Body",
-      "description": "Internal messaging serivce, compose, read, reply and delete messages."
+      "message": "Message",
+      "description": "Internal conversation interface, write, read, reply and delete messages."
     },
-    "list": {
-      "empty_inbox_header": "Inbox is empty",
-      "empty_inbox_message": "You haven't recieved any messages yet.",
-      "empty_archive_header": "Archive is empty",
-      "empty_archive_message": "Select and check archive checkbox from Inbox or Sent panel to archive messages.",
-      "empty_sent_header": "Sent is empty",
-      "empty_sent_message": "Click Compose new Conversation button on the left-side panel to compose your first Conversation."
+    "messages": {
+      "empty_message_header": "Message is empty",
+      "empty_message_message": "Create your first message by sending a message to memebers of this channel."
     },
     "form": {
-      "new_message": "New Message",
+      "create_channel": "Create Channel",
       "send": "Send",
       "cancel": "Cancel",
+      "create": "Create",
       "title": "Title",
-      "body": "Body",
-      "recipient": "Recipient",
-      "select_recipient": "-Select recipient-",
-      "recipient_required": "Recipient is required.",
-      "title_required": "Title is required.",
+      "message": "Message",
+      "channel_name_required": "Channel name is required.",
       "body_required": "Body is required.",
       "flash": {
         "success_compose": "Message is sent!",
         "error_compose": "Message is not sent, try sending again"
       }
-    },
-    "show": {
-      "title": "Title",
-      "recipient": "Recipient",
-      "body": "Body",
-      "reply": "Reply",
-      "delete_conversation": "Delete Conversation",
-      "cancel": "Cancel",
-      "write_reply": "Write your reply...",
-      "flash": {
-        "success_delete": "Message is deleted!"
-      }  
     },
     "reply": {
       "success": "Reply is sent"
