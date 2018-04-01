@@ -36,7 +36,6 @@ class Page extends Component {
     
             </Switch>
 
-
           </div>
         </div>
       </div> 

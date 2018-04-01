@@ -21,8 +21,8 @@ class Page extends Component {
     let currentAccount
     
     try {
-      const token = localStorage.getItem('token')
-      const { user, account } = decode('token')
+      const authToken = localStorage.getItem('authToken')
+      const { user, account } = decode('authToken')
 
       currentAccount.subdomain = account.subdomain
       currentAccount.firstName = user.firstName

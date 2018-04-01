@@ -59,12 +59,12 @@ import decode from 'jwt-decode'
 // }
 
 const isAuthenticated = () => {
-  const token = localStorage.getItem('token')
-  const refreshToken = localStorage.getItem('refreshToken')
+  const authToken = localStorage.getItem('authToken')
+  const refreshAuthToken = localStorage.getItem('refreshAuthToken')
   
   try {
-    decode(token)
-    decode(refreshToken)
+    decode(authToken)
+    decode(refreshAuthToken)
   } catch(err) {
     return false 
   }

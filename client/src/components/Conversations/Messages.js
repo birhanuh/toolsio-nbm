@@ -16,7 +16,60 @@ $.fn.dimmer = require('semantic-ui-dimmer')
 
 import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
 
+const NEW_CHANNEL_MESSAGE_SUBSCRIPTION = gql`
+  subscription($channelId: Int!) {
+    getNewChannelMessage(channelId: $channelId) {
+      id
+      message
+      userId
+      isRead
+      createdAt
+      user {
+        id
+        email
+        avatarUrl
+      }
+    }
+  }
+`
+
 class Messages extends Component {
+
+  componentDidMount() {
+    this.unsubscribe = this.subscribe(this.props.channelId)
+  }
+
+  componentWillReceiveProps({ channelId }) {    
+    if (this.props.channelId !== channelId) {
+      if (this.unsubscribe) {
+        this.unsubscribe()
+      }
+      this.unsubscribe = this.subscribe(channelId)
+    }
+  }﻿
+
+  componentWillUnmount() {   
+    if (this.unsubscribe) {
+      this.unsubscribe()
+    }
+  }﻿
+
+  subscribe = (channelId) => {
+    this.props.getChannelMessagesQuery.subscribeToMore({
+      document: NEW_CHANNEL_MESSAGE_SUBSCRIPTION,
+      variables: {
+        channelId: parseInt(channelId)
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev
+        
+        return {
+          ...prev,
+          getChannelMessages: [...prev.getChannelMessages, subscriptionData.data.getNewChannelMessage],
+        }
+      }
+    })
+  }
 
   showConfirmationModal(event) {
     event.preventDefault()
@@ -34,12 +87,10 @@ class Messages extends Component {
 
   render() {
 
-    const { getChannel } = this.props.getChannelQuery
-    
-    const { getChannelMessages } = this.props.getChannelMessagesQuery
+    const { getChannelQuery: { getChannel }, getChannelMessagesQuery: { getChannelMessages } } = this.props
 
     const emptyMessage = (
-      <div className="ui info message mt-5">
+      <div className="ui info message">
         <h3>{T.translate(`conversations.messages.empty_message_header`)}</h3>
         <p>{T.translate(`conversations.messages.empty_message_message`)}</p>
       </div>
@@ -67,8 +118,8 @@ class Messages extends Component {
       <div className="messages">
 
         <div className="ui clearing vertical segment border-bottom-none">
-          <div className="ui left floated header">
-            <h3 className="header">{getChannel && getChannel.name}</h3>
+          <div className="ui left floated header mt-2">
+            <h3 className="header capitalize-text">{getChannel && getChannel.name}</h3>
           </div>  
 
           <button id="add-member" className="ui right floated primary button" onClick={this.showConfirmationModal.bind(this)}>
@@ -146,7 +197,8 @@ const MutationsAndQuery =  compose(
     options: (props) => ({
       variables: {
         channelId: parseInt(props.channelId)
-      }
+      },
+      fetchPolicy: 'network-only'
     })
   })
 )(Messages)

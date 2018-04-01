@@ -18,7 +18,6 @@ import jwt from 'jsonwebtoken'
 // Subscription packages 
 import { createServer } from 'http'
 import { execute, subscribe } from 'graphql'
-import { PubSub } from 'graphql-subscriptions'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 // Init app
@@ -39,7 +38,7 @@ import db from './db'
 
 // Models
 import models from './models'
-import refreshToken from './utils/authentication'
+import refreshAuthToken from './utils/authentication'
 
 // Schema
 const types = fileLoader(path.join(__dirname + '/types'))
@@ -77,35 +76,35 @@ app.use(graphqlEndPoint, bodyParser.json(),
   }))
 )
 
-app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint }))
+app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint, subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' }))
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(cookieParser())
 
-// Add token exist checker middleware
+// Add authToken exist checker middleware
 app.use(async (req, res, next) => {
   
   // Parse subdomain 
   //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
 
-   // Parse token 
-  let token = req.headers['x-token']
+   // Parse authToken 
+  let authToken = req.headers['x-authToken']
 
-  if (token) {
+  if (authToken) {
     try {
-      const { user } = jwt.verify(token, config.secret)
+      const { user } = jwt.verify(authToken, config.secret)
       req.user = user
     
     } catch (err) {
-      let refreshToken = req.headers['x-refresh-token']
-      const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2)
-      if (newTokens.token && newTokens.refreshToken) {
-        res.set('Access-Control-Expose-Headers', 'x-token', 'x-refresh-token')
-        res.set('x-token', newTokens.token)
-        res.set('x-refresh-token', newTokens.refreshToken)
+      let refreshAuthToken = req.headers['x-refresh-authToken']
+      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, SECRET, SECRET2)
+      if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
+        res.set('Access-Control-Expose-Headers', 'x-authToken', 'x-refresh-authToken')
+        res.set('x-authToken', newAuthTokens.authToken)
+        res.set('x-refresh-authToken', newAuthTokens.refreshAuthToken)
       }
-      req.user = newTokens.user
+      req.user = newAuthTokens.user
     }
   }
   next()
@@ -167,7 +166,21 @@ models.sequelize.sync().then(() => {
       execute,
       subscribe,
       schema: schema,
-    }, {
+      onConnect: async (connectionParams, webSocket) => {
+        if (connectionParams.authToken && connectionParams.refreshAuthToken) {
+
+          let user = null          
+          try {
+            const { user } = jwt.verify(authToken, config.secret)
+            return { models, user }           
+          } catch (err) {
+            const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, SECRET, SECRET2)
+            return { models, user: newAuthTokens.user }
+          }
+      }
+
+      return {models }
+    }}, {
       server: server,
       path: '/subscriptions',
     })
@@ -271,7 +284,7 @@ mutation {
 }
 
 mutation {
-  createChannel(name: "channel1", owner: 1) {
+  createChannel(name: "channel1") {
     success
     channel {
       id

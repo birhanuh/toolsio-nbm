@@ -17,8 +17,8 @@ const httpLink = createHttpLink({
 const middlewareLink = setContext(() => ({
   headers: {
     'subdomain': Authorization.getSubdomain(), // Parse subdomain 
-    'x-token': localStorage.getItem('token'),
-    'x-refresh-token': localStorage.getItem('refresh-token')
+    'x-authToken': localStorage.getItem('authToken'),
+    'x-refresh-authToken': localStorage.getItem('refresh-authToken')
   }
 }))
 
@@ -26,15 +26,15 @@ const afterwareLink = new ApolloLink((operation, forward) => {
   const { headers } = operation.getContext()
 
   if (headers) {
-    const token = headers.get('x-token')
-    const refreshToken = headers.get('x-refresh-token')
+    const authToken = headers.get('x-authToken')
+    const refreshAuthToken = headers.get('x-refresh-authToken')
 
-    if (token) {
-      localStorage.setItem('token', token)
+    if (authToken) {
+      localStorage.setItem('authToken', authToken)
     }
 
-    if (refreshToken) {
-      localStorage.setItem('refreshToken', refreshToken)
+    if (refreshAuthToken) {
+      localStorage.setItem('refreshAuthToken', refreshAuthToken)
     }
   }
 
@@ -48,9 +48,13 @@ const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLi
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:8080/subscriptions`,
+  uri: 'ws://localhost:8080/subscriptions',
   options: {
     reconnect: true
+  },
+  connectionParams: {
+    authToken: localStorage.getItem('authToken'),
+    refreshAuthToken: localStorage.getItem('refreshAuthToken')
   }
 })
 
