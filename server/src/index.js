@@ -179,7 +179,7 @@ models.sequelize.sync().then(() => {
           }
       }
 
-      return {models }
+      return { models }
     }}, {
       server: server,
       path: '/subscriptions',
