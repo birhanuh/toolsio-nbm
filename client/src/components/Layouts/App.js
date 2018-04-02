@@ -73,31 +73,32 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Landing} />
               <Route exact path="/signup" component={Signup} />
-              <Route exact path="/signup/invitation/:token" component={Signup} />
+              <Route exact path="/signup/invitation/:token?" component={Signup} />
               <Route exact path="/login" component={Login} />
-              <Route exact path="/login/confirmation/:token" component={Login} />
+              <Route exact path="/login/confirmation/:token?" component={Login} />
               <Route path="/subdomain" component={Subdomain} />
               <Route path="/dashboard" component={Dashboard} />
               <Route exact path="/account" component={Account} />
               <Route exact path="/projects" component={ProjectsPage} />
-              <Route exact path="/projects/edit/:id" component={ProjectsForm} /> 
-              <Route exact path="/projects/show/:id" component={ProjectsShow} />
+              <Route exact path="/projects/edit/:id?" component={ProjectsForm} /> 
+              <Route exact path="/projects/show/:id?" component={ProjectsShow} />
               <Route exact path="/projects/new" component={ProjectsForm} />
               <Route exact path="/projects/:start?/:length?" component={ProjectsPage} />
               <PrivateRoute exact path="/sales" component={SalesPage} />
-              <Route exact path="/sales/edit/:id" component={SalesForm} /> 
+              <Route exact path="/sales/edit/:id?" component={SalesForm} /> 
               <Route exact path="/sales/new" component={SalesForm} />
-              <Route exact path="/sales/show/:id" component={SalesShow} />
+              <Route exact path="/sales/show/:id?" component={SalesShow} />
               <Route exact path="/customers" component={CustomersPage} />
-              <Route exact path="/customers/edit/:id" component={CustomersForm} /> 
+              <Route exact path="/customers/edit/:id?" component={CustomersForm} /> 
               <Route exact path="/customers/new" component={CustomersForm} />
-              <Route exact path="/customers/show/:id" component={CustomersShow} /> 
+              <Route exact path="/customers/show/:id?" component={CustomersShow} /> 
               <Route exact path="/invoices" component={InvoicesPage} />
-              <Route exact path="/invoices/edit/:id" component={InvoicesForm} /> 
+              <Route exact path="/invoices/edit/:id?" component={InvoicesForm} /> 
               <Route exact path="/invoices/new" component={InvoicesForm} />
-              <Route exact path="/invoices/show/:id" component={InvoicesShow} /> 
+              <Route exact path="/invoices/show/:id?" component={InvoicesShow} /> 
               <Route exact path="/conversations" component={ConversationsPage} />
               <Route exact path="/conversations/channel/:channelId?" component={ConversationsPage} />
+              <Route exact path="/conversations/receiver/:receiverId?" component={ConversationsPage} />
               <Route exact path="/users" component={UsersPage} /> 
             </Switch>
           </div>

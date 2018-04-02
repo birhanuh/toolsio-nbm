@@ -23,28 +23,30 @@ const middlewareLink = setContext(() => ({
 }))
 
 const afterwareLink = new ApolloLink((operation, forward) => {
-  const { headers } = operation.getContext()
 
-  if (headers) {
-    const authToken = headers.get('x-authToken')
-    const refreshAuthToken = headers.get('x-refresh-authToken')
+  return forward(operation).map(response => {
+    const { response: { headers } } = operation.getContext()
+    console.log('fds', headers )
+    if (headers) {
+      const authToken = headers.get('x-authToken')
+      const refreshAuthToken = headers.get('x-refresh-authToken')
+      console.log(authToken, authToken)
+      console.log('refreshAuthToken', refreshAuthToken)
+      if (authToken) {
+        localStorage.setItem('authToken', authToken)
+      }
 
-    if (authToken) {
-      localStorage.setItem('authToken', authToken)
+      if (refreshAuthToken) {
+        localStorage.setItem('refreshAuthToken', refreshAuthToken)
+      }
     }
 
-    if (refreshAuthToken) {
-      localStorage.setItem('refreshAuthToken', refreshAuthToken)
-    }
-  }
-
-  return forward(operation)
+    return response
+  })
 })
 
 // Use with apollo-client
 const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLink))
-
-
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({

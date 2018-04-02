@@ -60,7 +60,7 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
-    if (!!this.state.errors[e.target.name]) {
+    if (!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
@@ -264,7 +264,7 @@ class Form extends Component {
   }
 
   handleChangeDate(deadline) {
-    if (!!this.state.errors['deadline']) {
+    if (!this.state.errors['deadline']) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors['deadline']

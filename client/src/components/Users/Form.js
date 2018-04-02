@@ -23,7 +23,7 @@ class Form extends Component {
 
   handleChange = (e) => {
 
-    if (!!this.state.errors[e.target.name]) {
+    if (!this.state.errors[e.target.name]) {
 
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]

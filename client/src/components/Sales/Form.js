@@ -24,13 +24,13 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: !!this.props.data.getSale ? this.props.data.getSale.id : null,
-      name: !!this.props.data.getSale ? this.props.data.getSale.name : '',
-      deadline: !!this.props.data.getSale ? moment(this.props.data.getSale.deadline).format("MM-DD-YYYY") : moment(),
-      customerId: !!this.props.data.getSale ? this.props.data.getSale.customer.id : '',
-      status: !!this.props.data.getSale ? this.props.data.getSale.status : 'new',
-      description: !!this.props.data.getSale ? this.props.data.getSale.description : '',
-      total: !!this.props.data.getSale ? this.props.data.getSale.total : 0,
+      id: !this.props.data.getSale ? this.props.data.getSale.id : null,
+      name: !this.props.data.getSale ? this.props.data.getSale.name : '',
+      deadline: !this.props.data.getSale ? moment(this.props.data.getSale.deadline).format("MM-DD-YYYY") : moment(),
+      customerId: !this.props.data.getSale ? this.props.data.getSale.customer.id : '',
+      status: !this.props.data.getSale ? this.props.data.getSale.status : 'new',
+      description: !this.props.data.getSale ? this.props.data.getSale.description : '',
+      total: !this.props.data.getSale ? this.props.data.getSale.total : 0,
       errors: {},
       isLoading: false
     }
@@ -51,7 +51,7 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
-    if (!!this.state.errors[e.target.name]) {
+    if (!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
@@ -169,7 +169,7 @@ class Form extends Component {
   }
 
   handleChangeDate(deadline) {
-    if (!!this.state.errors['deadline']) {
+    if (!this.state.errors['deadline']) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors['deadline']

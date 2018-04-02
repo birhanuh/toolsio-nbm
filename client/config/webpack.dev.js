@@ -13,17 +13,6 @@ module.exports = merge(common, {
     allowedHosts: [
       '.lvh.me'
     ],
-    proxy: {
-     '/**': {
-        target: 'http://localhost:8080/',
-        changeOrigin: true,
-        bypass: function(req, res, proxyOptions) {
-          if (req.headers.accept.indexOf("html") !== -1) {
-            return "/index.html"
-          }
-        }
-     },
-    },
     overlay: {
      warnings: false,
      errors: true

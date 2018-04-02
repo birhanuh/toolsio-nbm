@@ -5,7 +5,6 @@ export default {
 
   Query: {
     getProject: (parent, {id}, { models }) => {
-      console.log('id ', id)
       return models.Project.findOne({ where: { id } }, 
         {
           include: [

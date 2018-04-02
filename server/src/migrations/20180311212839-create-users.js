@@ -8,14 +8,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      account: {
-        allowNull: false,
+      firstName: {
+        notEmpty: false,
         type: Sequelize.STRING
       },
-      first_name: {
-        type: Sequelize.STRING
-      },
-      last_name: {
+      lastName: {
+        notEmpty: false,
         type: Sequelize.STRING
       },
       email: {
@@ -27,15 +25,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      avatar_url: {
+      avatarUrl: {
         type: Sequelize.STRING
       },
-      is_confirmed: {
+      isConfirmed: {
         defaultValue: false,
+        allowNull : false,
         type: Sequelize.BOOLEAN
       },
-      is_admin: {
+      isAdmin: {
         defaultValue: false,
+        allowNull : false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {

@@ -46,7 +46,7 @@ class Item extends Component {
   }
 
   handleNewItemChange = (e) => {
-    if (!!this.state.newItem.errors[e.target.name]) {
+    if (!this.state.newItem.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.newItem.errors)
       delete errors[e.target.name]
 
@@ -148,7 +148,7 @@ class Item extends Component {
   }
 
   handleEditItemChange = (item, e) => {
-    if (!!this.state.editItem.errors.message.errors[e.target.name]) {
+    if (!this.state.editItem.errors.message.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.editItem.errors)
       delete errors.message.errors[e.target.name]
 

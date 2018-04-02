@@ -7,7 +7,7 @@ export default function Pagination({ path, pages, match, length }) {
   let currentPage = 0
   let start = (match && match.params && match.params.start) ? match.params.start : 0
   
-  if (!!pages) {
+  if (!pages) {
     if ((start/length) < (parseInt(pages)-5)) {
       currentPage = (match && match.params && match.params.start) ? Math.ceil(match.params.start/match.params.length) + 1 : 1
     } else {
@@ -39,7 +39,7 @@ export default function Pagination({ path, pages, match, length }) {
       <i className="angle right icon"></i>
     </div>)
   } else {
-    nextLink = (<Link to={!!match ? `/${path}/${50}/${length}` : (currentPage && currentPage+4 === (pages) ? `/${path}/${parseInt(match.params.start)}/${length}` : `/${path}/${parseInt(match.params.start)+10}/${length}`)} className={classnames("item", {disabled: currentPage && currentPage+4 === pages})}>
+    nextLink = (<Link to={!match ? `/${path}/${50}/${length}` : (currentPage && currentPage+4 === (pages) ? `/${path}/${parseInt(match.params.start)}/${length}` : `/${path}/${parseInt(match.params.start)+10}/${length}`)} className={classnames("item", {disabled: currentPage && currentPage+4 === pages})}>
         <i className="angle right icon"></i>
     </Link>)
   }

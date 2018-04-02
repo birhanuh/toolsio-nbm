@@ -54,10 +54,17 @@ class HeaderNav extends Component {
 
   render() {
     
-    const authToken = localStorage.getItem('authToken')      
-    const { user, account } = decode(authToken)
+    let isAuthenticated = false
+    let currentUser = null
 
-    const isAuthenticated = user ? true : false
+    const authToken = localStorage.getItem('authToken')   
+
+    if (authToken) {
+      const { user, account } = decode(authToken)
+
+      isAuthenticated = user ? true : false
+      currentUser = user ? user : null
+    }   
 
     const latestFiveUnreadMessages = <a className="item"><strong>{T.translate("internal_navigation.unread_messages", {unread_messages_number: 0})}</strong></a> 
     let countUnread = 2
@@ -106,7 +113,7 @@ class HeaderNav extends Component {
             </div>
             <div className="ui medium dropdown item">
               <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-              {user.firstName}<i className="dropdown icon"></i>
+              {currentUser && currentUser.firstName}<i className="dropdown icon"></i>
               <div className="menu">
                 <a className="item">
                   <i className="tasks icon"></i>
@@ -205,7 +212,6 @@ class HeaderNav extends Component {
         {/* Call links conditionally.  */}
         { isAuthenticated ? userLinks : guestLinks } 
 
-        { userLinks }
       </header>
     )
   }

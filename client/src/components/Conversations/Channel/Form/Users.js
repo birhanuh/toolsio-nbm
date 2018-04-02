@@ -1,20 +1,20 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import { Validation } from '../../../utils'
-import { InputField } from '../../../utils/FormFields'
+import { Validation } from '../../../../utils'
+import { SelectField } from '../../../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
 
-class Channel extends Component {
+class Users extends Component {
   
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
+      userId: '',
       errors: {},
       isLoading: false
     }
@@ -22,7 +22,7 @@ class Channel extends Component {
 
   handleChange = (e) => {
 
-    if (!!this.state.errors[e.target.name]) {
+    if (!this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
@@ -61,25 +61,25 @@ class Channel extends Component {
 
     // Validation
     if (this.isValid()) { 
-      const { name } = this.state
+      const { userId } = this.state
+      const { channelId } = this.props
 
       this.setState({ isLoading: true })
 
-      this.props.createChannelMutation({ 
-        variables: { name },
-        update: (proxy, { data: { createChannel } }) => {
-          const { success, channel } = createChannel
+      this.props.addMemberMutation({ 
+        variables: { userId, channelId },
+        update: (proxy, { data: { addMember } }) => {
+          const { success, member } = addMember
 
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getChannelsQuery })
+          const data = proxy.readQuery({ query: getChannelQuery })
           // Add our comment from the mutation to the end.
-          channel.getUsersCount = 1
-          data.getChannels.push(channel)
+          data.getChannel.users.push(member)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getChannelsQuery, data })
+          proxy.writeQuery({ query: getChannelQuery, data })
         }})
         .then(res => {
           // this.props.addFlashMessage({
@@ -89,10 +89,9 @@ class Channel extends Component {
           // this.context.router.history.push('/conversations')
           
 
-          const { success, channel, errors } = res.data.createChannel
+          const { success, member, errors } = res.data.addMember
 
           if (success) {
-            this.context.router.history.push('/conversations')
             this.setState({ isLoading: false })
           } else {
             let errorsList = {}
@@ -106,10 +105,16 @@ class Channel extends Component {
   }
 
   render() {
-    const { name, errors, isLoading } = this.state
+    const { userId, errors, isLoading } = this.state
+
+    const { getUsers } = this.props.data
+
+    const usersOptions = getUsers && getUsers.map(user => 
+      user.id !== 1 && <option key={user.id} value={user.id}>{user.firstName}</option>
+    )
 
     return (   
-      <form className={classnames("ui form p-3", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+      <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 
         <div className="field">  
            <h1 className="ui header">{T.translate("conversations.form.create_channel")}</h1>
@@ -117,35 +122,36 @@ class Channel extends Component {
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-        <InputField
-          label={T.translate("customers.show.name")}
-          name="name" 
-          value={name} 
-          onChange={this.handleChange.bind(this)} 
-          placeholder="Name"
-          error={errors.name}
-          formClass="field"
-        />
+        <SelectField
+            name="userId"
+            value={userId} 
+            onChange={this.handleChange.bind(this)} 
+            error={errors.userId}
+            formClass="field"
+
+            options={[<option key="default" value="" disabled>{T.translate("conversations.form.select_users")}</option>,
+              usersOptions]}
+          />
   
-        <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.create")}</button>
+        <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" 
+          aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.add")}</button>
         
       </form> 
     )
   }
 }
 
-Channel.contextTypes = {
-  router: PropTypes.object.isRequired
+Users.propTypes = {
+  channelId: PropTypes.string.isRequired
 }
 
-const createChannelMutation = gql`
-  mutation createChannel($name: String!) {
-    createChannel(name: $name) {
+const addMemberMutation = gql`
+  mutation addMember($userId: Int!, $channelId: Int!) {
+    addMember(userId: $userId, channelId: $channelId ) {
       success
-      channel {
-        id 
-        name
-      }
+      message {
+        id
+      } 
       errors {
         path
         message
@@ -154,24 +160,44 @@ const createChannelMutation = gql`
   }
 `
 
-const getChannelsQuery = gql`
-  {
-    getChannels {
+const getChannelQuery = gql`
+  query getChannel($id: Int!) {
+    getChannel(id: $id) {
       id
       name
-      getUsersCount 
+      users {
+        id
+        email
+      }
+    }
+  }
+`
+
+const getUsersQuery = gql`
+  {
+    getUsers {
+      id
+      firstName
+      lastName
+      email
     }
   }
 `
 
 const MutationsAndQuery =  compose(
-  graphql(createChannelMutation, {
-    name : 'createChannelMutation'
+  graphql(addMemberMutation, {
+    name : 'addMemberMutation'
   }),
-  graphql(getChannelsQuery, {
-    name: 'getChannelsQuery'
-  })
-)(Channel)
+  graphql(getChannelQuery, {
+    "name": "getChannelQuery",
+    options: (props) => ({
+      variables: {
+        id: parseInt(props.channelId)
+      }
+    })
+  }),
+  graphql(getUsersQuery)
+)(Users)
 
 export default MutationsAndQuery
 

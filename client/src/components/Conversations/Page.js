@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import Messages from './Messages'
-import Channel from './Channel'
-import ChannelForm from './Form/Channel'
+import ChannelMessages from './Channel/Messages'
+import ChannelsList from './Channel/List'
+import ChannelForm from './Channel/Form/Channel'
+import DirectMessages from './Direct/Messages'
+import UsersList from './Direct/List'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -20,7 +22,13 @@ class Page extends Component {
         <Breadcrumb />
 
         <div className="four wide column">
-          <Channel  channelId={match.params.channelId} />
+          <div className="ui vertical fluid menu">
+            <ChannelsList  channelId={match.params.channelId} />
+
+            <div className="ui divider"></div>
+
+            <UsersList receiverId={match.params.receiverId} />
+          </div>
         </div>
 
         <div className="twelve wide stretched column">
@@ -31,9 +39,13 @@ class Page extends Component {
               <Route exact path="/conversations" component={ChannelForm} /> 
 
               <Route exact path="/conversations/channel/:channelId?" children={() =>
-                <Messages channelId={match.params.channelId} />
-              }/>}
-    
+                <ChannelMessages channelId={match.params.channelId} />
+              }/>
+      
+              <Route exact path="/conversations/receiver/:receiverId?" children={() =>
+                <DirectMessages receiverlId={match.params.receiverlId} />
+              }/>
+
             </Switch>
 
           </div>

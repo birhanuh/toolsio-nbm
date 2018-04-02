@@ -9,7 +9,8 @@ export default function account(state = {}, action = {}) {
     
     case ACCOUNT_UPDATED:
       if (state._id === action.account._id) return action.account
-
+      break
+    
     default: return state
   }
 }

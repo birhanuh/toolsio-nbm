@@ -26,6 +26,19 @@ export const requiresAuth = createResolver((parent, args, context ) => {
   }
 })
 
+export const requiresChannelAccess = createResolver(async (parent, { channelId }, { user, models} ) => {
+  if (!context.user || !context.user.id) {
+    throw new Error('Not authenticated')
+  }
+  // Check if part of the memeber
+  const memeber = await models.Member.findOne({ where: { channelId, userId: user.id } })
+ 
+  if (!member) {
+    throw new Error("You have to be a member of the channel to subscribe for it's messages")
+  }
+  
+})
+
 // Checks if user in on Adimin role
 // export const requireAdmin = requiresAuth.createResolver((parent, args, context ) => {
 //   if (!context.user.isAdmin) {

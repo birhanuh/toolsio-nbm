@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { observer } from 'mobx-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -57,7 +56,7 @@ class Form extends Component {
           //   text: 'You have signed in successfully!'
           // })
           const { success, authToken, refreshAuthToken, errors } = res.data.loginUser
-          console.log('errors', errors)
+      
           if (success) {
             localStorage.setItem('authToken', authToken)
             localStorage.setItem('refreshAuthToken', refreshAuthToken)

@@ -1,3 +1,18 @@
 {
-  "extends": "react-app"
+  parser: "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "prop-types": [1],
+    "react/prop-types": [0],
+    "no-unused-vars": [1],
+    "no-undef": [1],
+    "no-console": [0],
+    "no-case-declarations": [1],
+    "no-constant-condition": [1],
+    "react/no-children-prop": [0],
+    "no-irregular-whitespace": [0]
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"]
 }

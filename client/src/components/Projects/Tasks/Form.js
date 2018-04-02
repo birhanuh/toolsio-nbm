@@ -47,7 +47,7 @@ class Task extends Component {
   }
 
   handleNewTaskChange = (e) => {
-    if (!!this.state.newTask.errors[e.target.name]) {
+    if (!this.state.newTask.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.newTask.errors)
       delete errors[e.target.name]
 
@@ -152,7 +152,7 @@ class Task extends Component {
   }
 
   handleEditTaskChange = (task, e) => {
-    if (!!this.state.editTask.errors.message.errors[e.target.name]) {
+    if (!this.state.editTask.errors.message.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.editTask.errors)
       delete errors.message.errors[e.target.name]
 

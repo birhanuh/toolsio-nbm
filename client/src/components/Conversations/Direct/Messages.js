@@ -3,25 +3,19 @@ import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import MessageForm from './Form/Message'
-import UsersForm from './Form/Users'
 
 // Localization 
 import T from 'i18n-react'
 
 import $ from 'jquery'
 
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
+import avatarPlaceholderSmall from '../../../images/avatar-placeholder-small.png'
 
-import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
-
-const NEW_CHANNEL_MESSAGE_SUBSCRIPTION = gql`
-  subscription($channelId: Int!) {
-    getNewChannelMessage(channelId: $channelId) {
+const NEW_DIRECT_MESSAGE_SUBSCRIPTION = gql`
+  subscription($receiverId: Int!) {
+    getNewDirectMessage(receiverId: $receiverId) {
       id
       message
-      userId
       isRead
       createdAt
       user {
@@ -36,15 +30,15 @@ const NEW_CHANNEL_MESSAGE_SUBSCRIPTION = gql`
 class Messages extends Component {
 
   componentDidMount() {
-    this.unsubscribe = this.subscribe(this.props.channelId)
+    this.unsubscribe = this.subscribe(this.props.receiverId)
   }
 
-  componentWillReceiveProps({ channelId }) {    
-    if (this.props.channelId !== channelId) {
+  componentWillReceiveProps({ receiverId }) {    
+    if (this.props.receiverId !== receiverId) {
       if (this.unsubscribe) {
         this.unsubscribe()
       }
-      this.unsubscribe = this.subscribe(channelId)
+      this.unsubscribe = this.subscribe(receiverId)
     }
   }﻿
 
@@ -54,18 +48,18 @@ class Messages extends Component {
     }
   }﻿
 
-  subscribe = (channelId) => {
-    this.props.getChannelMessagesQuery.subscribeToMore({
-      document: NEW_CHANNEL_MESSAGE_SUBSCRIPTION,
+  subscribe = (receiverId) => {
+    this.props.getDirectlMessagesQuery.subscribeToMore({
+      document: NEW_DIRECT_MESSAGE_SUBSCRIPTION,
       variables: {
-        channelId: parseInt(channelId)
+        receiverId: parseInt(receiverId)
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
         
         return {
           ...prev,
-          getChannelMessages: [...prev.getChannelMessages, subscriptionData.data.getNewChannelMessage],
+          getDirectlMessages: [...prev.getDirectlMessages, subscriptionData.data.getNewDirectMessage],
         }
       }
     })
@@ -87,7 +81,7 @@ class Messages extends Component {
 
   render() {
 
-    const { getChannelQuery: { getChannel }, getChannelMessagesQuery: { getChannelMessages } } = this.props
+    const { getUserQuery: { getUser }, getDirectlMessagesQuery: { getDirectlMessages } } = this.props
 
     const emptyMessage = (
       <div className="ui info message">
@@ -96,10 +90,10 @@ class Messages extends Component {
       </div>
     )
 
-    const messagesList = getChannelMessages && getChannelMessages.map(message => 
+    const messagesList = getDirectlMessages && getDirectlMessages.map(message => 
       <div key={message.id} className="comment">
         <a className="avatar">
-          {!!message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
+          {!message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
           alt="avatar-placeholder-small" />}
         </a>
         <div className="content">
@@ -119,7 +113,7 @@ class Messages extends Component {
 
         <div className="ui clearing vertical segment border-bottom-none">
           <div className="ui left floated header mt-2">
-            <h3 className="header capitalize-text">{getChannel && getChannel.name}</h3>
+            <h3 className="header capitalize-text">{getUser && getUser.firstName}</h3>
           </div>  
 
           <button id="add-member" className="ui right floated primary button" onClick={this.showConfirmationModal.bind(this)}>
@@ -132,46 +126,32 @@ class Messages extends Component {
 
         <div className="ui comments">
 
-          { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
+          { getDirectlMessages && getDirectlMessages.length === 0 ? emptyMessage : messagesList }
 
         </div>   
         
-        <MessageForm channelId={this.props.channelId} />
+        <MessageForm receiverId={this.props.receiverId} />
 
-        <div className="ui small modal add-member">
-          <div className="header">{T.translate("conversations.messages.add_member")}</div>
-          <div className="content">
-
-            <UsersForm channelId={this.props.channelId} />
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.show.cancel")}</button>
-          </div>
-        </div>
       </div>
     ) 
   }
 }
 
-const getChannelQuery = gql`
-  query getChannel($id: Int!) {
-    getChannel(id: $id) {
+const getUserQuery = gql`
+  query getUser($id: Int!) {
+    getUser(id: $id) {
       id
-      name
-      users {
-        id
-        email
-      }
+      firstName
+      email
     }
   }
 `
 
-const getChannelMessagesQuery = gql`
-  query getChannelMessages($channelId: Int!) {
-    getChannelMessages(channelId: $channelId) {
+const getDirectlMessagesQuery = gql`
+  query getDirectlMessages($receiverId: Int!) {
+    getDirectlMessages(receiverId: $receiverId) {
       id
       message
-      userId
       isRead
       createdAt
       user {
@@ -184,19 +164,19 @@ const getChannelMessagesQuery = gql`
 `
 
 const MutationsAndQuery =  compose(
-  graphql(getChannelQuery, {
-    "name": "getChannelQuery",
+  graphql(getUserQuery, {
+    "name": "getUserQuery",
     options: (props) => ({
       variables: {
-        id: parseInt(props.channelId)
+        id: parseInt(props.receiverId)
       }
     })
   }),
-  graphql(getChannelMessagesQuery, {
-    "name": "getChannelMessagesQuery",
+  graphql(getDirectlMessagesQuery, {
+    "name": "getDirectlMessagesQuery",
     options: (props) => ({
       variables: {
-        channelId: parseInt(props.channelId)
+        receiverId: parseInt(props.receiverId)
       },
       fetchPolicy: 'network-only'
     })
