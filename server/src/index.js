@@ -23,12 +23,6 @@ import { SubscriptionServer } from 'subscriptions-transport-ws'
 // Init app
 const app = express()
 
-// Routes
-//import accounts from './routes/accounts'
-//import users from './routes/users'
-//import api from './routes/api'
-//import routes from './routes/index'
-
 // Config
 require('dotenv').config()
 import jwtConfig from './config/jwt'
@@ -38,7 +32,7 @@ import db from './db'
 
 // Models
 import models from './models'
-import refreshAuthToken from './utils/authentication'
+import { refreshAuthTokens } from './utils/authentication'
 
 // Schema
 const types = fileLoader(path.join(__dirname + '/types'))
@@ -62,6 +56,42 @@ app.use(cors('*'))
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger('dev'))
 
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(cookieParser())
+
+// Add authToken exist checker middleware
+app.use(async (req, res, next) => {
+  
+  // Parse subdomain 
+  //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
+
+   // Parse authToken 
+  let authToken = req.headers['x-auth-token']
+ 
+  if (authToken) {
+    try {
+      const { user } = jwt.verify(authToken, config.secret)
+      
+      req.user = user
+    
+    } catch (err) {
+      let refreshAuthToken = req.headers['x-refresh-auth-token']
+      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
+      if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
+        res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
+        res.set('x-auth-token', newAuthTokens.authToken)
+        res.set('x-refresh-auth-token', newAuthTokens.refreshAuthToken)
+      }
+      req.user = newAuthTokens.user
+    }
+  }
+  next()
+})
+
+// GraphQL
+app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint, subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' }))
+
 const graphqlEndPoint = '/graphql'
 
 app.use(graphqlEndPoint, bodyParser.json(), 
@@ -75,40 +105,6 @@ app.use(graphqlEndPoint, bodyParser.json(),
     }
   }))
 )
-
-app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint, subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' }))
-
-app.use(bodyParser.urlencoded({ extended: true }))
-
-app.use(cookieParser())
-
-// Add authToken exist checker middleware
-app.use(async (req, res, next) => {
-  
-  // Parse subdomain 
-  //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
-
-   // Parse authToken 
-  let authToken = req.headers['x-authToken']
-
-  if (authToken) {
-    try {
-      const { user } = jwt.verify(authToken, config.secret)
-      req.user = user
-    
-    } catch (err) {
-      let refreshAuthToken = req.headers['x-refresh-authToken']
-      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, SECRET, SECRET2)
-      if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
-        res.set('Access-Control-Expose-Headers', 'x-authToken', 'x-refresh-authToken')
-        res.set('x-authToken', newAuthTokens.authToken)
-        res.set('x-refresh-authToken', newAuthTokens.refreshAuthToken)
-      }
-      req.user = newAuthTokens.user
-    }
-  }
-  next()
-})
 
 /**
 app.use(session({
@@ -135,11 +131,6 @@ if (env === 'development') {
 //   res.locals.isAuthenticated = req.isAuthenticated()
 //   next()  
 // })
-
-// app.use('/accounts', accounts)
-// app.use('/users', users)
-//app.use('/api', api)
-//app.use('/', routes)
 
 // Middleware function
 app.use((req, res) => {

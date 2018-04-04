@@ -24,7 +24,7 @@ class Message extends Component {
 
   handleChange = (e) => {
 
-    if (!this.state.errors[e.target.name]) {
+    if (this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]

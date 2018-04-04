@@ -99,7 +99,7 @@ class Messages extends Component {
     const messagesList = getChannelMessages && getChannelMessages.map(message => 
       <div key={message.id} className="comment">
         <a className="avatar">
-          {!message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
+          {message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
           alt="avatar-placeholder-small" />}
         </a>
         <div className="content">

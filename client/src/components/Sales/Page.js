@@ -18,28 +18,28 @@ class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      start: 0,
-      length: 10
+      offset: 0,
+      limit: 10
     }
   }
 
   componentDidMount() {
 
-    const { start, length} = this.state
+    const { offset, limit} = this.state
     
     const { match } = this.props
 
-    // if (!!match.params.start) {   
-    //   this.props.fetchSales(match.params.start, match.params.length)
+    // if (!!match.params.offset) {   
+    //   this.props.fetchSales(match.params.offset, match.params.limit)
     // } else {
-    //   this.props.fetchSales(start, length)
+    //   this.props.fetchSales(offset, limit)
     // }
 
   }
 
   render() {
 
-    const { length } = this.state
+    const { limit } = this.state
 
     const { match } = this.props
     const { getSales } = this.props.data
@@ -67,7 +67,7 @@ class Page extends Component {
 
         <div className="ui clearing vertical segment border-bottom-none">
          
-          {/*<Pagination path="sales" pages={getSales.pages} match={match} length={length} /> */}          
+          {/*<Pagination path="sales" total={getSales.total} offset={offset} limit={limit} /> */}          
            
         </div>   
       </div>  

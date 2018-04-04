@@ -43,7 +43,7 @@ class Page extends Component {
               }/>
       
               <Route exact path="/conversations/receiver/:receiverId?" children={() =>
-                <DirectMessages receiverlId={match.params.receiverlId} />
+                <DirectMessages receiverId={match.params.receiverId} />
               }/>
 
             </Switch>

@@ -28,7 +28,7 @@ export default {
 
     getSentMessages: (parent, args, { models }) => {
       return models.Message.findAll({ 
-        where: { userId: 1 },
+        where: { userId: user.id },
         order: [['created_at', 'ASC']] }, { raw: true })
     },
 
@@ -37,7 +37,7 @@ export default {
         include: [
           {
             model: models.User,
-            where: { id: 1 }
+            where: { id: user.id }
           }
         ],
         order: [['created_at', 'ASC']] }, { raw: true })
@@ -50,7 +50,7 @@ export default {
           include: [
             {
               model: models.User,
-              where: { id: 1 }
+              where: { id: user.id }
             }
           ]}, { raw: true })
 
@@ -105,7 +105,7 @@ export default {
     user: ({ user, userId }, args, { models }) => {
 
       if (user) {
-        return user;
+        return user
       }
       return models.User.findOne({ where: {id: userId} }, { raw: true })            
     } 

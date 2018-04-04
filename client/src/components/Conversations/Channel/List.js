@@ -43,7 +43,7 @@ class List extends Component {
        <div>
         <div className="ui center aligned vertical segment">
           <Link className="ui primary small button" to="/conversations">
-            <i className="plus outline icon"></i>
+            <i className="add circle icon"></i>
             {T.translate("conversations.page.add_channel")}
           </Link>
         </div>

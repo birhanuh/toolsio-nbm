@@ -17,8 +17,8 @@ const httpLink = createHttpLink({
 const middlewareLink = setContext(() => ({
   headers: {
     'subdomain': Authorization.getSubdomain(), // Parse subdomain 
-    'x-authToken': localStorage.getItem('authToken'),
-    'x-refresh-authToken': localStorage.getItem('refresh-authToken')
+    'x-auth-token': localStorage.getItem('authToken'),
+    'x-refresh-auth-token': localStorage.getItem('refreshAuthToken')
   }
 }))
 
@@ -26,11 +26,11 @@ const afterwareLink = new ApolloLink((operation, forward) => {
 
   return forward(operation).map(response => {
     const { response: { headers } } = operation.getContext()
-    console.log('fds', headers )
+    
     if (headers) {
-      const authToken = headers.get('x-authToken')
-      const refreshAuthToken = headers.get('x-refresh-authToken')
-      console.log(authToken, authToken)
+      const authToken = headers.get('x-auth-token')
+      const refreshAuthToken = headers.get('x-refresh-auth-token')
+      console.log('authToken', authToken)
       console.log('refreshAuthToken', refreshAuthToken)
       if (authToken) {
         localStorage.setItem('authToken', authToken)

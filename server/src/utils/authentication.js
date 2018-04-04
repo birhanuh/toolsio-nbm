@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 })
 
 export const createAuthTokens = async (user, secret, secret2) => {
-  const createToken = jwt.sign(
+  const createAuthToken = jwt.sign(
     {
       user: _.pick(user, ['id', 'firstName', 'email', 'isAdmin']),
     },
@@ -28,7 +28,7 @@ export const createAuthTokens = async (user, secret, secret2) => {
     },
   );
 
-  const createRefreshToken = jwt.sign(
+  const createRefreshAuthToken = jwt.sign(
     {
       user: _.pick(user, ['id']),
     },
@@ -38,7 +38,7 @@ export const createAuthTokens = async (user, secret, secret2) => {
     },
   );
 
-  return [createToken, createRefreshToken];
+  return [createAuthToken, createRefreshAuthToken];
 };
 
 export const refreshAuthTokens = async (authToken, refreshAuthToken, models, SECRET, SECRET2) => {
@@ -68,10 +68,10 @@ export const refreshAuthTokens = async (authToken, refreshAuthToken, models, SEC
     return
   }
 
-  const [newToken, newRefreshToken] = await createToken(user, SECRET, user.password + SECRET2)
+  const [newAuthToken, newRefreshAuthToken] = await createAuthTokens(user, SECRET, user.password + SECRET2)
   return {    
-    authToken, newToken,
-    refreshAuthToken: newRefreshToken,
+    authToken, newAuthToken,
+    refreshAuthToken: newRefreshAuthToken,
     user
   } 
 }

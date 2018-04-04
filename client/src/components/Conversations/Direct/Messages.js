@@ -49,7 +49,7 @@ class Messages extends Component {
   }﻿
 
   subscribe = (receiverId) => {
-    this.props.getDirectlMessagesQuery.subscribeToMore({
+    this.props.getDirectMessagesQuery.subscribeToMore({
       document: NEW_DIRECT_MESSAGE_SUBSCRIPTION,
       variables: {
         receiverId: parseInt(receiverId)
@@ -59,7 +59,7 @@ class Messages extends Component {
         
         return {
           ...prev,
-          getDirectlMessages: [...prev.getDirectlMessages, subscriptionData.data.getNewDirectMessage],
+          getDirectMessages: [...prev.getDirectMessages, subscriptionData.data.getNewDirectMessage],
         }
       }
     })
@@ -81,7 +81,7 @@ class Messages extends Component {
 
   render() {
 
-    const { getUserQuery: { getUser }, getDirectlMessagesQuery: { getDirectlMessages } } = this.props
+    const { getUserQuery: { getUser }, getDirectMessagesQuery: { getDirectMessages } } = this.props
 
     const emptyMessage = (
       <div className="ui info message">
@@ -90,10 +90,10 @@ class Messages extends Component {
       </div>
     )
 
-    const messagesList = getDirectlMessages && getDirectlMessages.map(message => 
+    const messagesList = getDirectMessages && getDirectMessages.map(message => 
       <div key={message.id} className="comment">
         <a className="avatar">
-          {!message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
+          {message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
           alt="avatar-placeholder-small" />}
         </a>
         <div className="content">
@@ -126,7 +126,7 @@ class Messages extends Component {
 
         <div className="ui comments">
 
-          { getDirectlMessages && getDirectlMessages.length === 0 ? emptyMessage : messagesList }
+          { getDirectMessages && getDirectMessages.length === 0 ? emptyMessage : messagesList }
 
         </div>   
         
@@ -147,9 +147,9 @@ const getUserQuery = gql`
   }
 `
 
-const getDirectlMessagesQuery = gql`
-  query getDirectlMessages($receiverId: Int!) {
-    getDirectlMessages(receiverId: $receiverId) {
+const getDirectMessagesQuery = gql`
+  query getDirectMessages($receiverId: Int!) {
+    getDirectMessages(receiverId: $receiverId) {
       id
       message
       isRead
@@ -172,8 +172,8 @@ const MutationsAndQuery =  compose(
       }
     })
   }),
-  graphql(getDirectlMessagesQuery, {
-    "name": "getDirectlMessagesQuery",
+  graphql(getDirectMessagesQuery, {
+    "name": "getDirectMessagesQuery",
     options: (props) => ({
       variables: {
         receiverId: parseInt(props.receiverId)

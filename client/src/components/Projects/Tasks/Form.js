@@ -152,9 +152,9 @@ class Task extends Component {
   }
 
   handleEditTaskChange = (task, e) => {
-    if (!this.state.editTask.errors.message.errors[e.target.name]) {
+    if (this.state.editTask.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.editTask.errors)
-      delete errors.message.errors[e.target.name]
+      delete errors[e.target.name]
 
       let updatedTask = Object.assign({}, this.state.editTask)
       updatedTask.id = task.id
