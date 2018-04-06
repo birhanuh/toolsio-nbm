@@ -88,7 +88,7 @@ class Form extends Component {
 
   handleChange = (e) => {
   
-    if (!!this.state.errors[e.target.name]) {
+    if (this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
@@ -193,7 +193,8 @@ class Form extends Component {
           .catch(err => this.setState({ errors: err, isLoading: false }))
       }   
 
-      this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, street, postalCode: parseInt(postalCode), region, country } })
+      this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, 
+        street, postalCode: parseInt(postalCode), region, country } })
         .then(res => {
           
           // this.props.addFlashMessage({

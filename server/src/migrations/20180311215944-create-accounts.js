@@ -11,12 +11,13 @@ module.exports = {
       subdomain: {
         allowNull: false,
         unique: true,
-        type: Sequelize.UUID
-      },
-      industry: {
         type: Sequelize.STRING
       },
-      phone_number: {
+      industry: {
+        allowNull : false,
+        type: Sequelize.STRING
+      },
+      phoneNumber: {
         type: Sequelize.STRING
       },
       email: {
@@ -25,8 +26,8 @@ module.exports = {
       street: {
         type: Sequelize.STRING
       },
-      postal_code: {
-        type: Sequelize.STRING
+      postalCode: {
+        type: Sequelize.DECIMAL
       },
       region: {
         type: Sequelize.STRING
@@ -34,7 +35,7 @@ module.exports = {
       country: {
         type: Sequelize.STRING
       },
-      logo_url: {
+      logoUrl: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -44,7 +45,14 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      owner: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id'
+        },
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

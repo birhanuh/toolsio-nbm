@@ -17,8 +17,8 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-export const createTokens = async (user, secret, secret2) => {
-  const createToken = jwt.sign(
+export const createAuthTokens = async (user, secret, secret2) => {
+  const createAuthToken = jwt.sign(
     {
       user: _.pick(user, ['id', 'firstName', 'email', 'isAdmin']),
     },
@@ -28,7 +28,7 @@ export const createTokens = async (user, secret, secret2) => {
     },
   );
 
-  const createRefreshToken = jwt.sign(
+  const createRefreshAuthToken = jwt.sign(
     {
       user: _.pick(user, ['id']),
     },
@@ -38,14 +38,14 @@ export const createTokens = async (user, secret, secret2) => {
     },
   );
 
-  return [createToken, createRefreshToken];
+  return [createAuthToken, createRefreshAuthToken];
 };
 
-export const refreshTokens = async (token, refreshToken, models, SECRET, SECRET2) => {
+export const refreshAuthTokens = async (authToken, refreshAuthToken, models, SECRET, SECRET2) => {
   let userId = 0
 
   try {
-    const { user: { id } } = jwt.decode(refreshToken)
+    const { user: { id } } = jwt.decode(refreshAuthToken)
     userId = id
   } catch(err) {
     return
@@ -63,15 +63,16 @@ export const refreshTokens = async (token, refreshToken, models, SECRET, SECRET2
   }
 
   try {
-    jwt.verify(refreshToken, user.password + SECRET2)
+    jwt.verify(refreshAuthToken, user.password + SECRET2)
   } catch (err) {
     return
   }
 
-  const [newToken, newRefreshToken] = await createToken(user, SECRET, user.password + SECRET2)
+  const [newAuthToken, newRefreshAuthToken] = await createAuthTokens(user, SECRET, user.password + SECRET2)
   return {    
-    token, newToken,
-    refreshToken: newRefreshToken,
+    authToken, 
+    newAuthToken,
+    refreshAuthToken: newRefreshAuthToken,
     user
   } 
 }
@@ -103,14 +104,14 @@ export const loginUserWithToken = async (email, password, models, SECRET, SECRET
     } 
   }
 
-  const refreshTokenSecret = user.password + SECRET2
+  const refreshAuthTokenSecret = user.password + SECRET2
 
-  const [token, refreshToken] = await createTokens(user, SECRET, refreshTokenSecret)
+  const [authToken, refreshAuthToken] = await createAuthTokens(user, SECRET, refreshAuthTokenSecret)
   // user found
   return {
     success: true,    
-    token,
-    refreshToken
+    authToken,
+    refreshAuthToken
   } 
 }
 

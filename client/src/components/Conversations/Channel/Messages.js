@@ -14,9 +14,62 @@ import $ from 'jquery'
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
 
-import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
+import avatarPlaceholderSmall from '../../../images/avatar-placeholder-small.png'
+
+const NEW_CHANNEL_MESSAGE_SUBSCRIPTION = gql`
+  subscription($channelId: Int!) {
+    getNewChannelMessage(channelId: $channelId) {
+      id
+      message
+      userId
+      isRead
+      createdAt
+      user {
+        id
+        email
+        avatarUrl
+      }
+    }
+  }
+`
 
 class Messages extends Component {
+
+  componentDidMount() {
+    this.unsubscribe = this.subscribe(this.props.channelId)
+  }
+
+  componentWillReceiveProps({ channelId }) {    
+    if (this.props.channelId !== channelId) {
+      if (this.unsubscribe) {
+        this.unsubscribe()
+      }
+      this.unsubscribe = this.subscribe(channelId)
+    }
+  }﻿
+
+  componentWillUnmount() {   
+    if (this.unsubscribe) {
+      this.unsubscribe()
+    }
+  }﻿
+
+  subscribe = (channelId) => 
+    this.props.getChannelMessagesQuery.subscribeToMore({
+      document: NEW_CHANNEL_MESSAGE_SUBSCRIPTION,
+      variables: {
+        channelId: parseInt(channelId)
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev
+        
+        return {
+          ...prev,
+          getChannelMessages: [...prev.getChannelMessages, subscriptionData.data.getNewChannelMessage],
+        }
+      }
+    })
+  
 
   showConfirmationModal(event) {
     event.preventDefault()
@@ -34,21 +87,19 @@ class Messages extends Component {
 
   render() {
 
-    const { getChannel } = this.props.getChannelQuery
-    
-    const { getChannelMessages } = this.props.getChannelMessagesQuery
+    const { getChannelQuery: { getChannel }, getChannelMessagesQuery: { getChannelMessages } } = this.props
 
     const emptyMessage = (
-      <div className="ui info message mt-5">
+      <div className="ui info message">
         <h3>{T.translate(`conversations.messages.empty_message_header`)}</h3>
-        <p>{T.translate(`conversations.messages.empty_message_message`)}</p>
+        <p>{T.translate(`conversations.messages.empty_channel_message_message`)}</p>
       </div>
     )
 
     const messagesList = getChannelMessages && getChannelMessages.map(message => 
       <div key={message.id} className="comment">
         <a className="avatar">
-          {!!message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
+          {message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
           alt="avatar-placeholder-small" />}
         </a>
         <div className="content">
@@ -67,8 +118,8 @@ class Messages extends Component {
       <div className="messages">
 
         <div className="ui clearing vertical segment border-bottom-none">
-          <div className="ui left floated header">
-            <h3 className="header">{getChannel && getChannel.name}</h3>
+          <div className="ui left floated header mt-2">
+            <h3 className="header capitalize-text">{getChannel && getChannel.name}</h3>
           </div>  
 
           <button id="add-member" className="ui right floated primary button" onClick={this.showConfirmationModal.bind(this)}>
@@ -94,7 +145,7 @@ class Messages extends Component {
             <UsersForm channelId={this.props.channelId} />
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.show.cancel")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.Form.cancel")}</button>
           </div>
         </div>
       </div>
@@ -146,7 +197,8 @@ const MutationsAndQuery =  compose(
     options: (props) => ({
       variables: {
         channelId: parseInt(props.channelId)
-      }
+      },
+      fetchPolicy: 'network-only'
     })
   })
 )(Messages)

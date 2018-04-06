@@ -9,21 +9,19 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import cors from 'cors'
-// Authentication package 
+
+// Authentication packages 
 import session from 'express-session'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
 
-import socketEvents from './socket/socketEvents'
+// Subscription packages 
+import { createServer } from 'http'
+import { execute, subscribe } from 'graphql'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 // Init app
 const app = express()
-
-// Routes
-//import accounts from './routes/accounts'
-//import users from './routes/users'
-//import api from './routes/api'
-//import routes from './routes/index'
 
 // Config
 require('dotenv').config()
@@ -34,7 +32,7 @@ import db from './db'
 
 // Models
 import models from './models'
-import refreshToken from './utils/authentication'
+import { refreshAuthTokens } from './utils/authentication'
 
 // Schema
 const types = fileLoader(path.join(__dirname + '/types'))
@@ -58,6 +56,40 @@ app.use(cors('*'))
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger('dev'))
 
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(cookieParser())
+
+// Add authToken exist checker middleware
+app.use(async (req, res, next) => {
+  
+  // Parse subdomain 
+  //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
+
+   // Parse authToken 
+  let authToken = req.headers['x-auth-token']
+
+  if (authToken) {
+    try {
+      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
+      
+      req.user = user
+    
+    } catch (err) {
+      let refreshAuthToken = req.headers['x-refresh-auth-token']
+      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
+      if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
+        res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
+        res.set('x-auth-token', newAuthTokens.authToken)
+        res.set('x-refresh-auth-token', newAuthTokens.refreshAuthToken)
+      }
+      req.user = newAuthTokens.user
+    }
+  }
+  next()
+})
+
+// GraphQL
 const graphqlEndPoint = '/graphql'
 
 app.use(graphqlEndPoint, bodyParser.json(), 
@@ -72,39 +104,7 @@ app.use(graphqlEndPoint, bodyParser.json(),
   }))
 )
 
-app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint }))
-
-app.use(bodyParser.urlencoded({ extended: true }))
-
-app.use(cookieParser())
-
-// Add token exist checker middleware
-app.use(async (req, res, next) => {
-  
-  // Parse subdomain 
-  //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
-
-   // Parse token 
-  let token = req.headers['x-token']
-
-  if (token) {
-    try {
-      const { user } = jwt.verify(token, config.secret)
-      req.user = user
-    
-    } catch (err) {
-      let refreshToken = req.headers['x-refresh-token']
-      const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2)
-      if (newTokens.token && newTokens.refreshToken) {
-        res.set('Access-Control-Expose-Headers', 'x-token', 'x-refresh-token')
-        res.set('x-token', newTokens.token)
-        res.set('x-refresh-token', newTokens.refreshToken)
-      }
-      req.user = newTokens.user
-    }
-  }
-  next()
-})
+app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint, subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' }))
 
 /**
 app.use(session({
@@ -132,11 +132,6 @@ if (env === 'development') {
 //   next()  
 // })
 
-// app.use('/accounts', accounts)
-// app.use('/users', users)
-//app.use('/api', api)
-//app.use('/', routes)
-
 // Middleware function
 app.use((req, res) => {
   res.status(404).json({
@@ -150,16 +145,41 @@ app.use((req, res) => {
 // Set port
 app.set('port', process.env.SERVER_PORT)
 
+const server = createServer(app)
 
 // sync() will create all table if then doesn't exist in database
 models.sequelize.sync().then(() => {
-  app.listen(app.get('port'), () => 
+  // app.listen(app.get('port'), () => 
+  //   console.log('Server started on port: ' + process.env.SERVER_PORT)
+  // )
+  server.listen(app.get('port'), () => {
+    new SubscriptionServer({
+      execute,
+      subscribe,
+      schema: schema,
+      onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
+        
+        if (authToken && refreshAuthToken) {
+        
+          try {
+            const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
+            return { models, user }           
+          } catch (err) {
+            const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
+            return { models, user: newAuthTokens.user }
+          }
+      }
+
+      return { models }
+    }}, {
+      server: server,
+      path: '/subscriptions',
+    })
     console.log('Server started on port: ' + process.env.SERVER_PORT)
-  )
+  })
 })
 
-//const io = require('socket.io').listen(8080)
-//socketEvents(io)
+
 
 // // Connect to mognodb
 // if (env === 'development') {
@@ -255,7 +275,7 @@ mutation {
 }
 
 mutation {
-  createChannel(name: "channel1", owner: 1) {
+  createChannel(name: "channel1") {
     success
     channel {
       id

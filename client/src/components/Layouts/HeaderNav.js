@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Route } from 'react-router-dom'
-import { connect } from 'react-redux'
+import decode from 'jwt-decode'
 import { logout } from '../../actions/authenticationActions'
 import { fetchConversations } from '../../actions/conversationActions'
 
@@ -44,29 +44,31 @@ class HeaderNav extends Component {
 
   logout(e) {
     e.preventDefault()
-    this.props.logout()
+    
+    // Mutation
+    //.
+    //.
+    localStorage.removeItem('authToken')
+    localStorage.removeItem('refreshAuthToken')
   }
 
   render() {
-    const isAuthenticated = false 
-    const currentAccount = {}
-    /*
-    const { isAuthenticated, currentAccount } = this.props.authentication
-    const { countUnread, conversations } = this.props.conversations
     
-    let latestFiveUnreadMessages 
+    let isAuthenticated = false
+    let currentUser = null
 
-    if (conversations && conversations.length !== 0) {
-      latestFiveUnreadMessages = conversations.map((conversation, index) => {
+    const authToken = localStorage.getItem('authToken')   
 
-        if (!conversation.isRead && index === 4) {
-          latestFiveUnreadMessages = <a className="item"><strong>{conversation.title}</strong></a>
-        }
-      }) 
-    } else {
-      latestFiveUnreadMessages = <a className="item"><strong>{T.translate("internal_navigation.unread_messages", {unread_messages_number: 0})}</strong></a> 
-    } 
-    */
+    if (authToken) {
+      const { user, account } = decode(authToken)
+
+      isAuthenticated = user ? true : false
+      currentUser = user ? user : null
+    }   
+
+    const latestFiveUnreadMessages = <a className="item"><strong>{T.translate("internal_navigation.unread_messages", {unread_messages_number: 0})}</strong></a> 
+    let countUnread = 2
+
     const userLinks = (
       <div>
         <nav className="ui fixed stackable menu">
@@ -99,18 +101,19 @@ class HeaderNav extends Component {
                 </a>
               </div>
             </div>
-            {/*
+           
             <div className="ui dropdown item">
               <i className="mail envelop icon"></i>
-              {countUnread !== 0 && <div className="ui mini blue label envelop">{countUnread}</div>}
+              <div className="ui mini blue label envelop">{countUnread}</div>
               <div className="menu">
+
                 {latestFiveUnreadMessages}               
                 <Link to="/conversations" className="item"><strong className="blue">{T.translate("internal_navigation.see_all_messages")}</strong></Link>
               </div>
             </div>
             <div className="ui medium dropdown item">
               <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-              {currentAccount.firstName}<i className="dropdown icon"></i>
+              {currentUser && currentUser.firstName}<i className="dropdown icon"></i>
               <div className="menu">
                 <a className="item">
                   <i className="tasks icon"></i>
@@ -128,7 +131,7 @@ class HeaderNav extends Component {
                 </a>   
               </div>
             </div>
-          */}
+        
           </div>
         </nav>
       </div>
@@ -207,9 +210,8 @@ class HeaderNav extends Component {
       <header>    
        
         {/* Call links conditionally.  */}
-        {/*  { isAuthenticated ? userLinks : guestLinks } */}
+        { isAuthenticated ? userLinks : guestLinks } 
 
-        { userLinks }
       </header>
     )
   }

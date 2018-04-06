@@ -34,4 +34,7 @@ export default `
     createMessage(message: String!, channelId: Int! ): CreateMessageResponse!
   }
 
+  type Subscription {
+    getNewChannelMessage(channelId: Int!): Message!
+  }
 `

@@ -25,14 +25,14 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: !!this.props.data.getProject ? this.props.data.getProject.id : null,
-      name: !!this.props.data.getProject ? this.props.data.getProject.name : '',
-      deadline: !!this.props.data.getProject ? moment(this.props.data.getProject.deadline).format("MM-DD-YYYY") : moment(),
-      customerId: !!this.props.data.getProject ? this.props.data.getProject.customerId : '',
-      status: !!this.props.data.getProject ? this.props.data.getProject.status : 'new',
-      progress: !!this.props.data.getProject ? this.props.data.getProject.progress : 0,
-      description: !!this.props.data.getProject ? this.props.data.getProject.description : '',
-      total: !!this.props.data.getProject ? this.props.data.getProject.total : 0,
+      id: !this.props.data.getProject ? this.props.data.getProject.id : null,
+      name: !this.props.data.getProject ? this.props.data.getProject.name : '',
+      deadline: !this.props.data.getProject ? moment(this.props.data.getProject.deadline).format("MM-DD-YYYY") : moment(),
+      customerId: !this.props.data.getProject ? this.props.data.getProject.customerId : '',
+      status: !this.props.data.getProject ? this.props.data.getProject.status : 'new',
+      progress: !this.props.data.getProject ? this.props.data.getProject.progress : 0,
+      description: !this.props.data.getProject ? this.props.data.getProject.description : '',
+      total: !this.props.data.getProject ? this.props.data.getProject.total : 0,
       errors: {},
       isLoading: false
     }
@@ -56,7 +56,7 @@ class Form extends Component {
   handleChange = (e) => {
     //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
 
-    if (!!this.state.errors[e.target.name]) {
+    if (this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
@@ -171,7 +171,7 @@ class Form extends Component {
   }
 
   handleChangeDate(deadline) {
-    if (!!this.state.errors['deadline']) {
+    if (this.state.errors['deadline']) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors['deadline']

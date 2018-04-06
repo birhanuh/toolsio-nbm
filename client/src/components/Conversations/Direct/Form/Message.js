@@ -1,8 +1,8 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
-import { Validation } from '../../../utils'
-import { TextAreaField } from '../../../utils/FormFields'
-import { graphql } from 'react-apollo'
+import { Validation } from '../../../../utils'
+import { TextAreaField } from '../../../../utils/FormFields'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // Localization 
@@ -15,7 +15,7 @@ class Message extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      channelId: this.props.channelId ? this.props.channelId: null,
+      receiverId: this.props.receiverId ? this.props.receiverId: null,
       message: '',
       errors: {},
       isLoading: false
@@ -24,7 +24,7 @@ class Message extends Component {
 
   handleChange = (e) => {
 
-    if (!!this.state.errors[e.target.name]) {
+    if (this.state.errors[e.target.name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[e.target.name]
@@ -67,13 +67,39 @@ class Message extends Component {
       if (!message.trim()) { 
         return
       } else {
-        const { channelId, message } = this.state
+        const { receiverId, message } = this.state
 
         this.setState({ isLoading: true })
 
         this.props.mutate({ 
-          variables: { message, channelId: parseInt(channelId) }
-          })
+          variables: { message, receiverId: parseInt(receiverId) },
+          optimisticResponse: {
+            createDirectMessage: {
+              __typename: "Mutation",
+              id: -1,
+              success: true,
+              errors: null,
+              message: {
+                __typename: "Message",
+                id: -1,
+              }
+            }            
+          },
+          update: (store) => {
+            const data = store.readQuery({ query: getDirectMessageUsersQuery })
+            const notUserInList = data.getDirectMessageUsers.every(user => user.id !== parseInt(receiverId, 10))
+            
+            if (notUserInList) {
+              data.getDirectMessageUsers.push({
+                __typename: 'DirectMessageUser',
+                id: parseInt(receiverId, 10),
+                first_name: this.props.data.getUser.firstName,
+                email: this.props.data.getUser.email
+              })
+            }
+            // Write our data back to the cache.
+            store.writeQuery({ query: getDirectMessageUsersQuery, data })
+          }})
           .then(res => {
             // this.props.addFlashMessage({
             //   type: 'success',
@@ -82,7 +108,7 @@ class Message extends Component {
             // this.context.router.history.push('/conversations')
             
 
-            const { success, message, errors } = res.data.createMessage
+            const { success, message, errors } = res.data.createDirectMessage
 
             if (success) {
               console.log('Message sent', message)
@@ -130,9 +156,9 @@ class Message extends Component {
   }
 }
 
-const createMessageMutation = gql`
-  mutation ($message: String!, $channelId: Int!) {
-    createMessage(message: $message, channelId: $channelId ) {
+const createDirectMessageMutation = gql`
+  mutation ($message: String!, $receiverId: Int!) {
+    createDirectMessage(message: $message, receiverId: $receiverId ) {
       success
       message {
         id
@@ -145,5 +171,37 @@ const createMessageMutation = gql`
   }
 `
 
-export default graphql(createMessageMutation)(Message)
+const getDirectMessageUsersQuery = gql`
+  {
+    getDirectMessageUsers {
+      id
+      first_name
+      email
+    }
+  }
+`
+
+const getUserQuery = gql`
+  query getUser($id: Int!) { 
+    getUser(id: $id) {
+      id
+      firstName
+      email
+    }
+}
+`
+
+const MutationsAndQuery =  compose(
+  graphql(createDirectMessageMutation),
+  graphql(getDirectMessageUsersQuery),  
+  graphql(getUserQuery, {
+    options: (props) => ({
+      variables: {
+        id: parseInt(props.receiverId, 10)
+      }
+    })
+  })
+)(Message)
+
+export default MutationsAndQuery
 

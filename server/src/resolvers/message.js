@@ -1,20 +1,34 @@
-import { requiresAuth } from '../middlewares/authentication'
+import { PubSub, withFilter } from 'graphql-subscriptions'
+
+import { requiresAuth, requiresChannelAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 
+const pubsub = new PubSub()
+
+const NEW_CHANNEL_MESSAGE = 'NEW_CHANNEL_MESSAGE'
+
 export default {
-  
+  Subscription: {
+    getNewChannelMessage: {
+      subscribe: requiresChannelAccess.createResolver(withFilter(
+        () => pubsub.asyncIterator(NEW_CHANNEL_MESSAGE), 
+        (payload, args) => payload.getNewChannelMessage.channelId === args.channelId
+      ))
+    }
+  },
+
   Query: {
     getMessage: (parent, { id }, { models }) => models.Message.findOne({ where: { id } }, { raw: true }),
 
     getChannelMessages: (parent, args, { models }) => {
       return models.Message.findAll({ 
         where: { channelId: args.channelId },
-        order: [['created_at', 'DESC']] }, { raw: true })
+        order: [['created_at', 'ASC']] }, { raw: true })
     },
 
     getSentMessages: (parent, args, { models }) => {
       return models.Message.findAll({ 
-        where: { userId: 1 },
+        where: { userId: user.id },
         order: [['created_at', 'ASC']] }, { raw: true })
     },
 
@@ -23,7 +37,7 @@ export default {
         include: [
           {
             model: models.User,
-            where: { id: 1 }
+            where: { id: user.id }
           }
         ],
         order: [['created_at', 'ASC']] }, { raw: true })
@@ -36,7 +50,7 @@ export default {
           include: [
             {
               model: models.User,
-              where: { id: 1 }
+              where: { id: user.id }
             }
           ]}, { raw: true })
 
@@ -59,7 +73,19 @@ export default {
     createMessage: async (parent, args, { models, user }) => {
       try {
         
-        const message = await models.Message.create({ ...args, userId: 1 })
+        const message = await models.Message.create({ ...args, userId: user.id })
+
+        // Do both asynchronously
+        const asyncFunc = async () => {
+          const author = await models.User.findOne({ where: {id: user.id} }, { raw: true })
+
+          pubsub.publish(NEW_CHANNEL_MESSAGE, { 
+            channelId: args.channelId, 
+            getNewChannelMessage: {...message.dataValues, user: author.dataValues} 
+          })
+        }
+        
+        asyncFunc()
 
         return {
           success: true,
@@ -76,9 +102,12 @@ export default {
   },
 
   Message: {
-    user: ({ userId }, args, { models }) => {
+    user: ({ user, userId }, args, { models }) => {
 
-      return models.User.findOne({ where: {id: userId} }, { raw: true })
+      if (user) {
+        return user
+      }
+      return models.User.findOne({ where: {id: userId} }, { raw: true })            
     } 
   }        
 }

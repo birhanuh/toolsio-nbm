@@ -24,7 +24,7 @@ export default (sequelize, DataTypes) => {
 
     // 1:N
     Channel.belongsTo(models.User, {
-      foreignKey: 'owner',
+      foreignKey: 'owner'
     })
   }
 

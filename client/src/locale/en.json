@@ -650,8 +650,10 @@
     },
     "messages": {
       "add_member": "Add member",
+      "add_user": "Add user",
       "empty_message_header": "Message is empty",
-      "empty_message_message": "Create your first message by sending a message to memebers of this channel."
+      "empty_channel_message_message": "Create your first message by sending a message to memebers of this channel.",
+      "empty_direct_message_message": "Create your first message by sending a message to selected memeber."
     },
     "form": {
       "create_channel": "Create Channel",

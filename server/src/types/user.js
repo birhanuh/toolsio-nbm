@@ -27,8 +27,8 @@ export default `
 
   type LoginResponse {
     success: Boolean!
-    token: String
-    refreshToken: String
+    authToken: String
+    refreshAuthToken: String
     errors: [Error!]
   }
 

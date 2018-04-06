@@ -26,6 +26,35 @@ export const requiresAuth = createResolver((parent, args, context ) => {
   }
 })
 
+export const requiresChannelAccess = createResolver(async (parent, { channelId }, { user, models} ) => {
+  if (!user || !user.id) {
+    throw new Error('Not authenticated')
+  }
+  // Check if part of the member
+  const memeber = await models.Member.findOne({ where: { channelId, userId: user.id } })
+ 
+  if (!member) {
+    throw new Error("You have to be a member of the channel to subscribe for it's messages")
+  }
+  
+})
+
+export const requiresDirectMessageAccess = createResolver(async (parent, { receiverId }, { models, user }) => {
+  if (!user || !user.id) {
+    throw new Error('Not authenticated')
+  }
+
+  const directMessagers = await models.DirectMessage.findAll({
+    where: {
+      [models.sequelize.Op.or]: [{ recieverId }, { senderId: user.id }],
+    },
+  })
+  console.log('directMessagers ', directMessagers)
+  if (directMessagers.length !== 2) {
+    throw new Error('Something went wrong');
+  }
+})
+
 // Checks if user in on Adimin role
 // export const requireAdmin = requiresAuth.createResolver((parent, args, context ) => {
 //   if (!context.user.isAdmin) {

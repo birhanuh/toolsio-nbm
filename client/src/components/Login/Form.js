@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { extendObservable } from 'mobx'
-import { observer } from 'mobx-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -15,25 +13,26 @@ import T from 'i18n-react'
 class Form extends Component {
   constructor(props) {
     super(props)
-    extendObservable(this, {
+    this.state = {
       email: '',
       password: '',
       errors: {},
       isLoading: false
-    })
+    }
   }
 
   handleChange = (e) => {
-    const { name, value } = e.target
-    this[name] = value
+    this.setState({
+      [e.target.name]: e.target.value
+    })
   }
 
   isValid() {
-    const { email, password } = this
+    const { email, password } = this.state
     const { errors, isValid } = Validation.validateLoginInput({email, password})
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ errors: updatedErrors })
@@ -45,21 +44,22 @@ class Form extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     
-    const { email, password } = this
-    this.errors = {password: 'me'}
-    if (true) {
+    const { email, password } = this.state
+  
+    if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true })
+
       this.props.mutate({variables: { email, password }})
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',
           //   text: 'You have signed in successfully!'
           // })
-          const { success, token, refreshToken, errors } = res.data.loginUser
-         
+          const { success, authToken, refreshAuthToken, errors } = res.data.loginUser
+      
           if (success) {
-            localStorage.setItem('token', token)
-            localStorage.setItem('refreshToken', refreshToken)
+            localStorage.setItem('authToken', authToken)
+            localStorage.setItem('refreshAuthToken', refreshAuthToken)
             this.context.router.history.push('/dashboard')
           } else {
             let errorsList = {}
@@ -72,13 +72,13 @@ class Form extends Component {
   }
 
   render() {
-    const { email, password, errors, isLoading } = this
-    console.log('errors ', errors.password)
+    const { email, password, errors, isLoading } = this.state
+  
     return (  
-        <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit}>
+        <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
-            {/*{ !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } */}
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             <div className={classnames("field", { error: errors && errors.email })}>
               <div className="ui right icon input">
@@ -106,12 +106,16 @@ class Form extends Component {
   }
 }
 
+Form.contextTypes = {
+  router: PropTypes.object.isRequired
+}
+
 const loginUserMutation = gql`
   mutation($email: String!, $password: String!) {
     loginUser(email: $email, password: $password) {
       success
-      token 
-      refreshToken
+      authToken 
+      refreshAuthToken
       errors {
         path
         message
@@ -119,5 +123,5 @@ const loginUserMutation = gql`
     }
   }
 `
-export default graphql(loginUserMutation)(observer(Form))
+export default graphql(loginUserMutation)(Form)
 

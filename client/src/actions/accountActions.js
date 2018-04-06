@@ -25,7 +25,6 @@ export function fetchAccount(subdomain) {
 }
 
 export function updateAccount(account) {
-  console.log('account ', account)
   return dispatch => {
     return axios.put(`/accounts/update/${account._id}`, account)
       .then(res => { 

@@ -11,7 +11,7 @@ import T from 'i18n-react'
 // jQuery
 import $ from 'jquery'
 
-class Channel extends Component {
+class List extends Component {
 
   componentDidMount() {
 
@@ -40,10 +40,10 @@ class Channel extends Component {
     )
 
     return (
-       <div className="ui vertical fluid menu">
+       <div>
         <div className="ui center aligned vertical segment">
           <Link className="ui primary small button" to="/conversations">
-            <i className="plus outline icon"></i>
+            <i className="add circle icon"></i>
             {T.translate("conversations.page.add_channel")}
           </Link>
         </div>
@@ -64,7 +64,7 @@ const getChannelsQuery = gql`
     }
   }
 `
-export default graphql(getChannelsQuery)(Channel)
+export default graphql(getChannelsQuery)(List)
 
 
 

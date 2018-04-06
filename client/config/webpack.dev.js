@@ -8,22 +8,12 @@ module.exports = merge(common, {
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
+    historyApiFallback: true,
     host: "lvh.me",
     port: 3000,    
     allowedHosts: [
       '.lvh.me'
     ],
-    proxy: {
-     '/**': {
-        target: 'http://localhost:8080/',
-        changeOrigin: true,
-        bypass: function(req, res, proxyOptions) {
-          if (req.headers.accept.indexOf("html") !== -1) {
-            return "/index.html"
-          }
-        }
-     },
-    },
     overlay: {
      warnings: false,
      errors: true
