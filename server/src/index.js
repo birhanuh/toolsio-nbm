@@ -68,10 +68,10 @@ app.use(async (req, res, next) => {
 
    // Parse authToken 
   let authToken = req.headers['x-auth-token']
- 
+
   if (authToken) {
     try {
-      const { user } = jwt.verify(authToken, config.secret)
+      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
       
       req.user = user
     
@@ -90,8 +90,6 @@ app.use(async (req, res, next) => {
 })
 
 // GraphQL
-app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint, subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' }))
-
 const graphqlEndPoint = '/graphql'
 
 app.use(graphqlEndPoint, bodyParser.json(), 
@@ -105,6 +103,8 @@ app.use(graphqlEndPoint, bodyParser.json(),
     }
   }))
 )
+
+app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint, subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' }))
 
 /**
 app.use(session({
@@ -157,15 +157,15 @@ models.sequelize.sync().then(() => {
       execute,
       subscribe,
       schema: schema,
-      onConnect: async (connectionParams, webSocket) => {
-        if (connectionParams.authToken && connectionParams.refreshAuthToken) {
-
-          let user = null          
+      onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
+        
+        if (authToken && refreshAuthToken) {
+        
           try {
-            const { user } = jwt.verify(authToken, config.secret)
+            const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
             return { models, user }           
           } catch (err) {
-            const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, SECRET, SECRET2)
+            const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
             return { models, user: newAuthTokens.user }
           }
       }

@@ -70,7 +70,8 @@ export const refreshAuthTokens = async (authToken, refreshAuthToken, models, SEC
 
   const [newAuthToken, newRefreshAuthToken] = await createAuthTokens(user, SECRET, user.password + SECRET2)
   return {    
-    authToken, newAuthToken,
+    authToken, 
+    newAuthToken,
     refreshAuthToken: newRefreshAuthToken,
     user
   } 

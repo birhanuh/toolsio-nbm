@@ -20,10 +20,16 @@ export default `
     user: User!
   }
 
+  type DirectMessageUser {
+    id: Int!
+    first_name: String
+    email: String!
+  }
+
   type Query {
     getDirectMessage(id: Int!): DirectMessage
     getDirectMessages(receiverId: Int!): [DirectMessage!]!
-    getDirectMessageUsers(receiverId: Int!): [DirectMessageUsers!]!
+    getDirectMessageUsers: [DirectMessageUser!]!
   }
 
   type Mutation {

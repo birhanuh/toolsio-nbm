@@ -84,7 +84,7 @@ export default (sequelize, DataTypes) => {
         })
       }
     }
-  })
+  }, { underscored: true })
 
   User.associate = (models) => {
     // N:M

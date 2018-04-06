@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import classnames from 'classnames'
 import { Validation } from '../../../../utils'
 import { TextAreaField } from '../../../../utils/FormFields'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // Localization 
@@ -72,8 +72,34 @@ class Message extends Component {
         this.setState({ isLoading: true })
 
         this.props.mutate({ 
-          variables: { message, receiverId: parseInt(receiverId) }
-          })
+          variables: { message, receiverId: parseInt(receiverId) },
+          optimisticResponse: {
+            createDirectMessage: {
+              __typename: "Mutation",
+              id: -1,
+              success: true,
+              errors: null,
+              message: {
+                __typename: "Message",
+                id: -1,
+              }
+            }            
+          },
+          update: (store) => {
+            const data = store.readQuery({ query: getDirectMessageUsersQuery })
+            const notUserInList = data.getDirectMessageUsers.every(user => user.id !== parseInt(receiverId, 10))
+            
+            if (notUserInList) {
+              data.getDirectMessageUsers.push({
+                __typename: 'DirectMessageUser',
+                id: parseInt(receiverId, 10),
+                first_name: this.props.data.getUser.firstName,
+                email: this.props.data.getUser.email
+              })
+            }
+            // Write our data back to the cache.
+            store.writeQuery({ query: getDirectMessageUsersQuery, data })
+          }})
           .then(res => {
             // this.props.addFlashMessage({
             //   type: 'success',
@@ -145,5 +171,37 @@ const createDirectMessageMutation = gql`
   }
 `
 
-export default graphql(createDirectMessageMutation)(Message)
+const getDirectMessageUsersQuery = gql`
+  {
+    getDirectMessageUsers {
+      id
+      first_name
+      email
+    }
+  }
+`
+
+const getUserQuery = gql`
+  query getUser($id: Int!) { 
+    getUser(id: $id) {
+      id
+      firstName
+      email
+    }
+}
+`
+
+const MutationsAndQuery =  compose(
+  graphql(createDirectMessageMutation),
+  graphql(getDirectMessageUsersQuery),  
+  graphql(getUserQuery, {
+    options: (props) => ({
+      variables: {
+        id: parseInt(props.receiverId, 10)
+      }
+    })
+  })
+)(Message)
+
+export default MutationsAndQuery
 

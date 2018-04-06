@@ -54,7 +54,7 @@ class Messages extends Component {
     }
   }﻿
 
-  subscribe = (channelId) => {
+  subscribe = (channelId) => 
     this.props.getChannelMessagesQuery.subscribeToMore({
       document: NEW_CHANNEL_MESSAGE_SUBSCRIPTION,
       variables: {
@@ -69,7 +69,7 @@ class Messages extends Component {
         }
       }
     })
-  }
+  
 
   showConfirmationModal(event) {
     event.preventDefault()
@@ -92,7 +92,7 @@ class Messages extends Component {
     const emptyMessage = (
       <div className="ui info message">
         <h3>{T.translate(`conversations.messages.empty_message_header`)}</h3>
-        <p>{T.translate(`conversations.messages.empty_message_message`)}</p>
+        <p>{T.translate(`conversations.messages.empty_channel_message_message`)}</p>
       </div>
     )
 
@@ -145,7 +145,7 @@ class Messages extends Component {
             <UsersForm channelId={this.props.channelId} />
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.show.cancel")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.Form.cancel")}</button>
           </div>
         </div>
       </div>

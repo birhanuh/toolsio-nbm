@@ -1,19 +1,23 @@
 import { PubSub, withFilter } from 'graphql-subscriptions'
 
-import { requiresAuth, requiresChannelAccess } from '../middlewares/authentication'
+import { requiresAuth, requiresDirectMessageAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 
 const pubsub = new PubSub()
 
 const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE'
-
+//requiresDirectMessageAccess.createResolver(
 export default {
   Subscription: {
     getNewDirectMessage: {
-      subscribe: requiresChannelAccess.createResolver(withFilter(
+      subscribe: withFilter(
         () => pubsub.asyncIterator(NEW_DIRECT_MESSAGE), 
-        (payload, args) => payload.getNewDirectMessage.receiverId === args.receiverId
-      ))
+        (payload, args, { models, user }) => {
+          
+          return (payload.getNewDirectMessage.senderId === user.id && payload.getNewDirectMessage.receiverId === args.receiverId)
+          ||(payload.getNewDirectMessage.senderId === args.receiverId && payload.getNewDirectMessage.receiverId === user.id)
+        }
+      )
     }
   },
 
@@ -29,14 +33,18 @@ export default {
         order: [['created_at', 'ASC']] }, { raw: true })
     },
 
-     getDirectMessageUsers: (parent, { receiverId }, { models }) => models.sequelize.query(' select * from users as user join direct_messages ')
+    getDirectMessageUsers: (parent, args, { models }) => 
+      models.sequelize.query('select distinct on (u.id) u.id, u.first_name, u.email from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id)', {
+          model: models.User,
+          raw: true,
+        })
 
   },
 
   Mutation: {
     createDirectMessage: async (parent, args, { models, user }) => {
       try {
-        console.log('user ', user)
+        
         const message = await models.DirectMessage.create({ ...args, senderId: user.id })
 
         // Do both asynchronously
@@ -45,6 +53,7 @@ export default {
 
           pubsub.publish(NEW_DIRECT_MESSAGE, { 
             receiverId: args.receiverId, 
+            senderId: user.id,
             getNewDirectMessage: {...message.dataValues, user: author.dataValues} 
           })
         }

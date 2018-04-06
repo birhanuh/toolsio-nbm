@@ -30,47 +30,54 @@ class List extends Component {
     event.preventDefault()
 
     // Show modal
-    $('.small.modal.add-member').modal('show')
+    $('.small.modal.add-user').modal('show')
   }
 
   hideConfirmationModal(event) {
-    event.preventDefault()
+    if (event) {
+      event.preventDefault()  
+    }
 
-    // Show modal
-    $('.small.modal.add-member').modal('hide')
+    // Close modal
+    $('.small.modal.add-user').modal('hide')
   }
 
   render() {
     
-    const { data: { getUsers }, receiverId } = this.props
-    
-    const receiverList = getUsers && getUsers.map(receiver => 
-      <Link key={receiver.id} to={`/conversations/receiver/${receiver.id}`} 
-        className={classnames('item', {active: receiverId && parseInt(receiverId) === receiver.id})}>
+    const { data: { getDirectMessageUsers }, receiverId } = this.props
+
+    const userList = getDirectMessageUsers && getDirectMessageUsers.map(user => 
+      <Link key={user.id} to={`/conversations/receiver/${user.id}`} 
+        className={classnames('item', {active: receiverId && parseInt(receiverId) === user.id})}>
 
         <div>
           <i className="user icon"></i>&nbsp;
-          {receiver.firstName}
+          {user.first_name}
         </div>
       </Link>
     )
-
+    console.log('user ', userList)
     return (
       <div>
 
+        <div className="ui center aligned vertical segment">
+          <button id="add-user" className="ui primary button" onClick={this.showConfirmationModal.bind(this)}>
+            <i className="add circle icon"></i>
+            {T.translate("conversations.messages.add_user")}
+          </button>  
+        </div>
 
-        <div className="ui divider"></div>
+        { userList }        
 
-        {receiverList}
-
-        <div className="ui small modal add-member">
+        <div className="ui small modal add-user">
           <div className="header">{T.translate("conversations.messages.add_user")}</div>
           <div className="content">
 
-            <UsersDownshift />
+            <UsersDownshift onClose={this.hideConfirmationModal.bind(this)} />
+
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.show.cancel")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.form.cancel")}</button>
           </div>
         </div>
       </div>
@@ -78,16 +85,17 @@ class List extends Component {
   }
 }
 
-const getUsersQuery = gql`
+const getDirectMessageUsersQuery = gql`
   {
-    getUsers {
+    getDirectMessageUsers {
       id
-      firstName
-      email 
+      first_name
+      email
     }
   }
 `
-export default graphql(getUsersQuery)(List)
+
+export default graphql(getDirectMessageUsersQuery)(List)
 
 
 

@@ -52,11 +52,11 @@ const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLi
 const wsLink = new WebSocketLink({
   uri: 'ws://localhost:8080/subscriptions',
   options: {
-    reconnect: true
-  },
-  connectionParams: {
-    authToken: localStorage.getItem('authToken'),
-    refreshAuthToken: localStorage.getItem('refreshAuthToken')
+    reconnect: true,
+    connectionParams: {
+      authToken: localStorage.getItem('authToken'),
+      refreshAuthToken: localStorage.getItem('refreshAuthToken')
+    }
   }
 })
 

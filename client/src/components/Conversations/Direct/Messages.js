@@ -40,6 +40,9 @@ class Messages extends Component {
       }
       this.unsubscribe = this.subscribe(receiverId)
     }
+
+    // Close add-user modal
+    $('.small.modal.add-user').modal('hide')
   }﻿
 
   componentWillUnmount() {   
@@ -48,7 +51,7 @@ class Messages extends Component {
     }
   }﻿
 
-  subscribe = (receiverId) => {
+  subscribe = (receiverId) => 
     this.props.getDirectMessagesQuery.subscribeToMore({
       document: NEW_DIRECT_MESSAGE_SUBSCRIPTION,
       variables: {
@@ -63,7 +66,7 @@ class Messages extends Component {
         }
       }
     })
-  }
+  
 
   showConfirmationModal(event) {
     event.preventDefault()
@@ -86,7 +89,7 @@ class Messages extends Component {
     const emptyMessage = (
       <div className="ui info message">
         <h3>{T.translate(`conversations.messages.empty_message_header`)}</h3>
-        <p>{T.translate(`conversations.messages.empty_message_message`)}</p>
+        <p>{T.translate(`conversations.messages.empty_direct_message_message`)}</p>
       </div>
     )
 

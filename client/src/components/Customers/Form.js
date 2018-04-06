@@ -193,7 +193,8 @@ class Form extends Component {
           .catch(err => this.setState({ errors: err, isLoading: false }))
       }   
 
-      this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, street, postalCode: parseInt(postalCode), region, country } })
+      this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, 
+        street, postalCode: parseInt(postalCode), region, country } })
         .then(res => {
           
           // this.props.addFlashMessage({
