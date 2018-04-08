@@ -27,7 +27,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       postalCode: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.STRING
       },
       region: {
         type: Sequelize.STRING

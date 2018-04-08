@@ -9,7 +9,10 @@ export default (sequelize, DataTypes) => {
       field: 'first_name',
       notEmpty: false,
       validate: {     
-        isAlpha: true  // will only allow letters
+        is: {
+          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces with RegExp,
+          msg: 'Wrong first name format'
+        }
       } 
     },
     lastName: {
@@ -17,7 +20,10 @@ export default (sequelize, DataTypes) => {
       field: 'last_name',
       notEmpty: false,
       validate: {     
-        isAlpha: true  // will only allow letters
+        is: {
+          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces with RegExp,
+          msg: 'Wrong last name format'
+        }
       } 
     },
     email: {

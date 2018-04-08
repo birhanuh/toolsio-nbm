@@ -23,8 +23,10 @@ import { SubscriptionServer } from 'subscriptions-transport-ws'
 // Init app
 const app = express()
 
-// Config
+// env
 require('dotenv').config()
+
+// Config
 import jwtConfig from './config/jwt'
 
 // Mongodb connection
@@ -67,9 +69,9 @@ app.use(async (req, res, next) => {
   //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
 
    // Parse authToken 
-  let authToken = req.headers['x-auth-token']
+  const authToken = req.headers['x-auth-token']
 
-  if (authToken) {
+  if (authToken !== 'null') {
     try {
       const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
       

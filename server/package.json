@@ -7,8 +7,10 @@
     "test": "./src/__test__"
   },
   "scripts": {
-    "start": "nodemon --watch src --exec babel-node -- src/index.js",
-    "test": "jest './src/__test__'"
+    "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
+    "tstart": "./src/__test__/helpers/reset_db.sh && NODE_ENV=test babel-node -- src/index.js",
+    "pretest": "NODE_ENV=test cd src && './__test__/helpers/reset_db.sh'",
+    "test": "NODE_ENV=test jest './src/__test__'"
   },
   "repository": {
     "type": "git",
@@ -56,7 +58,8 @@
     "babel-jest": "^22.4.3",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "factory-girl": "^5.0.2",
+    "child-process-promise": "^2.2.1",
+    "faker": "^4.1.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.1",
     "gulp-nodemon": "^2.2.1",

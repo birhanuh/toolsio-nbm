@@ -8,7 +8,9 @@ export default {
   },
 
   Mutation: {
-    loginUser: (parent, { email, password }, { models, SECRET, SECRET2 }) => loginUserWithToken(email, password, models, SECRET, SECRET2),
+    loginUser: (parent, { email, password }, { models, SECRET, SECRET2 }) => 
+      loginUserWithToken(email, password, models, SECRET, SECRET2),
+    
     registerUser: async (parent, args, { models }) => {
 
       const { firstName, lastName, email, password } = args
@@ -28,10 +30,10 @@ export default {
             ]
           }
         } else {
-          const response = await models.sequelize.transaction(async () => {
+          const response = await models.sequelize.transaction(async (transaction) => {
 
-            const user = await  models.User.create({ firstName, lastName, email, password })
-            await models.Account.create({ subdomain, industry, owner: user.id })
+            const user = await  models.User.create({ firstName, lastName, email, password }, { transaction })
+            await models.Account.create({ subdomain, industry, owner: user.id }, { transaction })
 
             return user
           })

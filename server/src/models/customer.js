@@ -4,7 +4,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        isAlpha: true  // will only allow letters
+        is: {
+          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces with RegExp,
+          msg: "Wrong name format"
+        }
       } 
     },
     vatNumber: {
@@ -17,10 +20,13 @@ export default (sequelize, DataTypes) => {
       field: 'vat_number'
     },
     phoneNumber: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        isDecimal: true // checks for any numbers
+        is: {
+          arg: /^(?=.*?[1-9])[0-9()-]+$/,  // checks for phone format with RegExp,
+          msg: "Wrong phone number format"
+        }
       },
       field: 'phone_number'
     },
@@ -39,23 +45,39 @@ export default (sequelize, DataTypes) => {
     },
     street: {
       type: DataTypes.STRING,
-      allowNull: true
-    },
-    postalCode: {
-      type: DataTypes.DECIMAL,
       allowNull: true,
       validate: {     
-        isDecimal: true // checks for any numbers
+        is: /^[A-Za-z ]+$/,            // will only allow letters and spaces,
+        msg: 'Wrong street format'
+      } 
+    },
+    postalCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {     
+        is: {
+          arg: /^(?=.*?[1-9])[0-9()-]+$/, // checks for numbers and special characters with RegExp,
+          msg: 'Wrong postal code format'
+        }
       },
       field: 'postal_code'
     },
     region: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      validate: {     
+        isAlpha: true  // will only allow letters
+      } 
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      validate: {     
+        is: {
+          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces
+          msg: 'Wrong country format'
+        }
+      } 
     }
   }, {
     hooks: {

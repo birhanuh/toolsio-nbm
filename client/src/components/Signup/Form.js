@@ -45,29 +45,6 @@ class Form extends Component {
     }  
   }
 
-  getAccount = (e) => {
-    const field = e.target.name
-    const val = e.target.value
-
-    if (val !== '') {
-      this.props.client.query({ 
-        query: getAccountQuery,
-        variables: {subdomain: val} })
-        .then(res => {
-
-          const { id, subdomain } = res.data.getAccountQuery
-
-          if (subdomain) {
-
-            let updatedErrors = Object.assign({}, this.state.errors)
-            updatedErrors = {subdomain: 'There is an account with such '+field+ ' subdomain.'}
-
-            this.setState({ errors: updatedErrors })
-          }
-        })
-    }
-  }
-
   isValid() {
     const { errors, isValid } = Validation.validateRegistrationInput(this.state)
 
@@ -90,7 +67,7 @@ class Form extends Component {
       
       const { account: { subdomain, industry }, user: { firstName, lastName, email, password } } = this.state
       // Make submit
-      this.props.registerUserMutation({variables: { firstName, lastName, email, password, subdomain, industry }})
+      this.props.mutate({variables: { firstName, lastName, email, password, subdomain, industry }})
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',
@@ -101,7 +78,11 @@ class Form extends Component {
           const { success, token, refreshToken, errors } = res.data.registerUser
          
           if (success) {
-            console.log('res', res.data)
+            localStorage.setItem('authToken', authToken)
+            localStorage.setItem('refreshAuthToken', refreshAuthToken)
+
+            // Redirect to dashboard
+            this.context.router.history.push('/dashboard')
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -199,7 +180,6 @@ class Form extends Component {
               <input type="text" name="subdomain" 
                 id="subdomain" 
                 placeholder={T.translate("sign_up.account.subdomain")} 
-                onBlur={this.getAccount.bind(this)} 
                 value={account.subdomain} 
                 onChange={this.handleChange.bind(this)} />
               <div className="ui label">toolsio.com</div>  
@@ -222,6 +202,10 @@ Form.propTypes = {
   // isUserExist: PropTypes.func.isRequired
 }
 
+Form.contextTypes = {
+  router: PropTypes.object.isRequired
+}
+
 const registerUserMutation = gql`
   mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
     registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
@@ -230,15 +214,6 @@ const registerUserMutation = gql`
         path
         message
       }
-    }
-  }
-`
-
-const getAccountQuery = gql`
-  query getAccount($subdomain: String!) {
-    getAccount(subdomain: $subdomain) {
-      id
-      subdomain
     }
   }
 `

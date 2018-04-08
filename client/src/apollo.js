@@ -30,8 +30,7 @@ const afterwareLink = new ApolloLink((operation, forward) => {
     if (headers) {
       const authToken = headers.get('x-auth-token')
       const refreshAuthToken = headers.get('x-refresh-auth-token')
-      console.log('authToken', authToken)
-      console.log('refreshAuthToken', refreshAuthToken)
+   
       if (authToken) {
         localStorage.setItem('authToken', authToken)
       }
@@ -54,8 +53,8 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     connectionParams: {
-      authToken: localStorage.getItem('authToken'),
-      refreshAuthToken: localStorage.getItem('refreshAuthToken')
+      authToken: console.log('Connection authToken', localStorage.getItem('authToken')) || localStorage.getItem('authToken'),
+      refreshAuthToken: console.log('Connection refreshAuthToken', localStorage.getItem('refreshAuthToken')) || localStorage.getItem('refreshAuthToken')
     }
   }
 })
