@@ -9,7 +9,8 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
     "tstart": "./src/__test__/helpers/reset_db.sh && NODE_ENV=test babel-node -- src/index.js",
-    "pretest": "NODE_ENV=test cd src && './__test__/helpers/reset_db.sh'",
+    "db:reset": "cd src && './__test__/helpers/reset_db.sh'",
+    "pretest": "NODE_ENV=test npm run db:reset",
     "test": "NODE_ENV=test jest './src/__test__'"
   },
   "repository": {
@@ -64,6 +65,7 @@
     "gulp-nodemon": "^2.2.1",
     "jest": "^22.4.3",
     "nodemon": "^1.17.3",
-    "phantomjs": "^2.1.7"
+    "phantomjs": "^2.1.7",
+    "umzug": "^2.1.0"
   }
 }

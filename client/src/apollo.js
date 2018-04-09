@@ -24,7 +24,7 @@ const middlewareLink = setContext(() => ({
 
 const afterwareLink = new ApolloLink((operation, forward) => {
 
-  return forward(operation).map(response => {
+  forward(operation).map(response => {
     const { response: { headers } } = operation.getContext()
     
     if (headers) {

@@ -16,7 +16,7 @@ describe("User", () => {
 
   afterAll(async () => {    
 
-    await truncate()   
+    //await truncate()   
   })
 
   test('getUsers', async () => {
@@ -49,7 +49,7 @@ describe("User", () => {
 
     beforeAll( async () => {
       
-      await truncate()   
+      //await truncate()   
 
       userFactoryLocal = await userFactory()
       accountFactoryLocal = await accountFactory()

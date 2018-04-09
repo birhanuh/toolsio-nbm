@@ -1,21 +1,34 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('channels', {
+    return queryInterface.createTable('messages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING,
+      message: {
         allowNull : false,
-        unique: true
+        type: Sequelize.TEXT
       },
-      isPublic: {
+      isRead: {
         type: Sequelize.BOOLEAN,
-        defaultValue: true
+        defaultValue: false
+      },
+      channelId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'channels',
+          key: 'id'
+        },
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id'
+        },
       },
       createdAt: {
         allowNull: false,
@@ -28,6 +41,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('channels');
+    return queryInterface.dropTable('messages');
   }
 };

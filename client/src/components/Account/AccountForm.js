@@ -252,7 +252,7 @@ class AccountForm extends Component {
                   <div className="ui dimmer">
                     <div className="content">
                       <div className="center">
-                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ui inverted button">
+                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
                           {T.translate("account.page.select_logo")}
                         </Dropzone>
                       </div>
