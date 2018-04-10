@@ -27,18 +27,18 @@ module.exports = {
       vat: {
         type: Sequelize.INTEGER
       },
-      saleId: {
+      sale_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'sales',
           key: 'id'
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

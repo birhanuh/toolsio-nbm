@@ -24,22 +24,26 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+      progress: {
+        defaultValue: 0,
+        type: Sequelize.INTEGER
+      },
       total: {
         defaultValue: 0,
         type: Sequelize.INTEGER
       },
-      customerId: {
+      customer_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'customers',
           key: 'id'
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

@@ -71,7 +71,7 @@ app.use(async (req, res, next) => {
    // Parse authToken 
   const authToken = req.headers['x-auth-token']
 
-  if (authToken !== 'null') {
+  if (authToken) {
     try {
       const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
       
@@ -149,36 +149,35 @@ app.set('port', process.env.SERVER_PORT)
 
 const server = createServer(app)
 
-// sync() will create all table if then doesn't exist in database
-models.sequelize.sync().then(() => {
-  // app.listen(app.get('port'), () => 
-  //   console.log('Server started on port: ' + process.env.SERVER_PORT)
-  // )
-  server.listen(app.get('port'), () => {
-    new SubscriptionServer({
-      execute,
-      subscribe,
-      schema: schema,
-      onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
-        
-        if (authToken && refreshAuthToken) {
-        
-          try {
-            const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
-            return { models, user }           
-          } catch (err) {
-            const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
-            return { models, user: newAuthTokens.user }
-          }
-      }
+// app.listen(app.get('port'), () => 
+//   console.log('Server started on port: ' + process.env.SERVER_PORT)
+// )
+server.listen(app.get('port'), () => {
+  new SubscriptionServer({
+    execute,
+    subscribe,
+    schema: schema,
+    onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
+      
+      if (authToken && refreshAuthToken) {
+      
+        try {
+          const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
+          return { models, user }           
+        } catch (err) {
+          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
+          return { models, user: newAuthTokens.user }
+        }
+    }
 
-      return { models }
-    }}, {
-      server: server,
-      path: '/subscriptions',
-    })
-    console.log('Server started on port: ' + process.env.SERVER_PORT)
+    return { models }
+  }}, {
+    server: server,
+    path: '/subscriptions',
   })
+  console.log('Server started on port: ' + process.env.SERVER_PORT)
+  console.log('Environment: ' + process.env.NODE_ENV)
+  console.log('------------------------')
 })
 
 

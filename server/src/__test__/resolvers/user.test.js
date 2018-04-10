@@ -10,12 +10,10 @@ import accountFactory from '../factories/account'
 describe("User", () => { 
 
   beforeAll(async () => {
-
     await truncate()
   })
 
-  afterAll(async () => {    
-
+  afterAll(async () => {  
     //await truncate()   
   })
 
@@ -47,8 +45,7 @@ describe("User", () => {
     let userFactoryLocal
     let accountFactoryLocal
 
-    beforeAll( async () => {
-      
+    beforeAll( async () => {      
       //await truncate()   
 
       userFactoryLocal = await userFactory()
@@ -81,12 +78,13 @@ describe("User", () => {
       }) 
 
       const { data } = response
+      const { data: { registerUser: { user } } } = response.data
       
       expect(data).toMatchObject({
         data: {
           registerUser: {
             success: true,
-            user: null,
+            user: user,
             errors: null
           }
         }
@@ -96,7 +94,7 @@ describe("User", () => {
     test('loginUser', async () => {
 
       const response = await axios.post('http://localhost:8080/graphql', {
-        query: ` mutation($email: String!, $password: String!) {
+        query: `mutation($email: String!, $password: String!) {
           loginUser(email: $email, password: $password) {
             success
             authToken 

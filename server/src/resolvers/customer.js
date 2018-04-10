@@ -8,7 +8,7 @@ export default {
   },
 
   Mutation: {
-    createCustomer: (parent, args, { models }) => {
+    createCustomer: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Customer.create(args)
         .then(customer => {
           return {
@@ -23,7 +23,7 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    },
+    }),
 
     updateCustomer: (parent, args, { models }) => {
       return models.Customer.update(args, { where: {id: args.id}, returning: true, plain: true })

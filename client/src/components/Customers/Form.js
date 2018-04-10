@@ -381,7 +381,7 @@ Form.contextTypes = {
 }
 
 const createCustomerMutation = gql`
-  mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: Int, $region: String, $country: String) {
+  mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
     createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
       postalCode: $postalCode, region: $region, country: $country) {
       success
@@ -393,7 +393,7 @@ const createCustomerMutation = gql`
   }
 `
 const updateCustomerMutation = gql`
-  mutation updateCustomer($id: Int!, $name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: Int, $region: String, $country: String) {
+  mutation updateCustomer($id: Int!, $name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
     updateCustomer(id: $id, name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, postalCode: $postalCode, region: $region, country: $country) {
       success
       errors {

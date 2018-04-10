@@ -10,7 +10,7 @@ module.exports = {
           primaryKey: true,
           autoIncrement: true
         },
-        userId: {
+        user_id: {
           type: Sequelize.INTEGER,
           references: {
             model: 'users',
@@ -18,7 +18,7 @@ module.exports = {
           },
           allowNull: false
         },
-        channelId: {
+        channel_id: {
           type: Sequelize.INTEGER,
           references: {
             model: 'channels',
@@ -26,11 +26,11 @@ module.exports = {
           },
           allowNull: false
         },
-        createdAt: {
+        created_at: {
           allowNull: false,
           type: Sequelize.DATE
         },
-        updatedAt: {
+        updated_at: {
           allowNull: false,
           type: Sequelize.DATE
         }

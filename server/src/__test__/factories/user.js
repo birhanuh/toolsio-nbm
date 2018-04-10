@@ -20,6 +20,7 @@ const data = (props = {}) => {
   }
 
   console.log('firstName', defaultProps.firstName)
+  console.log('firstName', defaultProps.lastName)
   return Object.assign({}, defaultProps, props)
 }
 /**

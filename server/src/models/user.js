@@ -9,8 +9,8 @@ export default (sequelize, DataTypes) => {
       field: 'first_name',
       notEmpty: false,
       validate: {     
-        is: {
-          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces with RegExp,
+        isAlpha: {
+          arg: true,            // will only allow letters
           msg: 'Wrong first name format'
         }
       } 
@@ -20,8 +20,8 @@ export default (sequelize, DataTypes) => {
       field: 'last_name',
       notEmpty: false,
       validate: {     
-        is: {
-          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces with RegExp,
+        isAlpha: {
+          arg: true,            // will only allow letters
           msg: 'Wrong last name format'
         }
       } 
@@ -42,7 +42,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       validate: {
         len: { 
-          args: [5, 100],
+          arg: [5, 100],
           msg: 'Password needs to be at least 5 characters'
         }
       }

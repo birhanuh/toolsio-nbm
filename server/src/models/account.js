@@ -23,8 +23,8 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: {
-          arg: /^(?=.*?[1-9])[0-9()-]+$/,  // checks for phone format with RegExp,
+        isNumeric: {
+          arg: true, // will only allow numbers
           msg: 'Wrong phone number format'
         }
       },
@@ -42,7 +42,7 @@ export default (sequelize, DataTypes) => {
       allowNull : true,
       validate: {     
         is: {
-          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces with RegExp,
+          arg: /^[a-zA-Z0-9_ ]*$/,      // will only allow letter, numbers, spaces with RegExp,
           msg: 'Wrong street format'
         }
       } 
@@ -52,7 +52,7 @@ export default (sequelize, DataTypes) => {
       allowNull : true,
       validate: {     
         is: {
-          arg: /^(?=.*?[1-9])[0-9()-]+$/, // checks for numbers and special characters with RegExp,
+          arg: /^[0-9- ]*$/, // will only allow numbers, spaces, dash characters with RegExp,
           msg: 'Wrong postal code format'
         }
       },
@@ -62,15 +62,18 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        isAlpha: true  // will only allow letters
+        is: {
+          arg: /^[a-zA-Z_ ]*$/,            // will only allow letters, spaces  with RegExp,
+          msg: 'Wrong country format'
+        }
       } 
     },
     country: {
       type: DataTypes.STRING,
       allowNull : true,
-      validate: {     
+      validate: {       
         is: {
-          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces with RegExp,
+           arg: /^[a-zA-Z_ ]*$/,            // will only allow letters, spaces  with RegExp,
           msg: 'Wrong country format'
         }
       } 

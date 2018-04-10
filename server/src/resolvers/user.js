@@ -37,10 +37,10 @@ export default {
 
             return user
           })
-        
+      
           return {
             success: true,
-            response
+            user: response
           }
         }
       } catch(err) {

@@ -16,7 +16,7 @@ module.exports = {
          allowNull : false,
         type: Sequelize.STRING
       },
-      paymentType: {
+      payment_type: {
          allowNull : false,
         type: Sequelize.STRING
       },
@@ -27,18 +27,18 @@ module.exports = {
       vat: {
         type: Sequelize.INTEGER
       },
-      projectId: {
+      project_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'projects',
           key: 'id'
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

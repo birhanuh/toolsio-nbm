@@ -5,14 +5,15 @@ const data = async (props = {}) => {
   const defaultProps = {
     name: faker.name.firstName(),
     vatNumber: faker.random.number(),
-    phoneNumber: faker.phone.phoneNumber(),
+    phoneNumber: "12345678910",
     email: faker.internet.email(),
     isContactIncludedInInvoice: faker.random.boolean(),
     street: faker.address.streetName(),
-    postalCode: faker.address.zipCode(),
+    postalCode: "1234",
     region: faker.address.county(),
-    country: faker.address.country()
+    country: "Finland"
   }
+  console.log('postalCode: ', defaultProps.postalCode)
   return Object.assign({}, defaultProps, props)
 }
 

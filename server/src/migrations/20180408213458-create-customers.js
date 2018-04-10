@@ -12,24 +12,24 @@ module.exports = {
         allowNull : false,
         type: Sequelize.STRING
       },
-      vatNumber: {
+      vat_number: {
         allowNull : false,
         type: Sequelize.DECIMAL
       },
-      phoneNumber: {
+      phone_number: {
         type: Sequelize.STRING
       },
       email: {
         type: Sequelize.STRING
       },
-      isContactIncludedInInvoice: {
+      is_contact_included_in_invoice: {
         allowNull : false,
         type: Sequelize.BOOLEAN
       },
       street: {
         type: Sequelize.STRING
       },
-      postalCode: {
+      postal_code: {
         type: Sequelize.STRING
       },
       region: {
@@ -38,11 +38,11 @@ module.exports = {
       country: {
         type: Sequelize.STRING
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

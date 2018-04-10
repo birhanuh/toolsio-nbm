@@ -11,10 +11,10 @@ module.exports = {
       deadline: {
         type: Sequelize.DATE
       },
-      paymentTerm: {
+      payment_term: {
         type: Sequelize.INTEGER
       },
-      interestInArrears: {
+      interest_in_arrears: {
         allowNull : false,
         type: Sequelize.INTEGER
       },
@@ -23,7 +23,7 @@ module.exports = {
         defaultValue: "new",
         type: Sequelize.STRING
       },
-      referenceNumber: {
+      reference_number: {
         allowNull : false,
         type: Sequelize.STRING
       },
@@ -34,32 +34,32 @@ module.exports = {
         allowNull : false,
         type: Sequelize.INTEGER
       },
-      customerId: {
+      customer_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'customers',
           key: 'id'
         },
       },
-      projectId: {
+      project_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'projects',
           key: 'id'
         },
       },
-      saleId: {
+      sale_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'sales',
           key: 'id'
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

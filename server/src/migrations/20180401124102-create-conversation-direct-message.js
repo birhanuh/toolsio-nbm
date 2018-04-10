@@ -12,26 +12,26 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
-      isRead: {
+      is_read: {
         type: Sequelize.BOOLEAN,
         defaultValue : false
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      receiverId: {
+      receiver_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id'
         },
       },
-      senderId: {
+      sender_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'users',

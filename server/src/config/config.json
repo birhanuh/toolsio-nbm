@@ -15,7 +15,11 @@
     "password": null,
     "database": "toolsio_test",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "operatorsAliases": "Sequelize.Op",
+    "define": {
+      "underscored": true
+    }
   },
   "production": {
     "username": "root",

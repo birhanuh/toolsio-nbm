@@ -4,8 +4,8 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        is: {
-          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces with RegExp,
+        isAlpha: {
+          arg: true,            // will only allow letters
           msg: "Wrong name format"
         }
       } 
@@ -23,8 +23,8 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: {
-          arg: /^(?=.*?[1-9])[0-9()-]+$/,  // checks for phone format with RegExp,
+        isNumeric: {
+          arg: true, // will only allow numbers
           msg: "Wrong phone number format"
         }
       },
@@ -47,16 +47,18 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        is: /^[A-Za-z ]+$/,            // will only allow letters and spaces,
-        msg: 'Wrong street format'
+        is: {
+          arg: /^[a-zA-Z0-9 ]+$/,      // checks for letter, numbers, spaces with RegExp,
+          msg: 'Wrong street format'
+        }
       } 
     },
     postalCode: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        is: {
-          arg: /^(?=.*?[1-9])[0-9()-]+$/, // checks for numbers and special characters with RegExp,
+        isNumeric: {
+          arg: true,      // will only allow numbers,
           msg: 'Wrong postal code format'
         }
       },
@@ -66,15 +68,18 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        isAlpha: true  // will only allow letters
+        isAlpha: {
+          arg: true,  // will only allow letters
+          msg: 'Wrong country format'
+        }
       } 
     },
     country: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        is: {
-          arg: /^[A-Za-z ]+$/,            // will only allow letters and spaces
+        isAlpha: {
+          arg: true,            // will only allow letters
           msg: 'Wrong country format'
         }
       } 
