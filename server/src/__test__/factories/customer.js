@@ -13,7 +13,7 @@ const data = async (props = {}) => {
     region: faker.address.county(),
     country: "Finland"
   }
-  console.log('postalCode: ', defaultProps.postalCode)
+  console.log('street: ', defaultProps.street)
   return Object.assign({}, defaultProps, props)
 }
 
