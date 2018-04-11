@@ -3,12 +3,12 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getTask: (parent, {id}, { models }) => models.Task.findOne({ where: {id} }),
-    getTasks: (parent, args, { models }) => models.Task.findAll()
+    getTask: requiresAuth.createResolver((parent, {id}, { models }) => models.Task.findOne({ where: {id} })),
+    getTasks: requiresAuth.createResolver((parent, args, { models }) => models.Task.findAll())
   },
 
   Mutation: {
-    createTask: async (parent, args, { models }) => {
+    createTask: requiresAuth.createResolver(async (parent, args, { models }) => {
       try {
         const task = await models.Task.create(args)
         
@@ -24,5 +24,5 @@ export default {
         }
       }
     }  
-  }         
+  })         
 }

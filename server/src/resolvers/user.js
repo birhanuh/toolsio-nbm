@@ -1,10 +1,11 @@
 import { formatErrors } from '../utils/formatErrors'
 import { loginUserWithToken } from '../utils/authentication'
+import { requiresAuth } from '../middlewares/authentication'
 
 export default {
   Query: {
-    getUser: (parent, {id}, { models }) => models.User.findOne({ where: {id} }, { raw: true }),
-    getUsers: (parent, args, { models }) => models.User.findAll()
+    getUser: requiresAuth.createResolver((parent, {id}, { models }) => models.User.findOne({ where: {id} }, { raw: true })),
+    getUsers: requiresAuth.createResolver((parent, args, { models }) => models.User.findAll())
   },
 
   Mutation: {

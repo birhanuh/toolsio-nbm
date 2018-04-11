@@ -3,9 +3,9 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getChannel: (parent, { id }, { models }) => models.Channel.findOne({ where: { id } }),
+    getChannel: requiresAuth.createResolver((parent, { id }, { models }) => models.Channel.findOne({ where: { id } })),
 
-    getChannels: (parent, args, { models }) => {
+    getChannels: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Channel.findAll({
         include: [
           {
@@ -14,11 +14,11 @@ export default {
           }
         ]
       }, { raw: true })
-    }
+    })
   },
 
   Mutation: {
-    createChannel: async (parent, { name }, { models, user }) => {
+    createChannel: requiresAuth.createResolver(async (parent, { name }, { models, user }) => {
       try {
       
         const channel = await models.Channel.findOne({ where: { name } }, { raw: true })
@@ -49,9 +49,9 @@ export default {
           errors: formatErrors(err, models)
         }
       }
-    },
+    }),
 
-    addMemeber: async (parent, { userId, channelId }, { models, user }) => {
+    addMemeber: requiresAuth.createResolver(async (parent, { userId, channelId }, { models, user }) => {
 
       return models.Member.create({ userId: userId, channelId: channelId })
         .then(() => {
@@ -66,7 +66,7 @@ export default {
             errors: formatErrors(err, models)
           }
         })    
-    }
+    })
 
   },
 

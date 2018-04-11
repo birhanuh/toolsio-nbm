@@ -4,7 +4,7 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
 
   Query: {
-    getProject: (parent, {id}, { models }) => {
+    getProject: requiresAuth.createResolver((parent, {id}, { models }) => {
       return models.Project.findOne({ where: { id } }, 
         {
           include: [
@@ -15,7 +15,7 @@ export default {
           ]
         }, { raw: true })
 
-    },
+    }),
 
     // getProject: (parent, {id}, { models }) => {
     //   return requiresAuth.createResolver(models.Project.findOne({ where: { id } }, 
@@ -28,11 +28,11 @@ export default {
     //       ]
     //     }, { raw: true }))
     // },
-    getProjects: (parent, args, { models }) => models.Project.findAll()
+    getProjects: requiresAuth.createResolver((parent, args, { models }) => models.Project.findAll())
   },
 
   Mutation: {
-    createProject: (parent, args, { models }) => {
+    createProject: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Project.create(args)
         .then(project => {
           return {
@@ -47,9 +47,9 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    },
+    }),
 
-    updateProject: (parent, args, { models }) => {
+    updateProject: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Project.update(args, { where: {id: args.id}, returning: true, plain: true })
         .then(result => {
   
@@ -65,9 +65,9 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    },
+    }),
 
-    deleteProject: (parent, args, { models }) => {
+    deleteProject: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Project.destroy({ where: {id: args.id}, force: true })
         .then(res => {
           
@@ -82,7 +82,7 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    }      
+    })      
   },
 
   Project: {

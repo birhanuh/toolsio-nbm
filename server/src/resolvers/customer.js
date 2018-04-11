@@ -3,8 +3,8 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getCustomer: (parent, {id}, { models }) => models.Customer.findOne({ where: {id} }, { raw: true }),
-    getCustomers: (parent, args, { models }) => models.Customer.findAll()
+    getCustomer: requiresAuth.createResolver((parent, {id}, { models }) => models.Customer.findOne({ where: {id} }, { raw: true })),
+    getCustomers: requiresAuth.createResolver((parent, args, { models }) => models.Customer.findAll())
   },
 
   Mutation: {
@@ -25,7 +25,7 @@ export default {
         })
     }),
 
-    updateCustomer: (parent, args, { models }) => {
+    updateCustomer: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Customer.update(args, { where: {id: args.id}, returning: true, plain: true })
         .then(result => {
           return {
@@ -40,9 +40,9 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    },
+    }),
 
-    deleteCustomer: (parent, args, { models }) => {
+    deleteCustomer: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Customer.destroy({ where: {id: args.id}, force: true })
         .then(res => {
           
@@ -57,7 +57,7 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    }      
+    })      
 
   },
 

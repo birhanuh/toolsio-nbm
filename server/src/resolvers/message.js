@@ -18,21 +18,21 @@ export default {
   },
 
   Query: {
-    getMessage: (parent, { id }, { models }) => models.Message.findOne({ where: { id } }, { raw: true }),
+    getMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.Message.findOne({ where: { id } }, { raw: true })),
 
-    getChannelMessages: (parent, args, { models }) => {
+    getChannelMessages: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Message.findAll({ 
         where: { channelId: args.channelId },
         order: [['created_at', 'ASC']] }, { raw: true })
-    },
+    }),
 
-    getSentMessages: (parent, args, { models }) => {
+    getSentMessages: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Message.findAll({ 
         where: { userId: user.id },
         order: [['created_at', 'ASC']] }, { raw: true })
-    },
+    }),
 
-    getInboxMessages: (parent, args, { models }) => {
+    getInboxMessages: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Message.findAll({ 
         include: [
           {
@@ -41,9 +41,9 @@ export default {
           }
         ],
         order: [['created_at', 'ASC']] }, { raw: true })
-    },
+    }),
 
-    getUnreadCounts: async (parent, args, { models }) => {
+    getUnreadCounts: requiresAuth.createResolver(async (parent, args, { models }) => {
       try {
         const unreadCount = await models.Message.count({ 
           where: { isRead: false },
@@ -66,11 +66,11 @@ export default {
         }
       }
 
-    }
+    })
   },
 
   Mutation: {
-    createMessage: async (parent, args, { models, user }) => {
+    createMessage: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
         
         const message = await models.Message.create({ ...args, userId: user.id })
@@ -98,7 +98,7 @@ export default {
           errors: formatErrors(err, models)
         }
       }
-    }  
+    })  
   },
 
   Message: {

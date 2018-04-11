@@ -10,39 +10,39 @@ const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE'
 export default {
   Subscription: {
     getNewDirectMessage: {
-      subscribe: withFilter(
+      subscribe: requiresAuth.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_DIRECT_MESSAGE), 
         (payload, args, { models, user }) => {
           
           return (payload.getNewDirectMessage.senderId === user.id && payload.getNewDirectMessage.receiverId === args.receiverId)
           ||(payload.getNewDirectMessage.senderId === args.receiverId && payload.getNewDirectMessage.receiverId === user.id)
         }
-      )
+      ))
     }
   },
 
   Query: {
-    getDirectMessage: (parent, { id }, { models }) => models.DirectMessage.findOne({ where: { id } }, { raw: true }),
+    getDirectMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.DirectMessage.findOne({ where: { id } }, { raw: true })),
 
-    getDirectMessages: (parent, args, { models, user }) => {
+    getDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => {
       return models.DirectMessage.findAll({ 
         where: { [models.sequelize.Op.or]: [
           { [models.sequelize.Op.and]: [{ receiverId: args.receiverId, senderId: user.id }]},
           { [models.sequelize.Op.and]: [{ senderId: args.receiverId, receiverId: user.id }]}
           ] },
         order: [['created_at', 'ASC']] }, { raw: true })
-    },
+    }),
 
-    getDirectMessageUsers: (parent, args, { models }) => 
+    getDirectMessageUsers: (requiresAuth.createResolver(parent, args, { models }) => 
       models.sequelize.query('select distinct on (u.id) u.id, u.first_name, u.email from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id)', {
           model: models.User,
           raw: true,
-        })
+        }))
 
   },
 
   Mutation: {
-    createDirectMessage: async (parent, args, { models, user }) => {
+    createDirectMessage: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
         
         const message = await models.DirectMessage.create({ ...args, senderId: user.id })
@@ -71,7 +71,7 @@ export default {
           errors: formatErrors(err, models)
         }
       }
-    }  
+    })  
   },
 
   DirectMessage: {
