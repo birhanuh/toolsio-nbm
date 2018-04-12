@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { decode } from 'jwt-decode'
+import decode from 'jwt-decode'
 import List from './List' 
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -22,9 +22,9 @@ class Page extends Component {
     
     try {
       const authToken = localStorage.getItem('authToken')
-      const { user, account } = decode('authToken')
+      const { user, account } = decode(authToken)
 
-      currentAccount.subdomain = account.subdomain
+      //currentAccount.subdomain = account.subdomain
       currentAccount.firstName = user.firstName
       currentAccount.email = user.email
 

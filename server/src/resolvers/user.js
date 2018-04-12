@@ -4,7 +4,7 @@ import { requiresAuth } from '../middlewares/authentication'
 
 export default {
   Query: {
-    getUser: requiresAuth.createResolver((parent, {id}, { models }) => models.User.findOne({ where: {id} }, { raw: true })),
+    getUser: (parent, {email}, { models }) => models.User.findOne({ where: {email} }, { raw: true }),
     getUsers: requiresAuth.createResolver((parent, args, { models }) => models.User.findAll())
   },
 

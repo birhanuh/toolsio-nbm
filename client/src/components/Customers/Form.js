@@ -49,16 +49,16 @@ class Form extends Component {
         id: nextProps.data.getCustomer.id,
         name: nextProps.data.getCustomer.name,
         address: {
-          street: nextProps.data.getCustomer.street,
-          postalCode: nextProps.data.getCustomer.postalCode,
-          region: nextProps.data.getCustomer.region,
-          country: nextProps.data.getCustomer.country
+          street: !nextProps.data.getCustomer.street ? '' : nextProps.data.getCustomer.street,
+          postalCode: !nextProps.data.getCustomer.postalCode ? '' : nextProps.data.getCustomer.postalCode,
+          region: !nextProps.data.getCustomer.region ? '' : nextProps.data.getCustomer.region,
+          country: !nextProps.data.getCustomer.country ? '' : nextProps.data.getCustomer.country
         },
         vatNumber: nextProps.data.getCustomer.vatNumber,
         isContactIncludedInInvoice: nextProps.data.getCustomer.isContactIncludedInInvoice,
         contact: {
-          phoneNumber: nextProps.data.getCustomer.phoneNumber,
-          email: nextProps.data.getCustomer.email
+          phoneNumber: !nextProps.data.getCustomer.phoneNumber ? '' : nextProps.data.getCustomer.phoneNumber,
+          email: !nextProps.data.getCustomer.email ? '' : nextProps.data.getCustomer.email
         }
       })
     }
@@ -350,7 +350,7 @@ class Form extends Component {
                   country={address.country}
                   value={address.region}
                   onChange={(val) => this.selectRegion(val)} 
-                  error={errors.address && errors.address.region}/>
+                  error={errors.address && errors.address.region} />
                 
                 <span className={classnames({red: address.region !== '' && errors.address && errors.address.region})}>{errors.address && errors.address.region}</span>  
               </div>

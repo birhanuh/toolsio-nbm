@@ -52,15 +52,3 @@ export function updateUser(user) {
   }
 }
 
-export function s3SignAvatar(variables) {
-  return dispatch => {
-    return axios.post('/users/avatar/', variables)
-  }
-}
-
-// Save File to S3
-export function uploadAvatar(signedRequest, file, options) {
-  return dispatch => {
-    return axios.put(signedRequest, file, options)
-  }
-}

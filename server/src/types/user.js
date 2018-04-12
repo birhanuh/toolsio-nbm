@@ -33,7 +33,7 @@ export default `
   }
 
   type Query {
-    getUser(id: Int!): User!
+    getUser(email: String!): User!
     getUsers: [GetUsersResponse!]!
   }
 

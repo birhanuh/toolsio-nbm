@@ -23,6 +23,6 @@ export default {
           errors: formatErrors(err, models)
         }
       }
-    }  
-  })            
+    })  
+  }          
 }
