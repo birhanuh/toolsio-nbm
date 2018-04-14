@@ -92,38 +92,6 @@ app.use(async (req, res, next) => {
   next()
 })
 
-// // Files path
-// const uploadDir = '../files'
-
-// const fileMiddleware = (req, res, next) => {
-//   if(!req.is('multipart/form-data')) return next()
-
-//   const form = formidable.IncomingForm({
-//     uploadDir
-//   })
- 
-//   form.parse(req, (error, { operations }, files) => {
-//     if (error) {
-//       console.log(error)
-//     }
-
-//     const document = JSON.parse(operations)     
-
-//     if (Object.keys(files).length) {
-//       const { file: { type, path: filePath }} = files
-//       console.log(type)
-//       console.log(filePath)
-//       document.variables.file = {
-//         type,
-//         path: filePath
-//       }
-//     }
-
-//     req.body = document
-//     next()
-//   })
-// }
-
 // GraphQL
 const graphqlEndPoint = '/graphql'
 
