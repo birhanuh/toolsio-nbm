@@ -9,6 +9,7 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import cors from 'cors'
+import { apolloUploadExpress } from 'apollo-upload-server'
 
 // Authentication packages 
 import session from 'express-session'
@@ -68,7 +69,7 @@ app.use(async (req, res, next) => {
   // Parse subdomain 
   //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
 
-   // Parse authToken 
+  // Parse authToken 
   const authToken = req.headers['x-auth-token']
 
   if (authToken) {
@@ -91,10 +92,45 @@ app.use(async (req, res, next) => {
   next()
 })
 
+// // Files path
+// const uploadDir = '../files'
+
+// const fileMiddleware = (req, res, next) => {
+//   if(!req.is('multipart/form-data')) return next()
+
+//   const form = formidable.IncomingForm({
+//     uploadDir
+//   })
+ 
+//   form.parse(req, (error, { operations }, files) => {
+//     if (error) {
+//       console.log(error)
+//     }
+
+//     const document = JSON.parse(operations)     
+
+//     if (Object.keys(files).length) {
+//       const { file: { type, path: filePath }} = files
+//       console.log(type)
+//       console.log(filePath)
+//       document.variables.file = {
+//         type,
+//         path: filePath
+//       }
+//     }
+
+//     req.body = document
+//     next()
+//   })
+// }
+
 // GraphQL
 const graphqlEndPoint = '/graphql'
 
-app.use(graphqlEndPoint, bodyParser.json(), 
+app.use(
+  graphqlEndPoint, 
+  bodyParser.json(),
+  apolloUploadExpress({ uploadDir: "../files"}), 
   graphqlExpress(req => ({ 
     schema,
     context: {

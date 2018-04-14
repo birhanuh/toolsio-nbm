@@ -1,9 +1,8 @@
 export default (sequelize, DataTypes) => {
   const Message = sequelize.define('messages', {
-    message: {
-      type: DataTypes.TEXT,
-      allowNull : false
-    },
+    message: DataTypes.TEXT,
+    path: DataTypes.STRING,
+    type: DataTypes.STRING,
     isRead: {
       type: DataTypes.BOOLEAN,
       defaultValue : false,

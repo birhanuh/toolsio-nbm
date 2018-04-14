@@ -79,7 +79,7 @@ class Messages extends Component {
   }
 
   hideConfirmationModal(event) {
-    event.preventDefault()
+    event.persist()
 
     // Show modal
     $('.small.modal.add-member').modal('hide')
@@ -142,10 +142,10 @@ class Messages extends Component {
           <div className="header">{T.translate("conversations.messages.add_member")}</div>
           <div className="content">
 
-            <UsersForm channelId={this.props.channelId} />
+            <UsersForm channelId={this.props.channelId} hideConfirmationModal={this.hideConfirmationModal.bind(this)} />
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.Form.cancel")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.form.cancel")}</button>
           </div>
         </div>
       </div>

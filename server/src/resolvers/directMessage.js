@@ -6,7 +6,7 @@ import { formatErrors } from '../utils/formatErrors'
 const pubsub = new PubSub()
 
 const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE'
-//requiresDirectMessageAccess.createResolver(
+
 export default {
   Subscription: {
     getNewDirectMessage: {
@@ -15,7 +15,7 @@ export default {
         (payload, args, { models, user }) => {
           
           return (payload.getNewDirectMessage.senderId === user.id && payload.getNewDirectMessage.receiverId === args.receiverId)
-          ||(payload.getNewDirectMessage.senderId === args.receiverId && payload.getNewDirectMessage.receiverId === user.id)
+          || (payload.getNewDirectMessage.senderId === args.receiverId && payload.getNewDirectMessage.receiverId === user.id)
         }
       ))
     }
@@ -42,10 +42,17 @@ export default {
   },
 
   Mutation: {
-    createDirectMessage: requiresAuth.createResolver(async (parent, args, { models, user }) => {
+    createDirectMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, user }) => {
       try {
-        
-        const message = await models.DirectMessage.create({ ...args, senderId: user.id })
+
+        const messageData = args
+        console.log('args ', file)
+        if (file) {
+          messageData.type = file.type
+          messageData.path = file.path
+        }
+         
+        const message = await models.DirectMessage.create({ ...messageData, senderId: user.id })
 
         // Do both asynchronously
         const asyncFunc = async () => {

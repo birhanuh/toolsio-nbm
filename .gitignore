@@ -1,5 +1,12 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# Misc
+.DS_Store
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Dependencies
 node_modules
 package-lock.json
@@ -9,6 +16,7 @@ app.css
 
 # Development
 dist
+files
 
 # Testing
 errorShots
@@ -18,12 +26,7 @@ logfile
 
 # Production
 
-# Misc
-.DS_Store
-.env
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+
 
 
 

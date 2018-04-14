@@ -303,6 +303,19 @@ export default {
     }
   },
 
+  validateAddUserInput: (data) => {
+    let errors = {}
+
+    if (!data.userId) {
+      errors['userId'] = T.translate("conversations.form.user_required")
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
   validateConversationReplyInput: (data) => {
     let errors = {}
 

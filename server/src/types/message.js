@@ -1,13 +1,22 @@
 export default `
-
+  
+  scalar Upload
+  
   type Message {
     id: Int!
-    message: String!
+    message: String
     isRead: Boolean!
     channelId: Int!
     userId: Int!
     createdAt: Date!
     user: User!
+    path: String!
+    type: String!
+  }
+
+  input File {
+    type: String!,
+    path: String
   }
 
   type GetUnreadCountsMessageResponse {
@@ -31,7 +40,7 @@ export default `
   }
 
   type Mutation {
-    createMessage(message: String!, channelId: Int! ): CreateMessageResponse!
+    createMessage(message: String, file: Upload, channelId: Int! ): CreateMessageResponse!
   }
 
   type Subscription {

@@ -419,6 +419,7 @@ nav.ui.menu {
 }
 
 .messages {
+  margin-bottom: 70px;
   .ui.header h3 {
     text-transform: capitalize;
   }
@@ -429,6 +430,18 @@ nav.ui.menu {
     flex-direction: column;
     overflow-y: auto;
     max-height: 360px;
+  }
+  .ui.form {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    padding-right: 30px;
+  }
+  .ui.left.action.input {
+    width: 100%;
+  }
+  .ui.left.action.input .field {
+    width: 100%;
   }
 }
 

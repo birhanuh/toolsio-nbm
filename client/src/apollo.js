@@ -1,5 +1,5 @@
 import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
+import { createUploadLink } from 'apollo-upload-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
 import { ApolloLink, split } from 'apollo-link'
@@ -9,7 +9,7 @@ import { getMainDefinition } from 'apollo-utilities'
 // Authorization utils
 import { Authorization } from './utils'
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: 'http://localhost:8080/graphql'
 })
 
@@ -22,12 +22,11 @@ const middlewareLink = setContext(() => ({
   }
 }))
 
-const afterwareLink = new ApolloLink((operation, forward) => {
+const afterwareLink = new ApolloLink((operation, forward) =>
+  forward(operation).map((response) => {
+    const { response: { headers } } = operation.getContext();
 
-  return forward(operation).map(response => {
-    const { response: { headers } } = operation.getContext()
-    
-    if (headers) {
+      if (headers) {
       const authToken = headers.get('x-auth-token')
       const refreshAuthToken = headers.get('x-refresh-auth-token')
    
@@ -41,8 +40,8 @@ const afterwareLink = new ApolloLink((operation, forward) => {
     }
 
     return response
-  })
-})
+  }))
+
 
 // Use with apollo-client
 const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLink))

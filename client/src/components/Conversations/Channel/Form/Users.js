@@ -42,7 +42,7 @@ class Users extends Component {
   }
 
   isValid() {
-    const { errors, isValid } = Validation.validateChannelInput(this.state)
+    const { errors, isValid } = Validation.validateAddUserInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
     updatedErrors = errors
@@ -75,24 +75,27 @@ class Users extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getChannelQuery })
+          const data = proxy.readQuery({ query: getChannelUsersQuery })
           // Add our comment from the mutation to the end.
+          console.log('data ', data)
           data.getChannel.users.push(member)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getChannelQuery, data })
+          proxy.writeQuery({ query: getChannelUsersQuery, data })
         }})
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',
           //   text: T.translate("messages.form.flash.success_compose")
           // })  
-          // this.context.router.history.push('/conversations')
-          
+          // this.context.router.history.push('/conversations')          
 
           const { success, member, errors } = res.data.addMember
 
           if (success) {
             this.setState({ isLoading: false })
+
+            // Close modal on success
+            this.props.hideConfirmationModal(e)
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -149,8 +152,10 @@ const addMemberMutation = gql`
   mutation addMember($userId: Int!, $channelId: Int!) {
     addMember(userId: $userId, channelId: $channelId ) {
       success
-      message {
+      member {
         id
+        firstName
+        email
       } 
       errors {
         path
@@ -160,7 +165,7 @@ const addMemberMutation = gql`
   }
 `
 
-const getChannelQuery = gql`
+const getChannelUsersQuery = gql`
   query getChannel($id: Int!) {
     getChannel(id: $id) {
       id
@@ -170,11 +175,6 @@ const getChannelQuery = gql`
         email
       }
     }
-  }
-`
-
-const getUsersQuery = gql`
-  {
     getUsers {
       id
       firstName
@@ -188,15 +188,13 @@ const MutationsAndQuery =  compose(
   graphql(addMemberMutation, {
     name : 'addMemberMutation'
   }),
-  graphql(getChannelQuery, {
-    "name": "getChannelQuery",
+  graphql(getChannelUsersQuery, {
     options: (props) => ({
       variables: {
         id: parseInt(props.channelId)
       }
     })
-  }),
-  graphql(getUsersQuery)
+  })
 )(Users)
 
 export default MutationsAndQuery

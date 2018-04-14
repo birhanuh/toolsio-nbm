@@ -50,7 +50,7 @@ class Page extends Component {
 
           <AccountForm subdomain={subdomain} /> 
              
-          <UserForm email="testa@toolsio.com" /> 
+          { currentAccount && <UserForm id={currentAccount.id} /> }
 
       </div>  
     )

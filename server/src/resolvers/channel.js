@@ -51,21 +51,24 @@ export default {
       }
     }),
 
-    addMemeber: requiresAuth.createResolver(async (parent, { userId, channelId }, { models, user }) => {
+    addMember: requiresAuth.createResolver(async (parent, { userId, channelId }, { models, user }) => {
 
-      return models.Member.create({ userId: userId, channelId: channelId })
-        .then(() => {
-          return {
-            success: true
-          }
-        })  
-        .catch(err => {
-          console.log(err)
-          return {
-            success: false,
-            errors: formatErrors(err, models)
-          }
-        })    
+      try {
+        const member = await models.Member.create({ userId: userId, channelId: channelId })
+        console.log('memberAdded', member.dataValues)
+        const user = await models.User.findOne({ where: { id: member.dataValues.userId }})
+
+        return {
+          success: true,
+          member: user
+        }
+      } catch (err) {
+        console.log(err)
+        return {
+          success: false,
+          errors: formatErrors(err, models)
+        }
+      }   
     })
 
   },

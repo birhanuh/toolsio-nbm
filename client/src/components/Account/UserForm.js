@@ -33,7 +33,7 @@ class UserForm extends Component {
       password: '',
       confirmPassword: '',
       avatarUrl: this.props.data.getUser ? this.props.data.getUser.avatarUrl : '',
-      file: '',
+      file: null,
       errors: {},
       isLoadingLogo: false,
       isLoadingForm: false
@@ -316,7 +316,7 @@ const MutationsAndQuery =  compose(
   graphql(getUserQuery, {
     options: (props) => ({
       variables: {
-        email: props.email
+        email: parseInt(props.id)
       },
     })
   })

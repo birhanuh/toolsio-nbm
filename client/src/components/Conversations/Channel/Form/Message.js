@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
+import Dropzone from 'react-dropzone'
 import { Validation } from '../../../../utils'
 import { TextAreaField } from '../../../../utils/FormFields'
 import { graphql } from 'react-apollo'
@@ -18,6 +19,7 @@ class Message extends Component {
       channelId: this.props.channelId ? this.props.channelId: null,
       message: '',
       errors: {},
+      file: null,
       isLoading: false
     }
   }
@@ -105,6 +107,13 @@ class Message extends Component {
     }
   }
 
+  handleOnDrop = async files => {
+
+    this.setState({
+      'file': files[0]
+    })
+  }
+
   render() {
     const { message, errors, isLoading } = this.state
 
@@ -114,25 +123,31 @@ class Message extends Component {
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
         
-        <TextAreaField
-          label={T.translate("conversations.form.message")}
-          name="message" 
-          value={message} 
-          onChange={this.handleChange.bind(this)} 
-          onKeyDown={this.handleSubmit.bind(this)}
-          placeholder={T.translate("conversations.form.message")}
-          error={errors.message}
-          formClass="field"
-        /> 
-
+        <div className="ui left action input">
+            <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui primary button">
+              <i className="plus icon" aria-hidden="true" />  
+            </Dropzone>
+          
+          <TextAreaField
+            label=""
+            name="message" 
+            value={message} 
+            onChange={this.handleChange.bind(this)} 
+            onKeyDown={this.handleSubmit.bind(this)}
+            placeholder={T.translate("conversations.form.message")}
+            error={errors.message}
+            formClass="field"
+            rows="2"
+          />           
+        </div>   
       </div> 
     )
   }
 }
 
 const createMessageMutation = gql`
-  mutation ($message: String!, $channelId: Int!) {
-    createMessage(message: $message, channelId: $channelId ) {
+  mutation ($message: String, $file: File, $channelId: Int!) {
+    createMessage(message: $message, file: $file, channelId: $channelId)  {
       success
       message {
         id
