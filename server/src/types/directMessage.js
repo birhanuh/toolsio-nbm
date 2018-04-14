@@ -9,7 +9,7 @@ export default `
     createdAt: Date!
     user: User!
     path: String!
-    type: String!
+    mimetype: String!
   }
 
   type CreateDirectMessageResponse {

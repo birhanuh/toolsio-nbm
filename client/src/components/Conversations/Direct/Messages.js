@@ -7,8 +7,6 @@ import MessageForm from './Form/Message'
 // Localization 
 import T from 'i18n-react'
 
-import $ from 'jquery'
-
 import avatarPlaceholderSmall from '../../../images/avatar-placeholder-small.png'
 
 const NEW_DIRECT_MESSAGE_SUBSCRIPTION = gql`
@@ -40,9 +38,6 @@ class Messages extends Component {
       }
       this.unsubscribe = this.subscribe(receiverId)
     }
-
-    // Close add-user modal
-    $('.small.modal.add-user').modal('hide')
   }﻿
 
   componentWillUnmount() {   
@@ -66,21 +61,6 @@ class Messages extends Component {
         }
       }
     })
-  
-
-  showConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.add-member').modal('show')
-  }
-
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.add-member').modal('hide')
-  }
 
   render() {
 
@@ -115,14 +95,9 @@ class Messages extends Component {
       <div className="messages">
 
         <div className="ui clearing vertical segment border-bottom-none">
-          <div className="ui left floated header mt-2">
+          <div className="ui left floated header">
             <h3 className="header capitalize-text">{getUser && getUser.firstName}</h3>
-          </div>  
-
-          <button id="add-member" className="ui right floated primary button" onClick={this.showConfirmationModal.bind(this)}>
-            <i className="add circle icon"></i>
-            {T.translate("conversations.messages.add_member")}
-          </button>        
+          </div>        
         </div>   
 
         <div className="ui divider mt-0"></div>

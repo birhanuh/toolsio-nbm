@@ -43,6 +43,7 @@
     "jsonwebtoken": "^8.2.0",
     "lodash": "^4.17.5",
     "merge-graphql-schemas": "^1.5.1",
+    "mkdirp": "^0.5.1",
     "mongoose": "^5.0.12",
     "morgan": "^1.9.0",
     "nodemailer": "^4.6.4",
@@ -50,6 +51,7 @@
     "passport-local": "^1.0.0",
     "pg": "^7.4.1",
     "sequelize": "^4.37.5",
+    "shortid": "^2.2.8",
     "socket.io": "^2.1.0",
     "subscriptions-transport-ws": "^0.9.7"
   },

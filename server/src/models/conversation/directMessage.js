@@ -1,8 +1,11 @@
 export default (sequelize, DataTypes) => {
   var directMessage = sequelize.define('direct_messages', {
     message: DataTypes.TEXT,
-    path: DataTypes.STRING,
-    type: DataTypes.STRING,
+    uploadPath: {
+      type: DataTypes.STRING,
+      field: 'upload_path'
+    },
+    mimetype: DataTypes.STRING,
     isRead: {
       type: DataTypes.BOOLEAN,
       defaultValue : false,

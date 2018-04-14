@@ -419,7 +419,6 @@ nav.ui.menu {
 }
 
 .messages {
-  margin-bottom: 70px;
   .ui.header h3 {
     text-transform: capitalize;
   }
@@ -431,17 +430,19 @@ nav.ui.menu {
     overflow-y: auto;
     max-height: 360px;
   }
-  .ui.form {
-    position: absolute;
-    bottom: 15px;
-    width: 100%;
-    padding-right: 30px;
+  .ui.fluid.input .field {
+    max-width: 100%;
+    flex: 1 0 auto;
   }
-  .ui.left.action.input {
-    width: 100%;
+  .ui.fluid.input .field textarea {
+    border-top-left-radius: 0!important;
+    border-bottom-left-radius: 0!important;
+    border-left-color: transparent!important;
   }
-  .ui.left.action.input .field {
-    width: 100%;
+  .ui.fluid.input .button {
+    border-top-right-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+    border-right-color: transparent!important;
   }
 }
 

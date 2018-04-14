@@ -2,6 +2,7 @@ import { PubSub, withFilter } from 'graphql-subscriptions'
 
 import { requiresAuth, requiresDirectMessageAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
+import { processUpload } from '../utils/uploadFile'
 
 const pubsub = new PubSub()
 
@@ -46,10 +47,11 @@ export default {
       try {
 
         const messageData = args
-        console.log('args ', file)
+        
         if (file) {
-          messageData.type = file.type
-          messageData.path = file.path
+          const uploadFile = await processUpload(file)
+          messageData.uploadPath = uploadFile.path
+          messageData.mimetype = uploadFile.mimetype
         }
          
         const message = await models.DirectMessage.create({ ...messageData, senderId: user.id })

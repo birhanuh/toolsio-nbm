@@ -1,7 +1,7 @@
 export default `
   
   scalar Upload
-  
+
   type Message {
     id: Int!
     message: String
@@ -10,13 +10,8 @@ export default `
     userId: Int!
     createdAt: Date!
     user: User!
-    path: String!
-    type: String!
-  }
-
-  input File {
-    type: String!,
-    path: String
+    uploadPath: String!
+    mimetype: String!
   }
 
   type GetUnreadCountsMessageResponse {

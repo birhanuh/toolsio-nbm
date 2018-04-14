@@ -200,7 +200,7 @@ class Message extends Component {
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
         
-        <div className="ui left action input">
+        <div className="ui fluid action input">
           <Dropzone onDrop={this.handleOnDrop.bind(this)} className="ignore ui primary button">
             <i className="plus icon" aria-hidden="true" />  
           </Dropzone>

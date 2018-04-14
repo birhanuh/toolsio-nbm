@@ -16,7 +16,7 @@ app.css
 
 # Development
 dist
-files
+uploads
 
 # Testing
 errorShots
