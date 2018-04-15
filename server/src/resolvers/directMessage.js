@@ -84,6 +84,8 @@ export default {
   },
 
   DirectMessage: {
+    uploadPath: parent => parent.uploadPath && process.env.DNS+parent.uploadPath,
+    
     user: ({ user, senderId }, args, { models }) => {
 
       if (user) {

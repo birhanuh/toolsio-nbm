@@ -30,9 +30,6 @@ require('dotenv').config()
 // Config
 import jwtConfig from './config/jwt'
 
-// Mongodb connection
-import db from './db'
-
 // Models
 import models from './models'
 import { refreshAuthTokens } from './utils/authentication'
@@ -98,7 +95,7 @@ const graphqlEndPoint = '/graphql'
 app.use(
   graphqlEndPoint, 
   bodyParser.json(),
-  apolloUploadExpress({ uploadDir: "../files"}), 
+  apolloUploadExpress(), 
   graphqlExpress(req => ({ 
     schema,
     context: {
@@ -110,7 +107,14 @@ app.use(
   }))
 )
 
-app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint, subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' }))
+app.use(
+  '/graphiql', 
+  graphiqlExpress({ endpointURL: graphqlEndPoint, 
+    subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' 
+  })
+)
+
+app.use('/uploads', express.static('uploads'))
 
 /**
 app.use(session({

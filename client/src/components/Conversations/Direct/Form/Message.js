@@ -17,9 +17,17 @@ class Message extends Component {
     super(props)
     this.state = {
       receiverId: this.props.receiverId ? this.props.receiverId: null,
-      message: '',
+      body: '',
       errors: {},
       isLoading: false
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.receiverId) {
+      this.setState({
+        receiverId: nextProps.receiverId
+      })
     }
   }
 
@@ -61,19 +69,19 @@ class Message extends Component {
 
   handleSubmit = (e) => {
     
-    const { message } = this.state
+    const { body } = this.state
     
     // Validation
     if (e.keyCode === ENTER_KEY) { 
-      if (!message.trim()) { 
+      if (!body.trim()) { 
         return
       } else {
-        const { receiverId, message } = this.state
+        const { receiverId, body } = this.state
 
         this.setState({ isLoading: true })
 
         this.props.mutate({ 
-          variables: { message, receiverId: parseInt(receiverId) },
+          variables: { body, receiverId: parseInt(receiverId) },
           optimisticResponse: {
             createDirectMessage: {
               __typename: "Mutation",
@@ -115,7 +123,7 @@ class Message extends Component {
 
               // Rest message state
               this.setState({
-                "message": ''
+                "body": ''
               })
 
               // Reset reload
@@ -136,8 +144,7 @@ class Message extends Component {
 
     const { receiverId } = this.state
     this.setState({ isLoading: true })
-    
-    console.log('file: ', file)    
+       
     await this.props.mutate({ 
       variables: { file, receiverId: parseInt(receiverId) },
       optimisticResponse: {
@@ -192,7 +199,7 @@ class Message extends Component {
   }
 
   render() {
-    const { message, errors, isLoading } = this.state
+    const { body, errors, isLoading } = this.state
 
     return (  
 
@@ -207,12 +214,12 @@ class Message extends Component {
           
           <TextAreaField
             label=""
-            name="message" 
-            value={message} 
+            name="body" 
+            value={body} 
             onChange={this.handleChange.bind(this)} 
             onKeyDown={this.handleSubmit.bind(this)}
             placeholder={T.translate("conversations.form.message")}
-            error={errors.message}
+            error={errors.body}
             formClass="field"
             rows="2"
           /> 
@@ -223,8 +230,8 @@ class Message extends Component {
 }
 
 const createDirectMessageMutation = gql`
-  mutation ($message: String, $file: Upload, $receiverId: Int!) {
-    createDirectMessage(message: $message, file: $file, receiverId: $receiverId) {
+  mutation ($body: String, $file: Upload, $receiverId: Int!) {
+    createDirectMessage(body: $body, file: $file, receiverId: $receiverId) {
       success
       message {
         id

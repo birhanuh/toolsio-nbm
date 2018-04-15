@@ -35,7 +35,7 @@ export default {
           }    
         } else {
           const channel = await models.Channel.create({ name, owner: 1 })
-          await models.Member.create({ userId: 1, channelId: channel.id })
+          await models.Member.create({ userId: 1, channelId: channel.dataValues.id })
 
           return {
             success: true,
@@ -51,16 +51,14 @@ export default {
       }
     }),
 
-    addMember: requiresAuth.createResolver(async (parent, { userId, channelId }, { models, user }) => {
+    addMember: requiresAuth.createResolver(async (parent, { members, channelId }, { models, user }) => {
 
       try {
-        const member = await models.Member.create({ userId: userId, channelId: channelId })
-        console.log('memberAdded', member.dataValues)
-        const user = await models.User.findOne({ where: { id: member.dataValues.userId }})
-
+        const members = await models.Member.bulkCreate(members.map(member => ({ userId: member, channelId: channelId })))
+        console.log('memberAdded', members)
         return {
           success: true,
-          member: user
+          members
         }
       } catch (err) {
         console.log(err)

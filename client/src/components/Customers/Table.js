@@ -9,7 +9,7 @@ export default function Table({ customers }) {
   const emptyMessage = (
     <tbody>
       <tr>
-        <td colSpan="5">
+        <td colSpan="6">
           <div className="ui info message m-3">
             <div className="header">{T.translate("customers.page.empty_customers_header")}</div>
             <p>{T.translate("customers.page.empty_customers_message")}</p>

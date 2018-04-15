@@ -104,7 +104,7 @@ class HeaderNav extends Component {
            
             <div className="ui dropdown item">
               <i className="mail envelop icon"></i>
-              <div className="ui mini blue label envelop">{countUnread}</div>
+              <div className="ui mini red label envelop">{countUnread}</div>
               <div className="menu">
 
                 {latestFiveUnreadMessages}               

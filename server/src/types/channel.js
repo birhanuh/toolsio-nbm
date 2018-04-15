@@ -20,7 +20,7 @@ export default `
 
   type AddMemberResponse {
     success: Boolean!
-    member: User 
+    members: [Int!] 
     errors: [Error!]
   }
 
@@ -31,7 +31,7 @@ export default `
 
   type Mutation {
     createChannel(name: String): CreateChannelResponse!
-    addMember(userId: Int!, channelId: Int!): AddMemberResponse!
+    addMember(members: [Int!], channelId: Int!): AddMemberResponse!
   }
 
 `

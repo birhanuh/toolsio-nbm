@@ -2,6 +2,7 @@ import { PubSub, withFilter } from 'graphql-subscriptions'
 
 import { requiresAuth, requiresChannelAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
+import { processUpload } from '../utils/uploadFile'
 
 const pubsub = new PubSub()
 
@@ -12,7 +13,7 @@ export default {
     getNewChannelMessage: {
       subscribe: requiresChannelAccess.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_CHANNEL_MESSAGE), 
-        (payload, args) => payload.getNewChannelMessage.channelId === args.channelId
+        (payload, args) => console.log('sdfsdf', payload.getNewChannelMessage)
       ))
     }
   },
@@ -76,8 +77,9 @@ export default {
         const messageData = args
 
         if (file) {
-          messageData.filetype = file.type
-          messageData.path = file.path
+          const uploadFile = await processUpload(file)
+          messageData.uploadPath = uploadFile.path
+          messageData.mimetype = uploadFile.mimetype
         }
 
         const message = await models.Message.create({ ...messageData, userId: user.id })
@@ -109,6 +111,8 @@ export default {
   },
 
   Message: {
+    uploadPath: parent => parent.uploadPath && process.env.DNS+parent.uploadPath,
+
     user: ({ user, userId }, args, { models }) => {
 
       if (user) {

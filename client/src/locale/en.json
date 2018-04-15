@@ -640,13 +640,15 @@
       "create_channel": "Create Channel",
       "no_channel": "No Channels",
       "empty_message": "Message is empty",
+      "description": "Internal conversation interface, write, read, reply and delete messages."
+    },
+    "channel": {
       "empty_trash": "Empty trash",
       "remove": "Remove",
       "archive": "Archive",
       "restore": "Restore",
-      "from": "From",
-      "message": "Message",
-      "description": "Internal conversation interface, write, read, reply and delete messages."
+      "members": "members",
+      "message": "Message"
     },
     "messages": {
       "add_member": "Add member",

@@ -24,13 +24,13 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: !this.props.data.getSale ? this.props.data.getSale.id : null,
-      name: !this.props.data.getSale ? this.props.data.getSale.name : '',
-      deadline: !this.props.data.getSale ? moment(this.props.data.getSale.deadline).format("MM-DD-YYYY") : moment(),
-      customerId: !this.props.data.getSale ? this.props.data.getSale.customer.id : '',
-      status: !this.props.data.getSale ? this.props.data.getSale.status : 'new',
-      description: !this.props.data.getSale ? this.props.data.getSale.description : '',
-      total: !this.props.data.getSale ? this.props.data.getSale.total : 0,
+      id: this.props.data.getSale ? this.props.data.getSale.id : null,
+      name: this.props.data.getSale ? this.props.data.getSale.name : '',
+      deadline: this.props.data.getSale ? moment(this.props.data.getSale.deadline) : moment(),
+      customerId: this.props.data.getSale ? this.props.data.getSale.customer.id : '',
+      status: this.props.data.getSale ? this.props.data.getSale.status : 'new',
+      description: this.props.data.getSale ? this.props.data.getSale.description : '',
+      total: this.props.data.getSale ? this.props.data.getSale.total : 0,
       errors: {},
       isLoading: false
     }

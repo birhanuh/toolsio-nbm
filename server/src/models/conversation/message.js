@@ -1,6 +1,6 @@
 export default (sequelize, DataTypes) => {
   const Message = sequelize.define('messages', {
-    message: DataTypes.TEXT,
+    body: DataTypes.TEXT,
     uploadPath: {
       type: DataTypes.STRING,
       field: 'upload_path'

@@ -17,10 +17,17 @@ class Message extends Component {
     super(props)
     this.state = {
       channelId: this.props.channelId ? this.props.channelId: null,
-      message: '',
+      body: '',
       errors: {},
-      file: null,
       isLoading: false
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.channelId) {
+      this.setState({
+        channelId: nextProps.channelId
+      })
     }
   }
 
@@ -62,19 +69,19 @@ class Message extends Component {
 
   handleSubmit = (e) => {
     
-    const { message } = this.state
+    const { body } = this.state
     
     // Validation
     if (e.keyCode === ENTER_KEY) { 
-      if (!message.trim()) { 
+      if (!body.trim()) { 
         return
       } else {
-        const { channelId, message } = this.state
+        const { channelId, body } = this.state
 
         this.setState({ isLoading: true })
 
         this.props.mutate({ 
-          variables: { message, channelId: parseInt(channelId) }
+          variables: { body, channelId: parseInt(channelId) }
           })
           .then(res => {
             // this.props.addFlashMessage({
@@ -90,7 +97,7 @@ class Message extends Component {
               console.log('Message sent', message)
               // Rest message state
               this.setState({
-                "message": ''
+                "body": ''
               })
 
               // Reset reload
@@ -107,15 +114,39 @@ class Message extends Component {
     }
   }
 
-  handleOnDrop = async files => {
+  handleOnDrop = async ([file]) => {
 
-    this.setState({
-      'file': files[0]
-    })
+    const { channelId, body } = this.state
+    this.setState({ isLoading: true })
+    
+    console.log('file: ', file)    
+    await this.props.mutate({ 
+      variables: { file, channelId: parseInt(channelId) },
+      })
+      .then(res => {       
+
+        const { success, message, errors } = res.data.createMessage
+
+        if (success) {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("conversations.form.flash.success_compose")
+          // })  
+          console.log('Message sent', message)
+          // Reset reload
+          this.setState({ isLoading: false })
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => this.setState({ errors: err, isLoading: false }))
   }
 
   render() {
-    const { message, errors, isLoading } = this.state
+    const { body, errors, isLoading } = this.state
 
     return (  
 
@@ -130,12 +161,12 @@ class Message extends Component {
           
           <TextAreaField
             label=""
-            name="message" 
-            value={message} 
+            name="body" 
+            value={body} 
             onChange={this.handleChange.bind(this)} 
             onKeyDown={this.handleSubmit.bind(this)}
             placeholder={T.translate("conversations.form.message")}
-            error={errors.message}
+            error={errors.body}
             formClass="field"
             rows="2"
           />           
@@ -146,8 +177,8 @@ class Message extends Component {
 }
 
 const createMessageMutation = gql`
-  mutation ($message: String, $file: File, $channelId: Int!) {
-    createMessage(message: $message, file: $file, channelId: $channelId)  {
+  mutation ($body: String, $file: Upload, $channelId: Int!) {
+    createMessage(body: $body, file: $file, channelId: $channelId)  {
       success
       message {
         id

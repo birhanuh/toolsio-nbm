@@ -4,10 +4,10 @@
     "react"
   ],
   "rules": {
-    "prop-types": [1],
+    "prop-types": [0],
     "react/prop-types": [0],
     "no-unused-vars": [1],
-    "no-undef": [1],
+    "no-undef": [0],
     "no-console": [0],
     "no-case-declarations": [1],
     "no-constant-condition": [1],

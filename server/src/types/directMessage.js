@@ -2,14 +2,14 @@ export default `
 
   type DirectMessage {
     id: Int!
-    message: String
+    body: String
     isRead: Boolean!
     senderId: Int!
     receiverId: Int!
     createdAt: Date!
     user: User!
-    path: String!
-    mimetype: String!
+    uploadPath: String
+    mimetype: String
   }
 
   type CreateDirectMessageResponse {
@@ -35,7 +35,7 @@ export default `
   }
 
   type Mutation {
-    createDirectMessage(message: String, file: Upload, receiverId: Int! ): CreateDirectMessageResponse!
+    createDirectMessage(body: String, file: Upload, receiverId: Int! ): CreateDirectMessageResponse!
   }
 
   type Subscription {
