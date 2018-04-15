@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 
 import MessageForm from './Form/Message'
 import UsersForm from './Form/Users'
+import RenderText from '../RenderText'
 
 // Localization 
 import T from 'i18n-react'
@@ -20,7 +21,9 @@ const NEW_CHANNEL_MESSAGE_SUBSCRIPTION = gql`
   subscription($channelId: Int!) {
     getNewChannelMessage(channelId: $channelId) {
       id
-      message
+      body
+      uploadPath
+      mimetype
       userId
       isRead
       createdAt
@@ -32,6 +35,27 @@ const NEW_CHANNEL_MESSAGE_SUBSCRIPTION = gql`
     }
   }
 `
+const Message = ({ message: {uploadPath, body, mimetype} }) => {
+  
+  if (uploadPath) {
+    if (mimetype.startsWith('image/')) {
+      return (<div className="ui small message">
+        <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
+      </div>)
+    } else if (mimetype.startsWith('text/')) {
+      return <RenderText uploadPath={uploadPath} />
+    } else if (mimetype.startsWith('audio/')) {
+      return (<div className="ui small message"><audio controls>
+          <source src={uploadPath} type={mimetype} />
+        </audio></div>)
+    } else if (mimetype.startsWith('video/')) {
+      return (<div className="ui small message"><video controls>
+          <source src={uploadPath} type={mimetype} />
+        </video></div>)
+    }
+  }
+  return (body)            
+}
 
 class Messages extends Component {
 
@@ -62,7 +86,7 @@ class Messages extends Component {
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
-        
+        console.log('subscriptionData.data', subscriptionData.data)
         return {
           ...prev,
           getChannelMessages: [...prev.getChannelMessages, subscriptionData.data.getNewChannelMessage],
@@ -79,7 +103,7 @@ class Messages extends Component {
   }
 
   hideConfirmationModal(event) {
-    event.preventDefault()
+    event.persist()
 
     // Show modal
     $('.small.modal.add-member').modal('hide')
@@ -108,7 +132,9 @@ class Messages extends Component {
             <span className="date">{message.createdAt}</span>
           </div>
           <div className="text">
-            {message.message}
+
+            <Message message={message} />
+
           </div>
         </div>
       </div>
@@ -142,10 +168,10 @@ class Messages extends Component {
           <div className="header">{T.translate("conversations.messages.add_member")}</div>
           <div className="content">
 
-            <UsersForm channelId={this.props.channelId} />
+            <UsersForm channelId={this.props.channelId} hideConfirmationModal={this.hideConfirmationModal.bind(this)} />
           </div>
           <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.Form.cancel")}</button>
+            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.form.cancel")}</button>
           </div>
         </div>
       </div>
@@ -170,7 +196,9 @@ const getChannelMessagesQuery = gql`
   query getChannelMessages($channelId: Int!) {
     getChannelMessages(channelId: $channelId) {
       id
-      message
+      body
+      uploadPath
+      mimetype
       userId
       isRead
       createdAt

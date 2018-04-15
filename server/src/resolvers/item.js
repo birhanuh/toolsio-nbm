@@ -3,12 +3,12 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getItem: (parent, {id}, { models }) => models.Item.findOne({ where: {id} }),
-    getItems: (parent, args, { models }) => models.Item.findAll()
+    getItem: requiresAuth.createResolver((parent, {id}, { models }) => models.Item.findOne({ where: {id} })),
+    getItems: requiresAuth.createResolver((parent, args, { models }) => models.Item.findAll())
   },
 
   Mutation: {
-    createItem: async (parent, args, { models }) => {
+    createItem: requiresAuth.createResolver(async (parent, args, { models }) => {
       try {
         const item = await models.Item.create(args)
         
@@ -23,6 +23,6 @@ export default {
           errors: formatErrors(err, models)
         }
       }
-    }  
-  }             
+    })  
+  }          
 }

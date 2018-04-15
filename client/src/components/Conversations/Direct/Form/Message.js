@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
+import Dropzone from 'react-dropzone'
 import { Validation } from '../../../../utils'
 import { TextAreaField } from '../../../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
@@ -16,9 +17,17 @@ class Message extends Component {
     super(props)
     this.state = {
       receiverId: this.props.receiverId ? this.props.receiverId: null,
-      message: '',
+      body: '',
       errors: {},
       isLoading: false
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.receiverId) {
+      this.setState({
+        receiverId: nextProps.receiverId
+      })
     }
   }
 
@@ -60,19 +69,19 @@ class Message extends Component {
 
   handleSubmit = (e) => {
     
-    const { message } = this.state
+    const { body } = this.state
     
     // Validation
     if (e.keyCode === ENTER_KEY) { 
-      if (!message.trim()) { 
+      if (!body.trim()) { 
         return
       } else {
-        const { receiverId, message } = this.state
+        const { receiverId, body } = this.state
 
         this.setState({ isLoading: true })
 
         this.props.mutate({ 
-          variables: { message, receiverId: parseInt(receiverId) },
+          variables: { body, receiverId: parseInt(receiverId) },
           optimisticResponse: {
             createDirectMessage: {
               __typename: "Mutation",
@@ -100,21 +109,21 @@ class Message extends Component {
             // Write our data back to the cache.
             store.writeQuery({ query: getDirectMessageUsersQuery, data })
           }})
-          .then(res => {
-            // this.props.addFlashMessage({
-            //   type: 'success',
-            //   text: T.translate("conversations.form.flash.success_compose")
-            // })  
-            // this.context.router.history.push('/conversations')
-            
+          .then(res => {           
 
             const { success, message, errors } = res.data.createDirectMessage
 
             if (success) {
               console.log('Message sent', message)
+              // this.props.addFlashMessage({
+              //   type: 'success',
+              //   text: T.translate("conversations.form.flash.success_compose")
+              // })  
+              // this.context.router.history.push('/conversations')
+
               // Rest message state
               this.setState({
-                "message": ''
+                "body": ''
               })
 
               // Reset reload
@@ -131,8 +140,66 @@ class Message extends Component {
     }
   }
 
+  handleOnDrop = async ([file]) => {
+
+    const { receiverId } = this.state
+    this.setState({ isLoading: true })
+       
+    await this.props.mutate({ 
+      variables: { file, receiverId: parseInt(receiverId) },
+      optimisticResponse: {
+        createDirectMessage: {
+          __typename: "Mutation",
+          id: -1,
+          success: true,
+          errors: null,
+          message: {
+            __typename: "Message",
+            id: -1,
+          }
+        }            
+      },
+      update: (store) => {
+        const data = store.readQuery({ query: getDirectMessageUsersQuery })
+        const notUserInList = data.getDirectMessageUsers.every(user => user.id !== parseInt(receiverId, 10))
+        
+        if (notUserInList) {
+          data.getDirectMessageUsers.push({
+            __typename: 'DirectMessageUser',
+            id: parseInt(receiverId, 10),
+            first_name: this.props.data.getUser.firstName,
+            email: this.props.data.getUser.email
+          })
+        }
+        // Write our data back to the cache.
+        store.writeQuery({ query: getDirectMessageUsersQuery, data })
+      }})
+      .then(res => {            
+
+        const { success, message, errors } = res.data.createDirectMessage
+
+        if (success) {              
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("conversations.form.flash.success_compose")
+          // })  
+          // this.context.router.history.push('/conversations')
+          console.log('Message sent', message)
+
+          // Reset reload
+          this.setState({ isLoading: false })
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => this.setState({ errors: err, isLoading: false }))
+  }
+
   render() {
-    const { message, errors, isLoading } = this.state
+    const { body, errors, isLoading } = this.state
 
     return (  
 
@@ -140,25 +207,31 @@ class Message extends Component {
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
         
-        <TextAreaField
-          label={T.translate("conversations.form.message")}
-          name="message" 
-          value={message} 
-          onChange={this.handleChange.bind(this)} 
-          onKeyDown={this.handleSubmit.bind(this)}
-          placeholder={T.translate("conversations.form.message")}
-          error={errors.message}
-          formClass="field"
-        /> 
-
+        <div className="ui fluid action input">
+          <Dropzone onDrop={this.handleOnDrop.bind(this)} className="ignore ui primary button">
+            <i className="plus icon" aria-hidden="true" />  
+          </Dropzone>
+          
+          <TextAreaField
+            label=""
+            name="body" 
+            value={body} 
+            onChange={this.handleChange.bind(this)} 
+            onKeyDown={this.handleSubmit.bind(this)}
+            placeholder={T.translate("conversations.form.message")}
+            error={errors.body}
+            formClass="field"
+            rows="2"
+          /> 
+        </div> 
       </div> 
     )
   }
 }
 
 const createDirectMessageMutation = gql`
-  mutation ($message: String!, $receiverId: Int!) {
-    createDirectMessage(message: $message, receiverId: $receiverId ) {
+  mutation ($body: String, $file: Upload, $receiverId: Int!) {
+    createDirectMessage(body: $body, file: $file, receiverId: $receiverId) {
       success
       message {
         id

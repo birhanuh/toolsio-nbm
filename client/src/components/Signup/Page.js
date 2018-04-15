@@ -1,10 +1,8 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import Form from './Form'
 import Invitation from './Invitation'
 import { Authorization } from '../../utils'
-import { signupRequest, isSubdomainExist, isUserExist} from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import FlashMessagesList from '../../flash/FlashMessagesList'
 

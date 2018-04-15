@@ -1,14 +1,17 @@
 import { formatErrors } from '../utils/formatErrors'
 import { loginUserWithToken } from '../utils/authentication'
+import { requiresAuth } from '../middlewares/authentication'
 
 export default {
   Query: {
-    getUser: (parent, {id}, { models }) => models.User.findOne({ where: {id} }, { raw: true }),
-    getUsers: (parent, args, { models }) => models.User.findAll()
+    getUser: requiresAuth.createResolver((parent, {id}, { models }) => models.User.findOne({ where: {id} }, { raw: true })),
+    getUsers: requiresAuth.createResolver((parent, args, { models }) => models.User.findAll())
   },
 
   Mutation: {
-    loginUser: (parent, { email, password }, { models, SECRET, SECRET2 }) => loginUserWithToken(email, password, models, SECRET, SECRET2),
+    loginUser: (parent, { email, password }, { models, SECRET, SECRET2 }) => 
+      loginUserWithToken(email, password, models, SECRET, SECRET2),
+    
     registerUser: async (parent, args, { models }) => {
 
       const { firstName, lastName, email, password } = args
@@ -28,17 +31,17 @@ export default {
             ]
           }
         } else {
-          const response = await models.sequelize.transaction(async () => {
+          const response = await models.sequelize.transaction(async (transaction) => {
 
-            const user = await  models.User.create({ firstName, lastName, email, password })
-            await models.Account.create({ subdomain, industry, owner: user.id })
+            const user = await  models.User.create({ firstName, lastName, email, password }, { transaction })
+            await models.Account.create({ subdomain, industry, owner: user.id }, { transaction })
 
             return user
           })
-        
+      
           return {
             success: true,
-            response
+            user: response
           }
         }
       } catch(err) {

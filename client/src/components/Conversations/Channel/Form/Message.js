@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import classnames from 'classnames'
+import Dropzone from 'react-dropzone'
 import { Validation } from '../../../../utils'
 import { TextAreaField } from '../../../../utils/FormFields'
 import { graphql } from 'react-apollo'
@@ -16,9 +17,17 @@ class Message extends Component {
     super(props)
     this.state = {
       channelId: this.props.channelId ? this.props.channelId: null,
-      message: '',
+      body: '',
       errors: {},
       isLoading: false
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.channelId) {
+      this.setState({
+        channelId: nextProps.channelId
+      })
     }
   }
 
@@ -60,19 +69,19 @@ class Message extends Component {
 
   handleSubmit = (e) => {
     
-    const { message } = this.state
+    const { body } = this.state
     
     // Validation
     if (e.keyCode === ENTER_KEY) { 
-      if (!message.trim()) { 
+      if (!body.trim()) { 
         return
       } else {
-        const { channelId, message } = this.state
+        const { channelId, body } = this.state
 
         this.setState({ isLoading: true })
 
         this.props.mutate({ 
-          variables: { message, channelId: parseInt(channelId) }
+          variables: { body, channelId: parseInt(channelId) }
           })
           .then(res => {
             // this.props.addFlashMessage({
@@ -88,7 +97,7 @@ class Message extends Component {
               console.log('Message sent', message)
               // Rest message state
               this.setState({
-                "message": ''
+                "body": ''
               })
 
               // Reset reload
@@ -105,8 +114,39 @@ class Message extends Component {
     }
   }
 
+  handleOnDrop = async ([file]) => {
+
+    const { channelId, body } = this.state
+    this.setState({ isLoading: true })
+    
+    console.log('file: ', file)    
+    await this.props.mutate({ 
+      variables: { file, channelId: parseInt(channelId) },
+      })
+      .then(res => {       
+
+        const { success, message, errors } = res.data.createMessage
+
+        if (success) {
+          // this.props.addFlashMessage({
+          //   type: 'success',
+          //   text: T.translate("conversations.form.flash.success_compose")
+          // })  
+          console.log('Message sent', message)
+          // Reset reload
+          this.setState({ isLoading: false })
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => this.setState({ errors: err, isLoading: false }))
+  }
+
   render() {
-    const { message, errors, isLoading } = this.state
+    const { body, errors, isLoading } = this.state
 
     return (  
 
@@ -114,25 +154,31 @@ class Message extends Component {
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
         
-        <TextAreaField
-          label={T.translate("conversations.form.message")}
-          name="message" 
-          value={message} 
-          onChange={this.handleChange.bind(this)} 
-          onKeyDown={this.handleSubmit.bind(this)}
-          placeholder={T.translate("conversations.form.message")}
-          error={errors.message}
-          formClass="field"
-        /> 
-
+        <div className="ui fluid action input">
+            <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui primary button">
+              <i className="plus icon" aria-hidden="true" />  
+            </Dropzone>
+          
+          <TextAreaField
+            label=""
+            name="body" 
+            value={body} 
+            onChange={this.handleChange.bind(this)} 
+            onKeyDown={this.handleSubmit.bind(this)}
+            placeholder={T.translate("conversations.form.message")}
+            error={errors.body}
+            formClass="field"
+            rows="2"
+          />           
+        </div>   
       </div> 
     )
   }
 }
 
 const createMessageMutation = gql`
-  mutation ($message: String!, $channelId: Int!) {
-    createMessage(message: $message, channelId: $channelId ) {
+  mutation ($body: String, $file: Upload, $channelId: Int!) {
+    createMessage(body: $body, file: $file, channelId: $channelId)  {
       success
       message {
         id

@@ -42,10 +42,10 @@ export default `
 
   type Mutation {
     createCustomer(name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
-      street: String, postalCode: Int, region: String, country: String): CreateUpdateCustomerResponse!
+      street: String, postalCode: String, region: String, country: String): CreateUpdateCustomerResponse!
     
     updateCustomer(id: Int!, name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
-      street: String, postalCode: Int, region: String, country: String): CreateUpdateCustomerResponse! 
+      street: String, postalCode: String, region: String, country: String): CreateUpdateCustomerResponse! 
 
     deleteCustomer(id: Int!): DeleteCustomerResponse!   
   }

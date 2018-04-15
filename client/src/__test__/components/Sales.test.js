@@ -13,7 +13,6 @@ import thunk from 'redux-thunk'
 configure({ adapter: new Adapter() })
 
 // Components 
-import FormPage from '../../components/Sales/FormPage'
 import Form from '../../components/Sales/Form'
 import Page from '../../components/Sales/Page'
 import Show from '../../components/Sales/Show'
@@ -46,49 +45,7 @@ describe("components", function() {
 
     })
   })
-   
-  describe("<FormPage />", function() {  
-
-    beforeEach(() => {
-      const storeStateMock = {
-        sales: {
-          Sales,
-          find: jest.fn()
-        },
-        customers: Customers
-      }
-
-      store = mockStore(storeStateMock)
-
-      props = {
-        createSale: jest.fn(),
-        fetchSale: jest.fn(),
-        updateSale: jest.fn(),
-        fetchCustomers: jest.fn(),
-        match: {
-          params: {
-            id: 1
-          }
-        }
-      }
-
-      wrapper = mount(<BrowserRouter><Provider store={store}><FormPage {...props} /></Provider></BrowserRouter>)
-    })
-
-    it('renders connected component', function() { 
-      
-      expect(wrapper.find(FormPage).length).toEqual(1)
-    })
-
-    it('check props matchs', function() { 
-
-      expect(wrapper.find(FormPage).prop('createSale')).toEqual(props.createSale)
-      expect(wrapper.find(FormPage).prop('fetchSale')).toEqual(props.fetchSale)
-      expect(wrapper.find(FormPage).prop('updateSale')).toEqual(props.updateSale)
-      expect(wrapper.find(FormPage).prop('fetchCustomers')).toEqual(props.fetchCustomers)
-    })
-
-  })
+  
 
   describe("<Page />", function() {  
 

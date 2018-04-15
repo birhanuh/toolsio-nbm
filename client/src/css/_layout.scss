@@ -430,6 +430,20 @@ nav.ui.menu {
     overflow-y: auto;
     max-height: 360px;
   }
+  .ui.fluid.input .field {
+    max-width: 100%;
+    flex: 1 0 auto;
+  }
+  .ui.fluid.input .field textarea {
+    border-top-left-radius: 0!important;
+    border-bottom-left-radius: 0!important;
+    border-left-color: transparent!important;
+  }
+  .ui.fluid.input .button {
+    border-top-right-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+    border-right-color: transparent!important;
+  }
 }
 
 // footer

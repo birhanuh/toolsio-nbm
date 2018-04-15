@@ -9,6 +9,7 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import cors from 'cors'
+import { apolloUploadExpress } from 'apollo-upload-server'
 
 // Authentication packages 
 import session from 'express-session'
@@ -23,12 +24,11 @@ import { SubscriptionServer } from 'subscriptions-transport-ws'
 // Init app
 const app = express()
 
-// Config
+// env
 require('dotenv').config()
-import jwtConfig from './config/jwt'
 
-// Mongodb connection
-import db from './db'
+// Config
+import jwtConfig from './config/jwt'
 
 // Models
 import models from './models'
@@ -66,8 +66,8 @@ app.use(async (req, res, next) => {
   // Parse subdomain 
   //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
 
-   // Parse authToken 
-  let authToken = req.headers['x-auth-token']
+  // Parse authToken 
+  const authToken = req.headers['x-auth-token']
 
   if (authToken) {
     try {
@@ -92,7 +92,10 @@ app.use(async (req, res, next) => {
 // GraphQL
 const graphqlEndPoint = '/graphql'
 
-app.use(graphqlEndPoint, bodyParser.json(), 
+app.use(
+  graphqlEndPoint, 
+  bodyParser.json(),
+  apolloUploadExpress(), 
   graphqlExpress(req => ({ 
     schema,
     context: {
@@ -104,7 +107,14 @@ app.use(graphqlEndPoint, bodyParser.json(),
   }))
 )
 
-app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndPoint, subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' }))
+app.use(
+  '/graphiql', 
+  graphiqlExpress({ endpointURL: graphqlEndPoint, 
+    subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' 
+  })
+)
+
+app.use('/uploads', express.static('uploads'))
 
 /**
 app.use(session({
@@ -147,36 +157,35 @@ app.set('port', process.env.SERVER_PORT)
 
 const server = createServer(app)
 
-// sync() will create all table if then doesn't exist in database
-models.sequelize.sync().then(() => {
-  // app.listen(app.get('port'), () => 
-  //   console.log('Server started on port: ' + process.env.SERVER_PORT)
-  // )
-  server.listen(app.get('port'), () => {
-    new SubscriptionServer({
-      execute,
-      subscribe,
-      schema: schema,
-      onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
-        
-        if (authToken && refreshAuthToken) {
-        
-          try {
-            const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
-            return { models, user }           
-          } catch (err) {
-            const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
-            return { models, user: newAuthTokens.user }
-          }
-      }
+// app.listen(app.get('port'), () => 
+//   console.log('Server started on port: ' + process.env.SERVER_PORT)
+// )
+server.listen(app.get('port'), () => {
+  new SubscriptionServer({
+    execute,
+    subscribe,
+    schema: schema,
+    onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
+      
+      if (authToken && refreshAuthToken) {
+      
+        try {
+          const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
+          return { models, user }           
+        } catch (err) {
+          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
+          return { models, user: newAuthTokens.user }
+        }
+    }
 
-      return { models }
-    }}, {
-      server: server,
-      path: '/subscriptions',
-    })
-    console.log('Server started on port: ' + process.env.SERVER_PORT)
+    return { models }
+  }}, {
+    server: server,
+    path: '/subscriptions',
   })
+  console.log('Server started on port: ' + process.env.SERVER_PORT)
+  console.log('Environment: ' + process.env.NODE_ENV)
+  console.log('------------------------')
 })
 
 

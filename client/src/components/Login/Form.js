@@ -60,6 +60,8 @@ class Form extends Component {
           if (success) {
             localStorage.setItem('authToken', authToken)
             localStorage.setItem('refreshAuthToken', refreshAuthToken)
+            
+            // Redirect to dashboard
             this.context.router.history.push('/dashboard')
           } else {
             let errorsList = {}

@@ -24,7 +24,7 @@ class Form extends Component {
         projectId: this.props.data.getInvoice ? (this.props.data.getInvoice.project ? this.props.data.getInvoice.project.id : '') : '' 
       },
       step2: {
-        deadline: this.props.data.getInvoice ? moment(this.props.data.getInvoice.deadline, "MM-DD-YYYY") : moment(),
+        deadline: this.props.data.getInvoice ? moment(this.props.data.getInvoice.deadline) : moment(),
         paymentTerm: this.props.data.getInvoice ? this.props.data.getInvoice.paymentTerm : '',
         interestInArrears: this.props.data.getInvoice ? this.props.data.getInvoice.interestInArrears : '',
         status: this.props.data.getInvoice ? this.props.data.getInvoice.status : 'new',

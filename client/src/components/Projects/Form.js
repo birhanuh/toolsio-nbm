@@ -25,14 +25,14 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: !this.props.data.getProject ? this.props.data.getProject.id : null,
-      name: !this.props.data.getProject ? this.props.data.getProject.name : '',
-      deadline: !this.props.data.getProject ? moment(this.props.data.getProject.deadline).format("MM-DD-YYYY") : moment(),
-      customerId: !this.props.data.getProject ? this.props.data.getProject.customerId : '',
-      status: !this.props.data.getProject ? this.props.data.getProject.status : 'new',
-      progress: !this.props.data.getProject ? this.props.data.getProject.progress : 0,
-      description: !this.props.data.getProject ? this.props.data.getProject.description : '',
-      total: !this.props.data.getProject ? this.props.data.getProject.total : 0,
+      id: this.props.data.getProject ? this.props.data.getProject.id : null,
+      name: this.props.data.getProject ? this.props.data.getProject.name : '',
+      deadline: this.props.data.getProject ? moment(this.props.data.getProject.deadline) : moment(),
+      customerId: this.props.data.getProject ? this.props.data.getProject.customerId : '',
+      status: this.props.data.getProject ? this.props.data.getProject.status : 'new',
+      progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
+      description: this.props.data.getProject ? this.props.data.getProject.description : '',
+      total: this.props.data.getProject ? this.props.data.getProject.total : 0,
       errors: {},
       isLoading: false
     }
@@ -235,7 +235,7 @@ class Form extends Component {
 
   render() {
     const { id, name, deadline, customerId, status, progress, description, errors, isLoading } = this.state
-    
+   
     const { getCustomers } = this.props.getCustomersProjectsQuery
   
     const customersOptions = map(getCustomers, (customer) => 

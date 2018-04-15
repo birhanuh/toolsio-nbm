@@ -1,11 +1,12 @@
 import React, { Component } from 'react' 
-import PropTypes from 'prop-types'
 require('babel-polyfill')
 import { Link } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { InputField } from '../../utils/FormFields'
 import classnames from 'classnames'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -25,30 +26,28 @@ class UserForm extends Component {
   constructor(props) {
     super(props)
     this.state = {    
-      _id: this.props.user ? this.props.user._id : null,
-      firstName: this.props.user ? this.props.user.firstName : '',
-      lastName: this.props.user ? this.props.user.lastName : '',
+      id: this.props.data.getUser ? this.props.data.getUser.id : null,
+      firstName: this.props.data.getUser ? this.props.data.getUser.firstName : '',
+      lastName: this.props.data.getUser ? this.props.data.getUser.lastName : '',
+      email: this.props.data.getUser ? this.props.data.getUser.email : '',
       password: '',
       confirmPassword: '',
-      avatar: '',
-      file: '',
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      avatarUrl: this.props.data.getUser ? this.props.data.getUser.avatarUrl : '',
+      file: null,
+      errors: {},
       isLoadingLogo: false,
       isLoadingForm: false
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.user) {
+    if (nextProps.data.getUser) {
       this.setState({
-        _id: nextProps.user._id,
-        firstName: nextProps.user.firstName,
-        lastName: nextProps.user.lastName,
-        avatar: nextProps.user.avatar,
+        id: nextProps.data.getUser.id,
+        firstName: nextProps.data.getUser.firstName,
+        lastName: nextProps.data.getUser.lastName,
+        email: nextProps.data.getUser.email,
+        avatarUrl: nextProps.data.getUser.avatarUrl,
       })
     }
   }
@@ -100,6 +99,15 @@ class UserForm extends Component {
     }  
   }
 
+  s3SignAvatar = (variables) => {
+    return axios.post('/users/avatar/', variables)
+  }
+
+  // Save File to S3
+  uploadAvatar = (signedRequest, file, options) => {
+    return axios.put(signedRequest, file, options)
+  }
+
   uploadToS3 = async (url, file, signedRequest) => {
 
     const options = {
@@ -112,13 +120,13 @@ class UserForm extends Component {
 
     if (uploadAvatarResponse.status === 200) {
       this.setState({
-        avatar: url
+        avatarUrl: url
       })
 
-      const { _id, avatar } = this.state
+      const { id, avatarUrl } = this.state
 
       this.setState({ isLoadingAvatar: true })
-      this.props.updateUser({ _id, avatar})
+      this.props.updateUser({ id, avatarUrl})
         .then((res) => {
           this.props.addFlashMessage({
             type: 'success',
@@ -137,7 +145,7 @@ class UserForm extends Component {
       .toString(36)
       .substring(2, 7)
     const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-")
-    const newFileName = `avatars/${date}-${randomString}-${cleanFileName}`
+    const newFileName = `avatarUrls/${date}-${randomString}-${cleanFileName}`
     return newFileName.substring(0, 60)
   }
 
@@ -149,7 +157,7 @@ class UserForm extends Component {
   }
 
   handleSubmitImage = async () => {
-    const { _id, file } = this.state
+    const { id, file } = this.state
     const response = await this.props.s3SignAvatar({
       variables: {
         filename: this.formatFileName(file.name),
@@ -163,7 +171,7 @@ class UserForm extends Component {
 
   render() {
 
-    const { _id, firstName, lastName, avatar, password, confirmPassword, errors, isLoadingAvatar, isLoadingForm } = this.state
+    const { id, firstName, lastName, email, avatarUrl, password, confirmPassword, errors, isLoadingAvatar, isLoadingForm } = this.state
   
     return (            
 
@@ -176,7 +184,7 @@ class UserForm extends Component {
                   <div className="ui dimmer">
                     <div className="content">
                       <div className="center">
-                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ui inverted button">
+                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
                           {T.translate("account.page.select_avatar")}
                         </Dropzone>
                       </div>
@@ -203,6 +211,7 @@ class UserForm extends Component {
                   value={firstName} 
                   onChange={this.handleChange.bind(this)} 
                   placeholder={T.translate("account.page.first_name")}
+                  error={errors && errors.firstName}
                   formClass="field"
                 />
                 <InputField
@@ -212,6 +221,18 @@ class UserForm extends Component {
                   value={lastName} 
                   onChange={this.handleChange.bind(this)} 
                   placeholder={T.translate("account.page.last_name")}
+                  error={errors && errors.lastName}
+                  formClass="field"
+                />
+                <InputField
+                  type="email"
+                  name="email" 
+                  value={email} 
+                  id='email'
+                  label={T.translate("account.page.email")}
+                  onChange={this.handleChange.bind(this)} 
+                  placeholder={T.translate("account.page.email")}
+                  error={errors && errors.email}
                   formClass="field"
                 />
                 <InputField
@@ -222,7 +243,7 @@ class UserForm extends Component {
                   label={T.translate("account.page.password")}
                   onChange={this.handleChange.bind(this)} 
                   placeholder={T.translate("account.page.password")}
-                  error={errors.message && errors.message.errors && errors.message.errors['password'] && errors.message.errors['password'].message}
+                  error={errors && errors.password}
                   formClass="field"
                 />
                 <InputField
@@ -233,7 +254,7 @@ class UserForm extends Component {
                   label={T.translate("account.page.confirm_password")}
                   onChange={this.handleChange.bind(this)} 
                   placeholder={T.translate("sign_up.confirm_password")}
-                  error={errors.confirmPassword}
+                  error={errors && errors.confirmPassword}
                   formClass="field"
                 /> 
 
@@ -254,20 +275,51 @@ class UserForm extends Component {
   }
 }
 
-// Proptypes definition
-UserForm.propTypes = {
-  updateUser: PropTypes.func.isRequired,
-  uploadAvatar: PropTypes.func.isRequired,
-  s3SignAvatar: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
-  user: PropTypes.object
-}
+const getUserQuery = gql`
+  query getUser($email: String!) {
+    getUser(email: $email) {
+      id
+      firstName
+      lastName
+      email
+      avatarUrl
+      isAdmin
+    }
+  }
+`
 
-// Contexttype definition
-UserForm.contextTypes = {
-  router: PropTypes.object.isRequired
-}
+const updateUserMutation = gql`
+  mutation updateUser($id: Int!, $firstName: String!, $lastName: String, $email: String!, $avatarUrl: String!) {
+    updateUser(id: $id, name: $firstName, firstName: $lastName, lastName: $email, avatarUrl: $avatarUrl) {
+      success
+      user {
+        id
+        email
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
 
-export default UserForm
+const MutationsAndQuery =  compose(
+  graphql(updateUserMutation, {
+    name : 'updateUserMutation',
+    options: (props) => ({
+      variables: {
+        subdomain: props.subdomain
+      },
+    })
+  }),
+  graphql(getUserQuery, {
+    options: (props) => ({
+      variables: {
+        email: parseInt(props.id)
+      },
+    })
+  })
+)(UserForm)
 
-
+export default MutationsAndQuery

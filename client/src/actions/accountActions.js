@@ -33,15 +33,3 @@ export function updateAccount(account) {
   }
 }
 
-export function s3SignLogo(variables) {
-  return dispatch => {
-    return axios.post('/accounts/logo', variables)
-  }
-}
-
-// Save File to S3
-export function uploadLogo(signedRequest, file, options) {
-  return dispatch => {
-    return axios.put(signedRequest, file, options)
-  }
-}

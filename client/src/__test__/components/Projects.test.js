@@ -1,95 +1,100 @@
 import 'raf/polyfill'
 
 import React from 'react'
-import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { configure, shallow, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import toJson from 'enzyme-to-json'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import { MockedProvider } from 'react-apollo/test-utils'
+import { addTypenameToDocument } from 'apollo-client'
+import gql from 'graphql-tag'
 
 // Configure Adapter
 configure({ adapter: new Adapter() })
 
 // Components 
-import FormPage from '../../components/Projects/FormPage'
 import Form from '../../components/Projects/Form'
 import Page from '../../components/Projects/Page'
 import Show from '../../components/Projects/Show'
 
-// Factories
-import { Project, Projects, Customer, Customers } from '../factories'
-
-// Setups
-const middlewares = [thunk] // add your middlewares like `redux-thunk`
-const mockStore = configureMockStore(middlewares)
-
-let store, props, component, wrapper
+let list
+let APPS_GQL
 
 describe("components", function() { 
-
-  describe("<Form />", function() { 
-    
-    beforeEach(() => {
-      props = {
-        customers: Customers,
-        saveProject: jest.fn()
-      }
-
-      component = shallow(<Form {...props}/>)
-    })
-
-    it('renders correctly', () => { 
-      
-      expect(component.find('button').hasClass('ui primary')).toBe(true)
-
-      // const formComponent = shallow(<Form />)
-      // const tree = toJson(formComponent)
-      // console.log(tree)
-
-    })
-  })
    
-  describe("<FormPage />", function() {  
+  describe("<Form />", function() {  
 
     beforeEach(() => {
-      const storeStateMock = {
-        projects: {
-          Projects,
-          find: jest.fn()
-        },
-        customers: Customers
-      }
 
-      store = mockStore(storeStateMock)
-
-      props = {
-        createProject: jest.fn(),
-        fetchProject: jest.fn(),
-        updateProject: jest.fn(),
-        fetchCustomers: jest.fn(),
-        match: {
-          params: {
-            id: 1
+      APPS_GQL = gql`
+        mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
+          createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+            success
+            project {
+              id
+              name 
+              deadline
+              status
+              progress
+              description
+            }
+            errors {
+              path
+              message
+            }
           }
         }
-      }
-
-      wrapper = mount(<BrowserRouter><Provider store={store}><FormPage {...props} /></Provider></BrowserRouter>)
+      `
     })
 
     it('renders connected component', function() { 
       
+      const props = {
+        match: {
+          params: {
+            id: 1
+          }
+        },
+        data: {
+          getProject: {
+            id: 1,
+            name: "Project 1",
+            deadline: 1523439822435,
+            status: "new",
+            description: "Desciption 1..."
+          }
+        }
+      }
+
+      const wrapper = mount(<BrowserRouter>
+        <MockedProvider mocks={[{
+          request: {
+            query: APPS_GQL,
+            varibales: { name: "Project 1", deadline: 1523439822435, status: "new", description: "Desciption 1...", total: 0, customerId: 1 }
+          },
+          result: {
+            "data": {
+              "createProject": {
+                "success": true,
+                "project": {
+                  "id": 1,
+                  "name": "Project 1",
+                  "deadline": 1523439822435,
+                  "status": "new",
+                  "description": "Desciption 1..."
+                },
+                "errors": null
+              }
+            }
+          }
+        }]} > 
+          
+          <Form {...props} />
+
+        </MockedProvider>
+      </BrowserRouter>)
+
       expect(wrapper.find(FormPage).length).toEqual(1)
-    })
-
-    it('check props matchs', function() { 
-
-      expect(wrapper.find(FormPage).prop('createProject')).toEqual(props.createProject)
-      expect(wrapper.find(FormPage).prop('fetchProject')).toEqual(props.fetchProject)
-      expect(wrapper.find(FormPage).prop('updateProject')).toEqual(props.updateProject)
-      expect(wrapper.find(FormPage).prop('fetchCustomers')).toEqual(props.fetchCustomers)
     })
 
   })
@@ -97,27 +102,51 @@ describe("components", function() {
   describe("<Page />", function() {  
 
     beforeEach(() => {
-      const storeStateMock = {
-        projects: Projects
-      }
 
-      store = mockStore(storeStateMock)
-
-      props = {
-        fetchProjects: jest.fn()
-      }
-
-      wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
+      APPS_GQL = gql`
+        {
+          getProjects {
+            id
+            name 
+          }
+        }
+      `
     })
 
     it('renders connected component', function() { 
       
-      expect(wrapper.find(Page).length).toEqual(1)
-    })
+      const list =  [
+        {
+          "id": 1,
+          "name": "Project 1"
+        }
+      ]
 
-    it('check props matchs', function() { 
+      const wrapper = mount(<BrowserRouter>
+        <MockedProvider mocks={[{
+          request: {
+            query: APPS_GQL
+          },
+          result: {
+            "data": {
+              "getProjects": [
+                {
+                  "id": 1,
+                  "name": "Project 1"
+                }
+              ]
+            }
+          }
+        }]} > 
+          
+          <Page />
 
-      expect(wrapper.find(Page).prop('fetchProjects')).toEqual(props.fetchProjects)
+        </MockedProvider>
+      </BrowserRouter>)
+
+      expect(wrapper.find(Page).prop('data').getProjects).toEqual(list)
+      //expect(toJSON(wrapper)).toMatchSnapshot()
+
     })
 
   })
@@ -125,39 +154,42 @@ describe("components", function() {
   describe("<Show />", function() {  
     
     beforeEach(() => {
-      const storeStateMock = {
-        projects: {
-          Projects,
-          find: jest.fn()
-        }
-      }
-
-      store = mockStore(storeStateMock)
-
-      props = {
-        fetchProject: jest.fn(),
-        deleteProject: jest.fn(),
-        addFlashMessage: jest.fn(),
-        match: {
-          params: {
-            id: 1
+      APPS_GQL = gql`
+        query getProject($id: Int!) {
+          getProject(id: $id) {
+            id
+            name 
           }
         }
-      }
-
-      wrapper = mount(<BrowserRouter><Provider store={store}><Show {...props} /></Provider></BrowserRouter>)
+      `  
     })
 
     it('renders connected component', function() { 
       
-      expect(wrapper.find(Show).length).toEqual(1)
+      const wrapper = mount(<BrowserRouter>
+        <MockedProvider mocks={[{
+          request: {
+            query: APPS_GQL,
+            varibales: { params: {id: 1} }
+          },
+          result: {
+            "data": {
+              "getProject": {
+                "id": 1,
+                "name": "Project 1"
+              }
+            }
+          }
+        }]} > 
+          
+          <Show match={{params: {id: 1}}} />
+
+        </MockedProvider>
+      </BrowserRouter>)
+
+      expect(wrapper.find(Show).prop('data').getProject).not.toBe(null)
     })
 
-    it('check props matchs', function() { 
-
-      expect(wrapper.find(Show).prop('fetchProjects')).toEqual(props.fetchProjects)
-      expect(wrapper.find(Show).prop('deleteProject')).toEqual(props.deleteProject)
-    })
 
   })
 

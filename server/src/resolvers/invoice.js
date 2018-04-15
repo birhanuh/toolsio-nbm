@@ -4,12 +4,12 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
   
   Query: {
-    getInvoice: (parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true }),
-    getInvoices: (parent, args, { models }) => models.Invoice.findAll()
+    getInvoice: requiresAuth.createResolver((parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true })),
+    getInvoices: requiresAuth.createResolver((parent, args, { models }) => models.Invoice.findAll())
   },
 
   Mutation: {
-    createInvoice: async (parent, args, { models, user }) => {
+    createInvoice: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
         const customer = models.Customer.findOne({where: {id: args.customerId} }, { raw: true })
         
@@ -32,9 +32,9 @@ export default {
           errors: formatErrors(err, models)
         }
       }
-    },
+    }),
 
-    updateInvoice: (parent, args, { models }) => {
+    updateInvoice: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Invoice.update(args, { where: {id: args.id}, returning: true, plain: true })
         .then(result => {
   
@@ -50,9 +50,9 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    },
+    }),
 
-    deleteInvoice: (parent, args, { models }) => {
+    deleteInvoice: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Invoice.destroy({ where: {id: args.id}, force: true })
         .then(res => {
           
@@ -67,7 +67,7 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    }         
+    })         
   },
 
   GetInvoicesResponse: {

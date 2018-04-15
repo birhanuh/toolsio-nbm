@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
+import Moment from 'moment'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import MessageForm from './Form/Message'
+import RenderText from '../RenderText'
 
 // Localization 
 import T from 'i18n-react'
-
-import $ from 'jquery'
 
 import avatarPlaceholderSmall from '../../../images/avatar-placeholder-small.png'
 
@@ -15,7 +15,9 @@ const NEW_DIRECT_MESSAGE_SUBSCRIPTION = gql`
   subscription($receiverId: Int!) {
     getNewDirectMessage(receiverId: $receiverId) {
       id
-      message
+      body
+      uploadPath
+      mimetype
       isRead
       createdAt
       user {
@@ -26,6 +28,28 @@ const NEW_DIRECT_MESSAGE_SUBSCRIPTION = gql`
     }
   }
 `
+
+const Message = ({ message: {uploadPath, body, mimetype} }) => {
+  
+  if (uploadPath) {
+    if (mimetype.startsWith('image/')) {
+      return (<div className="ui small message">
+        <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
+      </div>)
+    } else if (mimetype.startsWith('text/')) {
+      return <RenderText uploadPath={uploadPath} />
+    } else if (mimetype.startsWith('audio/')) {
+      return (<div className="ui small message"><audio controls>
+          <source src={uploadPath} type={mimetype} />
+        </audio></div>)
+    } else if (mimetype.startsWith('video/')) {
+      return (<div className="ui small message"><video controls>
+          <source src={uploadPath} type={mimetype} />
+        </video></div>)
+    }
+  }
+  return (body)            
+}
 
 class Messages extends Component {
 
@@ -40,9 +64,6 @@ class Messages extends Component {
       }
       this.unsubscribe = this.subscribe(receiverId)
     }
-
-    // Close add-user modal
-    $('.small.modal.add-user').modal('hide')
   }﻿
 
   componentWillUnmount() {   
@@ -59,28 +80,13 @@ class Messages extends Component {
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
-        
+        console.log('subscriptionData.data', subscriptionData.data)
         return {
           ...prev,
           getDirectMessages: [...prev.getDirectMessages, subscriptionData.data.getNewDirectMessage],
         }
       }
     })
-  
-
-  showConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.add-member').modal('show')
-  }
-
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.add-member').modal('hide')
-  }
 
   render() {
 
@@ -102,10 +108,12 @@ class Messages extends Component {
         <div className="content">
           <a className="author">{message.user.email}</a>
           <div className="metadata">
-            <span className="date">{message.createdAt}</span>
+            <span className="date">{Moment(message.createdAt).format('DD/MM/YYYY')}</span>
           </div>
           <div className="text">
-            {message.message}
+           
+           <Message message={message} />
+
           </div>
         </div>
       </div>
@@ -115,14 +123,9 @@ class Messages extends Component {
       <div className="messages">
 
         <div className="ui clearing vertical segment border-bottom-none">
-          <div className="ui left floated header mt-2">
+          <div className="ui left floated header">
             <h3 className="header capitalize-text">{getUser && getUser.firstName}</h3>
-          </div>  
-
-          <button id="add-member" className="ui right floated primary button" onClick={this.showConfirmationModal.bind(this)}>
-            <i className="add circle icon"></i>
-            {T.translate("conversations.messages.add_member")}
-          </button>        
+          </div>        
         </div>   
 
         <div className="ui divider mt-0"></div>
@@ -154,7 +157,9 @@ const getDirectMessagesQuery = gql`
   query getDirectMessages($receiverId: Int!) {
     getDirectMessages(receiverId: $receiverId) {
       id
-      message
+      body
+      uploadPath
+      mimetype
       isRead
       createdAt
       user {

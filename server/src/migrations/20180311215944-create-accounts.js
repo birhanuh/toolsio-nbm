@@ -17,7 +17,7 @@ module.exports = {
         allowNull : false,
         type: Sequelize.STRING
       },
-      phoneNumber: {
+      phone_number: {
         type: Sequelize.STRING
       },
       email: {
@@ -26,8 +26,8 @@ module.exports = {
       street: {
         type: Sequelize.STRING
       },
-      postalCode: {
-        type: Sequelize.DECIMAL
+      postal_code: {
+        type: Sequelize.STRING
       },
       region: {
         type: Sequelize.STRING
@@ -35,14 +35,14 @@ module.exports = {
       country: {
         type: Sequelize.STRING
       },
-      logoUrl: {
+      logo_url: {
         type: Sequelize.STRING
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       },

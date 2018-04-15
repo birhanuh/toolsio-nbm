@@ -3,9 +3,9 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getChannel: (parent, { id }, { models }) => models.Channel.findOne({ where: { id } }),
+    getChannel: requiresAuth.createResolver((parent, { id }, { models }) => models.Channel.findOne({ where: { id } })),
 
-    getChannels: (parent, args, { models }) => {
+    getChannels: requiresAuth.createResolver((parent, args, { models }) => {
       return models.Channel.findAll({
         include: [
           {
@@ -14,11 +14,11 @@ export default {
           }
         ]
       }, { raw: true })
-    }
+    })
   },
 
   Mutation: {
-    createChannel: async (parent, { name }, { models, user }) => {
+    createChannel: requiresAuth.createResolver(async (parent, { name }, { models, user }) => {
       try {
       
         const channel = await models.Channel.findOne({ where: { name } }, { raw: true })
@@ -35,7 +35,7 @@ export default {
           }    
         } else {
           const channel = await models.Channel.create({ name, owner: 1 })
-          await models.Member.create({ userId: 1, channelId: channel.id })
+          await models.Member.create({ userId: 1, channelId: channel.dataValues.id })
 
           return {
             success: true,
@@ -49,24 +49,25 @@ export default {
           errors: formatErrors(err, models)
         }
       }
-    },
+    }),
 
-    addMemeber: async (parent, { userId, channelId }, { models, user }) => {
+    addMember: requiresAuth.createResolver(async (parent, { members, channelId }, { models, user }) => {
 
-      return models.Member.create({ userId: userId, channelId: channelId })
-        .then(() => {
-          return {
-            success: true
-          }
-        })  
-        .catch(err => {
-          console.log(err)
-          return {
-            success: false,
-            errors: formatErrors(err, models)
-          }
-        })    
-    }
+      try {
+        const members = await models.Member.bulkCreate(members.map(member => ({ userId: member, channelId: channelId })))
+        console.log('memberAdded', members)
+        return {
+          success: true,
+          members
+        }
+      } catch (err) {
+        console.log(err)
+        return {
+          success: false,
+          errors: formatErrors(err, models)
+        }
+      }   
+    })
 
   },
 

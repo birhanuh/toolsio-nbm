@@ -22,7 +22,7 @@ export const InputField = ({ type, name, value, id, label,
 }  
 
 export const TextAreaField = ({ name, value, id, label, error, 
-  placeholder, onChange, onKeyDown, labelHorizontal, formClass}) => {  
+  placeholder, onChange, onKeyDown, labelHorizontal, formClass, rows}) => {  
   return (
     <div className={classnames(formClass, { error: !!error })}>
       { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }
@@ -34,6 +34,7 @@ export const TextAreaField = ({ name, value, id, label, error,
         onKeyDown={onKeyDown}
         placeholder={placeholder}
         tabIndex="0"
+        rows={rows}
       />
       <span className={classnames({red: !!error})}>{error}</span>
     </div>

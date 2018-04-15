@@ -2,50 +2,59 @@ import { PubSub, withFilter } from 'graphql-subscriptions'
 
 import { requiresAuth, requiresDirectMessageAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
+import { processUpload } from '../utils/uploadFile'
 
 const pubsub = new PubSub()
 
 const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE'
-//requiresDirectMessageAccess.createResolver(
+
 export default {
   Subscription: {
     getNewDirectMessage: {
-      subscribe: withFilter(
+      subscribe: requiresAuth.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_DIRECT_MESSAGE), 
         (payload, args, { models, user }) => {
           
           return (payload.getNewDirectMessage.senderId === user.id && payload.getNewDirectMessage.receiverId === args.receiverId)
-          ||(payload.getNewDirectMessage.senderId === args.receiverId && payload.getNewDirectMessage.receiverId === user.id)
+          || (payload.getNewDirectMessage.senderId === args.receiverId && payload.getNewDirectMessage.receiverId === user.id)
         }
-      )
+      ))
     }
   },
 
   Query: {
-    getDirectMessage: (parent, { id }, { models }) => models.DirectMessage.findOne({ where: { id } }, { raw: true }),
+    getDirectMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.DirectMessage.findOne({ where: { id } }, { raw: true })),
 
-    getDirectMessages: (parent, args, { models, user }) => {
+    getDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => {
       return models.DirectMessage.findAll({ 
         where: { [models.sequelize.Op.or]: [
           { [models.sequelize.Op.and]: [{ receiverId: args.receiverId, senderId: user.id }]},
           { [models.sequelize.Op.and]: [{ senderId: args.receiverId, receiverId: user.id }]}
           ] },
         order: [['created_at', 'ASC']] }, { raw: true })
-    },
+    }),
 
-    getDirectMessageUsers: (parent, args, { models }) => 
+    getDirectMessageUsers: requiresAuth.createResolver((parent, args, { models }) => 
       models.sequelize.query('select distinct on (u.id) u.id, u.first_name, u.email from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id)', {
           model: models.User,
           raw: true,
-        })
+        }))
 
   },
 
   Mutation: {
-    createDirectMessage: async (parent, args, { models, user }) => {
+    createDirectMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, user }) => {
       try {
+
+        const messageData = args
         
-        const message = await models.DirectMessage.create({ ...args, senderId: user.id })
+        if (file) {
+          const uploadFile = await processUpload(file)
+          messageData.uploadPath = uploadFile.path
+          messageData.mimetype = uploadFile.mimetype
+        }
+         
+        const message = await models.DirectMessage.create({ ...messageData, senderId: user.id })
 
         // Do both asynchronously
         const asyncFunc = async () => {
@@ -71,10 +80,12 @@ export default {
           errors: formatErrors(err, models)
         }
       }
-    }  
+    })  
   },
 
   DirectMessage: {
+    uploadPath: parent => parent.uploadPath && process.env.DNS+parent.uploadPath,
+    
     user: ({ user, senderId }, args, { models }) => {
 
       if (user) {

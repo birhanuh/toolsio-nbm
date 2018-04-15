@@ -637,16 +637,18 @@
   "conversations": {
     "page": {
       "header": "Conversations",
-      "add_channel": "Add Channel",
+      "create_channel": "Create Channel",
       "no_channel": "No Channels",
       "empty_message": "Message is empty",
+      "description": "Internal conversation interface, write, read, reply and delete messages."
+    },
+    "channel": {
       "empty_trash": "Empty trash",
       "remove": "Remove",
       "archive": "Archive",
       "restore": "Restore",
-      "from": "From",
-      "message": "Message",
-      "description": "Internal conversation interface, write, read, reply and delete messages."
+      "members": "members",
+      "message": "Message"
     },
     "messages": {
       "add_member": "Add member",
@@ -664,7 +666,8 @@
       "title": "Title",
       "message": "Message",
       "select_users": "-Select users-",
-      "channel_name_required": "Channel name is required.",
+      "user_required": "User is required.",
+      "channel_name_required": "Channel name is required",
       "body_required": "Body is required.",
       "flash": {
         "success_compose": "Message is sent!",
