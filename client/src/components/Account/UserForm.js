@@ -1,8 +1,11 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 require('babel-polyfill')
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { InputField } from '../../utils/FormFields'
 import classnames from 'classnames'
 import { graphql, compose } from 'react-apollo'
@@ -275,6 +278,10 @@ class UserForm extends Component {
   }
 }
 
+UserForm.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+}
+
 const getUserQuery = gql`
   query getUser($email: String!) {
     getUser(email: $email) {
@@ -304,7 +311,7 @@ const updateUserMutation = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const MutationQuery =  compose(
   graphql(updateUserMutation, {
     name : 'updateUserMutation',
     options: (props) => ({
@@ -316,10 +323,10 @@ const MutationsAndQuery =  compose(
   graphql(getUserQuery, {
     options: (props) => ({
       variables: {
-        email: parseInt(props.id)
+        email: props.email
       },
     })
   })
 )(UserForm)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationQuery)

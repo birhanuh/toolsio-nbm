@@ -26,7 +26,7 @@ import UsersPage from '../Users/Page'
 
 import HeaderNav from './HeaderNav'
 import Sidebar from './Sidebar'
-import FlashMessagesList from '../../flash/FlashMessagesList'
+import FlashMessage from '../../flash/FlashMessage'
 
 // Semantic CSS
 import 'semantic-ui-css/semantic.min.css'
@@ -67,7 +67,7 @@ class App extends Component {
 
         <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
                    
-          { !authPages && <FlashMessagesList /> }
+          { !authPages && <FlashMessage /> }
           
           <div className={classnames({'sixteen wide column': internalPages, 'six wide column': authPages})}>           
             <Switch>

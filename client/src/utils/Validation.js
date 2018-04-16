@@ -143,8 +143,8 @@ export default {
     if (!data.deadline) {
       errors['deadline'] = T.translate("projects.form.deadline_required")
     }
-    if (!data.customer) {
-      errors['customer'] = T.translate("projects.form.customer_required")
+    if (!data.customerId) {
+      errors['customerId'] = T.translate("projects.form.customer_required")
     }
     
     return {
@@ -162,8 +162,8 @@ export default {
     if (!data.deadline) {
       errors['deadline'] = T.translate("sales.form.deadline_required")
     }
-    if (!data.customer) {
-      errors['customer'] = T.translate("sales.form.customer_required")
+    if (!data.customerId) {
+      errors['customerId'] = T.translate("sales.form.customer_required")
     }
     
     return {

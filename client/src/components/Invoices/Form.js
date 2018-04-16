@@ -1,8 +1,10 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import Steps from './Steps'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -318,9 +320,14 @@ class Form extends Component {
   }
 }
 
+// Proptypes definition
+Form.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+}
+
 const createInvoiceMutation = gql`
   mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
-    $description: String, $total: Int, $projectId: Int, $saleId: Int, $customerId: Int!) {
+    $description: String, $total: Int!, $projectId: Int, $saleId: Int, $customerId: Int!) {
     createInvoice(deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
       description: $description, total: $total, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
       success
@@ -336,7 +343,7 @@ const createInvoiceMutation = gql`
 `
 
 const updateInvoiceMutation = gql`
-  mutation updateInvoice($id: Int!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
+  mutation updateInvoice($id: Int!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int!, $customerId: Int!) {
     updateInvoice(id: $id, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
       success
       invoice {
@@ -433,7 +440,7 @@ const getInvoiceQuery = gql`
     }
   }
 `
-const Mutations =  compose(
+const MutationsQuery =  compose(
   graphql(createInvoiceMutation, {
     name : 'createInvoiceMutation'
   }),
@@ -455,5 +462,5 @@ const Mutations =  compose(
   })
 )(Form)
 
-export default Mutations
+export default connect(null, { addFlashMessage } ) (MutationsQuery)
 

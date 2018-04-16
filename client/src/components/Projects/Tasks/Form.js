@@ -386,7 +386,7 @@ class Task extends Component {
 Task.propTypes = {
   tasks: PropTypes.array.isRequired,
   projectId: PropTypes.number.isRequired,
-  //addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 const createTaskMutation = gql`
@@ -469,7 +469,7 @@ const updateTaskMutation = gql`
 
 // export default MutationsAndQuery
 
-const MutationsAndQuery =  compose(
+const Mutations =  compose(
   graphql(createTaskMutation, {
     name : 'createTaskMutation'
   }),
@@ -478,4 +478,4 @@ const MutationsAndQuery =  compose(
   })
 )(Task)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (Mutations)

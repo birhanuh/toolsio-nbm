@@ -1,9 +1,12 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 require('babel-polyfill')
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { InputField, SelectField } from '../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -428,6 +431,10 @@ class AccountForm extends Component {
   }
 }
 
+AccountForm.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+}
+
 const getAccountQuery = gql`
   query getAccount($subdomain: String!) {
     getAccount(subdomain: $subdomain) {
@@ -461,7 +468,7 @@ const updateAccountMutation = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const MutationQuery =  compose(
   graphql(updateAccountMutation, {
     name : 'updateAccountMutation',
     options: (props) => ({
@@ -479,6 +486,6 @@ const MutationsAndQuery =  compose(
   })
 )(AccountForm)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationQuery)
 
 

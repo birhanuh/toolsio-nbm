@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
 import { SelectField } from '../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -271,7 +270,7 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  //addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
@@ -315,7 +314,7 @@ const getProjectQuery = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const MutationQuery =  compose(
   graphql(deleteProjectMutation, {
     name : 'deleteProjectMutation'
   }),
@@ -328,5 +327,4 @@ const MutationsAndQuery =  compose(
   })
 )(Show)
 
-export default MutationsAndQuery
-
+export default connect(null, { addFlashMessage } ) (MutationQuery)

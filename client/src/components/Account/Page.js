@@ -19,8 +19,6 @@ class Page extends Component {
     
     // Parse subdomain 
     let subdomain =  Authorization.getSubdomain()
-
-
   }
 
   render() {
@@ -35,10 +33,8 @@ class Page extends Component {
       const authToken = localStorage.getItem('authToken')
       const { user, account } = decode(authToken)
 
-      //currentAccount.subdomain = account.subdomain
-      currentAccount.firstName = user.firstName
-      currentAccount.email = user.email
-
+      currentAccount = { user, account }
+      console.log('user ', currentAccount.user.email)
     } catch(err) {
       console.log('err: ', err)
     }
@@ -50,32 +46,13 @@ class Page extends Component {
 
           <AccountForm subdomain={subdomain} /> 
              
-          { currentAccount && <UserForm id={currentAccount.id} /> }
+          { currentAccount.user && <UserForm email={currentAccount.user.email} /> }
 
       </div>  
     )
   }
 }
 
-
-const deleteAccountMutation = gql`
-  mutation deleteAccount($subdomain: String!) {
-    deleteAccount(subdomain: $subdomain) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default graphql(deleteAccountMutation, {
-  options: (props) => ({
-    variables: {
-      subdomain: 'testa'
-    },
-  })
-})(Page)
+export default Page
 
 

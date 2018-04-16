@@ -1,7 +1,7 @@
 import React from 'react' 
 import { render } from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-//import { Provider } from 'react-redux'
+import { Provider } from 'react-redux'
 import { createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers/rootReducer'
@@ -16,7 +16,7 @@ import T from 'i18n-react'
 import App from './components/Layouts/App'
 import client from './apollo'
 
-/*
+
 // A state for the entire project created by Redux
 const store = createStore(
   rootReducer,
@@ -25,7 +25,6 @@ const store = createStore(
     applyMiddleware(thunk)
   )
 )
-*/
 
 /*
 // Parse subdomain 
@@ -51,9 +50,11 @@ if (language.length > 2) {
 T.setTexts(require("./locale/" +language+ ".json"))
 
 render(
-  <ApolloProvider client={client}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </ApolloProvider>, document.getElementById('app'))
+  <Provider store={store}>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ApolloProvider>
+  </Provider>, document.getElementById('app'))
 

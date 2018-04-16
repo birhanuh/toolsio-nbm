@@ -1,8 +1,10 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import map from 'lodash/map'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
@@ -76,7 +78,7 @@ class Form extends Component {
     const { errors, isValid } = Validation.validateProjectInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ errors: updatedErrors })
@@ -89,7 +91,7 @@ class Form extends Component {
      event.preventDefault()
 
     // Validation
-    if (true) { 
+    if (this.isValid()) { 
       this.setState({ isLoading: true })
 
       const { id, name, deadline, status, progress, description, total, customerId } = this.state
@@ -110,17 +112,16 @@ class Form extends Component {
           // Write our data back to the cache.
           proxy.writeQuery({ query: getCustomersProjectsQuery, data })
         }})
-        .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("projects.form.flash.success_update", { name: name})
-          // })  
-          // this.context.router.history.push('/projects')
-          
+        .then(res => {          
 
           const { success, project, errors } = res.data.updateProject
 
           if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.form.flash.success_update", { name: name})
+            })  
+
             this.context.router.history.push('/projects')
           } else {
             let errorsList = {}
@@ -147,17 +148,16 @@ class Form extends Component {
           // Write our data back to the cache.
           proxy.writeQuery({ query: getCustomersProjectsQuery, data })
         }})
-        .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("projects.form.flash.success_update", { name: name})
-          // })  
-          // this.context.router.history.push('/projects')
-          
+        .then(res => {          
 
           const { success, project, errors } = res.data.createProject
 
           if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.form.flash.success_update", { name: name})
+            })  
+
             this.context.router.history.push('/projects')
           } else {
             let errorsList = {}
@@ -374,9 +374,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  // saveProject: PropTypes.func.isRequired,
-  // project: PropTypes.object,
-  // customers: PropTypes.array.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Form.contextTypes = {
@@ -467,7 +465,7 @@ const getProjectQuery = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const MutationsQuery =  compose(
   graphql(createProjectMutation, {
     name : 'createProjectMutation'
   }),
@@ -486,4 +484,4 @@ const MutationsAndQuery =  compose(
   })
 )(Form)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationsQuery)

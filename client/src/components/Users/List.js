@@ -27,7 +27,7 @@ export default function List({ users}) {
   )
 
   return (
-    <table className="ui very compact striped table">
+    <table className="ui very compact striped center aligned table">
        <thead>
           <tr>
             <th>{T.translate("account.users.first_name")}</th>

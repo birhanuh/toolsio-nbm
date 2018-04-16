@@ -1,8 +1,10 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { InputField } from '../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -372,8 +374,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  // saveCustomer: PropTypes.func.isRequired,
-  // customer: PropTypes.object
+  addFlashMessage: PropTypes.func.isRequired,
 }
 
 Form.contextTypes = {
@@ -420,7 +421,7 @@ const getCustomerQuery = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const MutationsQuery =  compose(
   graphql(createCustomerMutation, {
     name : 'createCustomerMutation'
   }),
@@ -436,4 +437,4 @@ const MutationsAndQuery =  compose(
   })
 )(Form)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationsQuery)

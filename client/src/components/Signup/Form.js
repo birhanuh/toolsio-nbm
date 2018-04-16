@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { InputField, SelectField } from '../../utils/FormFields'
 import classnames from 'classnames'
 import { graphql } from 'react-apollo'
@@ -197,7 +198,7 @@ class Form extends Component {
 
 // Proptypes definition
 Form.propTypes = {
-  // addFlashMessage: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
   // isSubdomainExist: PropTypes.func.isRequired,
   // isUserExist: PropTypes.func.isRequired
 }
@@ -218,5 +219,4 @@ const registerUserMutation = gql`
   }
 `
 
-export default graphql(registerUserMutation)(Form)
-
+export default connect(null, { addFlashMessage } ) (graphql(registerUserMutation)(Form))

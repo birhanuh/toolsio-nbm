@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import map from 'lodash/map'
 import classnames from 'classnames'
@@ -286,7 +287,7 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  //addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
@@ -343,7 +344,7 @@ const getCustomerQuery = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const MutationQuery =  compose(
   graphql(deleteCustomerMutation, {
     name : 'deleteCustomerMutation'
   }),
@@ -356,4 +357,4 @@ const MutationsAndQuery =  compose(
   })
 )(Show)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationQuery)

@@ -4,7 +4,7 @@ import Form from './Form'
 import { connect } from 'react-redux'
 import { confirmEmail } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import FlashMessagesList from '../../flash/FlashMessagesList'
+import FlashMessage from '../../flash/FlashMessage'
 
 // Localization 
 import T from 'i18n-react'
@@ -49,7 +49,7 @@ class Page extends Component {
           </div>
         </h2>
         
-        <FlashMessagesList />
+        <FlashMessage />
 
         <Form />
 

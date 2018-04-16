@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
@@ -380,7 +381,7 @@ class Item extends Component {
 Item.propTypes = {
   items: PropTypes.array.isRequired,
   saleId: PropTypes.number.isRequired,
-  //addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 const createItemMutation = gql`
@@ -422,7 +423,7 @@ const updateItemMutation = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const Mutations =  compose(
   graphql(createItemMutation, {
     name : 'createItemMutation'
   }),
@@ -431,5 +432,5 @@ const MutationsAndQuery =  compose(
   })
 )(Item)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (Mutations)
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
@@ -108,6 +109,11 @@ class Form extends Component {
   }
 }
 
+// Proptypes definition
+Form.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+}
+
 Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
@@ -125,5 +131,6 @@ const loginUserMutation = gql`
     }
   }
 `
-export default graphql(loginUserMutation)(Form)
+
+export default connect(null, { addFlashMessage } ) (graphql(loginUserMutation)(Form))
 

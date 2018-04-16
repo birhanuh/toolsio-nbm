@@ -1,10 +1,9 @@
 import React, { Component } from 'react' 
-import PropTypes from 'prop-types'
 import Form from './Form'
 import Invitation from './Invitation'
 import { Authorization } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import FlashMessagesList from '../../flash/FlashMessagesList'
+import FlashMessage from '../../flash/FlashMessage'
 
 // Localization 
 import T from 'i18n-react'
@@ -38,7 +37,7 @@ class Page extends Component {
           <div className="content">{T.translate("sign_up.header")}</div>
         </h2>
         
-        <FlashMessagesList />
+        <FlashMessage />
         
         {form}
 
@@ -52,13 +51,6 @@ class Page extends Component {
       </div>  
     )
   }
-}
-
-// Proptypes definition
-Page.propTypes = {
-  // addFlashMessage: PropTypes.func.isRequired,
-  // isSubdomainExist: PropTypes.func.isRequired,
-  // isUserExist: PropTypes.func.isRequired
 }
 
 export default Page
