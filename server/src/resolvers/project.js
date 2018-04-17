@@ -4,7 +4,7 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
 
   Query: {
-    getProject: requiresAuth.createResolver((parent, {id}, { models }) => {
+    getProject: requiresAuth.createResolver((parent, { id }, { models }) => {
       return models.Project.findOne({ where: { id } }, 
         {
           include: [

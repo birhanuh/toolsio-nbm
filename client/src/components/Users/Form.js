@@ -63,7 +63,7 @@ class Form extends Component {
         .then((res) => {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("account.users.invitation_success_message", {email: email})
+            text: T.translate("users.form.invitation_success_message", {email: email})
           })
           this.setState({ email: '', isLoading: false })
         })
@@ -81,7 +81,7 @@ class Form extends Component {
       <div className="ui text segment">  
 
         <fieldset className="custom-fieldset">
-          <legend className="custom-legend">{T.translate("account.users.invite_user_message")}</legend>
+          <legend className="custom-legend">{T.translate("users.form.invite_user_label")}</legend>
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>          
             
@@ -97,7 +97,7 @@ class Form extends Component {
               formClass="field"
             />
 
-            <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("account.users.invite_user")}</button> 
+            <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("users.form.invite_user")}</button> 
 
           </form>
         </fieldset>  

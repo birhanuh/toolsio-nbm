@@ -101,20 +101,44 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
-    this.props.deleteProjectMutation({ variables: {id} })
-      .then(() => {
-        // this.props.addFlashMessage({
-        //   type: 'success',
-        //   text: T.translate("projects.show.flash.success_delete", { name: name})
-        // })  
-        this.context.router.history.push('/projects')
+    this.props.deleteProjectMutation({ 
+      variables: { id },
+      update: (proxy, { data: { deleteProject } }) => {
+        const { success } = deleteProject
+
+        if (!success) {
+          return
+        }
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: getProjectsQuery })
+        // Add our comment from the mutation to the end.
+        data.getProjects.filter(project => project.id !== id) 
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: getProjectsQuery, data })
+      }})
+      .then(res => {          
+
+        const { success, project, errors } = res.data.deleteProject
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("projects.show.flash.success_delete")
+          })  
+
+          this.context.router.history.push('/projects')
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
       })
       .catch(err => {
-        // this.props.addFlashMessage({
-        //   type: 'error',
-        //   text: T.translate("projects.show.flash.error_delete")
-        // })  
-        console.log('error ', err)
+        this.props.addFlashMessage({
+          type: 'error',
+          text: T.translate("projects.show.flash.error_delete")
+        })  
       })
     
   }
@@ -314,10 +338,27 @@ const getProjectQuery = gql`
   }
 `
 
+const getProjectsQuery = gql`
+  query {
+    getProjects {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        name
+      }
+    }
+  }
+`
+
 const MutationQuery =  compose(
   graphql(deleteProjectMutation, {
     name : 'deleteProjectMutation'
   }),
+  graphql(getProjectsQuery),
   graphql(getProjectQuery, {
     options: (props) => ({
       variables: {

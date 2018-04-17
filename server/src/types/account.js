@@ -16,13 +16,19 @@ export default `
 
   type UpdateAccountResponse {
     success: Boolean!
-    account: Account
+    account: Account!
     errors: [Error!]
   }
 
   type DeleteAccountResponse {
     success: Boolean!
     errors: [Error!]
+  }
+
+  type S3SignLogoResponse {
+    signedRequest: String!
+    url: String!
+    errors: String
   }
 
   type Query {
@@ -36,7 +42,9 @@ export default `
     updateAccount(subdomain: String! industry: String, phoneNumber: String, email: String, street: String, postalCode: 
     String, region: String, country: String, logoUrl: String): UpdateAccountResponse!
 
-     deleteAccount(subdomain: String!): DeleteAccountResponse!
+    deleteAccount(subdomain: String!): DeleteAccountResponse!
+
+    s3SignLogo(fileName: String!, fileType: String!): S3SignLogoResponse!
   }
 
 `

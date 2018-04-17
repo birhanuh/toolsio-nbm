@@ -15,10 +15,6 @@ export default function Breadcrumb(props, context) {
       currentPageTitle = "dashboard.header"
       currentPageDescription = "dashboard.description"
       break
-    case currentPage.includes('/settings'): 
-      currentPageTitle = "settings.page.header"
-      currentPageDescription = "customers.page.description"
-      break
     case currentPage.includes('/customers'): 
       currentPageTitle = "customers.page.header"
       currentPageDescription = "customers.page.description"
@@ -39,13 +35,13 @@ export default function Breadcrumb(props, context) {
       currentPageTitle = "conversations.page.header"
       currentPageDescription = "conversations.page.description"
       break
-    case currentPage.includes('/account'): 
-      currentPageTitle = "account.header"
-      currentPageDescription = "account.description"
+    case currentPage.includes('/settings'): 
+      currentPageTitle = "settings.header"
+      currentPageDescription = "settings.description"
       break
     case currentPage.includes('/users'): 
-      currentPageTitle = "account.users.header"
-      currentPageDescription = "account.users.description"
+      currentPageTitle = "users.header"
+      currentPageDescription = "users.description"
       break
     default:
       currentPageTitle = "No page title"

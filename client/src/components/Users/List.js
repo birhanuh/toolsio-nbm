@@ -5,14 +5,14 @@ import Tr from './Tr'
 // Localization 
 import T from 'i18n-react'
 
-export default function List({ users}) {
+export default function List({ users }) {
   const emptyMessage = (
     <tbody>
       <tr>
         <td colSpan="4" className="p-3">
           <div className="ui info message">
-            <div className="header">{T.translate("account.users.empty_users_header")}</div>
-            <p>{T.translate("account.users.empty_users_message")}</p>
+            <div className="header">{T.translate("users.list.empty_users_header")}</div>
+            <p>{T.translate("users.list.empty_users_message")}</p>
           </div>
         </td>
       </tr>
@@ -21,7 +21,7 @@ export default function List({ users}) {
 
   const usersList = (
     <tbody>
-      { users.map(user => <Tr user={user} key={user._id} />) }
+      { users.map(user => <Tr user={user} key={user.id} />) }
     </tbody>   
     
   )
@@ -30,10 +30,10 @@ export default function List({ users}) {
     <table className="ui very compact striped center aligned table">
        <thead>
           <tr>
-            <th>{T.translate("account.users.first_name")}</th>
-            <th>{T.translate("account.users.last_name")}</th>
-            <th>{T.translate("account.users.email")}</th>
-            <th>{T.translate("account.users.accepted")}</th>
+            <th>{T.translate("users.list.first_name")}</th>
+            <th>{T.translate("users.list.last_name")}</th>
+            <th>{T.translate("users.list.email")}</th>
+            <th>{T.translate("users.list.accepted")}</th>
           </tr>
         </thead>
         

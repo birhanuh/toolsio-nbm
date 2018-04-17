@@ -84,6 +84,46 @@ class Page extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
+    this.props.deleteInvoiceMutation({ 
+      variables: { id },
+      update: (proxy, { data: { deleteInvoice } }) => {
+        const { success } = deleteInvoice
+
+        if (!success) {
+          return
+        }
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: getInvoicesQuery })
+        // Add our comment from the mutation to the end.
+        data.getInvoices.filter(invoice => invoice.id !== id) 
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: getInvoicesQuery, data })
+      }})
+      .then(res => {          
+
+        const { success, project, errors } = res.data.deleteInvoice
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("invoices.show.flash.success_delete")
+          })  
+
+          this.context.router.history.push('/projects')
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => {
+        this.props.addFlashMessage({
+          type: 'error',
+          text: T.translate("invoices.show.flash.error_delete")
+        })  
+      })
+
     this.props.deleteInvoiceMutation({ variables: {id} })
       .then(() => {
         // this.props.addFlashMessage({

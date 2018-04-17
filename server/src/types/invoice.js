@@ -28,7 +28,7 @@ export default `
 
   type CreateUpdateInvoiceResponse {
     success: Boolean!
-    invoice: Invoice 
+    invoice: Invoice!
     errors: [Error!]
   }
 

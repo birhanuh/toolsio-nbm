@@ -3,7 +3,7 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getTask: requiresAuth.createResolver((parent, {id}, { models }) => models.Task.findOne({ where: {id} })),
+    getTask: requiresAuth.createResolver((parent, { id }, { models }) => models.Task.findOne({ where: { id } })),
     getTasks: requiresAuth.createResolver((parent, args, { models }) => models.Task.findAll())
   },
 

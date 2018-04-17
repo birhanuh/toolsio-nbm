@@ -163,18 +163,31 @@ class Form extends Component {
       this.setState({ isLoading: true })
       
       if (id) {
-        this.props.updateCustomerMutation({variables: { id, name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, street, postalCode: parseInt(postalCode), region, country } })
-          .then(res => {
-            
-            // this.props.addFlashMessage({
-            //   type: 'success',
-            //   text: T.translate("customers.form.flash.success_update", { name: name})
-            // })  
-            // this.context.router.history.push('/customers')
+        this.props.updateCustomerMutation({variables: { id, name, vatNumber: parseInt(vatNumber), phoneNumber, 
+          email, isContactIncludedInInvoice, street, postalCode: parseInt(postalCode), region, country },
+          update: (proxy, { data: { updateCustomer } }) => {
+            const { success, customer } = updateCustomer
 
-            const { success, errors } = res.data.createCustomer
+            if (!success) {
+              return
+            }
+            // Read the data from our cache for this query.
+            const data = proxy.readQuery({ query: getCustomersQuery })
+            // Add our comment from the mutation to the end.
+            data.getCustomers.push(customer)
+            // Write our data back to the cache.
+            proxy.writeQuery({ query: getCustomersQuery, data })
+          }})
+          .then(res => {
+
+            const { success, errors } = res.data.updateCustomer
            
             if (success) {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: T.translate("customers.form.flash.success_update", { name: name})
+              })  
+
               this.context.router.history.push('/customers')
             } else {
               let errorsList = {}
@@ -196,18 +209,30 @@ class Form extends Component {
       }   
 
       this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, 
-        street, postalCode: parseInt(postalCode), region, country } })
+        street, postalCode: parseInt(postalCode), region, country },
+        update: (proxy, { data: { createCustomer } }) => {
+          const { success, customer } = createCustomer
+
+          if (!success) {
+            return
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({ query: getCustomersQuery })
+          // Add our comment from the mutation to the end.
+          data.getCustomers.push(customer)
+          // Write our data back to the cache.
+          proxy.writeQuery({ query: getCustomersQuery, data })
+        }})
         .then(res => {
-          
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("customers.form.flash.success_create", { name: name})
-          // })  
-          // this.context.router.history.push('/customers')
 
           const { success, errors } = res.data.createCustomer
          
           if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("customers.form.flash.success_create", { name: name})
+            }) 
+
             this.context.router.history.push('/customers')
           } else {
             let errorsList = {}
@@ -386,6 +411,13 @@ const createCustomerMutation = gql`
     createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
       postalCode: $postalCode, region: $region, country: $country) {
       success
+      customer {
+        id
+        name
+        vatNumber
+        phoneNumber
+        email
+      }
       errors {
         path
         message
@@ -397,6 +429,13 @@ const updateCustomerMutation = gql`
   mutation updateCustomer($id: Int!, $name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
     updateCustomer(id: $id, name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, postalCode: $postalCode, region: $region, country: $country) {
       success
+      customer {
+        id
+        name
+        vatNumber
+        phoneNumber
+        email
+      }
       errors {
         path
         message
@@ -421,13 +460,26 @@ const getCustomerQuery = gql`
   }
 `
 
-const MutationsQuery =  compose(
+const getCustomersQuery = gql`
+  {
+    getCustomers {
+      id
+      name
+      vatNumber
+      phoneNumber
+      email
+    }
+  }
+`
+
+const MutationsQueries =  compose(
   graphql(createCustomerMutation, {
     name : 'createCustomerMutation'
   }),
   graphql(updateCustomerMutation, {
     name: 'updateCustomerMutation'
   }),
+  graphql(getCustomersQuery),
   graphql(getCustomerQuery, {
     options: (props) => ({
       variables: {
@@ -437,4 +489,4 @@ const MutationsQuery =  compose(
   })
 )(Form)
 
-export default connect(null, { addFlashMessage } ) (MutationsQuery)
+export default connect(null, { addFlashMessage } ) (MutationsQueries)

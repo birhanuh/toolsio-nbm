@@ -78,7 +78,7 @@ class App extends Component {
               <Route exact path="/login/confirmation/:token?" component={Login} />
               <Route path="/subdomain" component={Subdomain} />
               <Route path="/dashboard" component={Dashboard} />
-              <Route exact path="/account" component={Account} />
+              <Route exact path="/settings" component={Account} />
               <Route exact path="/projects" component={ProjectsPage} />
               <Route exact path="/projects/edit/:id?" component={ProjectsForm} /> 
               <Route exact path="/projects/show/:id?" component={ProjectsShow} />

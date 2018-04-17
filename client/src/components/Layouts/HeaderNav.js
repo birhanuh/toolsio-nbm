@@ -120,7 +120,7 @@ class HeaderNav extends Component {
                   {T.translate("internal_navigation.tasks")}
                   <div className="ui right floated blue label">1</div>
                 </a>
-                <Link to="/account" className="item">
+                <Link to="/settings" className="item">
                   <i className="settings icon"></i>
                   {T.translate("internal_navigation.settings")}
                 </Link>

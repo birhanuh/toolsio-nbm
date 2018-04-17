@@ -93,20 +93,44 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
-    this.props.deleteCustomerMutation({ variables: {id} })
-      .then(() => {
-        // this.props.addFlashMessage({
-        //   type: 'success',
-        //   text: T.translate("customers.show.flash.success_delete", { name: name})
-        // })  
-        this.context.router.history.push('/customers')
+    this.props.deleteCustomerMutation({ 
+      variables: { id },
+      update: (proxy, { data: { deleteCustomer } }) => {
+        const { success } = deleteCustomer
+
+        if (!success) {
+          return
+        }
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: getCustomersQuery })
+        // Add our comment from the mutation to the end.
+        data.getCustomers.filter(customer => customer.id !== id) 
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: getCustomersQuery, data })
+      }})
+      .then(res => {          
+
+        const { success, project, errors } = res.data.deleteCustomer
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("customers.show.flash.success_delete")
+          })  
+
+          this.context.router.history.push('/customers')
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
       })
       .catch(err => {
-        // this.props.addFlashMessage({
-        //   type: 'error',
-        //   text: T.translate("customers.show.flash.error_delete")
-        // })  
-        console.log('error ', err)
+        this.props.addFlashMessage({
+          type: 'error',
+          text: T.translate("customers.show.flash.error_delete")
+        })  
       })
     
   }
@@ -344,10 +368,23 @@ const getCustomerQuery = gql`
   }
 `
 
+const getCustomersQuery = gql`
+  query {
+    getCustomers {
+      id
+      name
+      vatNumber
+      phoneNumber
+      email
+    }
+  }
+`
+
 const MutationQuery =  compose(
   graphql(deleteCustomerMutation, {
     name : 'deleteCustomerMutation'
   }),
+  graphql(getCustomersQuery),
   graphql(getCustomerQuery, {
     options: (props) => ({
       variables: {

@@ -415,6 +415,9 @@ const updateProjectMutation = gql`
         status
         progress
         description
+        customer {
+          name
+        }
       }
       errors {
         path

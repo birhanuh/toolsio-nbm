@@ -3,7 +3,7 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getCustomer: requiresAuth.createResolver((parent, {id}, { models }) => models.Customer.findOne({ where: {id} }, { raw: true })),
+    getCustomer: requiresAuth.createResolver((parent, { id }, { models }) => models.Customer.findOne({ where: { id } }, { raw: true })),
     getCustomers: requiresAuth.createResolver((parent, args, { models }) => models.Customer.findAll())
   },
 

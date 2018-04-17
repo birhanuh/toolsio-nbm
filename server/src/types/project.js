@@ -27,7 +27,7 @@ export default `
 
   type CreateUpdateProjectResponse {
     success: Boolean!
-    project: Project 
+    project: Project! 
     errors: [Error!]
   }
 

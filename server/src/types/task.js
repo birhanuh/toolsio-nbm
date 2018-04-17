@@ -12,7 +12,7 @@ export default `
 
   type CreateTaskResponse {
     success: Boolean!
-    task: Task 
+    task: Task!
     errors: [Error!]
   }
 

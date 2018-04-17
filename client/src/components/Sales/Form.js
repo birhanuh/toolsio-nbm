@@ -313,6 +313,9 @@ const createSaleMutation = gql`
         deadline
         status
         description
+        customer {
+          name
+        }
       }
       errors {
         path
@@ -332,6 +335,9 @@ const updateSaleMutation = gql`
         deadline
         status
         description
+        customer {
+          name
+        }
       }
       errors {
         path
