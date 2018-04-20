@@ -181,7 +181,9 @@
       "empty_users_message": "Enter email and click Send button above to send your first invitation."
     },
     "description": "Invited users by sending an invitation to their emails",
-    "invitation_success_message": "Your invitation is sent to *{email}*"
+    "flash": {
+      "invitation_success": "Your invitation is sent to *{email}*"
+    }
   },
   "dashboard": {
     "header": "Dashboard",

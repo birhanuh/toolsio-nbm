@@ -26,7 +26,7 @@ export default {
           invoice: invoice
         }
       } catch (err) {
-        console.log(err)
+        console.log('err: ', err)
         return {
           success: false,
           errors: formatErrors(err, models)

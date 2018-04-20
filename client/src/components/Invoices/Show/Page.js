@@ -95,7 +95,10 @@ class Page extends Component {
         // Read the data from our cache for this query.
         const data = proxy.readQuery({ query: getInvoicesQuery })
         // Add our comment from the mutation to the end.
-        data.getInvoices.filter(invoice => invoice.id !== id) 
+        
+        let updatedData = data.getInvoices.filter(invoice => invoice.id !== id) 
+        data.getInvoices = updatedData
+
         // Write our data back to the cache.
         proxy.writeQuery({ query: getInvoicesQuery, data })
       }})
@@ -122,22 +125,6 @@ class Page extends Component {
           type: 'error',
           text: T.translate("invoices.show.flash.error_delete")
         })  
-      })
-
-    this.props.deleteInvoiceMutation({ variables: {id} })
-      .then(() => {
-        // this.props.addFlashMessage({
-        //   type: 'success',
-        //   text: T.translate("invoices.show.flash.success_delete", { name: name})
-        // })  
-        this.context.router.history.push('/invoices')
-      })
-      .catch(err => {
-        // this.props.addFlashMessage({
-        //   type: 'error',
-        //   text: T.translate("invoices.show.flash.error_delete")
-        // })  
-        console.log('error ', err)
       })
     
   }

@@ -104,7 +104,10 @@ class Show extends Component {
         // Read the data from our cache for this query.
         const data = proxy.readQuery({ query: getCustomersQuery })
         // Add our comment from the mutation to the end.
-        data.getCustomers.filter(customer => customer.id !== id) 
+        
+        let updatedData = data.getCustomers.filter(customer => customer.id !== id) 
+        data.getInvoices = updatedData
+
         // Write our data back to the cache.
         proxy.writeQuery({ query: getCustomersQuery, data })
       }})

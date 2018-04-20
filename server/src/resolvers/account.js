@@ -1,5 +1,5 @@
 import { requiresAuth } from '../middlewares/authentication'
-import formatErrors from '../utils/formatErrors'
+import { formatErrors } from '../utils/formatErrors'
 // AWS
 import AWS from 'aws-sdk'
 
@@ -18,21 +18,29 @@ export default {
   },
 
   Mutation: {
-    createAccount: requiresAuth.createResolver(async (parent, args, { models, user }) => {
-      try {
-        const account = await models.Account.create({...args, owner: user.id})
-        return {
-          success: true,
-          account
-        }
-      } catch (err) {
-        console.log(err)
-        return {
-          success: false,
-          errors: formatErrors(err, models)
-        }
-      }
-    }),
+    isSubdomainExist: (parent, { subdomain }, { models, user }) => 
+      models.Account.findOne({ where: { subdomain } }, { raw: true })
+        .then(account => {
+          if (account) {
+            return {
+              success: true,
+              subdomain: account.dataValues.subdomain
+            }
+          } else {
+            return {
+              success: false,
+              errors: [{ path: 'subdomain', message: 'There is no account with such subdomain! Go to Sign up page to sign for free!'}]
+            }
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models) 
+          }
+        })
+    ,
 
     updateAccount: requiresAuth.createResolver((parent, args, { models, user }) => {
       return models.Account.update(args, { where: {subdomain: args.subdomain}, returning: true, plain: true })
@@ -104,9 +112,12 @@ export default {
           url
         }
       } catch (err) {
-        console.log(err)
+        console.log('err: ', err)
         return {
-          errors: err
+          error: { 
+            path: 'signedRequest',
+            message: err 
+          }
         }
       }
     })    

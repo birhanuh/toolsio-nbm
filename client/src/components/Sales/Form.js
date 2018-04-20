@@ -144,14 +144,15 @@ class Form extends Component {
           proxy.writeQuery({ query: getCustomersSalesQuery, data });
         }})
         .then(res => {          
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("sales.form.flash.success_create", { name: name})
-          })  
 
           const { success, sale, errors } = res.data.createSale
 
           if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sales.form.flash.success_create", { name: name})
+            })  
+            
             this.context.router.history.push('/sales')
           } else {
             let errorsList = {}

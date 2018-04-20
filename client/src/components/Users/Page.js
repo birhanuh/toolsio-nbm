@@ -1,18 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import decode from 'jwt-decode'
-import List from './List' 
+import { Authorization } from '../../utils'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
+
+import List from './List' 
 import Form from './Form'
 
 class Page extends Component {
-
-  componentDidMount() {
-   
-  }
 
   render() {
 

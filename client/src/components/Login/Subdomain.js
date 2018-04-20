@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { isSubdomainExist } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import { Validation, Authorization } from '../../utils'
 
@@ -17,11 +19,7 @@ class Subdomain extends Component {
     super(props)
     this.state = {
       subdomain: '',
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
+      errors: {},
       isLoading: false
     }
   }
@@ -32,16 +30,28 @@ class Subdomain extends Component {
     
     if (subdomain) {
       this.setState({ errros: {}, isLoading: true })
-      this.props.isSubdomainExist(subdomain)
-        .then((res) => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("log_in.subdomain.on_your_account_page")
-          })
-          window.location = ''+process.env.HTP+res.data.result.subdomain+'.'+process.env.DNS+'/login'
-        },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
-      )  
+
+      this.props.mutate({ variables: { subdomain } })
+        .then(res => {
+         
+          const { success, subdomain, error } = res.data.isSubdomainExist
+      
+          if (success) {
+            
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("log_in.subdomain.on_your_account_page")
+            })
+
+            // Redirect to login page with subdoamin set 
+            window.location = ''+process.env.HTTP+subdomain+'.'+process.env.DNS+'/login'
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))    
     } 
   }
   
@@ -55,7 +65,7 @@ class Subdomain extends Component {
     const { errors, isValid } = Validation.validateSubdomainInput(this.state.subdomain)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ errors: updatedErrors })
@@ -68,32 +78,30 @@ class Subdomain extends Component {
     e.preventDefault()
  
     if (this.isValid()) {
+      const { subdomain } = this.state
       this.setState({ errros: {}, isLoading: true })
-      this.props.isSubdomainExist(this.state.subdomain).then(
-        (res) => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("log_in.subdomain.on_your_account_page")
-          })
+
+      this.props.mutate({ variables: { subdomain } })
+        .then(res => {
+         
+          const { success, subdomain, errors } = res.data.isSubdomainExist
           
-          if (res.data.result !== null) {
-            window.location = `http://${res.data.result.subdomain}.lvh.me:3000/login`  
-          } else {
-
-            let errors = { subdomain: { message: T.translate("log_in.subdomain.no_account") } }
-
-            let updatedErrors = Object.assign({}, this.state.errors)
-            updatedErrors.message.errors = errors
-
-            this.setState({ errors: updatedErrors })
-
-            this.setState({ 
-              isLoading: false
+          if (success) {
+            console.log('sdfsdfs ', subdomain)
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("log_in.subdomain.on_your_account_page")
             })
-          }          
-        },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
-      )  
+
+            // Redirect to login page with subdoamin set 
+            window.location = ''+process.env.HTTP+subdomain+'.'+process.env.DNS+'/login'
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false })) 
     }
   }
 
@@ -113,15 +121,15 @@ class Subdomain extends Component {
         <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
-            { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            <div className={classnames("field", { error: !!errors.message && errors.message.errors && errors.message.errors.subdomain })}>
+            <div className={classnames("field", { error: errors && errors.subdomain })}>
               <div className="ui right labeled input">
                 <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
                   value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
                 <div className="ui label">toolsio.com</div>  
               </div>
-              <span className="red">{errors.message && errors.message.errors && errors.message.errors.subdomain && errors.message.errors.subdomain.message}</span>
+              <span className="red">{errors && errors.subdomain}</span>
             </div>  
 
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>
@@ -142,7 +150,6 @@ class Subdomain extends Component {
 }
 
 Subdomain.propTypes = {
-  isSubdomainExist: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired
 }
 
@@ -150,5 +157,18 @@ Subdomain.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(null, { isSubdomainExist, addFlashMessage })(Subdomain)
+
+const isSubdomainExistMutation = gql`
+  mutation($subdomain: String!) {
+    isSubdomainExist(subdomain: $subdomain) {
+      success
+      subdomain
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+export default connect(null, { addFlashMessage }) (graphql(isSubdomainExistMutation)(Subdomain))
 

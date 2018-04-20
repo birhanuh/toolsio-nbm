@@ -64,12 +64,12 @@ app.use(cookieParser())
 app.use(async (req, res, next) => {
   
   // Parse subdomain 
-  //let subdomain = req.headers.subdomain || (req.headers.host.split('.').length >= 3 ? req.headers.host.split('.')[0] : false)
-
+  let subdomain = req.headers.subdomain
+  console.log('subdomain: ', subdomain)
   // Parse authToken 
   const authToken = req.headers['x-auth-token']
 
-  if (authToken) {
+  if (authToken !== "null") {
     try {
       const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
       
@@ -100,6 +100,7 @@ app.use(
     schema,
     context: {
       models,
+      subdomain: req.headers.subdomain,
       user: req.user,
       SECRET: jwtConfig.jwtSecret,
       SECRET2: jwtConfig.jwtSecret2

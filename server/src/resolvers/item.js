@@ -17,7 +17,7 @@ export default {
           item
         }
       } catch (err) {
-        console.log(err)
+        console.log('err: ', err)
         return {
           success: false,
           errors: formatErrors(err, models)

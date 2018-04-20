@@ -52,16 +52,18 @@ class Form extends Component {
 
       this.props.mutate({variables: { email, password }})
         .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: 'You have signed in successfully!'
-          // })
+         
           const { success, authToken, refreshAuthToken, errors } = res.data.loginUser
       
           if (success) {
             localStorage.setItem('authToken', authToken)
             localStorage.setItem('refreshAuthToken', refreshAuthToken)
             
+            this.props.addFlashMessage({
+              type: 'success',
+              text: 'You have signed in successfully!'
+            })
+
             // Redirect to dashboard
             this.context.router.history.push('/dashboard')
           } else {
@@ -132,5 +134,5 @@ const loginUserMutation = gql`
   }
 `
 
-export default connect(null, { addFlashMessage } ) (graphql(loginUserMutation)(Form))
+export default connect(null, { addFlashMessage }) (graphql(loginUserMutation)(Form))
 

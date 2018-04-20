@@ -70,20 +70,20 @@ class Form extends Component {
       // Make submit
       this.props.mutate({variables: { firstName, lastName, email, password, subdomain, industry }})
         .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("sign_up.success_create")
-          // })
-          // window.location = `${process.env.HTP}${this.props.currentAccount.account}.${process.env.DNS}/dashboard`
-
-          const { success, token, refreshToken, errors } = res.data.registerUser
+      
+          const { success, response, errors } = res.data.registerUser
          
           if (success) {
             localStorage.setItem('authToken', authToken)
             localStorage.setItem('refreshAuthToken', refreshAuthToken)
 
-            // Redirect to dashboard
-            this.context.router.history.push('/dashboard')
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sign_up.success_create")
+            })
+            
+            // Redirect to login
+            window.location = `${process.env.HTP}${response.account.subdomain}.${process.env.DNS}/login`
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -103,7 +103,7 @@ class Form extends Component {
       <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
            
-          {/*{ !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }*/} 
+          { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
           
           <InputField
             id='firstName'

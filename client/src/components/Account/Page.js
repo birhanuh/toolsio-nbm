@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import decode from 'jwt-decode'
 import { Authorization } from '../../utils'
-import { addFlashMessage } from '../../actions/flashMessageActions'
-import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 
 import AccountForm from './AccountForm'
 import UserForm from './UserForm'
@@ -15,26 +12,19 @@ import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Page extends Component {
 
-  componentDidMount() {
-    
-    // Parse subdomain 
-    let subdomain =  Authorization.getSubdomain()
-  }
-
   render() {
     
     // Parse subdomain 
-    // let subdomain =  Authorization.getSubdomain()
-    let subdomain = 'testa'
+    let subdomain =  Authorization.getSubdomain()
 
-    let currentAccount
+    let currentUser
     
     try {
       const authToken = localStorage.getItem('authToken')
-      const { user, account } = decode(authToken)
+      const { user } = decode(authToken)
 
-      currentAccount = { user, account }
-      console.log('user ', currentAccount.user.email)
+      currentUser = user
+      console.log('user ', currentUser.email)
     } catch(err) {
       console.log('err: ', err)
     }
@@ -46,7 +36,7 @@ class Page extends Component {
 
           <AccountForm subdomain={subdomain} /> 
              
-          { currentAccount.user && <UserForm email={currentAccount.user.email} /> }
+          { currentUser.user && <UserForm email={currentUser.email} /> }
 
       </div>  
     )

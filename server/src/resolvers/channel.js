@@ -43,7 +43,7 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err)
+        console.log('err: ', err)
         return {
           success: false,
           errors: formatErrors(err, models)
@@ -61,7 +61,7 @@ export default {
           members
         }
       } catch (err) {
-        console.log(err)
+        console.log('err: ', err)
         return {
           success: false,
           errors: formatErrors(err, models)

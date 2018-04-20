@@ -32,10 +32,15 @@ export default `
     errors: [Error!]
   }
 
+  type SendInvitationResponse {
+    success: Boolean!
+    errors: [Error!]
+  }
+
   type S3SignAvatarResponse {
     signedRequest: String!
     url: String!
-    errors: String
+    errors: [Error!]
   }
 
   type Query {
@@ -48,6 +53,8 @@ export default `
       subdomain: String!, industry: String!): RegisterResponse!
 
     loginUser(email: String!, password: String!): LoginResponse!
+
+    sendInvitation(email: String!): SendInvitationResponse!
 
     s3SignAvatar(fileName: String!, fileType: String!): S3SignAvatarResponse!
   }

@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { InputField } from '../../utils/FormFields'
-import { sendInvitation } from '../../actions/userActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
@@ -57,17 +58,31 @@ class Form extends Component {
 
     if (this.isValid()) {
       const { email } = this.state
+
       this.setState({ isLoading: true })
       
-      this.props.sendInvitation({ email: email })
-        .then((res) => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("users.form.invitation_success_message", {email: email})
-          })
-          this.setState({ email: '', isLoading: false })
+      this.props.mutate({ 
+        variables: { email } })
+        .then(res => {  
+
+          const { success, errors } = res.data.sendInvitation
+
+          if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("users.flash.invitation_success", {email: email})
+            })
+
+            this.setState({ email: '', isLoading: false })
+          } else {
+            let errorsList = {}
+            console.log('errors: ', res.data.sendInvitation)
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
         })
-        .catch( ({response}) => this.setState({ errors: response.data.errors, isLoading: false }) )
+        .catch(err => this.setState({ errors: err, isLoading: false }))
     }
     
   }
@@ -85,7 +100,7 @@ class Form extends Component {
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>          
             
-            { !!errors && (typeof errors === "string") && <div className="ui negative message"><p>{errors}</p></div> } 
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             <InputField
               label=''
@@ -93,7 +108,7 @@ class Form extends Component {
               value={email} 
               onChange={this.handleChange.bind(this)} 
               placeholder="Email"
-              error={errors && errors.email && errors.email.message}
+              error={errors && errors.email}
               formClass="field"
             />
 
@@ -105,15 +120,24 @@ class Form extends Component {
 
       )
   }
-
-
 }
 
 Form.propTypes = {
-  sendInvitation: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired
 }
 
-export default connect(null, { sendInvitation, addFlashMessage }) (Form)
+const sendInvitationMutation = gql`
+  mutation sendInvitation($email: String!) {
+    sendInvitation(email: $email) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+export default connect(null, { addFlashMessage }) (graphql(sendInvitationMutation)(Form))
 
 

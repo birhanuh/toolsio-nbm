@@ -336,7 +336,7 @@ export default {
     let errors = {}
 
     if (!data.email) {
-      errors['email'] = T.translate("account.users.email_required")
+      errors['email'] = T.translate("users.form.email_required")
     }
     
     return {

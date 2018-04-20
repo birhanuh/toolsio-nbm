@@ -45,11 +45,11 @@ class HeaderNav extends Component {
   logout(e) {
     e.preventDefault()
     
-    // Mutation
-    //.
-    //.
     localStorage.removeItem('authToken')
     localStorage.removeItem('refreshAuthToken')
+
+    // Redirect to login page
+    this.context.router.history.push('/login')
   }
 
   render() {
@@ -220,6 +220,10 @@ class HeaderNav extends Component {
 HeaderNav.propTypes = {
   // authentication: PropTypes.object.isRequired,
   // logout: PropTypes.func.isRequired,
+}
+
+HeaderNav.contextTypes = {
+  router: PropTypes.object.isRequired
 }
 
 export default HeaderNav

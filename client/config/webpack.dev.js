@@ -23,7 +23,7 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
       'process.env.DNS': JSON.stringify('lvh.me:3000'),
-      'process.env.HTP': JSON.stringify('http://')
+      'process.env.HTTP': JSON.stringify('http://')
     })
   ]
 
