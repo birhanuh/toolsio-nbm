@@ -28,18 +28,9 @@ class HeaderNav extends Component {
       // you can use any ui transition
       transition: 'vertical flip'
     })
-
+    
     // Fetch Inbox conversations
     //{ this.props.authentication.isAuthenticated && this.props.fetchConversations('inbox') }
-  }
-
-   handleToggleBar = (e) => {
-    e.preventDefault()
-    
-    $('.ui.visible.sidebar').toggleClass('collapsed')
-    $('.ui.internal-page').toggleClass('collapsed')
-    $('.ui.footer.segment.internal-footer').toggleClass('collapsed')
-    $('.ui.fixed.menu.header-breadcrumb').toggleClass('collapsed')
   }
 
   logout(e) {
@@ -70,71 +61,67 @@ class HeaderNav extends Component {
     let countUnread = 2
 
     const userLinks = (
-      <div>
-        <nav className="ui fixed stackable menu">
-          <div className="left menu">
-            <div className="logo item">
-              <Link to="/dashboard">
-                <img src={logoInverted} alt="logo-inverted" />
-              </Link>
-            </div>
-            <div className="item">
-              <a onClick={this.handleToggleBar.bind(this)} href="#"><i className="sidebar icon"></i></a>
-            </div>
+      <nav className="ui fixed menu">
+        <div className="left menu">
+          <a className="item anchor"><i className="sidebar icon"></i></a>
+          <div className="logo item">
+            <Link to="/dashboard">
+              <img src={logoInverted} alt="logo-inverted" />
+            </Link>
           </div>
-          
-          <div className="right menu">
-            <div className="ui dropdown item">
-              <i className="alarm icon"></i>
-              <div className="menu">
-                <a className="item">
-                  <div className="ui label orange">WAR</div> 
-                  It is a long established.
-                </a>
-                <a className="item">
-                  <div className="ui label blue">NEW</div> 
-                  NEW
-                </a>
-                <a className="item">
-                  <div className="ui label green">SENT</div> 
-                  SENT
-                </a>
-              </div>
-            </div>
-           
-            <div className="ui dropdown item">
-              <i className="mail envelop icon"></i>
-              <div className="ui mini red label envelop">{countUnread}</div>
-              <div className="menu">
+        </div>
 
-                {latestFiveUnreadMessages}               
-                <Link to="/conversations" className="item"><strong className="blue">{T.translate("internal_navigation.see_all_messages")}</strong></Link>
-              </div>
+        <div className="right menu">
+          <div className="ui dropdown item">
+            <i className="alarm icon"></i>
+            <div className="menu">
+              <a className="item">
+                <div className="ui label orange">WAR</div> 
+                It is a long established.
+              </a>
+              <a className="item">
+                <div className="ui label blue">NEW</div> 
+                NEW
+              </a>
+              <a className="item">
+                <div className="ui label green">SENT</div> 
+                SENT
+              </a>
             </div>
-            <div className="ui medium dropdown item">
-              <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
-              {currentUser && currentUser.firstName}<i className="dropdown icon"></i>
-              <div className="menu">
-                <a className="item">
-                  <i className="tasks icon"></i>
-                  {T.translate("internal_navigation.tasks")}
-                  <div className="ui right floated blue label">1</div>
-                </a>
-                <Link to="/settings" className="item">
-                  <i className="settings icon"></i>
-                  {T.translate("internal_navigation.settings")}
-                </Link>
-                <div className="divider"></div>
-                <a className="item" to="#" onClick={this.logout.bind(this)} >
-                  <i className="sign out icon"></i>
-                  {T.translate("internal_navigation.sign_out")}
-                </a>   
-              </div>
-            </div>
-        
           </div>
-        </nav>
-      </div>
+         
+          <div className="ui dropdown item">
+            <i className="mail envelop icon"></i>
+            <div className="ui mini red label envelop">{countUnread}</div>
+            <div className="menu">
+
+              {latestFiveUnreadMessages}               
+              <Link to="/conversations" className="item"><strong className="blue">{T.translate("internal_navigation.see_all_messages")}</strong></Link>
+            </div>
+          </div>
+          <div className="ui medium dropdown item">
+            <img className="ui avatar image" src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
+            {currentUser && currentUser.firstName}<i className="dropdown icon"></i>
+            <div className="menu">
+              <a className="item">
+                <i className="tasks icon"></i>
+                {T.translate("internal_navigation.tasks")}
+                <div className="ui right floated blue label">1</div>
+              </a>
+              <Link to="/settings" className="item">
+                <i className="settings icon"></i>
+                {T.translate("internal_navigation.settings")}
+              </Link>
+              <div className="divider"></div>
+              <a className="item" to="#" onClick={this.logout.bind(this)} >
+                <i className="sign out icon"></i>
+                {T.translate("internal_navigation.sign_out")}
+              </a>   
+            </div>
+          </div>
+      
+        </div>
+      </nav>
     )
 
     const guestLinks = (

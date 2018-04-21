@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 
 export const InputField = ({ type, name, value, id, label, 
-  error, placeholder, onChange, onBlur, labelHorizontal, formClass}) => {
+  error, placeholder, onChange, onBlur, labelHorizontal, formClass, disabled}) => {
   return (
     <div className={classnames(formClass, { error: !!error })}>
       { label && <label htmlFor={name} className={classnames(labelHorizontal, {red: !!error})}>{label}</label> }
@@ -15,6 +15,7 @@ export const InputField = ({ type, name, value, id, label,
         onChange={onChange} 
         onBlur={onBlur}
         placeholder={placeholder} 
+        disabled={disabled}
       />
       <span className={classnames({red: !!error})}>{error}</span>
     </div>

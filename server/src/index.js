@@ -28,7 +28,7 @@ const app = express()
 require('dotenv').config()
 
 // Config
-import jwtConfig from './config/jwt'
+import jwtConfig from '../../config/jwt.json'
 
 // Models
 import models from './models'
@@ -71,13 +71,12 @@ app.use(async (req, res, next) => {
 
   if (authToken !== "null") {
     try {
-      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
-      
+      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)      
       req.user = user
     
     } catch (err) {
       let refreshAuthToken = req.headers['x-refresh-auth-token']
-      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
+      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
       if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
         res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
         res.set('x-auth-token', newAuthTokens.authToken)
@@ -102,7 +101,7 @@ app.use(
       models,
       subdomain: req.headers.subdomain,
       user: req.user,
-      SECRET: jwtConfig.jwtSecret,
+      SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2
     }
   }))
@@ -171,10 +170,10 @@ server.listen(app.get('port'), () => {
       if (authToken && refreshAuthToken) {
       
         try {
-          const { user } = jwt.verify(authToken, jwtConfig.jwtSecret)
+          const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)
           return { models, user }           
         } catch (err) {
-          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret, jwtConfig.jwtSecret2)
+          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
           return { models, user: newAuthTokens.user }
         }
     }

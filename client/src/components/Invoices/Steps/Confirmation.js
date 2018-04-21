@@ -9,7 +9,7 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
 
   return (
     <div className="row">
-      <div className="ui text container ui segment"> 
+      <div className="ui text container segment"> 
         <div className="inline field"> 
           {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
             <h1 className="ui header">{T.translate("invoices.form.new_invoice")}

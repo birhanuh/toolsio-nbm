@@ -23,9 +23,20 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+    if (this.state.errors[e.target.name]) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[e.target.name]
+
+      this.setState({
+        [e.target.name]: e.target.value,
+        errors
+      })
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      })
+    }
   }
 
   isValid() {

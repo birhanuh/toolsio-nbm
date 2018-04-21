@@ -19,7 +19,7 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
 export default function Sidebar() {
 
   return(
-    <div className="ui visible sidebar vertical menu">
+    <div className="ui sidebar vertical menu">
       <div className="ui center aligned vertical segment account">
         <a href="/settings">
           <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />

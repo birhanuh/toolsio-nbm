@@ -279,7 +279,7 @@ class Form extends Component {
 
         <Breadcrumb />
 
-        <div className="ui text container ui segment">  
+        <div className="ui text container segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
 

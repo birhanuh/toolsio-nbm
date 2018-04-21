@@ -47,7 +47,12 @@ $.fn.sidebar = require('semantic-ui-sidebar')
 class App extends Component {
   
   componentDidMount = () => {
-    //$('.sidebar.icon').sidebar('toggle')
+    $('#app .ui.sidebar')
+      .sidebar({
+        context: $('#app')
+      })
+      .sidebar('attach events', '#app .menu .item.anchor')
+    ;
   }
 
   render() {
@@ -60,13 +65,13 @@ class App extends Component {
     return (
       <div className="pusher">
         
-        { !authPages && <HeaderNav /> }
-        
         { internalPages && 
           <Sidebar />
         }
 
-        <section className={classnames({'ui stackable grid internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
+        { !authPages && <HeaderNav /> }
+
+        <section className={classnames({'ui stackable grid basic segment internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
                    
           { !authPages && <FlashMessage /> }
           

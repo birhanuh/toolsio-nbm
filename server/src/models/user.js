@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
     firstName: {
       type: DataTypes.STRING,
       field: 'first_name',
-      notEmpty: false,
+      allowNull: false,
       validate: {     
         isAlpha: {
           arg: true,            // will only allow letters
@@ -18,7 +18,7 @@ export default (sequelize, DataTypes) => {
     lastName: {
       type: DataTypes.STRING,
       field: 'last_name',
-      notEmpty: false,
+      allowNull: false,
       validate: {     
         isAlpha: {
           arg: true,            // will only allow letters

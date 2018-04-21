@@ -1,6 +1,5 @@
  html {
   position: relative;
-  height: inherit;
   min-height: 100%;
 }
 
@@ -22,6 +21,10 @@ body {
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
           text-size-adjust: 100%;
+}
+
+body.pushable > .pusher {
+  background: $body-background-color;
 }
 
 body .internal-page {  
@@ -211,23 +214,25 @@ nav.ui.menu {
 
 
 // Internal page
-.internal-page > .sixteen.wide.column {
-  margin-right: 1rem;
+.ui.basic.segment.internal-page {
+  margin-top: 98px;
+}
+
+.ui.basic.segment {
+  background: $body-background-color;
 }
 
 // Sidebar 
-.ui.visible.sidebar {
-  width: 190px;
+.ui.vertical.sidebar {
   background: $dark-mid-night-blue;
   border: none;
-  @include transition(all .4s ease 0s);
   .item {    
     color: #d9d9d9;
     border-bottom: 1px solid $light-dark-grey;
-    padding: 10px;
+    padding: 12px;
     font-weight: 600;
     text-transform: uppercase !important;
-    height: 35px;
+    height: 40px;
   }
   .active.item, .active.item:hover, .active.item:focus {
     background: $body-background-color;
@@ -235,7 +240,6 @@ nav.ui.menu {
   }
   .item:hover, .item:focus {
     background: $body-background-color;
-    transition: 0.2s all ease-in-out;
     outline: none;
     color: $body-color;
   }
@@ -256,10 +260,6 @@ nav.ui.menu {
     background: #ffffff;
   }    
 } 
-
-.ui.visible.sidebar.collapsed {
-  width: 100px;
-}
 
 // Account page
 .ui.user {
@@ -287,6 +287,7 @@ nav.ui.menu {
 }
 
 // Toggle styles
+/**
 .ui.visible.sidebar.collapsed {
   span {
     visibility: collapse;
@@ -323,6 +324,7 @@ nav.ui.menu {
             transition: opacity 600ms, visibility 600ms;
   }
 }
+**/
 
 // Steps
 .ui.steps .step.active .title {
@@ -331,15 +333,6 @@ nav.ui.menu {
 
 .steps .suitcase, .steps .cart {
   font-size: 1.2em;
-}
-
-// Breadcrump
-.ui.breadcrumb .active.section {
-  font-weight: 400;
-}
-
-.ui.breadcrumb a {
-  color: $turquoise;
 }
 
 // Footer 
@@ -353,6 +346,7 @@ nav.ui.menu {
 .ui.footer.segment.internal-footer {
   padding: 2em 1em;
   position: absolute;
+  left: 0;
   bottom: 0;
 }
 
@@ -919,10 +913,6 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
   body {
     margin-bottom: 800px;
   }
-
-  .ui.fixed.menu {
-    display: none !important;
-  }
   .secondary.pointing.menu .item,
   .secondary.pointing.menu .menu {
     display: none;
@@ -959,13 +949,6 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
       margin-left: 150px;
     }
   }
-  .ui.internal-page {
-    margin-top: 100px;
-    @include transition(all .4s ease 0s);
-  }
-  .ui.visible.sidebar {
-    margin-top: 48px !important;
-  }
 }
 
 /* Small medium devices (tablets, 768px and upto desktops, 992px) */
@@ -975,28 +958,10 @@ form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
 
 /* Medium devices (desktops, 992px and upto large desktops, 1200px) */
 @media (min-width: $screen-md) and (max-width: $screen-lg) {
-  .ui.internal-page, .ui.footer.segment.internal-footer, .ui.fixed.menu.header-breadcrumb {
-    margin-left: 190px;
-    @include transition(all .4s ease 0s);
-  }
-  .ui.internal-page.collapsed, .ui.footer.segment.internal-footer.collapsed, .ui.fixed.menu.header-breadcrumb.collapsed {
-    margin-left: 100px;
-  }
-  .ui.fixed.menu.header-breadcrumb .right.menu {
-    margin-right: 190px;
-  }
+
 }
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: $screen-lg) {
-  .ui.internal-page, .ui.footer.segment.internal-footer, .ui.fixed.menu.header-breadcrumb {
-    margin-left: 190px;
-    @include transition(all .4s ease 0s);
-  }
-  .ui.internal-page.collapsed, .ui.footer.segment.internal-footer.collapsed, .ui.fixed.menu.header-breadcrumb.collapsed {
-    margin-left: 100px;
-  }
-  .ui.fixed.menu.header-breadcrumb .right.menu {
-    margin-right: 190px;
-  }
+
 }
