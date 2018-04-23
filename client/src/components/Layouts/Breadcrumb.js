@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 // Localization 
 import T from 'i18n-react'
@@ -57,7 +58,7 @@ export default function Breadcrumb(props, context) {
     return (
     
       index+1 === filterdTokens.length ? <div key={index} className="section">{token}</div> : <div key={index}>
-        <a className="active section">{token}</a>
+        <Link to={`/${token}`} className="active section">{token}</Link>
         <div className="divider"> / </div></div>
       )
     })

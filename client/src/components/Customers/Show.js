@@ -93,6 +93,8 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
+    const { name } = this.state
+    
     this.props.deleteCustomerMutation({ 
       variables: { id },
       update: (proxy, { data: { deleteCustomer } }) => {
@@ -113,12 +115,12 @@ class Show extends Component {
       }})
       .then(res => {          
 
-        const { success, project, errors } = res.data.deleteCustomer
+        const { success, errors } = res.data.deleteCustomer
 
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("customers.show.flash.success_delete")
+            text: T.translate("customers.show.flash.success_delete", { name: name})
           })  
 
           this.context.router.history.push('/customers')
@@ -132,7 +134,7 @@ class Show extends Component {
       .catch(err => {
         this.props.addFlashMessage({
           type: 'error',
-          text: T.translate("customers.show.flash.error_delete")
+          text: T.translate("customers.show.flash.error_delete", { name: name})
         })  
       })
     

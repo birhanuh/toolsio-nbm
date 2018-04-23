@@ -149,26 +149,25 @@ class Form extends Component {
         variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
           status, description, total: parseInt(total), projectId: parseInt(projectId), 
           saleId: parseInt(saleId), customerId: parseInt(customerId) },
-        update: (proxy, { data: { updateInvoice } }) => {
+        update: (store, { data: { updateInvoice } }) => {
           const { success, invoice } = updateInvoice
 
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getInvoicesQuery })
+          const data = store.readQuery({ query: getInvoicesQuery })
           // Add our comment from the mutation to the end.
           data.getInvoices.push(invoice)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getInvoicesQuery, data })
+          store.writeQuery({ query: getInvoicesQuery, data })
         }})
         .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("invoices.form.flash.success_update", { name: name})
-          // })  
-          // this.context.router.history.push('/invoices')
-          
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("invoices.form.flash.success_update", { name: name})
+          })  
+          this.context.router.history.push('/invoices')          
 
           const { success, invoice, errors } = res.data.updateInvoice
 
@@ -188,27 +187,26 @@ class Form extends Component {
         variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
           status, description, total: parseInt(total), projectId: parseInt(projectId), 
           saleId: parseInt(saleId), customerId: parseInt(customerId) },
-        update: (proxy, { data: { createInvoice } }) => {
+        update: (store, { data: { createInvoice } }) => {
           const { success, invoice } = createInvoice
 
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getInvoicesQuery })
+          const data = store.readQuery({ query: getInvoicesQuery })
           // Add our comment from the mutation to the end.
           data.getInvoices.push(invoice)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getInvoicesQuery, data })
+          store.writeQuery({ query: getInvoicesQuery, data })
         }})
         .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("invoices.form.flash.success_update", { name: name})
-          // })  
-          // this.context.router.history.push('/invoices')
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("invoices.form.flash.success_update", { name: name})
+          })  
+          this.context.router.history.push('/invoices')
           
-
           const { success, invoice, errors } = res.data.createInvoice
 
           if (success) {

@@ -7,7 +7,6 @@ export default `
     status:  String!
     description:  String!
     items: [Item!]
-    total: Int!
     customer: Customer!
   }
 

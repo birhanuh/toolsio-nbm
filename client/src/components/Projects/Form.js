@@ -99,18 +99,18 @@ class Form extends Component {
       if (id) {
         this.props.updateProjectMutation({ 
         variables: { id, name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
-        update: (proxy, { data: { updateProject } }) => {
+        update: (store, { data: { updateProject } }) => {
           let { success, project } = updateProject
 
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersProjectsQuery })
+          const data = store.readQuery({ query: getCustomersProjectsQuery })
           // Add our comment from the mutation to the end.
           data.getProjects.push(project)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersProjectsQuery, data })
+          store.writeQuery({ query: getCustomersProjectsQuery, data })
         }})
         .then(res => {          
 
@@ -135,18 +135,18 @@ class Form extends Component {
 
       this.props.createProjectMutation({ 
         variables: { name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
-        update: (proxy, { data: { createProject } }) => {
+        update: (store, { data: { createProject } }) => {
           const { success, project } = createProject
 
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersProjectsQuery })
+          const data = store.readQuery({ query: getCustomersProjectsQuery })
           // Add our comment from the mutation to the end.
           data.getProjects.push(project)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersProjectsQuery, data })
+          store.writeQuery({ query: getCustomersProjectsQuery, data })
         }})
         .then(res => {          
 
@@ -243,7 +243,7 @@ class Form extends Component {
     )
     
     return (
-      <div className="ui stackable grid">
+      <div className="row column">
 
         <Breadcrumb />
 

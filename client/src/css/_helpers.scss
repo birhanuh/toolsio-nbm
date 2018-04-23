@@ -160,28 +160,24 @@ i.orange.icon {
 }
 
 // Display
-.inline-block {
-  display: inline-block;
-}
-
-.inline {
-  display: inline;
-}
-
-.block {
-  display: block;
-}
-
-.inline-block-i {
+.d-inline-block {
   display: inline-block !important;
 }
 
-.inline-i {
+.d-inline {
   display: inline !important;
 }
 
-.block-i {
+.d-block {
   display: block !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.d-table-cell {
+  display: table-cell !important;
 }
 
 .overflow-hidden {

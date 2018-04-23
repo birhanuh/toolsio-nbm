@@ -22,15 +22,7 @@ export default (sequelize, DataTypes) => {
         isAlpha: true  // will only allow letters
       } 
     },
-    description: DataTypes.TEXT,
-    total: {
-      type: DataTypes.INTEGER,
-      allowNull : true,
-      defaultValue : 0,
-      validate: {    
-        isInt: true // checks for int
-      } 
-    }
+    description: DataTypes.TEXT
   })
 
   Sale.associate = (models) => {

@@ -10,7 +10,6 @@ export default `
     description: String
     progress: Int
     tasks: [Task!]
-    total: Int
     customer: Customer!
   }
 

@@ -223,8 +223,12 @@ nav.ui.menu {
 }
 
 // Sidebar 
+.pushable {
+  overflow-x: initial;
+}
+
 .ui.vertical.sidebar {
-  background: $dark-mid-night-blue;
+  background-color: $dark-mid-night-blue;
   border: none;
   .item {    
     color: #d9d9d9;
@@ -851,36 +855,6 @@ dl.dl-horizontal {
     line-height: 33px;
     width: inherit;
   }
-}
-
-// Projects & Sales
-.ui.table.projects thead th, .ui.table.sales thead th  {
-  padding: .32857143em .78571429em;
-}
-
-.ui.table.tasks thead th, .ui.table.items thead th  {
-  padding: .42857143em .78571429em;
-}
-
-form .ui.table tr {
-  td.add-task, td.edit-task, td.add-item, td.edit-item {
-    vertical-align: top;
-  }
-}
-
-form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
-  display: none;
-  button {
-    width: 50%;
-  }
-}
-
-.ui.table.project td, .ui.table.sale td {
-  padding: .58571429em;
-}
-
-.ui.table.task td:last-child, .ui.table.item td:last-child {
-  padding-right: 10px !important;
 }
 
 // Invoices

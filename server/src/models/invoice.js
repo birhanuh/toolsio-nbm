@@ -37,13 +37,6 @@ export default (sequelize, DataTypes) => {
       field: 'reference_number'
     },
     description: DataTypes.TEXT,
-    total: {
-      type: DataTypes.INTEGER,
-      allowNull : false,
-      validate: {     
-        isInt: true // checks for int
-      } 
-    },
     createdAt: {
       type: DataTypes.DATE,
       field: 'created_at'

@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
-import { AddElement, ShowEditElement } from './Tr'
+import AddItemTr from './AddItemTr'
+import ShowEditItemTr from './ShowEditItemTr'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -17,32 +18,33 @@ import $ from 'jquery'
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
 
-class Item extends Component {
+class Form extends Component {
    constructor(props) {
     super(props)
     this.state = {
-      itemToBeDeleated: {},
       newItem: {
         saleId: this.props.saleId,
         name: "",
         unit: "",
-        quantity: 0,
+        quantity: "",
         price: "",
         vat: "",
         errors: {},
         isLoading: false
       },
       editItem: {
-        id: null,
+        id: this.props.saleId,
         saleId: null,
         name: "",
         unit: "",
-        quantity: 0,
+        quantity: "",
         price: "",
         vat: "",
         errors: {},
         isLoading: false
-      }
+      },      
+      itemToBeDeleated: {},
+      errors: {},
     }
   }
 
@@ -52,12 +54,11 @@ class Item extends Component {
       delete errors[e.target.name]
 
       let updatedItem = Object.assign({}, this.state.newItem)
-      updatedItem.saleId = this.props.saleId
       updatedItem[e.target.name] = e.target.value
+      updatedItem.errors = errors
 
       this.setState({
-        newItem: updatedItem,
-        errors
+        newItem: updatedItem
       })
     } else {
       let updatedItem = Object.assign({}, this.state.newItem)
@@ -93,41 +94,46 @@ class Item extends Component {
 
       this.props.createItemMutation({
         variables: { saleId, name, unit, quantity, price, vat },
-        update: (proxy, { data: { createItem } }) => {
-          const { success, task } = createItem
+        update: (store, { data: { createItem } }) => {
+          const { success, item } = createItem
 
           if (!success) {
             return
           }
-          /*
+          
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getSaleQuery })
+          const data = store.readQuery({ query: getSaleQuery,
+            variables: {
+              id: saleId,
+            }
+          })
           // Add our comment from the mutation to the end.
-          data.getSale.tasks.push(task)
+          data.getSale.items.push(item)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getSaleQuery, data }) */
+          store.writeQuery({ query: getSaleQuery, data }) 
         }})
       .then(res => {
-          let updatedItem = Object.assign({}, this.state.newItem)
-          updatedItem.saleId = null
-          updatedItem.name = ""
-          updatedItem.unit = ""
-          updatedItem.quantity = ""
-          updatedItem.price = ""
-          updatedItem.vat = ""
-          updatedItem.isLoading = false
-           this.setState({
-            newItem: updatedItem
-          })
 
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("sales.items.form.flash.success_add", { name: name})
-          // })
+          const { success, item, errors } = res.data.createItem
 
-          const { success, task, errors } = res.data.createItem
+          if (success) {
+            let updatedItem = Object.assign({}, this.state.newItem)
+            updatedItem.saleId = null
+            updatedItem.name = ""
+            updatedItem.unit = ""
+            updatedItem.quantity = ""
+            updatedItem.price = ""
+            updatedItem.vat = ""
+            updatedItem.isLoading = false
+             this.setState({
+              newItem: updatedItem
+            })
 
-          if (!success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sales.items.form.flash.success_add", { name: name})
+            })
+          } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
 
@@ -225,41 +231,57 @@ class Item extends Component {
       
       this.props.updateItemMutation({
         variables: { id, saleId, name, unit, quantity, price, vat },
-        update: (proxy, { data: { updateItem } }) => {
-          const { success, task } = updateItem
+        update: (store, { data: { updateItem } }) => {
+          const { success, item } = updateItem
 
           if (!success) {
             return
           }
-          /*
+          
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getSaleQuery })
+          const data = store.readQuery({ query: getSaleQuery,
+              variables: {
+                id: saleId,
+              }
+             })
           // Add our comment from the mutation to the end.
-          data.getSale.tasks.push(task)
+          let updatedItems = data.getSale.items.map(item2 => {
+            if (item2.id === item.id) {
+              return {...item, __typename: 'Item'}
+            }
+            return item2
+          })
+          data.getSale.items = updatedItems
+
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getSaleQuery, data }) */
+          store.writeQuery({ query: getSaleQuery, data })
         }})
       .then(res => {
-          let updatedItem = Object.assign({}, this.state.editItem)
-          updatedItem.saleId = null
-          updatedItem.name = ""
-          updatedItem.unit = ""
-          updatedItem.quantity = ""
-          updatedItem.price = ""
-          updatedItem.vat = ""
-          updatedItem.isLoading = false
-           this.setState({
-            editItem: updatedItem
-          })
 
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("sales.items.form.flash.success_update", { name: name})
-          // })
+          const { success, item, errors } = res.data.updateItem
 
-          const { success, task, errors } = res.data.updateItem
+          if (success) {
+            let updatedItem = Object.assign({}, this.state.editItem)
+            updatedItem.saleId = null
+            updatedItem.name = ""
+            updatedItem.unit = ""
+            updatedItem.quantity = ""
+            updatedItem.price = ""
+            updatedItem.vat = ""
+            updatedItem.isLoading = false
+             this.setState({
+              editItem: updatedItem
+            })
 
-          if (!success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sales.items.form.flash.success_update", { name: name})
+            })
+
+            // Hide edit tr and show show tr
+            $('#'+item.id+' td.edit-item').hide()
+            $('#'+item.id+' td.show-item').show()  
+          } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
 
@@ -301,32 +323,67 @@ class Item extends Component {
   handleDelete(item, event) {
     event.preventDefault()
     
-    let name = item.name
+    const { id, name } = item
+    const { saleId } = this.props
+    
+    this.props.deleteItemMutation({ 
+      variables: { id },
+      update: (proxy, { data: { deleteItem } }) => {
+        const { success } = deleteItem
 
-    this.props.deleteItem(item).then(
-      () => {
-        this.setState({
-          itemToBeDeleated: {}
-        })
+        if (!success) {
+          return
+        }
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: getSaleQuery,
+            variables: {
+              id: saleId,
+            } 
+          })
+        // Add our comment from the mutation to the end.
+   
+        let updatedItems = data.getSale.items.filter(item => item.id !== id) 
+        data.getSale.items = updatedItems
+ 
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: getSaleQuery, data })
+      }})
+      .then(res => {          
 
+        const { success, errors } = res.data.deleteItem
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("sales.items.form.flash.success_delete", { name: name})
+          })  
+
+          this.setState({ itemToBeDeleated: {} })
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => {
         this.props.addFlashMessage({
-          type: 'success',
-          text: T.translate("sales.items.form.flash.success_delete", { name: name})
+          type: 'error',
+          text: T.translate("sales.items.form.flash.error_delete", { name: name})
         })  
-      },
-      ({ response }) => {
-      }
-    ) 
+
+        this.setState({ errors: err, isLoading: false })  
+      }) 
   }
 
   render() {
     const { newItem, editItem } = this.state
   
-    let items = this.props.items   
-    
+    let { items, total } = this.props  
+
     const itemsList = (
       items.map(item => 
-        <ShowEditElement 
+        <ShowEditItemTr
           key={item.id}
           item={item} 
           editItem={editItem}
@@ -355,11 +412,18 @@ class Item extends Component {
 
             { items.length !== 0 && itemsList }
             
-            <AddElement 
+            <AddItemTr
               item={newItem} 
               handleNewItemChange={this.handleNewItemChange.bind(this)} 
               handleCreate={this.handleCreate.bind(this)} /> 
             
+            <tr>
+              <td colSpan="3"><strong>{T.translate("sales.items.form.total")}</strong></td>
+              <td><strong>{total}</strong></td>
+              <td></td>
+              <td></td>
+            </tr>
+
           </tbody>
         </table>
         <div className="ui small modal item">
@@ -369,7 +433,7 @@ class Item extends Component {
           </div>
           <div className="actions">
             <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.items.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.itemToBeDeleated)}>{T.translate("sale.items.delete")}</button>
+            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.itemToBeDeleated)}>{T.translate("sales.items.delete")}</button>
           </div>
         </div>
       </form>
@@ -378,7 +442,7 @@ class Item extends Component {
   
 }
 
-Item.propTypes = {
+Form.propTypes = {
   items: PropTypes.array.isRequired,
   saleId: PropTypes.number.isRequired,
   addFlashMessage: PropTypes.func.isRequired
@@ -395,6 +459,7 @@ const createItemMutation = gql`
         quantity
         price
         vat
+        saleId
       }
       errors {
         path
@@ -404,7 +469,7 @@ const createItemMutation = gql`
   }
 `
 const updateItemMutation = gql`
-  mutation updateItem($id: id, $name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $saleId: Int!) {
+  mutation updateItem($id: Int!, $name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $saleId: Int!) {
     updateItem(id: $id, name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, saleId: $saleId) {
       success
       item {
@@ -414,6 +479,7 @@ const updateItemMutation = gql`
         quantity
         price
         vat
+        saleId
       }
       errors {
         path
@@ -423,14 +489,54 @@ const updateItemMutation = gql`
   }
 `
 
+const deleteItemMutation = gql`
+  mutation deleteItem($id: Int!) {
+    deleteItem(id: $id) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const getSaleQuery = gql`
+  query getSale($id: Int!) {
+    getSale(id: $id) {
+      id
+      name 
+      deadline
+      status
+      description
+      customer {
+        id
+        name
+      }
+      items {
+        id
+        name
+        unit
+        quantity
+        price
+        vat
+        saleId
+      }
+    }
+  }
+`
+
 const Mutations =  compose(
   graphql(createItemMutation, {
     name : 'createItemMutation'
   }),
-   graphql(updateItemMutation, {
+  graphql(updateItemMutation, {
     name : 'updateItemMutation'
+  }),
+  graphql(deleteItemMutation, {
+    name : 'deleteItemMutation'
   })
-)(Item)
+)(Form)
 
 export default connect(null, { addFlashMessage } ) (Mutations)
 

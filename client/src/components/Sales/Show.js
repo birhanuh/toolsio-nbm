@@ -13,7 +13,7 @@ import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
-import ItemForm from './Items/Form'
+import ItemsForm from './Items/Form'
 
 // Localization 
 import T from 'i18n-react'
@@ -90,6 +90,8 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
 
+    const { name } = this.state
+    
     this.props.deleteSaleMutation({ 
       variables: { id },
       update: (proxy, { data: { deleteSale } }) => {
@@ -110,12 +112,12 @@ class Show extends Component {
       }})
       .then(res => {          
 
-        const { success, project, errors } = res.data.deleteSale
+        const { success, errors } = res.data.deleteSale
 
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("sales.show.flash.success_delete")
+            text: T.translate("sales.show.flash.success_delete", { name: name})
           })  
 
           this.context.router.history.push('/sales')
@@ -129,7 +131,7 @@ class Show extends Component {
       .catch(err => {
         this.props.addFlashMessage({
           type: 'error',
-          text: T.translate("sales.show.flash.error_delete")
+          text: T.translate("sales.show.flash.error_delete", { name: name})
         })  
       })
     
@@ -138,6 +140,9 @@ class Show extends Component {
   render() {
     const { id, name, deadline, customer, status, description, items } = this.state
     
+    let total = 0
+    items.map(item => (total+=item.price))
+
     return (
       <div className="ui stackable grid">
 
@@ -183,7 +188,7 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("sales.items.header")}</h3>
 
-            { items && this.state.id && <ItemForm saleId={this.state.id} items={this.state.items} /> }
+            { (items && id) && <ItemsForm saleId={id} total={total} items={items} /> }
             
             <div className="ui divider"></div>
 
@@ -246,6 +251,7 @@ const getSaleQuery = gql`
         quantity
         price
         vat
+        saleId
       }
     }
   }

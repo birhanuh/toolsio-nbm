@@ -8,7 +8,6 @@ export default `
     status: String!
     referenceNumber: String!
     description: String
-    total: Int!
     createdAt: Date!
     project: Project
     sale: Sale

@@ -13,7 +13,7 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
         <div className="inline field"> 
           {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
             <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-              <div className="sub header inline-block-i pl-1">{T.translate("invoices.form.confirmation")}</div>
+              <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.confirmation")}</div>
             </h1>
           }
         </div> 
@@ -78,7 +78,7 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
           <button className="ui button" onClick={handlePrevious}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
           <button disabled={isLoading} className="ui primary button" onClick={handleSubmit}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.save")}</button>
           
-          <Link to="/invoices" className="ui negative block-i mt-3">{T.translate("invoices.form.cancel")}</Link>
+          <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
         </div>  
       </div>
     </div>

@@ -10,9 +10,14 @@ export default `
     saleId: Int!
   }
 
-  type CreateItemResponse {
+  type CreateUpdateItemResponse {
     success: Boolean!
     item: Item 
+    errors: [Error!]
+  }
+
+  type DeleteItemResponse {
+    success: Boolean!
     errors: [Error!]
   }
 
@@ -23,7 +28,12 @@ export default `
 
   type Mutation {
     createItem(name: String!, unit: String!, quantity: Int!, price: Float!, vat: Int, 
-      saleId: Int!): CreateItemResponse!
+      saleId: Int!): CreateUpdateItemResponse!
+
+    updateItem(id: Int!, name: String!, unit: String!, quantity: Int!, price: Float!, vat: Int, 
+      saleId: Int!): CreateUpdateItemResponse!
+
+    deleteItem(id: Int!): DeleteItemResponse!
   }
 
 `

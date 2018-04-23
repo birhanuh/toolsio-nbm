@@ -165,18 +165,18 @@ class Form extends Component {
       if (id) {
         this.props.updateCustomerMutation({variables: { id, name, vatNumber: parseInt(vatNumber), phoneNumber, 
           email, isContactIncludedInInvoice, street, postalCode: parseInt(postalCode), region, country },
-          update: (proxy, { data: { updateCustomer } }) => {
+          update: (store, { data: { updateCustomer } }) => {
             const { success, customer } = updateCustomer
 
             if (!success) {
               return
             }
             // Read the data from our cache for this query.
-            const data = proxy.readQuery({ query: getCustomersQuery })
+            const data = store.readQuery({ query: getCustomersQuery })
             // Add our comment from the mutation to the end.
             data.getCustomers.push(customer)
             // Write our data back to the cache.
-            proxy.writeQuery({ query: getCustomersQuery, data })
+            store.writeQuery({ query: getCustomersQuery, data })
           }})
           .then(res => {
 
@@ -210,18 +210,18 @@ class Form extends Component {
 
       this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, 
         street, postalCode: parseInt(postalCode), region, country },
-        update: (proxy, { data: { createCustomer } }) => {
+        update: (store, { data: { createCustomer } }) => {
           const { success, customer } = createCustomer
 
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersQuery })
+          const data = store.readQuery({ query: getCustomersQuery })
           // Add our comment from the mutation to the end.
           data.getCustomers.push(customer)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersQuery, data })
+          store.writeQuery({ query: getCustomersQuery, data })
         }})
         .then(res => {
 
@@ -275,7 +275,7 @@ class Form extends Component {
     //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
 
     return (  
-      <div className="ui stackable grid">
+      <div className="row column">
 
         <Breadcrumb />
 

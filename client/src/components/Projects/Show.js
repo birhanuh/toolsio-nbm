@@ -12,7 +12,7 @@ import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
-import TaskForm from './Tasks/Form'
+import TasksForm from './Tasks/Form'
 
 // Localization 
 import T from 'i18n-react'
@@ -101,6 +101,8 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
+    const { name } = this.state
+    
     this.props.deleteProjectMutation({ 
       variables: { id },
       update: (proxy, { data: { deleteProject } }) => {
@@ -113,20 +115,20 @@ class Show extends Component {
         const data = proxy.readQuery({ query: getProjectsQuery })
         // Add our comment from the mutation to the end.
    
-        let updatedData = data.getProjects.filter(project => project.id !== id) 
-        data.getProjects = updatedData
+        let updatedProjects = data.getProjects.filter(project => project.id !== id) 
+        data.getProjects = updatedProjects
  
         // Write our data back to the cache.
         proxy.writeQuery({ query: getProjectsQuery, data })
       }})
       .then(res => {          
 
-        const { success, project, errors } = res.data.deleteProject
+        const { success, errors } = res.data.deleteProject
 
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("projects.show.flash.success_delete")
+            text: T.translate("projects.show.flash.success_delete", { name: name})
           })  
 
           this.context.router.history.push('/projects')
@@ -140,8 +142,10 @@ class Show extends Component {
       .catch(err => {
         this.props.addFlashMessage({
           type: 'error',
-          text: T.translate("projects.show.flash.error_delete")
+          text: T.translate("projects.show.flash.error_delete", { name: name})
         })  
+
+        this.setState({ errors: err, isLoading: false })  
       })
     
   }
@@ -210,6 +214,9 @@ class Show extends Component {
 
   render() {
     const { id, name, deadline, customer, status, description, progress, tasks } = this.state
+    
+    let total = 0
+    tasks.map(task => (total+=task.price))
 
     return (
       <div className="ui stackable grid">
@@ -272,7 +279,7 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
 
-            { tasks && this.state.id && <TaskForm projectId={this.state.id} tasks={this.state.tasks} /> }
+            { (tasks && id) && <TasksForm projectId={id} total={total} tasks={tasks} /> }
             
             <div className="ui divider"></div>
 
@@ -336,6 +343,7 @@ const getProjectQuery = gql`
         paymentType
         price
         vat
+        projectId
       }
     }
   }

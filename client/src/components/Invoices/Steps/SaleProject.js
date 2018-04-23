@@ -13,7 +13,7 @@ export default function SaleProject({ _id, step1, salesOptions, projectsOptions,
         <div className="inline field"> 
           {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
             <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-              <div className="sub header inline-block-i pl-1">{T.translate("invoices.form.sale_or_project")}</div>
+              <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.sale_or_project")}</div>
             </h1>
           }
         </div>
@@ -51,7 +51,7 @@ export default function SaleProject({ _id, step1, salesOptions, projectsOptions,
         <div className="inline field mt-5"> 
           <button className="ui primary button" onClick={handleNext}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
 
-          <Link to="/invoices" className="ui negative block-i mt-3">{T.translate("invoices.form.cancel")}</Link>
+          <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
         </div>  
       </div>
     </div>  

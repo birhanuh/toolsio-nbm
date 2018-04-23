@@ -95,18 +95,18 @@ class Form extends Component {
       if (id) {
         this.props.updateSaleMutation({ 
         variables: { id, name, deadline, status, description, total, customerId: parseInt(customerId) },
-        update: (proxy, { data: { updateSale } }) => {
+        update: (store, { data: { updateSale } }) => {
           const { success, sale } = updateSale
           
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersSalesQuery })
+          const data = store.readQuery({ query: getCustomersSalesQuery })
           // Add our comment from the mutation to the end.
           data.getSales.push(sale)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersSalesQuery, data })
+          store.writeQuery({ query: getCustomersSalesQuery, data })
         }})
         .then(res => {
 
@@ -130,18 +130,18 @@ class Form extends Component {
 
       this.props.createSaleMutation({ 
         variables: { name, deadline, status, description, total, customerId: parseInt(customerId) },
-        update: (proxy, { data: { createSale } }) => {
+        update: (store, { data: { createSale } }) => {
           const { success, sale } = createSale
 
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersSalesQuery });
+          const data = store.readQuery({ query: getCustomersSalesQuery });
           // Add our comment from the mutation to the end.
           data.getSales.push(sale);
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersSalesQuery, data });
+          store.writeQuery({ query: getCustomersSalesQuery, data });
         }})
         .then(res => {          
 
@@ -192,7 +192,7 @@ class Form extends Component {
     )
 
     return (  
-      <div className="ui stackable grid">
+      <div className="row column">
 
         <Breadcrumb />
 
