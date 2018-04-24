@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import flashMessages from './flashMessages'
+import flashMessage from './flashMessage'
 import authentication from './authentication'
 import sales from './sales'
 import projects from './projects'
@@ -12,7 +12,7 @@ import users from './users'
 
 // combineReducers combines all passed reducers in to one state object
 export default combineReducers({
-  flashMessages,
+  flashMessage,
   authentication,
   sales,
   projects,

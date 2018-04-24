@@ -1,3 +1,12 @@
+// Breadcrump
+.ui.breadcrumb .active.section {
+  font-weight: 400;
+}
+
+.ui.breadcrumb a {
+  color: $turquoise;
+}
+
 // Header breadcrumb
 .ui.fixed.menu.header-breadcrumb {
   margin-top: 48px;

@@ -19,12 +19,12 @@ export default {
     if (!data.user.password) {
       errors["password"] = T.translate("sign_up.password_required") 
     }
-    if (!data.user.confirm_password) {
-      errors["confirm_password"] = T.translate("sign_up.password_confirmation_required")
+    if (!data.user.confirmPassword) {
+      errors["confirmPassword"] = T.translate("sign_up.password_confirmation_required")
     }
-    if (data.user.password && data.confirm_password) {
-      if (!Validator.equals(data.password, data.confirm_password)) {
-        errors["confirm_password"] = T.translate("sign_up.password_match_required") 
+    if (data.user.password && data.confirmPassword) {
+      if (!Validator.equals(data.password, data.confirmPassword)) {
+        errors["confirmPassword"] = T.translate("sign_up.password_match_required") 
       }
     }    
     if (!data.account.subdomain) {
@@ -43,22 +43,22 @@ export default {
   validateInvitationRegistrationInput: (data) => {
     let errors = {}
 
-    if (!data.user.email) {
+    if (!data.email) {
       errors["email"] = T.translate("log_in.email_required")
     } else {
-      if (!Validator.isEmail(data.user.email)) {
+      if (!Validator.isEmail(data.email)) {
         errors["email"] = T.translate("sign_un.email_format_required")  
       }
     }  
-    if (!data.user.password) {
+    if (!data.password) {
       errors["password"] = T.translate("sign_up.password_required") 
     }
-    if (!data.user.confirm_password) {
-      errors["confirm_password"] = T.translate("sign_up.password_confirmation_required")
+    if (!data.confirmPassword) {
+      errors["confirmPassword"] = T.translate("sign_up.password_confirmation_required")
     }
-    if (data.user.password && data.confirm_password) {
-      if (!Validator.equals(data.password, data.confirm_password)) {
-        errors["confirm_password"] = T.translate("sign_up.password_match_required") 
+    if (data.password && data.confirmPassword) {
+      if (!Validator.equals(data.password, data.confirmPassword)) {
+        errors["confirmPassword"] = T.translate("sign_up.password_match_required") 
       }
     } 
 
@@ -77,27 +77,6 @@ export default {
     if (!data.industry) {
       errors["industry"] = T.translate("sign_up.account.industry_required")
     }
-
-    return {
-      errors,
-      isValid: isEmpty(errors)
-    }
-  },
-
-  validateUserInput: (data) => {
-    let errors = {}
-
-    if (!data.user.password) {
-      errors["password"] = T.translate("sign_up.password_required") 
-    }
-    if (!data.user.confirm_password) {
-      errors["confirm_password"] = T.translate("sign_up.password_confirmation_required")
-    }
-    if (data.user.password && data.confirm_password) {
-      if (!Validator.equals(data.password, data.confirm_password)) {
-        errors["confirm_password"] = T.translate("sign_up.password_match_required") 
-      }
-    }    
 
     return {
       errors,
@@ -143,8 +122,8 @@ export default {
     if (!data.deadline) {
       errors['deadline'] = T.translate("projects.form.deadline_required")
     }
-    if (!data.customer) {
-      errors['customer'] = T.translate("projects.form.customer_required")
+    if (!data.customerId) {
+      errors['customerId'] = T.translate("projects.form.customer_required")
     }
     
     return {
@@ -162,8 +141,8 @@ export default {
     if (!data.deadline) {
       errors['deadline'] = T.translate("sales.form.deadline_required")
     }
-    if (!data.customer) {
-      errors['customer'] = T.translate("sales.form.customer_required")
+    if (!data.customerId) {
+      errors['customerId'] = T.translate("sales.form.customer_required")
     }
     
     return {
@@ -336,7 +315,7 @@ export default {
     let errors = {}
 
     if (!data.email) {
-      errors['email'] = T.translate("account.users.email_required")
+      errors['email'] = T.translate("users.form.email_required")
     }
     
     return {

@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
-import { AddElement, ShowEditElement } from './Tr'
+import AddTaskTr from './AddTaskTr'
+import ShowEditTaskTr from './ShowEditTaskTr'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -17,7 +18,7 @@ import $ from 'jquery'
 $.fn.modal = require('semantic-ui-modal')
 $.fn.dimmer = require('semantic-ui-dimmer')
 
-class Task extends Component {
+class Form extends Component {
    constructor(props) {
     super(props)
     this.state = {
@@ -34,7 +35,7 @@ class Task extends Component {
       },
       editTask: {
         id: null,
-        projectId: null,
+        projectId: this.props.projectId,
         name: "",
         paymentType: "",
         hours: "",
@@ -47,17 +48,16 @@ class Task extends Component {
   }
 
   handleNewTaskChange = (e) => {
-    if (!this.state.newTask.errors[e.target.name]) {
+    if (this.state.newTask.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.newTask.errors)
       delete errors[e.target.name]
 
       let updatedTask = Object.assign({}, this.state.newTask)
-      updatedTask.projectId = this.props.projectId
       updatedTask[e.target.name] = e.target.value
+      updatedTask.errors = errors 
 
       this.setState({
-        newTask: updatedTask,
-        errors
+        newTask: updatedTask
       })
     } else {
       let updatedTask = Object.assign({}, this.state.newTask)
@@ -93,42 +93,47 @@ class Task extends Component {
 
       this.props.createTaskMutation({ 
         variables: { projectId, name, paymentType, hours, price, vat },
-        update: (proxy, { data: { createTask } }) => {
+        update: (store, { data: { createTask } }) => {
           const { success, task } = createTask
 
           if (!success) {
             return
           }
-          /*
+          
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getProjectQuery })
+          const data = store.readQuery({ query: getProjectQuery,
+            variables: {
+              id: projectId,
+            }
+          })
           // Add our comment from the mutation to the end.
           data.getProject.tasks.push(task)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getProjectQuery, data }) */
+          store.writeQuery({ query: getProjectQuery, data }) 
         }})
         .then(res => {
-          let updatedTask = Object.assign({}, this.state.newTask)
-          updatedTask.projectId = null
-          updatedTask.name = ""
-          updatedTask.paymentType = ""
-          updatedTask.hours = ""
-          updatedTask.price = ""
-          updatedTask.vat = ""
-          updatedTask.isLoading = false
-          
-          this.setState({
-            newTask: updatedTask
-          })
-
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("projects.tasks.form.flash.success_add", { name: name})
-          // })
 
           const { success, task, errors } = res.data.createTask
 
-          if (!success) {
+          if (success) {
+            let updatedTask = Object.assign({}, this.state.newTask)
+            updatedTask.projectId = null
+            updatedTask.name = ""
+            updatedTask.paymentType = ""
+            updatedTask.hours = ""
+            updatedTask.price = ""
+            updatedTask.vat = ""
+            updatedTask.isLoading = false
+            
+            this.setState({
+              newTask: updatedTask
+            })
+
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.tasks.form.flash.success_add", { name: name})
+            })
+          } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
 
@@ -162,8 +167,7 @@ class Task extends Component {
       updatedTask[e.target.name] = e.target.value
 
       this.setState({
-        editTask: updatedTask,
-        errors
+        editTask: updatedTask
       })
     } else {
       let updatedTask = Object.assign({}, this.state.editTask)
@@ -228,42 +232,58 @@ class Task extends Component {
       
       this.props.updateTaskMutation({ 
         variables: { id, projectId, name, paymentType, hours, price, vat },
-        update: (proxy, { data: { updateTask } }) => {
+        update: (store, { data: { updateTask } }) => {
           const { success, task } = updateTask
 
           if (!success) {
             return
           }
-          /*
+          
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getProjectQuery })
+          const data = store.readQuery({ query: getProjectQuery,
+              variables: {
+                id: projectId,
+              }
+             })
           // Add our comment from the mutation to the end.
-          data.getProject.tasks.push(task)
+          let updatedTasks = data.getProject.tasks.map(item => {
+            if (item.id === task.id) {
+              return {...task, __typename: 'Task'}
+            }
+            return item
+          })
+          data.getProject.tasks = updatedTasks
+      
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getProjectQuery, data }) */
+          store.writeQuery({ query: getProjectQuery, data }) 
         }})
         .then(res => {
-          let updatedTask = Object.assign({}, this.state.editTask)
-          updatedTask.projectId = null
-          updatedTask.name = ""
-          updatedTask.paymentType = ""
-          updatedTask.hours = ""
-          updatedTask.price = ""
-          updatedTask.vat = ""
-          updatedTask.isLoading = false
-          
-          this.setState({
-            editTask: updatedTask
-          })
-
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("projects.tasks.form.flash.success_add", { name: name})
-          // })
 
           const { success, task, errors } = res.data.updateTask
 
-          if (!success) {
+          if (success) {
+            let updatedTask = Object.assign({}, this.state.editTask)
+            updatedTask.projectId = null
+            updatedTask.name = ""
+            updatedTask.paymentType = ""
+            updatedTask.hours = ""
+            updatedTask.price = ""
+            updatedTask.vat = ""
+            updatedTask.isLoading = false
+            
+            this.setState({
+              editTask: updatedTask
+            })
+
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.tasks.form.flash.success_update", { name: name})
+            })
+            
+            // Hide edit tr and show show tr
+            $('#'+task.id+' td.edit-task').hide()
+            $('#'+task.id+' td.show-task').show()  
+          } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
 
@@ -306,32 +326,68 @@ class Task extends Component {
   handleDelete(task, event) {
     event.preventDefault()
     
-    let name = task.name
+    const { id, name } = task
+    const { projectId } = this.props
 
-    this.props.deleteTask(task).then(
-      () => {
-        this.setState({
-          taskToBeDeleated: {}
-        })
+    this.props.deleteTaskMutation({ 
+      variables: { id },
+      update: (proxy, { data: { deleteTask } }) => {
+        const { success } = deleteTask
 
+        if (!success) {
+          return
+        }
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: getProjectQuery,
+            variables: {
+              id: projectId,
+            }
+          })
+        // Add our comment from the mutation to the end.
+   
+        let updatedTasks = data.getProject.tasks.filter(task => task.id !== id) 
+        data.getProject.tasks = updatedTasks
+ 
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: getProjectQuery, data })
+      }})
+      .then(res => {          
+
+        const { success, project, errors } = res.data.deleteTask
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("projects.tasks.form.flash.success_delete", { name: name})
+          })  
+
+          this.setState({ itemToBeDeleated: {} })
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => {
         this.props.addFlashMessage({
-          type: 'success',
-          text: T.translate("projects.tasks.form.flash.success_delete", { name: name})
+          type: 'error',
+          text: T.translate("projects.tasks.form.flash.error_delete", { name: name})
         })  
-      },
-      ({ response }) => {
-      }
-    ) 
+
+        this.setState({ errors: err, isLoading: false })  
+      }) 
   }
 
   render() {
     const { newTask, editTask } = this.state
-  
-    let tasks = this.props.tasks   
+
+    const { tasks, total } = this.props
     
+
     const tasksList = (
       tasks.map(task => 
-        <ShowEditElement 
+        <ShowEditTaskTr 
           key={task.id}
           task={task} 
           editTask={editTask}
@@ -360,11 +416,18 @@ class Task extends Component {
 
             { tasks.length !== 0 && tasksList }
             
-            <AddElement 
+            <AddTaskTr
               task={newTask} 
               handleNewTaskChange={this.handleNewTaskChange.bind(this)} 
               handleCreate={this.handleCreate.bind(this)} /> 
             
+            <tr>
+              <td colSpan="3"><strong>{T.translate("projects.tasks.form.total")}</strong></td>
+              <td><strong>{total}</strong></td>
+              <td></td>
+              <td></td>
+            </tr>
+
           </tbody>
         </table>
         <div className="ui small modal task">
@@ -383,10 +446,10 @@ class Task extends Component {
   
 }
 
-Task.propTypes = {
+Form.propTypes = {
   tasks: PropTypes.array.isRequired,
   projectId: PropTypes.number.isRequired,
-  //addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 const createTaskMutation = gql`
@@ -400,6 +463,7 @@ const createTaskMutation = gql`
         paymentType
         price
         vat
+        projectId
       }
       errors {
         path
@@ -410,7 +474,7 @@ const createTaskMutation = gql`
 `
 
 const updateTaskMutation = gql`
-  mutation updateTask($id: id, $name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
+  mutation updateTask($id: Int!, $name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
     updateTask(id: $id, name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
       success
       task {
@@ -420,6 +484,7 @@ const updateTaskMutation = gql`
         paymentType
         price
         vat
+        projectId
       }
       errors {
         path
@@ -429,53 +494,53 @@ const updateTaskMutation = gql`
   }
 `
 
-// const getProjectQuery = gql`
-//   query getProject($id: Int!) {
-//     getProject(id: $id) {
-//       id
-//       name 
-//       deadline
-//       status
-//       progress
-//       description
-//       customer {
-//         id
-//         name
-//       }
-//       tasks {
-//         id
-//         name
-//         hours
-//         paymentType
-//         price
-//         vat
-//       }
-//     }
-//   }
-// `
-// const MutationsAndQuery =  compose(
-//   graphql(createTaskMutation, {
-//     name : 'createTaskMutation'
-//   }),
-//   graphql(getProjectQuery, {
-//     name: 'getProjectQuery',
-//     options: (props) => ({
-//       variables: {
-//         id: props.match.params.id 
-//       }
-//     })
-//   })
-// )(Task)
+const deleteTaskMutation = gql`
+  mutation deleteTask($id: Int!) {
+    deleteTask(id: $id) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
 
-// export default MutationsAndQuery
-
-const MutationsAndQuery =  compose(
+const getProjectQuery = gql`
+  query ($id: Int!) {
+    getProject(id: $id) {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        id
+        name
+      }
+      tasks {
+        id
+        name
+        hours
+        paymentType
+        price
+        vat
+        projectId
+      }
+    }
+  }
+`
+const Mutations =  compose(
   graphql(createTaskMutation, {
     name : 'createTaskMutation'
   }),
-   graphql(updateTaskMutation, {
+  graphql(updateTaskMutation, {
     name : 'updateTaskMutation'
+  }),
+  graphql(deleteTaskMutation, {
+    name : 'deleteTaskMutation'
   })
-)(Task)
+)(Form)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (Mutations)

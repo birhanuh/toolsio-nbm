@@ -22,7 +22,7 @@ export default `
 
   type CreateMessageResponse {
     success: Boolean!
-    message: Message 
+    message: Message! 
     errors: [Error!]
   }
 

@@ -19,11 +19,11 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
 export default function Sidebar() {
 
   return(
-    <div className="ui visible sidebar vertical menu">
+    <div className="ui sidebar vertical menu">
       <div className="ui center aligned vertical segment account">
-        <a href="/account">
+        <Link to="/settings">
           <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
-        </a>
+        </Link>
         <p className="mt-3 mb-2">Birhanu (Admin)</p>
       </div>
       <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboard.header")} />
@@ -31,7 +31,7 @@ export default function Sidebar() {
       <ActiveLink activeOnlyWhenExact to="/sales" icon="cart icon" label={T.translate("sales.page.header")} />
       <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.page.header")}/>
       <ActiveLink activeOnlyWhenExact to="/invoices" icon="file text outline icon" label={T.translate("invoices.page.header")}/>
-      <ActiveLink activeOnlyWhenExact to="/users" icon="user icon" label={T.translate("account.users.header")}/>
+      <ActiveLink activeOnlyWhenExact to="/users" icon="user icon" label={T.translate("users.header")}/>
     </div>
   )
 }

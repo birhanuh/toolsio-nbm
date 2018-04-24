@@ -4,78 +4,9 @@ import { InputField, SelectField } from '../../../utils/FormFields'
 // Localization 
 import T from 'i18n-react'
 
-export const AddElement = ({item, handleNewItemChange, handleCreate}) => {
+export default function ShowEditItemTr({item, editItem, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, showConfirmationModal}) {
   return (
-    <tr>
-      <td className="add-item">
-        <InputField
-          name="name" 
-          value={item.name} 
-          onChange={handleNewItemChange}  
-          placeholder="Name"
-          error={item.errors && item.errors.name}
-          formClass="ui small input"
-        />
-      </td>
-      <td className="add-item">
-        <SelectField
-          name="unit"
-          type="select"
-          value={item.unit} 
-          onChange={handleNewItemChange}  
-          error={item.errors && item.errors.unit}
-          formClass="ui small input"
-          options={[
-            <option key="default" value="" disabled>{T.translate("sales.items.form.select_unit")}</option>,
-            <option key="piece" value="piece">Piece</option>,
-            <option key="meter" value="meter">Meter</option>,
-            <option key="kilo gram" value="kilo gram">Kilo gram</option>,
-            <option key="liter" value="liter">Liter</option>
-            ]
-          }
-        />
-      </td>
-      <td className="add-item">
-        <InputField
-          name="quantity" 
-          value={item.quantity} 
-          onChange={handleNewItemChange}  
-          placeholder="0.00"
-          error={item.errors && item.errors.quantity}
-          formClass="ui small input"
-        />
-      </td>
-      <td className="add-item">
-        <InputField
-          name="price" 
-          value={item.price} 
-          onChange={handleNewItemChange} 
-          placeholder="0.00"
-          error={item.errors && item.errors.price}
-          formClass="ui small input"
-        />
-      </td>
-      <td className="add-item">
-        <InputField
-          name="vat" 
-          value={item.vat} 
-          onChange={handleNewItemChange} 
-          placeholder="0"
-          error={item.errors && item.errors.vat}
-          formClass="ui small input"
-        />
-      </td>
-      <td className="add-item" width="120px">     
-        <button disabled={item.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.items.form.add_item")}</button> 
-      </td>
-    </tr>
-  )  
-}
-
-
-export const ShowEditElement = ({item, editItem, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, showConfirmationModal}) => {
-  return (
-    <tr key={item._id} id={item._id}>      
+    <tr key={item.id} id={item.id}>      
       <td className="show-item">{item.name}</td>
       <td className="show-item">{item.unit}</td>
       <td className="show-item">{item.quantity}</td>
@@ -94,7 +25,7 @@ export const ShowEditElement = ({item, editItem, handleCreate, handleEdit, handl
           onChange={handleEditItemChange}  
           placeholder="Name"
           error={editItem.errors && editItem.errors.name}
-          formClass="ui small input"
+          formClass="ui small d-block input"
         />
       </td>
       <td className="edit-item">
@@ -104,7 +35,7 @@ export const ShowEditElement = ({item, editItem, handleCreate, handleEdit, handl
           value={editItem.unit} 
           onChange={handleEditItemChange}  
           error={editItem.errors && editItem.errors.unit}
-          formClass="ui small input"
+          formClass="ui small d-block input"
           options={[
             <option key="default" value="" disabled>{T.translate("sales.items.form.select_unit")}</option>,
             <option key="piece" value="piece">Piece</option>,
@@ -122,7 +53,7 @@ export const ShowEditElement = ({item, editItem, handleCreate, handleEdit, handl
           onChange={handleEditItemChange}  
           placeholder="0.00"
           error={editItem.errors && editItem.errors.quantity}
-          formClass="ui small input"
+          formClass="ui small d-block input"
         />
       </td>
       <td className="edit-item">
@@ -132,7 +63,7 @@ export const ShowEditElement = ({item, editItem, handleCreate, handleEdit, handl
           onChange={handleEditItemChange} 
           placeholder="0.00"
           error={editItem.errors && editItem.errors.price}
-          formClass="ui small input"
+          formClass="ui small d-block input"
         />
       </td>
       <td className="edit-item">
@@ -142,12 +73,12 @@ export const ShowEditElement = ({item, editItem, handleCreate, handleEdit, handl
           onChange={handleEditItemChange} 
           placeholder="0"
           error={editItem.errors && editItem.errors.vat}
-          formClass="ui small input"
+          formClass="ui small d-block input"
         />
       </td>
       <td className="edit-item" width="120px">  
         <div className="edit-item ui fluid small buttons">
-          <button className="ui basic icon button" onClick={handleCancelEdit}><i className="remove circle outline icon"></i></button>
+          <button className="ui basic icon button" onClick={handleCancelEdit}><i className="remove icon"></i></button>
           <button className="ui positive icon basic button" onClick={handleUpdate}><i className="check circle outline icon"></i></button>
         </div>
       </td>

@@ -1,9 +1,13 @@
 import React, { Component } from 'react' 
+import PropTypes from 'prop-types'
 require('babel-polyfill')
+import { connect } from 'react-redux'
+import axios from 'axios'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { InputField, SelectField } from '../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -29,19 +33,18 @@ class AccountForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: this.props.data.getAccount ? this.props.data.getAccount.id : null,
       subdomain: this.props.data.getAccount ? this.props.data.getAccount.subdomain : '',
       logoUrl: this.props.data.getAccount ? this.props.data.getAccount.logoUrl : '',
       industry: this.props.data.getAccount ? this.props.data.getAccount.industry : '',
       address: {
-        street: this.props.data.getAccount ? this.props.data.getAccount.street: '',
-        postalCode: this.props.data.getAccount ? this.props.data.getAccount.postalCode : '',
-        region: this.props.data.getAccount ? this.props.data.getAccount.region : '',
-        country: this.props.data.getAccount ? this.props.data.getAccount.country : ''
+        street: this.props.data.getAccount ? (this.props.data.getAccount.street ? this.props.data.getAccount.street : '') : '',
+        postalCode: this.props.data.getAccount ? (this.props.data.getAccount.postalCode ? this.props.data.getAccount.postalCode : '') : '',
+        region: this.props.data.getAccount ? (this.props.data.getAccount.region ? this.props.data.getAccount.region : '') : '',
+        country: this.props.data.getAccount ? (this.props.data.getAccount.country ? this.props.data.getAccount.country : '') : ''
       },
       contact: {
-        phoneNumber: this.props.data.getAccount ? this.props.data.getAccount.phoneNumber : '',
-        email: this.props.data.getAccount ? this.props.data.getAccount.email : ''
+        phoneNumber: this.props.data.getAccount ? (this.props.data.getAccount.phoneNumber ? this.props.data.getAccount.phoneNumber : '') : '',
+        email: this.props.data.getAccount ? (this.props.data.getAccount.email ? this.props.data.getAccount.email : '') : ''
       },
       file: null,
       errors: {},
@@ -53,19 +56,18 @@ class AccountForm extends Component {
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.data.getAccount) {
       this.setState({
-        id: nextProps.data.getAccount.id,
         subdomain: nextProps.data.getAccount.subdomain,
-        logoUrl: !nextProps.data.getAccount.logoUrl ? '' : nextProps.data.getAccount.logoUrl,
+        logoUrl: nextProps.data.getAccount.logoUrl ? nextProps.data.getAccount.logoUrl : '',
         industry: nextProps.data.getAccount.industry,
         address: {
-          street: !nextProps.data.getAccount.street ? '' : nextProps.data.getAccount.street,
-          postalCode: !nextProps.data.getAccount.postalCode ? '' : nextProps.data.getAccount.postalCode,
-          region: !nextProps.data.getAccount.region ? '' : nextProps.data.getAccount.region,
-          country: !nextProps.data.getAccount.country ? '' : nextProps.data.getAccount.country
+          street: nextProps.data.getAccount.street ? nextProps.data.getAccount.street : '',
+          postalCode: nextProps.data.getAccount.postalCode ? nextProps.data.getAccount.postalCode : '',
+          region: nextProps.data.getAccount.region ? nextProps.data.getAccount.region : '',
+          country: nextProps.data.getAccount.country ? nextProps.data.getAccount.country : ''
         },
         contact: {
-          phoneNumber: !nextProps.data.getAccount.phoneNumber ? '' : nextProps.data.getAccount.phoneNumber,
-          email: !nextProps.data.getAccount.email ? '' : nextProps.data.getAccount.email
+          phoneNumber: nextProps.data.getAccount.phoneNumber ?  nextProps.data.getAccount.phoneNumber : '',
+          email: nextProps.data.getAccount.email ? nextProps.data.getAccount.email : '' 
         }
       })
     }
@@ -131,7 +133,7 @@ class AccountForm extends Component {
     const { errors, isValid } = Validation.validateAccountInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ 
@@ -147,21 +149,21 @@ class AccountForm extends Component {
 
     // Validation
     if (this.isValid()) { 
-     const { id, name, subdomain, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
+     const { name, subdomain, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
 
       this.setState({ isLoading: true })
       
-      if (id) {
-        this.props.updateAccountMutation({variables: { id, name, subdomain, phoneNumber, email, logoUrl, street, postalCode: parseInt(postalCode), region, country } })
+      if (subdomain) {
+        this.props.updateAccountMutation({variables: { name, subdomain, phoneNumber, email, logoUrl, street, postalCode: parseInt(postalCode), region, country } })
           .then(res => {
 
             const { success, errors } = res.data.updateAccount
            
             if (success) {
-              // this.props.addFlashMessage({
-              //   type: 'success',
-              //   text: T.translate("account.form.success_update_account")
-              // })
+              this.props.addFlashMessage({
+                type: 'success',
+                text: T.translate("settings.account.flash.success_update")
+              })
               this.setState({ isLoading: false })
             } else {
               let errorsList = {}
@@ -201,10 +203,6 @@ class AccountForm extends Component {
     return axios.put(signedRequest, file, options)
   }
 
-  s3SignLogo = (variables) => {
-    return axios.post('/accounts/logo', variables)
-  }
-
   uploadToS3 = async (url, file, signedRequest) => {
 
     const options = {
@@ -213,7 +211,7 @@ class AccountForm extends Component {
       }
     }
     
-    const uploadLogoResponse = await this.props.uploadLogo(signedRequest, file, options)
+    const uploadLogoResponse = await this.uploadLogo(signedRequest, file, options)
 
     if (uploadLogoResponse.status === 200) {
       this.setState({
@@ -228,10 +226,10 @@ class AccountForm extends Component {
         const { success, errors } = res.data.updateAccount
        
         if (success) {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("account.form.success_update_account")
-          // })
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("settings.account.flash.success_update")
+          })
           this.setState({ isLoadingLogo: false })
         } else {
           let errorsList = {}
@@ -271,20 +269,20 @@ class AccountForm extends Component {
   }
 
   handleSubmitImage = async () => {
-    const { subdomain, file } = this.state
-    const response = await this.props.s3SignLogo({
+    const { file } = this.state
+    const response = await this.props.s3SignLogoMutation({
       variables: {
-        filename: this.formatFileName(file.name),
-        filetype: file.type
+        fileName: this.formatFileName(file.name),
+        fileType: file.type
       }
     })
 
-    const { signedRequest, url } = response.data.result
+    const { signedRequest, url } = response.data.s3SignLogo
     await this.uploadToS3(url, file, signedRequest)
   }
 
   render() {
-    const { id, subdomain, industry, logoUrl, contact, address, errors, isLoadingLogo, isLoadingForm } = this.state
+    const { subdomain, industry, logoUrl, contact, address, errors, isLoadingLogo, isLoadingForm } = this.state
 
     return ( 
 
@@ -298,7 +296,7 @@ class AccountForm extends Component {
                     <div className="content">
                       <div className="center">
                         <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
-                          {T.translate("account.page.select_logo")}
+                          {T.translate("settings.account.select_logo")}
                         </Dropzone>
                       </div>
                     </div>
@@ -307,17 +305,17 @@ class AccountForm extends Component {
                 </div>
               </div>
 
-              <button disabled={isLoadingLogo} className="fluid ui primary button" onClick={this.handleSubmitImage.bind(this)}><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.upload")}</button>
+              <button disabled={isLoadingLogo} className="fluid ui primary button" onClick={this.handleSubmitImage.bind(this)}><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.account.upload")}</button>
             </div>
             <div className="content">
-              <h1 className="ui header mt-2 mb-3">{T.translate("account.page.account")}</h1>
+              <h1 className="ui header mt-2 mb-3">{T.translate("settings.account.header")}</h1>
               
               <form className={classnames("ui form", { loading: isLoadingForm })} onSubmit={this.handleSubmit.bind(this)}>
 
                 { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
 
                 <InputField
-                  label={T.translate("account.page.subdomain")}
+                  label={T.translate("settings.account.subdomain")}
                   name="subdomain" 
                   value={subdomain} 
                   onChange={this.handleChange.bind(this)} 
@@ -329,13 +327,13 @@ class AccountForm extends Component {
                   type="select"
                   name="industry"
                   value={industry ? industry : '-'} 
-                  label={T.translate("account.page.industry")}
+                  label={T.translate("settings.account.industry")}
                   onChange={this.handleChange.bind(this)} 
                   error={errors && errors.industry}
                   formClass="field"
 
                   options={[
-                    <option key="default" value="" disabled>{T.translate("account.page.select_industry")}</option>,
+                    <option key="default" value="" disabled>{T.translate("settings.account.select_industry")}</option>,
                     <option key="human resource" value="human resource">Human resource</option>,
                     <option key="fashion" value="fashion">Fashion</option>,
                     <option key="import/export" value="import/export">Import/Export</option>,
@@ -345,9 +343,9 @@ class AccountForm extends Component {
                   }
                 />
                  <fieldset className="custom-fieldset">
-                  <legend className="custom-legend">{T.translate("account.page.contact.header")}</legend>
+                  <legend className="custom-legend">{T.translate("settings.account.contact.header")}</legend>
                   <InputField
-                    label={T.translate("account.page.contact.phone_number")}
+                    label={T.translate("settings.account.contact.phone_number")}
                     name="phoneNumber" 
                     value={contact.phoneNumber} 
                     onChange={this.handleChange.bind(this)} 
@@ -356,7 +354,7 @@ class AccountForm extends Component {
                     formClass="field"
                   />
                   <InputField
-                    label={T.translate("account.page.contact.email")}
+                    label={T.translate("settings.account.contact.email")}
                     name="email" 
                     value={contact.email} 
                     onChange={this.handleChange.bind(this)} 
@@ -366,9 +364,9 @@ class AccountForm extends Component {
                   />
                 </fieldset>
                 <fieldset className="custom-fieldset">
-                  <legend className="custom-legend">{T.translate("account.page.address.header")}</legend>
+                  <legend className="custom-legend">{T.translate("settings.account.address.header")}</legend>
                   <InputField
-                    label={T.translate("account.page.address.street")}
+                    label={T.translate("settings.account.address.street")}
                     name="street" 
                     value={address.street} 
                     onChange={this.handleChange.bind(this)} 
@@ -377,7 +375,7 @@ class AccountForm extends Component {
                     formClass="field"
                   />
                 <InputField
-                  label={T.translate("account.page.address.postal_code")}
+                  label={T.translate("settings.account.address.postal_code")}
                   name="postalCode" 
                   value={address.postalCode} 
                   onChange={this.handleChange.bind(this)} 
@@ -386,9 +384,9 @@ class AccountForm extends Component {
                   formClass="field"
                 />
                 <div className={classnames("field", {error: errors['address.country']})}>              
-                  <label>{T.translate("account.page.address.country")}</label>
+                  <label>{T.translate("settings.account.address.country")}</label>
                   <CountryDropdown
-                    defaultOptionLabel={T.translate("account.page.address.select_country")}
+                    defaultOptionLabel={T.translate("settings.account.address.select_country")}
                     value={address.country}
                     onChange={(val) => this.selectCountry(val)} 
                     error={errors.address && errors.address.country} />
@@ -396,9 +394,9 @@ class AccountForm extends Component {
                   <span className={classnames({red: errors.address && errors.address.country})}>{errors.address && errors.address.country}</span>  
                 </div> 
                 <div className={classnames("field", {error: address.country !== '' && errors['address.region']})}>              
-                  <label>{T.translate("account.page.address.region")}</label> 
+                  <label>{T.translate("settings.account.address.region")}</label> 
                   <RegionDropdown
-                    defaultOptionLabel={T.translate("account.page.address.select_region")}
+                    defaultOptionLabel={T.translate("settings.account.address.select_region")}
                     disabled={address.country === ''}
                     country={address.country}
                     value={address.region}
@@ -413,9 +411,9 @@ class AccountForm extends Component {
               <div className="field">  
                 <Link className="ui primary outline button" to="/dashboard">
                   <i className="minus circle icon"></i>
-                  {T.translate("account.page.cancel")}
+                  {T.translate("settings.account.cancel")}
                 </Link>  
-                <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("account.page.edit")}</button>
+                <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.account.edit")}</button>
               </div>  
             </form>   
           </div>
@@ -426,6 +424,10 @@ class AccountForm extends Component {
 
     )
   }
+}
+
+AccountForm.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 const getAccountQuery = gql`
@@ -446,8 +448,8 @@ const getAccountQuery = gql`
 `
 
 const updateAccountMutation = gql`
-  mutation updateAccount($id: Int!, $subdomain: String!, $industry: String, $email: String!, $phoneNumber: String!, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
-    updateAccount(id: $id, name: $subdomain, subdomain: $industry, industry: $email, phoneNumber: $phoneNumber, logoUrl: $logoUrl, street: $street, postalCode: $postalCode, region: $region, country: $country) {
+  mutation updateAccount($subdomain: String!, $industry: String, $email: String!, $phoneNumber: String, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
+    updateAccount(subdomain: $subdomain, industry: $industry, email: $email, phoneNumber: $phoneNumber, logoUrl: $logoUrl, street: $street, postalCode: $postalCode, region: $region, country: $country) {
       success
       account {
         id
@@ -461,7 +463,17 @@ const updateAccountMutation = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const s3SignLogoMutation = gql`
+  mutation s3SignLogo($fileName: String!, $fileType: String!) {
+    s3SignLogo(fileName: $fileName, fileType: $fileType) {
+      signedRequest
+      url
+      errors
+    }
+  }
+`
+
+const MutationQuery =  compose(
   graphql(updateAccountMutation, {
     name : 'updateAccountMutation',
     options: (props) => ({
@@ -469,6 +481,9 @@ const MutationsAndQuery =  compose(
         subdomain: props.subdomain
       },
     })
+  }),
+  graphql(s3SignLogoMutation, {
+    name : 's3SignLogoMutation'
   }),
   graphql(getAccountQuery, {
     options: (props) => ({
@@ -479,6 +494,6 @@ const MutationsAndQuery =  compose(
   })
 )(AccountForm)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationQuery)
 
 

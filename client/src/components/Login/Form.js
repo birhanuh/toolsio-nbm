@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
@@ -22,9 +23,20 @@ class Form extends Component {
   }
 
   handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+    if (this.state.errors[e.target.name]) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[e.target.name]
+
+      this.setState({
+        [e.target.name]: e.target.value,
+        errors
+      })
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      })
+    }
   }
 
   isValid() {
@@ -51,16 +63,18 @@ class Form extends Component {
 
       this.props.mutate({variables: { email, password }})
         .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: 'You have signed in successfully!'
-          // })
+         
           const { success, authToken, refreshAuthToken, errors } = res.data.loginUser
       
           if (success) {
             localStorage.setItem('authToken', authToken)
             localStorage.setItem('refreshAuthToken', refreshAuthToken)
             
+            this.props.addFlashMessage({
+              type: 'success',
+              text: 'You have signed in successfully!'
+            })
+
             // Redirect to dashboard
             this.context.router.history.push('/dashboard')
           } else {
@@ -108,6 +122,11 @@ class Form extends Component {
   }
 }
 
+// Proptypes definition
+Form.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+}
+
 Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
@@ -125,5 +144,6 @@ const loginUserMutation = gql`
     }
   }
 `
-export default graphql(loginUserMutation)(Form)
+
+export default connect(null, { addFlashMessage }) (graphql(loginUserMutation)(Form))
 

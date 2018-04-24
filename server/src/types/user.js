@@ -21,7 +21,7 @@ export default `
 
   type RegisterResponse {
     success: Boolean!
-    user: User
+    account: Account
     errors: [Error!]
   }
 
@@ -32,16 +32,34 @@ export default `
     errors: [Error!]
   }
 
+  type SendInvitationResponse {
+    success: Boolean!
+    account: Account!
+    errors: [Error!]
+  }
+
+  type S3SignAvatarResponse {
+    signedRequest: String!
+    url: String!
+    errors: [Error!]
+  }
+
   type Query {
-    getUser(id: Int!): User!
+    getUser(email: String!): User!
     getUsers: [GetUsersResponse!]!
   }
 
   type Mutation {
-    registerUser(firstName: String, lastName: String, email: String!, password: String!, avatarUrl: String, 
+    registerUser(firstName: String, lastName: String, email: String!, password: String!, 
       subdomain: String!, industry: String!): RegisterResponse!
+
     loginUser(email: String!, password: String!): LoginResponse!
 
+    sendInvitation(email: String!): SendInvitationResponse!
+
+    registerInvitedUser(firstName: String, lastName: String, email: String!, password: String!, token: String!): RegisterResponse!
+
+    s3SignAvatar(fileName: String!, fileType: String!): S3SignAvatarResponse!
   }
 
 `

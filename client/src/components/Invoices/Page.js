@@ -73,10 +73,12 @@ const getInvoicesQuery = gql`
       project {
         id
         name
+        status
       }
       sale {
         id
         name
+        status
       }
       customer {
         id

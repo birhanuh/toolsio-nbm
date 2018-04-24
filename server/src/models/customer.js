@@ -120,7 +120,13 @@ export default (sequelize, DataTypes) => {
   })
 
   Customer.associate = (models) => {
-
+    // 1:M
+    Customer.belongsTo(models.User, {
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id'
+      }
+    })
   }
 
   return Customer

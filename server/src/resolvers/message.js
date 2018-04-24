@@ -60,7 +60,7 @@ export default {
           unreadCount
         }
       } catch(err) {
-        console.log(err)
+        console.log('err: ', err)
         return {
           success: false,
           errors: formatErrors(err, models)
@@ -101,7 +101,7 @@ export default {
           message
         }
       } catch (err) {
-        console.log(err)
+        console.log('err: ', err)
         return {
           success: false,
           errors: formatErrors(err, models)

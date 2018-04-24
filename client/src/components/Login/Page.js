@@ -4,7 +4,7 @@ import Form from './Form'
 import { connect } from 'react-redux'
 import { confirmEmail } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import FlashMessagesList from '../../flash/FlashMessagesList'
+import FlashMessage from '../../flash/FlashMessage'
 
 // Localization 
 import T from 'i18n-react'
@@ -49,7 +49,7 @@ class Page extends Component {
           </div>
         </h2>
         
-        <FlashMessagesList />
+        <FlashMessage />
 
         <Form />
 
@@ -57,8 +57,8 @@ class Page extends Component {
           {T.translate("log_in.new_to_us")}&nbsp;<a href="/signup">{T.translate("sign_up.sign_up")}</a>
         </div>
         <div className="ui center aligned vertical segment">
-          <small className="block-i">{T.translate("landing.footer.copyright")}</small>
-          <small className="block-i">{T.translate("landing.footer.address")}</small>
+          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="d-block">{T.translate("landing.footer.address")}</small>
         </div>
       </div>
     )

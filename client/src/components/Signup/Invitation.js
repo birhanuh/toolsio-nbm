@@ -4,58 +4,54 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import { InputField } from '../../utils/FormFields'
 import classnames from 'classnames'
+import jwt from 'jsonwebtoken'
+import { addFlashMessage } from '../../actions/flashMessageActions'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Localization 
 import T from 'i18n-react'
 
-class Form extends Component {
+// Config
+import jwtConfig from '../../../../config/jwt.json'
+
+class Invitation extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      user: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-      },
-      errors: {
-        message: {
-          errors: {}
-        }
-      },
-      isLoading: false,
-      invalid: false
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      token: null,
+      errors: {},
+      isLoading: false
     }
   }
   
-  handleChange(e) {
-    this.setState({
-      user: { ...this.state.user, [e.target.name]: e.target.value }
-    })
+  componentDidMount = () => {
+    const url = new URL(window.location.href)
+    let token = url.searchParams.get("token")
+  
+    const { email } = jwt.verify(token, jwtConfig.jwtSecret1)
+
+    this.setState({ email, token })
   }
 
-  checkUserExist(e) {
-    const field = e.target ? e.target.name : 'email'
-    const val = e.target ? e.target.value : e
-    if (val !== '') {
-      this.props.isUserExist(val).then(res => {
-        let errors = this.state.errors
-        let invalid
-        if (res.data.user[0]) {
-          errors['message'] = {
-            errors: {
-              email: {
-                message: 'There is user with such '+field+ '.'
-              }  
-            }  
-          }
-          invalid = true
-        } else {
-          errors[field] = ''
-          invalid = false
-        }
-        this.setState({ errors, invalid })
+  handleChange(e) {
+    if (this.state.errors[e.target.name]) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[e.target.name]
+
+      this.setState({
+        [e.target.name]: e.target.value,
+        errors
+      })
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
       })
     }
   }
@@ -64,7 +60,7 @@ class Form extends Component {
     const { errors, isValid } = Validation.validateInvitationRegistrationInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ errors: updatedErrors })
@@ -77,78 +73,91 @@ class Form extends Component {
     e.preventDefault()
 
     if (this.isValid()) { 
-      // Empty errros state for each submit
-      this.setState({ errros: {}, isLoading: true })
       
-      const { user } = this.state
-      // Make submit
-      this.props.signupRequest({ user}).then(
-        (res) => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("sign_up.success_create")
-          })
-          window.location = `http://${this.props.account.subdomain}.lvh.me:3000/login`
-        },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoading: false })
-      )
+      this.setState({ isLoading: true })
+      
+      const { firstName, lastName, email, password, token } = this.state
+      
+      this.props.mutate({variables: { firstName, lastName, email, password, token }})
+        .then(res => {
+      
+          const { success, account, errors } = res.data.registerInvitedUser
+         
+          if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sign_up.success_create")
+            })
+            
+            // Redirect to login
+            window.location = `${process.env.HTTP}${account.subdomain}.${process.env.DNS}/login`
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+         
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
     }  
   }
 
   render() {
-    const { user, errors, isLoading, invalid } = this.state
-   
+    const { firstName, email, lastName, password, confirmPassword, errors, isLoading, invalid } = this.state
+
     return (            
       <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
            
-          { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+          { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
           
           <InputField
             id='firstName'
             label={T.translate("sign_up.first_name")}
             name="firstName" 
-            value={user.firstName} 
+            value={firstName} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.first_name")}
+            error={errors && errors.firstName}
             formClass="field"
           />
           <InputField
             id='lastName'
             label={T.translate("sign_up.last_name")}
             name="lastName" 
-            value={user.lastName} 
+            value={lastName} 
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.last_name")}
+            error={errors && errors.lastName}
             formClass="field"
           />
           <InputField
             type="email"
             name="email" 
-            value={user.email} 
+            value={email} 
             id='email'
             label={T.translate("sign_up.email")}
             onChange={this.handleChange.bind(this)} 
-            onBlur={this.checkUserExist.bind(this)} 
             placeholder={T.translate("sign_up.email")}
-            error={errors.message && errors.message.errors && errors.message.errors['email'] && errors.message.errors['email'].message}
+            error={errors && errors.email}
             formClass="field"
+            disabled="true"
           />
           <InputField
             type="password"
             name="password" 
-            value={user.password} 
+            value={password} 
             id="password"
             label={T.translate("sign_up.password")}
             onChange={this.handleChange.bind(this)} 
             placeholder={T.translate("sign_up.password")}
-            error={errors.message && errors.message.errors && errors.message.errors['password'] && errors.message.errors['password'].message}
+            error={errors && errors.password}
             formClass="field"
           />
           <InputField
             type="password"
             name="confirmPassword" 
-            value={user.confirmPassword} 
+            value={confirmPassword} 
             id="confirmPassword"
             label={T.translate("sign_up.confirm_password")}
             onChange={this.handleChange.bind(this)} 
@@ -157,7 +166,7 @@ class Form extends Component {
             formClass="field"
           /> 
 
-          <button disabled={isLoading || invalid} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
+          <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
         </div>
       </form>         
 
@@ -166,23 +175,30 @@ class Form extends Component {
 }
 
 // Proptypes definition
-Form.propTypes = {
-  signupRequest: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
-  isUserExist: PropTypes.func.isRequired
+Invitation.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 // Contexttype definition
-Form.contextTypes = {
+Invitation.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state) {
-  return {
-    account: state.authentication && state.authentication.account
-  } 
-}
+const sendInvitationMutation = gql`
+  mutation($firstName: String, $lastName: String, $email: String!, $password: String!, $token: String!) {
+    registerInvitedUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, token: $token) {
+      success
+      account {
+        subdomain
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
 
-export default connect(mapStateToProps, {}) (Form)
+export default connect(null, { addFlashMessage }) (graphql(sendInvitationMutation)(Invitation))
 
 

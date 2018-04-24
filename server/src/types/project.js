@@ -10,8 +10,9 @@ export default `
     description: String
     progress: Int
     tasks: [Task!]
-    total: Int
+    customerId: Int!
     customer: Customer!
+    user: User!
   }
 
   type GetProjectsResponse {
@@ -27,7 +28,7 @@ export default `
 
   type CreateUpdateProjectResponse {
     success: Boolean!
-    project: Project 
+    project: Project! 
     errors: [Error!]
   }
 
@@ -45,8 +46,8 @@ export default `
     createProject(name: String!, deadline: Date!, status: String!, progress: Int, description: String, 
       total: Int, customerId: Int!): CreateUpdateProjectResponse!
     
-    updateProject(id: Int!, name: String!, deadline: Date!, status: String!, progress: Int, description: String, 
-      total: Int, customerId: Int!): CreateUpdateProjectResponse!
+    updateProject(id: Int!, name: String, deadline: Date, status: String, progress: Int, description: String, 
+      total: Int, customerId: Int): CreateUpdateProjectResponse!
     
     deleteProject(id: Int!): DeleteProjectResponse!
   }

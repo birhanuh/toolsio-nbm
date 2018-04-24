@@ -1,8 +1,10 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import map from 'lodash/map'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
@@ -27,7 +29,7 @@ class Form extends Component {
       id: this.props.data.getSale ? this.props.data.getSale.id : null,
       name: this.props.data.getSale ? this.props.data.getSale.name : '',
       deadline: this.props.data.getSale ? moment(this.props.data.getSale.deadline) : moment(),
-      customerId: this.props.data.getSale ? this.props.data.getSale.customer.id : '',
+      customerId: this.props.data.getSale ? this.props.data.getSale.customerId : '',
       status: this.props.data.getSale ? this.props.data.getSale.status : 'new',
       description: this.props.data.getSale ? this.props.data.getSale.description : '',
       total: this.props.data.getSale ? this.props.data.getSale.total : 0,
@@ -85,7 +87,7 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (true) { 
+    if (this.isValid()) { 
       this.setState({ isLoading: true })
 
       const { id, name, deadline, status, description, total, customerId } = this.state
@@ -93,32 +95,37 @@ class Form extends Component {
       if (id) {
         this.props.updateSaleMutation({ 
         variables: { id, name, deadline, status, description, total, customerId: parseInt(customerId) },
-        update: (proxy, { data: { updateSale } }) => {
+        update: (store, { data: { updateSale } }) => {
           const { success, sale } = updateSale
-          console.log('sale ', sale)
+          
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersSalesQuery })
+          const data = store.readQuery({ query: getCustomersSalesQuery })
           // Add our comment from the mutation to the end.
-          data.getSales.map(item => {
-            if (item.id === sale.id) return sale
+          
+          let updatedSales = data.getSales.map(item => {
+            if (item.id === sale.id) {
+              return {...sale, __typename: 'Sale'}
+            }
+            return item
           })
+
+          data.getSales = updatedSales
+
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersSalesQuery, data })
+          store.writeQuery({ query: getCustomersSalesQuery, data })
         }})
         .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("sales.form.flash.success_update", { name: name})
-          // })  
-          // this.context.router.history.push('/sales')
-          
 
           const { success, sale, errors } = res.data.updateSale
 
-          if (success) {
+          if (success) {            
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("sales.form.flash.success_update", { name: sale.name})
+            })  
             this.context.router.history.push('/sales')
           } else {
             let errorsList = {}
@@ -128,43 +135,43 @@ class Form extends Component {
           }
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
-      }
+      } else {
 
-      this.props.createSaleMutation({ 
-        variables: { name, deadline, status, description, total, customerId: parseInt(customerId) },
-        update: (proxy, { data: { createSale } }) => {
-          const { success, sale } = createSale
+        this.props.createSaleMutation({ 
+          variables: { name, deadline, status, description, total, customerId: parseInt(customerId) },
+          update: (store, { data: { createSale } }) => {
+            const { success, sale } = createSale
 
-          if (!success) {
-            return
-          }
-          // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersSalesQuery });
-          // Add our comment from the mutation to the end.
-          data.getSales.push(sale);
-          // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersSalesQuery, data });
-        }})
-        .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("sales.form.flash.success_update", { name: name})
-          // })  
-          // this.context.router.history.push('/sales')
-          
+            if (!success) {
+              return
+            }
+            // Read the data from our cache for this query.
+            const data = store.readQuery({ query: getCustomersSalesQuery });
+            // Add our comment from the mutation to the end.
+            data.getSales.push(sale);
+            // Write our data back to the cache.
+            store.writeQuery({ query: getCustomersSalesQuery, data });
+          }})
+          .then(res => {          
 
-          const { success, sale, errors } = res.data.createSale
+            const { success, sale, errors } = res.data.createSale
 
-          if (success) {
-            this.context.router.history.push('/sales')
-          } else {
-            let errorsList = {}
-            errors.map(error => errorsList[error.path] = error.message)
+            if (success) {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: T.translate("sales.form.flash.success_create", { name: name})
+              })  
+              
+              this.context.router.history.push('/sales')
+            } else {
+              let errorsList = {}
+              errors.map(error => errorsList[error.path] = error.message)
 
-            this.setState({ errors: errorsList, isLoading: false })
-          }
-        })
-        .catch(err => this.setState({ errors: err, isLoading: false }))
+              this.setState({ errors: errorsList, isLoading: false })
+            }
+          })
+          .catch(err => this.setState({ errors: err, isLoading: false }))
+        }
     }    
   }
 
@@ -195,7 +202,7 @@ class Form extends Component {
     )
 
     return (  
-      <div className="ui stackable grid">
+      <div className="row column">
 
         <Breadcrumb />
 
@@ -300,9 +307,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  // saveSale: PropTypes.func.isRequired,
-  // sale: PropTypes.object,
-  // customers: PropTypes.array.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Form.contextTypes = {
@@ -319,6 +324,9 @@ const createSaleMutation = gql`
         deadline
         status
         description
+        customer {
+          name
+        }
       }
       errors {
         path
@@ -329,7 +337,7 @@ const createSaleMutation = gql`
 `
 
 const updateSaleMutation = gql`
-  mutation updateSale($id: Int!, $name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
+  mutation updateSale($id: Int!, $name: String, $deadline: Date, $status: String, $description: String, $total: Int, $customerId: Int) {
     updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
       success
       sale {
@@ -338,6 +346,10 @@ const updateSaleMutation = gql`
         deadline
         status
         description
+        customer {
+          id
+          name
+        }
       }
       errors {
         path
@@ -374,6 +386,7 @@ const getSaleQuery = gql`
       deadline
       status
       description
+      customerId
       customer {
         id
         name
@@ -390,7 +403,7 @@ const getSaleQuery = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const MutationsQuery =  compose(
   graphql(createSaleMutation, {
     name : 'createSaleMutation'
   }),
@@ -409,5 +422,5 @@ const MutationsAndQuery =  compose(
   })
 )(Form)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationsQuery)
 

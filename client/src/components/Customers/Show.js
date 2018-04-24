@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import map from 'lodash/map'
 import classnames from 'classnames'
@@ -40,6 +41,7 @@ class Show extends Component {
       sales: this.props.data.getCustomer ? this.props.data.getCustomer.sales : null,
       projects: this.props.data.getCustomer ? this.props.data.getCustomer.projects : null,
       invoices: this.props.data.getCustomer ? this.props.data.getCustomer.invoices : null,
+      user: this.props.data.getCustomer ? this.props.data.getCustomer.user : null,
     }
   }
 
@@ -71,6 +73,7 @@ class Show extends Component {
         sales: nextProps.data.getCustomer.sales,
         projects: nextProps.data.getCustomer.projects,
         invoices: nextProps.data.getCustomer.invoices,
+        user: nextProps.data.getCustomer.user,
       })
     }
   }
@@ -92,26 +95,55 @@ class Show extends Component {
   handleDelete(id, event) {
     event.preventDefault()
     
-    this.props.deleteCustomerMutation({ variables: {id} })
-      .then(() => {
-        // this.props.addFlashMessage({
-        //   type: 'success',
-        //   text: T.translate("customers.show.flash.success_delete", { name: name})
-        // })  
-        this.context.router.history.push('/customers')
+    const { name } = this.state
+    
+    this.props.deleteCustomerMutation({ 
+      variables: { id },
+      update: (proxy, { data: { deleteCustomer } }) => {
+        const { success } = deleteCustomer
+
+        if (!success) {
+          return
+        }
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: getCustomersQuery })
+        // Add our comment from the mutation to the end.
+        
+        let updatedData = data.getCustomers.filter(customer => customer.id !== id) 
+        data.getInvoices = updatedData
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: getCustomersQuery, data })
+      }})
+      .then(res => {          
+
+        const { success, errors } = res.data.deleteCustomer
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("customers.show.flash.success_delete", { name: name})
+          })  
+
+          this.context.router.history.push('/customers')
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
       })
       .catch(err => {
-        // this.props.addFlashMessage({
-        //   type: 'error',
-        //   text: T.translate("customers.show.flash.error_delete")
-        // })  
-        console.log('error ', err)
+        this.props.addFlashMessage({
+          type: 'error',
+          text: T.translate("customers.show.flash.error_delete", { name: name})
+        })  
       })
     
   }
 
   render() {
-    const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, projects, sales, invoices } = this.state
+    const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, projects, sales, invoices, user } = this.state
     
     const emptyProjectsMessage = (
       <div className="ui mini info message">
@@ -222,8 +254,8 @@ class Show extends Component {
             <dl className="dl-horizontal">
               <dt>{T.translate("customers.show.vat_number")}</dt>
               <dd>{vatNumber}</dd>
-              {/*<dt>{T.translate("customers.show.user")}</dt>
-              <dd>{customer.user.first_name}</dd>*/}
+              <dt>{T.translate("customers.show.user")}</dt>
+              <dd>{user && user.firstName}</dd>
               
               <h3 className="ui header">{T.translate("customers.show.contact.header")}</h3>
               <dt>{T.translate("customers.show.contact.phone_number")}</dt>
@@ -231,7 +263,7 @@ class Show extends Component {
               <dt>{T.translate("customers.show.contact.email")}</dt>
               <dd>{contact.email ? contact.email : '-'}</dd>
               
-              <dt>{T.translate("customers.show.include_contact_on_invoice")}</dt>
+              <dt>{T.translate("customers.show.include_contact_in_invoice")}</dt>
               <dd>
                 {isContactIncludedInInvoice ? <i className="check circle icon green"></i> :
                   <i className="minus circle icon red"></i>
@@ -286,7 +318,7 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  //addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
@@ -339,14 +371,30 @@ const getCustomerQuery = gql`
         referenceNumber
         status
       }
+      user {
+        firstName
+      }
     }
   }
 `
 
-const MutationsAndQuery =  compose(
+const getCustomersQuery = gql`
+  query {
+    getCustomers {
+      id
+      name
+      vatNumber
+      phoneNumber
+      email
+    }
+  }
+`
+
+const MutationQuery =  compose(
   graphql(deleteCustomerMutation, {
     name : 'deleteCustomerMutation'
   }),
+  graphql(getCustomersQuery),
   graphql(getCustomerQuery, {
     options: (props) => ({
       variables: {
@@ -356,4 +404,4 @@ const MutationsAndQuery =  compose(
   })
 )(Show)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationQuery)

@@ -14,6 +14,7 @@ export default `
     projects: [Project!]
     sales: [Sale!]
     invoices: [Invoice!]
+    user: User!
   }
 
   type GetCustomersResponse {
@@ -26,7 +27,7 @@ export default `
 
   type CreateUpdateCustomerResponse {
     success: Boolean!
-    customer: Customer
+    customer: Customer!
     errors: [Error!]
   }
 
@@ -44,7 +45,7 @@ export default `
     createCustomer(name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
       street: String, postalCode: String, region: String, country: String): CreateUpdateCustomerResponse!
     
-    updateCustomer(id: Int!, name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
+    updateCustomer(id: Int!, name: String, vatNumber: Int, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
       street: String, postalCode: String, region: String, country: String): CreateUpdateCustomerResponse! 
 
     deleteCustomer(id: Int!): DeleteCustomerResponse!   

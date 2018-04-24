@@ -6,7 +6,7 @@ export default function Tr({user}) {
   const accepted = user.accepted ? <i className="check green icon"></i> : <i className="close red icon"></i>
   
   return (
-    <tr>
+    <tr key={user.id}>
       <td>{user.firstName}</td>
       <td>{user.lastName}</td>
       <td>{user.email}</td>

@@ -8,11 +8,13 @@ export default `
     status: String!
     referenceNumber: String!
     description: String
-    total: Int!
     createdAt: Date!
+    total: Int!
+    customerId: Int!
     project: Project
     sale: Sale
     customer: Customer!
+    user: User!
   }
 
   type GetInvoicesResponse {
@@ -28,7 +30,7 @@ export default `
 
   type CreateUpdateInvoiceResponse {
     success: Boolean!
-    invoice: Invoice 
+    invoice: Invoice!
     errors: [Error!]
   }
 
@@ -44,12 +46,12 @@ export default `
 
   type Mutation {
     createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String!, 
-      , description: String, total: Int!, projectId: Int, saleId: Int, 
+      , description: String, projectId: Int, saleId: Int, 
       customerId: Int!): CreateUpdateInvoiceResponse!
     
-    updateInvoice(id: Int!, deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String!, 
-      , description: String, total: Int!, projectId: Int, saleId: Int, 
-      customerId: Int!): CreateUpdateInvoiceResponse!  
+    updateInvoice(id: Int!, deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String, 
+      , description: String, projectId: Int, saleId: Int, 
+      customerId: Int): CreateUpdateInvoiceResponse!  
 
     deleteInvoice(id: Int!): DeleteInvoiceResponse!
   }

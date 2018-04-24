@@ -19,14 +19,14 @@ export default {
         //let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()+user.id.toString()
         let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()
        
-        const invoice = await models.Invoice.create({...args, referenceNumber})
+        const invoice = await models.Invoice.create({...args, referenceNumber, userId: user.id})
 
         return {
           success: true,
           invoice: invoice
         }
       } catch (err) {
-        console.log(err)
+        console.log('err: ', err)
         return {
           success: false,
           errors: formatErrors(err, models)
@@ -103,6 +103,54 @@ export default {
     sale: ({ saleId }, args, { models }) => {
 
       return models.Sale.findOne({ where: {id: saleId} }, { raw: true })
+    },
+
+    total: ({ projectId, saleId }, args, { models }) => {
+
+      if (projectId) {
+        return models.Task.sum('price',
+          { where: {projectId} }, { raw: true })  
+      }
+      if (saleId) {
+        return models.Item.sum('price',
+          { where: {saleId} }, { raw: true })  
+      }
+      return null
+    },
+
+    user: ({ userId }, args, { models }) => {
+
+      return models.User.findOne({ where: {id: userId} }, { raw: true })
     }
-  }                
+  },
+
+  GetInvoicesResponse: {
+    project: ({ projectId }, args, { models }) => {
+
+      return models.Project.findOne({ where: {id: projectId} }, { raw: true })
+    },
+
+    sale: ({ saleId }, args, { models }) => {
+
+      return models.Sale.findOne({ where: {id: saleId} }, { raw: true })
+    },
+
+    customer: ({ customerId }, args, { models }) => {
+
+      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
+    },
+
+    total: ({ projectId, saleId }, args, { models }) => {
+
+      if (projectId) {
+        return models.Task.sum('price',
+          { where: {projectId} }, { raw: true })  
+      }
+      if (saleId) {
+        return models.Item.sum('price',
+          { where: {saleId} }, { raw: true })  
+      }
+      return null
+    }
+  }               
 }

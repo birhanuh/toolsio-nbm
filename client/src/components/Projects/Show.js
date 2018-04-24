@@ -6,14 +6,13 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { fetchProject, updateProject, deleteProject } from '../../actions/projectActions'
 import { SelectField } from '../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
-import TaskForm from './Tasks/Form'
+import TasksForm from './Tasks/Form'
 
 // Localization 
 import T from 'i18n-react'
@@ -37,7 +36,8 @@ class Show extends Component {
       status: this.props.data.getProject ? this.props.data.getProject.status : '',
       description: this.props.data.getProject ? this.props.data.getProject.description : '',
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
-      tasks: this.props.data.getProject ? this.props.data.getProject.tasks : []
+      tasks: this.props.data.getProject ? this.props.data.getProject.tasks : [],
+      user: this.props.data.getProject ? this.props.data.getProject.user : null,
     }
   }
 
@@ -67,7 +67,8 @@ class Show extends Component {
         status: nextProps.data.getProject.status,
         description: nextProps.data.getProject.description,
         progress: nextProps.data.getProject.progress,
-        tasks: nextProps.data.getProject.tasks
+        tasks: nextProps.data.getProject.tasks,
+        user: nextProps.data.getProject.user
       })
     }
   }
@@ -86,44 +87,36 @@ class Show extends Component {
     $('.small.modal.project').modal('hide')
   }
 
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+  handleStatusChange = (e) => {
 
-    const { id } = this.state
+    const { id, name } = this.state
 
-    this.props.updateProject({ id, status: e.target.value })
-      .then(() => {
-        console.log('updateProject status')
+    this.props.updateProjectMutation({ 
+        variables: { id, status: e.target.value }
       })
+      .then(res => {          
+
+        const { success, project, errors } = res.data.updateProject
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("projects.form.flash.success_update", { name: name})
+          })  
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => this.setState({ errors: err, isLoading: false }))
   }
 
-  handleDelete(id, event) {
-    event.preventDefault()
-    
-    this.props.deleteProjectMutation({ variables: {id} })
-      .then(() => {
-        // this.props.addFlashMessage({
-        //   type: 'success',
-        //   text: T.translate("projects.show.flash.success_delete", { name: name})
-        // })  
-        this.context.router.history.push('/projects')
-      })
-      .catch(err => {
-        // this.props.addFlashMessage({
-        //   type: 'error',
-        //   text: T.translate("projects.show.flash.error_delete")
-        // })  
-        console.log('error ', err)
-      })
-    
-  }
-
-  handleIncreaseProgress = (event) => {
+   handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, progress } = this.state
+    const { id, name, progress } = this.state
 
     if (progress <= 90) {
       this.setState({
@@ -144,17 +137,33 @@ class Show extends Component {
       // Update Project
       let progressUpdated = progress+10
 
-      this.props.updateProject({ id, progress: progressUpdated })
-        .then(() => {
-          console.log('updateProject progress')
+      this.props.updateProjectMutation({ 
+          variables: { id, progress: progressUpdated }
         })
+        .then(res => {          
+
+          const { success, project, errors } = res.data.updateProject
+
+          if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.form.flash.success_update", { name: name})
+            })  
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
     }
   }
 
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, status, progress } = this.state
+    const { id, name, status, progress } = this.state
 
     if (progress >= 10) {
       this.setState({
@@ -175,15 +184,87 @@ class Show extends Component {
       // Update Project
       let progressUpdated = progress-10
 
-      this.props.updateProject({ id, progress: progressUpdated })
-        .then(() => {
-          console.log('updateProject progress')
+      this.props.updateProjectMutation({ 
+          variables: { id, progress: progressUpdated }
         })
+        .then(res => {          
+
+          const { success, project, errors } = res.data.updateProject
+
+          if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.form.flash.success_update", { name: name})
+            })  
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
     }
   }
+  handleDelete(id, event) {
+    event.preventDefault()
+    
+    const { name } = this.state
+    
+    this.props.deleteProjectMutation({ 
+      variables: { id },
+      update: (store, { data: { deleteProject } }) => {
+        const { success } = deleteProject
+
+        if (!success) {
+          return
+        }
+        // Read the data from our cache for this query.
+        const data = store.readQuery({ query: getProjectsQuery })
+        // Add our comment from the mutation to the end.
+   
+        let updatedProjects = data.getProjects.filter(project => project.id !== id) 
+        data.getProjects = updatedProjects
+ 
+        // Write our data back to the cache.
+        store.writeQuery({ query: getProjectsQuery, data })
+      }})
+      .then(res => {          
+
+        const { success, errors } = res.data.deleteProject
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("projects.show.flash.success_delete", { name: name})
+          })  
+
+          this.context.router.history.push('/projects')
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => {
+        this.props.addFlashMessage({
+          type: 'error',
+          text: T.translate("projects.show.flash.error_delete", { name: name})
+        })  
+
+        this.setState({ errors: err, isLoading: false })  
+      })
+    
+  }
+
+
 
   render() {
-    const { id, name, deadline, customer, status, description, progress, tasks } = this.state
+    const { id, name, deadline, customer, status, description, progress, tasks, user } = this.state
+    
+    let total = 0
+    tasks.map(task => (total+=task.price))
 
     return (
       <div className="ui stackable grid">
@@ -196,8 +277,8 @@ class Show extends Component {
             <dl className="dl-horizontal">
               <dt>{T.translate("projects.show.customer")}</dt>
               <dd>{customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}</dd>
-              {/*<dt>{T.translate("projects.show.user")}</dt>
-              <dd>{project.user.first_name}</dd>*/}
+              <dt>{T.translate("projects.show.user")}</dt>
+              <dd>{user && user.firstName}</dd>
               <dt>{T.translate("projects.show.deadline")}</dt>
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("projects.show.status")}</dt>
@@ -208,7 +289,7 @@ class Show extends Component {
                   type="select"
                   value={status} 
                   formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  onChange={this.handleChange.bind(this)} 
+                  onChange={this.handleStatusChange.bind(this)} 
                   error=""
 
                   options={[
@@ -246,7 +327,7 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
 
-            { tasks && this.state.id && <TaskForm projectId={this.state.id} tasks={this.state.tasks} /> }
+            { (tasks && id) && <TasksForm projectId={id} total={total} tasks={tasks} /> }
             
             <div className="ui divider"></div>
 
@@ -271,7 +352,7 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  //addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
@@ -282,6 +363,30 @@ const deleteProjectMutation = gql`
   mutation deleteProject($id: Int!) {
     deleteProject(id: $id) {
       success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const updateProjectMutation = gql`
+  mutation updateProject($id: Int!, $status: String, $progress: Int) {
+    updateProject(id: $id, status: $status, progress: $progress) {
+      success
+      project {
+        id
+        name 
+        deadline
+        status
+        progress
+        description
+        customer {
+          id
+          name
+        }
+      }
       errors {
         path
         message
@@ -310,15 +415,39 @@ const getProjectQuery = gql`
         paymentType
         price
         vat
+        projectId
+      }
+      user {
+        firstName
       }
     }
   }
 `
 
-const MutationsAndQuery =  compose(
+const getProjectsQuery = gql`
+  query {
+    getProjects {
+      id
+      name 
+      deadline
+      status
+      progress
+      description
+      customer {
+        name
+      }
+    }
+  }
+`
+
+const MutationQuery =  compose(
   graphql(deleteProjectMutation, {
     name : 'deleteProjectMutation'
   }),
+  graphql(updateProjectMutation, {
+    name : 'updateProjectMutation'
+  }),
+  graphql(getProjectsQuery),
   graphql(getProjectQuery, {
     options: (props) => ({
       variables: {
@@ -328,5 +457,4 @@ const MutationsAndQuery =  compose(
   })
 )(Show)
 
-export default MutationsAndQuery
-
+export default connect(null, { addFlashMessage } ) (MutationQuery)

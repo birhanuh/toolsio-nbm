@@ -46,7 +46,7 @@ class Page extends Component {
     const { getProjects } = this.props.data
 
     return (
-      <div className="row column">  
+      <div className="row column"> 
 
         <Breadcrumb />
 

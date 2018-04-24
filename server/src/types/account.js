@@ -14,14 +14,26 @@ export default `
     logoUrl: String
   }
 
+  type IsSubdomainExistResponse {
+    success: Boolean!
+    subdomain: String
+    errors: [Error!]
+  }
+
   type UpdateAccountResponse {
     success: Boolean!
-    account: Account
+    account: Account!
     errors: [Error!]
   }
 
   type DeleteAccountResponse {
     success: Boolean!
+    errors: [Error!]
+  }
+
+  type S3SignLogoResponse {
+    signedRequest: String!
+    url: String!
     errors: [Error!]
   }
 
@@ -31,12 +43,14 @@ export default `
   }
 
   type Mutation {
-    createAccount(owner: Int!, subdomain: String!, industry: String!): Account!
+    isSubdomainExist(subdomain: String!): IsSubdomainExistResponse!
 
     updateAccount(subdomain: String! industry: String, phoneNumber: String, email: String, street: String, postalCode: 
     String, region: String, country: String, logoUrl: String): UpdateAccountResponse!
 
-     deleteAccount(subdomain: String!): DeleteAccountResponse!
+    deleteAccount(subdomain: String!): DeleteAccountResponse!
+
+    s3SignLogo(fileName: String!, fileType: String!): S3SignLogoResponse!
   }
 
 `

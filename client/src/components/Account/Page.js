@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import decode from 'jwt-decode'
 import { Authorization } from '../../utils'
-import { addFlashMessage } from '../../actions/flashMessageActions'
-import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 
 import AccountForm from './AccountForm'
 import UserForm from './UserForm'
@@ -15,30 +12,19 @@ import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Page extends Component {
 
-  componentDidMount() {
+  render() {
     
     // Parse subdomain 
     let subdomain =  Authorization.getSubdomain()
 
-
-  }
-
-  render() {
-    
-    // Parse subdomain 
-    // let subdomain =  Authorization.getSubdomain()
-    let subdomain = 'testa'
-
-    let currentAccount
+    let currentUser
     
     try {
       const authToken = localStorage.getItem('authToken')
-      const { user, account } = decode(authToken)
+      const { user } = decode(authToken)
 
-      //currentAccount.subdomain = account.subdomain
-      currentAccount.firstName = user.firstName
-      currentAccount.email = user.email
-
+      currentUser = user
+      console.log('user ', currentUser.email)
     } catch(err) {
       console.log('err: ', err)
     }
@@ -50,32 +36,13 @@ class Page extends Component {
 
           <AccountForm subdomain={subdomain} /> 
              
-          { currentAccount && <UserForm id={currentAccount.id} /> }
+          { currentUser.user && <UserForm email={currentUser.email} /> }
 
       </div>  
     )
   }
 }
 
-
-const deleteAccountMutation = gql`
-  mutation deleteAccount($subdomain: String!) {
-    deleteAccount(subdomain: $subdomain) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default graphql(deleteAccountMutation, {
-  options: (props) => ({
-    variables: {
-      subdomain: 'testa'
-    },
-  })
-})(Page)
+export default Page
 
 

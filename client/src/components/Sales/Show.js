@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
@@ -12,7 +13,7 @@ import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
-import ItemForm from './Items/Form'
+import ItemsForm from './Items/Form'
 
 // Localization 
 import T from 'i18n-react'
@@ -34,7 +35,8 @@ class Show extends Component {
       customer: this.props.data.getSale ? this.props.data.getSale.customer : '',
       status: this.props.data.getSale ? this.props.data.getSale.status : '',
       description: this.props.data.getSale ? this.props.data.getSale.description : '',
-      items: this.props.data.getSale ? this.props.data.getSale.items : []
+      items: this.props.data.getSale ? this.props.data.getSale.items : [],
+      user: this.props.data.getSale ? this.props.data.getSale.user : null
     }
   }
 
@@ -43,12 +45,12 @@ class Show extends Component {
     const { match } = this.props
    
     // Check if param id is an int
-    const projectId = parseInt(match.params.id, 10)
+    const saleId = parseInt(match.params.id, 10)
     
-    if (!projectId) {
-      return <Redirect to="/projects" />
+    if (!saleId) {
+      return <Redirect to="/sales" />
     } else {
-      //this.props.getSaleMutation({ variables: {id: projectId} })
+      //this.props.getSaleMutation({ variables: {id: saleId} })
     } 
   }
 
@@ -61,7 +63,8 @@ class Show extends Component {
         customer: nextProps.data.getSale.customer,
         status: nextProps.data.getSale.status,
         description: nextProps.data.getSale.description,
-        items: nextProps.data.getSale.items
+        items: nextProps.data.getSale.items,
+        user: nextProps.data.getSale.user
       })
     }
   }
@@ -80,36 +83,87 @@ class Show extends Component {
     $('.small.modal.sale').modal('hide')
   }
 
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+  handleStateChange = (e) => {
+    const { id, name } = this.state
+
+    this.props.updateSaleMutation({ 
+        variables: { id, status: e.target.value }
+      })
+      .then(res => {          
+
+        const { success, sale, errors } = res.data.updateSale
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("sales.form.flash.success_update", { name: name})
+          })  
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => this.setState({ errors: err, isLoading: false }))
   }
 
   handleDelete(id, event) {
     event.preventDefault()
 
-    this.props.deleteSaleMutation({ variables: {id} })
-      .then(() => {
-        // this.props.addFlashMessage({
-        //   type: 'success',
-        //   text: T.translate("sales.show.flash.success_delete", { name: name})
-        // })  
-        this.context.router.history.push('/sales')
+    const { name } = this.state
+    
+    this.props.deleteSaleMutation({ 
+      variables: { id },
+      update: (proxy, { data: { deleteSale } }) => {
+        const { success } = deleteSale
+
+        if (!success) {
+          return
+        }
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: getSalesQuery })
+        // Add our comment from the mutation to the end.
+        
+        let updatedData = data.getSales.filter(sale => sale.id !== id) 
+        data.getSales = updatedData
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: getSalesQuery, data })
+      }})
+      .then(res => {          
+
+        const { success, errors } = res.data.deleteSale
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("sales.show.flash.success_delete", { name: name})
+          })  
+
+          this.context.router.history.push('/sales')
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
       })
       .catch(err => {
-        // this.props.addFlashMessage({
-        //   type: 'error',
-        //   text: T.translate("sales.show.flash.error_delete")
-        // })  
-        console.log('error ', err)
+        this.props.addFlashMessage({
+          type: 'error',
+          text: T.translate("sales.show.flash.error_delete", { name: name})
+        })  
       })
     
   }
 
   render() {
-    const { id, name, deadline, customer, status, description, items } = this.state
+    const { id, name, deadline, customer, status, description, items, user } = this.state
     
+    let total = 0
+    items.map(item => (total+=item.price))
+
     return (
       <div className="ui stackable grid">
 
@@ -121,8 +175,8 @@ class Show extends Component {
             <dl className="dl-horizontal">
               <dt>{T.translate("sales.show.customer")}</dt>
               <dd>{customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}</dd>
-              {/*<dt>{T.translate("sales.show.user")}</dt>
-              <dd>{sale.user.first_name}</dd>*/}
+              <dt>{T.translate("sales.show.user")}</dt>
+              <dd>{user && user.firstName}</dd>
               <dt>{T.translate("sales.show.deadline")}</dt>
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("sales.show.status")}</dt>
@@ -133,7 +187,7 @@ class Show extends Component {
                   type="select"
                   value={status} 
                   formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  onChange={this.handleChange.bind(this)} 
+                  onChange={this.handleStateChange.bind(this)} 
                   error=""
 
                   options={[
@@ -155,7 +209,7 @@ class Show extends Component {
 
             <h3 className="ui header">{T.translate("sales.items.header")}</h3>
 
-            { items && this.state.id && <ItemForm saleId={this.state.id} items={this.state.items} /> }
+            { (items && id) && <ItemsForm saleId={id} total={total} items={items} /> }
             
             <div className="ui divider"></div>
 
@@ -180,7 +234,7 @@ class Show extends Component {
 }
 
 Show.propTypes = {
-  //addFlashMessage: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Show.contextTypes = {
@@ -191,6 +245,29 @@ const deleteSaleMutation = gql`
   mutation deleteSale($id: Int!) {
     deleteSale(id: $id) {
       success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+const updateSaleMutation = gql`
+  mutation updateSale($id: Int!, $status: String) {
+    updateSale(id: $id, status: $status) {
+      success
+      sale {
+        id
+        name
+        deadline
+        status
+        description
+        customer {
+          id
+          name
+        }
+      }
       errors {
         path
         message
@@ -218,14 +295,36 @@ const getSaleQuery = gql`
         quantity
         price
         vat
+        saleId
+      }
+      user {
+        firstName
       }
     }
   }
 `
 
-const MutationsAndQuery =  compose(
+const getSalesQuery = gql`
+  query {
+    getSales {
+      id
+      name 
+      deadline
+      status
+      description
+      customer {
+        name
+      }
+    }
+  }
+`
+const MutationQuery =  compose(
   graphql(deleteSaleMutation, {
     name : 'deleteSaleMutation'
+  }),
+  graphql(getSalesQuery),
+  graphql(updateSaleMutation, {
+    name: 'updateSaleMutation'
   }),
   graphql(getSaleQuery, {
     options: (props) => ({
@@ -236,4 +335,4 @@ const MutationsAndQuery =  compose(
   })
 )(Show)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationQuery)

@@ -10,9 +10,14 @@ export default `
     projectId: Int!
   }
 
-  type CreateTaskResponse {
+  type CreateUpdateTaskResponse {
     success: Boolean!
-    task: Task 
+    task: Task
+    errors: [Error!]
+  }
+
+  type DeleteTaskResponse {
+    success: Boolean!
     errors: [Error!]
   }
 
@@ -23,7 +28,12 @@ export default `
 
   type Mutation {
     createTask(name: String!, hours: String!, paymentType: String!, price: Float!, 
-      vat: Int!, projectId: Int!): CreateTaskResponse!
+      vat: Int!, projectId: Int!): CreateUpdateTaskResponse!
+
+    updateTask(id: Int!, name: String!, hours: String!, paymentType: String!, price: Float!, 
+      vat: Int!, projectId: Int!): CreateUpdateTaskResponse!
+
+    deleteTask(id: Int!): DeleteTaskResponse!
   }
 
 `

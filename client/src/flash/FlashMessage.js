@@ -1,6 +1,8 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
+import { deleteFlashMessage } from '../actions/flashMessageActions'
 
 class FlashMessage extends Component {
   
@@ -9,14 +11,21 @@ class FlashMessage extends Component {
   }
 
   render() {
+    
     const { type, text } = this.props.message
-    return (
+
+    const message = (
       <div className={classnames('ui message', {
         'positive': type === 'success',
         'negative': type === 'error'
       })}>
         <i onClick={this.onClick.bind(this)} className="close icon"></i>
         <p>{text}</p>
+      </div>
+      )
+    return (
+      <div className={classnames({'sixteen wide column flash-message': !!type && !!text })}>
+        {!!type && !!text && message } 
       </div>
     )
   }
@@ -28,4 +37,11 @@ FlashMessage.propTypes = {
   deleteFlashMessage: PropTypes.func.isRequired
 }
 
-export default FlashMessage
+// Takes our global state and return just flashMessages
+function mapStateToProps(state) {
+  return {
+    message: state.flashMessage
+  }
+}
+
+export default connect(mapStateToProps, { deleteFlashMessage } ) (FlashMessage)

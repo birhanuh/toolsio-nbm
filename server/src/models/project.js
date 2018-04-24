@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       defaultValue : "new",
       validate: {     
-        isAlpha: true  // will only allow letters
+        notEmpty: true  // don't allow empty strings
       } 
     },
     progress: {
@@ -30,15 +30,7 @@ export default (sequelize, DataTypes) => {
         isDecimal: true // checks for any numbers
       } 
     },
-    description: DataTypes.TEXT,
-    total: {
-      type: DataTypes.INTEGER,
-      allowNull : true,
-      defaultValue : 0,
-      validate: {     
-        isInt: true // checks for int
-      } 
-    }
+    description: DataTypes.TEXT
   })
 
   Project.associate = (models) => {
@@ -50,6 +42,13 @@ export default (sequelize, DataTypes) => {
       }
     })
 
+    // 1:M
+    Project.belongsTo(models.User, {
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id'
+      }
+    })
   }
 
   return Project

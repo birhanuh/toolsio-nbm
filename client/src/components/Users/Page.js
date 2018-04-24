@@ -1,38 +1,34 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import decode from 'jwt-decode'
-import List from './List' 
+import { Authorization } from '../../utils'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
+
+import List from './List' 
 import Form from './Form'
 
 class Page extends Component {
 
-  componentDidMount() {
-   
-  }
-
   render() {
 
-    const { getUsers } = this.props.data
-
-    let currentAccount
+    let currentUser
     
     try {
       const authToken = localStorage.getItem('authToken')
-      const { user, account } = decode(authToken)
+      const { user } = decode(authToken)
 
-      //currentAccount.subdomain = account.subdomain
-      currentAccount.firstName = user.firstName
-      currentAccount.email = user.email
+      currentUser = user
 
     } catch(err) {
       console.log('err: ', err)
     }
 
-    let usersNotCurrentUserIncluded = getUsers && getUsers.filter(user => user.email !== currentAccount.email)
+    const { data: { getUsers } } = this.props
+
+    const usersNotCurrentUserIncluded = getUsers && getUsers.filter(user => user.email !== currentUser.email)
     
     return (
       <div className="row column">  
@@ -43,7 +39,7 @@ class Page extends Component {
         
           <Form />  
 
-          <List users={usersNotCurrentUserIncluded} />   
+          { usersNotCurrentUserIncluded && <List users={usersNotCurrentUserIncluded} /> }
 
         </div>
       </div>  

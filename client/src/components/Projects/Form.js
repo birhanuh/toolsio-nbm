@@ -1,8 +1,10 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import map from 'lodash/map'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
 import { graphql, compose } from 'react-apollo'
@@ -76,7 +78,7 @@ class Form extends Component {
     const { errors, isValid } = Validation.validateProjectInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ errors: updatedErrors })
@@ -89,7 +91,7 @@ class Form extends Component {
      event.preventDefault()
 
     // Validation
-    if (true) { 
+    if (this.isValid()) { 
       this.setState({ isLoading: true })
 
       const { id, name, deadline, status, progress, description, total, customerId } = this.state
@@ -97,30 +99,38 @@ class Form extends Component {
       if (id) {
         this.props.updateProjectMutation({ 
         variables: { id, name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
-        update: (proxy, { data: { updateProject } }) => {
-          const { success, project } = updateProject
+        update: (store, { data: { updateProject } }) => {
+          let { success, project } = updateProject
 
           if (!success) {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersProjectsQuery })
+          const data = store.readQuery({ query: getCustomersProjectsQuery })
           // Add our comment from the mutation to the end.
-          data.getProjects.push(project)
+
+          let updatedProjects = data.getProjects.map(item => {
+            if (item.id === project.id) {
+              return {...project, __typename: 'Project'}
+            }
+            return item
+          })
+
+          data.getProjects = updatedProjects
+
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersProjectsQuery, data })
+          store.writeQuery({ query: getCustomersProjectsQuery, data })
         }})
-        .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("projects.form.flash.success_update", { name: name})
-          // })  
-          // this.context.router.history.push('/projects')
-          
+        .then(res => {          
 
           const { success, project, errors } = res.data.updateProject
 
           if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("projects.form.flash.success_update", { name: name})
+            })  
+
             this.context.router.history.push('/projects')
           } else {
             let errorsList = {}
@@ -130,43 +140,43 @@ class Form extends Component {
           }
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
+      } else {
+
+        this.props.createProjectMutation({ 
+          variables: { name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+          update: (store, { data: { createProject } }) => {
+            const { success, project } = createProject
+
+            if (!success) {
+              return
+            }
+            // Read the data from our cache for this query.
+            const data = store.readQuery({ query: getCustomersProjectsQuery })
+            // Add our comment from the mutation to the end.
+            data.getProjects.push(project)
+            // Write our data back to the cache.
+            store.writeQuery({ query: getCustomersProjectsQuery, data })
+          }})
+          .then(res => {          
+
+            const { success, project, errors } = res.data.createProject
+
+            if (success) {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: T.translate("projects.form.flash.success_update", { name: name})
+              })  
+
+              this.context.router.history.push('/projects')
+            } else {
+              let errorsList = {}
+              errors.map(error => errorsList[error.path] = error.message)
+
+              this.setState({ errors: errorsList, isLoading: false })
+            }
+          })
+          .catch(err => this.setState({ errors: err, isLoading: false }))
       }
-
-      this.props.createProjectMutation({ 
-        variables: { name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
-        update: (proxy, { data: { createProject } }) => {
-          const { success, project } = createProject
-
-          if (!success) {
-            return
-          }
-          // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getCustomersProjectsQuery })
-          // Add our comment from the mutation to the end.
-          data.getProjects.push(project)
-          // Write our data back to the cache.
-          proxy.writeQuery({ query: getCustomersProjectsQuery, data })
-        }})
-        .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("projects.form.flash.success_update", { name: name})
-          // })  
-          // this.context.router.history.push('/projects')
-          
-
-          const { success, project, errors } = res.data.createProject
-
-          if (success) {
-            this.context.router.history.push('/projects')
-          } else {
-            let errorsList = {}
-            errors.map(error => errorsList[error.path] = error.message)
-
-            this.setState({ errors: errorsList, isLoading: false })
-          }
-        })
-        .catch(err => this.setState({ errors: err, isLoading: false }))
     }    
   }
 
@@ -243,11 +253,11 @@ class Form extends Component {
     )
     
     return (
-      <div className="ui stackable grid">
+      <div className="row column">
 
         <Breadcrumb />
 
-        <div className="ui text container ui segment">  
+        <div className="ui text container segment">  
 
           <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
             <div className="inline field"> 
@@ -374,9 +384,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  // saveProject: PropTypes.func.isRequired,
-  // project: PropTypes.object,
-  // customers: PropTypes.array.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Form.contextTypes = {
@@ -407,7 +415,7 @@ const createProjectMutation = gql`
 `
 
 const updateProjectMutation = gql`
-  mutation updateProject($id: Int!, $name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
+  mutation updateProject($id: Int!, $name: String, $deadline: Date, $status: String, $progress: Int, $description: String, $total: Int, $customerId: Int) {
     updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
       success
       project {
@@ -417,6 +425,10 @@ const updateProjectMutation = gql`
         status
         progress
         description
+        customer {
+          id
+          name
+        }
       }
       errors {
         path
@@ -455,6 +467,7 @@ const getProjectQuery = gql`
       status
       progress
       description
+      customerId
       tasks {
         id
         name
@@ -467,7 +480,7 @@ const getProjectQuery = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const MutationsQuery =  compose(
   graphql(createProjectMutation, {
     name : 'createProjectMutation'
   }),
@@ -486,4 +499,4 @@ const MutationsAndQuery =  compose(
   })
 )(Form)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationsQuery)
