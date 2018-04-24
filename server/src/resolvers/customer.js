@@ -4,12 +4,13 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
   Query: {
     getCustomer: requiresAuth.createResolver((parent, { id }, { models }) => models.Customer.findOne({ where: { id } }, { raw: true })),
+
     getCustomers: requiresAuth.createResolver((parent, args, { models }) => models.Customer.findAll())
   },
 
   Mutation: {
-    createCustomer: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Customer.create(args)
+    createCustomer: requiresAuth.createResolver((parent, args, { models, user }) => {
+      return models.Customer.create({...args, userId: user.id})
         .then(customer => {
           return {
             success: true,
@@ -62,20 +63,14 @@ export default {
   },
 
   Customer: {
-    projects: ({ id }, args, { models } ) => { 
+    projects: ({ id }, args, { models } ) => models.Project.findAll({ where: { customerId: id} }),
 
-      return models.Project.findAll({ customerId: id})
-    },
+    sales: ({ id }, args, { models } ) => models.Sale.findAll({ where: { customerId: id} }),
 
-    sales: ({ id }, args, { models } ) => { 
+    invoices: ({ id }, args, { models } ) => models.Invoice.findAll({ where: { customerId: id} }),
 
-      return models.Sale.findAll({ customerId: id})
-    },
-
-    invoices: ({ id }, args, { models } ) => { 
-
-      return models.Invoice.findAll({ customerId: id})
-    }
+    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true })
+    
   }        
 }
 

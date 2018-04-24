@@ -4,12 +4,13 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
   Query: {
     getSale: requiresAuth.createResolver((parent, { id }, { models }) => models.Sale.findOne({ where: { id } }, { raw: true })),
+    
     getSales: requiresAuth.createResolver((parent, args, { models }) => models.Sale.findAll())
   },
 
  Mutation: {
-    createSale: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Sale.create(args)
+    createSale: requiresAuth.createResolver((parent, args, { models, user }) => {
+      return models.Sale.create({...args, userId: user.id})
         .then(sale => {
           return {
             success: true,
@@ -63,23 +64,18 @@ export default {
   },
 
   Sale: {
-    items: ({ id }, args, { models } ) => { 
-
-      return models.Item.findAll({ saleId: id})
-    },
+    items: ({ id }, args, { models } ) => models.Item.findAll({ where: { saleId: id} }),
     
-    customer: ({ customerId }, args, { models }) => {
+    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
 
-      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
-    }
+    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true })
+
   },
 
   GetSalesResponse: {
 
-    customer: ({ customerId }, args, { models }) => {
-
-      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
-    }
+    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true })
+    
   }
 
 }

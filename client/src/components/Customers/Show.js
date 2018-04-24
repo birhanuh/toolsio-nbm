@@ -41,6 +41,7 @@ class Show extends Component {
       sales: this.props.data.getCustomer ? this.props.data.getCustomer.sales : null,
       projects: this.props.data.getCustomer ? this.props.data.getCustomer.projects : null,
       invoices: this.props.data.getCustomer ? this.props.data.getCustomer.invoices : null,
+      user: this.props.data.getCustomer ? this.props.data.getCustomer.user : null,
     }
   }
 
@@ -72,6 +73,7 @@ class Show extends Component {
         sales: nextProps.data.getCustomer.sales,
         projects: nextProps.data.getCustomer.projects,
         invoices: nextProps.data.getCustomer.invoices,
+        user: nextProps.data.getCustomer.user,
       })
     }
   }
@@ -141,7 +143,7 @@ class Show extends Component {
   }
 
   render() {
-    const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, projects, sales, invoices } = this.state
+    const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, projects, sales, invoices, user } = this.state
     
     const emptyProjectsMessage = (
       <div className="ui mini info message">
@@ -252,8 +254,8 @@ class Show extends Component {
             <dl className="dl-horizontal">
               <dt>{T.translate("customers.show.vat_number")}</dt>
               <dd>{vatNumber}</dd>
-              {/*<dt>{T.translate("customers.show.user")}</dt>
-              <dd>{customer.user.first_name}</dd>*/}
+              <dt>{T.translate("customers.show.user")}</dt>
+              <dd>{user && user.firstName}</dd>
               
               <h3 className="ui header">{T.translate("customers.show.contact.header")}</h3>
               <dt>{T.translate("customers.show.contact.phone_number")}</dt>
@@ -261,7 +263,7 @@ class Show extends Component {
               <dt>{T.translate("customers.show.contact.email")}</dt>
               <dd>{contact.email ? contact.email : '-'}</dd>
               
-              <dt>{T.translate("customers.show.include_contact_on_invoice")}</dt>
+              <dt>{T.translate("customers.show.include_contact_in_invoice")}</dt>
               <dd>
                 {isContactIncludedInInvoice ? <i className="check circle icon green"></i> :
                   <i className="minus circle icon red"></i>
@@ -368,6 +370,9 @@ const getCustomerQuery = gql`
         interestInArrears
         referenceNumber
         status
+      }
+      user {
+        firstName
       }
     }
   }

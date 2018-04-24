@@ -478,12 +478,13 @@
       "edit": "Edit",
       "delete": "Delete",
       "cancel": "Cancel",
+      "user": "User",
       "contact": {
         "header": "Contact",
         "phone_number": "Phone number",
         "email": "Email"
       },
-      "include_contact_in_invoice": "Include address in invoice",
+      "include_contact_in_invoice": "Include contact in invoice",
       "address": {
         "header": "Address",
         "street": "Street",
@@ -560,8 +561,8 @@
       "deadline_or_payment_required": "Select either Deadline or Payment term.",
       "intereset_in_arrears_required": "Interset in arrears is required.",
       "flash": {
-        "success_create": "*{name}* created!",
-        "success_update": "*{name}* is updated!"
+        "success_create": "Invoice for *{name}* created!",
+        "success_update": "Invoice for *{name}* is updated!"
       }
     },
     "show": {
@@ -633,8 +634,8 @@
       },
       "confirmation_msg": "Are you sure to delete this invoice?",      
       "flash": {
-        "success_delete": "Invoice *{name}* is deleted!",
-        "error_delete": "Invoice couldn't be deleted, try again after refreshing the page"
+        "success_delete": "Invoice of *{name}* is deleted!",
+        "error_delete": "Invoice of *{name}* couldn't be deleted, try again after refreshing the page"
       }
     }
   },

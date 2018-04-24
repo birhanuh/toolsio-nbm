@@ -7,7 +7,9 @@ export default `
     status:  String!
     description:  String!
     items: [Item!]
+    customerId: Int!
     customer: Customer!
+    user: User!
   }
 
   type GetSalesResponse {
@@ -39,8 +41,8 @@ export default `
   type Mutation {
     createSale(name: String!, deadline: Date!, status: String!, description: String, total: Int, customerId: Int!): CreateUpdateSaleResponse!
     
-    updateSale(id: Int!, name: String!, deadline: Date!, status: String!, description: String, 
-      total: Int, customerId: Int!): CreateUpdateSaleResponse!
+    updateSale(id: Int!, name: String, deadline: Date, status: String, description: String, 
+      total: Int, customerId: Int): CreateUpdateSaleResponse!
 
     deleteSale(id: Int!): DeleteSaleResponse!
   }

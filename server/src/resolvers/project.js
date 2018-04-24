@@ -4,36 +4,14 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
 
   Query: {
-    getProject: requiresAuth.createResolver((parent, { id }, { models }) => {
-      return models.Project.findOne({ where: { id } }, 
-        {
-          include: [
-            {
-              model: models.Task,
-              where: { projectId: id }
-            }
-          ]
-        }, { raw: true })
-
-    }),
-
-    // getProject: (parent, {id}, { models }) => {
-    //   return requiresAuth.createResolver(models.Project.findOne({ where: { id } }, 
-    //     {
-    //       include: [
-    //         {
-    //           model: models.Task,
-    //           where: { projectId: id }
-    //         }
-    //       ]
-    //     }, { raw: true }))
-    // },
+    getProject: requiresAuth.createResolver((parent, { id }, { models }) =>  models.Project.findOne({ where: { id } })),
+    
     getProjects: requiresAuth.createResolver((parent, args, { models }) => models.Project.findAll())
   },
 
   Mutation: {
-    createProject: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Project.create(args)
+    createProject: requiresAuth.createResolver((parent, args, { models, user }) => {
+      return models.Project.create({...args, userId: user.id})
         .then(project => {
           return {
             success: true,
@@ -86,23 +64,17 @@ export default {
   },
 
   Project: {
-    tasks: ({ id }, args, { models } ) => { 
+    tasks: ({ id }, args, { models } ) => models.Task.findAll({ where: { projectId: id} }),
 
-      return models.Task.findAll({ projectId: id})
-    },
+    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
 
-    customer: ({ customerId }, args, { models }) => {
-
-      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
-    }
+    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true })
   },
 
   GetProjectsResponse: {
 
-    customer: ({ customerId }, args, { models }) => {
-
-      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
-    }
+    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true })
+    
   }
 
 }

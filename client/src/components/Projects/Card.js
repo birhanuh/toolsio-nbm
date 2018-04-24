@@ -38,7 +38,7 @@ export default function Card({project}) {
           <tbody>
             <tr>
               <td>John</td>
-              <td>{moment(project.deadline).format("YYYY-MM-DD")}</td>
+              <td>{moment(project.deadline).format("DD/MM/YYYY")}</td>
               <td>{project.customer ? project.customer.name: <p className="blue">{T.translate("projects.page.no_customer")}</p>}</td>
               <td>
                 <div className="ui progress success small mb-0" data-percent={project.progress}>

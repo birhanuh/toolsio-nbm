@@ -21,9 +21,9 @@ export default function Sidebar() {
   return(
     <div className="ui sidebar vertical menu">
       <div className="ui center aligned vertical segment account">
-        <a href="/settings">
+        <Link to="/settings">
           <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
-        </a>
+        </Link>
         <p className="mt-3 mb-2">Birhanu (Admin)</p>
       </div>
       <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboard.header")} />

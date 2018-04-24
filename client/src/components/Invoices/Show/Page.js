@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
@@ -37,7 +38,8 @@ class Page extends Component {
       interestInArrears: this.props.data.getInvoice ? this.props.data.getInvoice.interestInArrears : '',
       status: this.props.data.getInvoice ? this.props.data.getInvoice.status : '',
       referenceNumber: this.props.data.getInvoice ? this.props.data.getInvoice.referenceNumber : '',
-      description: this.props.data.getInvoice ? this.props.data.getInvoice.description : ''
+      description: this.props.data.getInvoice ? this.props.data.getInvoice.description : '',
+      user: this.props.data.getInvoice ? this.props.data.getInvoice.user : null
     }
   }
 
@@ -62,7 +64,8 @@ class Page extends Component {
         interestInArrears: nextProps.data.getInvoice.interestInArrears,
         status: nextProps.data.getInvoice.status,
         referenceNumber: nextProps.data.getInvoice.referenceNumber,
-        description: nextProps.data.getInvoice.description
+        description: nextProps.data.getInvoice.description,
+        user: nextProps.data.getInvoice.user
       })
     }
   }
@@ -83,6 +86,10 @@ class Page extends Component {
 
   handleDelete(id, event) {
     event.preventDefault()
+    
+    const { project, sale } = this.state
+
+    let projectSaleName = (project && project.name) || (sale && sale.name)
     
     this.props.deleteInvoiceMutation({ 
       variables: { id },
@@ -109,10 +116,10 @@ class Page extends Component {
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("invoices.show.flash.success_delete")
+            text: T.translate("invoices.show.flash.success_delete", { name: projectSaleName })
           })  
 
-          this.context.router.history.push('/projects')
+          this.context.router.history.push('/invoices')
         } else {
           let errorsList = {}
           errors.map(error => errorsList[error.path] = error.message)
@@ -123,15 +130,17 @@ class Page extends Component {
       .catch(err => {
         this.props.addFlashMessage({
           type: 'error',
-          text: T.translate("invoices.show.flash.error_delete")
+          text: T.translate("invoices.show.flash.error_delete", { name: projectSaleName })
         })  
+
+        this.setState({ errors: err, isLoading: false })
       })
     
   }
 
   render() {
-    const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, createdAt } = this.state
-
+    const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, user, createdAt } = this.state
+  
     const customerContact = (      
       <div>
         <dt>{T.translate("invoices.show.customer.contact.phone_number")}</dt>
@@ -206,12 +215,10 @@ class Page extends Component {
             <div className="ui clearing vertical segment border-bottom-none pt-0">
               <div className="ui right floated vertical segment p-0 m-0">
                 <dl className="dl-horizontal">                
-                <dt>{T.translate("account.page.first_name")}</dt>
-               {/* <dd>{this.props.account.firstName}</dd> 
-                <dt>{T.translate("account.page.last_name")}</dt>
-                <dd>{this.props.account.lastName}</dd> 
-                <dt>{T.translate("account.page.email")}</dt>
-                <dd>{this.props.account.email}</dd> */}
+                <dt>{T.translate("settings.user.first_name")}</dt>
+                <dd>{user && user.firstName}</dd> 
+                <dt>{T.translate("settings.user.email")}</dt>
+                <dd>{user && user.email}</dd> 
               </dl>  
               </div>
             </div>
@@ -237,7 +244,7 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  //addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Page.contextTypes = {
@@ -266,18 +273,38 @@ const getInvoiceQuery = gql`
       referenceNumber
       status
       createdAt
+      user {
+        firstName
+        email
+      }
       project {
         id
         name
         deadline
         progress
         status
+        tasks {
+          id
+          name
+          hours
+          paymentType
+          price
+          vat
+        }
       }
       sale {
         id
         name
         deadline
         status
+        items {
+          id
+          name
+          unit
+          quantity
+          price
+          vat
+        }
       }
       customer {
         id
@@ -294,8 +321,33 @@ const getInvoiceQuery = gql`
     }
   }
 `
+const getInvoicesQuery = gql`
+  query {
+    getInvoices {
+      id
+      deadline
+      referenceNumber
+      status
+      total
+      project {
+        id
+        name
+        status
+      }
+      sale {
+        id
+        name
+        status
+      }
+      customer {
+        id
+        name
+      }
+    }
+  }
+`
 
-const MutationsAndQuery =  compose(
+const MutationQuery =  compose(
   graphql(deleteInvoiceMutation, {
     name : 'deleteInvoiceMutation'
   }),
@@ -308,5 +360,5 @@ const MutationsAndQuery =  compose(
   })
 )(Page)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationQuery)
 

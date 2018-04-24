@@ -104,7 +104,16 @@ class Form extends Component {
           // Read the data from our cache for this query.
           const data = store.readQuery({ query: getCustomersSalesQuery })
           // Add our comment from the mutation to the end.
-          data.getSales.push(sale)
+          
+          let updatedSales = data.getSales.map(item => {
+            if (item.id === sale.id) {
+              return {...sale, __typename: 'Sale'}
+            }
+            return item
+          })
+
+          data.getSales = updatedSales
+
           // Write our data back to the cache.
           store.writeQuery({ query: getCustomersSalesQuery, data })
         }})
@@ -126,42 +135,43 @@ class Form extends Component {
           }
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
-      }
+      } else {
 
-      this.props.createSaleMutation({ 
-        variables: { name, deadline, status, description, total, customerId: parseInt(customerId) },
-        update: (store, { data: { createSale } }) => {
-          const { success, sale } = createSale
+        this.props.createSaleMutation({ 
+          variables: { name, deadline, status, description, total, customerId: parseInt(customerId) },
+          update: (store, { data: { createSale } }) => {
+            const { success, sale } = createSale
 
-          if (!success) {
-            return
-          }
-          // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getCustomersSalesQuery });
-          // Add our comment from the mutation to the end.
-          data.getSales.push(sale);
-          // Write our data back to the cache.
-          store.writeQuery({ query: getCustomersSalesQuery, data });
-        }})
-        .then(res => {          
+            if (!success) {
+              return
+            }
+            // Read the data from our cache for this query.
+            const data = store.readQuery({ query: getCustomersSalesQuery });
+            // Add our comment from the mutation to the end.
+            data.getSales.push(sale);
+            // Write our data back to the cache.
+            store.writeQuery({ query: getCustomersSalesQuery, data });
+          }})
+          .then(res => {          
 
-          const { success, sale, errors } = res.data.createSale
+            const { success, sale, errors } = res.data.createSale
 
-          if (success) {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: T.translate("sales.form.flash.success_create", { name: name})
-            })  
-            
-            this.context.router.history.push('/sales')
-          } else {
-            let errorsList = {}
-            errors.map(error => errorsList[error.path] = error.message)
+            if (success) {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: T.translate("sales.form.flash.success_create", { name: name})
+              })  
+              
+              this.context.router.history.push('/sales')
+            } else {
+              let errorsList = {}
+              errors.map(error => errorsList[error.path] = error.message)
 
-            this.setState({ errors: errorsList, isLoading: false })
-          }
-        })
-        .catch(err => this.setState({ errors: err, isLoading: false }))
+              this.setState({ errors: errorsList, isLoading: false })
+            }
+          })
+          .catch(err => this.setState({ errors: err, isLoading: false }))
+        }
     }    
   }
 
@@ -327,7 +337,7 @@ const createSaleMutation = gql`
 `
 
 const updateSaleMutation = gql`
-  mutation updateSale($id: Int!, $name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
+  mutation updateSale($id: Int!, $name: String, $deadline: Date, $status: String, $description: String, $total: Int, $customerId: Int) {
     updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
       success
       sale {
@@ -337,6 +347,7 @@ const updateSaleMutation = gql`
         status
         description
         customer {
+          id
           name
         }
       }
@@ -375,6 +386,7 @@ const getSaleQuery = gql`
       deadline
       status
       description
+      customerId
       customer {
         id
         name

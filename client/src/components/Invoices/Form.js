@@ -13,6 +13,11 @@ import SaleProject from './Steps/SaleProject'
 import Details from './Steps/Details'
 import Confirmation from './Steps/Confirmation'
 
+// Localization 
+import T from 'i18n-react'
+
+import Breadcrumb from '../Layouts/Breadcrumb'
+
 // Moment
 import moment from 'moment'
 
@@ -33,7 +38,8 @@ class Form extends Component {
         description: this.props.data.getInvoice ? this.props.data.getInvoice.description : ''
       },
       sale: this.props.data.getInvoice ? this.props.data.getInvoice.sale : null,
-      project:this.props.data.getInvoice ? this.props.data.getInvoice.project : null,
+      project: this.props.data.getInvoice ? this.props.data.getInvoice.project : null,
+      customerId: this.props.data.getInvoice ? this.props.data.getInvoice.customerId : null,
       currentStep: 'step1',
       errors: {},
       isLoading: false
@@ -57,6 +63,7 @@ class Form extends Component {
         },
         sale: nextProps.data.getInvoice.sale,
         project: nextProps.data.getInvoice.project,
+        customerId: nextProps.data.getInvoice.customerId
       })
     }
   }
@@ -131,24 +138,18 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (true) { 
-      const { id, project, sale } = this.state
+    if (this.isValid()) { 
+      const { id, project, sale, customerId } = this.state
       const { saleId, projectId } = this.state.step1
       const { deadline, paymentTerm, interestInArrears, status, description } = this.state.step2
 
       this.setState({ isLoading: true })
-      
-      // Get total either form Project or Sale
-      let total = (sale && sale.total) || (project && project.total)
-
-      // Get customerId either form Project or Sale
-      let customerId = (sale && sale.customer.id) || (project && project.customer.id)
-      console.log('customerId ', total +' / '+customerId)
+    
       if (id) {
         this.props.updateInvoiceMutation({ 
         variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
-          status, description, total: parseInt(total), projectId: parseInt(projectId), 
-          saleId: parseInt(saleId), customerId: parseInt(customerId) },
+          status, description, projectId: parseInt(projectId), 
+          saleId: parseInt(saleId), customerId },
         update: (store, { data: { updateInvoice } }) => {
           const { success, invoice } = updateInvoice
 
@@ -158,21 +159,30 @@ class Form extends Component {
           // Read the data from our cache for this query.
           const data = store.readQuery({ query: getInvoicesQuery })
           // Add our comment from the mutation to the end.
-          data.getInvoices.push(invoice)
+          
+          let updatedInvoices = data.getInvoices.map(item => {
+            if (item.id === invoice.id) {
+              return {...invoice, __typename: 'Invoice'}
+            }
+            return item
+          })
+
+          data.getInvoices = updatedInvoices
+
           // Write our data back to the cache.
           store.writeQuery({ query: getInvoicesQuery, data })
         }})
-        .then(res => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("invoices.form.flash.success_update", { name: name})
-          })  
-          this.context.router.history.push('/invoices')          
+        .then(res => {         
 
           const { success, invoice, errors } = res.data.updateInvoice
 
           if (success) {
-            this.context.router.history.push('/invoices')
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("invoices.form.flash.success_update", { name: (project && project.name) || (sale && sale.name)})
+            })  
+
+            this.context.router.history.push('/invoices') 
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -181,44 +191,44 @@ class Form extends Component {
           }
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
-      }
+      } else { 
+        this.props.createInvoiceMutation({ 
+          variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
+            status, description, projectId: parseInt(projectId), 
+            saleId: parseInt(saleId), customerId: parseInt(customerId) },
+          update: (store, { data: { createInvoice } }) => {
+            const { success, invoice } = createInvoice
 
-      this.props.createInvoiceMutation({ 
-        variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
-          status, description, total: parseInt(total), projectId: parseInt(projectId), 
-          saleId: parseInt(saleId), customerId: parseInt(customerId) },
-        update: (store, { data: { createInvoice } }) => {
-          const { success, invoice } = createInvoice
+            if (!success) {
+              return
+            }
+            // Read the data from our cache for this query.
+            const data = store.readQuery({ query: getInvoicesQuery })
+            // Add our comment from the mutation to the end.
+            data.getInvoices.push(invoice)
+            // Write our data back to the cache.
+            store.writeQuery({ query: getInvoicesQuery, data })
+          }})
+          .then(res => {
+            
+            const { success, invoice, errors } = res.data.createInvoice
 
-          if (!success) {
-            return
-          }
-          // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getInvoicesQuery })
-          // Add our comment from the mutation to the end.
-          data.getInvoices.push(invoice)
-          // Write our data back to the cache.
-          store.writeQuery({ query: getInvoicesQuery, data })
-        }})
-        .then(res => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("invoices.form.flash.success_update", { name: name})
-          })  
-          this.context.router.history.push('/invoices')
-          
-          const { success, invoice, errors } = res.data.createInvoice
+            if (success) {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: T.translate("invoices.form.flash.success_update", { name: (project && project.name) || (sale && sale.name)})
+              })
 
-          if (success) {
-            this.context.router.history.push('/invoices')
-          } else {
-            let errorsList = {}
-            errors.map(error => errorsList[error.path] = error.message)
+              this.context.router.history.push('/invoices')
+            } else {
+              let errorsList = {}
+              errors.map(error => errorsList[error.path] = error.message)
 
-            this.setState({ errors: errorsList, isLoading: false })
-          }
-        })
-        .catch(err => this.setState({ errors: err, isLoading: false }))
+              this.setState({ errors: errorsList, isLoading: false })
+            }
+          })
+          .catch(err => this.setState({ errors: err, isLoading: false }))
+        }
     }
   }
 
@@ -238,15 +248,17 @@ class Form extends Component {
     }
 
     if (this.state.id === null) {
-      const sale = this.props.getProjectsAndSalesQuery.getSales.find(item => item.id === parseInt(this.state.step1.saleId) ) 
+      const sale = this.props.getProjectsSalesQuery.getSales.find(item => item.id === parseInt(this.state.step1.saleId) ) 
       this.setState({
-        sale: sale
+        sale: sale,
+        customerId: sale && sale.customer.id
       })
 
-      const project = this.props.getProjectsAndSalesQuery.getProjects.find(item => item.id === parseInt(this.state.step1.projectId) ) 
-      console.log('projectId', project)
+      const project = this.props.getProjectsSalesQuery.getProjects.find(item => item.id === parseInt(this.state.step1.projectId) ) 
+ 
       this.setState({
-        project: project
+        project: project,
+        customerId: project && project.customer.id
       })
     }
 
@@ -283,7 +295,7 @@ class Form extends Component {
   render() {
     const { id, step1, step2, sale, project, errors, isLoading, currentStep } = this.state
 
-    const { getProjects, getSales } = this.props.getProjectsAndSalesQuery
+    const { getProjects, getSales } = this.props.getProjectsSalesQuery
  
     const salesOptions = map(getSales, (sale) => 
       <option key={sale.id} value={sale.id}>{sale.name}</option>
@@ -294,24 +306,28 @@ class Form extends Component {
     )
 
     return ( 
-      <div className="ui form">
-        
+      <div className="ui stackable grid">
+
+        <Breadcrumb />
+       
         {/* Steps component */}
         <Steps currentStep={this.state.currentStep}/> 
 
-        {currentStep === 'step1' &&  <SaleProject id={id} salesOptions={salesOptions} projectsOptions={projectsOptions} step1={step1} handleChange={this.handleChange.bind(this)} handleNext={this.handleNext.bind(this)} errors={errors} />}
+        <div className="ui text container segment">
+          {currentStep === 'step1' &&  <SaleProject id={id} salesOptions={salesOptions} projectsOptions={projectsOptions} step1={step1} handleChange={this.handleChange.bind(this)} handleNext={this.handleNext.bind(this)} errors={errors} />}
 
-        {currentStep === 'step2' && <Details id={id} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} handleChange={this.handleChange.bind(this)} handlePrevious={this.handlePrevious.bind(this)}
-            handleNext={this.handleNext.bind(this)} errors={errors} /> }
+          {currentStep === 'step2' && <Details id={id} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} handleChange={this.handleChange.bind(this)} handlePrevious={this.handlePrevious.bind(this)}
+              handleNext={this.handleNext.bind(this)} errors={errors} /> }
 
-        <form className={classnames("ui form", { loading: isLoading })}>
+          <form className={classnames("ui form", { loading: isLoading })}>
 
-          { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-          {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={sale} project={project} handlePrevious={this.handlePrevious.bind(this)} 
-              handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
+            {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={sale} project={project} handlePrevious={this.handlePrevious.bind(this)} 
+                handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
 
-        </form> 
+          </form> 
+        </div>
       </div>
 
     )
@@ -323,14 +339,37 @@ Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
+Form.contextTypes = {
+  router: PropTypes.object.isRequired
+}
+
 const createInvoiceMutation = gql`
   mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
-    $description: String, $total: Int!, $projectId: Int, $saleId: Int, $customerId: Int!) {
+    $description: String, $projectId: Int, $saleId: Int, $customerId: Int!) {
     createInvoice(deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
-      description: $description, total: $total, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
+      description: $description, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
       success
       invoice {
         id
+        deadline
+        referenceNumber
+        status
+        total
+        project {
+          id
+          name
+        }
+        sale {
+          id
+          name
+        }
+        customer {
+          id
+          name
+          vatNumber
+          email
+          phoneNumber
+        }
       }
       errors {
         path
@@ -341,11 +380,32 @@ const createInvoiceMutation = gql`
 `
 
 const updateInvoiceMutation = gql`
-  mutation updateInvoice($id: Int!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int!, $customerId: Int!) {
-    updateInvoice(id: $id, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+  mutation updateInvoice($id: Int!, $deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
+    $description: String, $projectId: Int, $saleId: Int, $customerId: Int!) {
+    updateInvoice(id: $id, deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
+      description: $description, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
       success
       invoice {
         id
+        deadline
+        referenceNumber
+        status
+        total
+        project {
+          id
+          name
+        }
+        sale {
+          id
+          name
+        }
+        customer {
+          id
+          name
+          vatNumber
+          email
+          phoneNumber
+        }
       }
       errors {
         path
@@ -355,7 +415,7 @@ const updateInvoiceMutation = gql`
   }
 `
 
-const getProjectsAndSalesQuery = gql`
+const getProjectsSalesQuery = gql`
   {
     getProjects {
       id
@@ -421,7 +481,9 @@ const getInvoiceQuery = gql`
       interestInArrears
       referenceNumber
       status
+      description
       createdAt
+      customerId
       project {
         id
         name
@@ -445,8 +507,8 @@ const MutationsQuery =  compose(
   graphql(updateInvoiceMutation, {
     name: 'updateInvoiceMutation'
   }),
-  graphql(getProjectsAndSalesQuery, {
-    name : 'getProjectsAndSalesQuery'
+  graphql(getProjectsSalesQuery, {
+    name : 'getProjectsSalesQuery'
   }),
   graphql(getInvoicesQuery, {
     name : 'getInvoicesQuery'

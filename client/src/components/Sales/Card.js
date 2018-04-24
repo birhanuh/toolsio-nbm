@@ -37,7 +37,7 @@ export default function Card({sale}) {
           <tbody>
             <tr>
               <td>John</td>
-              <td>{moment(sale.deadline).format("YYYY-MM-DD")}</td>
+              <td>{moment(sale.deadline).format("DD/MM/YYYY")}</td>
               <td>{sale.customer ? sale.customer.name: <p className="blue">{T.translate("sales.page.no_customer")}</p>}</td>
               <td>
                 <i className={classnames("check circle outline icon", {blue: sale.status === 'new', orange: sale.status === 'in progress', red: sale.status === 'delayed', green: sale.status === 'ready' || sale.status === 'delivered'})}></i>

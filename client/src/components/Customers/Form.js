@@ -29,16 +29,16 @@ class Form extends Component {
       id: this.props.data.getCustomer ? this.props.data.getCustomer.id : null,
       name: this.props.data.getCustomer ? this.props.data.getCustomer.name : '',
       address: {
-        street: this.props.data.getCustomer ? this.props.data.getCustomer.street: '',
-        postalCode: this.props.data.getCustomer ? this.props.data.getCustomer.postalCode : '',
-        region: this.props.data.getCustomer ? this.props.data.getCustomer.region : '',
-        country: this.props.data.getCustomer ? this.props.data.getCustomer.country : ''
+        street: this.props.data.getCustomer ? (this.props.data.getCustomer.street ? this.props.data.getCustomer.street : '') : '',
+        postalCode: this.props.data.getCustomer ? (this.props.data.getCustomer.postalCode ? this.props.data.getCustomer.postalCode : '') : '',
+        region: this.props.data.getCustomer ? (this.props.data.getCustomer.region ? this.props.data.getCustomer.region : '') : '',
+        country: this.props.data.getCustomer ? (this.props.data.getCustomer.country ? this.props.data.getCustomer.country : '') : ''
       },
       vatNumber: this.props.data.getCustomer ? this.props.data.getCustomer.vatNumber : '',
       isContactIncludedInInvoice: this.props.data.getCustomer ? this.props.data.getCustomer.isContactIncludedInInvoice : false,
       contact: {
-        phoneNumber: this.props.data.getCustomer ? this.props.data.getCustomer.phoneNumber : '',
-        email: this.props.data.getCustomer ? this.props.data.getCustomer.email : ''
+        phoneNumber: this.props.data.getCustomer ? (this.props.data.getCustomer.phoneNumber ? this.props.data.getCustomer.phoneNumber : '') : '',
+        email: this.props.data.getCustomer ? (this.props.data.getCustomer.email ? this.props.data.getCustomer.email : '') : ''
       },
       errors: {},
       isLoading: false
@@ -51,16 +51,16 @@ class Form extends Component {
         id: nextProps.data.getCustomer.id,
         name: nextProps.data.getCustomer.name,
         address: {
-          street: !nextProps.data.getCustomer.street ? '' : nextProps.data.getCustomer.street,
-          postalCode: !nextProps.data.getCustomer.postalCode ? '' : nextProps.data.getCustomer.postalCode,
-          region: !nextProps.data.getCustomer.region ? '' : nextProps.data.getCustomer.region,
-          country: !nextProps.data.getCustomer.country ? '' : nextProps.data.getCustomer.country
+          street: nextProps.data.getCustomer.street ? nextProps.data.getCustomer.street : '',
+          postalCode: nextProps.data.getCustomer.postalCode ? nextProps.data.getCustomer.postalCode : '',
+          region: nextProps.data.getCustomer.region ? nextProps.data.getCustomer.region : '',
+          country: nextProps.data.getCustomer.country ? nextProps.data.getCustomer.country : '' 
         },
         vatNumber: nextProps.data.getCustomer.vatNumber,
         isContactIncludedInInvoice: nextProps.data.getCustomer.isContactIncludedInInvoice,
         contact: {
-          phoneNumber: !nextProps.data.getCustomer.phoneNumber ? '' : nextProps.data.getCustomer.phoneNumber,
-          email: !nextProps.data.getCustomer.email ? '' : nextProps.data.getCustomer.email
+          phoneNumber: nextProps.data.getCustomer.phoneNumber ? nextProps.data.getCustomer.phoneNumber : '',
+          email: nextProps.data.getCustomer.email ? nextProps.data.getCustomer.email : ''
         }
       })
     }
@@ -174,7 +174,16 @@ class Form extends Component {
             // Read the data from our cache for this query.
             const data = store.readQuery({ query: getCustomersQuery })
             // Add our comment from the mutation to the end.
-            data.getCustomers.push(customer)
+            
+            let updatedCustomers = data.getCustomers.map(item => {
+              if (item.id === customer.id) {
+                return {...customer, __typename: 'Customer'}
+              }
+              return item
+            })
+
+            data.getCustomers = updatedCustomers
+
             // Write our data back to the cache.
             store.writeQuery({ query: getCustomersQuery, data })
           }})
@@ -206,51 +215,52 @@ class Form extends Component {
            
           })
           .catch(err => this.setState({ errors: err, isLoading: false }))
-      }   
+      } else {
 
-      this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, 
-        street, postalCode: parseInt(postalCode), region, country },
-        update: (store, { data: { createCustomer } }) => {
-          const { success, customer } = createCustomer
+        this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, 
+          street, postalCode: parseInt(postalCode), region, country },
+          update: (store, { data: { createCustomer } }) => {
+            const { success, customer } = createCustomer
 
-          if (!success) {
-            return
-          }
-          // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getCustomersQuery })
-          // Add our comment from the mutation to the end.
-          data.getCustomers.push(customer)
-          // Write our data back to the cache.
-          store.writeQuery({ query: getCustomersQuery, data })
-        }})
-        .then(res => {
+            if (!success) {
+              return
+            }
+            // Read the data from our cache for this query.
+            const data = store.readQuery({ query: getCustomersQuery })
+            // Add our comment from the mutation to the end.
+            data.getCustomers.push(customer)
+            // Write our data back to the cache.
+            store.writeQuery({ query: getCustomersQuery, data })
+          }})
+          .then(res => {
 
-          const { success, errors } = res.data.createCustomer
-         
-          if (success) {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: T.translate("customers.form.flash.success_create", { name: name})
-            }) 
+            const { success, errors } = res.data.createCustomer
+           
+            if (success) {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: T.translate("customers.form.flash.success_create", { name: name})
+              }) 
 
-            this.context.router.history.push('/customers')
-          } else {
-            let errorsList = {}
-            errors.map(error => {
-              
-              if (error.path === 'phoneNumber' || error.path === 'email') {
-                errorsList['contact'] = {...errorsList['contact'], [error.path]: error.message }
-              } else if (error.path === 'street' || error.path === 'postalCode' || error.path === 'region' || error.path === 'country') {
-                errorsList['address'] = {...errorsList['address'], [error.path]: error.message }
-              } else {
-                errorsList[error.path] = error.message
-              }
-            })
-            this.setState({ errors: errorsList, isLoading: false })
-          }
-         
-        })
-        .catch(err => this.setState({ errors: err, isLoading: false }))
+              this.context.router.history.push('/customers')
+            } else {
+              let errorsList = {}
+              errors.map(error => {
+                
+                if (error.path === 'phoneNumber' || error.path === 'email') {
+                  errorsList['contact'] = {...errorsList['contact'], [error.path]: error.message }
+                } else if (error.path === 'street' || error.path === 'postalCode' || error.path === 'region' || error.path === 'country') {
+                  errorsList['address'] = {...errorsList['address'], [error.path]: error.message }
+                } else {
+                  errorsList[error.path] = error.message
+                }
+              })
+              this.setState({ errors: errorsList, isLoading: false })
+            }
+           
+          })
+          .catch(err => this.setState({ errors: err, isLoading: false }))
+        }
     }
   }
 
@@ -426,7 +436,7 @@ const createCustomerMutation = gql`
   }
 `
 const updateCustomerMutation = gql`
-  mutation updateCustomer($id: Int!, $name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
+  mutation updateCustomer($id: Int!, $name: String, $vatNumber: Int, $email: String, $phoneNumber: String, $isContactIncludedInInvoice: Boolean, $street: String, $postalCode: String, $region: String, $country: String) {
     updateCustomer(id: $id, name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, postalCode: $postalCode, region: $region, country: $country) {
       success
       customer {

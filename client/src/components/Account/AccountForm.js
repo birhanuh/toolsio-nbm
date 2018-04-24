@@ -37,14 +37,14 @@ class AccountForm extends Component {
       logoUrl: this.props.data.getAccount ? this.props.data.getAccount.logoUrl : '',
       industry: this.props.data.getAccount ? this.props.data.getAccount.industry : '',
       address: {
-        street: this.props.data.getAccount ? this.props.data.getAccount.street: '',
-        postalCode: this.props.data.getAccount ? this.props.data.getAccount.postalCode : '',
-        region: this.props.data.getAccount ? this.props.data.getAccount.region : '',
-        country: this.props.data.getAccount ? this.props.data.getAccount.country : ''
+        street: this.props.data.getAccount ? (this.props.data.getAccount.street ? this.props.data.getAccount.street : '') : '',
+        postalCode: this.props.data.getAccount ? (this.props.data.getAccount.postalCode ? this.props.data.getAccount.postalCode : '') : '',
+        region: this.props.data.getAccount ? (this.props.data.getAccount.region ? this.props.data.getAccount.region : '') : '',
+        country: this.props.data.getAccount ? (this.props.data.getAccount.country ? this.props.data.getAccount.country : '') : ''
       },
       contact: {
-        phoneNumber: this.props.data.getAccount ? this.props.data.getAccount.phoneNumber : '',
-        email: this.props.data.getAccount ? this.props.data.getAccount.email : ''
+        phoneNumber: this.props.data.getAccount ? (this.props.data.getAccount.phoneNumber ? this.props.data.getAccount.phoneNumber : '') : '',
+        email: this.props.data.getAccount ? (this.props.data.getAccount.email ? this.props.data.getAccount.email : '') : ''
       },
       file: null,
       errors: {},
@@ -57,17 +57,17 @@ class AccountForm extends Component {
     if (nextProps.data.getAccount) {
       this.setState({
         subdomain: nextProps.data.getAccount.subdomain,
-        logoUrl: !nextProps.data.getAccount.logoUrl ? '' : nextProps.data.getAccount.logoUrl,
+        logoUrl: nextProps.data.getAccount.logoUrl ? nextProps.data.getAccount.logoUrl : '',
         industry: nextProps.data.getAccount.industry,
         address: {
-          street: !nextProps.data.getAccount.street ? '' : nextProps.data.getAccount.street,
-          postalCode: !nextProps.data.getAccount.postalCode ? '' : nextProps.data.getAccount.postalCode,
-          region: !nextProps.data.getAccount.region ? '' : nextProps.data.getAccount.region,
-          country: !nextProps.data.getAccount.country ? '' : nextProps.data.getAccount.country
+          street: nextProps.data.getAccount.street ? nextProps.data.getAccount.street : '',
+          postalCode: nextProps.data.getAccount.postalCode ? nextProps.data.getAccount.postalCode : '',
+          region: nextProps.data.getAccount.region ? nextProps.data.getAccount.region : '',
+          country: nextProps.data.getAccount.country ? nextProps.data.getAccount.country : ''
         },
         contact: {
-          phoneNumber: !nextProps.data.getAccount.phoneNumber ? '' : nextProps.data.getAccount.phoneNumber,
-          email: !nextProps.data.getAccount.email ? '' : nextProps.data.getAccount.email
+          phoneNumber: nextProps.data.getAccount.phoneNumber ?  nextProps.data.getAccount.phoneNumber : '',
+          email: nextProps.data.getAccount.email ? nextProps.data.getAccount.email : '' 
         }
       })
     }

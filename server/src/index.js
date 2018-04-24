@@ -69,7 +69,7 @@ app.use(async (req, res, next) => {
   // Parse authToken 
   const authToken = req.headers['x-auth-token']
 
-  if (authToken !== "null") {
+  if (authToken) {
     try {
       const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)      
       req.user = user

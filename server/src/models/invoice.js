@@ -28,7 +28,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       defaultValue : "new",
       validate: {     
-        isAlpha: true // will only allow letters
+        notEmpty: true  // don't allow empty strings
       } 
     },
     referenceNumber: {
@@ -85,6 +85,13 @@ export default (sequelize, DataTypes) => {
       }
     })
 
+    // 1:M
+    Invoice.belongsTo(models.User, {
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id'
+      }
+    })
   }
 
   return Invoice

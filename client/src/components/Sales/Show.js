@@ -35,7 +35,8 @@ class Show extends Component {
       customer: this.props.data.getSale ? this.props.data.getSale.customer : '',
       status: this.props.data.getSale ? this.props.data.getSale.status : '',
       description: this.props.data.getSale ? this.props.data.getSale.description : '',
-      items: this.props.data.getSale ? this.props.data.getSale.items : []
+      items: this.props.data.getSale ? this.props.data.getSale.items : [],
+      user: this.props.data.getSale ? this.props.data.getSale.user : null
     }
   }
 
@@ -44,12 +45,12 @@ class Show extends Component {
     const { match } = this.props
    
     // Check if param id is an int
-    const projectId = parseInt(match.params.id, 10)
+    const saleId = parseInt(match.params.id, 10)
     
-    if (!projectId) {
-      return <Redirect to="/projects" />
+    if (!saleId) {
+      return <Redirect to="/sales" />
     } else {
-      //this.props.getSaleMutation({ variables: {id: projectId} })
+      //this.props.getSaleMutation({ variables: {id: saleId} })
     } 
   }
 
@@ -62,7 +63,8 @@ class Show extends Component {
         customer: nextProps.data.getSale.customer,
         status: nextProps.data.getSale.status,
         description: nextProps.data.getSale.description,
-        items: nextProps.data.getSale.items
+        items: nextProps.data.getSale.items,
+        user: nextProps.data.getSale.user
       })
     }
   }
@@ -81,10 +83,29 @@ class Show extends Component {
     $('.small.modal.sale').modal('hide')
   }
 
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+  handleStateChange = (e) => {
+    const { id, name } = this.state
+
+    this.props.updateSaleMutation({ 
+        variables: { id, status: e.target.value }
+      })
+      .then(res => {          
+
+        const { success, sale, errors } = res.data.updateSale
+
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("sales.form.flash.success_update", { name: name})
+          })  
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+
+          this.setState({ errors: errorsList, isLoading: false })
+        }
+      })
+      .catch(err => this.setState({ errors: err, isLoading: false }))
   }
 
   handleDelete(id, event) {
@@ -138,7 +159,7 @@ class Show extends Component {
   }
 
   render() {
-    const { id, name, deadline, customer, status, description, items } = this.state
+    const { id, name, deadline, customer, status, description, items, user } = this.state
     
     let total = 0
     items.map(item => (total+=item.price))
@@ -154,8 +175,8 @@ class Show extends Component {
             <dl className="dl-horizontal">
               <dt>{T.translate("sales.show.customer")}</dt>
               <dd>{customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}</dd>
-              {/*<dt>{T.translate("sales.show.user")}</dt>
-              <dd>{sale.user.first_name}</dd>*/}
+              <dt>{T.translate("sales.show.user")}</dt>
+              <dd>{user && user.firstName}</dd>
               <dt>{T.translate("sales.show.deadline")}</dt>
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("sales.show.status")}</dt>
@@ -166,7 +187,7 @@ class Show extends Component {
                   type="select"
                   value={status} 
                   formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  onChange={this.handleChange.bind(this)} 
+                  onChange={this.handleStateChange.bind(this)} 
                   error=""
 
                   options={[
@@ -232,6 +253,29 @@ const deleteSaleMutation = gql`
   }
 `
 
+const updateSaleMutation = gql`
+  mutation updateSale($id: Int!, $status: String) {
+    updateSale(id: $id, status: $status) {
+      success
+      sale {
+        id
+        name
+        deadline
+        status
+        description
+        customer {
+          id
+          name
+        }
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
 const getSaleQuery = gql`
   query getSale($id: Int!) {
     getSale(id: $id) {
@@ -252,6 +296,9 @@ const getSaleQuery = gql`
         price
         vat
         saleId
+      }
+      user {
+        firstName
       }
     }
   }
@@ -276,6 +323,9 @@ const MutationQuery =  compose(
     name : 'deleteSaleMutation'
   }),
   graphql(getSalesQuery),
+  graphql(updateSaleMutation, {
+    name: 'updateSaleMutation'
+  }),
   graphql(getSaleQuery, {
     options: (props) => ({
       variables: {

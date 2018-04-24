@@ -8,15 +8,17 @@ import classnames from 'classnames'
 // Localization 
 import T from 'i18n-react'
 
+import moment from 'moment'
+
 export default function Project({ project }) {
   return(
     <div>
       <h3 className="ui header">{T.translate("invoices.show.project.header")}</h3>
       <dl className="dl-horizontal"> 
         <dt>{T.translate("invoices.show.project.name")}</dt>
-        <dd>{project && <Link to={`/projects/show/${project._id}`}>{project.name}</Link>}</dd>
+        <dd>{project && <Link to={`/projects/show/${project.id}`}>{project.name}</Link>}</dd>
         <dt>{T.translate("invoices.show.project.deadline")}</dt>
-        <dd>{project && project.deadline}</dd>
+        <dd>{project && moment(project.deadline).format("DD/MM/YYYY")}</dd>
         <dt>{T.translate("invoices.show.project.status")}</dt>
         <dd>
           { project && 
@@ -42,7 +44,7 @@ export default function Project({ project }) {
         </thead>
         <tbody>
           { project && map(project.tasks, (task) => 
-            <tr key={task._id}>
+            <tr key={task.id}>
               <td>{task.name}</td>
               <td>{task.paymentType}</td>
               <td>{task.hours}</td>

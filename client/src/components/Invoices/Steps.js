@@ -6,7 +6,7 @@ import T from 'i18n-react'
 
 export default function Steps({currentStep}) {
   return (
-    <div className="row mb-4">
+    <div className="row column">
       <div className="ui text container"> 
         <div className="ui small steps">
           <div className={classnames("step", {active: currentStep === 'step1'})}>
