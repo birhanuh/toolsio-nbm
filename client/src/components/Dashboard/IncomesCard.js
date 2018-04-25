@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchIncomes } from '../../actions/dashboardActions'
 
-import {XYPlot, XAxis, YAxis, LineSeries, HorizontalGridLines, DiscreteColorLegend } from 'react-vis'
+import { Bar } from 'react-chartjs-2'
 
 // Localization 
 import T from 'i18n-react'
@@ -62,29 +62,9 @@ class IncomesCard extends Component {
         </div>
 
         <div className="image">
-          <XYPlot
-            xType="time"
-            margin={MARGIN}
-            width={300}
-            height={200}>
-            <DiscreteColorLegend
-              className="legend-right-top-aligned"
-              orientation="vertical" 
-              items={[
-                {
-                  title: 'This month',
-                  color: '#12939A'
-                }
-              ]}
-            />
-            <HorizontalGridLines />
-            <LineSeries
-              style={{strokeLinejoin: "round"}}
-              data={data ? data : []}/>
-            <XAxis tickLabelAngle={-90} />
-            <YAxis />
-          </XYPlot>
+          <Bar />
         </div>
+        
         <div className="content">
           <div className="right floated">
             <div className="meta">{T.translate("dashboard.this_month")}</div>

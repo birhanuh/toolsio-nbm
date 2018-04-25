@@ -37,7 +37,7 @@ export default function Card({project}) {
           </thead>
           <tbody>
             <tr>
-              <td>John</td>
+              <td>{project.user.firstName}</td>
               <td>{moment(project.deadline).format("DD/MM/YYYY")}</td>
               <td>{project.customer ? project.customer.name: <p className="blue">{T.translate("projects.page.no_customer")}</p>}</td>
               <td>

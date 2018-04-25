@@ -37,6 +37,14 @@ export default (sequelize, DataTypes) => {
       field: 'reference_number'
     },
     description: DataTypes.TEXT,
+    total: {
+      type: DataTypes.DECIMAL,
+      allowNull : false,
+      defaultValue : 0,
+      validate: {     
+        isDecimal: true,          // checks for any numbers
+      } 
+    },
     createdAt: {
       type: DataTypes.DATE,
       field: 'created_at'
@@ -53,7 +61,7 @@ export default (sequelize, DataTypes) => {
         if (invoice.paymentTerm === "") {
           invoice.paymentTerm = null
         }
-        if (!invoice.projectId && !invoice.paymentTerm) {
+        if (!invoice.projectId && !invoice.saleId) {
           throw new Error("Either Project or Sale is required")
         }
       }

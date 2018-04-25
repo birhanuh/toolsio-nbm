@@ -38,6 +38,7 @@ export default `
 
   type Query {
     getCustomer(id: Int!): Customer
+    
     getCustomers: [GetCustomersResponse!]!
   }
 

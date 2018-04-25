@@ -85,8 +85,12 @@ const getProjectsQuery = gql`
       status
       progress
       description
+      total
       customer {
         name
+      }
+      user {
+        firstName
       }
     }
   }

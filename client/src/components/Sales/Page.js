@@ -87,8 +87,12 @@ const getSalesQuery = gql`
       deadline
       status
       description
+      total
       customer {
         name
+      }
+      user {
+        firstName
       }
     }
 }

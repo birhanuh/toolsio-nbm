@@ -36,6 +36,7 @@ class Show extends Component {
       status: this.props.data.getSale ? this.props.data.getSale.status : '',
       description: this.props.data.getSale ? this.props.data.getSale.description : '',
       items: this.props.data.getSale ? this.props.data.getSale.items : [],
+      total: this.props.data.getSale ? this.props.data.getSale.total : 0,
       user: this.props.data.getSale ? this.props.data.getSale.user : null
     }
   }
@@ -64,6 +65,7 @@ class Show extends Component {
         status: nextProps.data.getSale.status,
         description: nextProps.data.getSale.description,
         items: nextProps.data.getSale.items,
+        total: nextProps.data.getSale.total,
         user: nextProps.data.getSale.user
       })
     }
@@ -284,6 +286,7 @@ const getSaleQuery = gql`
       deadline
       status
       description
+      total
       customer {
         id
         name
@@ -312,6 +315,7 @@ const getSalesQuery = gql`
       deadline
       status
       description
+      total
       customer {
         name
       }

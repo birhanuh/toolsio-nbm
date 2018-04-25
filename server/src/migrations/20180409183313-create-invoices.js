@@ -31,8 +31,9 @@ module.exports = {
         type: Sequelize.TEXT
       },
       total: {
-        allowNull : false,
-        type: Sequelize.INTEGER
+        allowNull : false,          
+        defaultValue: 0,
+        type: Sequelize.DECIMAL
       },
       customer_id: {
         type: Sequelize.INTEGER,

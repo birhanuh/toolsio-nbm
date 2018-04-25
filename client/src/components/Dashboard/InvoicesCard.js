@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchInvoices } from '../../actions/dashboardActions'
 
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend } from 'react-vis'
+import { Bar } from 'react-chartjs-2'
 
 // Localization 
 import T from 'i18n-react'
@@ -85,49 +85,7 @@ class InvoicesCard extends Component {
       </div>
 
       <div className="image">
-        <XYPlot
-          xType="ordinal"
-          width={600}
-          height={200}
-          >
-          <DiscreteColorLegend
-            className="legend-center-top-aligned"
-            orientation="horizontal" items={[
-              {
-                title: 'New',
-                color: '#199CD5'
-              },
-              {
-                title: 'Pending',
-                color: '#F0730F'
-              },
-              {
-                title: 'Overdue',
-                color: '#be0a0a'
-              },
-              {
-                title: 'Paid',
-                color: '#7DA40D'
-              }
-            ]}
-          />
-          <VerticalGridLines />
-          <HorizontalGridLines />
-          <XAxis tickFormat={v => `Week ${v}`} />
-          <YAxis />
-          <VerticalBarSeries
-            color="#199CD5"
-            data={dataNew}/>
-          <VerticalBarSeries
-            color="#F0730F"
-            data={dataPending}/>
-          <VerticalBarSeries
-            color="#be0a0a"
-            data={dataOverdue}/>
-          <VerticalBarSeries
-            color="#7DA40D"
-            data={dataPaid}/>
-        </XYPlot>
+        <Bar />
       </div>
 
       <div className="content"> 

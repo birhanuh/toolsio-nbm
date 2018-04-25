@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { fetchCustomers } from '../../actions/dashboardActions'
 
-import { XYPlot, XAxis, YAxis, LineSeries, HorizontalGridLines, Hint, DiscreteColorLegend } from 'react-vis'
+import { Bar } from 'react-chartjs-2'
 
 // Localization 
 import T from 'i18n-react'
@@ -74,47 +74,9 @@ class CustomersCard extends Component {
           </div>       
         </div>
         <div className="image">
-          <XYPlot
-          xType="time"
-          margin={MARGIN}
-          width={300}
-          height={200}
-          onValueMouseOver={v => this.setState({value: v})}
-          onSeriesMouseOut={v => this.setState({value: false})}
-          >
-          <DiscreteColorLegend
-            className="legend-right-top-aligned"
-            orientation="vertical" 
-            items={[
-              {
-                title: 'This month',
-                color: '#12939A'
-              },
-              {
-                title: 'Average per month',
-                color: '#79C7E3'
-              }
-            ]}
-          />
-          {value && 
-            <Hint value={value}>
-              <div style={tooltipClass}>
-                <p><strong>Status: </strong><span style={{textTransform: 'capitalize'}}>{value.x}</span></p>
-                <p><strong>Number: </strong>{value.y}</p>
-              </div>
-            </Hint>
-          }
-          <HorizontalGridLines />
-          <LineSeries
-            style={{strokeLinejoin: "round"}}
-            data={data ? data : []}
-            />
-          <LineSeries
-            data={dataAvg ? dataAvg : []}/>
-          <XAxis tickLabelAngle={-90} />
-          <YAxis />
-        </XYPlot>
+          <Bar />        
         </div>
+        
         <div className="content">  
           <div className="right floated">
             <div className="meta">{T.translate("dashboard.this_month")}</div>

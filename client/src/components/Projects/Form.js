@@ -34,7 +34,6 @@ class Form extends Component {
       status: this.props.data.getProject ? this.props.data.getProject.status : 'new',
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
       description: this.props.data.getProject ? this.props.data.getProject.description : '',
-      total: this.props.data.getProject ? this.props.data.getProject.total : 0,
       errors: {},
       isLoading: false
     }
@@ -49,8 +48,7 @@ class Form extends Component {
         customerId: nextProps.data.getProject.customerId,
         status: nextProps.data.getProject.status,
         progress: nextProps.data.getProject.progress,
-        description: nextProps.data.getProject.description,
-        total: nextProps.data.getProject.total
+        description: nextProps.data.getProject.description
       })
     }
   }
@@ -94,11 +92,11 @@ class Form extends Component {
     if (this.isValid()) { 
       this.setState({ isLoading: true })
 
-      const { id, name, deadline, status, progress, description, total, customerId } = this.state
+      const { id, name, deadline, status, progress, description, customerId } = this.state
       
       if (id) {
         this.props.updateProjectMutation({ 
-        variables: { id, name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+        variables: { id, name, deadline, status, progress, description, customerId: parseInt(customerId) },
         update: (store, { data: { updateProject } }) => {
           let { success, project } = updateProject
 
@@ -143,7 +141,7 @@ class Form extends Component {
       } else {
 
         this.props.createProjectMutation({ 
-          variables: { name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+          variables: { name, deadline, status, progress, description, customerId: parseInt(customerId) },
           update: (store, { data: { createProject } }) => {
             const { success, project } = createProject
 
@@ -392,8 +390,8 @@ Form.contextTypes = {
 }
 
 const createProjectMutation = gql`
-  mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
-    createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+  mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $customerId: Int!) {
+    createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
       success
       project {
         id
@@ -415,8 +413,8 @@ const createProjectMutation = gql`
 `
 
 const updateProjectMutation = gql`
-  mutation updateProject($id: Int!, $name: String, $deadline: Date, $status: String, $progress: Int, $description: String, $total: Int, $customerId: Int) {
-    updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+  mutation updateProject($id: Int!, $name: String, $deadline: Date, $status: String, $progress: Int, $description: String, $customerId: Int) {
+    updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
       success
       project {
         id

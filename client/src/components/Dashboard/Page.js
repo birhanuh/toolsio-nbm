@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
 
-// React-vis style 
-import 'react-vis/dist/styles/plot.scss'
-import 'react-vis/dist/styles/legends.scss'
-
 import Breadcrumb from '../Layouts/Breadcrumb'
 
 import TotalIncomeCard from './TotalIncomeCard'

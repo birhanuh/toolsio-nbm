@@ -36,6 +36,7 @@ class Show extends Component {
       status: this.props.data.getProject ? this.props.data.getProject.status : '',
       description: this.props.data.getProject ? this.props.data.getProject.description : '',
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
+      total: this.props.data.getProject ? this.props.data.getProject.total : 0,
       tasks: this.props.data.getProject ? this.props.data.getProject.tasks : [],
       user: this.props.data.getProject ? this.props.data.getProject.user : null,
     }
@@ -404,6 +405,7 @@ const getProjectQuery = gql`
       status
       progress
       description
+      total
       customer {
         id
         name
@@ -433,6 +435,7 @@ const getProjectsQuery = gql`
       status
       progress
       description
+      total
       customer {
         name
       }

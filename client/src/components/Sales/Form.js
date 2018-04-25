@@ -32,7 +32,6 @@ class Form extends Component {
       customerId: this.props.data.getSale ? this.props.data.getSale.customerId : '',
       status: this.props.data.getSale ? this.props.data.getSale.status : 'new',
       description: this.props.data.getSale ? this.props.data.getSale.description : '',
-      total: this.props.data.getSale ? this.props.data.getSale.total : 0,
       errors: {},
       isLoading: false
     }
@@ -47,7 +46,6 @@ class Form extends Component {
         customerId: nextProps.data.getSale.customer.id,
         status: nextProps.data.getSale.status,
         description: nextProps.data.getSale.description,
-        total: nextProps.data.getSale.total
       })
     }
   }
@@ -90,11 +88,11 @@ class Form extends Component {
     if (this.isValid()) { 
       this.setState({ isLoading: true })
 
-      const { id, name, deadline, status, description, total, customerId } = this.state
+      const { id, name, deadline, status, description, customerId } = this.state
       
       if (id) {
         this.props.updateSaleMutation({ 
-        variables: { id, name, deadline, status, description, total, customerId: parseInt(customerId) },
+        variables: { id, name, deadline, status, description, customerId: parseInt(customerId) },
         update: (store, { data: { updateSale } }) => {
           const { success, sale } = updateSale
           
@@ -138,7 +136,7 @@ class Form extends Component {
       } else {
 
         this.props.createSaleMutation({ 
-          variables: { name, deadline, status, description, total, customerId: parseInt(customerId) },
+          variables: { name, deadline, status, description, customerId: parseInt(customerId) },
           update: (store, { data: { createSale } }) => {
             const { success, sale } = createSale
 
@@ -315,8 +313,8 @@ Form.contextTypes = {
 }
 
 const createSaleMutation = gql`
-  mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
-    createSale(name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
+  mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
+    createSale(name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
       success
       sale {
         id
@@ -337,8 +335,8 @@ const createSaleMutation = gql`
 `
 
 const updateSaleMutation = gql`
-  mutation updateSale($id: Int!, $name: String, $deadline: Date, $status: String, $description: String, $total: Int, $customerId: Int) {
-    updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
+  mutation updateSale($id: Int!, $name: String, $deadline: Date, $status: String, $description: String, $customerId: Int) {
+    updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
       success
       sale {
         id

@@ -18,15 +18,16 @@ module.exports = {
       },
       status: {
         allowNull : false,
-        defaultValue: 0,
+        defaultValue: "new",
         type: Sequelize.STRING
       },
       description: {
         type: Sequelize.TEXT
       },
-      total: {                
+      total: {      
+        allowNull : false,          
         defaultValue: 0,
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL
       },
       customer_id: {
         type: Sequelize.INTEGER,

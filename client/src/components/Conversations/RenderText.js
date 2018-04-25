@@ -13,7 +13,6 @@ export default class RenderText extends Component {
   }
 
   render() {
-
     const { text } = this. state
 
     return (

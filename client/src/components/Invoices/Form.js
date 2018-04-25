@@ -235,6 +235,8 @@ class Form extends Component {
   handleNext = (e) => {
     e.preventDefault()
     
+    const { id } = this.state
+
     if (this.state.currentStep === 'step1') {
       // Validation
       if (this.isValid()) { 
@@ -247,19 +249,22 @@ class Form extends Component {
       }
     }
 
-    if (this.state.id === null) {
-      const sale = this.props.getProjectsSalesQuery.getSales.find(item => item.id === parseInt(this.state.step1.saleId) ) 
-      this.setState({
-        sale: sale,
-        customerId: sale && sale.customer.id
-      })
+    if (id === null) {
+      const sale = this.props.getProjectsSalesWithoutInvoiceQuery.getSalesWithoutInvoice.find(item => item.id === parseInt(this.state.step1.saleId) ) 
+      if (sale) {
+        this.setState({
+          sale: sale,
+          customerId: sale && sale.customer.id
+        })
+      }
 
-      const project = this.props.getProjectsSalesQuery.getProjects.find(item => item.id === parseInt(this.state.step1.projectId) ) 
- 
-      this.setState({
-        project: project,
-        customerId: project && project.customer.id
-      })
+      const project = this.props.getProjectsSalesWithoutInvoiceQuery.getProjectsWithoutInvoice.find(item => item.id === parseInt(this.state.step1.projectId) )  
+      if (project) {
+        this.setState({
+          project: project,
+          customerId: project && project.customer.id
+        })
+      }
     }
 
   }
@@ -295,13 +300,13 @@ class Form extends Component {
   render() {
     const { id, step1, step2, sale, project, errors, isLoading, currentStep } = this.state
 
-    const { getProjects, getSales } = this.props.getProjectsSalesQuery
+    const { getProjectsWithoutInvoice, getSalesWithoutInvoice } = this.props.getProjectsSalesWithoutInvoiceQuery
  
-    const salesOptions = map(getSales, (sale) => 
+    const salesOptions = map(getSalesWithoutInvoice, (sale) => 
       <option key={sale.id} value={sale.id}>{sale.name}</option>
     )
 
-    const projectsOptions = map(getProjects, (project) => 
+    const projectsOptions = map(getProjectsWithoutInvoice, (project) => 
       <option key={project.id} value={project.id}>{project.name}</option>
     )
 
@@ -415,9 +420,9 @@ const updateInvoiceMutation = gql`
   }
 `
 
-const getProjectsSalesQuery = gql`
+const getProjectsSalesWithoutInvoiceQuery = gql`
   {
-    getProjects {
+    getProjectsWithoutInvoice {
       id
       name 
       deadline
@@ -430,7 +435,7 @@ const getProjectsSalesQuery = gql`
         name
       }
     }
-    getSales {
+    getSalesWithoutInvoice {
       id
       name 
       deadline
@@ -507,8 +512,8 @@ const MutationsQuery =  compose(
   graphql(updateInvoiceMutation, {
     name: 'updateInvoiceMutation'
   }),
-  graphql(getProjectsSalesQuery, {
-    name : 'getProjectsSalesQuery'
+  graphql(getProjectsSalesWithoutInvoiceQuery, {
+    name : 'getProjectsSalesWithoutInvoiceQuery'
   }),
   graphql(getInvoicesQuery, {
     name : 'getInvoicesQuery'
