@@ -42,6 +42,9 @@ export default (sequelize, DataTypes) => {
         if (task.vat === "") {
           task.vat = null
         }
+      },
+      beforeUpdate: (task, options) => {
+        console.log('task sd', task)
       }
     }
   })
@@ -49,6 +52,15 @@ export default (sequelize, DataTypes) => {
   Task.associate = (models) => {
     // 1:M
     Task.belongsTo(models.Project, {
+      foreignKey: {
+        name: 'projectId',
+        field: 'project_id'
+      }
+    })
+
+      // 1:M
+    Task.belongsTo(models.Invoice, {
+      through: models.Project,
       foreignKey: {
         name: 'projectId',
         field: 'project_id'

@@ -5,12 +5,11 @@ import { SelectField } from '../../../utils/FormFields'
 // Localization 
 import T from 'i18n-react'
 
-export default function SaleProject({ _id, step1, salesOptions, projectsOptions, handleChange, handleNext, errors }) {
-
+export default function SaleProject({ id, step1, salesOption, projectsOption, handleChange, handleNext, errors }) {
   return (
     <div className="ui form"> 
       <div className="inline field"> 
-        {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
+        {id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
           <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
             <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.sale_or_project")}</div>
           </h1>
@@ -29,7 +28,7 @@ export default function SaleProject({ _id, step1, salesOptions, projectsOptions,
           formClass="inline field"
 
           options={[<option key="default" value="">{T.translate("invoices.form.select_sale")}</option>,
-            salesOptions]}
+            salesOption]}
         />
 
          <div className="ui horizontal divider">Or</div>
@@ -43,7 +42,7 @@ export default function SaleProject({ _id, step1, salesOptions, projectsOptions,
           formClass="inline field"
 
           options={[<option key="default" value="">{T.translate("invoices.form.select_project")}</option>,
-            projectsOptions]}
+            projectsOption]}
         />
       </fieldset>
 

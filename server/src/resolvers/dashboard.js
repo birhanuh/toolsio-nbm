@@ -7,23 +7,15 @@ export default {
   Query: {
     getTotalIncomeData: async (parent, args, { models }) =>  {
 
-      // const data = await models.Task.sum('price', {
-      //   group: 'project.id',
-      //   include: [
-      //   {
-      //     model: models.Project,
-      //     where: { status: 'delivered' },
-      //   }
-      // ]}, { raw: true }) 
+      const data = await models.Task.sum('price', {
+        group: 'project.id',
+        include: [
+        {
+          model: models.Project,
+          where: { status: 'delivered' },
+        }
+      ]}, { raw: true }) 
 
-      const data = await models.Invoice.sum('price', {
-          where: { status: 'delivered' }
-        }, { raw: true }) 
-
-      console.log('data', data)
-      return {
-        data: data ? data : 0
-      }
     },
     
     getProjectsData: async (parent, args, { models }) => {
@@ -38,7 +30,7 @@ export default {
         raw: true
       })
 
-      const countMonthPromise = models.sequelize.query("select to_char(created_at,'Mon') as mon, extract(year from created_at) as yyyy, count(*) from projects group by 1,2 limit 2", {
+      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at,'Mon') AS mon, extract(year FROM created_at) AS yyyy, count(*) FROM projects GROUP BY 1,2 LIMIT 2", {
         model: models.Project,
         raw: true
       })
@@ -58,7 +50,7 @@ export default {
         raw: true
       })
 
-      const countMonthPromise = models.sequelize.query("select to_char(created_at,'Mon') as mon, extract(year from created_at) as yyyy, count(*) from sales group by 1,2 limit 2", {
+      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at,'Mon') AS mon, extract(year FROM created_at) AS yyyy, count(*) FROM sales GROUP BY 1,2 LIMIT 2", {
         model: models.Sale,
         raw: true
       })
@@ -76,8 +68,35 @@ export default {
     },
 
     getInvoicesData: async (parent, args, { models }) => {
+      const countStatusPromise = models.sequelize.query("SELECT to_char(created_at,'Mon') AS mon, extract(year FROM created_at) AS yyyy, count(*) FROM invoices GROUP BY 1,2 LIMIT 2", {
+        model: models.Invoice,
+        raw: true
+      })
+
+      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at,'Mon') AS mon, extract(year FROM created_at) AS yyyy, status, count(*) FROM invoices GROUP BY 1,2,3 LIMIT 4", {
+        model: models.Invoice,
+        raw: true
+      })
+
+      const [countMonth, countStatusMonth] = await Promise.all([countStatusPromise, countMonthPromise])
+
+      return {
+        countMonth: countMonth,
+        countStatusMonth: countStatusMonth 
+      }
+    },
+
+    getProjectTasksData: async (parent, args, { models }) => {
 
     },
+
+    getSaleTasksData: async (parent, args, { models }) => {
+
+    },
+
+    getInvoiceTasksData: async (parent, args, { models }) => {
+
+    }
 
   }
 }

@@ -10,7 +10,7 @@ import T from 'i18n-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-export default function Details({ id, step2, handleChangeDate, handleChange, handlePrevious, handleNext, errors}) {
+export default function Details({ id, step1, step2, handleChangeDate, handleChange, handlePrevious, handleNext, errors}) {
 
   const paymentTermOptions = Array(99).fill().map((key, value) => 
     <option key={value} value={value}>{value}</option>
@@ -47,8 +47,7 @@ export default function Details({ id, step2, handleChangeDate, handleChange, han
           onChange={handleChange} 
           placeholder="Name"
           error={errors.paymentTerm}
-            formClass="inline field"
-
+          formClass="inline field"
           options={[<option key="default" value="">{T.translate("invoices.form.select_days")}</option>,
             paymentTermOptions]}
         />
@@ -64,6 +63,27 @@ export default function Details({ id, step2, handleChangeDate, handleChange, han
           formClass="inline field"
       />
       
+      <InputField
+        label={T.translate("invoices.form.tax")}
+        name="tax" 
+        value={step2.tax && step2.tax.toString()} 
+        onChange={handleChange} 
+        placeholder="0%"
+        error={errors.tax}
+        formClass="inline field"
+      />
+
+      <InputField
+        label={T.translate("invoices.form.total")}
+        name="tax" 
+        value={(step1.sale && step1.sale.total) || (step1.project && step1.project.total)} 
+        onChange={handleChange} 
+        placeholder="0%"
+        error={errors.tax}
+        formClass="inline field"
+        disabled="disabled"
+      />
+
       { id &&
         <SelectField
           label={T.translate("invoices.form.status")}

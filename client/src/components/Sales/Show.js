@@ -36,8 +36,24 @@ class Show extends Component {
       status: this.props.data.getSale ? this.props.data.getSale.status : '',
       description: this.props.data.getSale ? this.props.data.getSale.description : '',
       items: this.props.data.getSale ? this.props.data.getSale.items : [],
-      total: this.props.data.getSale ? this.props.data.getSale.total : 0,
-      user: this.props.data.getSale ? this.props.data.getSale.user : null
+      user: this.props.data.getSale ? this.props.data.getSale.user : null,
+      total: this.props.data.getSale ? this.props.data.getSale.total : 0
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.data.getSale) {
+      this.setState({
+        id: nextProps.data.getSale.id,
+        name: nextProps.data.getSale.name,
+        deadline: nextProps.data.getSale.deadline,
+        customer: nextProps.data.getSale.customer,
+        status: nextProps.data.getSale.status,
+        description: nextProps.data.getSale.description,
+        items: nextProps.data.getSale.items,
+        user: nextProps.data.getSale.user,
+        total: nextProps.data.getSale.total
+      })
     }
   }
 
@@ -53,22 +69,6 @@ class Show extends Component {
     } else {
       //this.props.getSaleMutation({ variables: {id: saleId} })
     } 
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.data.getSale) {
-      this.setState({
-        id: nextProps.data.getSale.id,
-        name: nextProps.data.getSale.name,
-        deadline: nextProps.data.getSale.deadline,
-        customer: nextProps.data.getSale.customer,
-        status: nextProps.data.getSale.status,
-        description: nextProps.data.getSale.description,
-        items: nextProps.data.getSale.items,
-        total: nextProps.data.getSale.total,
-        user: nextProps.data.getSale.user
-      })
-    }
   }
 
   showConfirmationModal(event) {
@@ -286,7 +286,6 @@ const getSaleQuery = gql`
       deadline
       status
       description
-      total
       customer {
         id
         name

@@ -37,7 +37,7 @@ export default (sequelize, DataTypes) => {
       field: 'reference_number'
     },
     description: DataTypes.TEXT,
-    total: {
+    tax: {
       type: DataTypes.DECIMAL,
       allowNull : false,
       defaultValue : 0,

@@ -39,7 +39,8 @@ class Page extends Component {
       status: this.props.data.getInvoice ? this.props.data.getInvoice.status : '',
       referenceNumber: this.props.data.getInvoice ? this.props.data.getInvoice.referenceNumber : '',
       description: this.props.data.getInvoice ? this.props.data.getInvoice.description : '',
-      user: this.props.data.getInvoice ? this.props.data.getInvoice.user : null
+      user: this.props.data.getInvoice ? this.props.data.getInvoice.user : null,
+      total: this.props.data.getInvoice ? this.props.data.getInvoice.total : 0
     }
   }
 
@@ -65,7 +66,8 @@ class Page extends Component {
         status: nextProps.data.getInvoice.status,
         referenceNumber: nextProps.data.getInvoice.referenceNumber,
         description: nextProps.data.getInvoice.description,
-        user: nextProps.data.getInvoice.user
+        user: nextProps.data.getInvoice.user,
+        total: nextProps.data.getInvoice.total
       })
     }
   }

@@ -549,6 +549,8 @@
       "select_project": "-Select Project-",
       "deadline": "Deadline",
       "status": "Status",
+      "total": "Total",
+      "tax": "Tax (in %)",
       "payment_term": "Payment term (in Days)",
       "interest_in_arrears": "Interest in arrears (in %)",
       "reference_number": "Reference number",

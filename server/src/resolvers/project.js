@@ -9,15 +9,21 @@ export default {
     getProjects: requiresAuth.createResolver((parent, args, { models }) => models.Project.findAll()),
 
     getProjectsWithoutInvoice: requiresAuth.createResolver((parent, args, { models }) => 
-      models.sequelize.query('select p.id, p.name, p.deadline, p.status, p.progress, p.description, p.total, p.customer_id, p.user_id from projects as p join invoices as i on (p.id != i.project_id)', {
+      models.sequelize.query('SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p LEFT JOIN invoices i ON p.id = i.project_id WHERE i.project_id IS NULL', {
+        model: models.Project,
+        raw: true,
+      })),
+
+    getProjectsWithInvoice: requiresAuth.createResolver((parent, args, { models }) => 
+      models.sequelize.query('SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p INNER JOIN invoices i ON p.id = i.project_id', {
         model: models.Project,
         raw: true,
       }))
   },
 
   Mutation: {
-    createProject: requiresAuth.createResolver((parent, args, { models, user }) => {
-      return models.Project.create({...args, userId: user.id})
+    createProject: requiresAuth.createResolver((parent, args, { models, user }) => 
+      models.Project.create({...args, userId: user.id})
         .then(project => {
           return {
             success: true,
@@ -30,11 +36,10 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    }),
+        })),
 
-    updateProject: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Project.update(args, { where: {id: args.id}, returning: true, plain: true })
+    updateProject: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Project.update(args, { where: {id: args.id}, returning: true, plain: true })
         .then(result => {  
           return {
             success: true,
@@ -47,11 +52,10 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    }),
+        })),
 
-    deleteProject: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Project.destroy({ where: {id: args.id}, force: true })
+    deleteProject: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Project.destroy({ where: {id: args.id}, force: true })
         .then(res => {          
           return {
             success: (res === 1)
@@ -63,8 +67,7 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    })      
+        }))      
   },
 
   Project: {
@@ -72,17 +75,45 @@ export default {
 
     customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
 
-    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true })
+    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true }),
+
+    total: async ({ id }, args, { models }) => {     
+      const totalSum = await models.Task.sum('price', {
+          where: { projectId: id }
+        }) 
+     
+      return totalSum ? totalSum : 0      
+    }
   },
 
   GetProjectsResponse: {
     customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
 
-    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true })    
+    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true })
   },
 
   GetProjectsWithoutInvoiceResponse: {
-    customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true })  
+    customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
+
+    total: async ({ id }, args, { models }) => {     
+      const totalSum = await models.Task.sum('price', {
+          where: { projectId: id }
+        }) 
+     
+      return totalSum ? totalSum : 0      
+    }
+  },
+
+  GetProjectsWithInvoiceResponse: {
+    customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
+
+    total: async ({ id }, args, { models }) => {     
+      const totalSum = await models.Task.sum('price', {
+          where: { projectId: id }
+        }) 
+     
+      return totalSum ? totalSum : 0      
+    }
   }
 }
 

@@ -8,26 +8,24 @@ export default {
   },
 
   Mutation: {
-    createItem: requiresAuth.createResolver(async (parent, args, { models }) => {
-      try {
-        const item = await models.Item.create(args)
-        
-        return {
-          success: true,
-          item
-        }
-      } catch (err) {
-        console.log('err: ', err)
-        return {
-          success: false,
-          errors: formatErrors(err, models)
-        }
-      }
-    }),
+    createItem: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Item.create(args)
+        .then(project => {
+            return {
+              success: true,
+              project
+            }
+          })
+          .catch(err => {
+            console.log('err: ', err)
+            return {
+              success: false,
+              errors: formatErrors(err, models)
+            }
+          })),
 
-    updateItem: requiresAuth.createResolver((parent, args, { models }) => {
-
-      return models.Item.update(args, { where: {id: args.id}, returning: true, plain: true })
+    updateItem: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Item.update(args, { where: {id: args.id}, returning: true, plain: true })
         .then(result => {
   
           return {
@@ -41,11 +39,10 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    }),
+        })),
 
-    deleteItem: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Item.destroy({ where: {id: args.id}, force: true })
+    deleteItem: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Item.destroy({ where: {id: args.id}, force: true })
         .then(res => {
           
           return {
@@ -58,7 +55,6 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    })          
+        }))          
   }          
 }

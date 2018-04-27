@@ -69,6 +69,7 @@ const getInvoicesQuery = gql`
       deadline
       referenceNumber
       status
+      tax
       total
       project {
         id

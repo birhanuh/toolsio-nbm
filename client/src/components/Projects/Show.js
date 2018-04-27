@@ -36,9 +36,26 @@ class Show extends Component {
       status: this.props.data.getProject ? this.props.data.getProject.status : '',
       description: this.props.data.getProject ? this.props.data.getProject.description : '',
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
-      total: this.props.data.getProject ? this.props.data.getProject.total : 0,
       tasks: this.props.data.getProject ? this.props.data.getProject.tasks : [],
       user: this.props.data.getProject ? this.props.data.getProject.user : null,
+      total: this.props.data.getProject ? this.props.data.getProject.total : 0
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.data.getProject) {
+      this.setState({
+        id: nextProps.data.getProject.id,
+        name: nextProps.data.getProject.name,
+        deadline: nextProps.data.getProject.deadline,
+        customer: nextProps.data.getProject.customer,
+        status: nextProps.data.getProject.status,
+        description: nextProps.data.getProject.description,
+        progress: nextProps.data.getProject.progress,
+        tasks: nextProps.data.getProject.tasks,
+        user: nextProps.data.getProject.user,
+        total: nextProps.data.getProject.total
+      })
     }
   }
 
@@ -56,22 +73,6 @@ class Show extends Component {
     } 
     // Progress
     //$("#progress").progress('increment')
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.data.getProject) {
-      this.setState({
-        id: nextProps.data.getProject.id,
-        name: nextProps.data.getProject.name,
-        deadline: nextProps.data.getProject.deadline,
-        customer: nextProps.data.getProject.customer,
-        status: nextProps.data.getProject.status,
-        description: nextProps.data.getProject.description,
-        progress: nextProps.data.getProject.progress,
-        tasks: nextProps.data.getProject.tasks,
-        user: nextProps.data.getProject.user
-      })
-    }
   }
 
   showConfirmationModal(event) {
@@ -435,7 +436,6 @@ const getProjectsQuery = gql`
       status
       progress
       description
-      total
       customer {
         name
       }

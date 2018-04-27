@@ -30,15 +30,7 @@ export default (sequelize, DataTypes) => {
         isDecimal: true // checks for any numbers
       } 
     },
-    description: DataTypes.TEXT,
-    total: {
-      type: DataTypes.DECIMAL,
-      allowNull : false,
-      defaultValue : 0,
-      validate: {     
-        isDecimal: true,          // checks for any numbers
-      } 
-    }
+    description: DataTypes.TEXT
   })
 
   Project.associate = (models) => {

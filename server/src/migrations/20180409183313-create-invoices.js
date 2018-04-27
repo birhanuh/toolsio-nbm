@@ -30,7 +30,7 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
-      total: {
+      tax: {
         allowNull : false,          
         defaultValue: 0,
         type: Sequelize.DECIMAL
