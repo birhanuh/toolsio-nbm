@@ -357,8 +357,7 @@ class Form extends Component {
 
           <form className={classnames("ui form", { loading: isLoading })}>
 
-            { !!errors && !!errors.message && (typeof errors.message === "string") && 
-              <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
             {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={step1.sale} project={step1.project} 
               handlePrevious={this.handlePrevious.bind(this)} 

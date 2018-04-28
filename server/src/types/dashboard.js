@@ -1,4 +1,14 @@
 export default `
+  
+  type DaySum {
+    sum: Float!
+    day: String!
+  }
+
+  type MonthSum {
+    sum: Float!
+    month: String!
+  }
 
   type CountStatus {
     count: Int!
@@ -29,7 +39,8 @@ export default `
   }
 
   type IncomesData {
-    data: Float!
+    daySum: [DaySum!]!
+    monthSum: [MonthSum!]!
   }
 
   type ProjectsSalesData {

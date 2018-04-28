@@ -190,7 +190,7 @@
     "description": "Summary of your business activties are shown infographically.",
     "total_income": {
       "header": "Total income",
-      "description": "Cumulative of all of your incomes (paid-invoices) statred since using this sevice."
+      "description": "Cumulative income, (i.e total summary of all your PAID invoices)."
     },
     "incomes": {
       "header": "Incomes"

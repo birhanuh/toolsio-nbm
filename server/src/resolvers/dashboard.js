@@ -1,7 +1,6 @@
 import { requiresAuth } from '../middlewares/authentication'
-
-let date = new Date()
-let firstDayOfLastMonth = new Date(date.getFullYear(), date.getMonth()-1, 1)
+// lodash
+import _ from 'lodash'
 
 export default {
   Query: {
@@ -18,13 +17,60 @@ export default {
 
       const [paidTasksSum, paidItemsSum] = await Promise.all([paidTasksSumPromise, paidItemsSumPromise])
       console.log('paidTasksSum', paidTasksSum)
-      
+
       return {
         tasksTotalSum: paidTasksSum[0].sum,
         itemsTotalSum: paidItemsSum[0].sum
       } 
     },
     
+    getIncomesData: async (parent, args, { models }) =>  {
+      const paidTasksSumDayPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'DD/MM/YYYY') AS day, SUM(ts.price) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1", {
+        model: models.Task,
+        raw: true,
+      })
+
+      const paidItemsSumDayPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'DD/MM/YYYY') AS day, SUM(it.price) FROM items it JOIN invoices invoice ON it.sale_id = invoice.sale_id WHERE invoice.status='paid' GROUP BY 1", {
+        model: models.Item,
+        raw: true,
+      })
+
+      const [paidTasksSumDay, paidItemsSumDay] = await Promise.all([paidTasksSumDayPromise, paidItemsSumDayPromise])
+
+      let paidTasksItemsSumDay = [...paidTasksSumDay, ...paidItemsSumDay]
+      console.log('paidTasksItemsSumDay', paidTasksItemsSumDay)
+
+      let groupByDaySum = _(paidTasksItemsSumDay).groupBy('day').map((objs, key) => ({
+        'day': key,
+        'sum': _.sumBy(objs, 'sum')
+      })).value()
+      console.log('groupByDaySum', groupByDaySum)
+
+      const paidTasksSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at,'MM/YYYY') AS month, SUM(ts.price) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
+        model: models.Task,
+        raw: true,
+      })
+
+      const paidItemsSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at,'MM/YYYY') AS month, SUM(it.price) FROM items it JOIN invoices invoice ON it.sale_id = invoice.sale_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
+        model: models.Item,
+        raw: true,
+      })
+
+      const [paidTasksSumMonth, paidItemsSumMonth] = await Promise.all([paidTasksSumMonthPromise, paidItemsSumMonthPromise])
+
+      let paidTasksItemsSumMonth = [...paidTasksSumMonth, ...paidItemsSumMonth]
+
+      let groupByMonthSum = _(paidTasksItemsSumMonth).groupBy('month').map((objs, key) => ({
+        'month': key,
+        'sum': _.sumBy(objs, 'sum')
+      })).value()
+      console.log('paidItemsSumMonth', paidItemsSumMonth)
+      return {
+        daySum: groupByDaySum,
+        monthSum: groupByMonthSum
+      } 
+    },
+
     getProjectsData: async (parent, args, { models }) => {
       // const data = await models.Project.findAll({
       //   group: ['status'],
