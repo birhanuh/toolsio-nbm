@@ -28,15 +28,16 @@ class Page extends Component {
           <div className="column">
             <IncomesCard />
           </div>
-        {/*
+
           <div className="column">
             <ProjectsCard />
           </div>
+
           <div className="column">  
             <SalesCard />
-          </div>*/}
+          </div>
         </div>
-        {/*
+        
         <div className="ui two column grid">
           <div className="four wide column">
             <CustomersCard />
@@ -45,7 +46,7 @@ class Page extends Component {
             <InvoicesCard /> 
           </div>
         </div>
-
+        {/*
         <div className="ui three column grid">
           <div className="column">
             <ProjectTasks />

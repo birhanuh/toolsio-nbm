@@ -46,12 +46,12 @@ export default {
       })).value()
       console.log('groupByDaySum', groupByDaySum)
 
-      const paidTasksSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at,'MM/YYYY') AS month, SUM(ts.price) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
+      const paidTasksSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'MM/YYYY') AS month, SUM(ts.price) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
         model: models.Task,
         raw: true,
       })
 
-      const paidItemsSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at,'MM/YYYY') AS month, SUM(it.price) FROM items it JOIN invoices invoice ON it.sale_id = invoice.sale_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
+      const paidItemsSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'MM/YYYY') AS month, SUM(it.price) FROM items it JOIN invoices invoice ON it.sale_id = invoice.sale_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
         model: models.Item,
         raw: true,
       })
@@ -82,7 +82,7 @@ export default {
         raw: true
       })
 
-      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at,'Mon') AS mon, extract(year FROM created_at) AS yyyy, count(*) FROM projects GROUP BY 1,2 LIMIT 2", {
+      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at, 'MM/YYYY') AS month, count(*) FROM projects GROUP BY 1 LIMIT 2", {
         model: models.Project,
         raw: true
       })
@@ -102,7 +102,7 @@ export default {
         raw: true
       })
 
-      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at,'Mon') AS mon, extract(year FROM created_at) AS yyyy, count(*) FROM sales GROUP BY 1,2 LIMIT 2", {
+      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at, 'MM/YYYY') AS month, count(*) FROM sales GROUP BY 1 LIMIT 2", {
         model: models.Sale,
         raw: true
       })
@@ -120,12 +120,12 @@ export default {
     },
 
     getInvoicesData: async (parent, args, { models }) => {
-      const countStatusPromise = models.sequelize.query("SELECT to_char(created_at,'Mon') AS mon, extract(year FROM created_at) AS yyyy, count(*) FROM invoices GROUP BY 1,2 LIMIT 2", {
+      const countStatusPromise = models.sequelize.query("SELECT to_char(created_at, 'Mon/YYYY') AS month, count(*) FROM invoices GROUP BY 1 LIMIT 2", {
         model: models.Invoice,
         raw: true
       })
 
-      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at,'Mon') AS mon, extract(year FROM created_at) AS yyyy, status, count(*) FROM invoices GROUP BY 1,2,3 LIMIT 4", {
+      const countMonthPromise = models.sequelize.query("SELECT to_char(created_at, 'Mon/YYYY') AS month, status, count(*) FROM invoices GROUP BY 1,2 LIMIT 4", {
         model: models.Invoice,
         raw: true
       })

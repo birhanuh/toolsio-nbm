@@ -21,14 +21,12 @@ export default `
   }
 
   type CountMonth {
-    mon: String!
-    yyyy: String!
+    month: String!
     count: Int!
   }
 
   type CountStatusMonth {
-    mon: String!
-    yyyy: String!
+    month: String!
     count: Int!
     status: String!
   }

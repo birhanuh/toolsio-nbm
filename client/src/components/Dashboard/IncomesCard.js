@@ -28,26 +28,26 @@ const GET_INCOMES = gql`
 const IncomesCard = () => (
   <Query query={GET_INCOMES}>
     {({ loading, error, data }) => {
-      console.log('data', data)
+     
       const daySum = data && data.getIncomesData && data.getIncomesData.daySum
       const monthSum = data && data.getIncomesData && data.getIncomesData.monthSum
 
       let dayPick = daySum && daySum.map(item => pick(item, ['day']).day.substring(0, 5))
       let sumPick = daySum && daySum.map(item => pick(item, ['sum']).sum)
-      console.log('day', dayPick)
-      console.log('sum', sumPick)
+      // console.log('day', dayPick)
+      // console.log('sum', sumPick)
 
       let chartData = {
         labels: dayPick,
         datasets: [
           {
             label: 'Incomes',
+            data: sumPick,
             backgroundColor: "rgba(125,164,13, 0.75)",
             borderColor: "rgba(125,164,13, 1)",
             borderWidth: 1,
             pointRadius: 2,
-            pointBackgroundColor: "rgba(125,164,13, 1)",
-            data: sumPick
+            pointBackgroundColor: "rgba(125,164,13, 1)"
           }]
       }
 
