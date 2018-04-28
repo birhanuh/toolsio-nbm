@@ -1,7 +1,12 @@
 export default `
-  
+
   type CountStatus {
     count: Int!
+    status: String!
+  }
+
+  type IdStatus {
+    id: Int!
     status: String!
   }
 
@@ -19,7 +24,8 @@ export default `
   }
 
   type TotalIncomeData {
-    data: Float!
+    tasksTotalSum: Float!
+    itemsTotalSum: Float!
   }
 
   type IncomesData {
@@ -41,15 +47,18 @@ export default `
   }
 
   type ProjectTasksData {
-    data: Float!
+    countStatus: [CountStatus!]!
+    idStatus: [IdStatus!]!
   }
 
   type SaleTasksData {
-    data: Float!
+    countStatus: [CountStatus!]!
+    idStatus: [IdStatus!]!
   }
 
   type InvoiceTasksData {
-    data: Float!
+    countStatus: [CountStatus!]!
+    idStatus: [IdStatus!]!
   }
 
   type Query {

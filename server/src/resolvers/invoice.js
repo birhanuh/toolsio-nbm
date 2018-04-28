@@ -79,7 +79,6 @@ export default {
     customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
 
     total: async ({ projectId, saleId }, args, { models }) => {
-      console.log('projectId', projectId)
       if (projectId) {    
         const totalSum = await models.Task.sum('price', {
             where: { projectId }
