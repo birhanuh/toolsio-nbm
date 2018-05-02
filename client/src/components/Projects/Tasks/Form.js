@@ -47,13 +47,13 @@ class Form extends Component {
     }
   }
 
-  handleNewTaskChange = (e) => {
-    if (this.state.newTask.errors[e.target.name]) {
+  handleNewTaskChange = (name, value) => {
+    if (this.state.newTask.errors[name]) {
       let errors = Object.assign({}, this.state.newTask.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       let updatedTask = Object.assign({}, this.state.newTask)
-      updatedTask[e.target.name] = e.target.value
+      updatedTask[name] = value
       updatedTask.errors = errors 
 
       this.setState({
@@ -62,7 +62,7 @@ class Form extends Component {
     } else {
       let updatedTask = Object.assign({}, this.state.newTask)
       updatedTask.projectId = this.props.projectId
-      updatedTask[e.target.name] = e.target.value
+      updatedTask[name] = value
 
       this.setState({
         newTask: updatedTask
@@ -156,15 +156,15 @@ class Form extends Component {
     }
   }
 
-  handleEditTaskChange = (task, e) => {
-    if (this.state.editTask.errors[e.target.name]) {
+  handleEditTaskChange = (name, value, task) => {
+    if (this.state.editTask.errors[name]) {
       let errors = Object.assign({}, this.state.editTask.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       let updatedTask = Object.assign({}, this.state.editTask)
       updatedTask.id = task.id
       updatedTask.projectId = task.projectId
-      updatedTask[e.target.name] = e.target.value
+      updatedTask[name] = value
 
       this.setState({
         editTask: updatedTask
@@ -173,8 +173,8 @@ class Form extends Component {
       let updatedTask = Object.assign({}, this.state.editTask)
       updatedTask.id = task.id
       updatedTask.projectId = task.projectId
-      updatedTask[e.target.name] = e.target.value
-
+      updatedTask[name] = value
+      
       this.setState({
         editTask: updatedTask
       })
@@ -392,7 +392,7 @@ class Form extends Component {
           task={task} 
           editTask={editTask}
           handleCancelEdit={this.handleCancelEdit.bind(this, task)}
-          handleEditTaskChange={this.handleEditTaskChange.bind(this, task)} 
+          handleEditTaskChange={this.handleEditTaskChange} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, task)}
           showConfirmationModal={this.showConfirmationModal.bind(this, task)}/> 
@@ -418,7 +418,7 @@ class Form extends Component {
             
             <AddTaskTr
               task={newTask} 
-              handleNewTaskChange={this.handleNewTaskChange.bind(this)} 
+              handleNewTaskChange={this.handleNewTaskChange} 
               handleCreate={this.handleCreate.bind(this)} /> 
             
             <tr>

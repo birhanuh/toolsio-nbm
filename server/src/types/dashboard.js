@@ -15,8 +15,21 @@ export default `
     status: String!
   }
 
-  type IdStatus {
+  type IdNameStatus {
     id: Int!
+    name: String!
+    status: String!
+  }
+
+  type IdProjectStatus {
+    id: Int!
+    name: String
+    status: String!
+  }
+
+  type IdSaleStatus {
+    id: Int!
+    name: String
     status: String!
   }
 
@@ -57,17 +70,18 @@ export default `
 
   type ProjectTasksData {
     countStatus: [CountStatus!]!
-    idStatus: [IdStatus!]!
+    idNameStatus: [IdNameStatus!]!
   }
 
   type SaleTasksData {
     countStatus: [CountStatus!]!
-    idStatus: [IdStatus!]!
+    idNameStatus: [IdNameStatus!]!
   }
 
   type InvoiceTasksData {
     countStatus: [CountStatus!]!
-    idStatus: [IdStatus!]!
+    idProjectStatus: [IdProjectStatus!]!
+    idSaleStatus: [IdSaleStatus!]!
   }
 
   type Query {

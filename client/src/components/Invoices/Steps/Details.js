@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { InputField, SelectField, TextAreaField } from '../../../utils/FormFields'
+// Semantic UI Form elements
+import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -13,7 +14,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 export default function Details({ id, step1, step2, handleChangeDate, handleChange, handlePrevious, handleNext, errors}) {
 
   const paymentTermOptions = Array(99).fill().map((key, value) => 
-    <option key={value} value={value}>{value}</option>
+    ({ key: value, value: value, text: value })
     )
   
   return (
@@ -28,90 +29,108 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
       <fieldset className="custom-fieldset">
         <legend className="custom-legend">{T.translate("invoices.form.select_payment_term_or_deadline")}</legend>
 
-        <div  className={classnames("inline field", { error: !!errors.deadline })}>
-          <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
+        <Form.Group inline error={errors.deadline}>
+          <label>{T.translate("invoices.form.deadline")}</label>
           <DatePicker
             dateFormat="DD/MM/YYYY"
             selected={step2.deadline}
             onChange={handleChangeDate}
           />
           <span className="red">{errors.deadline}</span>
-        </div>
+        </Form.Group>
         
         <div className="ui horizontal divider">Or</div>
 
-        <SelectField
-          label={T.translate("invoices.form.payment_term")}
-          name="paymentTerm" 
-          value={step2.paymentTerm ? step2.paymentTerm.toString() : ''} 
-          onChange={handleChange} 
-          placeholder="Name"
-          error={errors.paymentTerm}
-          formClass="inline field"
-          options={[<option key="default" value="">{T.translate("invoices.form.select_days")}</option>,
-            paymentTermOptions]}
-        />
+        <Form.Group inline error={errors.paymentTerm}>
+          <Form.Field 
+            label={T.translate("invoices.form.payment_term")}
+            placeholder={T.translate("invoices.form.select_days")}
+            control={Select}
+            name="paymentTerm" 
+            value={step2.paymentTerm ? step2.paymentTerm.toString() : ''} 
+            onChange={(e, {value}) => handleChange('paymentTerm', value)} 
+            error={!!errors.paymentTerm}
+            options={paymentTermOptions}
+            selection
+          />
+          <span className="red">{errors.paymentTerm}</span>
+        </Form.Group>
       </fieldset>  
 
-      <InputField
-        label={T.translate("invoices.form.interest_in_arrears")}
-        name="interestInArrears" 
-        value={step2.interestInArrears && step2.interestInArrears.toString()} 
-        onChange={handleChange} 
-        placeholder="0%"
-        error={errors.interestInArrears}
-          formClass="inline field"
-      />
-      
-      <InputField
-        label={T.translate("invoices.form.tax")}
-        name="tax" 
-        value={step2.tax && step2.tax.toString()} 
-        onChange={handleChange} 
-        placeholder="0%"
-        error={errors.tax}
-        formClass="inline field"
-      />
+      <Form.Group inline error={errors.interestInArrears}>
+        <Form.Field 
+          label={T.translate("invoices.form.interest_in_arrears")}
+          placeholder="0%"
+          control={Input}
+          name="interestInArrears" 
+          value={step2.interestInArrears && step2.interestInArrears.toString()} 
+          onChange={(e, {value}) => handleChange('interestInArrears', value)} 
+          error={!!errors.interestInArrears}
+        />
+        <span className="red">{errors.interestInArrears}</span>
+      </Form.Group>
 
-      <InputField
-        label={T.translate("invoices.form.total")}
-        name="tax" 
-        value={(step1.sale && step1.sale.total) || (step1.project && step1.project.total)} 
-        onChange={handleChange} 
-        placeholder="0%"
-        error={errors.tax}
-        formClass="inline field"
-        disabled="disabled"
-      />
+      <Form.Group inline error={errors.tax}>
+        <Form.Field 
+          label={T.translate("invoices.form.tax")}
+          placeholder="0%"
+          control={Input}
+          name="tax" 
+          value={step2.tax && step2.tax.toString()} 
+          onChange={(e, {value}) => handleChange('tax', value)} 
+          error={!!errors.tax}
+          disabled={true}
+        />
+        <span className="red">{errors.tax}</span>
+      </Form.Group>
+      
+      <Form.Group inline error={errors.total}>
+        <Form.Field 
+          label={T.translate("invoices.form.total")}
+          placeholder="0%"
+          control={Input}
+          name="total" 
+          value={(step1.sale && step1.sale.total) || (step1.project && step1.project.total)} 
+          onChange={(e, {value}) => handleChange('total', value)} 
+          error={!!errors.total}
+          disabled={true}
+        />
+        <span className="red">{errors.total}</span>
+      </Form.Group>
 
       { id &&
-        <SelectField
-          label={T.translate("invoices.form.status")}
-          name="status"
-          type="select"
-          value={step2.status && step2.status} 
-          onChange={handleChange} 
-          error={errors.status}
-          formClass="inline field"
-
-          options={[
-            <option key="default" value="new" disabled>NEW</option>,
-            <option key="pending" value="pending">PENDING</option>,
-            <option key="paid" value="paid">PAID</option>,
-            <option key="overdue" value="overdue">OVERDUE</option>
-            ]
-          }
-        />
+        <Form.Group inline error={errors.status}>
+          <Form.Field 
+            label={T.translate("invoices.form.status")}
+            placeholder={T.translate("invoices.form.select_status")}
+            control={Select}
+            name="status"
+            value={step2.status && step2.status} 
+            onChange={(e, {value}) => handleChange('status', value)} 
+            error={!!errors.staus}
+            options={[
+              { key: "default", value: "new", disabled: true, text: 'NEW' },
+              { key: "pending", value: "pending", text: 'PENDING' },
+              { key: "paid", value: "paid", text: 'PAID' },
+              { key: "overdue", value: "overdue", text: 'OVERDUE' }
+            ]}
+            selection
+          />
+          <span className="red">{errors.status}</span>
+        </Form.Group>
       }
 
-      <TextAreaField
-        label={T.translate("invoices.form.description")}
-        name="description" 
-        value={step2.description} 
-        onChange={handleChange} 
-        placeholder={T.translate("invoices.form.description")}
-        formClass="inline field"
-      /> 
+      <Form.Group inline error={errors.description}>  
+        <Form.Field 
+          label={T.translate("invoices.form.description")}
+          placeholder={T.translate("invoices.form.description")}
+          control={TextArea}
+          name="description" 
+          value={step2.description} 
+          onChange={(e, {value}) => handleChange('description', value)} 
+        />
+        <span className={classnames({red: !!errors.description})}>{errors.status}</span>
+      </Form.Group>
 
       <div className="inline field mt-5"> 
         <button className="ui button" onClick={handlePrevious}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>

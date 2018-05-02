@@ -220,16 +220,16 @@
       "no_projects": "You have no Projects",
       "no_new_projects": "You have no new Project",
       "new_projects": "You have *{count}* new Projects.",
-      "no_overdued_projects": "You have no overdue Project",
-      "overdued_sales": "You have *{count}* overdued Projects."
+      "no_delayed_projects": "You have no delayed Project",
+      "delayed_projects": "You have *{count}* delayed Projects."
     },
     "sale_tasks": {
       "header": "Sale tasks",
       "no_sales": "You have no Sales",
       "no_new_sales": "You have no new Sales",
       "new_sales": "You have *{count}* new Sales.",
-      "no_overdued_sales": "You have no overdue Sales",
-      "overdued_sales": "You have *{count}* overdued Sales."
+      "no_delayed_sales": "You have no delayed Sales",
+      "delayed_sales": "You have *{count}* delayed Sales."
     },
     "invoice_tasks": {
       "header": "Invoice tasks",
@@ -237,7 +237,7 @@
       "no_pending_invoices": "You have no pending Invoices",
       "pending_invoices": "You have *{count}* pending Invoices.",
       "no_overuded_invoices": "You have no overuded Invoices",
-      "overdued_invoices": "You have *{count}* overdued Invoices."
+      "overdue_invoices": "You have *{count}* overdue Invoices."
     },   
     "last_month": "Last month",
     "this_month": "This month", 
@@ -457,10 +457,24 @@
       "delete": "Delete",
       "cancel": "Cancel",
       "edit": "Edit",
-      "notice_add": "Customer added",
-      "select_country": "-Select Country-",
-      "select_region": "-Select Region-",   
-      "name": "Name is required.",
+      "name": "Name",
+      "vat_number": "Vat number",
+      "contact": {
+        "header": "Contact",
+        "phone_number": "Phone number",
+        "email": "Email"
+      },
+      "include_contact_in_invoice": "Include contact in invoice",
+      "address": {
+        "header": "Address",
+        "street": "Street",
+        "postal_code": "Postal code",
+        "region": "Region",
+        "country": "Country",
+        "select_country": "-Select Country-",
+        "select_region": "-Select Region-"
+      },  
+      "name_required": "Name is required.",
       "vat_number_required": "Vat number is required.",
       "phone_number_or_email_required": "Either Phone number or email should be filled.",
       "street_required": "Street is required.",
@@ -679,6 +693,7 @@
       "cancel": "Cancel",
       "add": "Add",
       "create": "Create",
+      "name": "Name",
       "title": "Title",
       "message": "Message",
       "select_users": "-Select users-",

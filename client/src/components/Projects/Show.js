@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { SelectField } from '../../utils/FormFields'
+// Semantic UI JS
+import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -89,15 +90,13 @@ class Show extends Component {
     $('.small.modal.project').modal('hide')
   }
 
-  handleStatusChange = (e) => {
-
+  handleStatusChange = (value) => {
     const { id, name } = this.state
 
     this.props.updateProjectMutation({ 
-        variables: { id, status: e.target.value }
+        variables: { id, status: value }
       })
-      .then(res => {          
-
+      .then(res => {      
         const { success, project, errors } = res.data.updateProject
 
         if (success) {
@@ -284,25 +283,23 @@ class Show extends Component {
               <dt>{T.translate("projects.show.deadline")}</dt>
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("projects.show.status")}</dt>
-              <dd>
-                <SelectField
-                  label=""
+              <dd>               
+                <Form.Field 
+                  placeholder={T.translate("projects.form.select_status")}
+                  control={Select}
                   name="status"
-                  type="select"
                   value={status} 
-                  formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  onChange={this.handleStatusChange.bind(this)} 
-                  error=""
-
+                  onChange={(e, {value}) => this.handleStatusChange(value)} 
+                  className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
                   options={[
-                    <option key="default" value="new" disabled>NEW</option>,
-                    <option key="in progress" value="in progress">IN PROGRESS</option>,
-                    <option key="finished" value="finished">FINISHED</option>,
-                    <option key="delayed" value="delayed">DELAYED</option>,
-                    <option key="delivered" value="delivered">DELIVERED</option>
-                    ]
-                  }
-                  />
+                    { key: "default", value: "new", disabled: true, text: 'NEW' },
+                    { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
+                    { key: "finished", value: "finished", text: 'FINISHED' },
+                    { key: "delayed", value: "delayed", text: 'DELAYED' },
+                    { key: "delivered", value: "delivered", text: 'DELIVERED' }
+                  ]}
+                  selection
+                />
               </dd>
              
               <dt>{T.translate("projects.show.description")}</dt>

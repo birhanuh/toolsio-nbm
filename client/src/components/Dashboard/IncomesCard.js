@@ -34,8 +34,6 @@ const IncomesCard = () => (
 
       let dayPick = daySum && daySum.map(item => pick(item, ['day']).day.substring(0, 5))
       let sumPick = daySum && daySum.map(item => pick(item, ['sum']).sum)
-      // console.log('day', dayPick)
-      // console.log('sum', sumPick)
 
       let chartData = {
         labels: dayPick,

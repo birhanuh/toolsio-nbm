@@ -6,7 +6,8 @@ import classnames from 'classnames'
 import map from 'lodash/map'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
-import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
+// Semantic UI Form elements
+import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -19,10 +20,7 @@ import T from 'i18n-react'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
-// Semantic UI JS
-//import { Dropdown, Input } from 'semantic-ui-react'
-
-class Form extends Component {
+class FormPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -50,22 +48,23 @@ class Form extends Component {
     }
   }
 
-  handleChange = (e) => {
-    if (!this.state.errors[e.target.name]) {
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       this.setState({
-        [e.target.name]: e.target.value,
+        [name]: value,
         errors
       })
+     
     } else {
+
       this.setState({
-        [e.target.name]: e.target.value
-      })
-    }
-   
+        [name]: value
+      })  
+    }   
   }
 
   isValid() {
@@ -196,7 +195,7 @@ class Form extends Component {
     const { getCustomers } = this.props.getCustomersSalesQuery
   
     const customersOptions = map(getCustomers, (customer) => 
-      <option key={customer.id} value={customer.id.toString()}>{customer.name}</option>
+      ({ key: customer.id, value: customer.id, text: customer.name })
     )
 
     return (  
@@ -206,7 +205,7 @@ class Form extends Component {
 
         <div className="ui text container ui segment">  
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
               {id ? <h1 className="ui header">{T.translate("sales.form.edit_sale")}</h1> : <h1 className="ui header">{T.translate("sales.form.new_sale")}</h1>}        
@@ -214,37 +213,41 @@ class Form extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
-            <InputField
-              label={T.translate("sales.form.name")}
-              name="name" 
-              value={name} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder="Name"
-              error={errors.name}
-              formClass="inline field"
-            />
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.name})}>{T.translate("sales.form.name")}</label>
+              <Input
+                placeholder={T.translate("sales.form.name")}
+                name="name" 
+                value={name} 
+                onChange={(e, {value}) => this.handleChange('name', value)} 
+                error={!!errors.name}
+              />
+              <span className="red">{errors.name}</span>
+            </Form.Field>
 
-            <div  className={classnames("inline field", { error: !!errors.deadline })}>
-              <label className="" htmlFor="date">{T.translate("sales.form.deadline")}</label>
+            <Form.Field inline error={errors.deadline}>
+              <label>{T.translate("sales.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
               <span className="red">{errors.deadline}</span>
-            </div>
+            </Form.Field>
 
-            <SelectField
-              label={T.translate("sales.form.customer")}
-              name="customerId"
-              value={customerId ? customerId : ''} 
-              onChange={this.handleChange.bind(this)} 
-              error={errors.customerId}
-              formClass="inline field"
-              
-              options={[<option key="default" value="" disabled>{T.translate("sales.form.select_customer")}</option>,
-                customersOptions]}
-            />
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.customerId})}>{T.translate("sales.form.customer")}</label>
+              <Select
+                placeholder={T.translate("sales.form.select_customer")}
+                name="customerId"
+                value={customerId && customerId} 
+                onChange={(e, {value}) => this.handleChange('customerId', value)} 
+                error={!!errors.customerId}
+                options={customersOptions}
+                selection
+              />
+              <span className="red">{errors.customerId}</span>
+            </Form.Field>
 
              {
               customersOptions.length === 0 &&
@@ -261,54 +264,59 @@ class Form extends Component {
             }
 
             { id &&
-              <SelectField
-                label={T.translate("sales.form.status")}
-                name="status"
-                type="select"
-                value={status} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.status}
-                formClass="inline field"
-
-                options={[
-                  <option key="default" value="new" disabled>NEW</option>,
-                  <option key="in progress" value="in progress">IN PROGRESS</option>,
-                  <option key="ready" value="ready">READY</option>,
-                  <option key="delayed" value="delayed">DELAYED</option>,
-                  <option key="delivered" value="delivered">DELIVERED</option>
-                  ]
-                }
-              />
+              <Form.Field inline>
+                <label className={classnames({red: !!errors.status})}>{T.translate("sales.form.status")}</label>
+                <Select
+                  label={T.translate("sales.form.status")}
+                  placeholder={T.translate("sales.form.select_status")}
+                  name="status"
+                  value={status} 
+                  onChange={(e, {value}) => this.handleChange('status', value)} 
+                  error={!!errors.staus}
+                  options={[
+                    { key: "default", value: "new", disabled: true, text: 'NEW' },
+                    { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
+                    { key: "finished", value: "finished", text: 'FINISHED' },
+                    { key: "delayed", value: "delayed", text: 'DELAYED' },
+                    { key: "delivered", value: "delivered", text: 'DELIVERED' }
+                    ]}
+                  selection
+                />
+                <span className="red">{errors.status}</span>
+              </Form.Field>
             }
 
-            <TextAreaField
-              label={T.translate("sales.form.description")}
-              name="description" 
-              value={description} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("sales.form.description")}
-              formClass="inline field"
-            />
+            <Form.Field inline>  
+              <label>{T.translate("sales.form.description")}</label>
+              <TextArea
+                placeholder={T.translate("sales.form.description")}
+                name="description" 
+                value={description} 
+                onChange={(e, {value}) => this.handleChange('description', value)} 
+              />
+            </Form.Field>
 
             <div className="inline field">   
               <Link className="ui primary outline button" to="/sales">
                 <i className="minus circle icon"></i>
                 {T.translate("sales.form.cancel")}
               </Link> 
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.form.save")}</button>
+              <button disabled={isLoading} className="ui primary button">
+                <i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.form.save")}
+              </button>
             </div>  
-          </form> 
+          </Form> 
         </div>  
       </div>
     )
   }
 }
 
-Form.propTypes = {
+FormPage.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-Form.contextTypes = {
+FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
@@ -418,7 +426,7 @@ const MutationsQuery =  compose(
       }
     })
   })
-)(Form)
+)(FormPage)
 
 export default connect(null, { addFlashMessage } ) (MutationsQuery)
 

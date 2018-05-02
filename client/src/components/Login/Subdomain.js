@@ -123,13 +123,13 @@ class Subdomain extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            <div className={classnames("field", { error: errors && errors.subdomain })}>
+            <div className={classnames("field", { error: errors.subdomain })}>
               <div className="ui right labeled input">
                 <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
                   value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
                 <div className="ui label">toolsio.com</div>  
               </div>
-              <span className="red">{errors && errors.subdomain}</span>
+              <span className="red">{errors.subdomain}</span>
             </div>  
 
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>

@@ -96,21 +96,21 @@ class Form extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            <div className={classnames("field", { error: errors && errors.email })}>
+            <div className={classnames("field", { error: errors.email })}>
               <div className="ui right icon input">
                 <i className="user icon"></i>
                 <input type="text" name="email" placeholder={T.translate("log_in.email")} 
                   value={email} onChange={this.handleChange} />
               </div>
-              <span className="red">{errors && errors.email}</span>
+              <span className="red">{errors.email}</span>
             </div>  
-            <div className={classnames("field", { error: errors && errors.password })}>
+            <div className={classnames("field", { error: errors.password })}>
               <div className="ui right icon input">
                 <i className="lock icon"></i>
                 <input type="password" name="password" placeholder={T.translate("log_in.password")}
                   value={password} onChange={this.handleChange} />                
               </div>
-              <span className="red">{errors && errors.password}</span>
+              <span className="red">{errors.password}</span>
             </div>
                   
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.log_in")}</button>

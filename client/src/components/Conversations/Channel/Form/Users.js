@@ -20,22 +20,22 @@ class Users extends Component {
     }
   }
 
-  handleChange = (members, value) => {
+  handleChange = (name, value) => {
   
-    if (!this.state.errors['members']) {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors['members']
+      delete errors[name]
 
       this.setState({
-        members: value,
+        [name]: value,
         errors
       })
      
     } else {
 
       this.setState({
-        'members': value
+        [name]: value
       })
     }
    

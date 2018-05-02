@@ -70,51 +70,51 @@ class Form extends Component {
     }
   }
 
-  handleChange = (e) => {
-    if (this.state.errors[e.target.name]) {
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
-      if (e.target.name === "saleId" || e.target.name === "projectId") {
+      if (name === "saleId" || name === "projectId") {
     
         this.setState({
-          step1: { ...this.state.step1, [e.target.name]: e.target.value },
+          step1: { ...this.state.step1, [name]: value },
           errors
         })
-      } else if (e.target.name === "deadline" || e.target.name === "paymentTerm"
-        || e.target.name === "interestInArrears" || e.target.name === "status"
-        || e.target.name === "description" || e.target.name === "tax") {
+      } else if (name === "deadline" || name === "paymentTerm"
+        || name === "interestInArrears" || name === "status"
+        || name === "description" || name === "tax") {
 
         this.setState({
-          step2: { ...this.state.step2, [e.target.name]: e.target.value },
+          step2: { ...this.state.step2, [name]: value },
           errors
         })
       } else {
 
         this.setState({
-          [e.target.name]: e.target.value,
+          [name]: value,
           errors
         })
       }
     } else {
 
-     if (e.target.name === "saleId" || e.target.name === "projectId") {
+     if (name === "saleId" || name === "projectId") {
     
         this.setState({
-          step1: { ...this.state.step1, [e.target.name]: e.target.value }
+          step1: { ...this.state.step1, [name]: value }
         })
-      } else if (e.target.name === "deadline" || e.target.name === "paymentTerm"
-        || e.target.name === "interestInArrears" || e.target.name === "status"
-        || e.target.name === "description" || e.target.name === "tax") {
+      } else if (name === "deadline" || name === "paymentTerm"
+        || name === "interestInArrears" || name === "status"
+        || name === "description" || name === "tax") {
 
         this.setState({
-          step2: { ...this.state.step2, [e.target.name]: e.target.value }
+          step2: { ...this.state.step2, [name]: value }
         })
       } else {
 
         this.setState({
-          [e.target.name]: e.target.value,
+          [name]: value,
         })
       }
     }
@@ -331,11 +331,11 @@ class Form extends Component {
     }
 
     const salesOption = salesList && map(salesList, (sale) => 
-      <option key={sale.id} value={sale.id}>{sale.name}</option>
+      ({ key: sale.id, value: sale.id, text: sale.name })
     )
     
     const projectsOption = projectsList && map(projectsList, (project) => 
-      <option key={project.id} value={project.id}>{project.name}</option>
+      ({ key: project.id, value: project.id, text: project.name })
     )
 
     return ( 
@@ -348,11 +348,11 @@ class Form extends Component {
 
         <div className="ui text container segment">
           {currentStep === 'step1' &&  <SaleProject id={id} salesOption={salesOption} 
-            projectsOption={projectsOption} step1={step1} handleChange={this.handleChange.bind(this)} 
+            projectsOption={projectsOption} step1={step1} handleChange={this.handleChange} 
             handleNext={this.handleNext.bind(this)} errors={errors} />}
 
           {currentStep === 'step2' && <Details id={id} step1={step1} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} 
-            handleChange={this.handleChange.bind(this)} handlePrevious={this.handlePrevious.bind(this)}
+            handleChange={this.handleChange} handlePrevious={this.handlePrevious.bind(this)}
             handleNext={this.handleNext.bind(this)} errors={errors} /> }
 
           <form className={classnames("ui form", { loading: isLoading })}>

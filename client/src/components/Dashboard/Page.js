@@ -46,19 +46,20 @@ class Page extends Component {
             <InvoicesCard /> 
           </div>
         </div>
-        {/*
+       
         <div className="ui three column grid">
           <div className="column">
             <ProjectTasks />
           </div>
+           
           <div className="column">
             <SaleTasks />
           </div>
+          
           <div className="column">
             <InvoiceTasks />
           </div>
         </div>
-        */}
       </div>  
     )
   }  

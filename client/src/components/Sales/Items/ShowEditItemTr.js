@@ -1,5 +1,6 @@
 import React from 'react'
-import { InputField, SelectField } from '../../../utils/FormFields'
+// Semantic UI JS
+import { Input, Select, Form } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -19,62 +20,76 @@ export default function ShowEditItemTr({item, editItem, handleCreate, handleEdit
         </div>
       </td>
       <td className="edit-item">
-        <InputField
-          name="name" 
-          value={editItem.name} 
-          onChange={handleEditItemChange}  
-          placeholder="Name"
-          error={editItem.errors && editItem.errors.name}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder={T.translate("sales.items.form.name")}
+            name="name" 
+            value={editItem.name} 
+            onChange={(e, {value}) => handleEditItemChange('name', value, item)} 
+            error={!!editItem.errors.name}
+            className="ui small d-block input"
+          />
+          <span className="red">{item.errors && item.errors.name}</span>
+        </Form.Field>
       </td>
       <td className="edit-item">
-        <SelectField
-          name="unit"
-          type="select"
-          value={editItem.unit} 
-          onChange={handleEditItemChange}  
-          error={editItem.errors && editItem.errors.unit}
-          formClass="ui small d-block input"
-          options={[
-            <option key="default" value="" disabled>{T.translate("sales.items.form.select_unit")}</option>,
-            <option key="piece" value="piece">Piece</option>,
-            <option key="meter" value="meter">Meter</option>,
-            <option key="kilo gram" value="kilo gram">Kilo gram</option>,
-            <option key="liter" value="liter">Liter</option>
-            ]
-          }
-        />
+        <Form.Field>
+          <Select
+            placeholder={T.translate("sales.items.form.select_unit")}
+            name="unit"
+            value={editItem.unit} 
+            onChange={(e, {value}) => handleEditItemChange('unit', value, item)} 
+            error={!!editItem.errors.unit}
+            options={[
+              { key: "piece", value: "piece", text: 'Piece' },
+              { key: "meter", value: "meter", text: 'Meter' },
+              { key: "kilo", value: "kilo", text: 'Kilo gram' },
+              { key: "liter", value: "liter", text: 'Liter' }
+            ]}
+            selection
+            className="ui small d-block input"
+          />
+          <span className="red">{item.errors && item.errors.unit}</span>
+        </Form.Field>
       </td>
       <td className="edit-item">
-        <InputField
-          name="quantity" 
-          value={editItem.quantity.toString()} 
-          onChange={handleEditItemChange}  
-          placeholder="0.00"
-          error={editItem.errors && editItem.errors.quantity}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0"
+            name="quantity" 
+            value={editItem.quantity} 
+            onChange={(e, {value}) => handleEditItemChange('quantity', value, item)} 
+            error={!!editItem.errors.quantity}
+            className="ui small d-block input"
+          />
+          <span className="red">{item.errors && item.errors.quantity}</span>
+        </Form.Field>
       </td>
       <td className="edit-item">
-        <InputField
-          name="price" 
-          value={editItem.price.toString()} 
-          onChange={handleEditItemChange} 
-          placeholder="0.00"
-          error={editItem.errors && editItem.errors.price}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0.00"
+            name="price" 
+            value={editItem.price} 
+            onChange={(e, {value}) => handleEditItemChange('price', value, item)} 
+            error={!!editItem.errors.price}
+            className="ui small d-block input"
+          />
+          <span className="red">{item.errors && item.errors.price}</span>
+        </Form.Field>
       </td>
       <td className="edit-item">
-        <InputField
-          name="vat" 
-          value={editItem.vat.toString()} 
-          onChange={handleEditItemChange} 
-          placeholder="0"
-          error={editItem.errors && editItem.errors.vat}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0%"
+            name="vat" 
+            value={editItem.vat} 
+            onChange={(e, {value}) => handleEditItemChange('vat', value, item)} 
+            error={!!editItem.errors.vat}
+            className="ui small d-block input"
+          />
+          <span className="red">{item.errors && item.errors.vat}</span>
+        </Form.Field>
       </td>
       <td className="edit-item" width="120px">  
         <div className="edit-item ui fluid small buttons">

@@ -144,16 +144,16 @@ export default {
         raw: true
       })
 
-      const idStatusPromise = await models.sequelize.query("SELECT status, id FROM projects WHERE status='new' OR status='delayed' GROUP BY 1,id", {
+      const idNameStatusPromise = await models.sequelize.query("SELECT status, id, name FROM projects WHERE status='new' OR status='delayed' GROUP BY 1,id", {
         model: models.Project,
         raw: true
       })
 
-      const [countStatus, idStatus] = await Promise.all([countStatusPromise, idStatusPromise])
-      console.log('countStatus ', idStatus)
+      const [countStatus, idNameStatus] = await Promise.all([countStatusPromise, idNameStatusPromise])
+      console.log('countStatus ', idNameStatus)
       return {
         countStatus,
-        idStatus
+        idNameStatus
       }
     },
 
@@ -163,35 +163,41 @@ export default {
         raw: true
       })
 
-      const idStatusPromise = await models.sequelize.query("SELECT status, id FROM sales WHERE status='new' OR status='delayed' GROUP BY 1,id", {
+      const idNameStatusPromise = await models.sequelize.query("SELECT status, id, name FROM sales WHERE status='new' OR status='delayed' GROUP BY 1,id", {
         model: models.Sale,
         raw: true
       })
 
-      const [countStatus, idStatus] = await Promise.all([countStatusPromise, idStatusPromise])
+      const [countStatus, idNameStatus] = await Promise.all([countStatusPromise, idNameStatusPromise])
   
       return {
         countStatus,
-        idStatus
+        idNameStatus
       }
     },
 
     getInvoiceTasksData: async (parent, args, { models }) => {
-      const countStatusPromise = await models.sequelize.query("SELECT count(*), status FROM invoices WHERE status='new' OR status='overdue' GROUP BY status", {
+      const countStatusPromise = await models.sequelize.query("SELECT count(*), status FROM invoices WHERE status='pending' OR status='overdue' GROUP BY status", {
         model: models.Invoice,
         raw: true
       })
 
-      const idStatusPromise = await models.sequelize.query("SELECT status, id FROM invoices WHERE status='new' OR status='overdue' GROUP BY 1,id", {
-        model: models.Invoice,
+      const idProjectStatusPromise = await models.sequelize.query("SELECT p.name, invoice.id, invoice.status FROM projects p JOIN invoices invoice ON p.id = invoice.project_id WHERE invoice.status='pending' OR invoice.status='overdue' GROUP BY 1,2", {
+        model: models.Project,
         raw: true
       })
 
-      const [countStatus, idStatus] = await Promise.all([countStatusPromise, idStatusPromise])
+      const idSaleStatusPromise = await models.sequelize.query("SELECT p.name, invoice.id, invoice.status FROM sales p JOIN invoices invoice ON p.id = invoice.sale_id WHERE invoice.status='pending' OR invoice.status='overdue' GROUP BY 1,2", {
+        model: models.Sale,
+        raw: true
+      })
       
+      const [countStatus,  idProjectStatus, idSaleStatus] = await Promise.all([countStatusPromise, idProjectStatusPromise, idSaleStatusPromise])
+      console.log('idSaleStatusPromise', idProjectStatus)
       return {
         countStatus,
-        idStatus
+        idProjectStatus,
+        idSaleStatus
       }
     }
 

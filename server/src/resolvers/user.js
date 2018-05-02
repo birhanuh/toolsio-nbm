@@ -29,7 +29,10 @@ const s3Bucket = new AWS.S3({
 
 export default {
   Query: {
-    getUser: requiresAuth.createResolver((parent, { email }, { models }) => models.User.findOne({ where: { email } }, { raw: true })),
+    getUser: requiresAuth.createResolver((parent, { id }, { models }) => models.User.findOne({ where: { id } }, { raw: true })),
+
+    getUserByEmail: requiresAuth.createResolver((parent, { email }, { models }) => models.User.findOne({ where: { email } }, { raw: true })),
+
     getUsers: requiresAuth.createResolver((parent, args, { models }) => models.User.findAll())
   },
 

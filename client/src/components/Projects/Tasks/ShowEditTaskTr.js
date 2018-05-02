@@ -1,5 +1,6 @@
 import React from 'react'
-import { InputField, SelectField } from '../../../utils/FormFields'
+// Semantic UI JS
+import { Input, Select, Form } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -19,60 +20,74 @@ export default function ShowEditTaskTr({task, editTask, handleCreate, handleEdit
         </div>
       </td>
       <td className="edit-task">
-        <InputField
-          name="name" 
-          value={editTask.name} 
-          onChange={handleEditTaskChange}  
-          placeholder="Name"
-          error={editTask.errors.message && editTask.errors.name}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder={T.translate("projects.form.name")}
+            name="name" 
+            value={editTask.name} 
+            onChange={(e, {value}) => handleEditTaskChange('name', value, task)} 
+            error={!!editTask.errors.name}
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.name}</span>
+        </Form.Field>
       </td>
       <td className="edit-task">
-        <SelectField
-          name="paymentType"
-          type="select"
-          value={editTask.paymentType} 
-          onChange={handleEditTaskChange}  
-          error={editTask.errors && editTask.errors.paymentType}
-          formClass="ui small d-block input"
-          options={[
-            <option key="default" value="" disabled>{T.translate("projects.tasks.form.select_payment_type")}</option>,
-            <option key="per hour" value="per hour">Per task</option>,
-            <option key="per task" value="per task">Per hour</option>
-            ]
-          }
-        />
+        <Form.Field>
+          <Select 
+            placeholder={T.translate("projects.tasks.form.select_payment_type")}
+            name="paymentType"
+            value={editTask.paymentType} 
+            onChange={(e, {value}) => handleEditTaskChange('paymentType', value, task)} 
+            error={!!editTask.errors.paymentType}
+            options={[
+              { key: "per hour", value: "per hour", text: 'Per hour' },
+              { key: "per task", value: "per task", text: 'Per task' }
+            ]}
+            selection
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.paymentType}</span>
+        </Form.Field>
       </td>
       <td className="edit-task">
-        <InputField
-          name="hours" 
-          value={editTask.hours.toString()} 
-          onChange={handleEditTaskChange}  
-          placeholder="0.00"
-          error={editTask.errors && editTask.errors.hours}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0.00"
+            name="hours" 
+            value={editTask.hours} 
+            onChange={(e, {value}) => handleEditTaskChange('hours', value, task)} 
+            error={!!editTask.errors.hours}
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.hours}</span>
+        </Form.Field>
       </td>
       <td className="edit-task">
-        <InputField
-          name="price" 
-          value={editTask.price.toString()} 
-          onChange={handleEditTaskChange} 
-          placeholder="0.00"
-          error={editTask.errors && editTask.errors.price}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0.00"
+            name="price" 
+            value={editTask.price} 
+            onChange={(e, {value}) => handleEditTaskChange('price', value, task)} 
+            error={!!editTask.errors.price}
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.price}</span>
+        </Form.Field>
       </td>
       <td className="edit-task">
-        <InputField
-          name="vat" 
-          value={editTask.vat.toString()} 
-          onChange={handleEditTaskChange} 
-          placeholder="0"
-          error={editTask.errors && editTask.errors.vat}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0%"
+            name="vat" 
+            value={editTask.vat} 
+            onChange={(e, {value}) => handleEditTaskChange('vat', value, task)} 
+            error={!!editTask.errors.vat}
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.vat}</span>
+        </Form.Field>
       </td>
       <td className="edit-task" width="120px">  
         <div className="edit-item ui fluid small buttons">

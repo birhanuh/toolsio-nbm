@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
-import { InputField } from '../../utils/FormFields'
+// Semantic UI Form elements
+import { Input, Form } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -11,7 +12,7 @@ import gql from 'graphql-tag'
 // Localization 
 import T from 'i18n-react'
 
-class Form extends Component {
+class FormPage extends Component {
 
   constructor(props) {
     super(props)
@@ -22,20 +23,20 @@ class Form extends Component {
     }
   }
 
-  handleChange = (e) => {
+  handleChange = (name, value) => {
 
-    if (this.state.errors[e.target.name]) {
+    if (this.state.errors[name]) {
 
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       this.setState({
-        [e.target.name]: e.target.value,
+        [name]: value,
         errors
       })
     } else {
       this.setState({
-        [e.target.name]: e.target.value
+        [name]: value
       })
     }
   }
@@ -98,23 +99,27 @@ class Form extends Component {
         <fieldset className="custom-fieldset">
           <legend className="custom-legend">{T.translate("users.form.invite_user_label")}</legend>
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>          
+          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>          
             
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            <InputField
-              label=''
-              name="email" 
-              value={email} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder="Email"
-              error={errors && errors.email}
-              formClass="field"
-            />
+            <Form.Group error={errors.email}>
+              <Form.Field 
+                placeholder={T.translate("users.form.email")}
+                control={Input}
+                name="email" 
+                value={email} 
+                onChange={(e, {value}) => this.handleChange('email', value)} 
+                error={!!errors.email}
+              />
+              <span className="red">{errors.email}</span>
+            </Form.Group>
 
-            <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("users.form.invite_user")}</button> 
+            <button disabled={isLoading} className="ui primary button">
+              <i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("users.form.invite_user")}
+            </button> 
 
-          </form>
+          </Form>
         </fieldset>  
       </div>
 
@@ -122,7 +127,7 @@ class Form extends Component {
   }
 }
 
-Form.propTypes = {
+FormPage.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
@@ -138,6 +143,6 @@ const sendInvitationMutation = gql`
   }
 `
 
-export default connect(null, { addFlashMessage }) (graphql(sendInvitationMutation)(Form))
+export default connect(null, { addFlashMessage }) (graphql(sendInvitationMutation)(FormPage))
 
 

@@ -1,5 +1,6 @@
 import React from 'react'
-import { InputField, SelectField } from '../../../utils/FormFields'
+// Semantic UI JS
+import { Input, Select, Form } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -8,60 +9,74 @@ export default function AddTaskTr({task, handleNewTaskChange, handleCreate}) {
   return (
     <tr>
       <td className="add-task">
-        <InputField
-          name="name" 
-          value={task.name} 
-          onChange={handleNewTaskChange}  
-          placeholder="Name"
-          error={task.errors && task.errors.name}
-          formClass="ui small d-block input"
-        />
+       <Form.Field>
+          <Input 
+            placeholder={T.translate("projects.tasks.form.name")}
+            name="name" 
+            value={task.name} 
+            onChange={(e, {value}) => handleNewTaskChange('name', value)} 
+            error={!!task.errors.name}
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.name}</span>
+        </Form.Field>
       </td>
       <td className="add-task">
-        <SelectField
-          name="paymentType"
-          type="select"
-          value={task.paymentType} 
-          onChange={handleNewTaskChange}  
-          error={task.errors && task.errors.paymentType}
-          formClass="ui small d-block input"
-          options={[
-            <option key="default" value="" disabled>{T.translate("projects.tasks.form.select_payment_type")}</option>,
-            <option key="per hour" value="per hour">Per task</option>,
-            <option key="per task" value="per task">Per hour</option>
-            ]
-          }
-        />
+        <Form.Field>
+          <Select 
+            placeholder={T.translate("projects.tasks.form.select_payment_type")}
+            name="paymentType"
+            value={task.paymentType} 
+            onChange={(e, {value}) => handleNewTaskChange('paymentType', value)} 
+            error={!!task.errors.paymentType}
+            options={[
+              { key: "per hour", value: "per hour", text: 'Per hour' },
+              { key: "per task", value: "per task", text: 'Per task' }
+            ]}
+            selection
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.paymentType}</span>
+        </Form.Field>
       </td>
       <td className="add-task">
-        <InputField
-          name="hours" 
-          value={task.hours} 
-          onChange={handleNewTaskChange}  
-          placeholder="0.00"
-          error={task.errors && task.errors.hours}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0.00"
+            name="hours" 
+            value={task.hours} 
+            onChange={(e, {value}) => handleNewTaskChange('hours', value)} 
+            error={!!task.errors.hours}
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.hours}</span>
+        </Form.Field>
       </td>
       <td className="add-task">
-        <InputField
-          name="price" 
-          value={task.price} 
-          onChange={handleNewTaskChange} 
-          placeholder="0.00"
-          error={task.errors && task.errors.price}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0.00"
+            name="price" 
+            value={task.price} 
+            onChange={(e, {value}) => handleNewTaskChange('price', value)} 
+            error={!!task.errors.price}
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.price}</span>
+        </Form.Field>
       </td>
       <td className="add-task">
-        <InputField
-          name="vat" 
-          value={task.vat} 
-          onChange={handleNewTaskChange} 
-          placeholder="0"
-          error={task.errors && task.errors.vat}
-          formClass="ui small d-block input"
-        />
+        <Form.Field>
+          <Input 
+            placeholder="0%"
+            name="vat" 
+            value={task.vat} 
+            onChange={(e, {value}) => handleNewTaskChange('vat', value)} 
+            error={!!task.errors.vat}
+            className="ui small d-block input"
+          />
+          <span className="red">{task.errors && task.errors.vat}</span>
+        </Form.Field>
       </td>
       <td className="add-task" width="120px">     
         <button disabled={task.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.form.add_task")}</button> 

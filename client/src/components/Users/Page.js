@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 import Breadcrumb from '../Layouts/Breadcrumb'
 
 import List from './List' 
-import Form from './Form'
+import FormPage from './FormPage'
 
 class Page extends Component {
 
@@ -37,7 +37,7 @@ class Page extends Component {
 
         <div className="ui text container"> 
         
-          <Form />  
+          <FormPage />  
 
           { usersNotCurrentUserIncluded && <List users={usersNotCurrentUserIncluded} /> }
 

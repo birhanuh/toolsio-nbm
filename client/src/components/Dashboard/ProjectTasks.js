@@ -1,113 +1,93 @@
 import React, { Component }  from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
-
-import { fetchProjectTasks } from '../../actions/dashboardActions'
+import gql from "graphql-tag"
+import { Query } from "react-apollo"
 
 // Localization 
 import T from 'i18n-react'
 
-class ProjectTasks extends Component {
-  
-  state = {
-    isLoading: false
-  }
-  
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.projectTasks) {
-      this.setState({ isLoading: false })
+const GET_PROJECT_TASKS_DATA = gql`
+  {
+    getProjectTasksData {
+      countStatus {
+        status
+        count
+      }
+      idNameStatus {
+        id
+        name 
+        status
+      }
     }
   }
-
-  componentDidMount() {
-    this.setState({ isLoading: true })
-    this.props.fetchProjectTasks()
-      .catch( ({response}) => this.setState({ isLoading: false }) )
-  }
-
-  render() {
+`
+const ProjectTasksCard = () => (
+  <Query query={GET_PROJECT_TASKS_DATA}>
+    {({ loading, error, data }) => {
     
-    const { isLoading } = this.state
-    const { projectTasks } = this.props    
+    const countStatus = data && data.getProjectTasksData && data.getProjectTasksData.countStatus
+    const idNameStatus = data && data.getProjectTasksData && data.getProjectTasksData.idNameStatus
 
-    let newNotification   
-    let newProjects 
+    let newNotification  
+    let delayedNotification 
 
-    let overdueNotification   
-    let overdueProjects 
+    let newProjects = []
+    let delayedProjects = []
 
-    projectTasks && projectTasks.newDelayed.map(task => {
-
-      if (task._id === 'new') {
-        newNotification = (<div key={task._id} className="ui info message">
-            <div className="description">
-              {T.translate("dashboard.project_tasks.new_projects", {count: task.count})}
-            </div>
+    countStatus && countStatus.map(item => {
+      if (item.status === 'new') {
+        newNotification = (<div className="ui info message">
+          <div className="description">
+            {T.translate("dashboard.project_tasks.new_projects", {count: item.count})}
           </div>
-          )
-        
-        newProjects = task.projects.map(project => 
-          <Link key={project._id} to={`/projects/show/${project._id}`} className="item blue">{project.name}</Link>
-        )  
-      } else if (task._id !== 'new') {
-        newNotification = (<div key={"no-new"} className="ui info message">
-            <div className="description">
-              {T.translate("dashboard.project_tasks.no_new_projects")}
-            </div>
-          </div>
-          )
-      }
-
-      if (task._id === 'overdue') {
-        overdueNotification = (<div key={task._id} className="ui negative message">
-            <div className="description">
-              {T.translate("dashboard.project_tasks.overdued_projects", {count: task.count})}
-            </div>
-          </div>
-          )
-        
-        overdueProjects = task.projects.map(project => 
-          <Link key={project._id} to={`/projects/show/${project._id}`} className="item red">{project.name}</Link>
-        )  
-      } else if (task._id !== 'overdue') {
-        overdueNotification = (<div key={"no-overdue"} className="ui negative message">
-            <div className="description">
-              {T.translate("dashboard.project_tasks.no_overdued_projects")}
-            </div>
-          </div>
-          )
-      }
-
-      })
-
-      const list = (<div className="content">
-        {newNotification}
-        <div className="ui ordered list">
-          {newProjects}
-        </div>
-
-        <div className="ui divider"></div>
-
-        {overdueNotification}
-        <div className="ui ordered list">
-          {overdueProjects}
-        </div>
-
         </div>)
+      } 
+
+      if (item.status === 'delayed') {
+        delayedNotification = (<div className="ui negative message">
+          <div className="description">
+            {T.translate("dashboard.project_tasks.delayed_projects", {count: item.count})}
+          </div>
+        </div>)
+      }  
+    })
+
+    idNameStatus && idNameStatus.map(project => {
+      if(project.status === 'new') {
+        newProjects.push(project)
+      } else if (project.status === 'delayed') {
+        delayedProjects.push(project)
+      }
+    })
+
+    const list = (<div className="content">
+      {newNotification}
+      <div className="ui ordered list">
+        {newProjects && newProjects.map(project => <Link key={project.id} to={`/projects/show/${project.id}`} className="item blue">{project.name}</Link>)}
+      </div>
+
+      <div className="ui divider"></div>
+
+      {delayedNotification}
+      <div className="ui ordered list">
+        {delayedProjects && delayedProjects.map(project => <Link key={project.id} to={`/projects/show/${project.id}`} className="item red">{project.name}</Link>)}
+      </div>
+
+      </div>)
 
     return (
       
-      <div className={classnames("dashboard", { loading: isLoading })}>
+      <div className={classnames("dashboard", { loading: loading })}>
         <h4 className="ui header">{T.translate("dashboard.project_tasks.header")}</h4>
         <div className="ui card">
           
-          {projectTasks && projectTasks.total && projectTasks.total.count === 0 ? 
+          {(countStatus && countStatus.length === 0) ?
             <div className="content">
               <div className="ui info message">
                 <div className="description">
-                  {T.translate("dashboard.project_tasks.no_projects")}
+                  {T.translate("dashboard.project_tasks.no_new_projects")}
+                  {T.translate("dashboard.project_tasks.no_delayed_projects")}
                 </div>
               </div> 
             </div> : list }
@@ -115,17 +95,9 @@ class ProjectTasks extends Component {
         </div>
       </div>  
       )
-  }
-}
+    }}
+  </Query>
+)
 
-ProjectTasks.propTypes = {
-  fetchProjectTasks: PropTypes.func.isRequired
-}
+export default ProjectTasksCard
 
-function mapStateToProps(state) {
-  return {
-    projectTasks: state.dashboard.projectTasks
-  }
-}
-
-export default connect(mapStateToProps, { fetchProjectTasks }) (ProjectTasks)

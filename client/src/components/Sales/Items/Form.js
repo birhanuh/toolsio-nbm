@@ -48,13 +48,13 @@ class Form extends Component {
     }
   }
 
-  handleNewItemChange = (e) => {
-    if (this.state.newItem.errors[e.target.name]) {
+  handleNewItemChange = (name, value) => {
+    if (this.state.newItem.errors[name]) {
       let errors = Object.assign({}, this.state.newItem.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       let updatedItem = Object.assign({}, this.state.newItem)
-      updatedItem[e.target.name] = e.target.value
+      updatedItem[name] = value
       updatedItem.errors = errors
 
       this.setState({
@@ -63,7 +63,7 @@ class Form extends Component {
     } else {
       let updatedItem = Object.assign({}, this.state.newItem)
       updatedItem.saleId = this.props.saleId
-      updatedItem[e.target.name] = e.target.value
+      updatedItem[name] = value
 
       this.setState({
         newItem: updatedItem
@@ -154,15 +154,15 @@ class Form extends Component {
     }
   }
 
-  handleEditItemChange = (item, e) => {
-    if (this.state.editItem.errors[e.target.name]) {
+  handleEditItemChange = (name, value, item) => {
+    if (this.state.editItem.errors[name]) {
       let errors = Object.assign({}, this.state.editItem.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       let updatedItem = Object.assign({}, this.state.editItem)
       updatedItem.id = item.id
       updatedItem.saleId = item.saleId
-      updatedItem[e.target.name] = e.target.value
+      updatedItem[name] = value
 
       this.setState({
         editItem: updatedItem,
@@ -172,7 +172,7 @@ class Form extends Component {
       let updatedItem = Object.assign({}, this.state.editItem)
       updatedItem.id = item.id
       updatedItem.saleId = item.saleId
-      updatedItem[e.target.name] = e.target.value
+      updatedItem[name] = value
 
       this.setState({
         editItem: updatedItem
@@ -388,7 +388,7 @@ class Form extends Component {
           item={item} 
           editItem={editItem}
           handleCancelEdit={this.handleCancelEdit.bind(this, item)}
-          handleEditItemChange={this.handleEditItemChange.bind(this, item)} 
+          handleEditItemChange={this.handleEditItemChange} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, item)}
           showConfirmationModal={this.showConfirmationModal.bind(this, item)}/> 
@@ -414,7 +414,7 @@ class Form extends Component {
             
             <AddItemTr
               item={newItem} 
-              handleNewItemChange={this.handleNewItemChange.bind(this)} 
+              handleNewItemChange={this.handleNewItemChange} 
               handleCreate={this.handleCreate.bind(this)} /> 
             
             <tr>

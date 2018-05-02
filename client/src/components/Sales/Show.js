@@ -5,8 +5,8 @@ import { Link, Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { fetchSale, deleteSale } from '../../actions/saleActions'
-import { SelectField } from '../../utils/FormFields'
+// Semantic UI JS
+import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -85,14 +85,13 @@ class Show extends Component {
     $('.small.modal.sale').modal('hide')
   }
 
-  handleStateChange = (e) => {
+  handleStatusChange = (value) => {
     const { id, name } = this.state
 
     this.props.updateSaleMutation({ 
-        variables: { id, status: e.target.value }
+        variables: { id, status: value }
       })
       .then(res => {          
-
         const { success, sale, errors } = res.data.updateSale
 
         if (success) {
@@ -183,23 +182,21 @@ class Show extends Component {
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("sales.show.status")}</dt>
               <dd>
-                <SelectField
-                  label=""
+                <Form.Field 
+                  placeholder={T.translate("projects.form.select_status")}
+                  control={Select}
                   name="status"
-                  type="select"
                   value={status} 
-                  formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  onChange={this.handleStateChange.bind(this)} 
-                  error=""
-
+                  onChange={(e, {value}) => this.handleStatusChange(value)} 
+                  className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
                   options={[
-                    <option key="default" value="new" disabled>NEW</option>,
-                    <option key="in progress" value="in progress">IN PROGRESS</option>,
-                    <option key="ready" value="ready">READY</option>,
-                    <option key="delayed" value="delayed">DELAYED</option>,
-                    <option key="delivered" value="delivered">DELIVERED</option>
-                    ]
-                  }
+                    { key: "default", value: "new", disabled: true, text: 'NEW' },
+                    { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
+                    { key: "finished", value: "finished", text: 'FINISHED' },
+                    { key: "delayed", value: "delayed", text: 'DELAYED' },
+                    { key: "delivered", value: "delivered", text: 'DELIVERED' }
+                  ]}
+                  selection
                 />
               </dd>
              
@@ -314,7 +311,6 @@ const getSalesQuery = gql`
       deadline
       status
       description
-      total
       customer {
         name
       }

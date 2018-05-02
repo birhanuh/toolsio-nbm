@@ -34,8 +34,6 @@ const ProjectsCard = () => (
 
       let statusPick = countStatus && countStatus.map(item => pick(item, ['status']).status)
       let countPick = countStatus && countStatus.map(item => pick(item, ['count']).count)
-      // console.log('status', statusPick)
-      // console.log('count', countPick)
 
       let chartData = {
         labels: statusPick,

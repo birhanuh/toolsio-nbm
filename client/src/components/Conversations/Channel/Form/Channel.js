@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { Validation } from '../../../../utils'
-import { InputField } from '../../../../utils/FormFields'
+// Semantic UI Form elements
+import { Input, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -20,22 +21,22 @@ class Channel extends Component {
     }
   }
 
-  handleChange = (e) => {
+  handleChange = (name, value) => {
 
-    if (!this.state.errors[e.target.name]) {
+    if (!this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       this.setState({
-        [e.target.name]: e.target.value,
+        [name]: value,
         errors
       })
      
     } else {
 
       this.setState({
-        [e.target.name]: e.target.value
+        [name]: value
       })
     }
    
@@ -117,15 +118,18 @@ class Channel extends Component {
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-        <InputField
-          label={T.translate("customers.show.name")}
-          name="name" 
-          value={name} 
-          onChange={this.handleChange.bind(this)} 
-          placeholder="Name"
-          error={errors.name}
-          formClass="field"
-        />
+        <Form.Group error={errors.name}>
+          <Form.Field 
+            label={T.translate("conversations.form.name")}
+            placeholder={T.translate("conversations.form.name")}
+            control={Input}
+            name="name" 
+            value={name} 
+            onChange={(e, {value}) => this.handleChange('name', value)} 
+            error={!!errors.name}
+          />
+          <span className="red">{errors.name}</span>
+        </Form.Group>
   
         <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.create")}</button>
         

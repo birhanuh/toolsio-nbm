@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import Form from './Form'
+import FormPage from './FormPage'
 import Invitation from './Invitation'
 import { Authorization } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
@@ -24,7 +24,7 @@ class Page extends Component {
       // Set Invitation token to Req header
       Authorization.setInvitationToken(match.params.token)
     } else {
-      form = <Form signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
+      form = <FormPage signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
         isUserExist={isUserExist} addFlashMessage={addFlashMessage} /> 
     }
 

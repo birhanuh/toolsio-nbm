@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import classnames from 'classnames'
 import Dropzone from 'react-dropzone'
 import { Validation } from '../../../../utils'
-import { TextAreaField } from '../../../../utils/FormFields'
+// Semantic UI Form elements
+import { TextArea, Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -31,22 +32,22 @@ class Message extends Component {
     }
   }
 
-  handleChange = (e) => {
+  handleChange = (name, value) => {
 
-    if (!this.state.errors[e.target.name]) {
+    if (!this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       this.setState({
-        [e.target.name]: e.target.value,
+        [name]: value,
         errors
       })
      
     } else {
 
       this.setState({
-        [e.target.name]: e.target.value
+        [name]: value
       })
     }
    
@@ -155,21 +156,20 @@ class Message extends Component {
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
         
         <div className="ui fluid action input">
-            <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui primary button">
-              <i className="plus icon" aria-hidden="true" />  
-            </Dropzone>
+          <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui primary button">
+            <i className="plus icon" aria-hidden="true" />  
+          </Dropzone>        
           
-          <TextAreaField
-            label=""
+          <Form.Field 
+            placeholder={T.translate("conversations.form.message")}
+            control={TextArea}
             name="body" 
             value={body} 
-            onChange={this.handleChange.bind(this)} 
-            onKeyDown={this.handleSubmit.bind(this)}
-            placeholder={T.translate("conversations.form.message")}
-            error={errors.body}
-            formClass="field"
+            onChange={(e, {value}) => this.handleChange('body', value)} 
+            error={!!errors.body}
+            className="field"
             rows="2"
-          />           
+          />                 
         </div>   
       </div> 
     )
