@@ -7,7 +7,8 @@ import { addFlashMessage } from '../../../actions/flashMessageActions'
 import AddTaskTr from './AddTaskTr'
 import ShowEditTaskTr from './ShowEditTaskTr'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_PROJECT_QUERY } from '../../../queries/projectQueriesMutations'
+import { CREATE_TASK_MUTATION, UPDATE_TASK_MUTATION, DELETE_TASK_MUTATION } from '../../../queries/taskQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -101,7 +102,7 @@ class Form extends Component {
           }
           
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getProjectQuery,
+          const data = store.readQuery({ query: GET_PROJECT_QUERY,
             variables: {
               id: projectId,
             }
@@ -109,7 +110,7 @@ class Form extends Component {
           // Add our comment from the mutation to the end.
           data.getProject.tasks.push(task)
           // Write our data back to the cache.
-          store.writeQuery({ query: getProjectQuery, data }) 
+          store.writeQuery({ query: GET_PROJECT_QUERY, data }) 
         }})
         .then(res => {
 
@@ -240,7 +241,7 @@ class Form extends Component {
           }
           
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getProjectQuery,
+          const data = store.readQuery({ query: GET_PROJECT_QUERY,
               variables: {
                 id: projectId,
               }
@@ -255,7 +256,7 @@ class Form extends Component {
           data.getProject.tasks = updatedTasks
       
           // Write our data back to the cache.
-          store.writeQuery({ query: getProjectQuery, data }) 
+          store.writeQuery({ query: GET_PROJECT_QUERY, data }) 
         }})
         .then(res => {
 
@@ -338,7 +339,7 @@ class Form extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: getProjectQuery,
+        const data = proxy.readQuery({ query: GET_PROJECT_QUERY,
             variables: {
               id: projectId,
             }
@@ -349,7 +350,7 @@ class Form extends Component {
         data.getProject.tasks = updatedTasks
  
         // Write our data back to the cache.
-        proxy.writeQuery({ query: getProjectQuery, data })
+        proxy.writeQuery({ query: GET_PROJECT_QUERY, data })
       }})
       .then(res => {          
 
@@ -452,93 +453,14 @@ Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-const createTaskMutation = gql`
-  mutation createTask($name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
-    createTask(name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
-      success
-      task {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-        projectId
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateTaskMutation = gql`
-  mutation updateTask($id: Int!, $name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
-    updateTask(id: $id, name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
-      success
-      task {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-        projectId
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const deleteTaskMutation = gql`
-  mutation deleteTask($id: Int!) {
-    deleteTask(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getProjectQuery = gql`
-  query ($id: Int!) {
-    getProject(id: $id) {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        id
-        name
-      }
-      tasks {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-        projectId
-      }
-    }
-  }
-`
 const Mutations =  compose(
-  graphql(createTaskMutation, {
+  graphql(CREATE_TASK_MUTATION, {
     name : 'createTaskMutation'
   }),
-  graphql(updateTaskMutation, {
+  graphql(UPDATE_TASK_MUTATION, {
     name : 'updateTaskMutation'
   }),
-  graphql(deleteTaskMutation, {
+  graphql(DELETE_TASK_MUTATION, {
     name : 'deleteTaskMutation'
   })
 )(Form)

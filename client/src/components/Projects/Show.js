@@ -9,7 +9,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
 import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../queries/projectQueriesMutations'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -221,14 +221,14 @@ class Show extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = store.readQuery({ query: getProjectsQuery })
+        const data = store.readQuery({ query: GET_PROJECTS_QUERY })
         // Add our comment from the mutation to the end.
    
         let updatedProjects = data.getProjects.filter(project => project.id !== id) 
         data.getProjects = updatedProjects
  
         // Write our data back to the cache.
-        store.writeQuery({ query: getProjectsQuery, data })
+        store.writeQuery({ query: GET_PROJECTS_QUERY, data })
       }})
       .then(res => {          
 
@@ -358,97 +358,15 @@ Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const deleteProjectMutation = gql`
-  mutation deleteProject($id: Int!) {
-    deleteProject(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateProjectMutation = gql`
-  mutation updateProject($id: Int!, $status: String, $progress: Int) {
-    updateProject(id: $id, status: $status, progress: $progress) {
-      success
-      project {
-        id
-        name 
-        deadline
-        status
-        progress
-        description
-        customer {
-          id
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getProjectQuery = gql`
-  query getProject($id: Int!) {
-    getProject(id: $id) {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      total
-      customer {
-        id
-        name
-      }
-      tasks {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-        projectId
-      }
-      user {
-        firstName
-      }
-    }
-  }
-`
-
-const getProjectsQuery = gql`
-  query {
-    getProjects {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        name
-      }
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(deleteProjectMutation, {
-    name : 'deleteProjectMutation'
-  }),
-  graphql(updateProjectMutation, {
+  graphql(UPDATE_PROJECT_MUTATION, {
     name : 'updateProjectMutation'
   }),
-  graphql(getProjectsQuery),
-  graphql(getProjectQuery, {
+  graphql(DELETE_PROJECT_MUTATION, {
+    name : 'deleteProjectMutation'
+  }),
+  graphql(GET_PROJECTS_QUERY),
+  graphql(GET_PROJECT_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)

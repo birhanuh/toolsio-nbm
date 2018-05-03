@@ -5,7 +5,8 @@ import { Validation } from '../../../../utils'
 // Semantic UI Form elements
 import { TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_USER_QUERY } from '../../../../queries/userQueriesMutations'
+import { GET_DIRECT_MESSAGE_USERS_QUERY, CREATE_DIRECT_MESSAGE_MUTATION } from '../../../../queries/directMessageQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -96,7 +97,7 @@ class Message extends Component {
             }            
           },
           update: (store) => {
-            const data = store.readQuery({ query: getDirectMessageUsersQuery })
+            const data = store.readQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY })
             const notUserInList = data.getDirectMessageUsers.every(user => user.id !== parseInt(receiverId, 10))
             
             if (notUserInList) {
@@ -108,7 +109,7 @@ class Message extends Component {
               })
             }
             // Write our data back to the cache.
-            store.writeQuery({ query: getDirectMessageUsersQuery, data })
+            store.writeQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY, data })
           }})
           .then(res => {           
 
@@ -161,7 +162,7 @@ class Message extends Component {
         }            
       },
       update: (store) => {
-        const data = store.readQuery({ query: getDirectMessageUsersQuery })
+        const data = store.readQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY })
         const notUserInList = data.getDirectMessageUsers.every(user => user.id !== parseInt(receiverId, 10))
         
         if (notUserInList) {
@@ -173,7 +174,7 @@ class Message extends Component {
           })
         }
         // Write our data back to the cache.
-        store.writeQuery({ query: getDirectMessageUsersQuery, data })
+        store.writeQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY, data })
       }})
       .then(res => {            
 
@@ -229,45 +230,10 @@ class Message extends Component {
   }
 }
 
-const createDirectMessageMutation = gql`
-  mutation ($body: String, $file: Upload, $receiverId: Int!) {
-    createDirectMessage(body: $body, file: $file, receiverId: $receiverId) {
-      success
-      message {
-        id
-      } 
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getDirectMessageUsersQuery = gql`
-  {
-    getDirectMessageUsers {
-      id
-      first_name
-      email
-    }
-  }
-`
-
-const getUserQuery = gql`
-  query getUser($id: Int!) { 
-    getUser(id: $id) {
-      id
-      firstName
-      email
-    }
-}
-`
-
 const MutationsAndQuery =  compose(
-  graphql(createDirectMessageMutation),
-  graphql(getDirectMessageUsersQuery),  
-  graphql(getUserQuery, {
+  graphql(CREATE_DIRECT_MESSAGE_MUTATION),
+  graphql(GET_DIRECT_MESSAGE_USERS_QUERY),  
+  graphql(GET_USER_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.receiverId, 10)

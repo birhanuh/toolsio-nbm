@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Table from './Table' 
 import { graphql} from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_INVOICES_QUERY } from '../../queries/invoiceQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -62,30 +62,4 @@ class Page extends Component {
   }
 }
 
-const getInvoicesQuery = gql`
-  query {
-    getInvoices {
-      id
-      deadline
-      referenceNumber
-      status
-      tax
-      total
-      project {
-        id
-        name
-        status
-      }
-      sale {
-        id
-        name
-        status
-      }
-      customer {
-        id
-        name
-      }
-    }
-  }
-`
-export default graphql(getInvoicesQuery)(Page)
+export default graphql(GET_INVOICES_QUERY)(Page)

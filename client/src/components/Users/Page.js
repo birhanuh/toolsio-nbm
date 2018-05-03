@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import decode from 'jwt-decode'
 import { Authorization } from '../../utils'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_USERS_QUERY } from '../../queries/userQueriesMutations'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -47,15 +47,4 @@ class Page extends Component {
   }
 }
 
-const getUsersQuery = gql`
-  {
-    getUsers {
-      id
-      firstName
-      lastName
-      email
-    }
-}
-`
-
-export default graphql(getUsersQuery)(Page)
+export default graphql(GET_USERS_QUERY)(Page)

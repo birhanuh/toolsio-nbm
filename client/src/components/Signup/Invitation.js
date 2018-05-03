@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken'
 import { Input, Form } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { REGISTER_INVITED_USER_MUTATION } from '../../queries/authenticationQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -195,21 +195,6 @@ Invitation.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const sendInvitationMutation = gql`
-  mutation($firstName: String, $lastName: String, $email: String!, $password: String!, $token: String!) {
-    registerInvitedUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, token: $token) {
-      success
-      account {
-        subdomain
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default connect(null, { addFlashMessage }) (graphql(sendInvitationMutation)(Invitation))
+export default connect(null, { addFlashMessage }) (graphql(REGISTER_INVITED_USER_MUTATION)(Invitation))
 
 

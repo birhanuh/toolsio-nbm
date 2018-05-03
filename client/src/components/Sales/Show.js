@@ -8,8 +8,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
 import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
-
+import { GET_SALES_QUERY, GET_SALE_QUERY, UPDATE_SALE_MUTATION, DELETE_SALE_MUTATION } from '../../queries/saleQueriesMutations'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -123,14 +122,14 @@ class Show extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: getSalesQuery })
+        const data = proxy.readQuery({ query: GET_SALES_QUERY })
         // Add our comment from the mutation to the end.
         
         let updatedData = data.getSales.filter(sale => sale.id !== id) 
         data.getSales = updatedData
 
         // Write our data back to the cache.
-        proxy.writeQuery({ query: getSalesQuery, data })
+        proxy.writeQuery({ query: GET_SALES_QUERY, data })
       }})
       .then(res => {          
 
@@ -240,92 +239,15 @@ Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const deleteSaleMutation = gql`
-  mutation deleteSale($id: Int!) {
-    deleteSale(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateSaleMutation = gql`
-  mutation updateSale($id: Int!, $status: String) {
-    updateSale(id: $id, status: $status) {
-      success
-      sale {
-        id
-        name
-        deadline
-        status
-        description
-        customer {
-          id
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getSaleQuery = gql`
-  query getSale($id: Int!) {
-    getSale(id: $id) {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        id
-        name
-      }
-      items {
-        id
-        name
-        unit
-        quantity
-        price
-        vat
-        saleId
-      }
-      user {
-        firstName
-      }
-    }
-  }
-`
-
-const getSalesQuery = gql`
-  query {
-    getSales {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        name
-      }
-    }
-  }
-`
 const MutationQuery =  compose(
-  graphql(deleteSaleMutation, {
+  graphql(DELETE_SALE_MUTATION, {
     name : 'deleteSaleMutation'
   }),
-  graphql(getSalesQuery),
-  graphql(updateSaleMutation, {
+  graphql(GET_SALES_QUERY),
+  graphql(UPDATE_SALE_MUTATION, {
     name: 'updateSaleMutation'
   }),
-  graphql(getSaleQuery, {
+  graphql(GET_SALE_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)

@@ -7,7 +7,7 @@ import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import Steps from './Steps'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, GET_PROJECTS_SALES_WITH_INVOICE_QUERY, GET_CUSTOMERS_INVOICES_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../queries/invoiceQueriesMutations'
 
 import SaleProject from './Steps/SaleProject'
 import Details from './Steps/Details'
@@ -159,7 +159,7 @@ class Form extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getInvoicesQuery })
+          const data = store.readQuery({ query: GET_INVOICES_QUERY })
           // Add our comment from the mutation to the end.
           
           let updatedInvoices = data.getInvoices.map(item => {
@@ -172,7 +172,7 @@ class Form extends Component {
           data.getInvoices = updatedInvoices
 
           // Write our data back to the cache.
-          store.writeQuery({ query: getInvoicesQuery, data })
+          store.writeQuery({ query: GET_INVOICES_QUERY, data })
         }})
         .then(res => {         
           const { success, invoice, errors } = res.data.updateInvoice
@@ -204,11 +204,11 @@ class Form extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getInvoicesQuery })
+            const data = store.readQuery({ query: GET_INVOICES_QUERY })
             // Add our comment from the mutation to the end.
             data.getInvoices.push(invoice)
             // Write our data back to the cache.
-            store.writeQuery({ query: getInvoicesQuery, data })
+            store.writeQuery({ query: GET_INVOICES_QUERY, data })
           }})
           .then(res => {            
             const { success, invoice, errors } = res.data.createInvoice
@@ -282,7 +282,6 @@ class Form extends Component {
         })
       }
     }
-
   }
 
   handlePrevious = (e) => {
@@ -347,7 +346,7 @@ class Form extends Component {
         <Steps currentStep={this.state.currentStep}/> 
 
         <div className="ui text container segment">
-          {currentStep === 'step1' &&  <SaleProject id={id} salesOption={salesOption} 
+          {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption} 
             projectsOption={projectsOption} step1={step1} handleChange={this.handleChange} 
             handleNext={this.handleNext.bind(this)} errors={errors} />}
 
@@ -380,211 +379,23 @@ Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createInvoiceMutation = gql`
-  mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
-    $description: String, $tax: Float!, $projectId: Int, $saleId: Int, $customerId: Int!) {
-    createInvoice(deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
-      description: $description, tax: $tax, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
-      success
-      invoice {
-        id
-        deadline
-        referenceNumber
-        status
-        tax
-        project {
-          id
-          name
-        }
-        sale {
-          id
-          name
-        }
-        customer {
-          id
-          name
-          vatNumber
-          email
-          phoneNumber
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateInvoiceMutation = gql`
-  mutation updateInvoice($id: Int!, $deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
-    $description: String, $tax: Float!, $projectId: Int, $saleId: Int, $customerId: Int!) {
-    updateInvoice(id: $id, deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
-      description: $description, tax: $tax, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
-      success
-      invoice {
-        id
-        deadline
-        referenceNumber
-        status
-        tax
-        project {
-          id
-          name
-        }
-        sale {
-          id
-          name
-        }
-        customer {
-          id
-          name
-          vatNumber
-          email
-          phoneNumber
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getProjectsSalesWithoutInvoiceQuery = gql`
-  {
-    getProjectsWithoutInvoice {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      total
-      customer {
-        id
-        name
-      }
-    }
-    getSalesWithoutInvoice {
-      id
-      name 
-      deadline
-      status
-      description
-      total
-      customer {
-        id
-        name
-      }
-    }
-}
-`
-
-const getProjectsSalesWithInvoiceQuery = gql`
-  {
-    getProjectsWithInvoice {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      total
-      customer {
-        id
-        name
-      }
-    }
-    getSalesWithInvoice {
-      id
-      name 
-      deadline
-      status
-      description
-      total
-      customer {
-        id
-        name
-      }
-    }
-}
-`
-
-const getInvoicesQuery = gql`
-  query {
-    getInvoices {
-      id
-      deadline
-      referenceNumber
-      status
-      tax
-      project {
-        id
-        name
-      }
-      sale {
-        id
-        name
-      }
-      customer {
-        id
-        name
-        vatNumber
-        email
-        phoneNumber
-      }
-    }
-  }
-`
-
-const getInvoiceQuery = gql`
-  query getInvoice($id: Int!) {
-    getInvoice(id: $id) {
-      id
-      deadline
-      paymentTerm
-      interestInArrears
-      referenceNumber
-      status
-      description
-      tax
-      createdAt
-      customerId
-      project {
-        id
-        name
-        deadline
-        progress
-        status
-      }
-      sale {
-        id
-        name
-        deadline
-        status
-      }
-    }
-  }
-`
 const MutationsQuery =  compose(
-  graphql(createInvoiceMutation, {
+  graphql(CREATE_INVOICE_MUTATION, {
     name : 'createInvoiceMutation'
   }),
-  graphql(updateInvoiceMutation, {
+  graphql(UPDATE_INVOICE_MUTATION, {
     name: 'updateInvoiceMutation'
   }),
-  graphql(getProjectsSalesWithoutInvoiceQuery, {
+  graphql(GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, {
     name : 'getProjectsSalesWithoutInvoiceQuery'
   }),
-  graphql(getProjectsSalesWithInvoiceQuery, {
+  graphql(GET_PROJECTS_SALES_WITH_INVOICE_QUERY, {
     name : 'getProjectsSalesWithInvoiceQuery'
   }),
-  graphql(getInvoicesQuery, {
+  graphql(GET_INVOICES_QUERY, {
     name : 'getInvoicesQuery'
   }),
-  graphql(getInvoiceQuery, {
+  graphql(GET_INVOICE_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0

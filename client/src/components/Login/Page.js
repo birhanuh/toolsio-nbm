@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
 import Form from './Form'
 import { connect } from 'react-redux'
-import { confirmEmail } from '../../actions/authenticationActions'
+//import { confirmEmail } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import FlashMessage from '../../flash/FlashMessage'
 

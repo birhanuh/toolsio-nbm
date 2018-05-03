@@ -7,7 +7,7 @@ import { Validation } from '../../utils'
 import { Input, Form } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { SEND_INVITATION_MUTATION } from '../../queries/userQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -131,18 +131,6 @@ FormPage.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-const sendInvitationMutation = gql`
-  mutation sendInvitation($email: String!) {
-    sendInvitation(email: $email) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default connect(null, { addFlashMessage }) (graphql(sendInvitationMutation)(FormPage))
+export default connect(null, { addFlashMessage }) (graphql(SEND_INVITATION_MUTATION)(FormPage))
 
 

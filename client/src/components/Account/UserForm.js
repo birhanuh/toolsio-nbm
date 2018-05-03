@@ -11,7 +11,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Input, Form } from 'semantic-ui-react'
 import classnames from 'classnames'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_USER_BY_EMAIL_QUERY, UPDATE_USER_MUTATION, S3_SIGN_AVATAR_MUTATION } from '../../queries/accountQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -295,47 +295,8 @@ UserForm.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-const getUserQuery = gql`
-  query getUser($email: String!) {
-    getUser(email: $email) {
-      id
-      firstName
-      lastName
-      email
-      avatarUrl
-      isAdmin
-    }
-  }
-`
-
-const updateUserMutation = gql`
-  mutation updateUser($firstName: String!, $lastName: String, $email: String!, $avatarUrl: String) {
-    updateUser(firstName: $firstName, lastName: $lastName, email: $email, avatarUrl: $avatarUrl) {
-      success
-      user {
-        id
-        email
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const s3SignAvatarMutation = gql`
-  mutation s3SignAvatar($fileName: String!, $fileType: String!) {
-    s3SignAvatar(fileName: $fileName, fileType: $fileType) {
-      signedRequest
-      url
-      errors
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(updateUserMutation, {
+  graphql(UPDATE_USER_MUTATION, {
     name : 'updateUserMutation',
     options: (props) => ({
       variables: {
@@ -343,10 +304,10 @@ const MutationQuery =  compose(
       },
     })
   }),
-  graphql(s3SignAvatarMutation, {
+  graphql(S3_SIGN_AVATAR_MUTATION, {
     name : 's3SignAvatarMutation'
   }),
-  graphql(getUserQuery, {
+  graphql(GET_USER_BY_EMAIL_QUERY, {
     options: (props) => ({
       variables: {
         email: props.email

@@ -9,7 +9,7 @@ import { Validation } from '../../utils'
 // Semantic UI JS
 import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, GET_CUSTOMERS_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../queries/projectQueriesMutations'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -105,7 +105,7 @@ class FormPage extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getCustomersProjectsQuery })
+          const data = store.readQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY })
           // Add our comment from the mutation to the end.
 
           let updatedProjects = data.getProjects.map(item => {
@@ -118,7 +118,7 @@ class FormPage extends Component {
           data.getProjects = updatedProjects
 
           // Write our data back to the cache.
-          store.writeQuery({ query: getCustomersProjectsQuery, data })
+          store.writeQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY, data })
         }})
         .then(res => {          
 
@@ -150,11 +150,11 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getCustomersProjectsQuery })
+            const data = store.readQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY })
             // Add our comment from the mutation to the end.
             data.getProjects.push(project)
             // Write our data back to the cache.
-            store.writeQuery({ query: getCustomersProjectsQuery, data })
+            store.writeQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY, data })
           }})
           .then(res => {          
 
@@ -261,7 +261,7 @@ class FormPage extends Component {
           <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
-              {id ? <h1 className="ui header">{T.translate("projects.form.edit_form")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}        
+              {id ? <h1 className="ui header">{T.translate("projects.form.edit_project")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}        
             </div>
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
@@ -278,8 +278,8 @@ class FormPage extends Component {
               <span className="red">{errors.name}</span>
             </Form.Field>
 
-            <Form.Field inline error={errors.deadline}>
-              <label>{T.translate("projects.form.deadline")}</label>
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.deadline})}>{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
@@ -317,7 +317,8 @@ class FormPage extends Component {
             }
 
             { id &&
-              <Form.Field inline>
+              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
+               >
                 <label className={classnames({red: !!errors.status})}>{T.translate("projects.form.status")}</label>
                 <Select
                   label={T.translate("projects.form.status")}
@@ -373,106 +374,17 @@ FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createProjectMutation = gql`
-  mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $customerId: Int!) {
-    createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
-      success
-      project {
-        id
-        name 
-        deadline
-        status
-        progress
-        description
-        customer {
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateProjectMutation = gql`
-  mutation updateProject($id: Int!, $name: String, $deadline: Date, $status: String, $progress: Int, $description: String, $customerId: Int) {
-    updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
-      success
-      project {
-        id
-        name 
-        deadline
-        status
-        progress
-        description
-        customer {
-          id
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getCustomersProjectsQuery = gql`
-  query {
-    getCustomers {
-      id
-      name
-    }
-    getProjects {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        name
-      }
-    }
-  }
-`
-
-const getProjectQuery = gql`
-  query getProject($id: Int!) {
-    getProject(id: $id) {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customerId
-      tasks {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-      }
-    }
-  }
-`
-
 const MutationsQuery =  compose(
-  graphql(createProjectMutation, {
+  graphql(CREATE_PROJECT_MUTATION, {
     name : 'createProjectMutation'
   }),
-  graphql(updateProjectMutation, {
+  graphql(UPDATE_PROJECT_MUTATION, {
     name: 'updateProjectMutation'
   }),
-  graphql(getCustomersProjectsQuery, {
+  graphql(GET_CUSTOMERS_PROJECTS_QUERY, {
     name: 'getCustomersProjectsQuery'
   }),
-  graphql(getProjectQuery, {
+  graphql(GET_PROJECT_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0

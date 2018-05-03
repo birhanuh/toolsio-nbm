@@ -5,7 +5,7 @@ import { Validation } from '../../../../utils'
 // Semantic UI Form elements
 import { Input, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_CHANNELS_QUERY, CREATE_CHANNEL_MUTATION } from '../../../../queries/conversationQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -75,12 +75,12 @@ class Channel extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getChannelsQuery })
+          const data = proxy.readQuery({ query: GET_CHANNELS_QUERY })
           // Add our comment from the mutation to the end.
           channel.getUsersCount = 1
           data.getChannels.push(channel)
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getChannelsQuery, data })
+          proxy.writeQuery({ query: GET_CHANNELS_QUERY, data })
         }})
         .then(res => {
           // this.props.addFlashMessage({
@@ -142,39 +142,11 @@ Channel.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createChannelMutation = gql`
-  mutation createChannel($name: String!) {
-    createChannel(name: $name) {
-      success
-      channel {
-        id 
-        name
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getChannelsQuery = gql`
-  {
-    getChannels {
-      id
-      name
-      getUsersCount 
-    }
-  }
-`
-
 const MutationsAndQuery =  compose(
-  graphql(createChannelMutation, {
+  graphql(CREATE_CHANNEL_MUTATION, {
     name : 'createChannelMutation'
   }),
-  graphql(getChannelsQuery, {
-    name: 'getChannelsQuery'
-  })
+  graphql(GET_CHANNELS_QUERY)
 )(Channel)
 
 export default MutationsAndQuery

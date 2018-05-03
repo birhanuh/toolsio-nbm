@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Table from './Table' 
 import { graphql} from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_CUSTOMERS_QUERY } from '../../queries/customerQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
-
 
 class Page extends Component {
 
@@ -60,15 +59,4 @@ class Page extends Component {
   }
 }
 
-const getCustomersQuery = gql`
-  {
-    getCustomers {
-      id
-      name
-      vatNumber
-      phoneNumber
-      email
-    }
-  }
-`
-export default graphql(getCustomersQuery)(Page)
+export default graphql(GET_CUSTOMERS_QUERY)(Page)

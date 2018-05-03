@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { LOGIN_USER_MUTATION } from '../../queries/authenticationQueriesMutations'
 
 import { Validation } from '../../utils'
 
@@ -131,19 +131,5 @@ Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const loginUserMutation = gql`
-  mutation($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password) {
-      success
-      authToken 
-      refreshAuthToken
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default connect(null, { addFlashMessage }) (graphql(loginUserMutation)(Form))
+export default connect(null, { addFlashMessage }) (graphql(LOGIN_USER_MUTATION)(Form))
 

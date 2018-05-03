@@ -5,7 +5,7 @@ import { Validation } from '../../../../utils'
 // Semantic UI Form elements
 import { TextArea, Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { CREATE_MESSAGE_MUTATION } from '../../../../queries/conversationQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -176,20 +176,5 @@ class Message extends Component {
   }
 }
 
-const createMessageMutation = gql`
-  mutation ($body: String, $file: Upload, $channelId: Int!) {
-    createMessage(body: $body, file: $file, channelId: $channelId)  {
-      success
-      message {
-        id
-      } 
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default graphql(createMessageMutation)(Message)
+export default graphql(CREATE_MESSAGE_MUTATION)(Message)
 

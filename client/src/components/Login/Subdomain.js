@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import { isSubdomainExist } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { IS_SUBDOMAIN_EXIST_MUTATION } from '../../queries/authenticationQueriesMutations'
 
 import { Validation, Authorization } from '../../utils'
 
@@ -157,18 +156,5 @@ Subdomain.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-
-const isSubdomainExistMutation = gql`
-  mutation($subdomain: String!) {
-    isSubdomainExist(subdomain: $subdomain) {
-      success
-      subdomain
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-export default connect(null, { addFlashMessage }) (graphql(isSubdomainExistMutation)(Subdomain))
+export default connect(null, { addFlashMessage }) (graphql(IS_SUBDOMAIN_EXIST_MUTATION)(Subdomain))
 

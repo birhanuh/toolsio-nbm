@@ -8,7 +8,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Input, Checkbox, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, CREATE_CUSTOMER_MUTATION, UPDATE_CUSTOMER_MUTATION } from '../../queries/customerQueriesMutations'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -70,27 +70,26 @@ class FormPage extends Component {
   componentDidMount = () => {
     let classContextThis = this
     
-    if (this.state.isContactIncludedInInvoice === true) {
-      $('.ui.toggle.checkbox').checkbox('check')
-    }
+    // if (this.state.isContactIncludedInInvoice === true) {
+    //   $('.ui.toggle.checkbox').checkbox('check')
+    // }
 
-    $('.ui.toggle.checkbox').checkbox({
-      onChecked: function() {
-         classContextThis.setState({
-          isContactIncludedInInvoice: true
-        })
-      },
-      onUnchecked: function() {
-        classContextThis.setState({
-          isContactIncludedInInvoice: false
-        })
-      }
-    })
+    // $('.ui.toggle.checkbox').checkbox({
+    //   onChecked: function() {
+    //      classContextThis.setState({
+    //       isContactIncludedInInvoice: true
+    //     })
+    //   },
+    //   onUnchecked: function() {
+    //     classContextThis.setState({
+    //       isContactIncludedInInvoice: false
+    //     })
+    //   }
+    // })
 
   }
 
   handleChange = (name, value) => {
-  
     if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
@@ -133,16 +132,31 @@ class FormPage extends Component {
           [name]: value
         })
       }
+    }   
+  }
 
-    }
-   
+  handleChangeToggle = (name, checked) => {
+    if (this.state.errors[name]) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[name]
+
+      this.setState({
+        [name]: checked,
+        errors
+      })
+    } else {
+      this.setState({
+        [name]: checked
+      })
+    }   
   }
 
   isValid() {
     const { errors, isValid } = Validation.validateCustomerInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ 
@@ -157,7 +171,7 @@ class FormPage extends Component {
     e.preventDefault()
 
     // Validation
-    if (true) { 
+    if (this.isValid()) { 
       const { id, name, vatNumber, contact: {phoneNumber, email} , isContactIncludedInInvoice, address: { street, postalCode, region, country} } = this.state
 
       this.setState({ isLoading: true })
@@ -172,7 +186,7 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getCustomersQuery })
+            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY })
             // Add our comment from the mutation to the end.
             
             let updatedCustomers = data.getCustomers.map(item => {
@@ -185,10 +199,9 @@ class FormPage extends Component {
             data.getCustomers = updatedCustomers
 
             // Write our data back to the cache.
-            store.writeQuery({ query: getCustomersQuery, data })
+            store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
           }})
           .then(res => {
-
             const { success, errors } = res.data.updateCustomer
            
             if (success) {
@@ -226,11 +239,11 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getCustomersQuery })
+            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY })
             // Add our comment from the mutation to the end.
             data.getCustomers.push(customer)
             // Write our data back to the cache.
-            store.writeQuery({ query: getCustomersQuery, data })
+            store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
           }})
           .then(res => {
 
@@ -320,7 +333,7 @@ class FormPage extends Component {
              <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
               <Form.Field inline>
-                <label className={classnames({red: !!errors.contact.phoneNumber})}>{T.translate("customers.form.contact.phone_number")}</label>
+                <label className={classnames({red: errors.contact && !!errors.contact.phoneNumber})}>{T.translate("customers.form.contact.phone_number")}</label>
                 <Input
                   placeholder={T.translate("customers.form.contact.phone_number")}
                   name="phoneNumber" 
@@ -331,7 +344,7 @@ class FormPage extends Component {
                 <span className="red">{errors.name}</span>
               </Form.Field>
               <Form.Field inline>
-                <label className={classnames({red: !!errors.contact.email})}>{T.translate("customers.form.contact.email")}</label>
+                <label className={classnames({red: errors.contact && !!errors.contact.email})}>{T.translate("customers.form.contact.email")}</label>
                 <Input
                   placeholder={T.translate("customers.form.contact.email")}
                   name="email" 
@@ -347,8 +360,8 @@ class FormPage extends Component {
               <Checkbox
                 toggle
                 name="isContactIncludedInInvoice" 
-                value={contact.isContactIncludedInInvoice} 
-                onChange={(e, {value}) => this.handleChange('isContactIncludedInInvoice', value)} 
+                checked={isContactIncludedInInvoice} 
+                onChange={(e, {checked}) => this.handleChangeToggle('isContactIncludedInInvoice', checked)} 
                 error={errors.contact && errors.contact.isContactIncludedInInvoice}
               />
               <span className="red">{errors.name}</span>
@@ -357,7 +370,7 @@ class FormPage extends Component {
             <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.address.header")}</legend>
               <Form.Field inline>
-                <label className={classnames({red: !!errors.address.street})}>{T.translate("customers.form.address.street")}</label>
+                <label className={classnames({red: errors.address && !!errors.address.street})}>{T.translate("customers.form.address.street")}</label>
                 <Input
                   placeholder={T.translate("customers.form.address.street")}
                   name="street" 
@@ -368,7 +381,7 @@ class FormPage extends Component {
                 <span className="red">{errors.name}</span>
               </Form.Field>
               <Form.Field inline>
-                <label className={classnames({red: !!errors.address.postalCode})}>{T.translate("customers.form.address.postal_code")}</label>
+                <label className={classnames({red: errors.address && !!errors.address.postalCode})}>{T.translate("customers.form.address.postal_code")}</label>
                 <Input
                   placeholder={T.translate("customers.form.address.postal_code")}
                   name="postalCode" 
@@ -425,81 +438,15 @@ FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createCustomerMutation = gql`
-  mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
-    createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
-      postalCode: $postalCode, region: $region, country: $country) {
-      success
-      customer {
-        id
-        name
-        vatNumber
-        phoneNumber
-        email
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-const updateCustomerMutation = gql`
-  mutation updateCustomer($id: Int!, $name: String, $vatNumber: Int, $email: String, $phoneNumber: String, $isContactIncludedInInvoice: Boolean, $street: String, $postalCode: String, $region: String, $country: String) {
-    updateCustomer(id: $id, name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, postalCode: $postalCode, region: $region, country: $country) {
-      success
-      customer {
-        id
-        name
-        vatNumber
-        phoneNumber
-        email
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-const getCustomerQuery = gql`
-  query getCustomer($id: Int!) {
-    getCustomer(id: $id) {
-      id
-      name
-      vatNumber
-      phoneNumber
-      email
-      isContactIncludedInInvoice
-      street
-      postalCode
-      region
-      country
-    }
-  }
-`
-
-const getCustomersQuery = gql`
-  {
-    getCustomers {
-      id
-      name
-      vatNumber
-      phoneNumber
-      email
-    }
-  }
-`
-
 const MutationsQueries =  compose(
-  graphql(createCustomerMutation, {
+  graphql(CREATE_CUSTOMER_MUTATION, {
     name : 'createCustomerMutation'
   }),
-  graphql(updateCustomerMutation, {
+  graphql(UPDATE_CUSTOMER_MUTATION, {
     name: 'updateCustomerMutation'
   }),
-  graphql(getCustomersQuery),
-  graphql(getCustomerQuery, {
+  graphql(GET_CUSTOMERS_QUERY),
+  graphql(GET_CUSTOMER_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_DIRECT_MESSAGE_USERS_QUERY } from '../../../queries/directMessageQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -85,17 +85,7 @@ class List extends Component {
   }
 }
 
-const getDirectMessageUsersQuery = gql`
-  {
-    getDirectMessageUsers {
-      id
-      first_name
-      email
-    }
-  }
-`
-
-export default graphql(getDirectMessageUsersQuery)(List)
+export default graphql(GET_DIRECT_MESSAGE_USERS_QUERY)(List)
 
 
 

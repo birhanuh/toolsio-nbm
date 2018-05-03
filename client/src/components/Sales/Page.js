@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { Pagination } from '../../utils'
-import { connect } from 'react-redux'
-import { fetchSales } from '../../actions/saleActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_SALES_QUERY } from '../../queries/saleQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -75,26 +73,4 @@ class Page extends Component {
   }
 }
 
-Page.propTypes = {
-  //fetchSales: PropTypes.func.isRequired,
-}
-
-const getSalesQuery = gql`
-  {
-    getSales {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        name
-      }
-      user {
-        firstName
-      }
-    }
-}
-`
-
-export default graphql(getSalesQuery)(Page)
+export default graphql(GET_SALES_QUERY)(Page)

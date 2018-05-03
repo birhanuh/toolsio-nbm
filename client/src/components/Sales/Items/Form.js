@@ -7,7 +7,8 @@ import { addFlashMessage } from '../../../actions/flashMessageActions'
 import AddItemTr from './AddItemTr'
 import ShowEditItemTr from './ShowEditItemTr'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_SALE_QUERY } from '../../../queries/saleQueriesMutations'
+import { CREATE_ITEM_MUTATION, UPDATE_ITEM_MUTATION, DELETE_ITEM_MUTATION } from '../../../queries/itemQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -102,7 +103,7 @@ class Form extends Component {
           }
           
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getSaleQuery,
+          const data = store.readQuery({ query: GET_SALE_QUERY,
             variables: {
               id: saleId,
             }
@@ -110,7 +111,7 @@ class Form extends Component {
           // Add our comment from the mutation to the end.
           data.getSale.items.push(item)
           // Write our data back to the cache.
-          store.writeQuery({ query: getSaleQuery, data }) 
+          store.writeQuery({ query: GET_SALE_QUERY, data }) 
         }})
       .then(res => {
 
@@ -239,7 +240,7 @@ class Form extends Component {
           }
           
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getSaleQuery,
+          const data = store.readQuery({ query: GET_SALE_QUERY,
               variables: {
                 id: saleId,
               }
@@ -254,7 +255,7 @@ class Form extends Component {
           data.getSale.items = updatedItems
 
           // Write our data back to the cache.
-          store.writeQuery({ query: getSaleQuery, data })
+          store.writeQuery({ query: GET_SALE_QUERY, data })
         }})
       .then(res => {
 
@@ -335,7 +336,7 @@ class Form extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: getSaleQuery,
+        const data = proxy.readQuery({ query: GET_SALE_QUERY,
             variables: {
               id: saleId,
             } 
@@ -346,7 +347,7 @@ class Form extends Component {
         data.getSale.items = updatedItems
  
         // Write our data back to the cache.
-        proxy.writeQuery({ query: getSaleQuery, data })
+        proxy.writeQuery({ query: GET_SALE_QUERY, data })
       }})
       .then(res => {          
 
@@ -448,92 +449,14 @@ Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-const createItemMutation = gql`
-  mutation createItem($name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $saleId: Int!) {
-    createItem(name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, saleId: $saleId) {
-      success
-      item {
-        id
-        name
-        unit
-        quantity
-        price
-        vat
-        saleId
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-const updateItemMutation = gql`
-  mutation updateItem($id: Int!, $name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $saleId: Int!) {
-    updateItem(id: $id, name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, saleId: $saleId) {
-      success
-      item {
-        id
-        name
-        unit
-        quantity
-        price
-        vat
-        saleId
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const deleteItemMutation = gql`
-  mutation deleteItem($id: Int!) {
-    deleteItem(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getSaleQuery = gql`
-  query getSale($id: Int!) {
-    getSale(id: $id) {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        id
-        name
-      }
-      items {
-        id
-        name
-        unit
-        quantity
-        price
-        vat
-        saleId
-      }
-    }
-  }
-`
-
 const Mutations =  compose(
-  graphql(createItemMutation, {
+  graphql(CREATE_ITEM_MUTATION, {
     name : 'createItemMutation'
   }),
-  graphql(updateItemMutation, {
+  graphql(UPDATE_ITEM_MUTATION, {
     name : 'updateItemMutation'
   }),
-  graphql(deleteItemMutation, {
+  graphql(DELETE_ITEM_MUTATION, {
     name : 'deleteItemMutation'
   })
 )(Form)

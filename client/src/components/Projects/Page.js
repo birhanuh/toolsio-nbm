@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import List from './List' 
 import { Pagination } from '../../utils'
-import { connect } from 'react-redux'
-import { fetchProjects } from '../../actions/projectActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_PROJECTS_QUERY } from '../../queries/projectQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -19,21 +17,21 @@ class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      start: 0,
+      offset: 0,
       length: 10
     }
   }
 
   componentDidMount() {
 
-    const { start, length } = this.state
+    const { offset, length } = this.state
     
     const { match } = this.props
 
-    // if (!!match.params.start) {   
-    //   this.props.fetchProjects(match.params.start, match.params.length)
+    // if (!!match.params.offset) {   
+    //   this.props.fetchProjects(match.params.offset, match.params.length)
     // } else {
-    //   this.props.fetchProjects(start, length)
+    //   this.props.fetchProjects(offset, length)
     // }
 
   }
@@ -76,23 +74,4 @@ class Page extends Component {
   }
 }
 
-const getProjectsQuery = gql`
-  {
-    getProjects {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        name
-      }
-      user {
-        firstName
-      }
-    }
-  }
-`
-
-export default graphql(getProjectsQuery)(Page)
+export default graphql(GET_PROJECTS_QUERY)(Page)

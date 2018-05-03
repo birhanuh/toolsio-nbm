@@ -9,7 +9,7 @@ import { Validation } from '../../utils'
 // Semantic UI Form elements
 import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_SALE_QUERY, GET_CUSTOMERS_SALES_QUERY, CREATE_SALE_MUTATION, UPDATE_SALE_MUTATION } from '../../queries/saleQueriesMutations'
 
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -99,7 +99,7 @@ class FormPage extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getCustomersSalesQuery })
+          const data = store.readQuery({ query: GET_CUSTOMERS_SALES_QUERY })
           // Add our comment from the mutation to the end.
           
           let updatedSales = data.getSales.map(item => {
@@ -112,7 +112,7 @@ class FormPage extends Component {
           data.getSales = updatedSales
 
           // Write our data back to the cache.
-          store.writeQuery({ query: getCustomersSalesQuery, data })
+          store.writeQuery({ query: GET_CUSTOMERS_SALES_QUERY, data })
         }})
         .then(res => {
 
@@ -143,11 +143,11 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getCustomersSalesQuery });
+            const data = store.readQuery({ query: GET_CUSTOMERS_SALES_QUERY });
             // Add our comment from the mutation to the end.
             data.getSales.push(sale);
             // Write our data back to the cache.
-            store.writeQuery({ query: getCustomersSalesQuery, data });
+            store.writeQuery({ query: GET_CUSTOMERS_SALES_QUERY, data });
           }})
           .then(res => {          
 
@@ -225,8 +225,8 @@ class FormPage extends Component {
               <span className="red">{errors.name}</span>
             </Form.Field>
 
-            <Form.Field inline error={errors.deadline}>
-              <label>{T.translate("sales.form.deadline")}</label>
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.deadline})}>{T.translate("sales.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
@@ -264,7 +264,7 @@ class FormPage extends Component {
             }
 
             { id &&
-              <Form.Field inline>
+              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>
                 <label className={classnames({red: !!errors.status})}>{T.translate("sales.form.status")}</label>
                 <Select
                   label={T.translate("sales.form.status")}
@@ -281,7 +281,7 @@ class FormPage extends Component {
                     { key: "delivered", value: "delivered", text: 'DELIVERED' }
                     ]}
                   selection
-                />
+                  />
                 <span className="red">{errors.status}</span>
               </Form.Field>
             }
@@ -320,106 +320,17 @@ FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createSaleMutation = gql`
-  mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
-    createSale(name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
-      success
-      sale {
-        id
-        name 
-        deadline
-        status
-        description
-        customer {
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateSaleMutation = gql`
-  mutation updateSale($id: Int!, $name: String, $deadline: Date, $status: String, $description: String, $customerId: Int) {
-    updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
-      success
-      sale {
-        id
-        name
-        deadline
-        status
-        description
-        customer {
-          id
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getCustomersSalesQuery = gql`
-  query {
-    getCustomers {
-      id
-      name
-    }
-    getSales {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        name
-      }
-    }
-  }
-`
-
-const getSaleQuery = gql`
-  query getSale($id: Int!) {
-    getSale(id: $id) {
-      id
-      name 
-      deadline
-      status
-      description
-      customerId
-      customer {
-        id
-        name
-      }
-      items {
-        id
-        name
-        unit
-        quantity
-        price
-        vat
-      }
-    }
-  }
-`
-
 const MutationsQuery =  compose(
-  graphql(createSaleMutation, {
+  graphql(CREATE_SALE_MUTATION, {
     name : 'createSaleMutation'
   }),
-  graphql(updateSaleMutation, {
+  graphql(UPDATE_SALE_MUTATION, {
     name: 'updateSaleMutation'
   }),
-  graphql(getCustomersSalesQuery, {
+  graphql(GET_CUSTOMERS_SALES_QUERY, {
     name: 'getCustomersSalesQuery'
   }),
-  graphql(getSaleQuery, {
+  graphql(GET_SALE_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0

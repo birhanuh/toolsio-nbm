@@ -6,7 +6,7 @@ import { createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers/rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { setCurrentAccount } from './actions/authenticationActions'
+//import { setCurrentAccount } from './actions/authenticationActions'
 // Apollo
 import { ApolloProvider } from 'react-apollo'
 

@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Route } from 'react-router-dom'
 import decode from 'jwt-decode'
-import { logout } from '../../actions/authenticationActions'
-import { fetchConversations } from '../../actions/conversationActions'
 
 import $ from 'jquery'
 $.fn.dropdown = require('semantic-ui-dropdown')

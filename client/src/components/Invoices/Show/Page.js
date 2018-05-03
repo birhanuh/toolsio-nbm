@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, DELETE_INVOICE_MUTATION } from '../../../queries/invoiceQueriesMutations'
 
 import Breadcrumb from '../../Layouts/Breadcrumb'
 
@@ -253,107 +253,11 @@ Page.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const deleteInvoiceMutation = gql`
-  mutation deleteInvoice($id: Int!) {
-    deleteInvoice(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getInvoiceQuery = gql`
-  query getInvoice($id: Int!) {
-    getInvoice(id: $id) {
-      id
-      deadline
-      paymentTerm
-      interestInArrears
-      referenceNumber
-      status
-      createdAt
-      user {
-        firstName
-        email
-      }
-      project {
-        id
-        name
-        deadline
-        progress
-        status
-        tasks {
-          id
-          name
-          hours
-          paymentType
-          price
-          vat
-        }
-      }
-      sale {
-        id
-        name
-        deadline
-        status
-        items {
-          id
-          name
-          unit
-          quantity
-          price
-          vat
-        }
-      }
-      customer {
-        id
-        name
-        vatNumber
-        phoneNumber
-        email
-        isContactIncludedInInvoice
-        street
-        postalCode
-        region
-        country
-      }
-    }
-  }
-`
-const getInvoicesQuery = gql`
-  query {
-    getInvoices {
-      id
-      deadline
-      referenceNumber
-      status
-      total
-      project {
-        id
-        name
-        status
-      }
-      sale {
-        id
-        name
-        status
-      }
-      customer {
-        id
-        name
-      }
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(deleteInvoiceMutation, {
+  graphql(DELETE_INVOICE_MUTATION, {
     name : 'deleteInvoiceMutation'
   }),
-  graphql(getInvoiceQuery, {
+  graphql(GET_INVOICE_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)

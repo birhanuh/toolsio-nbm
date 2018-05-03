@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { Validation } from '../../../../utils'
 import { Dropdown } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_CHANNEL_USERS_QUERY, ADD_MEMBER_MUTATION } from '../../../../queries/conversationQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -20,8 +20,7 @@ class Users extends Component {
     }
   }
 
-  handleChange = (name, value) => {
-  
+  handleChange = (name, value) => {  
     if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
@@ -37,8 +36,7 @@ class Users extends Component {
       this.setState({
         [name]: value
       })
-    }
-   
+    }   
   }
 
   isValid() {
@@ -149,47 +147,11 @@ Users.propTypes = {
   channelId: PropTypes.string.isRequired
 }
 
-const addMemberMutation = gql`
-  mutation addMember($members: [Int!], $channelId: Int!) {
-    addMember(members: $members, channelId: $channelId ) {
-      success
-      member {
-        id
-        firstName
-        email
-      } 
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getChannelUsersQuery = gql`
-  query getChannel($id: Int!) {
-    getChannel(id: $id) {
-      id
-      name
-      users {
-        id
-        email
-      }
-    }
-    getUsers {
-      id
-      firstName
-      lastName
-      email
-    }
-  }
-`
-
 const MutationsAndQuery =  compose(
-  graphql(addMemberMutation, {
+  graphql(ADD_MEMBER_MUTATION, {
     name : 'addMemberMutation'
   }),
-  graphql(getChannelUsersQuery, {
+  graphql(GET_CHANNEL_USERS_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.channelId)

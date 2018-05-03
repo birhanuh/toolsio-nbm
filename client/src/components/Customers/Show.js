@@ -6,7 +6,7 @@ import map from 'lodash/map'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, DELETE_CUSTOMER_MUTATION } from '../../queries/customerQueriesMutations'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -106,14 +106,14 @@ class Show extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: getCustomersQuery })
+        const data = proxy.readQuery({ query: GET_CUSTOMERS_QUERY })
         // Add our comment from the mutation to the end.
         
         let updatedData = data.getCustomers.filter(customer => customer.id !== id) 
         data.getInvoices = updatedData
 
         // Write our data back to the cache.
-        proxy.writeQuery({ query: getCustomersQuery, data })
+        proxy.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
       }})
       .then(res => {          
 
@@ -325,77 +325,12 @@ Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const deleteCustomerMutation = gql`
-  mutation deleteCustomer($id: Int!) {
-    deleteCustomer(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getCustomerQuery = gql`
-  query getCustomer($id: Int!) {
-    getCustomer(id: $id) {
-      id
-      name
-      vatNumber
-      phoneNumber
-      email
-      isContactIncludedInInvoice
-      street
-      postalCode
-      region
-      country
-      projects {
-        id
-        name
-        deadline
-        progress
-        status
-      }
-      sales {
-        id
-        name
-        deadline
-        status
-      }
-      invoices {
-        id
-        deadline
-        paymentTerm
-        interestInArrears
-        referenceNumber
-        status
-      }
-      user {
-        firstName
-      }
-    }
-  }
-`
-
-const getCustomersQuery = gql`
-  query {
-    getCustomers {
-      id
-      name
-      vatNumber
-      phoneNumber
-      email
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(deleteCustomerMutation, {
+  graphql(DELETE_CUSTOMER_MUTATION, {
     name : 'deleteCustomerMutation'
   }),
-  graphql(getCustomersQuery),
-  graphql(getCustomerQuery, {
+  graphql(GET_CUSTOMERS_QUERY),
+  graphql(GET_CUSTOMER_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)

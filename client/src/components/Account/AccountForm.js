@@ -11,7 +11,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_ACCOUNT_QUERY, UPDATE_ACCOUNT_MUTATION, S3_SIGN_LOGO_MUTATION } from '../../queries/accountQueriesMutations'
 
 // Localization 
 import T from 'i18n-react'
@@ -442,51 +442,8 @@ AccountForm.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-const getAccountQuery = gql`
-  query getAccount($subdomain: String!) {
-    getAccount(subdomain: $subdomain) {
-      id
-      subdomain
-      industry
-      email
-      phoneNumber
-      street
-      postalCode
-      region
-      country
-      logoUrl
-    }
-  }
-`
-
-const updateAccountMutation = gql`
-  mutation updateAccount($subdomain: String!, $industry: String, $email: String!, $phoneNumber: String, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
-    updateAccount(subdomain: $subdomain, industry: $industry, email: $email, phoneNumber: $phoneNumber, logoUrl: $logoUrl, street: $street, postalCode: $postalCode, region: $region, country: $country) {
-      success
-      account {
-        id
-        subdomain
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const s3SignLogoMutation = gql`
-  mutation s3SignLogo($fileName: String!, $fileType: String!) {
-    s3SignLogo(fileName: $fileName, fileType: $fileType) {
-      signedRequest
-      url
-      errors
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(updateAccountMutation, {
+  graphql(UPDATE_ACCOUNT_MUTATION, {
     name : 'updateAccountMutation',
     options: (props) => ({
       variables: {
@@ -494,10 +451,10 @@ const MutationQuery =  compose(
       },
     })
   }),
-  graphql(s3SignLogoMutation, {
+  graphql(S3_SIGN_LOGO_MUTATION, {
     name : 's3SignLogoMutation'
   }),
-  graphql(getAccountQuery, {
+  graphql(GET_ACCOUNT_QUERY, {
     options: (props) => ({
       variables: {
         subdomain: props.subdomain

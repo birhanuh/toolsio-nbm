@@ -7,7 +7,8 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Input, Select, Form } from 'semantic-ui-react'
 import classnames from 'classnames'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { REGISTER_USER_MUTATION } from '../../queries/authenticationQueriesMutations'
+
 
 // Localization 
 import T from 'i18n-react'
@@ -238,19 +239,4 @@ FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const registerUserMutation = gql`
-  mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
-    registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
-      success
-      account {
-        subdomain
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default connect(null, { addFlashMessage } ) (graphql(registerUserMutation)(FormPage))
+export default connect(null, { addFlashMessage } ) (graphql(REGISTER_USER_MUTATION)(FormPage))
