@@ -87,7 +87,7 @@ class Users extends Component {
           // })  
           // this.context.router.history.push('/conversations')          
 
-          const { success, member, errors } = res.data.addMember
+          const { success, errors } = res.data.addMember
 
           if (success) {
             this.setState({ isLoading: false })

@@ -68,23 +68,21 @@ app.use(async (req, res, next) => {
   console.log('subdomain: ', subdomain)
   // Parse authToken 
   const authToken = req.headers['x-auth-token']
-
-  if (authToken) {
-    if (authToken !== 'null') {
-      try {
-        const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)      
-        req.user = user
-      
-      } catch (err) {
-        let refreshAuthToken = req.headers['x-refresh-auth-token']
-        const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
-        if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
-          res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
-          res.set('x-auth-token', newAuthTokens.authToken)
-          res.set('x-refresh-auth-token', newAuthTokens.refreshAuthToken)
-        }
-        req.user = newAuthTokens.user
+  
+  if (authToken !== 'null') {
+    try {
+      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)      
+      req.user = user
+    
+    } catch (err) {
+      let refreshAuthToken = req.headers['x-refresh-auth-token']
+      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
+      if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
+        res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
+        res.set('x-auth-token', newAuthTokens.authToken)
+        res.set('x-refresh-auth-token', newAuthTokens.refreshAuthToken)
       }
+      req.user = newAuthTokens.user
     }
   }
   next()

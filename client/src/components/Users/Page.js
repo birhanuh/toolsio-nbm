@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import decode from 'jwt-decode'
-import { Authorization } from '../../utils'
 import { graphql } from 'react-apollo'
 import { GET_USERS_QUERY } from '../../queries/userQueriesMutations'
 
@@ -13,7 +11,6 @@ import FormPage from './FormPage'
 class Page extends Component {
 
   render() {
-
     let currentUser
     
     try {

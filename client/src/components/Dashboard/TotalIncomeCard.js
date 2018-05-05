@@ -1,4 +1,4 @@
-import React, { Component }  from 'react'
+import React  from 'react'
 import classnames from 'classnames'
 import gql from "graphql-tag"
 import { Query } from "react-apollo"

@@ -68,7 +68,7 @@ class FormPage extends Component {
   }
 
   componentDidMount = () => {
-    let classContextThis = this
+    //let classContextThis = this
     
     // if (this.state.isContactIncludedInInvoice === true) {
     //   $('.ui.toggle.checkbox').checkbox('check')

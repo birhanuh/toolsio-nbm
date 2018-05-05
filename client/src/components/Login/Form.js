@@ -21,6 +21,29 @@ class Form extends Component {
       isLoading: false
     }
   }
+  /*
+  componentDidMount = () => {
+    const { match } = this.props
+
+    if (match && match.params.token) {
+      this.props.confirmEmail(match.params.token)
+        .then(res => {
+        
+          if (res.data.confirmed) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("log_in.confirm_email.success")
+            })
+          } else {
+            this.props.addFlashMessage({
+              type: 'info',
+              text: T.translate("log_in.confirm_email.info")
+            })
+          }
+
+        })
+    }
+  }*/
 
   handleChange = (e) => {
     if (this.state.errors[e.target.name]) {

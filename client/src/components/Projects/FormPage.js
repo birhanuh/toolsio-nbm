@@ -9,7 +9,7 @@ import { Validation } from '../../utils'
 // Semantic UI JS
 import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, GET_CUSTOMERS_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../queries/projectQueriesMutations'
+import { GET_PROJECT_QUERY, GET_CUSTOMERS_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../queries/projectQueriesMutations'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -127,7 +127,7 @@ class FormPage extends Component {
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("projects.form.flash.success_update", { name: name})
+              text: T.translate("projects.form.flash.success_update", { name: project.name})
             })  
 
             this.context.router.history.push('/projects')
@@ -163,7 +163,7 @@ class FormPage extends Component {
             if (success) {
               this.props.addFlashMessage({
                 type: 'success',
-                text: T.translate("projects.form.flash.success_update", { name: name})
+                text: T.translate("projects.form.flash.success_update", { name: project.name})
               })  
 
               this.context.router.history.push('/projects')
@@ -199,7 +199,7 @@ class FormPage extends Component {
   handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, progress } = this.state
+    const { progress } = this.state
 
     if (progress <= 90) {
       this.setState({
@@ -222,7 +222,7 @@ class FormPage extends Component {
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, progress } = this.state
+    const { progress } = this.state
 
     if (progress >= 10) {
       this.setState({
@@ -302,7 +302,7 @@ class FormPage extends Component {
               <span className="red">{errors.customerId}</span>
             </Form.Field>
 
-             {
+            {
               customersOptions.length === 0 &&
                 <div className="inline field">
                   <div className="ui mini info message mb-1">
@@ -310,7 +310,7 @@ class FormPage extends Component {
 
                     <Link className="ui primary outline tiny button" to="/customers/new">
                       <i className="add circle icon"></i>
-                      {T.translate("projects.page.add_new_customer")}
+                      {T.translate("projects.form.add_new_customer")}
                     </Link>
                   </div>
                 </div>
@@ -340,6 +340,21 @@ class FormPage extends Component {
               </Form.Field>
             }
 
+            { id &&
+              <div className="inline field progress">
+                <div id="progress" className="ui success progress mb-3 mt-2">
+                  <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
+                    <div className="progress">{progress}%</div>
+                  </div>
+                </div>
+
+                <div className="ui icon mini buttons">
+                  <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
+                  <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
+                </div>
+              </div>
+            }
+            
             <Form.Field inline>  
               <label>{T.translate("projects.form.description")}</label>
               <TextArea

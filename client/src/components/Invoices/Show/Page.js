@@ -102,18 +102,18 @@ class Page extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: getInvoicesQuery })
+        const data = proxy.readQuery({ query: GET_INVOICES_QUERY })
         // Add our comment from the mutation to the end.
         
         let updatedData = data.getInvoices.filter(invoice => invoice.id !== id) 
         data.getInvoices = updatedData
 
         // Write our data back to the cache.
-        proxy.writeQuery({ query: getInvoicesQuery, data })
+        proxy.writeQuery({ query: GET_INVOICES_QUERY, data })
       }})
       .then(res => {          
 
-        const { success, project, errors } = res.data.deleteInvoice
+        const { success, errors } = res.data.deleteInvoice
 
         if (success) {
           this.props.addFlashMessage({

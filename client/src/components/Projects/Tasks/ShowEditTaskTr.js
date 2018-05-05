@@ -5,7 +5,7 @@ import { Input, Select, Form } from 'semantic-ui-react'
 // Localization 
 import T from 'i18n-react'
 
-export default function ShowEditTaskTr({task, editTask, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditTaskChange, showConfirmationModal}) {
+export default function ShowEditTaskTr({task, editTask, handleEdit, handleCancelEdit, handleUpdate, handleEditTaskChange, showConfirmationModal}) {
   return (
     <tr key={task.id} id={task.id}>      
       <td className="show-task">{task.name}</td>

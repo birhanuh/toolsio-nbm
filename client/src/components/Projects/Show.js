@@ -91,7 +91,7 @@ class Show extends Component {
   }
 
   handleStatusChange = (value) => {
-    const { id, name } = this.state
+    const { id } = this.state
 
     this.props.updateProjectMutation({ 
         variables: { id, status: value }
@@ -102,7 +102,7 @@ class Show extends Component {
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("projects.form.flash.success_update", { name: name})
+            text: T.translate("projects.form.flash.success_update", { name: project.name})
           })  
         } else {
           let errorsList = {}
@@ -114,10 +114,10 @@ class Show extends Component {
       .catch(err => this.setState({ errors: err, isLoading: false }))
   }
 
-   handleIncreaseProgress = (event) => {
+  handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, name, progress } = this.state
+    const { id, progress } = this.state
 
     if (progress <= 90) {
       this.setState({
@@ -148,7 +148,7 @@ class Show extends Component {
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("projects.form.flash.success_update", { name: name})
+              text: T.translate("projects.form.flash.success_update", { name: project.name})
             })  
           } else {
             let errorsList = {}
@@ -164,7 +164,7 @@ class Show extends Component {
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, name, status, progress } = this.state
+    const { id, progress } = this.state
 
     if (progress >= 10) {
       this.setState({
@@ -195,7 +195,7 @@ class Show extends Component {
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("projects.form.flash.success_update", { name: name})
+              text: T.translate("projects.form.flash.success_update", { name: project.name})
             })  
           } else {
             let errorsList = {}

@@ -73,15 +73,13 @@ class Invitation extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    if (this.isValid()) { 
-      
+    if (this.isValid()) {       
       this.setState({ isLoading: true })
       
       const { firstName, lastName, email, password, token } = this.state
       
       this.props.mutate({variables: { firstName, lastName, email, password, token }})
-        .then(res => {
-      
+        .then(res => {      
           const { success, account, errors } = res.data.registerInvitedUser
          
           if (success) {
@@ -96,15 +94,14 @@ class Invitation extends Component {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
             this.setState({ errors: errorsList, isLoading: false })
-          }
-         
+          }         
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
     }  
   }
 
   render() {
-    const { firstName, email, lastName, password, confirmPassword, errors, isLoading, invalid } = this.state
+    const { firstName, email, lastName, password, confirmPassword, errors, isLoading } = this.state
 
     return (            
       <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
@@ -118,7 +115,7 @@ class Invitation extends Component {
               placeholder={T.translate("sign_up.first_name")}
               control={Input}
               name="firstName" 
-              value={user.firstName} 
+              value={firstName} 
               onChange={(e, {value}) => this.handleChange('firstName', value)} 
               error={!!errors.firstName}
             />
@@ -130,12 +127,12 @@ class Invitation extends Component {
             <Input
               placeholder={T.translate("sign_up.last_name")}
               control={Input}
-              name="lasttName" 
-              value={user.lasttName} 
-              onChange={(e, {value}) => this.handleChange('lasttName', value)} 
-              error={!!errors.lasttName}
+              name="lastName" 
+              value={lastName} 
+              onChange={(e, {value}) => this.handleChange('lastName', value)} 
+              error={!!errors.lastName}
             />
-            <span className="red">{errors.lasttName}</span>
+            <span className="red">{errors.lastName}</span>
           </Form.Field>
 
           <Form.Field>
@@ -144,7 +141,7 @@ class Invitation extends Component {
               placeholder={T.translate("sign_up.email")}
               control={Input}
               name="email" 
-              value={user.email} 
+              value={email} 
               onChange={(e, {value}) => this.handleChange('email', value)} 
               error={!!errors.email}
             />
@@ -157,7 +154,7 @@ class Invitation extends Component {
               placeholder={T.translate("sign_up.password")}
               control={Input}
               name="password" 
-              value={user.password} 
+              value={password} 
               onChange={(e, {value}) => this.handleChange('password', value)} 
               error={!!errors.password}
             />
@@ -170,7 +167,7 @@ class Invitation extends Component {
               placeholder={T.translate("sign_up.confirm_password")}
               control={Input}
               name="confirmPassword" 
-              value={user.confirmPassword} 
+              value={confirmPassword} 
               onChange={(e, {value}) => this.handleChange('confirmPassword', value)} 
               error={!!errors.confirmPassword}
             />

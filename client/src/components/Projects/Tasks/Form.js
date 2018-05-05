@@ -132,7 +132,7 @@ class Form extends Component {
 
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("projects.tasks.form.flash.success_add", { name: name})
+              text: T.translate("projects.tasks.form.flash.success_add", { name: task.name})
             })
           } else {
             let errorsList = {}
@@ -359,7 +359,7 @@ class Form extends Component {
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("projects.tasks.form.flash.success_delete", { name: name})
+            text: T.translate("projects.tasks.form.flash.success_delete", { name: project.name})
           })  
 
           this.setState({ itemToBeDeleated: {} })
@@ -370,7 +370,7 @@ class Form extends Component {
           this.setState({ errors: errorsList, isLoading: false })
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.props.addFlashMessage({
           type: 'error',
           text: T.translate("projects.tasks.form.flash.error_delete", { name: name})

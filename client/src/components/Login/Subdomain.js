@@ -33,7 +33,7 @@ class Subdomain extends Component {
       this.props.mutate({ variables: { subdomain } })
         .then(res => {
          
-          const { success, subdomain, error } = res.data.isSubdomainExist
+          const { success, subdomain } = res.data.isSubdomainExist
       
           if (success) {
             

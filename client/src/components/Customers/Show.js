@@ -133,7 +133,7 @@ class Show extends Component {
           this.setState({ errors: errorsList, isLoading: false })
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.props.addFlashMessage({
           type: 'error',
           text: T.translate("customers.show.flash.error_delete", { name: name})

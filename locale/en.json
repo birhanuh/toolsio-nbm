@@ -280,6 +280,7 @@
       "select_customer": "-Select Customer-",
       "select_user": "-Select User-",
       "select_or_add_new_customer": "Select Customer if exists or add new",
+      "add_new_customer": "Add new Customer",
       "name_required": "Name is required",
       "deadline_required": "Deadline is required",
       "customer_required": "Customer is required",
@@ -374,6 +375,7 @@
       "description": "Description",
       "select_status": "-Select Status-",
       "select_customer": "-Select Customer-",
+      "add_new_customer": "Add new Customer",
       "name_required": "Name is required",
       "deadline_required": "Deadline is required",
       "customer_required": "Customer is required",
@@ -702,6 +704,7 @@
       "body_required": "Body is required.",
       "flash": {
         "success_compose": "Message is sent!",
+        "success_create_channel": "Channel *{name}* is created!",
         "error_compose": "Message is not sent, try sending again"
       }
     },

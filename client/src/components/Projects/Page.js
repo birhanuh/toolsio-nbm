@@ -48,7 +48,7 @@ class Page extends Component {
 
         <Breadcrumb />
 
-        <div className="ui clearing vertical segment border-bottom-none">
+        <div className="ui clearing basic segment p-0">
           <div className="ui right floated icon input">
             <input type="text" placeholder="Search..." />
             <i className="inverted circular search link icon"></i>

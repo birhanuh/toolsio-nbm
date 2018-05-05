@@ -1,5 +1,4 @@
 import React, { Component } from 'react' 
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { graphql } from 'react-apollo'
@@ -18,12 +17,10 @@ import UsersDownshift from './Form/UsersDownshift'
 class List extends Component {
 
   componentDidMount() {
-
     $('.ui .item').on('click', function() {
       $('.ui .item').removeClass('active')
       $(this).addClass('active')
-    })   
-
+    })  
   }
 
   showConfirmationModal(event) {
@@ -42,8 +39,7 @@ class List extends Component {
     $('.small.modal.add-user').modal('hide')
   }
 
-  render() {
-    
+  render() {    
     const { data: { getDirectMessageUsers }, receiverId } = this.props
 
     const userList = getDirectMessageUsers && getDirectMessageUsers.map(user => 

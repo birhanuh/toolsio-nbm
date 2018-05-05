@@ -132,7 +132,7 @@ class Form extends Component {
 
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("sales.items.form.flash.success_add", { name: name})
+              text: T.translate("sales.items.form.flash.success_add", { name: item.name})
             })
           } else {
             let errorsList = {}

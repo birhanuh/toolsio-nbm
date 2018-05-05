@@ -83,18 +83,15 @@ class Channel extends Component {
           proxy.writeQuery({ query: GET_CHANNELS_QUERY, data })
         }})
         .then(res => {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("messages.form.flash.success_compose")
-          // })  
-          // this.context.router.history.push('/conversations')
-          
-
           const { success, channel, errors } = res.data.createChannel
 
           if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("messages.form.flash.success_create_channel", { name: channel.name})
+            })  
+
             this.context.router.history.push('/conversations')
-            this.setState({ isLoading: false })
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)

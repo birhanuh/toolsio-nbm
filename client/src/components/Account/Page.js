@@ -5,9 +5,6 @@ import { Authorization } from '../../utils'
 import AccountForm from './AccountForm'
 import UserForm from './UserForm'
 
-// Localization 
-import T from 'i18n-react'
-
 import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Page extends Component {

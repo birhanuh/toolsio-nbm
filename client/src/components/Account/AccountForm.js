@@ -9,7 +9,7 @@ import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
-import { Input, Select, TextArea, Form } from 'semantic-ui-react'
+import { Input, Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_ACCOUNT_QUERY, UPDATE_ACCOUNT_MUTATION, S3_SIGN_LOGO_MUTATION } from '../../queries/accountQueriesMutations'
 
@@ -150,9 +150,9 @@ class AccountForm extends Component {
 
     // Validation
     if (this.isValid()) { 
-     const { name, subdomain, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
-
       this.setState({ isLoading: true })
+
+     const { name, subdomain, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
       
       if (subdomain) {
         this.props.updateAccountMutation({variables: { name, subdomain, phoneNumber, email, logoUrl, street, postalCode: parseInt(postalCode), region, country } })

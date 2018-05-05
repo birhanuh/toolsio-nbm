@@ -85,7 +85,7 @@ class Show extends Component {
   }
 
   handleStatusChange = (value) => {
-    const { id, name } = this.state
+    const { id } = this.state
 
     this.props.updateSaleMutation({ 
         variables: { id, status: value }
@@ -96,7 +96,7 @@ class Show extends Component {
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("sales.form.flash.success_update", { name: name})
+            text: T.translate("sales.form.flash.success_update", { name: sale.name})
           })  
         } else {
           let errorsList = {}
@@ -149,7 +149,7 @@ class Show extends Component {
           this.setState({ errors: errorsList, isLoading: false })
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.props.addFlashMessage({
           type: 'error',
           text: T.translate("sales.show.flash.error_delete", { name: name})

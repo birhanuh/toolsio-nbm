@@ -156,7 +156,7 @@ class FormPage extends Component {
             if (success) {
               this.props.addFlashMessage({
                 type: 'success',
-                text: T.translate("sales.form.flash.success_create", { name: name})
+                text: T.translate("sales.form.flash.success_create", { name: sale.name})
               })  
               
               this.context.router.history.push('/sales')
@@ -257,7 +257,7 @@ class FormPage extends Component {
 
                     <Link className="ui primary outline tiny button" to="/customers/new">
                       <i className="add circle icon"></i>
-                      {T.translate("customers.page.add_new_customer")}
+                      {T.translate("sales.form.add_new_customer")}
                     </Link>
                   </div>
                 </div>

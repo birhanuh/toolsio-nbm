@@ -1,6 +1,6 @@
 import React from 'react' 
 import { withRouter } from 'react-router-dom'
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import { GET_USERS_QUERY } from '../../../../queries/userQueriesMutations'
 
 import Downshift from 'downshift'

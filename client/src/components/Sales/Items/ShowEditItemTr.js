@@ -5,7 +5,7 @@ import { Input, Select, Form } from 'semantic-ui-react'
 // Localization 
 import T from 'i18n-react'
 
-export default function ShowEditItemTr({item, editItem, handleCreate, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, showConfirmationModal}) {
+export default function ShowEditItemTr({item, editItem, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, showConfirmationModal}) {
   return (
     <tr key={item.id} id={item.id}>      
       <td className="show-item">{item.name}</td>

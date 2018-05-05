@@ -1,4 +1,4 @@
-import React, { Component }  from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import gql from "graphql-tag"
@@ -24,7 +24,7 @@ const GET_INVOICES_DATA = gql`
         count
       }
   }
-  }
+}
 `
 const InvoicesCard = () => (
   <Query query={GET_INVOICES_DATA}>

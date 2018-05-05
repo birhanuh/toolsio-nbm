@@ -85,13 +85,6 @@ class Message extends Component {
           variables: { body, channelId: parseInt(channelId) }
           })
           .then(res => {
-            // this.props.addFlashMessage({
-            //   type: 'success',
-            //   text: T.translate("conversations.form.flash.success_compose")
-            // })  
-            // this.context.router.history.push('/conversations')
-            
-
             const { success, message, errors } = res.data.createMessage
 
             if (success) {
@@ -117,7 +110,7 @@ class Message extends Component {
 
   handleOnDrop = async ([file]) => {
 
-    const { channelId, body } = this.state
+    const { channelId } = this.state
     this.setState({ isLoading: true })
     
     console.log('file: ', file)    
@@ -129,13 +122,9 @@ class Message extends Component {
         const { success, message, errors } = res.data.createMessage
 
         if (success) {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("conversations.form.flash.success_compose")
-          // })  
-          console.log('Message sent', message)
           // Reset reload
           this.setState({ isLoading: false })
+          console.log('Message sent', message)
         } else {
           let errorsList = {}
           errors.map(error => errorsList[error.path] = error.message)
@@ -150,7 +139,6 @@ class Message extends Component {
     const { body, errors, isLoading } = this.state
 
     return (  
-
       <div className={classnames("ui form", { loading: isLoading })} >
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }

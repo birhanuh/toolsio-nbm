@@ -99,17 +99,27 @@ class UserForm extends Component {
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoadingForm: true })
       
-      const { user } = this.state
+      const { firstName, lastName, email, password, confirmPassword, avatarUrl } = this.state
       // Make submit
-      this.props.updateUser({ user})
+      this.props.updateUserMutation({ variables: { firstName, lastName, email, password, confirmPassword, avatarUrl } })
         .then((res) => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("settings.user.flash.success_update")
-          })
-        },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoadingForm: false })
-      )
+
+          const { success, errors } = res.data.updateUser
+           
+          if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("settings.user.flash.success_update")
+            })
+            this.setState({ isLoading: false })
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
     }  
   }
 
@@ -137,7 +147,7 @@ class UserForm extends Component {
 
       this.setState({ isLoadingAvatar: true })
       this.props.updateUser({ id, avatarUrl})
-        .then((res) => {
+        .then(() => {
           this.props.addFlashMessage({
             type: 'success',
             text: T.translate("settings.user.flash.success_update")
@@ -167,7 +177,7 @@ class UserForm extends Component {
   }
 
   handleSubmitImage = async () => {
-    const { id, file } = this.state
+    const { file } = this.state
     const response = await this.props.s3SignAvatarMutation({
       variables: {
         fileName: this.formatFileName(file.name),

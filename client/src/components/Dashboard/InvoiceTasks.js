@@ -1,4 +1,4 @@
-import React, { Component }  from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import gql from "graphql-tag"
@@ -112,6 +112,7 @@ const InvoiceTasksCard = () => (
           
           {(countStatus && countStatus.length === 0) ?
             <div className="content">
+              { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
               <div className="ui info message">
                 <div className="description">
                   {T.translate("dashboard.invoice_tasks.no_pending_invoices")}

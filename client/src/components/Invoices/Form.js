@@ -7,7 +7,7 @@ import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import Steps from './Steps'
 import { graphql, compose } from 'react-apollo'
-import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, GET_PROJECTS_SALES_WITH_INVOICE_QUERY, GET_CUSTOMERS_INVOICES_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../queries/invoiceQueriesMutations'
+import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, GET_PROJECTS_SALES_WITH_INVOICE_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../queries/invoiceQueriesMutations'
 
 import SaleProject from './Steps/SaleProject'
 import Details from './Steps/Details'
@@ -175,7 +175,7 @@ class Form extends Component {
           store.writeQuery({ query: GET_INVOICES_QUERY, data })
         }})
         .then(res => {         
-          const { success, invoice, errors } = res.data.updateInvoice
+          const { success, errors } = res.data.updateInvoice
 
           if (success) {
             this.props.addFlashMessage({
@@ -211,7 +211,7 @@ class Form extends Component {
             store.writeQuery({ query: GET_INVOICES_QUERY, data })
           }})
           .then(res => {            
-            const { success, invoice, errors } = res.data.createInvoice
+            const { success, errors } = res.data.createInvoice
 
             if (success) {
               this.props.addFlashMessage({
