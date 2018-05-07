@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import List from './List' 
 import { Pagination } from '../../utils'
 import { graphql } from 'react-apollo'
-import { GET_PROJECTS_QUERY } from '../../queries/projectQueriesMutations'
+import { GET_PROJECTS_QUERY } from '../../graphql/projects'
 
 // Localization 
 import T from 'i18n-react'

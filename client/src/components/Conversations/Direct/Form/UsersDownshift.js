@@ -1,7 +1,7 @@
 import React from 'react' 
 import { withRouter } from 'react-router-dom'
 import { graphql } from 'react-apollo'
-import { GET_USERS_QUERY } from '../../../../queries/userQueriesMutations'
+import { GET_USERS_QUERY } from '../../../../graphql/users'
 
 import Downshift from 'downshift'
 

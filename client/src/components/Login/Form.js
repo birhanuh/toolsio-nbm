@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import { LOGIN_USER_MUTATION } from '../../queries/authenticationQueriesMutations'
+import { LOGIN_USER_MUTATION } from '../../graphql/authentications'
 
 import { Validation } from '../../utils'
 

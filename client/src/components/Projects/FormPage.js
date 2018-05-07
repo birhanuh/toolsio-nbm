@@ -9,7 +9,7 @@ import { Validation } from '../../utils'
 // Semantic UI JS
 import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_PROJECT_QUERY, GET_CUSTOMERS_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../queries/projectQueriesMutations'
+import { GET_PROJECT_QUERY, GET_CUSTOMERS_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../graphql/projects'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'

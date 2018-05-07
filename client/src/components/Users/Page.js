@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import decode from 'jwt-decode'
 import { graphql } from 'react-apollo'
-import { GET_USERS_QUERY } from '../../queries/userQueriesMutations'
+import { GET_USERS_QUERY } from '../../graphql/users'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 

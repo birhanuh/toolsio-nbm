@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import { IS_SUBDOMAIN_EXIST_MUTATION } from '../../queries/authenticationQueriesMutations'
+import { IS_SUBDOMAIN_EXIST_MUTATION } from '../../graphql/authentications'
 
 import { Validation, Authorization } from '../../utils'
 

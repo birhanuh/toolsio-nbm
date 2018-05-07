@@ -1,5 +1,20 @@
 import gql from 'graphql-tag'
 
+// const fragments = gql`
+//   fragment ProjectsPageProject on Project {
+//     id
+//     name 
+//     deadline
+//     status
+//     progress
+//     description
+//     customer {
+//       id
+//       name
+//     }
+//   }
+// `
+
 export const GET_PROJECTS_QUERY = gql`
   query {
     getProjects {

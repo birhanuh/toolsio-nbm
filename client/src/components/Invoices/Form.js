@@ -7,7 +7,7 @@ import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import Steps from './Steps'
 import { graphql, compose } from 'react-apollo'
-import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, GET_PROJECTS_SALES_WITH_INVOICE_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../queries/invoiceQueriesMutations'
+import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, GET_PROJECTS_SALES_WITH_INVOICE_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../graphql/invoices'
 
 import SaleProject from './Steps/SaleProject'
 import Details from './Steps/Details'

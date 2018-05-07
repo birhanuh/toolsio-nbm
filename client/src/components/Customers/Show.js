@@ -6,7 +6,7 @@ import map from 'lodash/map'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
-import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, DELETE_CUSTOMER_MUTATION } from '../../queries/customerQueriesMutations'
+import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, DELETE_CUSTOMER_MUTATION } from '../../graphql/customers'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 

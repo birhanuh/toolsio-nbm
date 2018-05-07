@@ -8,7 +8,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Input, Checkbox, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, CREATE_CUSTOMER_MUTATION, UPDATE_CUSTOMER_MUTATION } from '../../queries/customerQueriesMutations'
+import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, CREATE_CUSTOMER_MUTATION, UPDATE_CUSTOMER_MUTATION } from '../../graphql/customers'
 
 import 'react-datepicker/dist/react-datepicker.css'
 

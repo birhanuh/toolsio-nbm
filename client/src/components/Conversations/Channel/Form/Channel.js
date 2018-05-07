@@ -5,7 +5,7 @@ import { Validation } from '../../../../utils'
 // Semantic UI Form elements
 import { Input, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_CHANNELS_QUERY, CREATE_CHANNEL_MUTATION } from '../../../../queries/conversationQueriesMutations'
+import { GET_CHANNELS_QUERY, CREATE_CHANNEL_MUTATION } from '../../../../graphql/conversations'
 
 // Localization 
 import T from 'i18n-react'

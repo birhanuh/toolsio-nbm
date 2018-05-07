@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken'
 import { Input, Form } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import { REGISTER_INVITED_USER_MUTATION } from '../../queries/authenticationQueriesMutations'
+import { REGISTER_INVITED_USER_MUTATION } from '../../graphql/authentications'
 
 // Localization 
 import T from 'i18n-react'

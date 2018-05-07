@@ -11,7 +11,12 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 // Apollo
 import { MockedProvider } from 'react-apollo/test-utils'
+import { addTypenameToDocument } from 'apollo-client'
 import gql from 'graphql-tag'
+
+import renderer from 'react-test-renderer'
+
+import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../graphql/projects'
 
 // Configure Adapter
 configure({ adapter: new Adapter() })
@@ -28,40 +33,17 @@ const mockStore = configureMockStore(middlewares)
 let store, list
 let GET_PROJECTS_GQL, CREATE_PROJECT_GQL, GET_PROJECT_GQL
 
-describe("components", function() { 
+describe("components", () => { 
    
-  describe("<FormPage />", function() {  
+  describe("<FormPage />", () => {  
 
     beforeEach(() => {
       const storeStateMock = {}
 
       store = mockStore(storeStateMock)
-
-      CREATE_PROJECT_GQL = gql`
-        mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $customerId: Int!) {
-          createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
-            success
-            project {
-              id
-              name 
-              deadline
-              status
-              progress
-              description
-              customer {
-                name
-              }
-            }
-            errors {
-              path
-              message
-            }
-          }
-        }
-      `
     })
 
-    it('renders connected component', function() { 
+    it('renders connected component', () => { 
       
       const props = {
         match: {
@@ -84,7 +66,7 @@ describe("components", function() {
         <Provider store={store}>
           <MockedProvider mocks={[{
             request: {
-              query: CREATE_PROJECT_GQL,
+              query: CREATE_PROJECT_MUTATION,
               varibales: { name: "Project 1", deadline: 1523439822435, status: "new", description: "Desciption 1...", total: 0, customerId: 1 }
             },
             result: {
@@ -115,59 +97,40 @@ describe("components", function() {
 
   })
 
-  describe("<Page />", function() {  
+  describe("<Page />", () => {  
 
     beforeEach(() => {
       const storeStateMock = {}
 
       store = mockStore(storeStateMock)
-
-      GET_PROJECTS_GQL = gql`
-        {
-          getProjects {
-            id
-            name 
-            deadline
-            status
-            progress
-            description
-            customer {
-              name
-            }
-            user {
-              firstName
-            }
-          }
-        }
-      `
     })
 
-    it('renders connected component', async () => { 
+    it('renders connected component', () => { 
       
       const projectsList =  {
-          getProjects: [
-            {
-              id: 1,
-              name: "Project 1",
-              deadline: 1523439822435,
-              status: "new",
-              progress: 0,
-              description: "",
-              customer: {
-                name: "Customera"
-              },
-              user: {
-                user: "testa"
-              }
+        getProjects: [
+          {
+            id: 1,
+            name: "Project 1",
+            deadline: 1523439822435,
+            status: "new",
+            progress: 0,
+            description: "",
+            customer: {
+              name: "Customera"
+            },
+            user: {
+              user: "testa"
             }
-          ]
-        }
+          }
+        ]
+      }
 
       const wrapper = mount(<BrowserRouter>
         <Provider store={store}>
           <MockedProvider mocks={[{
             request: {
-              query: GET_PROJECTS_GQL
+              query: GET_PROJECTS_QUERY
             },
             result: {
               data: projectsList
@@ -179,34 +142,31 @@ describe("components", function() {
           </MockedProvider>
         </Provider>
       </BrowserRouter>)
-
-      await new Promise(resolve => setTimeout(resolve))
-      wrapper.update()
-      console.log('Page ', wrapper.find(Page).props)
+      
+      console.log('Page ', wrapper.find(Page).props())
       //expect(wrapper.find(Page).prop('data').getProjects).toEqual(projectsList)
       //expect(toJSON(wrapper)).toMatchSnapshot()
 
     })
   })
 
-  describe("<Show />", function() {      
-    const storeStateMock = {}
-
-    store = mockStore(storeStateMock)
+  describe("<Show />", () => {      
 
     beforeEach(() => {
-      GET_PROJECT_GQL = gql`
-        query getProject($id: Int!) {
-          getProject(id: $id) {
-            id
-            name 
-          }
-        }
-      `  
+      const storeStateMock = {}  
+
+      store = mockStore(storeStateMock)
     })
 
-    it('renders connected component', function() { 
+    it('renders connected component', () => { 
       
+      const project =  {
+        "getProject": {
+          "id": 1,
+          "name": "Project 1"
+        }
+      }
+
       const wrapper = mount(<BrowserRouter>
         <Provider store={store}>
           <MockedProvider mocks={[{
@@ -215,12 +175,7 @@ describe("components", function() {
               varibales: { params: {id: 1} }
             },
             result: {
-              "data": {
-                "getProject": {
-                  "id": 1,
-                  "name": "Project 1"
-                }
-              }
+              data: project
             }
           }]} > 
             

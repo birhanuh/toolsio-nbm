@@ -8,7 +8,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
 import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_SALES_QUERY, GET_SALE_QUERY, UPDATE_SALE_MUTATION, DELETE_SALE_MUTATION } from '../../queries/saleQueriesMutations'
+import { GET_SALES_QUERY, GET_SALE_QUERY, UPDATE_SALE_MUTATION, DELETE_SALE_MUTATION } from '../../graphql/sales'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 

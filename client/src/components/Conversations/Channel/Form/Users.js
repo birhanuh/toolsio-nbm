@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { Validation } from '../../../../utils'
 import { Dropdown } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_CHANNEL_USERS_QUERY, ADD_MEMBER_MUTATION } from '../../../../queries/conversationQueriesMutations'
+import { GET_CHANNEL_USERS_QUERY, ADD_MEMBER_MUTATION } from '../../../../graphql/conversations'
 
 // Localization 
 import T from 'i18n-react'

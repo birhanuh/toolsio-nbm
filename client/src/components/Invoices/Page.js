@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Table from './Table' 
 import { graphql} from 'react-apollo'
-import { GET_INVOICES_QUERY } from '../../queries/invoiceQueriesMutations'
+import { GET_INVOICES_QUERY } from '../../graphql/invoices'
 
 // Localization 
 import T from 'i18n-react'

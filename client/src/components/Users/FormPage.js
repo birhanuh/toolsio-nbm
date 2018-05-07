@@ -6,7 +6,7 @@ import { Validation } from '../../utils'
 import { Input, Form } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import { SEND_INVITATION_MUTATION } from '../../queries/userQueriesMutations'
+import { SEND_INVITATION_MUTATION } from '../../graphql/users'
 
 // Localization 
 import T from 'i18n-react'

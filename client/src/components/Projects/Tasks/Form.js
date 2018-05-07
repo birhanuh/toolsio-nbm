@@ -7,8 +7,8 @@ import { addFlashMessage } from '../../../actions/flashMessageActions'
 import AddTaskTr from './AddTaskTr'
 import ShowEditTaskTr from './ShowEditTaskTr'
 import { graphql, compose } from 'react-apollo'
-import { GET_PROJECT_QUERY } from '../../../queries/projectQueriesMutations'
-import { CREATE_TASK_MUTATION, UPDATE_TASK_MUTATION, DELETE_TASK_MUTATION } from '../../../queries/taskQueriesMutations'
+import { GET_PROJECT_QUERY } from '../../../graphql/projects'
+import { CREATE_TASK_MUTATION, UPDATE_TASK_MUTATION, DELETE_TASK_MUTATION } from '../../../graphql/tasks'
 
 // Localization 
 import T from 'i18n-react'

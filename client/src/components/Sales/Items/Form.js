@@ -7,8 +7,8 @@ import { addFlashMessage } from '../../../actions/flashMessageActions'
 import AddItemTr from './AddItemTr'
 import ShowEditItemTr from './ShowEditItemTr'
 import { graphql, compose } from 'react-apollo'
-import { GET_SALE_QUERY } from '../../../queries/saleQueriesMutations'
-import { CREATE_ITEM_MUTATION, UPDATE_ITEM_MUTATION, DELETE_ITEM_MUTATION } from '../../../queries/itemQueriesMutations'
+import { GET_SALE_QUERY } from '../../../graphql/sales'
+import { CREATE_ITEM_MUTATION, UPDATE_ITEM_MUTATION, DELETE_ITEM_MUTATION } from '../../../graphql/items'
 
 // Localization 
 import T from 'i18n-react'

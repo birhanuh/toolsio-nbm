@@ -9,7 +9,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
 import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../queries/projectQueriesMutations'
+import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../graphql/projects'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 

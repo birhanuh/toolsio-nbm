@@ -5,8 +5,8 @@ import { Validation } from '../../../../utils'
 // Semantic UI Form elements
 import { TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_USER_QUERY } from '../../../../queries/userQueriesMutations'
-import { GET_DIRECT_MESSAGE_USERS_QUERY, CREATE_DIRECT_MESSAGE_MUTATION } from '../../../../queries/directMessageQueriesMutations'
+import { GET_USER_QUERY } from '../../../../graphql/users'
+import { GET_DIRECT_MESSAGE_USERS_QUERY, CREATE_DIRECT_MESSAGE_MUTATION } from '../../../../graphql/directMessages'
 
 // Localization 
 import T from 'i18n-react'

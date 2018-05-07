@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Table from './Table' 
 import { graphql} from 'react-apollo'
-import { GET_CUSTOMERS_QUERY } from '../../queries/customerQueriesMutations'
+import { GET_CUSTOMERS_QUERY } from '../../graphql/customers'
 
 // Localization 
 import T from 'i18n-react'

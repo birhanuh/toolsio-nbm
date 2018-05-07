@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
-import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, DELETE_INVOICE_MUTATION } from '../../../queries/invoiceQueriesMutations'
+import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, DELETE_INVOICE_MUTATION } from '../../../graphql/invoices'
 
 import Breadcrumb from '../../Layouts/Breadcrumb'
 

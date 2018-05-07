@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import List from './List' 
 import { Pagination } from '../../utils'
 import { graphql } from 'react-apollo'
-import { GET_SALES_QUERY } from '../../queries/saleQueriesMutations'
+import { GET_SALES_QUERY } from '../../graphql/sales'
 
 // Localization 
 import T from 'i18n-react'

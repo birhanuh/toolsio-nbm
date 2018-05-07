@@ -9,7 +9,7 @@ import { Validation } from '../../utils'
 // Semantic UI Form elements
 import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_SALE_QUERY, GET_CUSTOMERS_SALES_QUERY, CREATE_SALE_MUTATION, UPDATE_SALE_MUTATION } from '../../queries/saleQueriesMutations'
+import { GET_SALE_QUERY, GET_CUSTOMERS_SALES_QUERY, CREATE_SALE_MUTATION, UPDATE_SALE_MUTATION } from '../../graphql/sales'
 
 import DatePicker from 'react-datepicker'
 import moment from 'moment'

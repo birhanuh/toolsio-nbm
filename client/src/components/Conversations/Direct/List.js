@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { graphql } from 'react-apollo'
-import { GET_DIRECT_MESSAGE_USERS_QUERY } from '../../../queries/directMessageQueriesMutations'
+import { GET_DIRECT_MESSAGE_USERS_QUERY } from '../../../graphql/directMessages'
 
 // Localization 
 import T from 'i18n-react'

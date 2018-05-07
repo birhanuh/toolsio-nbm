@@ -7,7 +7,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Input, Select, Form } from 'semantic-ui-react'
 import classnames from 'classnames'
 import { graphql } from 'react-apollo'
-import { REGISTER_USER_MUTATION } from '../../queries/authenticationQueriesMutations'
+import { REGISTER_USER_MUTATION } from '../../graphql/authentications'
 
 
 // Localization 

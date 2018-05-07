@@ -5,7 +5,7 @@ import { Validation } from '../../../../utils'
 // Semantic UI Form elements
 import { TextArea, Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
-import { CREATE_MESSAGE_MUTATION } from '../../../../queries/conversationQueriesMutations'
+import { CREATE_MESSAGE_MUTATION } from '../../../../graphql/conversations'
 
 // Localization 
 import T from 'i18n-react'
