@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import { isSubdomainExist } from '../../actions/authenticationActions'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { IS_SUBDOMAIN_EXIST_MUTATION } from '../../graphql/authentications'
 
 import { Validation, Authorization } from '../../utils'
 
@@ -34,7 +33,7 @@ class Subdomain extends Component {
       this.props.mutate({ variables: { subdomain } })
         .then(res => {
          
-          const { success, subdomain, error } = res.data.isSubdomainExist
+          const { success, subdomain } = res.data.isSubdomainExist
       
           if (success) {
             
@@ -123,13 +122,13 @@ class Subdomain extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            <div className={classnames("field", { error: errors && errors.subdomain })}>
+            <div className={classnames("field", { error: errors.subdomain })}>
               <div className="ui right labeled input">
                 <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
                   value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
                 <div className="ui label">toolsio.com</div>  
               </div>
-              <span className="red">{errors && errors.subdomain}</span>
+              <span className="red">{errors.subdomain}</span>
             </div>  
 
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>
@@ -157,18 +156,5 @@ Subdomain.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-
-const isSubdomainExistMutation = gql`
-  mutation($subdomain: String!) {
-    isSubdomainExist(subdomain: $subdomain) {
-      success
-      subdomain
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-export default connect(null, { addFlashMessage }) (graphql(isSubdomainExistMutation)(Subdomain))
+export default connect(null, { addFlashMessage }) (graphql(IS_SUBDOMAIN_EXIST_MUTATION)(Subdomain))
 

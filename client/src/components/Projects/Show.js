@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { SelectField } from '../../utils/FormFields'
+// Semantic UI JS
+import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../graphql/projects'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -38,6 +39,24 @@ class Show extends Component {
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
       tasks: this.props.data.getProject ? this.props.data.getProject.tasks : [],
       user: this.props.data.getProject ? this.props.data.getProject.user : null,
+      total: this.props.data.getProject ? this.props.data.getProject.total : 0
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.data.getProject) {
+      this.setState({
+        id: nextProps.data.getProject.id,
+        name: nextProps.data.getProject.name,
+        deadline: nextProps.data.getProject.deadline,
+        customer: nextProps.data.getProject.customer,
+        status: nextProps.data.getProject.status,
+        description: nextProps.data.getProject.description,
+        progress: nextProps.data.getProject.progress,
+        tasks: nextProps.data.getProject.tasks,
+        user: nextProps.data.getProject.user,
+        total: nextProps.data.getProject.total
+      })
     }
   }
 
@@ -57,22 +76,6 @@ class Show extends Component {
     //$("#progress").progress('increment')
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.data.getProject) {
-      this.setState({
-        id: nextProps.data.getProject.id,
-        name: nextProps.data.getProject.name,
-        deadline: nextProps.data.getProject.deadline,
-        customer: nextProps.data.getProject.customer,
-        status: nextProps.data.getProject.status,
-        description: nextProps.data.getProject.description,
-        progress: nextProps.data.getProject.progress,
-        tasks: nextProps.data.getProject.tasks,
-        user: nextProps.data.getProject.user
-      })
-    }
-  }
-
   showConfirmationModal(event) {
     event.preventDefault()
 
@@ -87,21 +90,19 @@ class Show extends Component {
     $('.small.modal.project').modal('hide')
   }
 
-  handleStatusChange = (e) => {
-
-    const { id, name } = this.state
+  handleStatusChange = (value) => {
+    const { id } = this.state
 
     this.props.updateProjectMutation({ 
-        variables: { id, status: e.target.value }
+        variables: { id, status: value }
       })
-      .then(res => {          
-
+      .then(res => {      
         const { success, project, errors } = res.data.updateProject
 
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("projects.form.flash.success_update", { name: name})
+            text: T.translate("projects.form.flash.success_update", { name: project.name})
           })  
         } else {
           let errorsList = {}
@@ -113,10 +114,10 @@ class Show extends Component {
       .catch(err => this.setState({ errors: err, isLoading: false }))
   }
 
-   handleIncreaseProgress = (event) => {
+  handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, name, progress } = this.state
+    const { id, progress } = this.state
 
     if (progress <= 90) {
       this.setState({
@@ -147,7 +148,7 @@ class Show extends Component {
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("projects.form.flash.success_update", { name: name})
+              text: T.translate("projects.form.flash.success_update", { name: project.name})
             })  
           } else {
             let errorsList = {}
@@ -163,7 +164,7 @@ class Show extends Component {
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, name, status, progress } = this.state
+    const { id, progress } = this.state
 
     if (progress >= 10) {
       this.setState({
@@ -194,7 +195,7 @@ class Show extends Component {
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("projects.form.flash.success_update", { name: name})
+              text: T.translate("projects.form.flash.success_update", { name: project.name})
             })  
           } else {
             let errorsList = {}
@@ -220,14 +221,14 @@ class Show extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = store.readQuery({ query: getProjectsQuery })
+        const data = store.readQuery({ query: GET_PROJECTS_QUERY })
         // Add our comment from the mutation to the end.
    
         let updatedProjects = data.getProjects.filter(project => project.id !== id) 
         data.getProjects = updatedProjects
  
         // Write our data back to the cache.
-        store.writeQuery({ query: getProjectsQuery, data })
+        store.writeQuery({ query: GET_PROJECTS_QUERY, data })
       }})
       .then(res => {          
 
@@ -282,25 +283,23 @@ class Show extends Component {
               <dt>{T.translate("projects.show.deadline")}</dt>
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("projects.show.status")}</dt>
-              <dd>
-                <SelectField
-                  label=""
+              <dd>               
+                <Form.Field 
+                  placeholder={T.translate("projects.form.select_status")}
+                  control={Select}
                   name="status"
-                  type="select"
                   value={status} 
-                  formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  onChange={this.handleStatusChange.bind(this)} 
-                  error=""
-
+                  onChange={(e, {value}) => this.handleStatusChange(value)} 
+                  className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
                   options={[
-                    <option key="default" value="new" disabled>NEW</option>,
-                    <option key="in progress" value="in progress">IN PROGRESS</option>,
-                    <option key="finished" value="finished">FINISHED</option>,
-                    <option key="delayed" value="delayed">DELAYED</option>,
-                    <option key="delivered" value="delivered">DELIVERED</option>
-                    ]
-                  }
-                  />
+                    { key: "default", value: "new", disabled: true, text: 'NEW' },
+                    { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
+                    { key: "finished", value: "finished", text: 'FINISHED' },
+                    { key: "delayed", value: "delayed", text: 'DELAYED' },
+                    { key: "delivered", value: "delivered", text: 'DELIVERED' }
+                  ]}
+                  selection
+                />
               </dd>
              
               <dt>{T.translate("projects.show.description")}</dt>
@@ -359,96 +358,15 @@ Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const deleteProjectMutation = gql`
-  mutation deleteProject($id: Int!) {
-    deleteProject(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateProjectMutation = gql`
-  mutation updateProject($id: Int!, $status: String, $progress: Int) {
-    updateProject(id: $id, status: $status, progress: $progress) {
-      success
-      project {
-        id
-        name 
-        deadline
-        status
-        progress
-        description
-        customer {
-          id
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getProjectQuery = gql`
-  query getProject($id: Int!) {
-    getProject(id: $id) {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        id
-        name
-      }
-      tasks {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-        projectId
-      }
-      user {
-        firstName
-      }
-    }
-  }
-`
-
-const getProjectsQuery = gql`
-  query {
-    getProjects {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        name
-      }
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(deleteProjectMutation, {
-    name : 'deleteProjectMutation'
-  }),
-  graphql(updateProjectMutation, {
+  graphql(UPDATE_PROJECT_MUTATION, {
     name : 'updateProjectMutation'
   }),
-  graphql(getProjectsQuery),
-  graphql(getProjectQuery, {
+  graphql(DELETE_PROJECT_MUTATION, {
+    name : 'deleteProjectMutation'
+  }),
+  graphql(GET_PROJECTS_QUERY),
+  graphql(GET_PROJECT_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)

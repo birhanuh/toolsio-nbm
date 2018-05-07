@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { LOGIN_USER_MUTATION } from '../../graphql/authentications'
 
 import { Validation } from '../../utils'
 
@@ -21,6 +21,29 @@ class Form extends Component {
       isLoading: false
     }
   }
+  /*
+  componentDidMount = () => {
+    const { match } = this.props
+
+    if (match && match.params.token) {
+      this.props.confirmEmail(match.params.token)
+        .then(res => {
+        
+          if (res.data.confirmed) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("log_in.confirm_email.success")
+            })
+          } else {
+            this.props.addFlashMessage({
+              type: 'info',
+              text: T.translate("log_in.confirm_email.info")
+            })
+          }
+
+        })
+    }
+  }*/
 
   handleChange = (e) => {
     if (this.state.errors[e.target.name]) {
@@ -96,21 +119,21 @@ class Form extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            <div className={classnames("field", { error: errors && errors.email })}>
+            <div className={classnames("field", { error: errors.email })}>
               <div className="ui right icon input">
                 <i className="user icon"></i>
                 <input type="text" name="email" placeholder={T.translate("log_in.email")} 
                   value={email} onChange={this.handleChange} />
               </div>
-              <span className="red">{errors && errors.email}</span>
+              <span className="red">{errors.email}</span>
             </div>  
-            <div className={classnames("field", { error: errors && errors.password })}>
+            <div className={classnames("field", { error: errors.password })}>
               <div className="ui right icon input">
                 <i className="lock icon"></i>
                 <input type="password" name="password" placeholder={T.translate("log_in.password")}
                   value={password} onChange={this.handleChange} />                
               </div>
-              <span className="red">{errors && errors.password}</span>
+              <span className="red">{errors.password}</span>
             </div>
                   
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.log_in")}</button>
@@ -131,19 +154,5 @@ Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const loginUserMutation = gql`
-  mutation($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password) {
-      success
-      authToken 
-      refreshAuthToken
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default connect(null, { addFlashMessage }) (graphql(loginUserMutation)(Form))
+export default connect(null, { addFlashMessage }) (graphql(LOGIN_USER_MUTATION)(Form))
 

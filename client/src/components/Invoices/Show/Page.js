@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, DELETE_INVOICE_MUTATION } from '../../../graphql/invoices'
 
 import Breadcrumb from '../../Layouts/Breadcrumb'
 
@@ -39,7 +39,8 @@ class Page extends Component {
       status: this.props.data.getInvoice ? this.props.data.getInvoice.status : '',
       referenceNumber: this.props.data.getInvoice ? this.props.data.getInvoice.referenceNumber : '',
       description: this.props.data.getInvoice ? this.props.data.getInvoice.description : '',
-      user: this.props.data.getInvoice ? this.props.data.getInvoice.user : null
+      user: this.props.data.getInvoice ? this.props.data.getInvoice.user : null,
+      total: this.props.data.getInvoice ? this.props.data.getInvoice.total : 0
     }
   }
 
@@ -65,7 +66,8 @@ class Page extends Component {
         status: nextProps.data.getInvoice.status,
         referenceNumber: nextProps.data.getInvoice.referenceNumber,
         description: nextProps.data.getInvoice.description,
-        user: nextProps.data.getInvoice.user
+        user: nextProps.data.getInvoice.user,
+        total: nextProps.data.getInvoice.total
       })
     }
   }
@@ -100,18 +102,18 @@ class Page extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: getInvoicesQuery })
+        const data = proxy.readQuery({ query: GET_INVOICES_QUERY })
         // Add our comment from the mutation to the end.
         
         let updatedData = data.getInvoices.filter(invoice => invoice.id !== id) 
         data.getInvoices = updatedData
 
         // Write our data back to the cache.
-        proxy.writeQuery({ query: getInvoicesQuery, data })
+        proxy.writeQuery({ query: GET_INVOICES_QUERY, data })
       }})
       .then(res => {          
 
-        const { success, project, errors } = res.data.deleteInvoice
+        const { success, errors } = res.data.deleteInvoice
 
         if (success) {
           this.props.addFlashMessage({
@@ -251,107 +253,11 @@ Page.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const deleteInvoiceMutation = gql`
-  mutation deleteInvoice($id: Int!) {
-    deleteInvoice(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getInvoiceQuery = gql`
-  query getInvoice($id: Int!) {
-    getInvoice(id: $id) {
-      id
-      deadline
-      paymentTerm
-      interestInArrears
-      referenceNumber
-      status
-      createdAt
-      user {
-        firstName
-        email
-      }
-      project {
-        id
-        name
-        deadline
-        progress
-        status
-        tasks {
-          id
-          name
-          hours
-          paymentType
-          price
-          vat
-        }
-      }
-      sale {
-        id
-        name
-        deadline
-        status
-        items {
-          id
-          name
-          unit
-          quantity
-          price
-          vat
-        }
-      }
-      customer {
-        id
-        name
-        vatNumber
-        phoneNumber
-        email
-        isContactIncludedInInvoice
-        street
-        postalCode
-        region
-        country
-      }
-    }
-  }
-`
-const getInvoicesQuery = gql`
-  query {
-    getInvoices {
-      id
-      deadline
-      referenceNumber
-      status
-      total
-      project {
-        id
-        name
-        status
-      }
-      sale {
-        id
-        name
-        status
-      }
-      customer {
-        id
-        name
-      }
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(deleteInvoiceMutation, {
+  graphql(DELETE_INVOICE_MUTATION, {
     name : 'deleteInvoiceMutation'
   }),
-  graphql(getInvoiceQuery, {
+  graphql(GET_INVOICE_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)

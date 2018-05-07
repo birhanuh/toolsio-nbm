@@ -23,6 +23,7 @@ export default `
 
   type Query {
     getTask(id: Int!): Task!
+    
     getTasks: [Task!]!
   }
 

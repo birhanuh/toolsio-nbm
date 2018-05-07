@@ -25,10 +25,7 @@ module.exports = {
         type: Sequelize.TEXT
       },
       progress: {
-        defaultValue: 0,
-        type: Sequelize.INTEGER
-      },
-      total: {
+        allowNull : false,
         defaultValue: 0,
         type: Sequelize.INTEGER
       },

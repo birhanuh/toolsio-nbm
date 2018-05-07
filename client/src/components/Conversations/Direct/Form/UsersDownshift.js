@@ -1,7 +1,7 @@
 import React from 'react' 
 import { withRouter } from 'react-router-dom'
-import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
+import { GET_USERS_QUERY } from '../../../../graphql/users'
 
 import Downshift from 'downshift'
 
@@ -50,16 +50,6 @@ const UsersDownshift = ({ onClose, history, data: { getUsers } }) => (
     )}
   />      
 )
-  
-const getUsersQuery = gql`
-  {
-    getUsers {
-      id
-      firstName
-      email
-    }
-}
-`
 
-export default withRouter(graphql(getUsersQuery)(UsersDownshift))
+export default withRouter(graphql(GET_USERS_QUERY)(UsersDownshift))
 

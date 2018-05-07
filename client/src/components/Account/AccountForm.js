@@ -8,9 +8,10 @@ import classnames from 'classnames'
 import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { InputField, SelectField } from '../../utils/FormFields'
+// Semantic UI Form elements
+import { Input, Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_ACCOUNT_QUERY, UPDATE_ACCOUNT_MUTATION, S3_SIGN_LOGO_MUTATION } from '../../graphql/accounts'
 
 // Localization 
 import T from 'i18n-react'
@@ -80,48 +81,48 @@ class AccountForm extends Component {
     })
   }
 
-  handleChange = (e) => {
+  handleChange = (name, value) => {
   
-    if (!this.state.errors[e.target.name]) {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
-      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+      if (name === "email" || name === "phoneNumber") {
 
          this.setState({
-          contact: { ...this.state.contact, [e.target.name]: e.target.value },
+          contact: { ...this.state.contact, [name]: value },
           errors
         })
-      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
-        || e.target.name === "country") {
+      } else if (name === "street" || name === "postalCode" || name === "region"
+        || name === "country") {
 
          this.setState({
-          address: { ...this.state.address, [e.target.name]: e.target.value },
+          address: { ...this.state.address, [name]: value },
           errors
         })
       } else {
         this.setState({
-          [e.target.name]: e.target.value,
+          [name]: value,
           errors
         })
       }
     } else {
 
-      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+      if (name === "email" || name === "phoneNumber") {
 
          this.setState({
-          contact: { ...this.state.contact, [e.target.name]: e.target.value },
+          contact: { ...this.state.contact, [name]: value },
         })
-      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
-        || e.target.name === "country") {
+      } else if (name === "street" || name === "postalCode" || name === "region"
+        || name === "country") {
         
          this.setState({
-          address: { ...this.state.address, [e.target.name]: e.target.value }
+          address: { ...this.state.address, [name]: value }
         })
       } else {
         this.setState({
-          [e.target.name]: e.target.value
+          [name]: value
         })
       }
 
@@ -149,9 +150,9 @@ class AccountForm extends Component {
 
     // Validation
     if (this.isValid()) { 
-     const { name, subdomain, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
-
       this.setState({ isLoading: true })
+
+     const { name, subdomain, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
       
       if (subdomain) {
         this.props.updateAccountMutation({variables: { name, subdomain, phoneNumber, email, logoUrl, street, postalCode: parseInt(postalCode), region, country } })
@@ -285,7 +286,6 @@ class AccountForm extends Component {
     const { subdomain, industry, logoUrl, contact, address, errors, isLoadingLogo, isLoadingForm } = this.state
 
     return ( 
-
       <div className="twelve wide column"> 
         <div className="ui items segment account">
           <div className="ui item">    
@@ -310,118 +310,130 @@ class AccountForm extends Component {
             <div className="content">
               <h1 className="ui header mt-2 mb-3">{T.translate("settings.account.header")}</h1>
               
-              <form className={classnames("ui form", { loading: isLoadingForm })} onSubmit={this.handleSubmit.bind(this)}>
+              <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)}>
 
                 { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-                <InputField
-                  label={T.translate("settings.account.subdomain")}
-                  name="subdomain" 
-                  value={subdomain} 
-                  onChange={this.handleChange.bind(this)} 
-                  placeholder="Name"
-                  error={errors && errors.subdomain}
-                  formClass="field"
-                />
-                <SelectField
-                  type="select"
-                  name="industry"
-                  value={industry ? industry : '-'} 
-                  label={T.translate("settings.account.industry")}
-                  onChange={this.handleChange.bind(this)} 
-                  error={errors && errors.industry}
-                  formClass="field"
+                <Form.Field>
+                  <label className={classnames({red: !!errors.subdomain})}>{T.translate("settings.account.subdomain")}</label>
+                  <Input 
+                    placeholder={T.translate("settings.account.subdomain")}
+                    name="subdomain" 
+                    value={subdomain} 
+                    onChange={(e, {value}) => this.handleChange('subdomain', value)} 
+                    error={errors.subdomain}
+                  />
+                  <span className="red">{errors.name}</span>
+                </Form.Field>
 
-                  options={[
-                    <option key="default" value="" disabled>{T.translate("settings.account.select_industry")}</option>,
-                    <option key="human resource" value="human resource">Human resource</option>,
-                    <option key="fashion" value="fashion">Fashion</option>,
-                    <option key="import/export" value="import/export">Import/Export</option>,
-                    <option key="store" value="store">Store</option>,
-                    <option key="technology" value="technology">Technology</option>
-                    ]
-                  }
-                />
-                 <fieldset className="custom-fieldset">
+                <Form.Field>
+                  <label className={classnames({red: !!errors.industry})}>{T.translate("settings.account.industry")}</label>
+                  <Select 
+                    placeholder={T.translate("settings.account.select_industry")}
+                    name="industry"
+                    value={industry ? industry : '-'} 
+                    onChange={(e, {value}) => this.handleChange('industry', value)} 
+                    error={!!errors.industry}
+                    options={[
+                      { key: "human resource", value: "human resource", text: 'Human resource' },
+                      { key: "fashion", value: "fashion", text: 'Fashion' },
+                      { key: "import/export", value: "import/export", text: 'Import/Export' },
+                      { key: "store", value: "store", text: 'Store' },
+                      { key: "technology", value: "technology", text: 'Technology' }
+                    ]}
+                    selection
+                  />
+                  <span className="red">{errors.industry}</span>
+                </Form.Field>
+
+                <fieldset className="custom-fieldset">
                   <legend className="custom-legend">{T.translate("settings.account.contact.header")}</legend>
-                  <InputField
-                    label={T.translate("settings.account.contact.phone_number")}
-                    name="phoneNumber" 
-                    value={contact.phoneNumber} 
-                    onChange={this.handleChange.bind(this)} 
-                    placeholder="Phone number"
-                    error={errors.contact && errors.contact.phoneNumber}
-                    formClass="field"
-                  />
-                  <InputField
-                    label={T.translate("settings.account.contact.email")}
-                    name="email" 
-                    value={contact.email} 
-                    onChange={this.handleChange.bind(this)} 
-                    placeholder="Email"
-                     error={errors.contact && errors.contact.email}
-                    formClass="field"
-                  />
+                  <Form.Field>
+                    <label className={classnames({red: errors.contact && !!errors.contact.phoneNumber})}>{T.translate("settings.account.contact.phone_number")}</label>
+                    <Input 
+                      placeholder={T.translate("settings.account.contact.phone_number")}
+                      name="phoneNumber" 
+                      value={contact.phoneNumber} 
+                      onChange={(e, {value}) => this.handleChange('phoneNumber', value)} 
+                      error={errors.contact && !!errors.contact.phoneNumber}
+                    />
+                    <span className="red">{errors.contact && errors.contact.phoneNumber}</span>
+                  </Form.Field>
+                  <Form.Field>
+                    <label className={classnames({red: errors.contact && !!errors.contact.email})}>{T.translate("settings.account.contact.email")}</label>
+                    <Input 
+                      placeholder={T.translate("settings.account.contact.email")}
+                      name="email" 
+                      value={contact.email} 
+                      onChange={(e, {value}) => this.handleChange('email', value)} 
+                      error={errors.contact && !!errors.contact.email}
+                    />
+                    <span className="red">{errors.email}</span>
+                  </Form.Field>
                 </fieldset>
                 <fieldset className="custom-fieldset">
                   <legend className="custom-legend">{T.translate("settings.account.address.header")}</legend>
-                  <InputField
-                    label={T.translate("settings.account.address.street")}
-                    name="street" 
-                    value={address.street} 
-                    onChange={this.handleChange.bind(this)} 
-                    placeholder="Street"
-                    error={errors.address && errors.address.street}
-                    formClass="field"
-                  />
-                <InputField
-                  label={T.translate("settings.account.address.postal_code")}
-                  name="postalCode" 
-                  value={address.postalCode} 
-                  onChange={this.handleChange.bind(this)} 
-                  placeholder="Postal code"
-                  error={errors.address && errors.address.postalCode}
-                  formClass="field"
-                />
-                <div className={classnames("field", {error: errors['address.country']})}>              
-                  <label>{T.translate("settings.account.address.country")}</label>
-                  <CountryDropdown
-                    defaultOptionLabel={T.translate("settings.account.address.select_country")}
-                    value={address.country}
-                    onChange={(val) => this.selectCountry(val)} 
-                    error={errors.address && errors.address.country} />
-                  
-                  <span className={classnames({red: errors.address && errors.address.country})}>{errors.address && errors.address.country}</span>  
-                </div> 
-                <div className={classnames("field", {error: address.country !== '' && errors['address.region']})}>              
-                  <label>{T.translate("settings.account.address.region")}</label> 
-                  <RegionDropdown
-                    defaultOptionLabel={T.translate("settings.account.address.select_region")}
-                    disabled={address.country === ''}
-                    country={address.country}
-                    value={address.region}
-                    onChange={(val) => this.selectRegion(val)} 
-                     error={errors.address && errors.address.region} />
-                  
-                  <span className={classnames({red: address.region !== '' && errors.address && errors.address.region})}>{errors.address && errors.address.region}</span>  
-                </div>
+                  <Form.Field>
+                    <label className={classnames({red: errors.address && !!errors.address.street})}>{T.translate("settings.account.address.street")}</label>
+                    <Input 
+                      placeholder={T.translate("settings.account.address.street")}
+                      name="street" 
+                      value={address.street} 
+                      onChange={(e, {value}) => this.handleChange('street', value)} 
+                      error={errors.address && !!errors.address.street}
+                      fluid
+                    />
+                    <span className="red">{errors.address && errors.address.street}</span>
+                  </Form.Field>
+                  <Form.Field>
+                    <label className={classnames({red: errors.address && !!errors.address.street})}>{T.translate("settings.account.address.postal_code")}</label>
+                    <Input 
+                      placeholder={T.translate("settings.account.address.postal_code")}
+                      name="postalCode" 
+                      value={address.postalCode} 
+                      onChange={(e, {value}) => this.handleChange('postalCode', value)} 
+                      error={errors.address && !!errors.address.postalCode}
+                    />
+                    <span className="red">{errors.address && errors.address.postalCode}</span>
+                  </Form.Field>
+                  <div className={classnames("field", {error: errors['address.country']})}>              
+                    <label>{T.translate("settings.account.address.country")}</label>
+                    <CountryDropdown
+                      defaultOptionLabel={T.translate("settings.account.address.select_country")}
+                      value={address.country}
+                      onChange={(val) => this.selectCountry(val)} 
+                      error={errors.address && errors.address.country} />
+                    
+                    <span className={classnames({red: errors.address && errors.address.country})}>{errors.address && errors.address.country}</span>  
+                  </div> 
+                  <div className={classnames("field", {error: address.country !== '' && errors['address.region']})}>              
+                    <label>{T.translate("settings.account.address.region")}</label> 
+                    <RegionDropdown
+                      defaultOptionLabel={T.translate("settings.account.address.select_region")}
+                      disabled={address.country === ''}
+                      country={address.country}
+                      value={address.region}
+                      onChange={(val) => this.selectRegion(val)} 
+                       error={errors.address && errors.address.region} />
+                    
+                    <span className={classnames({red: address.region !== '' && errors.address && errors.address.region})}>{errors.address && errors.address.region}</span>  
+                  </div>
                 
-              </fieldset>
+                </fieldset>
 
-              <div className="field">  
-                <Link className="ui primary outline button" to="/dashboard">
-                  <i className="minus circle icon"></i>
-                  {T.translate("settings.account.cancel")}
-                </Link>  
-                <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.account.edit")}</button>
-              </div>  
-            </form>   
-          </div>
+                <div className="field">  
+                  <Link className="ui primary outline button" to="/dashboard">
+                    <i className="minus circle icon"></i>
+                    {T.translate("settings.account.cancel")}
+                  </Link>  
+                  <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.account.edit")}</button>
+                </div>  
+              </Form>   
+            </div>
 
-        </div> 
-      </div>   
-    </div>
-
+          </div> 
+        </div>   
+      </div>
     )
   }
 }
@@ -430,51 +442,8 @@ AccountForm.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-const getAccountQuery = gql`
-  query getAccount($subdomain: String!) {
-    getAccount(subdomain: $subdomain) {
-      id
-      subdomain
-      industry
-      email
-      phoneNumber
-      street
-      postalCode
-      region
-      country
-      logoUrl
-    }
-  }
-`
-
-const updateAccountMutation = gql`
-  mutation updateAccount($subdomain: String!, $industry: String, $email: String!, $phoneNumber: String, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
-    updateAccount(subdomain: $subdomain, industry: $industry, email: $email, phoneNumber: $phoneNumber, logoUrl: $logoUrl, street: $street, postalCode: $postalCode, region: $region, country: $country) {
-      success
-      account {
-        id
-        subdomain
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const s3SignLogoMutation = gql`
-  mutation s3SignLogo($fileName: String!, $fileType: String!) {
-    s3SignLogo(fileName: $fileName, fileType: $fileType) {
-      signedRequest
-      url
-      errors
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(updateAccountMutation, {
+  graphql(UPDATE_ACCOUNT_MUTATION, {
     name : 'updateAccountMutation',
     options: (props) => ({
       variables: {
@@ -482,10 +451,10 @@ const MutationQuery =  compose(
       },
     })
   }),
-  graphql(s3SignLogoMutation, {
+  graphql(S3_SIGN_LOGO_MUTATION, {
     name : 's3SignLogoMutation'
   }),
-  graphql(getAccountQuery, {
+  graphql(GET_ACCOUNT_QUERY, {
     options: (props) => ({
       variables: {
         subdomain: props.subdomain

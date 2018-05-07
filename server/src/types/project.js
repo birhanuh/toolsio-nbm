@@ -13,6 +13,7 @@ export default `
     customerId: Int!
     customer: Customer!
     user: User!
+    total: Float!
   }
 
   type GetProjectsResponse {
@@ -22,13 +23,35 @@ export default `
     status: String!
     description: String
     progress: Int
-    total: Int
     customer: Customer!
+    user: User!
+  }
+
+  type GetProjectsWithoutInvoiceResponse {
+    id: Int!
+    name: String!
+    deadline: Date!
+    status: String!
+    description: String
+    progress: Int
+    customer: Customer!
+    total: Float
+  }
+
+  type GetProjectsWithInvoiceResponse {
+    id: Int!
+    name: String!
+    deadline: Date!
+    status: String!
+    description: String
+    progress: Int
+    customer: Customer!
+    total: Float
   }
 
   type CreateUpdateProjectResponse {
     success: Boolean!
-    project: Project! 
+    project: Project!
     errors: [Error!]
   }
 
@@ -39,15 +62,19 @@ export default `
 
   type Query {
     getProject(id: Int!): Project
+    
     getProjects: [GetProjectsResponse!]!
+
+    getProjectsWithoutInvoice: [GetProjectsWithoutInvoiceResponse!]!
+
+    getProjectsWithInvoice: [GetProjectsWithoutInvoiceResponse!]!
   }
 
   type Mutation {
-    createProject(name: String!, deadline: Date!, status: String!, progress: Int, description: String, 
-      total: Int, customerId: Int!): CreateUpdateProjectResponse!
+    createProject(name: String!, deadline: Date!, status: String!, progress: Int, description: String, customerId: Int!): CreateUpdateProjectResponse!
     
     updateProject(id: Int!, name: String, deadline: Date, status: String, progress: Int, description: String, 
-      total: Int, customerId: Int): CreateUpdateProjectResponse!
+      ,customerId: Int): CreateUpdateProjectResponse!
     
     deleteProject(id: Int!): DeleteProjectResponse!
   }

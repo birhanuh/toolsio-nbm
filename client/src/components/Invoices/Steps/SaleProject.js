@@ -1,16 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { SelectField } from '../../../utils/FormFields'
+import classnames from 'classnames'
+// Semantic UI Form elements
+import { Select, Form } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
 
-export default function SaleProject({ _id, step1, salesOptions, projectsOptions, handleChange, handleNext, errors }) {
+export default function SaleProject({ id, step1, salesOption, projectsOption, handleChange, handleNext, errors }) {
 
   return (
     <div className="ui form"> 
       <div className="inline field"> 
-        {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
+        {id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
           <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
             <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.sale_or_project")}</div>
           </h1>
@@ -20,31 +22,38 @@ export default function SaleProject({ _id, step1, salesOptions, projectsOptions,
       <fieldset className="custom-fieldset">
         <legend className="custom-legend">{T.translate("invoices.form.select_sale_or_project")}</legend>
         
-        <SelectField
-          label={T.translate("invoices.form.sales")}
-          name="saleId"
-          value={step1.saleId ? step1.saleId : ''} 
-          onChange={handleChange} 
-          error={errors.sale}
-          formClass="inline field"
-
-          options={[<option key="default" value="">{T.translate("invoices.form.select_sale")}</option>,
-            salesOptions]}
-        />
-
-         <div className="ui horizontal divider">Or</div>
-
-         <SelectField
-          label={T.translate("invoices.form.projects")}
-          name="projectId"
-          value={step1.projectId ? step1.projectId : ''} 
-          onChange={handleChange} 
-          error={errors.project}
-          formClass="inline field"
-
-          options={[<option key="default" value="">{T.translate("invoices.form.select_project")}</option>,
-            projectsOptions]}
-        />
+        { projectsOption && salesOption && 
+          <Form.Field inline>
+            <label className={classnames({red: !!errors.sale})}>{T.translate("invoices.form.sale")}</label>
+            <Select 
+              placeholder={T.translate("invoices.form.select_sale")}
+              name="saleId"
+              value={step1.saleId ? step1.saleId : ''} 
+              onChange={(e, {value}) => handleChange('saleId', value)} 
+              error={!!errors.sale}
+              options={salesOption}
+              selection
+            />
+            <span className="red">{errors.saleId}</span>
+          </Form.Field>
+        }  
+        <div className="ui horizontal divider">Or</div>
+        { projectsOption && salesOption &&   
+          <Form.Field inline>
+            <label className={classnames({red: !!errors.project})}>{T.translate("invoices.form.project")}</label>
+            <Select 
+              label={T.translate("invoices.form.projects")}
+              placeholder={T.translate("invoices.form.select_project")}
+              name="projectId"
+              value={step1.projectId ? step1.projectId : ''} 
+              onChange={(e, {value}) => handleChange('projectId', value)} 
+              error={!!errors.project}
+              options={projectsOption}
+              selection
+            />
+            <span className="red">{errors.projectId}</span>
+          </Form.Field> 
+        }
       </fieldset>
 
       <div className="inline field mt-5"> 

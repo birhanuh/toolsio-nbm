@@ -7,7 +7,7 @@ import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import Steps from './Steps'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, GET_PROJECTS_SALES_WITH_INVOICE_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../graphql/invoices'
 
 import SaleProject from './Steps/SaleProject'
 import Details from './Steps/Details'
@@ -35,84 +35,86 @@ class Form extends Component {
         paymentTerm: this.props.data.getInvoice ? this.props.data.getInvoice.paymentTerm : '',
         interestInArrears: this.props.data.getInvoice ? this.props.data.getInvoice.interestInArrears : '',
         status: this.props.data.getInvoice ? this.props.data.getInvoice.status : 'new',
-        description: this.props.data.getInvoice ? this.props.data.getInvoice.description : ''
+        description: this.props.data.getInvoice ? this.props.data.getInvoice.description : '',
+        tax: this.props.data.getInvoice ? this.props.data.getInvoice.tax : '',
+        customerId: this.props.data.getInvoice ? this.props.data.getInvoice.customerId : null,
+        sale: this.props.data.getInvoice ? this.props.data.getInvoice.sale : null,
+        project: this.props.data.getInvoice ? this.props.data.getInvoice.project : null,
       },
-      sale: this.props.data.getInvoice ? this.props.data.getInvoice.sale : null,
-      project: this.props.data.getInvoice ? this.props.data.getInvoice.project : null,
-      customerId: this.props.data.getInvoice ? this.props.data.getInvoice.customerId : null,
       currentStep: 'step1',
       errors: {},
       isLoading: false
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  componentWillReceiveProps = (nextProps) => {  
     if (nextProps.data.getInvoice) {
       this.setState({
         id: nextProps.data.getInvoice.id,
         step1: {
-          saleId: !!nextProps.data.getInvoice.sale && nextProps.data.getInvoice.sale.id,
-          projectId: !!nextProps.data.getInvoice.project && nextProps.data.getInvoice.project.id
+          saleId: nextProps.data.getInvoice.sale && nextProps.data.getInvoice.sale.id,
+          projectId: nextProps.data.getInvoice.project && nextProps.data.getInvoice.project.id,
         },
         step2: {
           deadline: nextProps.data.getInvoice.deadline ? moment(nextProps.data.getInvoice.deadline) : null,
           paymentTerm: nextProps.data.getInvoice.paymentTerm,
           interestInArrears: nextProps.data.getInvoice.interestInArrears,
           status: nextProps.data.getInvoice.status,
-          description: nextProps.data.getInvoice.description
+          description: nextProps.data.getInvoice.description,
+          tax: nextProps.data.getInvoice.tax,
+          customerId: nextProps.data.getInvoice.customerId,
+          sale: nextProps.data.getInvoice.sale,
+          project: nextProps.data.getInvoice.project
         },
-        sale: nextProps.data.getInvoice.sale,
-        project: nextProps.data.getInvoice.project,
-        customerId: nextProps.data.getInvoice.customerId
       })
     }
   }
 
-  handleChange = (e) => {
-    if (this.state.errors[e.target.name]) {
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
-      if (e.target.name === "saleId" || e.target.name === "projectId") {
+      if (name === "saleId" || name === "projectId") {
     
         this.setState({
-          step1: { ...this.state.step1, [e.target.name]: e.target.value },
+          step1: { ...this.state.step1, [name]: value },
           errors
         })
-      } else if (e.target.name === "deadline" || e.target.name === "paymentTerm"
-        || e.target.name === "interestInArrears" || e.target.name === "status"
-        || e.target.name === "description" ) {
+      } else if (name === "deadline" || name === "paymentTerm"
+        || name === "interestInArrears" || name === "status"
+        || name === "description" || name === "tax") {
 
         this.setState({
-          step2: { ...this.state.step2, [e.target.name]: e.target.value },
+          step2: { ...this.state.step2, [name]: value },
           errors
         })
       } else {
 
         this.setState({
-          [e.target.name]: e.target.value,
+          [name]: value,
           errors
         })
       }
     } else {
 
-     if (e.target.name === "saleId" || e.target.name === "projectId") {
+     if (name === "saleId" || name === "projectId") {
     
         this.setState({
-          step1: { ...this.state.step1, [e.target.name]: e.target.value }
+          step1: { ...this.state.step1, [name]: value }
         })
-      } else if (e.target.name === "deadline" || e.target.name === "paymentTerm"
-        || e.target.name === "interestInArrears" || e.target.name === "status"
-        || e.target.name === "description" ) {
+      } else if (name === "deadline" || name === "paymentTerm"
+        || name === "interestInArrears" || name === "status"
+        || name === "description" || name === "tax") {
 
         this.setState({
-          step2: { ...this.state.step2, [e.target.name]: e.target.value }
+          step2: { ...this.state.step2, [name]: value }
         })
       } else {
 
         this.setState({
-          [e.target.name]: e.target.value,
+          [name]: value,
         })
       }
     }
@@ -139,16 +141,16 @@ class Form extends Component {
 
     // Validation
     if (this.isValid()) { 
-      const { id, project, sale, customerId } = this.state
-      const { saleId, projectId } = this.state.step1
-      const { deadline, paymentTerm, interestInArrears, status, description } = this.state.step2
+      const { id } = this.state
+      const { saleId, projectId, project, sale } = this.state.step1
+      const { deadline, paymentTerm, interestInArrears, status, description, tax, customerId } = this.state.step2
 
       this.setState({ isLoading: true })
     
       if (id) {
         this.props.updateInvoiceMutation({ 
         variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
-          status, description, projectId: parseInt(projectId), 
+          status, description, tax, projectId: parseInt(projectId), 
           saleId: parseInt(saleId), customerId },
         update: (store, { data: { updateInvoice } }) => {
           const { success, invoice } = updateInvoice
@@ -157,7 +159,7 @@ class Form extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getInvoicesQuery })
+          const data = store.readQuery({ query: GET_INVOICES_QUERY })
           // Add our comment from the mutation to the end.
           
           let updatedInvoices = data.getInvoices.map(item => {
@@ -170,11 +172,10 @@ class Form extends Component {
           data.getInvoices = updatedInvoices
 
           // Write our data back to the cache.
-          store.writeQuery({ query: getInvoicesQuery, data })
+          store.writeQuery({ query: GET_INVOICES_QUERY, data })
         }})
         .then(res => {         
-
-          const { success, invoice, errors } = res.data.updateInvoice
+          const { success, errors } = res.data.updateInvoice
 
           if (success) {
             this.props.addFlashMessage({
@@ -194,7 +195,7 @@ class Form extends Component {
       } else { 
         this.props.createInvoiceMutation({ 
           variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
-            status, description, projectId: parseInt(projectId), 
+            status, description, tax, projectId: parseInt(projectId), 
             saleId: parseInt(saleId), customerId: parseInt(customerId) },
           update: (store, { data: { createInvoice } }) => {
             const { success, invoice } = createInvoice
@@ -203,20 +204,19 @@ class Form extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getInvoicesQuery })
+            const data = store.readQuery({ query: GET_INVOICES_QUERY })
             // Add our comment from the mutation to the end.
             data.getInvoices.push(invoice)
             // Write our data back to the cache.
-            store.writeQuery({ query: getInvoicesQuery, data })
+            store.writeQuery({ query: GET_INVOICES_QUERY, data })
           }})
-          .then(res => {
-            
-            const { success, invoice, errors } = res.data.createInvoice
+          .then(res => {            
+            const { success, errors } = res.data.createInvoice
 
             if (success) {
               this.props.addFlashMessage({
                 type: 'success',
-                text: T.translate("invoices.form.flash.success_update", { name: (project && project.name) || (sale && sale.name)})
+                text: T.translate("invoices.form.flash.success_create", { name: (project && project.name) || (sale && sale.name)})
               })
 
               this.context.router.history.push('/invoices')
@@ -235,6 +235,8 @@ class Form extends Component {
   handleNext = (e) => {
     e.preventDefault()
     
+    const { id } = this.state
+
     if (this.state.currentStep === 'step1') {
       // Validation
       if (this.isValid()) { 
@@ -247,21 +249,39 @@ class Form extends Component {
       }
     }
 
-    if (this.state.id === null) {
-      const sale = this.props.getProjectsSalesQuery.getSales.find(item => item.id === parseInt(this.state.step1.saleId) ) 
-      this.setState({
-        sale: sale,
-        customerId: sale && sale.customer.id
-      })
+    if (id === null) {
+      const sale = this.props.getProjectsSalesWithoutInvoiceQuery.getSalesWithoutInvoice.find(item => item.id === parseInt(this.state.step1.saleId) ) 
+      if (sale) {
+        this.setState({
+          step1: { ...this.state.step1, sale: sale },
+          step2: { ...this.state.step2, customerId: sale.customer.id }
+        })
+      }
 
-      const project = this.props.getProjectsSalesQuery.getProjects.find(item => item.id === parseInt(this.state.step1.projectId) ) 
- 
-      this.setState({
-        project: project,
-        customerId: project && project.customer.id
-      })
+      const project = this.props.getProjectsSalesWithoutInvoiceQuery.getProjectsWithoutInvoice.find(item => item.id === parseInt(this.state.step1.projectId) )  
+      if (project) {
+        this.setState({
+          step1: { ...this.state.step1, project: project },
+          step2: { ...this.state.step2, customerId: project.customer.id }
+        })
+      }
+    } else {
+      const sale = this.props.getProjectsSalesWithInvoiceQuery.getSalesWithInvoice.find(item => item.id === parseInt(this.state.step1.saleId) ) 
+      if (sale) {
+        this.setState({
+          step1: { ...this.state.step1, sale: sale },
+          step2: { ...this.state.step2, customerId: sale.customer.id }
+        })
+      }
+
+      const project = this.props.getProjectsSalesWithInvoiceQuery.getProjectsWithInvoice.find(item => item.id === parseInt(this.state.step1.projectId) )  
+      if (project) {
+        this.setState({
+          step1: { ...this.state.step1, project: project },
+          step2: { ...this.state.step2, customerId: project.customer.id }
+        })
+      }
     }
-
   }
 
   handlePrevious = (e) => {
@@ -293,16 +313,28 @@ class Form extends Component {
   } 
 
   render() {
-    const { id, step1, step2, sale, project, errors, isLoading, currentStep } = this.state
+    const { id, step1, step2, errors, isLoading, currentStep } = this.state
+    
+    const { getProjectsWithInvoice, getSalesWithInvoice } = this.props.getProjectsSalesWithInvoiceQuery
+    const { getProjectsWithoutInvoice, getSalesWithoutInvoice } = this.props.getProjectsSalesWithoutInvoiceQuery
 
-    const { getProjects, getSales } = this.props.getProjectsSalesQuery
- 
-    const salesOptions = map(getSales, (sale) => 
-      <option key={sale.id} value={sale.id}>{sale.name}</option>
+    let salesList
+    let projectsList
+
+    if (id) {
+      salesList = getSalesWithInvoice
+      projectsList = getProjectsWithInvoice
+    } else {
+      salesList = getSalesWithoutInvoice
+      projectsList = getProjectsWithoutInvoice 
+    }
+
+    const salesOption = salesList && map(salesList, (sale) => 
+      ({ key: sale.id, value: sale.id, text: sale.name })
     )
-
-    const projectsOptions = map(getProjects, (project) => 
-      <option key={project.id} value={project.id}>{project.name}</option>
+    
+    const projectsOption = projectsList && map(projectsList, (project) => 
+      ({ key: project.id, value: project.id, text: project.name })
     )
 
     return ( 
@@ -314,17 +346,21 @@ class Form extends Component {
         <Steps currentStep={this.state.currentStep}/> 
 
         <div className="ui text container segment">
-          {currentStep === 'step1' &&  <SaleProject id={id} salesOptions={salesOptions} projectsOptions={projectsOptions} step1={step1} handleChange={this.handleChange.bind(this)} handleNext={this.handleNext.bind(this)} errors={errors} />}
+          {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption} 
+            projectsOption={projectsOption} step1={step1} handleChange={this.handleChange} 
+            handleNext={this.handleNext.bind(this)} errors={errors} />}
 
-          {currentStep === 'step2' && <Details id={id} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} handleChange={this.handleChange.bind(this)} handlePrevious={this.handlePrevious.bind(this)}
-              handleNext={this.handleNext.bind(this)} errors={errors} /> }
+          {currentStep === 'step2' && <Details id={id} step1={step1} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} 
+            handleChange={this.handleChange} handlePrevious={this.handlePrevious.bind(this)}
+            handleNext={this.handleNext.bind(this)} errors={errors} /> }
 
           <form className={classnames("ui form", { loading: isLoading })}>
 
-            { !!errors && !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={sale} project={project} handlePrevious={this.handlePrevious.bind(this)} 
-                handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
+            {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={step1.sale} project={step1.project} 
+              handlePrevious={this.handlePrevious.bind(this)} 
+              handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
 
           </form> 
         </div>
@@ -343,177 +379,23 @@ Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createInvoiceMutation = gql`
-  mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
-    $description: String, $projectId: Int, $saleId: Int, $customerId: Int!) {
-    createInvoice(deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
-      description: $description, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
-      success
-      invoice {
-        id
-        deadline
-        referenceNumber
-        status
-        total
-        project {
-          id
-          name
-        }
-        sale {
-          id
-          name
-        }
-        customer {
-          id
-          name
-          vatNumber
-          email
-          phoneNumber
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateInvoiceMutation = gql`
-  mutation updateInvoice($id: Int!, $deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
-    $description: String, $projectId: Int, $saleId: Int, $customerId: Int!) {
-    updateInvoice(id: $id, deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
-      description: $description, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
-      success
-      invoice {
-        id
-        deadline
-        referenceNumber
-        status
-        total
-        project {
-          id
-          name
-        }
-        sale {
-          id
-          name
-        }
-        customer {
-          id
-          name
-          vatNumber
-          email
-          phoneNumber
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getProjectsSalesQuery = gql`
-  {
-    getProjects {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      total
-      customer {
-        id
-        name
-      }
-    }
-    getSales {
-      id
-      name 
-      deadline
-      status
-      description
-      total
-      customer {
-        id
-        name
-      }
-    }
-}
-`
-
-const getInvoicesQuery = gql`
-  query {
-    getInvoices {
-      id
-      deadline
-      referenceNumber
-      status
-      total
-      project {
-        id
-        name
-      }
-      sale {
-        id
-        name
-      }
-      customer {
-        id
-        name
-        vatNumber
-        email
-        phoneNumber
-      }
-    }
-  }
-`
-
-const getInvoiceQuery = gql`
-  query getInvoice($id: Int!) {
-    getInvoice(id: $id) {
-      id
-      deadline
-      paymentTerm
-      interestInArrears
-      referenceNumber
-      status
-      description
-      createdAt
-      customerId
-      project {
-        id
-        name
-        deadline
-        progress
-        status
-      }
-      sale {
-        id
-        name
-        deadline
-        status
-      }
-    }
-  }
-`
 const MutationsQuery =  compose(
-  graphql(createInvoiceMutation, {
+  graphql(CREATE_INVOICE_MUTATION, {
     name : 'createInvoiceMutation'
   }),
-  graphql(updateInvoiceMutation, {
+  graphql(UPDATE_INVOICE_MUTATION, {
     name: 'updateInvoiceMutation'
   }),
-  graphql(getProjectsSalesQuery, {
-    name : 'getProjectsSalesQuery'
+  graphql(GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, {
+    name : 'getProjectsSalesWithoutInvoiceQuery'
   }),
-  graphql(getInvoicesQuery, {
+  graphql(GET_PROJECTS_SALES_WITH_INVOICE_QUERY, {
+    name : 'getProjectsSalesWithInvoiceQuery'
+  }),
+  graphql(GET_INVOICES_QUERY, {
     name : 'getInvoicesQuery'
   }),
-  graphql(getInvoiceQuery, {
+  graphql(GET_INVOICE_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0

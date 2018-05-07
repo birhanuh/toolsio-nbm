@@ -20,8 +20,6 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
       </div> 
       
       <dl className="dl-horizontal">
-        {/*<dt>{T.translate("invoices.show.user")}</dt>
-        <dd>{invoice.user.first_name}</dd>*/}  
         <dt>{T.translate("invoices.show.deadline")}</dt>
         <dd>{step2.deadline ? moment(step2.deadline).format("DD/MM/YYYY") : '-'}</dd>
         <dt>{T.translate("invoices.show.status")}</dt>
@@ -31,7 +29,12 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
         <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
         <dd>{step2.interestInArrears}</dd>
         <dt>{T.translate("invoices.show.description")}</dt>
-        <dd>{step2.description}</dd>
+        <dd>{step2.description ? step2.description : '-'}</dd>
+        <dt><strong>{T.translate("invoices.show.total")}</strong></dt>
+        <dd><strong>
+          {project && project.total} {sale && sale.total}
+          </strong>
+        </dd>
       </dl>  
       
       {sale &&

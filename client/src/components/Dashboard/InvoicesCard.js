@@ -1,174 +1,166 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
-import { fetchInvoices } from '../../actions/dashboardActions'
+import gql from "graphql-tag"
+import { Query } from "react-apollo"
 
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend } from 'react-vis'
+import pick from 'lodash/pick'
+
+import { Bar } from 'react-chartjs-2'
 
 // Localization 
 import T from 'i18n-react'
 
-class InvoicesCard extends Component {
-
-   state = {
-    value: false,
-    isLoading: false
+const GET_INVOICES_DATA = gql`
+  {
+    getInvoicesData {
+      countStatusMonth {
+        status
+        count
+        month
+      }
+      countMonth {
+        month
+        count
+      }
   }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.invoices) {
-      this.setState({ isLoading: false })
-    }
-  }
-
-  componentDidMount = () => {
-    this.setState({ isLoading: true })
-    this.props.fetchInvoices()
-      .catch( ({response}) => this.setState({ isLoading: false }) )
-  }
-
-  render() {
-
-  const { value, isLoading } = this.state
-  const { invoices } = this.props
-
-  let dataNew = []
-  let dataPending = []
-  let dataOverdue = []
-  let dataPaid = []
-
-  const data = invoices && invoices.lastTwoMonths.length !== 0 && invoices.lastTwoMonths[1].data.map(invoice => {
-
-    let invoiceStatusClass          
-    switch(invoice.status) {
-      case 'new':
-        invoiceStatusClass = 'blue'
-        dataNew.push({x: invoice.week, y: invoice.count, status: invoice.status})
-        break
-      case 'pending':
-        invoiceStatusClass = 'orange'
-        dataNew.push({x: invoice.week, y: invoice.count, status: invoice.status})
-        break
-      case 'overdue':
-        invoiceStatusClass = 'red'
-        dataOverdue.push({x: invoice.week, y: invoice.count, status: invoice.status})
-        break
-      case 'paid':
-        invoiceStatusClass = 'green' 
-        dataPaid.push({x: invoice.week, y: invoice.count, status: invoice.status})
-        break
-      default:
-        invoiceStatusClass = 'undefined' 
-    }
+}
+`
+const InvoicesCard = () => (
+  <Query query={GET_INVOICES_DATA}>
+    {({ loading, error, data }) => {
     
-    })
+      const countStatusMonth = data && data.getInvoicesData && data.getInvoicesData.countStatusMonth
+      const countMonth = data && data.getInvoicesData && data.getInvoicesData.countMonth
 
-  console.log('dataNew invoice: ', dataNew)
-   console.log('dataPending invoice: ', dataPending)
-    console.log('dataOverdue nvoice: ', dataOverdue )
-     console.log('dataPaid invoice: ', dataPaid)
-  return (
-    <div className={classnames("ui card dashboard form", { loading: isLoading })}>
-      <div className="content">
-        <div className="right floated">
-          <h4 className="ui header">
-            <i className="file text outline icon"></i>
-          </h4>
-        </div> 
-        <div className="left floated">
-          <h4 className="ui header">
-            { T.translate("dashboard.invoices.header")}
-          </h4>
-        </div>       
-      </div>
+      let statusPick = countStatusMonth && countStatusMonth.map(item => pick(item, ['status']).status)
+      let monthPick = countStatusMonth && countStatusMonth.map(item => pick(item, ['month']).month.substring(0, 3))
+      let countPick = countStatusMonth && countStatusMonth.map(item => pick(item, ['count']).count)
+      console.log('status', statusPick)
+      console.log('count', countPick)
+      console.log('month', monthPick)
 
-      <div className="image">
-        <XYPlot
-          xType="ordinal"
-          width={600}
-          height={200}
-          >
-          <DiscreteColorLegend
-            className="legend-center-top-aligned"
-            orientation="horizontal" items={[
-              {
-                title: 'New',
-                color: '#199CD5'
+      let chartData = {
+        labels: ['Apr'],
+        datasets: [
+          {
+            label: 'New',
+            data: [5],
+            backgroundColor: "rgba(25,156,213,0.75)",
+            hoverBackgroundColor: "rgba(25,156,213,0.9)",
+            borderWidth: 2
+          },
+          {
+            label: 'Paid',
+            data: [2],
+            backgroundColor: "rgba(125,164,13,0.75)",
+            hoverBackgroundColor: "rgba(125,164,13,0.9)",
+            borderWidth: 2
+          },{
+            label: 'Pending',
+            data: [3],
+            backgroundColor: "rgba(240,115,15,0.75)",
+            hoverBackgroundColor: "rgba(240,115,15,0.9)",
+            borderWidth: 2,
+          },{
+            label: 'Overdue',
+            data: [1],
+            backgroundColor: "rgba(190,10,10,0.75)",
+            hoverBackgroundColor: "rgba(190,10,10,0.9)",
+            borderWidth: 2
+          }],
+          scaleBeginAtZero : true,
+          scaleShowGridLines : true,
+          scaleGridLineColor : "rgba(0,0,0,.05)",
+          scaleGridLineWidth : 1,
+          barShowStroke : true,
+          barStrokeWidth : 1,
+          barValueSpacing : 5,
+          barDatasetSpacing : 1,
+          responsive:true
+      }
+
+      const chartOptions = {
+        responsive: true,
+        title: {
+          display: true
+        },
+        tooltips: {
+          mode: 'label'
+        },
+        hover: {
+          mode: 'dataset'
+        },
+        options: {
+          legend: {
+            borderWidth: false
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                beginAtZero:true
               },
-              {
-                title: 'Pending',
-                color: '#F0730F'
-              },
-              {
-                title: 'Overdue',
-                color: '#be0a0a'
-              },
-              {
-                title: 'Paid',
-                color: '#7DA40D'
+              gridLines: {
+                display:false
               }
-            ]}
-          />
-          <VerticalGridLines />
-          <HorizontalGridLines />
-          <XAxis tickFormat={v => `Week ${v}`} />
-          <YAxis />
-          <VerticalBarSeries
-            color="#199CD5"
-            data={dataNew}/>
-          <VerticalBarSeries
-            color="#F0730F"
-            data={dataPending}/>
-          <VerticalBarSeries
-            color="#be0a0a"
-            data={dataOverdue}/>
-          <VerticalBarSeries
-            color="#7DA40D"
-            data={dataPaid}/>
-        </XYPlot>
-      </div>
+            }]
+          }
+        }
+      }
 
-      <div className="content"> 
-        <div className="right floated">
-          <div className="meta">{T.translate("dashboard.this_month")}</div>
-          <div className="header">
-            {invoices && invoices.lastTwoMonths.length !== 0 && invoices.lastTwoMonths[1].totalCount}
-            {invoices && invoices.lastTwoMonths.length !== 0 && (invoices.lastTwoMonths[0].totalCount > invoices.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
-              <i className="long arrow up green icon"></i>}
+      return (
+        <div className={classnames("ui card dashboard form", { loading: loading })}>
+          <div className="content">
+            <div className="right floated">
+              <h4 className="ui header">
+                <i className="file text outline icon"></i>
+              </h4>
+            </div> 
+            <div className="left floated">
+              <h4 className="ui header">
+                {T.translate("dashboard.invoices.header")}
+              </h4>
+            </div>       
           </div>
-        </div>     
-        <div className="left floated">
-          <div className="meta">{T.translate("dashboard.last_month")}</div>
-          <div className="header">{invoices && invoices.lastTwoMonths.length !== 0 && invoices.lastTwoMonths[0].totalCount}</div>
-        </div>    
-      </div>
 
-       {(!!invoices || (invoices && invoices.total && invoices.total.count === 0)) &&
-          <div className="content-btn-outer-container">
-            <div className="content-btn-inner-container">
-              <Link to="/invoices" className="ui primary outline button small">
-                <i className="check circle outline icon"></i>{T.translate("dashboard.invoices.create_first_invoice")}
-              </Link>
+          <div className="image">
+
+            <Bar data={chartData} options={chartOptions} />
+
+          </div>
+          
+          <div className="content">
+            { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
+            <div className="right floated">
+              <div className="meta">{T.translate("dashboard.this_month")}</div>
+              <div className="header">
+                {countMonth && countMonth ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
+                {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow down red icon"></i> : 
+                  <i className="long arrow up green icon"></i>)}
+                </div>
+            </div>     
+            <div className="left floated">
+              <div className="meta">{T.translate("dashboard.last_month")}</div>
+              <div className="header">
+                {countMonth && countMonth[1] ? (countMonth[1].count ? countMonth[1].count : '-') : '-'}
+              </div>
+            </div>    
+          </div> 
+
+          {countStatusMonth && countStatusMonth.length === 0 || countMonth && countMonth.length === 0 && 
+            <div className="content-btn-outer-container">
+              <div className="content-btn-inner-container">
+                <Link to="/invoices" className="ui primary outline button small">
+                  <i className="check circle outline icon"></i>{T.translate("dashboard.invoices.create_first_invoice")}
+                </Link>
+              </div>
             </div>
-          </div>
-        }  
-    </div> 
-    )
-  }
+          }          
+        </div>
+      )
+    }}
+  </Query>
+)
 
-}
-
-InvoicesCard.propTypes = {  
-  fetchInvoices: PropTypes.func.isRequired
-}
-
-function mapStateToProps(state) {
-  return {
-    invoices: state.dashboard.invoices
-  }
-}
-
-export default connect(mapStateToProps, { fetchInvoices }) (InvoicesCard)
+export default InvoicesCard
 

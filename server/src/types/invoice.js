@@ -9,12 +9,13 @@ export default `
     referenceNumber: String!
     description: String
     createdAt: Date!
-    total: Int!
+    tax: Float!
     customerId: Int!
     project: Project
     sale: Sale
     customer: Customer!
     user: User!
+    total: Float!
   }
 
   type GetInvoicesResponse {
@@ -22,7 +23,10 @@ export default `
     deadline: Date!
     referenceNumber: String!
     status: String!
-    total: Int!
+    tax: Float!
+    total: Float!
+    projectId: Int
+    saleId: Int
     project: Project
     sale: Sale
     customer: Customer! 
@@ -41,16 +45,17 @@ export default `
 
   type Query {
     getInvoice(id: Int!): Invoice
+    
     getInvoices: [GetInvoicesResponse!]!
   }
 
   type Mutation {
     createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String!, 
-      , description: String, projectId: Int, saleId: Int, 
+      , description: String, tax: Float!, projectId: Int, saleId: Int, 
       customerId: Int!): CreateUpdateInvoiceResponse!
     
-    updateInvoice(id: Int!, deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String, 
-      , description: String, projectId: Int, saleId: Int, 
+    updateInvoice(id: Int!, deadline: Date, paymentTerm: Int, interestInArrears: Int, status: String, 
+      , description: String, tax: Float, projectId: Int, saleId: Int, 
       customerId: Int): CreateUpdateInvoiceResponse!  
 
     deleteInvoice(id: Int!): DeleteInvoiceResponse!

@@ -1,152 +1,123 @@
-import React, { Component }  from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
-import { fetchSales } from '../../actions/dashboardActions'
+import gql from "graphql-tag"
+import { Query } from "react-apollo"
 
-import { RadialChart, Hint } from 'react-vis'
+import pick from 'lodash/pick'
+
+import { Doughnut } from 'react-chartjs-2'
 
 // Localization 
 import T from 'i18n-react'
 
-class SalesCard extends Component {
-
-  state = {
-    value: false,
-    isLoading: false
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.sales) {
-      this.setState({ isLoading: false })
+const GET_SALES_DATA = gql`
+  {
+    getSalesData {
+      countStatus {
+        status
+        count
+      }
+      countMonth {
+        month
+        count
+      }
     }
   }
+`
+const SalesCard = () => (
+  <Query query={GET_SALES_DATA}>
+    {({ loading, error, data }) => {
+    
+      const countStatus = data && data.getSalesData && data.getSalesData.countStatus
+      const countMonth = data && data.getSalesData && data.getSalesData.countMonth
 
-  componentDidMount = () => {
-    this.setState({ isLoading: true })
-    this.props.fetchSales()
-      .catch( ({response}) => this.setState({ isLoading: false }) )
-  }
+      let statusPick = countStatus && countStatus.map(item => pick(item, ['status']).status)
+      let countPick = countStatus && countStatus.map(item => pick(item, ['count']).count)
 
-  render() {
-
-    const { value, isLoading } = this.state
-    const { sales } = this.props
-
-    const data = sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[1] && sales.lastTwoMonths[1].data.map(sale => {
-
-      let saleStatusClass          
-      switch(sale.status) {
-        case 'new':
-          saleStatusClass = 'blue-graph'
-          break
-        case 'in progress':
-          saleStatusClass = 'orange-graph'
-          break
-        case 'overdue':
-          saleStatusClass = 'red-graph'
-          break
-        case 'ready':
-          saleStatusClass = 'green-graph' 
-          break
-        case 'delivered':
-          saleStatusClass = 'turquoise-graph' 
-          break
-         case 'delayed':
-          saleStatusClass = 'red-graph' 
-          break
-        default:
-          saleStatusClass = 'undefined'
+      let chartData = {
+        labels: statusPick,
+        datasets: [
+          {
+            label: 'Incomes',
+            data: countPick,
+            backgroundColor: ["rgba(125,164,13,0.75)", "rgba(25,156,213,0.75)", "rgba(240,115,15,0.75)", "rgba(190,10,10,0.75)"],
+            hoverBackgroundColor: ["rgba(125,164,13,1)", "rgba(25,156,213,1)", "rgba(240,115,15,1)", "rgba(190,10,10,1)"]
+          }]
       }
 
-      return ({theta: sale.count, status: sale.status, className: ''+saleStatusClass+''})
-      })
+      const chartOptions = {
+        responsive: true,
+        title: {
+          display: true
+        },
+        tooltips: {
+          mode: 'label'
+        },
+        hover: {
+          mode: 'dataset'
+        },
+        options: {
+          animation: { 
+            animateScale: true,
+            animateRotate: true
+          }
+        }
+      }
 
-    const tooltipClass = {
-      fontSize: '12px',
-      background: 'black', 
-      opacity: 0.85, 
-      color: '#ffffff', 
-      padding: '5px', 
-      borderRadius: '5px'
-    }
-
-    return (
-      <div className={classnames("ui card dashboard form", { loading: isLoading })}>
-        <div className="content">
-          <div className="right floated">
-            <h4 className="ui header">
-              <i className="cart icon"></i>
-            </h4>
-          </div> 
-          <div className="left floated">
-            <h4 className="ui header">
-              {T.translate("dashboard.sales.header")}
-            </h4>
-          </div>       
-        </div>
-
-        <div className="image">
-          <RadialChart
-            className={'donut-chart-example'}
-            innerRadius={55}
-            radius={95}
-            getAngle={d => d.theta}
-            data={data ? data : [{theta: 0}]}
-            onValueMouseOver={v => this.setState({value: v})}
-            onSeriesMouseOut={v => this.setState({value: false})}
-            width={300}
-            height={200}>
-            {value && 
-              <Hint value={value}>
-                <div style={tooltipClass}>
-                  <p><strong>Status: </strong><span style={{textTransform: 'capitalize'}}>{value.status}</span></p>
-                  <p><strong>Number: </strong>{value.theta}</p>
-                </div>
-              </Hint>
-            }
-          </RadialChart>
-        </div>
-
-        <div className="content">
-          <div className="right floated">
-            <div className="meta">{T.translate("dashboard.this_month")}</div>
-            <div className="header">
-              {sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[1] && sales.lastTwoMonths[1].totalCount}
-              {sales && sales.lastTwoMonths.length !== 0 && (sales.lastTwoMonths[0].totalCount > sales.lastTwoMonths[1] && sales.lastTwoMonths[1].totalCount ) ? <i className="long arrow down red icon"></i> : 
-              <i className="long arrow up green icon"></i>}
-            </div>
-          </div>     
-          <div className="left floated">
-            <div className="meta">{T.translate("dashboard.last_month")}</div>
-            <div className="header">{sales && sales.lastTwoMonths.length !== 0 && sales.lastTwoMonths[0].totalCount}</div>
-          </div>    
-        </div>
-
-        {sales && sales.total && sales.total.count === 0 &&
-          <div className="content-btn-outer-container">
-            <div className="content-btn-inner-container">
-              <Link to="/sales" className="ui primary outline button small">
-                <i className="check circle outline icon"></i>{T.translate("dashboard.sales.create_first_sale")}
-              </Link>
-            </div>
+      return (
+        <div className={classnames("ui card dashboard form", { loading: loading })}>
+          <div className="content">
+            <div className="right floated">
+              <h4 className="ui header">
+                <i className="cart icon"></i>
+              </h4>
+            </div> 
+            <div className="left floated">
+              <h4 className="ui header">
+                {T.translate("dashboard.sales.header")}
+              </h4>
+            </div>       
           </div>
-        }   
-      </div> 
+
+          <div className="image">
+
+            <Doughnut data={chartData} options={chartOptions} />
+
+          </div>
+          
+          <div className="content">
+            { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
+            <div className="right floated">
+              <div className="meta">{T.translate("dashboard.this_month")}</div>
+              <div className="header">
+                {countMonth && countMonth ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
+                {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow down red icon"></i> : 
+                  <i className="long arrow up green icon"></i>)}
+                </div>
+            </div>     
+            <div className="left floated">
+              <div className="meta">{T.translate("dashboard.last_month")}</div>
+              <div className="header">
+                {countMonth && countMonth[1] ? (countMonth[1].count ? countMonth[1].count : '-') : '-'}
+              </div>
+            </div>    
+          </div> 
+
+          {countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0 && 
+            <div className="content-btn-outer-container">
+              <div className="content-btn-inner-container">
+                <Link to="/invoices" className="ui primary outline button small">
+                  <i className="check circle outline icon"></i>{T.translate("dashboard.sales.create_first_sale")}
+                </Link>
+              </div>
+            </div>
+          }          
+        </div>
       )
-  }  
+    }}
+  </Query>
+)
 
-}
+export default SalesCard
 
-SalesCard.propTypes = {
-  fetchSales: PropTypes.func.isRequired
-}
-
-function mapStateToProps(state) {
-  return {
-    sales: state.dashboard.sales
-  }
-}
-
-export default connect(mapStateToProps, { fetchSales }) (SalesCard)

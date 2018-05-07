@@ -5,6 +5,7 @@ export default {
   
   Query: {
     getInvoice: requiresAuth.createResolver((parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true })),
+    
     getInvoices: requiresAuth.createResolver((parent, args, { models }) => models.Invoice.findAll())
   },
 
@@ -71,86 +72,43 @@ export default {
   },
 
   GetInvoicesResponse: {
+    project: ({ projectId }, args, { models }) => models.Project.findOne({ where: {id: projectId} }, { raw: true }),
 
-    customer: ({ customerId }, args, { models }) => {
+    sale: ({ saleId }, args, { models }) => models.Sale.findOne({ where: {id: saleId} }, { raw: true }),
 
-      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
+    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
+
+    total: async ({ projectId, saleId }, args, { models }) => {
+      if (projectId) {    
+        const totalSum = await models.Task.sum('price', {
+            where: { projectId }
+          }) 
+       
+        return totalSum ? totalSum : 0      
+      }
+      if (saleId) {
+        return models.Item.sum('price',
+          { where: {saleId} }, { raw: true })  
+      }
+      return null
     },
-
-    project: ({ projectId }, args, { models }) => {
-
-      return models.Project.findOne({ where: {id: projectId} }, { raw: true })
-    },
-
-    sale: ({ saleId }, args, { models }) => {
-
-      return models.Sale.findOne({ where: {id: saleId} }, { raw: true })
-    }
   },
 
   Invoice: {
 
-    customer: ({ customerId }, args, { models }) => {
+    customer: ({ customerId }, args, { models }) => 
+      models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
 
-      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
-    },
+    project: ({ projectId }, args, { models }) => 
+      models.Project.findOne({ where: {id: projectId} }, { raw: true }),
 
-    project: ({ projectId }, args, { models }) => {
+    sale: ({ saleId }, args, { models }) => 
+      models.Sale.findOne({ where: {id: saleId} }, { raw: true }),
 
-      return models.Project.findOne({ where: {id: projectId} }, { raw: true })
-    },
+    user: ({ userId }, args, { models }) => 
+      models.User.findOne({ where: {id: userId} }, { raw: true })
+  
+  }
 
-    sale: ({ saleId }, args, { models }) => {
-
-      return models.Sale.findOne({ where: {id: saleId} }, { raw: true })
-    },
-
-    total: ({ projectId, saleId }, args, { models }) => {
-
-      if (projectId) {
-        return models.Task.sum('price',
-          { where: {projectId} }, { raw: true })  
-      }
-      if (saleId) {
-        return models.Item.sum('price',
-          { where: {saleId} }, { raw: true })  
-      }
-      return null
-    },
-
-    user: ({ userId }, args, { models }) => {
-
-      return models.User.findOne({ where: {id: userId} }, { raw: true })
-    }
-  },
-
-  GetInvoicesResponse: {
-    project: ({ projectId }, args, { models }) => {
-
-      return models.Project.findOne({ where: {id: projectId} }, { raw: true })
-    },
-
-    sale: ({ saleId }, args, { models }) => {
-
-      return models.Sale.findOne({ where: {id: saleId} }, { raw: true })
-    },
-
-    customer: ({ customerId }, args, { models }) => {
-
-      return models.Customer.findOne({ where: {id: customerId} }, { raw: true })
-    },
-
-    total: ({ projectId, saleId }, args, { models }) => {
-
-      if (projectId) {
-        return models.Task.sum('price',
-          { where: {projectId} }, { raw: true })  
-      }
-      if (saleId) {
-        return models.Item.sum('price',
-          { where: {saleId} }, { raw: true })  
-      }
-      return null
-    }
-  }               
+   
 }

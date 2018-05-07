@@ -1,127 +1,136 @@
-import React, { Component }  from 'react'
-import PropTypes from 'prop-types'
+import React  from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
-import { fetchIncomes } from '../../actions/dashboardActions'
+import gql from "graphql-tag"
+import { Query } from "react-apollo"
 
-import {XYPlot, XAxis, YAxis, LineSeries, HorizontalGridLines, DiscreteColorLegend } from 'react-vis'
+import pick from 'lodash/pick'
+
+import { Line } from 'react-chartjs-2'
 
 // Localization 
 import T from 'i18n-react'
 
-class IncomesCard extends Component {
-  
-  state = {
-    value: false,
-    isLoading: false
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.incomes) {
-      this.setState({ isLoading: false })
+const GET_INCOMES = gql`
+  {
+    getIncomesData {
+      daySum {
+        day
+        sum
+      }
+      monthSum {
+        month
+        sum
+      }
     }
   }
+`
+const IncomesCard = () => (
+  <Query query={GET_INCOMES}>
+    {({ loading, error, data }) => {
+     
+      const daySum = data && data.getIncomesData && data.getIncomesData.daySum
+      const monthSum = data && data.getIncomesData && data.getIncomesData.monthSum
 
-  componentDidMount = () => {
-    this.setState({ isLoading: true })
-    this.props.fetchIncomes()
-      .catch( ({response}) => this.setState({ isLoading: false }) )
-  }
+      let dayPick = daySum && daySum.map(item => pick(item, ['day']).day.substring(0, 5))
+      let sumPick = daySum && daySum.map(item => pick(item, ['sum']).sum)
 
-  render() {
+      let chartData = {
+        labels: dayPick,
+        datasets: [
+          {
+            label: 'Incomes',
+            data: sumPick,
+            backgroundColor: "rgba(125,164,13, 0.75)",
+            borderColor: "rgba(125,164,13, 1)",
+            borderWidth: 1,
+            pointRadius: 2,
+            pointBackgroundColor: "rgba(125,164,13, 1)"
+          }]
+      }
 
-    const { isLoading } = this.state
-    const { incomes } = this.props
-  
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-      ]
+      const chartOptions = {
+        responsive: true,
+        title: {
+          display: true
+        },
+        tooltips: {
+          mode: 'label'
+        },
+        hover: {
+          mode: 'dataset'
+        },
+        scales: {
+          xAxes: [
+            {
+              display: true,
+              scaleLabel: {
+                show: true,
+                labelString: 'DD/MM/YYYY'
+              },
+              ticks: {
+                autoSkip: false,
+                maxRotation: 90,
+                minRotation: 90
+              }
+            }
+          ]
+        }
+      }
 
-    const data = incomes && incomes.lastTwoMonths.length !== 0 && incomes.lastTwoMonths[0].data.map(income => 
-      ({x: new Date(''+monthNames[income.date.month-1]+' '+income.date.day+' '+income.date.year+'').getTime(), y: income.sum})
-      )
-
-    const MARGIN = {
-      bottom: 50
-    }
-
-    return (
-      <div className={classnames("ui card dashboard form", { loading: isLoading })}>
-        <div className="content">
-          <div className="right floated">
-            <h4 className="ui header">
-              <i className="money icon"></i>
-            </h4>
-          </div> 
-          <div className="left floated">
-            <h4 className="ui header">
-              {T.translate("dashboard.incomes.header")}
-            </h4>
-          </div>       
-        </div>
-
-        <div className="image">
-          <XYPlot
-            xType="time"
-            margin={MARGIN}
-            width={300}
-            height={200}>
-            <DiscreteColorLegend
-              className="legend-right-top-aligned"
-              orientation="vertical" 
-              items={[
-                {
-                  title: 'This month',
-                  color: '#12939A'
-                }
-              ]}
-            />
-            <HorizontalGridLines />
-            <LineSeries
-              style={{strokeLinejoin: "round"}}
-              data={data ? data : []}/>
-            <XAxis tickLabelAngle={-90} />
-            <YAxis />
-          </XYPlot>
-        </div>
-        <div className="content">
-          <div className="right floated">
-            <div className="meta">{T.translate("dashboard.this_month")}</div>
-            <div className="header">
-              {incomes && incomes.lastTwoMonths.length !== 0 ? incomes.lastTwoMonths[1].totalSum : '-'}
-              {incomes && incomes.lastTwoMonths.length !== 0 && (incomes.lastTwoMonths[0].totalSum > incomes.lastTwoMonths[1].totalSum ) ? <i className="long arrow down red icon"></i> : 
-                <i className="long arrow up green icon"></i>}
-              </div>
-          </div>     
-          <div className="left floated">
-            <div className="meta">{T.translate("dashboard.last_month")}</div>
-            <div className="header">{incomes && incomes.lastTwoMonths.length !== 0 ? incomes.lastTwoMonths[0].totalSum : '-'}</div>
-          </div>    
-        </div> 
-
-        {incomes && incomes.total && incomes.total.count === 0 && 
-          <div className="content-btn-outer-container">
-            <div className="content-btn-inner-container">
-              <Link to="/invoices" className="ui primary outline button small">
-                <i className="check circle outline icon"></i>{T.translate("dashboard.invoices.create_first_invoice")}
-              </Link>
-            </div>
+      return (
+        <div className={classnames("ui card dashboard form", { loading: loading })}>
+          <div className="content">
+            <div className="right floated">
+              <h4 className="ui header">
+                <i className="money icon"></i>
+              </h4>
+            </div> 
+            <div className="left floated">
+              <h4 className="ui header">
+                {T.translate("dashboard.incomes.header")}
+              </h4>
+            </div>       
           </div>
-        }          
-      </div>
+
+          <div className="image">
+
+            <Line data={chartData} options={chartOptions} />
+
+          </div>
+          
+          <div className="content">
+            { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
+            <div className="right floated">
+              <div className="meta">{T.translate("dashboard.this_month")}</div>
+              <div className="header">
+                {monthSum && monthSum ? (monthSum[0].sum ? monthSum[0].sum : '-') : '-'}
+                {monthSum && monthSum[1] && ((monthSum[1].sum > monthSum[0].sum) ? <i className="long arrow down red icon"></i> : 
+                  <i className="long arrow up green icon"></i>)}
+                </div>
+            </div>     
+            <div className="left floated">
+              <div className="meta">{T.translate("dashboard.last_month")}</div>
+              <div className="header">
+                {monthSum && monthSum[1] ? (monthSum[1].sum ? monthSum[1].sum : '-') : '-'}
+              </div>
+            </div>    
+          </div> 
+
+          {daySum && daySum.length === 0 || monthSum && monthSum.length === 0 && 
+            <div className="content-btn-outer-container">
+              <div className="content-btn-inner-container">
+                <Link to="/invoices" className="ui primary outline button small">
+                  <i className="check circle outline icon"></i>{T.translate("dashboard.invoices.create_first_invoice")}
+                </Link>
+              </div>
+            </div>
+          }          
+        </div>
       )
-  }
-}
+    }}
+  </Query>
+)
 
-IncomesCard.propTypes = {
-  fetchIncomes: PropTypes.func.isRequired
-}
+export default IncomesCard
 
-function mapStateToProps(state) {
-  return {
-    incomes: state.dashboard.incomes
-  }
-}
-
-export default connect(mapStateToProps, { fetchIncomes }) (IncomesCard)

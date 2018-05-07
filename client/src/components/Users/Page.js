@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import decode from 'jwt-decode'
-import { Authorization } from '../../utils'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_USERS_QUERY } from '../../graphql/users'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
 import List from './List' 
-import Form from './Form'
+import FormPage from './FormPage'
 
 class Page extends Component {
 
   render() {
-
     let currentUser
     
     try {
@@ -37,7 +34,7 @@ class Page extends Component {
 
         <div className="ui text container"> 
         
-          <Form />  
+          <FormPage />  
 
           { usersNotCurrentUserIncluded && <List users={usersNotCurrentUserIncluded} /> }
 
@@ -47,15 +44,4 @@ class Page extends Component {
   }
 }
 
-const getUsersQuery = gql`
-  {
-    getUsers {
-      id
-      firstName
-      lastName
-      email
-    }
-}
-`
-
-export default graphql(getUsersQuery)(Page)
+export default graphql(GET_USERS_QUERY)(Page)

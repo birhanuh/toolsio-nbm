@@ -68,8 +68,8 @@ app.use(async (req, res, next) => {
   console.log('subdomain: ', subdomain)
   // Parse authToken 
   const authToken = req.headers['x-auth-token']
-
-  if (authToken) {
+  
+  if (authToken !== 'null') {
     try {
       const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)      
       req.user = user

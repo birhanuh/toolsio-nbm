@@ -23,6 +23,7 @@ export default `
 
   type Query {
     getItem(id: Int!): Item!
+    
     getItems: [Item!]!
   }
 

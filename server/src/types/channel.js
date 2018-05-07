@@ -26,11 +26,13 @@ export default `
 
   type Query {
     getChannel(id: Int!): Channel!
+    
     getChannels: [GetChannelAndUsersCountResponse!]!
   }
 
   type Mutation {
     createChannel(name: String): CreateChannelResponse!
+    
     addMember(members: [Int!], channelId: Int!): AddMemberResponse!
   }
 

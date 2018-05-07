@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Table from './Table' 
 import { graphql} from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_INVOICES_QUERY } from '../../graphql/invoices'
 
 // Localization 
 import T from 'i18n-react'
@@ -33,25 +32,29 @@ class Page extends Component {
           </Link>
         </div>  
 
-        <div className="ui clearing segment">
-          <div className="ui right floated vertical segment">
-            <div className="ui icon input">
-              <i className="search icon"></i>
-              <input type="text" placeholder="Search..." />
+        <div className="ui segment">
+          <div className="ui clearing segment basic segment pl-0 pr-0">
+            <div className="ui right floated input">
+              <div className="ui icon input">
+                <i className="search icon"></i>
+                <input type="text" placeholder="Search..." />
+              </div>
             </div>
-          </div>
-          <div className="ui left floated vertical segment border-bottom-none">
-            <select className="ui dropdown">
-              <option value="10" default>10</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+            <div className="ui left floated select">
+              <select className="ui dropdown">
+                <option value="10" default>10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
           </div>
 
           { getInvoices && <Table invoices={getInvoices} /> } 
 
-          <div className="ui right floated vertical segment">            
-            <p>Pagination...</p>
+          <div className="ui clearing segment basic segment p-0">
+            <div className="ui right floated button">            
+              <p>Pagination...</p>
+            </div>
           </div>
 
         </div>
@@ -62,29 +65,4 @@ class Page extends Component {
   }
 }
 
-const getInvoicesQuery = gql`
-  query {
-    getInvoices {
-      id
-      deadline
-      referenceNumber
-      status
-      total
-      project {
-        id
-        name
-        status
-      }
-      sale {
-        id
-        name
-        status
-      }
-      customer {
-        id
-        name
-      }
-    }
-  }
-`
-export default graphql(getInvoicesQuery)(Page)
+export default graphql(GET_INVOICES_QUERY)(Page)

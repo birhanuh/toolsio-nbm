@@ -5,11 +5,10 @@ import { Link, Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { fetchSale, deleteSale } from '../../actions/saleActions'
-import { SelectField } from '../../utils/FormFields'
+// Semantic UI JS
+import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
-
+import { GET_SALES_QUERY, GET_SALE_QUERY, UPDATE_SALE_MUTATION, DELETE_SALE_MUTATION } from '../../graphql/sales'
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
@@ -36,7 +35,24 @@ class Show extends Component {
       status: this.props.data.getSale ? this.props.data.getSale.status : '',
       description: this.props.data.getSale ? this.props.data.getSale.description : '',
       items: this.props.data.getSale ? this.props.data.getSale.items : [],
-      user: this.props.data.getSale ? this.props.data.getSale.user : null
+      user: this.props.data.getSale ? this.props.data.getSale.user : null,
+      total: this.props.data.getSale ? this.props.data.getSale.total : 0
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.data.getSale) {
+      this.setState({
+        id: nextProps.data.getSale.id,
+        name: nextProps.data.getSale.name,
+        deadline: nextProps.data.getSale.deadline,
+        customer: nextProps.data.getSale.customer,
+        status: nextProps.data.getSale.status,
+        description: nextProps.data.getSale.description,
+        items: nextProps.data.getSale.items,
+        user: nextProps.data.getSale.user,
+        total: nextProps.data.getSale.total
+      })
     }
   }
 
@@ -54,21 +70,6 @@ class Show extends Component {
     } 
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.data.getSale) {
-      this.setState({
-        id: nextProps.data.getSale.id,
-        name: nextProps.data.getSale.name,
-        deadline: nextProps.data.getSale.deadline,
-        customer: nextProps.data.getSale.customer,
-        status: nextProps.data.getSale.status,
-        description: nextProps.data.getSale.description,
-        items: nextProps.data.getSale.items,
-        user: nextProps.data.getSale.user
-      })
-    }
-  }
-
   showConfirmationModal(event) {
     event.preventDefault()
 
@@ -83,20 +84,19 @@ class Show extends Component {
     $('.small.modal.sale').modal('hide')
   }
 
-  handleStateChange = (e) => {
-    const { id, name } = this.state
+  handleStatusChange = (value) => {
+    const { id } = this.state
 
     this.props.updateSaleMutation({ 
-        variables: { id, status: e.target.value }
+        variables: { id, status: value }
       })
       .then(res => {          
-
         const { success, sale, errors } = res.data.updateSale
 
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("sales.form.flash.success_update", { name: name})
+            text: T.translate("sales.form.flash.success_update", { name: sale.name})
           })  
         } else {
           let errorsList = {}
@@ -122,14 +122,14 @@ class Show extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: getSalesQuery })
+        const data = proxy.readQuery({ query: GET_SALES_QUERY })
         // Add our comment from the mutation to the end.
         
         let updatedData = data.getSales.filter(sale => sale.id !== id) 
         data.getSales = updatedData
 
         // Write our data back to the cache.
-        proxy.writeQuery({ query: getSalesQuery, data })
+        proxy.writeQuery({ query: GET_SALES_QUERY, data })
       }})
       .then(res => {          
 
@@ -149,7 +149,7 @@ class Show extends Component {
           this.setState({ errors: errorsList, isLoading: false })
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.props.addFlashMessage({
           type: 'error',
           text: T.translate("sales.show.flash.error_delete", { name: name})
@@ -181,23 +181,21 @@ class Show extends Component {
               <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
               <dt>{T.translate("sales.show.status")}</dt>
               <dd>
-                <SelectField
-                  label=""
+                <Form.Field 
+                  placeholder={T.translate("projects.form.select_status")}
+                  control={Select}
                   name="status"
-                  type="select"
                   value={status} 
-                  formClass={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  onChange={this.handleStateChange.bind(this)} 
-                  error=""
-
+                  onChange={(e, {value}) => this.handleStatusChange(value)} 
+                  className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
                   options={[
-                    <option key="default" value="new" disabled>NEW</option>,
-                    <option key="in progress" value="in progress">IN PROGRESS</option>,
-                    <option key="ready" value="ready">READY</option>,
-                    <option key="delayed" value="delayed">DELAYED</option>,
-                    <option key="delivered" value="delivered">DELIVERED</option>
-                    ]
-                  }
+                    { key: "default", value: "new", disabled: true, text: 'NEW' },
+                    { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
+                    { key: "finished", value: "finished", text: 'FINISHED' },
+                    { key: "delayed", value: "delayed", text: 'DELAYED' },
+                    { key: "delivered", value: "delivered", text: 'DELIVERED' }
+                  ]}
+                  selection
                 />
               </dd>
              
@@ -241,92 +239,15 @@ Show.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const deleteSaleMutation = gql`
-  mutation deleteSale($id: Int!) {
-    deleteSale(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateSaleMutation = gql`
-  mutation updateSale($id: Int!, $status: String) {
-    updateSale(id: $id, status: $status) {
-      success
-      sale {
-        id
-        name
-        deadline
-        status
-        description
-        customer {
-          id
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getSaleQuery = gql`
-  query getSale($id: Int!) {
-    getSale(id: $id) {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        id
-        name
-      }
-      items {
-        id
-        name
-        unit
-        quantity
-        price
-        vat
-        saleId
-      }
-      user {
-        firstName
-      }
-    }
-  }
-`
-
-const getSalesQuery = gql`
-  query {
-    getSales {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        name
-      }
-    }
-  }
-`
 const MutationQuery =  compose(
-  graphql(deleteSaleMutation, {
+  graphql(DELETE_SALE_MUTATION, {
     name : 'deleteSaleMutation'
   }),
-  graphql(getSalesQuery),
-  graphql(updateSaleMutation, {
+  graphql(GET_SALES_QUERY),
+  graphql(UPDATE_SALE_MUTATION, {
     name: 'updateSaleMutation'
   }),
-  graphql(getSaleQuery, {
+  graphql(GET_SALE_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)

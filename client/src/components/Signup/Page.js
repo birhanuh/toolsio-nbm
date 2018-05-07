@@ -1,8 +1,7 @@
 import React, { Component } from 'react' 
-import Form from './Form'
+import FormPage from './FormPage'
 import Invitation from './Invitation'
 import { Authorization } from '../../utils'
-import { addFlashMessage } from '../../actions/flashMessageActions'
 import FlashMessage from '../../flash/FlashMessage'
 
 // Localization 
@@ -11,21 +10,21 @@ import T from 'i18n-react'
 import logo from '../../images/logo-square.png'; 
 
 class Page extends Component {
+  
   render() {
-
-    const { signupRequest, isSubdomainExist, isUserExist, addFlashMessage, match } = this.props
+    const { signupRequest, isSubdomainExist, isUserExist, match } = this.props
   
     let form 
 
     if (match && match.params.token) {
       form = <Invitation signupRequest={signupRequest} 
-        isUserExist={isUserExist} addFlashMessage={addFlashMessage} />  
+        isUserExist={isUserExist} />  
 
       // Set Invitation token to Req header
       Authorization.setInvitationToken(match.params.token)
     } else {
-      form = <Form signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
-        isUserExist={isUserExist} addFlashMessage={addFlashMessage} /> 
+      form = <FormPage signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
+        isUserExist={isUserExist} /> 
     }
 
     return (          

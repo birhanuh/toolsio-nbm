@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { InputField } from '../../utils/FormFields'
+// Semantic UI Form elements
+import { Input, Checkbox, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, CREATE_CUSTOMER_MUTATION, UPDATE_CUSTOMER_MUTATION } from '../../graphql/customers'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -22,7 +23,7 @@ $.fn.checkbox = require('semantic-ui-checkbox')
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
-class Form extends Component {
+class FormPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -67,81 +68,95 @@ class Form extends Component {
   }
 
   componentDidMount = () => {
-    let classContextThis = this
+    //let classContextThis = this
     
-    if (this.state.isContactIncludedInInvoice === true) {
-      $('.ui.toggle.checkbox').checkbox('check')
-    }
+    // if (this.state.isContactIncludedInInvoice === true) {
+    //   $('.ui.toggle.checkbox').checkbox('check')
+    // }
 
-    $('.ui.toggle.checkbox').checkbox({
-      onChecked: function() {
-         classContextThis.setState({
-          isContactIncludedInInvoice: true
-        })
-      },
-      onUnchecked: function() {
-        classContextThis.setState({
-          isContactIncludedInInvoice: false
-        })
-      }
-    })
+    // $('.ui.toggle.checkbox').checkbox({
+    //   onChecked: function() {
+    //      classContextThis.setState({
+    //       isContactIncludedInInvoice: true
+    //     })
+    //   },
+    //   onUnchecked: function() {
+    //     classContextThis.setState({
+    //       isContactIncludedInInvoice: false
+    //     })
+    //   }
+    // })
 
   }
 
-  handleChange = (e) => {
-  
-    if (this.state.errors[e.target.name]) {
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
-      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+      if (name === "email" || name === "phoneNumber") {
 
          this.setState({
-          contact: { ...this.state.contact, [e.target.name]: e.target.value },
+          contact: { ...this.state.contact, [name]: value },
           errors
         })
-      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
-        || e.target.name === "country") {
+      } else if (name === "street" || name === "postalCode" || name === "region"
+        || name === "country") {
 
          this.setState({
-          address: { ...this.state.address, [e.target.name]: e.target.value },
+          address: { ...this.state.address, [name]: value },
           errors
         })
       } else {
         this.setState({
-          [e.target.name]: e.target.value,
+          [name]: value,
           errors
         })
       }
     } else {
 
-      if (e.target.name === "email" || e.target.name === "phoneNumber") {
+      if (name === "email" || name === "phoneNumber") {
 
          this.setState({
-          contact: { ...this.state.contact, [e.target.name]: e.target.value },
+          contact: { ...this.state.contact, [name]: value },
         })
-      } else if (e.target.name === "street" || e.target.name === "postalCode" || e.target.name === "region"
-        || e.target.name === "country") {
+      } else if (name === "street" || name === "postalCode" || name === "region"
+        || name === "country") {
         
          this.setState({
-          address: { ...this.state.address, [e.target.name]: e.target.value }
+          address: { ...this.state.address, [name]: value }
         })
       } else {
         this.setState({
-          [e.target.name]: e.target.value
+          [name]: value
         })
       }
+    }   
+  }
 
-    }
-   
+  handleChangeToggle = (name, checked) => {
+    if (this.state.errors[name]) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[name]
+
+      this.setState({
+        [name]: checked,
+        errors
+      })
+    } else {
+      this.setState({
+        [name]: checked
+      })
+    }   
   }
 
   isValid() {
     const { errors, isValid } = Validation.validateCustomerInput(this.state)
 
     let updatedErrors = Object.assign({}, this.state.errors)
-    updatedErrors.message.errors = errors
+    updatedErrors = errors
 
     if (!isValid) {
       this.setState({ 
@@ -156,8 +171,7 @@ class Form extends Component {
     e.preventDefault()
 
     // Validation
-    if (true) { 
-
+    if (this.isValid()) { 
       const { id, name, vatNumber, contact: {phoneNumber, email} , isContactIncludedInInvoice, address: { street, postalCode, region, country} } = this.state
 
       this.setState({ isLoading: true })
@@ -172,7 +186,7 @@ class Form extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getCustomersQuery })
+            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY })
             // Add our comment from the mutation to the end.
             
             let updatedCustomers = data.getCustomers.map(item => {
@@ -185,10 +199,9 @@ class Form extends Component {
             data.getCustomers = updatedCustomers
 
             // Write our data back to the cache.
-            store.writeQuery({ query: getCustomersQuery, data })
+            store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
           }})
           .then(res => {
-
             const { success, errors } = res.data.updateCustomer
            
             if (success) {
@@ -226,11 +239,11 @@ class Form extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getCustomersQuery })
+            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY })
             // Add our comment from the mutation to the end.
             data.getCustomers.push(customer)
             // Write our data back to the cache.
-            store.writeQuery({ query: getCustomersQuery, data })
+            store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
           }})
           .then(res => {
 
@@ -278,11 +291,6 @@ class Form extends Component {
 
   render() {
     const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, errors, isLoading } = this.state
-    
-    //const statusOptions = [ { key: 'new', value: 'new', text: 'NEW' },
-    //    { key: 'in progress', value: 'in progress', text: 'IN PROGRESS' },
-    //    { key: 'ready', value: 'ready', text: 'READY' } ,
-    //    { key: 'delivered', value: 'delivered', text: 'DELIVERED' } ]
 
     return (  
       <div className="row column">
@@ -291,88 +299,102 @@ class Form extends Component {
 
         <div className="ui text container segment">  
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
             <div className="inline field">  
-               {id ? <h1 className="ui header">{T.translate("customers.form.edit_customer")}</h1> : <h1 className="ui header">{T.translate("customers.form.new_customer")}</h1>}
+              {id ? <h1 className="ui header">{T.translate("customers.form.edit_customer")}</h1> : <h1 className="ui header">{T.translate("customers.form.new_customer")}</h1>}        
             </div>
 
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.name})}>{T.translate("customers.form.name")}</label>
+              <Input
+                placeholder={T.translate("customers.form.name")}
+                name="name" 
+                value={name} 
+                onChange={(e, {value}) => this.handleChange('name', value)} 
+                error={!!errors.name}
+              />
+              <span className="red">{errors.name}</span>
+            </Form.Field>
 
-            <InputField
-              label={T.translate("customers.show.name")}
-              name="name" 
-              value={name} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder="Name"
-              error={errors.name}
-              formClass="inline field"
-            />
-            <InputField
-              label={T.translate("customers.show.vat_number")}
-              name="vatNumber" 
-              value={vatNumber} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("customers.show.vat_number")}
-              error={errors.vatNumber}
-              formClass="inline field"
-            />
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.vatNumber})}>{T.translate("customers.form.vat_number")}</label>
+              <Input
+                placeholder={T.translate("customers.form.vat_number")}
+                name="vatNumber" 
+                value={vatNumber} 
+                onChange={(e, {value}) => this.handleChange('vatNumber', value)} 
+                error={!!errors.vatNumber}
+              />
+              <span className="red">{errors.vatNumber}</span>
+            </Form.Field>
              <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
-              <InputField
-                label={T.translate("customers.show.contact.phone_number")}
-                name="phoneNumber" 
-                value={contact.phoneNumber} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder={T.translate("customers.show.contact.phone_number")}
-                error={errors.contact && errors.contact.phoneNumber}
-                formClass="inline field"
-              />
-              <InputField
-                label={T.translate("customers.show.contact.email")}
-                name="email" 
-                value={contact.email} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder={T.translate("customers.show.contact.email")}
-                error={errors.contact && errors.contact.email}
-                formClass="inline field"
-              />
+              <Form.Field inline>
+                <label className={classnames({red: errors.contact && !!errors.contact.phoneNumber})}>{T.translate("customers.form.contact.phone_number")}</label>
+                <Input
+                  placeholder={T.translate("customers.form.contact.phone_number")}
+                  name="phoneNumber" 
+                  value={contact.phoneNumber} 
+                  onChange={(e, {value}) => this.handleChange('phoneNumber', value)} 
+                  error={errors.contact && errors.contact.phoneNumber}
+                />
+                <span className="red">{errors.name}</span>
+              </Form.Field>
+              <Form.Field inline>
+                <label className={classnames({red: errors.contact && !!errors.contact.email})}>{T.translate("customers.form.contact.email")}</label>
+                <Input
+                  placeholder={T.translate("customers.form.contact.email")}
+                  name="email" 
+                  value={contact.email} 
+                  onChange={(e, {value}) => this.handleChange('email', value)} 
+                  error={errors.contact && errors.contact.email}
+                />
+                <span className="red">{errors.email}</span>
+              </Form.Field>
             </fieldset>
-            <div className="inline field">              
-              <label>{T.translate("customers.show.include_contact_in_invoice")}</label> 
-              <div className="ui toggle checkbox">
-                <input 
-                  type="checkbox" 
-                  name="isContactIncludedInInvoice" 
-                  value={isContactIncludedInInvoice}
-                  onChange={this.handleChange.bind(this)} />
-                <label></label>
-              </div>
-            </div>
+             <Form.Field inline>
+              <label className={classnames({red: !!errors.isContactIncludedInInvoice})}>{T.translate("customers.form.include_contact_in_invoice")}</label>
+              <Checkbox
+                toggle
+                name="isContactIncludedInInvoice" 
+                checked={isContactIncludedInInvoice} 
+                onChange={(e, {checked}) => this.handleChangeToggle('isContactIncludedInInvoice', checked)} 
+                error={errors.contact && errors.contact.isContactIncludedInInvoice}
+              />
+              <span className="red">{errors.name}</span>
+            </Form.Field>
+
             <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.address.header")}</legend>
-              <InputField
-                label={T.translate("customers.show.address.street")}
-                name="street" 
-                value={address.street} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder={T.translate("customers.show.address.street")}
-                error={errors.address && errors.address.street}
-                formClass="inline field"
-              />
-              <InputField
-                label={T.translate("customers.show.address.postal_code")}
-                name="postalCode" 
-                value={address.postalCode} 
-                onChange={this.handleChange.bind(this)} 
-                placeholder={T.translate("customers.show.address.postal_code")}
-                error={errors.address && errors.address.postalCode}
-                formClass="inline field"
-              />
+              <Form.Field inline>
+                <label className={classnames({red: errors.address && !!errors.address.street})}>{T.translate("customers.form.address.street")}</label>
+                <Input
+                  placeholder={T.translate("customers.form.address.street")}
+                  name="street" 
+                  value={address.street} 
+                  onChange={(e, {value}) => this.handleChange('street', value)} 
+                  error={errors.address && errors.address.street}
+                />
+                <span className="red">{errors.name}</span>
+              </Form.Field>
+              <Form.Field inline>
+                <label className={classnames({red: errors.address && !!errors.address.postalCode})}>{T.translate("customers.form.address.postal_code")}</label>
+                <Input
+                  placeholder={T.translate("customers.form.address.postal_code")}
+                  name="postalCode" 
+                  value={address.postalCode} 
+                  onChange={(e, {value}) => this.handleChange('postalCode', value)} 
+                  error={errors.address && errors.address.postalCode}
+                />
+                <span className="red">{errors.name}</span>
+              </Form.Field>
               <div className={classnames("inline field", {error: errors.address && errors.address.country})}>              
-                <label>{T.translate("customers.show.address.country")}</label>
+                <label>{T.translate("customers.form.address.country")}</label>
                 <CountryDropdown
-                  defaultOptionLabel={T.translate("customers.form.select_country")}
+                  defaultOptionLabel={T.translate("customers.form.address.select_country")}
                   value={address.country}
                   onChange={(val) => this.selectCountry(val)} 
                   error={errors.address && errors.address.country} />
@@ -382,7 +404,7 @@ class Form extends Component {
               <div className={classnames("inline field", {error: errors.address && errors.address.region})}>              
                 <label>{T.translate("customers.show.address.region")}</label> 
                 <RegionDropdown
-                  defaultOptionLabel={T.translate("customers.form.select_region")}
+                  defaultOptionLabel={T.translate("customers.form.address.select_region")}
                   disabled={address.country === ''}
                   country={address.country}
                   value={address.region}
@@ -401,102 +423,36 @@ class Form extends Component {
               </Link>  
               <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("customers.form.save")}</button>
             </div>  
-          </form> 
+          </Form> 
         </div>  
       </div>
     )
   }
 }
 
-Form.propTypes = {
+FormPage.propTypes = {
   addFlashMessage: PropTypes.func.isRequired,
 }
 
-Form.contextTypes = {
+FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createCustomerMutation = gql`
-  mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
-    createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
-      postalCode: $postalCode, region: $region, country: $country) {
-      success
-      customer {
-        id
-        name
-        vatNumber
-        phoneNumber
-        email
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-const updateCustomerMutation = gql`
-  mutation updateCustomer($id: Int!, $name: String, $vatNumber: Int, $email: String, $phoneNumber: String, $isContactIncludedInInvoice: Boolean, $street: String, $postalCode: String, $region: String, $country: String) {
-    updateCustomer(id: $id, name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, postalCode: $postalCode, region: $region, country: $country) {
-      success
-      customer {
-        id
-        name
-        vatNumber
-        phoneNumber
-        email
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-const getCustomerQuery = gql`
-  query getCustomer($id: Int!) {
-    getCustomer(id: $id) {
-      id
-      name
-      vatNumber
-      phoneNumber
-      email
-      isContactIncludedInInvoice
-      street
-      postalCode
-      region
-      country
-    }
-  }
-`
-
-const getCustomersQuery = gql`
-  {
-    getCustomers {
-      id
-      name
-      vatNumber
-      phoneNumber
-      email
-    }
-  }
-`
-
 const MutationsQueries =  compose(
-  graphql(createCustomerMutation, {
+  graphql(CREATE_CUSTOMER_MUTATION, {
     name : 'createCustomerMutation'
   }),
-  graphql(updateCustomerMutation, {
+  graphql(UPDATE_CUSTOMER_MUTATION, {
     name: 'updateCustomerMutation'
   }),
-  graphql(getCustomersQuery),
-  graphql(getCustomerQuery, {
+  graphql(GET_CUSTOMERS_QUERY),
+  graphql(GET_CUSTOMER_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0
       },
     })
   })
-)(Form)
+)(FormPage)
 
 export default connect(null, { addFlashMessage } ) (MutationsQueries)

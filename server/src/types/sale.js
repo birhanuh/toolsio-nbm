@@ -10,6 +10,7 @@ export default `
     customerId: Int!
     customer: Customer!
     user: User!
+    total: Float!
   }
 
   type GetSalesResponse {
@@ -18,8 +19,28 @@ export default `
     deadline: Date!
     status: String!
     description: String
-    total: Int
     customer: Customer!
+    user: User!
+  }
+
+  type GetSalesWithoutInvoiceResponse {
+    id: Int!
+    name: String!
+    deadline: Date!
+    status: String!
+    description: String
+    customer: Customer!
+    total: Float
+  }
+
+  type GetSalesWithInvoiceResponse {
+    id: Int!
+    name: String!
+    deadline: Date!
+    status: String!
+    description: String
+    customer: Customer!
+    total: Float
   }
 
   type CreateUpdateSaleResponse {
@@ -35,14 +56,20 @@ export default `
 
   type Query {
     getSale(id: Int!): Sale
+    
     getSales: [GetSalesResponse!]!
+
+    getSalesWithoutInvoice: [GetSalesWithoutInvoiceResponse!]!
+
+    getSalesWithInvoice: [GetSalesWithoutInvoiceResponse!]!
   }
 
   type Mutation {
-    createSale(name: String!, deadline: Date!, status: String!, description: String, total: Int, customerId: Int!): CreateUpdateSaleResponse!
+    createSale(name: String!, deadline: Date!, status: String!, description: String,
+      customerId: Int!): CreateUpdateSaleResponse!
     
     updateSale(id: Int!, name: String, deadline: Date, status: String, description: String, 
-      total: Int, customerId: Int): CreateUpdateSaleResponse!
+      ,customerId: Int): CreateUpdateSaleResponse!
 
     deleteSale(id: Int!): DeleteSaleResponse!
   }

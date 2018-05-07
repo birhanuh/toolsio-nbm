@@ -45,7 +45,10 @@ export default `
   }
 
   type Query {
-    getUser(email: String!): User!
+    getUser(id: Int!): User!
+
+    getUserByEmail(email: String!): User!
+
     getUsers: [GetUsersResponse!]!
   }
 

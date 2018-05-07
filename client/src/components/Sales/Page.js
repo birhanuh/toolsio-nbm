@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import List from './List' 
 import { Pagination } from '../../utils'
-import { connect } from 'react-redux'
-import { fetchSales } from '../../actions/saleActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_SALES_QUERY } from '../../graphql/sales'
 
 // Localization 
 import T from 'i18n-react'
@@ -49,7 +47,7 @@ class Page extends Component {
 
         <Breadcrumb />
         
-        <div className="ui clearing vertical segment border-bottom-none">
+        <div className="ui clearing basic segment p-0">
           <div className="ui right floated icon input">
             <input type="text" placeholder="Search..." />
             <i className="inverted circular search link icon"></i>
@@ -75,23 +73,4 @@ class Page extends Component {
   }
 }
 
-Page.propTypes = {
-  //fetchSales: PropTypes.func.isRequired,
-}
-
-const getSalesQuery = gql`
-  {
-    getSales {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        name
-      }
-    }
-}
-`
-
-export default graphql(getSalesQuery)(Page)
+export default graphql(GET_SALES_QUERY)(Page)

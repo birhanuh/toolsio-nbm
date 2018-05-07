@@ -6,9 +6,10 @@ import classnames from 'classnames'
 import map from 'lodash/map'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
-import { InputField, TextAreaField, SelectField } from '../../utils/FormFields'
+// Semantic UI JS
+import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_PROJECT_QUERY, GET_CUSTOMERS_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../graphql/projects'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -23,7 +24,7 @@ $.fn.progress = require('semantic-ui-progress')
 
 import Breadcrumb from '../Layouts/Breadcrumb'
 
-class Form extends Component {
+class FormPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -34,7 +35,6 @@ class Form extends Component {
       status: this.props.data.getProject ? this.props.data.getProject.status : 'new',
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
       description: this.props.data.getProject ? this.props.data.getProject.description : '',
-      total: this.props.data.getProject ? this.props.data.getProject.total : 0,
       errors: {},
       isLoading: false
     }
@@ -49,29 +49,28 @@ class Form extends Component {
         customerId: nextProps.data.getProject.customerId,
         status: nextProps.data.getProject.status,
         progress: nextProps.data.getProject.progress,
-        description: nextProps.data.getProject.description,
-        total: nextProps.data.getProject.total
+        description: nextProps.data.getProject.description
       })
     }
   }
 
-  handleChange = (e) => {
+  handleChange = (name, value) => {
     //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
-
-    if (this.state.errors[e.target.name]) {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
+      
+      this.setState({
+        [name]: value,
+        errors
+      })     
+    } else {
 
       this.setState({
-        [e.target.name]: e.target.value,
-        errors
+        [name]: value
       })
-    } else {
-      this.setState({
-        [e.target.name]: e.target.value
-      })
-    }
+    }   
   }
 
   isValid() {
@@ -94,11 +93,11 @@ class Form extends Component {
     if (this.isValid()) { 
       this.setState({ isLoading: true })
 
-      const { id, name, deadline, status, progress, description, total, customerId } = this.state
+      const { id, name, deadline, status, progress, description, customerId } = this.state
       
       if (id) {
         this.props.updateProjectMutation({ 
-        variables: { id, name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+        variables: { id, name, deadline, status, progress, description, customerId: parseInt(customerId) },
         update: (store, { data: { updateProject } }) => {
           let { success, project } = updateProject
 
@@ -106,7 +105,7 @@ class Form extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getCustomersProjectsQuery })
+          const data = store.readQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY })
           // Add our comment from the mutation to the end.
 
           let updatedProjects = data.getProjects.map(item => {
@@ -119,7 +118,7 @@ class Form extends Component {
           data.getProjects = updatedProjects
 
           // Write our data back to the cache.
-          store.writeQuery({ query: getCustomersProjectsQuery, data })
+          store.writeQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY, data })
         }})
         .then(res => {          
 
@@ -128,7 +127,7 @@ class Form extends Component {
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("projects.form.flash.success_update", { name: name})
+              text: T.translate("projects.form.flash.success_update", { name: project.name})
             })  
 
             this.context.router.history.push('/projects')
@@ -143,7 +142,7 @@ class Form extends Component {
       } else {
 
         this.props.createProjectMutation({ 
-          variables: { name, deadline, status, progress, description, total, customerId: parseInt(customerId) },
+          variables: { name, deadline, status, progress, description, customerId: parseInt(customerId) },
           update: (store, { data: { createProject } }) => {
             const { success, project } = createProject
 
@@ -151,11 +150,11 @@ class Form extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: getCustomersProjectsQuery })
+            const data = store.readQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY })
             // Add our comment from the mutation to the end.
             data.getProjects.push(project)
             // Write our data back to the cache.
-            store.writeQuery({ query: getCustomersProjectsQuery, data })
+            store.writeQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY, data })
           }})
           .then(res => {          
 
@@ -164,7 +163,7 @@ class Form extends Component {
             if (success) {
               this.props.addFlashMessage({
                 type: 'success',
-                text: T.translate("projects.form.flash.success_update", { name: name})
+                text: T.translate("projects.form.flash.success_update", { name: project.name})
               })  
 
               this.context.router.history.push('/projects')
@@ -200,7 +199,7 @@ class Form extends Component {
   handleIncreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, progress } = this.state
+    const { progress } = this.state
 
     if (progress <= 90) {
       this.setState({
@@ -223,7 +222,7 @@ class Form extends Component {
   handleDecreaseProgress = (event) => {
     event.preventDefault()
 
-    const { id, progress } = this.state
+    const { progress } = this.state
 
     if (progress >= 10) {
       this.setState({
@@ -249,9 +248,9 @@ class Form extends Component {
     const { getCustomers } = this.props.getCustomersProjectsQuery
   
     const customersOptions = map(getCustomers, (customer) => 
-      <option key={customer.id} value={customer.id.toString()}>{customer.name}</option>
+      ({ key: customer.id, value: customer.id, text: customer.name })
     )
-    
+  
     return (
       <div className="row column">
 
@@ -259,45 +258,50 @@ class Form extends Component {
 
         <div className="ui text container segment">  
 
-          <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
-            <div className="inline field"> 
-              {id ? <h1 className="ui header">{T.translate("projects.form.edit_project")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}
-            </div>
-            
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
-            <InputField
-              label={T.translate("projects.form.name")}
-              name="name" 
-              value={name} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder="Name"
-              error={errors.name}
-              formClass="inline field"
-            />
-                          
-            <div  className={classnames("inline field", { error: !!errors.deadline })}>
-              <label className="" htmlFor="date">{T.translate("projects.form.deadline")}</label>
+            <div className="inline field">  
+              {id ? <h1 className="ui header">{T.translate("projects.form.edit_project")}</h1> : <h1 className="ui header">{T.translate("projects.form.new_project")}</h1>}        
+            </div>
+
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.name})}>{T.translate("projects.form.name")}</label>
+              <Input
+                placeholder={T.translate("projects.form.name")}
+                name="name" 
+                value={name} 
+                onChange={(e, {value}) => this.handleChange('name', value)} 
+                error={!!errors.name}
+              />
+              <span className="red">{errors.name}</span>
+            </Form.Field>
+
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.deadline})}>{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
                 onChange={this.handleChangeDate.bind(this)}
               />
               <span className="red">{errors.deadline}</span>
-            </div>
-            
-            <SelectField
-              label={T.translate("projects.form.customer")}
-              name="customerId"
-              value={customerId && customerId} 
-              onChange={this.handleChange.bind(this)} 
-              error={errors.customerId}
-              formClass="inline field"
+            </Form.Field>
 
-              options={[<option key="default" value="" disabled>{T.translate("projects.form.select_customer")}</option>,
-                customersOptions]}
-            />
-            
+            <Form.Field inline>
+              <label className={classnames({red: !!errors.customerId})}>{T.translate("projects.form.customer")}</label>
+              <Select
+                placeholder={T.translate("projects.form.select_customer")}
+                name="customerId"
+                value={customerId && customerId} 
+                onChange={(e, {value}) => this.handleChange('customerId', value)} 
+                error={!!errors.customerId}
+                options={customersOptions}
+                selection
+              />
+              <span className="red">{errors.customerId}</span>
+            </Form.Field>
+
             {
               customersOptions.length === 0 &&
                 <div className="inline field">
@@ -306,31 +310,34 @@ class Form extends Component {
 
                     <Link className="ui primary outline tiny button" to="/customers/new">
                       <i className="add circle icon"></i>
-                      {T.translate("customers.page.add_new_customer")}
+                      {T.translate("projects.form.add_new_customer")}
                     </Link>
                   </div>
                 </div>
             }
 
             { id &&
-              <SelectField
-                label={T.translate("projects.form.status")}
-                name="status"
-                type="select"
-                value={status} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.staus}
-                formClass="inline field"
-
-                options={[
-                  <option key="default" value="new" disabled>NEW</option>,
-                  <option key="in progress" value="in progress">IN PROGRESS</option>,
-                  <option key="finished" value="finished">FINISHED</option>,
-                  <option key="delayed" value="delayed">DELAYED</option>,
-                  <option key="delivered" value="delivered">DELIVERED</option>
-                  ]
-                }
-              />
+              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
+               >
+                <label className={classnames({red: !!errors.status})}>{T.translate("projects.form.status")}</label>
+                <Select
+                  label={T.translate("projects.form.status")}
+                  placeholder={T.translate("projects.form.select_status")}
+                  name="status"
+                  value={status} 
+                  onChange={(e, {value}) => this.handleChange('status', value)} 
+                  error={!!errors.staus}
+                  options={[
+                    { key: "default", value: "new", disabled: true, text: 'NEW' },
+                    { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
+                    { key: "finished", value: "finished", text: 'FINISHED' },
+                    { key: "delayed", value: "delayed", text: 'DELAYED' },
+                    { key: "delivered", value: "delivered", text: 'DELIVERED' }
+                  ]}
+                  selection
+                />
+                <span className="red">{errors.status}</span>
+              </Form.Field>
             }
 
             { id &&
@@ -347,156 +354,58 @@ class Form extends Component {
                 </div>
               </div>
             }
-              
-            {/*
-            <div className={classnames("field", { error: !!error.status })}>
-              <label htmlFor="status">Status</label>
-              <Dropdown 
-                placeholder='Status' 
-                search selection options={statusOptions}   
-                value={status} 
-                onChange={this.handleChange.bind(this)} 
-                error={errors.status} />
-            </div>      
-            */}
+            
+            <Form.Field inline>  
+              <label>{T.translate("projects.form.description")}</label>
+              <TextArea
+                placeholder={T.translate("projects.form.description")}
+                name="description" 
+                value={description} 
+                onChange={(e, {value}) => this.handleChange('description', value)} 
+              />
+            </Form.Field>
 
-            <TextAreaField
-              label={T.translate("projects.form.description")}
-              name="description" 
-              value={description} 
-              onChange={this.handleChange.bind(this)} 
-              placeholder={T.translate("projects.form.description")}
-              formClass="inline field"
-            /> 
-
-            <div className="inline field">    
+            <div className="inline field">   
               <Link className="ui primary outline button" to="/projects">
                 <i className="minus circle icon"></i>
                 {T.translate("projects.form.cancel")}
-              </Link>
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.form.save")}</button>
+              </Link> 
+              <button disabled={isLoading} className="ui primary button">
+                <i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.form.save")}
+              </button>
             </div>  
-          </form> 
+          </Form> 
         </div>  
       </div>
     )
   }
 }
 
-Form.propTypes = {
+FormPage.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-Form.contextTypes = {
+FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const createProjectMutation = gql`
-  mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
-    createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
-      success
-      project {
-        id
-        name 
-        deadline
-        status
-        progress
-        description
-        customer {
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateProjectMutation = gql`
-  mutation updateProject($id: Int!, $name: String, $deadline: Date, $status: String, $progress: Int, $description: String, $total: Int, $customerId: Int) {
-    updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
-      success
-      project {
-        id
-        name 
-        deadline
-        status
-        progress
-        description
-        customer {
-          id
-          name
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getCustomersProjectsQuery = gql`
-  query {
-    getCustomers {
-      id
-      name
-    }
-    getProjects {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        name
-      }
-    }
-  }
-`
-
-const getProjectQuery = gql`
-  query getProject($id: Int!) {
-    getProject(id: $id) {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customerId
-      tasks {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-      }
-    }
-  }
-`
-
 const MutationsQuery =  compose(
-  graphql(createProjectMutation, {
+  graphql(CREATE_PROJECT_MUTATION, {
     name : 'createProjectMutation'
   }),
-  graphql(updateProjectMutation, {
+  graphql(UPDATE_PROJECT_MUTATION, {
     name: 'updateProjectMutation'
   }),
-  graphql(getCustomersProjectsQuery, {
+  graphql(GET_CUSTOMERS_PROJECTS_QUERY, {
     name: 'getCustomersProjectsQuery'
   }),
-  graphql(getProjectQuery, {
+  graphql(GET_PROJECT_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0
       }
     })
   })
-)(Form)
+)(FormPage)
 
 export default connect(null, { addFlashMessage } ) (MutationsQuery)

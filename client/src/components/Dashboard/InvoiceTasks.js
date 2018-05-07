@@ -1,113 +1,122 @@
-import React, { Component }  from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
-
-import { fetchInvoiceTasks } from '../../actions/dashboardActions'
+import gql from "graphql-tag"
+import { Query } from "react-apollo"
 
 // Localization 
 import T from 'i18n-react'
 
-class InvoiceTasks extends Component {
-  
-  state = {
-    isLoading: false
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.invoiceTasks) {
-      this.setState({ isLoading: false })
+const GET_INVOICE_TASKS_DATA = gql`
+  {
+    getInvoiceTasksData {
+      countStatus {
+        count
+        status
+      }
+      idProjectStatus {
+        id
+        status
+        name
+      }
+      idSaleStatus {
+        id
+        status
+        name
+      }
     }
   }
-
-  componentDidMount() {
-    this.setState({ isLoading: true })
-    this.props.fetchInvoiceTasks()
-      .catch( ({response}) => this.setState({ isLoading: false }) )
-  }
+`
+const InvoiceTasksCard = () => (
+  <Query query={GET_INVOICE_TASKS_DATA}>
+    {({ loading, error, data }) => {
+    
+    const countStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.countStatus
+    const idProjectStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.idProjectStatus
+    const idSaleStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.idSaleStatus
   
-  render() {
-    
-    const { isLoading } = this.state
-    const { invoiceTasks } = this.props
-    
-    let pendingNotification   
-    let pendingInvoices 
+    let newNotification  
+    let overdueNotification 
 
-    let overdueNotification   
-    let overdueInvoices 
+    let newInvoices = []
+    let overdueInvoices = []
 
-    invoiceTasks && invoiceTasks.pendingOverdue.map(task => {
-
-      if (task._id === 'pending') {
-        pendingNotification = (<div key={task._id} className="ui info message">
-            <div className="description">
-              {T.translate("dashboard.invoice_tasks.pending_invoices", {count: task.count})}
-            </div>
+    countStatus && countStatus.map(item => {
+      if (item.status === 'pending') {
+        newNotification = (<div className="ui warning message">
+          <div className="description">
+            {T.translate("dashboard.invoice_tasks.pending_invoices", {count: item.count})}
           </div>
-          )
-        
-        pendingInvoices = task.invoices.map(invoice => 
-          <Link key={invoice._id} to={`/invoices/show/${invoice._id}`} className="item blue">{invoice.referenceNumber}</Link>
-        )  
-      } else if (task._id !== 'pending' && task._id !== 'overdue') {
-        pendingNotification = (<div key={"no-new"} className="ui info message">
-            <div className="description">
-              {T.translate("dashboard.invoice_tasks.no_pending_invoices")}
-            </div>
+        </div>)
+
+        // pendingNotification = (<div key={"no-new"} className="ui info message">
+        //     <div className="description">
+        //       {T.translate("dashboard.invoice_tasks.no_pending_invoices")}
+        //     </div>
+        //   </div>
+        //   )
+
+      } 
+
+      if (item.status === 'overdue') {
+        overdueNotification = (<div className="ui negative message">
+          <div className="description">
+            {T.translate("dashboard.invoice_tasks.overdue_invoices", {count: item.count})}
           </div>
-          )
+        </div>)
+
+        // overdueNotification = (<div key={task._id} className="ui negative message">
+        //     <div className="description">
+        //       {T.translate("dashboard.invoice_tasks.overdued_invoices", {count: task.count})}
+        //     </div>
+        //   </div>
+        //   )
+      }  
+    })
+
+    idProjectStatus && idProjectStatus.map(invoice => {
+      if(invoice.status === 'pending') {
+        newInvoices.push(invoice)
+      } else if (invoice.status === 'overdue') {
+        overdueInvoices.push(invoice)
       }
+    })
 
-      if (task._id === 'overdue') {
-        overdueNotification = (<div key={task._id} className="ui negative message">
-            <div className="description">
-              {T.translate("dashboard.invoice_tasks.overdued_invoices", {count: task.count})}
-            </div>
-          </div>
-          )
-        
-        overdueInvoices = task.invoices.map(invoice => 
-          <Link key={invoice._id} to={`/invoices/show/${invoice._id}`} className="item red">{invoice.referenceNumber}</Link>
-        )  
-      } else if (task._id !== 'overdue' && task._id !== 'pending') {
-        overdueNotification = (<div key={"no-overdue"} className="ui negative message">
-            <div className="description">
-              {T.translate("dashboard.invoice_tasks.no_overdued_invoices")}
-            </div>
-          </div>
-          )
+    idSaleStatus && idSaleStatus.map(invoice => {
+      if(invoice.status === 'pending') {
+        newInvoices.push(invoice)
+      } else if (invoice.status === 'overdue') {
+        overdueInvoices.push(invoice)
       }
-
-      })
+    })
 
     const list = (<div className="content">
-      {pendingNotification}
+      {newNotification}
       <div className="ui ordered list">
-        {pendingInvoices}
+        {newInvoices && newInvoices.map(invoice => <Link key={invoice.id} to={`/invoices/show/${invoice.id}`} className="item orange">{'Invoice of '+invoice.name}</Link>)}
       </div>
 
       <div className="ui divider"></div>
 
       {overdueNotification}
       <div className="ui ordered list">
-        {overdueInvoices}
+        {overdueInvoices && overdueInvoices.map(invoice => <Link key={invoice.id} to={`/invoices/show/${invoice.id}`} className="item red">{'Invoice of '+invoice.name}</Link>)}
       </div>
 
       </div>)
 
-    return (
-      
-      <div className={classnames("dashboard form", { loading: isLoading })}>
+    return (      
+      <div className={classnames("dashboard", { loading: loading })}>
         <h4 className="ui header">{T.translate("dashboard.invoice_tasks.header")}</h4>
         <div className="ui card">
           
-          {invoiceTasks && invoiceTasks.total && invoiceTasks.total.count === 0 ? 
+          {(countStatus && countStatus.length === 0) ?
             <div className="content">
+              { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
               <div className="ui info message">
                 <div className="description">
-                  {T.translate("dashboard.invoice_tasks.no_invoices")}
+                  {T.translate("dashboard.invoice_tasks.no_pending_invoices")}
+                  {T.translate("dashboard.invoice_tasks.no_overdue_invoices")}
                 </div>
               </div> 
             </div> : list }
@@ -115,17 +124,8 @@ class InvoiceTasks extends Component {
         </div>
       </div>  
       )
-  }
-}
+    }}
+  </Query>
+)
 
-InvoiceTasks.propTypes = {
-  fetchInvoiceTasks: PropTypes.func.isRequired
-}
-
-function mapStateToProps(state) {
-  return {
-    invoiceTasks: state.dashboard.invoiceTasks
-  }
-}
-
-export default connect(mapStateToProps, { fetchInvoiceTasks }) (InvoiceTasks)
+export default InvoiceTasksCard

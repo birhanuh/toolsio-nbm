@@ -7,7 +7,8 @@ import { addFlashMessage } from '../../../actions/flashMessageActions'
 import AddTaskTr from './AddTaskTr'
 import ShowEditTaskTr from './ShowEditTaskTr'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_PROJECT_QUERY } from '../../../graphql/projects'
+import { CREATE_TASK_MUTATION, UPDATE_TASK_MUTATION, DELETE_TASK_MUTATION } from '../../../graphql/tasks'
 
 // Localization 
 import T from 'i18n-react'
@@ -47,13 +48,13 @@ class Form extends Component {
     }
   }
 
-  handleNewTaskChange = (e) => {
-    if (this.state.newTask.errors[e.target.name]) {
+  handleNewTaskChange = (name, value) => {
+    if (this.state.newTask.errors[name]) {
       let errors = Object.assign({}, this.state.newTask.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       let updatedTask = Object.assign({}, this.state.newTask)
-      updatedTask[e.target.name] = e.target.value
+      updatedTask[name] = value
       updatedTask.errors = errors 
 
       this.setState({
@@ -62,7 +63,7 @@ class Form extends Component {
     } else {
       let updatedTask = Object.assign({}, this.state.newTask)
       updatedTask.projectId = this.props.projectId
-      updatedTask[e.target.name] = e.target.value
+      updatedTask[name] = value
 
       this.setState({
         newTask: updatedTask
@@ -101,7 +102,7 @@ class Form extends Component {
           }
           
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getProjectQuery,
+          const data = store.readQuery({ query: GET_PROJECT_QUERY,
             variables: {
               id: projectId,
             }
@@ -109,7 +110,7 @@ class Form extends Component {
           // Add our comment from the mutation to the end.
           data.getProject.tasks.push(task)
           // Write our data back to the cache.
-          store.writeQuery({ query: getProjectQuery, data }) 
+          store.writeQuery({ query: GET_PROJECT_QUERY, data }) 
         }})
         .then(res => {
 
@@ -131,7 +132,7 @@ class Form extends Component {
 
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("projects.tasks.form.flash.success_add", { name: name})
+              text: T.translate("projects.tasks.form.flash.success_add", { name: task.name})
             })
           } else {
             let errorsList = {}
@@ -156,15 +157,15 @@ class Form extends Component {
     }
   }
 
-  handleEditTaskChange = (task, e) => {
-    if (this.state.editTask.errors[e.target.name]) {
+  handleEditTaskChange = (name, value, task) => {
+    if (this.state.editTask.errors[name]) {
       let errors = Object.assign({}, this.state.editTask.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       let updatedTask = Object.assign({}, this.state.editTask)
       updatedTask.id = task.id
       updatedTask.projectId = task.projectId
-      updatedTask[e.target.name] = e.target.value
+      updatedTask[name] = value
 
       this.setState({
         editTask: updatedTask
@@ -173,8 +174,8 @@ class Form extends Component {
       let updatedTask = Object.assign({}, this.state.editTask)
       updatedTask.id = task.id
       updatedTask.projectId = task.projectId
-      updatedTask[e.target.name] = e.target.value
-
+      updatedTask[name] = value
+      
       this.setState({
         editTask: updatedTask
       })
@@ -240,7 +241,7 @@ class Form extends Component {
           }
           
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: getProjectQuery,
+          const data = store.readQuery({ query: GET_PROJECT_QUERY,
               variables: {
                 id: projectId,
               }
@@ -255,7 +256,7 @@ class Form extends Component {
           data.getProject.tasks = updatedTasks
       
           // Write our data back to the cache.
-          store.writeQuery({ query: getProjectQuery, data }) 
+          store.writeQuery({ query: GET_PROJECT_QUERY, data }) 
         }})
         .then(res => {
 
@@ -338,7 +339,7 @@ class Form extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: getProjectQuery,
+        const data = proxy.readQuery({ query: GET_PROJECT_QUERY,
             variables: {
               id: projectId,
             }
@@ -349,7 +350,7 @@ class Form extends Component {
         data.getProject.tasks = updatedTasks
  
         // Write our data back to the cache.
-        proxy.writeQuery({ query: getProjectQuery, data })
+        proxy.writeQuery({ query: GET_PROJECT_QUERY, data })
       }})
       .then(res => {          
 
@@ -358,7 +359,7 @@ class Form extends Component {
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("projects.tasks.form.flash.success_delete", { name: name})
+            text: T.translate("projects.tasks.form.flash.success_delete", { name: project.name})
           })  
 
           this.setState({ itemToBeDeleated: {} })
@@ -369,7 +370,7 @@ class Form extends Component {
           this.setState({ errors: errorsList, isLoading: false })
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.props.addFlashMessage({
           type: 'error',
           text: T.translate("projects.tasks.form.flash.error_delete", { name: name})
@@ -392,7 +393,7 @@ class Form extends Component {
           task={task} 
           editTask={editTask}
           handleCancelEdit={this.handleCancelEdit.bind(this, task)}
-          handleEditTaskChange={this.handleEditTaskChange.bind(this, task)} 
+          handleEditTaskChange={this.handleEditTaskChange} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, task)}
           showConfirmationModal={this.showConfirmationModal.bind(this, task)}/> 
@@ -418,7 +419,7 @@ class Form extends Component {
             
             <AddTaskTr
               task={newTask} 
-              handleNewTaskChange={this.handleNewTaskChange.bind(this)} 
+              handleNewTaskChange={this.handleNewTaskChange} 
               handleCreate={this.handleCreate.bind(this)} /> 
             
             <tr>
@@ -452,93 +453,14 @@ Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-const createTaskMutation = gql`
-  mutation createTask($name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
-    createTask(name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
-      success
-      task {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-        projectId
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const updateTaskMutation = gql`
-  mutation updateTask($id: Int!, $name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
-    updateTask(id: $id, name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
-      success
-      task {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-        projectId
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const deleteTaskMutation = gql`
-  mutation deleteTask($id: Int!) {
-    deleteTask(id: $id) {
-      success
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const getProjectQuery = gql`
-  query ($id: Int!) {
-    getProject(id: $id) {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      customer {
-        id
-        name
-      }
-      tasks {
-        id
-        name
-        hours
-        paymentType
-        price
-        vat
-        projectId
-      }
-    }
-  }
-`
 const Mutations =  compose(
-  graphql(createTaskMutation, {
+  graphql(CREATE_TASK_MUTATION, {
     name : 'createTaskMutation'
   }),
-  graphql(updateTaskMutation, {
+  graphql(UPDATE_TASK_MUTATION, {
     name : 'updateTaskMutation'
   }),
-  graphql(deleteTaskMutation, {
+  graphql(DELETE_TASK_MUTATION, {
     name : 'deleteTaskMutation'
   })
 )(Form)

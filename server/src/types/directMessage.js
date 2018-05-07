@@ -30,7 +30,9 @@ export default `
 
   type Query {
     getDirectMessage(id: Int!): DirectMessage
+    
     getDirectMessages(receiverId: Int!): [DirectMessage!]!
+    
     getDirectMessageUsers: [DirectMessageUser!]!
   }
 

@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import classnames from 'classnames'
 import Dropzone from 'react-dropzone'
 import { Validation } from '../../../../utils'
-import { TextAreaField } from '../../../../utils/FormFields'
+// Semantic UI Form elements
+import { TextArea, Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { CREATE_MESSAGE_MUTATION } from '../../../../graphql/conversations'
 
 // Localization 
 import T from 'i18n-react'
@@ -31,22 +32,22 @@ class Message extends Component {
     }
   }
 
-  handleChange = (e) => {
+  handleChange = (name, value) => {
 
-    if (!this.state.errors[e.target.name]) {
+    if (!this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       this.setState({
-        [e.target.name]: e.target.value,
+        [name]: value,
         errors
       })
      
     } else {
 
       this.setState({
-        [e.target.name]: e.target.value
+        [name]: value
       })
     }
    
@@ -84,13 +85,6 @@ class Message extends Component {
           variables: { body, channelId: parseInt(channelId) }
           })
           .then(res => {
-            // this.props.addFlashMessage({
-            //   type: 'success',
-            //   text: T.translate("conversations.form.flash.success_compose")
-            // })  
-            // this.context.router.history.push('/conversations')
-            
-
             const { success, message, errors } = res.data.createMessage
 
             if (success) {
@@ -116,7 +110,7 @@ class Message extends Component {
 
   handleOnDrop = async ([file]) => {
 
-    const { channelId, body } = this.state
+    const { channelId } = this.state
     this.setState({ isLoading: true })
     
     console.log('file: ', file)    
@@ -128,13 +122,9 @@ class Message extends Component {
         const { success, message, errors } = res.data.createMessage
 
         if (success) {
-          // this.props.addFlashMessage({
-          //   type: 'success',
-          //   text: T.translate("conversations.form.flash.success_compose")
-          // })  
-          console.log('Message sent', message)
           // Reset reload
           this.setState({ isLoading: false })
+          console.log('Message sent', message)
         } else {
           let errorsList = {}
           errors.map(error => errorsList[error.path] = error.message)
@@ -149,47 +139,30 @@ class Message extends Component {
     const { body, errors, isLoading } = this.state
 
     return (  
-
       <div className={classnames("ui form", { loading: isLoading })} >
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
         
         <div className="ui fluid action input">
-            <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui primary button">
-              <i className="plus icon" aria-hidden="true" />  
-            </Dropzone>
+          <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui primary button">
+            <i className="plus icon" aria-hidden="true" />  
+          </Dropzone>        
           
-          <TextAreaField
-            label=""
+          <Form.Field 
+            placeholder={T.translate("conversations.form.message")}
+            control={TextArea}
             name="body" 
             value={body} 
-            onChange={this.handleChange.bind(this)} 
-            onKeyDown={this.handleSubmit.bind(this)}
-            placeholder={T.translate("conversations.form.message")}
-            error={errors.body}
-            formClass="field"
+            onChange={(e, {value}) => this.handleChange('body', value)} 
+            error={!!errors.body}
+            className="field"
             rows="2"
-          />           
+          />                 
         </div>   
       </div> 
     )
   }
 }
 
-const createMessageMutation = gql`
-  mutation ($body: String, $file: Upload, $channelId: Int!) {
-    createMessage(body: $body, file: $file, channelId: $channelId)  {
-      success
-      message {
-        id
-      } 
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default graphql(createMessageMutation)(Message)
+export default graphql(CREATE_MESSAGE_MUTATION)(Message)
 

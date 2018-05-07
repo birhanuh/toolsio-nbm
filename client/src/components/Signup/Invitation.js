@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
-import { InputField } from '../../utils/FormFields'
 import classnames from 'classnames'
 import jwt from 'jsonwebtoken'
+// Semantic UI Form elements
+import { Input, Form } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { REGISTER_INVITED_USER_MUTATION } from '../../graphql/authentications'
 
 // Localization 
 import T from 'i18n-react'
@@ -39,19 +40,19 @@ class Invitation extends Component {
     this.setState({ email, token })
   }
 
-  handleChange(e) {
-    if (this.state.errors[e.target.name]) {
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       this.setState({
-        [e.target.name]: e.target.value,
+        [name]: value,
         errors
       })
     } else {
       this.setState({
-        [e.target.name]: e.target.value
+        [name]: value
       })
     }
   }
@@ -72,15 +73,13 @@ class Invitation extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    if (this.isValid()) { 
-      
+    if (this.isValid()) {       
       this.setState({ isLoading: true })
       
       const { firstName, lastName, email, password, token } = this.state
       
       this.props.mutate({variables: { firstName, lastName, email, password, token }})
-        .then(res => {
-      
+        .then(res => {      
           const { success, account, errors } = res.data.registerInvitedUser
          
           if (success) {
@@ -95,80 +94,89 @@ class Invitation extends Component {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
             this.setState({ errors: errorsList, isLoading: false })
-          }
-         
+          }         
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
     }  
   }
 
   render() {
-    const { firstName, email, lastName, password, confirmPassword, errors, isLoading, invalid } = this.state
+    const { firstName, email, lastName, password, confirmPassword, errors, isLoading } = this.state
 
     return (            
-      <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+      <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
         <div className="ui stacked segment">
            
           { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
           
-          <InputField
-            id='firstName'
-            label={T.translate("sign_up.first_name")}
-            name="firstName" 
-            value={firstName} 
-            onChange={this.handleChange.bind(this)} 
-            placeholder={T.translate("sign_up.first_name")}
-            error={errors && errors.firstName}
-            formClass="field"
-          />
-          <InputField
-            id='lastName'
-            label={T.translate("sign_up.last_name")}
-            name="lastName" 
-            value={lastName} 
-            onChange={this.handleChange.bind(this)} 
-            placeholder={T.translate("sign_up.last_name")}
-            error={errors && errors.lastName}
-            formClass="field"
-          />
-          <InputField
-            type="email"
-            name="email" 
-            value={email} 
-            id='email'
-            label={T.translate("sign_up.email")}
-            onChange={this.handleChange.bind(this)} 
-            placeholder={T.translate("sign_up.email")}
-            error={errors && errors.email}
-            formClass="field"
-            disabled="true"
-          />
-          <InputField
-            type="password"
-            name="password" 
-            value={password} 
-            id="password"
-            label={T.translate("sign_up.password")}
-            onChange={this.handleChange.bind(this)} 
-            placeholder={T.translate("sign_up.password")}
-            error={errors && errors.password}
-            formClass="field"
-          />
-          <InputField
-            type="password"
-            name="confirmPassword" 
-            value={confirmPassword} 
-            id="confirmPassword"
-            label={T.translate("sign_up.confirm_password")}
-            onChange={this.handleChange.bind(this)} 
-            placeholder={T.translate("sign_up.confirm_password")}
-            error={errors.confirmPassword}
-            formClass="field"
-          /> 
+          <Form.Field>
+            <label>{T.translate("sign_up.first_name")}</label>
+            <Input
+              placeholder={T.translate("sign_up.first_name")}
+              control={Input}
+              name="firstName" 
+              value={firstName} 
+              onChange={(e, {value}) => this.handleChange('firstName', value)} 
+              error={!!errors.firstName}
+            />
+            <span className="red">{errors.firstName}</span>
+          </Form.Field>
+
+          <Form.Field>
+            <label>{T.translate("sign_up.last_name")}</label>
+            <Input
+              placeholder={T.translate("sign_up.last_name")}
+              control={Input}
+              name="lastName" 
+              value={lastName} 
+              onChange={(e, {value}) => this.handleChange('lastName', value)} 
+              error={!!errors.lastName}
+            />
+            <span className="red">{errors.lastName}</span>
+          </Form.Field>
+
+          <Form.Field>
+            <label className={classnames({red: !!errors.email})}>{T.translate("sign_up.email")}</label>
+            <Input
+              placeholder={T.translate("sign_up.email")}
+              control={Input}
+              name="email" 
+              value={email} 
+              onChange={(e, {value}) => this.handleChange('email', value)} 
+              error={!!errors.email}
+            />
+            <span className="red">{errors.email}</span>
+          </Form.Field>
+
+          <Form.Field>
+            <label className={classnames({red: !!errors.password})}>{T.translate("sign_up.password")}</label>
+            <Input
+              placeholder={T.translate("sign_up.password")}
+              control={Input}
+              name="password" 
+              value={password} 
+              onChange={(e, {value}) => this.handleChange('password', value)} 
+              error={!!errors.password}
+            />
+            <span className="red">{errors.password}</span>
+          </Form.Field>
+
+          <Form.Field>
+            <label className={classnames({red: !!errors.confirmPassword})}>{T.translate("sign_up.confirm_password")}</label>
+            <Input
+              placeholder={T.translate("sign_up.confirm_password")}
+              control={Input}
+              name="confirmPassword" 
+              value={confirmPassword} 
+              onChange={(e, {value}) => this.handleChange('confirmPassword', value)} 
+              error={!!errors.confirmPassword}
+            />
+            <span className="red">{errors.confirmPassword}</span>
+          </Form.Field>
 
           <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
         </div>
-      </form>         
+      </Form>         
 
     )
   }
@@ -184,21 +192,6 @@ Invitation.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const sendInvitationMutation = gql`
-  mutation($firstName: String, $lastName: String, $email: String!, $password: String!, $token: String!) {
-    registerInvitedUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, token: $token) {
-      success
-      account {
-        subdomain
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-export default connect(null, { addFlashMessage }) (graphql(sendInvitationMutation)(Invitation))
+export default connect(null, { addFlashMessage }) (graphql(REGISTER_INVITED_USER_MUTATION)(Invitation))
 
 

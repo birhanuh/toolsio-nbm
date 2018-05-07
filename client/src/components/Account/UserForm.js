@@ -7,10 +7,11 @@ import { Link } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { InputField } from '../../utils/FormFields'
+// Semantic UI Form elements
+import { Input, Form } from 'semantic-ui-react'
 import classnames from 'classnames'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import { GET_USER_BY_EMAIL_QUERY, UPDATE_USER_MUTATION, S3_SIGN_AVATAR_MUTATION } from '../../graphql/accounts'
 
 // Localization 
 import T from 'i18n-react'
@@ -61,10 +62,21 @@ class UserForm extends Component {
     })
   }
 
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[name]
+
+      this.setState({
+        [name]: value,
+        errors
+      })
+    } else {
+      this.setState({
+        [name]: value
+      })
+    }
   }
 
   isValid() {
@@ -87,17 +99,27 @@ class UserForm extends Component {
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoadingForm: true })
       
-      const { user } = this.state
+      const { firstName, lastName, email, password, confirmPassword, avatarUrl } = this.state
       // Make submit
-      this.props.updateUser({ user})
+      this.props.updateUserMutation({ variables: { firstName, lastName, email, password, confirmPassword, avatarUrl } })
         .then((res) => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: T.translate("settings.user.flash.success_update")
-          })
-        },
-        ({ response }) => this.setState({ errors: response.data.errors, isLoadingForm: false })
-      )
+
+          const { success, errors } = res.data.updateUser
+           
+          if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("settings.user.flash.success_update")
+            })
+            this.setState({ isLoading: false })
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+
+            this.setState({ errors: errorsList, isLoading: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoading: false }))
     }  
   }
 
@@ -125,7 +147,7 @@ class UserForm extends Component {
 
       this.setState({ isLoadingAvatar: true })
       this.props.updateUser({ id, avatarUrl})
-        .then((res) => {
+        .then(() => {
           this.props.addFlashMessage({
             type: 'success',
             text: T.translate("settings.user.flash.success_update")
@@ -155,7 +177,7 @@ class UserForm extends Component {
   }
 
   handleSubmitImage = async () => {
-    const { id, file } = this.state
+    const { file } = this.state
     const response = await this.props.s3SignAvatarMutation({
       variables: {
         fileName: this.formatFileName(file.name),
@@ -198,63 +220,69 @@ class UserForm extends Component {
             <div className="content">                
               <h1 className="ui header mt-2 mb-3">{T.translate("settings.user.header")}</h1> 
 
-              <form className={classnames("ui large form", { loading: isLoadingForm })} onSubmit={this.handleSubmit.bind(this)}>
+              <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)}>
              
                 { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
                 
-                <InputField
-                  id='firstName'
-                  label={T.translate("settings.user.first_name")}
-                  name="firstName" 
-                  value={firstName} 
-                  onChange={this.handleChange.bind(this)} 
-                  placeholder={T.translate("settings.user.first_name")}
-                  error={errors && errors.firstName}
-                  formClass="field"
-                />
-                <InputField
-                  id='lastName'
-                  label={T.translate("settings.user.last_name")}
-                  name="lastName" 
-                  value={lastName} 
-                  onChange={this.handleChange.bind(this)} 
-                  placeholder={T.translate("settings.user.last_name")}
-                  error={errors && errors.lastName}
-                  formClass="field"
-                />
-                <InputField
-                  type="email"
-                  name="email" 
-                  value={email} 
-                  id='email'
-                  label={T.translate("settings.user.email")}
-                  onChange={this.handleChange.bind(this)} 
-                  placeholder={T.translate("settings.user.email")}
-                  error={errors && errors.email}
-                  formClass="field"
-                />
-                <InputField
-                  type="password"
-                  name="password" 
-                  value={password} 
-                  id="password"
-                  label={T.translate("settings.user.password")}
-                  onChange={this.handleChange.bind(this)} 
-                  placeholder={T.translate("settings.user.password")}
-                  error={errors && errors.password}
-                  formClass="field"
-                />
-                <InputField
-                  type="password"
-                  name="confirmPassword" 
-                  value={confirmPassword} 
-                  id="confirmPassword"
-                  label={T.translate("settings.user.confirm_password")}
-                  onChange={this.handleChange.bind(this)} 
-                  placeholder={T.translate("sign_up.confirm_password")}
-                  error={errors && errors.confirmPassword}
-                  formClass="field"
-                /> 
+                <Form.Field>
+                  <label>{T.translate("settings.user.first_name")}</label>
+                  <Input
+                    placeholder={T.translate("settings.user.first_name")}
+                    name="firstName" 
+                    value={firstName} 
+                    onChange={(e, {value}) => this.handleChange('firstName', value)} 
+                    error={!!errors.firstName}
+                  />
+                  <span className="red">{errors.firstName}</span>
+                </Form.Field>
+
+                <Form.Field>
+                  <label>{T.translate("settings.user.last_name")}</label>
+                  <Input
+                    placeholder={T.translate("settings.user.last_name")}
+                    name="lasttName" 
+                    value={lastName} 
+                    onChange={(e, {value}) => this.handleChange('lasttName', value)} 
+                    error={!!errors.lasttName}
+                  />
+                  <span className="red">{errors.lasttName}</span>
+                </Form.Field>
+
+                <Form.Field>
+                  <label className={classnames({red: !!errors.email})}>{T.translate("settings.user.email")}</label>
+                  <Input
+                    placeholder={T.translate("settings.user.email")}
+                    name="email" 
+                    value={email} 
+                    onChange={(e, {value}) => this.handleChange('email', value)} 
+                    error={!!errors.email}
+                  />
+                  <span className="red">{errors.email}</span>
+                </Form.Field>
+
+                <Form.Field>
+                  <label className={classnames({red: !!errors.password})}>{T.translate("settings.user.password")}</label>
+                  <Input
+                    placeholder={T.translate("settings.user.password")}
+                    name="password" 
+                    value={password} 
+                    onChange={(e, {value}) => this.handleChange('password', value)} 
+                    error={!!errors.password}
+                  />
+                  <span className="red">{errors.password}</span>
+                </Form.Field>
+
+                <Form.Field>
+                  <label className={classnames({red: !!errors.confirmPassword})}>{T.translate("settings.user.confirm_password")}</label>
+                  <Input
+                    placeholder={T.translate("settings.user.confirm_password")}
+                    name="confirmPassword" 
+                    value={confirmPassword} 
+                    onChange={(e, {value}) => this.handleChange('confirmPassword', value)} 
+                    error={!!errors.confirmPassword}
+                  />
+                  <span className="red">{errors.confirmPassword}</span>
+                </Form.Field>
 
                 <div className="field">  
                   <Link className="ui primary outline button" to="/dashboard">
@@ -263,7 +291,7 @@ class UserForm extends Component {
                   </Link>  
                   <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.edit")}</button>
                 </div>  
-              </form>       
+              </Form>      
 
             </div>  
           </div> 
@@ -277,47 +305,8 @@ UserForm.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-const getUserQuery = gql`
-  query getUser($email: String!) {
-    getUser(email: $email) {
-      id
-      firstName
-      lastName
-      email
-      avatarUrl
-      isAdmin
-    }
-  }
-`
-
-const updateUserMutation = gql`
-  mutation updateUser($firstName: String!, $lastName: String, $email: String!, $avatarUrl: String) {
-    updateUser(firstName: $firstName, lastName: $lastName, email: $email, avatarUrl: $avatarUrl) {
-      success
-      user {
-        id
-        email
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`
-
-const s3SignAvatarMutation = gql`
-  mutation s3SignAvatar($fileName: String!, $fileType: String!) {
-    s3SignAvatar(fileName: $fileName, fileType: $fileType) {
-      signedRequest
-      url
-      errors
-    }
-  }
-`
-
 const MutationQuery =  compose(
-  graphql(updateUserMutation, {
+  graphql(UPDATE_USER_MUTATION, {
     name : 'updateUserMutation',
     options: (props) => ({
       variables: {
@@ -325,10 +314,10 @@ const MutationQuery =  compose(
       },
     })
   }),
-  graphql(s3SignAvatarMutation, {
+  graphql(S3_SIGN_AVATAR_MUTATION, {
     name : 's3SignAvatarMutation'
   }),
-  graphql(getUserQuery, {
+  graphql(GET_USER_BY_EMAIL_QUERY, {
     options: (props) => ({
       variables: {
         email: props.email
