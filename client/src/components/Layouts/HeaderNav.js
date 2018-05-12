@@ -121,6 +121,7 @@ class HeaderNav extends Component {
           </Menu.Menu>
         </nav>
 
+        {/* Breadcrumb */}
         <Breadcrumb />
       </div>
     )

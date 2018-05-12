@@ -25,12 +25,13 @@ class Page extends Component {
     }
     
     return (
-      <div className="ui stackable grid account">  
+      <div className="row column"> 
+        <div className="twelve wide column">
 
-        <AccountForm subdomain={subdomain} /> 
-           
-        { currentUser.user && <UserForm email={currentUser.email} /> }
-
+          <AccountForm subdomain={subdomain} /> 
+             
+          { currentUser.user && <UserForm email={currentUser.email} /> }
+        </div>  
       </div>  
     )
   }

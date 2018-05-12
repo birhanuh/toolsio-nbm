@@ -157,8 +157,8 @@ class Page extends Component {
     )
 
     return (
-      <div className="ui stackable grid invoice show">
-        <div className="twelve wide column">
+      <div className="column row">
+        <div className="twelve wide column invoice show">
           <div className="ui segment">
 
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
@@ -229,18 +229,18 @@ class Page extends Component {
 
             <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("invoices.show.delete")}</button>
             <Link to={`/invoices/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
-          </div>    
-        </div>
+          </div>
 
-        <div className="ui small modal invoice">
-          <div className="header">Confirmation</div>
-          <div className="content">
-            <p className="red">{T.translate("invoices.show.confirmation_msg")}</p>
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("invoices.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("invoices.show.delete")}</button>
-          </div>
+          <div className="ui small modal invoice">
+            <div className="header">Confirmation</div>
+            <div className="content">
+              <p className="red">{T.translate("invoices.show.confirmation_msg")}</p>
+            </div>
+            <div className="actions">
+              <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("invoices.show.cancel")}</button>
+              <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("invoices.show.delete")}</button>
+            </div>
+          </div>    
         </div>
       </div>
     )

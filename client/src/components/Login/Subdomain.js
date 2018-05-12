@@ -108,7 +108,7 @@ class Subdomain extends Component {
     const { errors, isLoading } = this.state
    
     return (  
-      <div>
+      <div className="ui text container">
         <h2 className="ui teal image header">
           <a className="" href="/">
             <img src={logo} className="image" alt="logo-square" />

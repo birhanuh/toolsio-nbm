@@ -14,8 +14,7 @@ class Page extends Component {
     const { match } = this.props    
     
     return (
-
-      <div className="ui stackable grid">
+      <div className="column row">
         <div className="four wide column">
           <div className="ui vertical fluid menu">
             <ChannelsList  channelId={match.params.channelId} />

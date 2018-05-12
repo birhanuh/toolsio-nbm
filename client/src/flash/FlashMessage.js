@@ -24,7 +24,7 @@ class FlashMessage extends Component {
       </div>
       )
     return (
-      <div className={classnames({'sixteen wide column flash-message': !!type && !!text })}>
+      <div className={classnames({'sixteen wide column row flash-message': !!type && !!text })}>
         {!!type && !!text && message } 
       </div>
     )
