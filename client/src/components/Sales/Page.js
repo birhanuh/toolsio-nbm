@@ -9,8 +9,6 @@ import { GET_SALES_QUERY } from '../../graphql/sales'
 // Localization 
 import T from 'i18n-react'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 const Page = ({ match }) => (
   <Query 
     query={GET_SALES_QUERY}
@@ -26,9 +24,6 @@ const Page = ({ match }) => (
 
       return ( 
         <div className="row column"> 
-
-          <Breadcrumb />   
-
           <div className="ui clearing basic segment p-0">
             <div className="ui right floated icon input">
               <input type="text" placeholder="Search..." />

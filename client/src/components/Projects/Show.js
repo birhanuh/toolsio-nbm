@@ -11,8 +11,6 @@ import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../graphql/projects'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 import TasksForm from './Tasks/Form'
 
 // Localization 
@@ -275,9 +273,6 @@ class Show extends Component {
 
     return (
       <div className="ui stackable grid">
-
-        <Breadcrumb />
-
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 

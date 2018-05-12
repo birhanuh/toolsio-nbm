@@ -7,8 +7,6 @@ import ChannelForm from './Channel/Form/Channel'
 import DirectMessages from './Direct/Messages'
 import UsersList from './Direct/List'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 class Page extends Component {
 
   render() {
@@ -18,9 +16,6 @@ class Page extends Component {
     return (
 
       <div className="ui stackable grid">
-
-        <Breadcrumb />
-
         <div className="four wide column">
           <div className="ui vertical fluid menu">
             <ChannelsList  channelId={match.params.channelId} />

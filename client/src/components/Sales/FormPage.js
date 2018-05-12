@@ -211,9 +211,6 @@ class FormPage extends Component {
 
     return (  
       <div className="row column">
-
-        <Breadcrumb />
-
         <div className="ui text container ui segment">  
 
           <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>

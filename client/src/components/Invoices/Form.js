@@ -16,8 +16,6 @@ import Confirmation from './Steps/Confirmation'
 // Localization 
 import T from 'i18n-react'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 // Moment
 import moment from 'moment'
 
@@ -350,10 +348,7 @@ class Form extends Component {
     )
 
     return ( 
-      <div className="ui stackable grid">
-
-        <Breadcrumb />
-        
+      <div className="ui stackable grid">        
         <div className="row columun">
           <div className="ui text container">
             {/* Steps component */}

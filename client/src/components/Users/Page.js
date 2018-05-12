@@ -29,9 +29,6 @@ class Page extends Component {
     
     return (
       <div className="row column">  
-
-        <Breadcrumb />
-
         <div className="ui text container"> 
         
           <FormPage />  

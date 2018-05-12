@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 import TotalIncomeCard from './TotalIncomeCard'
 import IncomesCard from './IncomesCard'
 import ProjectsCard from './ProjectsCard'
@@ -17,10 +15,7 @@ class Page extends Component {
   render() {
 
     return ( 
-      <div className="row column">  
-
-        <Breadcrumb />
-        
+      <div className="row column">          
         <div className="ui four column grid">
           <div className="column">
             <TotalIncomeCard />

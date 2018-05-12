@@ -7,8 +7,6 @@ import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
 import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, DELETE_INVOICE_MUTATION } from '../../../graphql/invoices'
 
-import Breadcrumb from '../../Layouts/Breadcrumb'
-
 // Localization 
 import T from 'i18n-react'
 
@@ -160,11 +158,9 @@ class Page extends Component {
 
     return (
       <div className="ui stackable grid invoice show">
-
-        <Breadcrumb />
-
         <div className="twelve wide column">
-          <div className="ui segment pd-3">    
+          <div className="ui segment">
+
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
               
               {project && <Link to={`/projects/show/${project.id}`} className={classnames("sub header d-inline-block pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({project.name})</Link>}

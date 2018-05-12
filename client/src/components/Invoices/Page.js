@@ -8,8 +8,6 @@ import { Pagination } from '../../utils'
 // Localization 
 import T from 'i18n-react'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 class Page extends Component {
   
   render() {
@@ -20,10 +18,7 @@ class Page extends Component {
     const { getInvoices } = this.props.data
 
     return (
-      <div className="row column">  
-
-        <Breadcrumb />
-        
+      <div className="row column">          
         <div className="ui vertical segment">
           <Link className="ui primary button" to="/invoices/new">
             <i className="add circle icon"></i>

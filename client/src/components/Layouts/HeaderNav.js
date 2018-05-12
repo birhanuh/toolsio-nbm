@@ -4,6 +4,8 @@ import { Link, Route } from 'react-router-dom'
 import decode from 'jwt-decode'
 import { Image, Dropdown, Menu } from 'semantic-ui-react'
 
+import Breadcrumb from './Breadcrumb'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -47,76 +49,80 @@ class HeaderNav extends Component {
     let countUnread = 2
 
     const userLinks = (
-      <nav className="ui fixed menu">
-        <div className="left menu">
-          <a className="item anchor"><i className="sidebar icon"></i></a>
-          <div className="logo item">
-            <Link to="/dashboard">
-              <img src={logoInverted} alt="logo-inverted" />
-            </Link>
+      <div>
+        <nav className="ui fixed menu">
+          <div className="left menu">
+            <a className="item anchor"><i className="sidebar icon"></i></a>
+            <div className="logo item">
+              <Link to="/dashboard">
+                <img src={logoInverted} alt="logo-inverted" />
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <Menu.Menu position='right'>
-          <Dropdown pointing='top right' className='ui dropdown item' 
-            trigger={(<i className="alarm icon mr-0"></i>)} icon={null} > 
-            <Dropdown.Menu>
-              <Dropdown.Item as='a'>
-                <div className="ui label orange">WAR</div> 
-                It is a long established.
-              </Dropdown.Item>
-              <Dropdown.Item as='a'>
-                <div className="ui label blue">NEW</div> 
-                NEW
-              </Dropdown.Item>
-              <Dropdown.Item as='a'>
-                <div className="ui label green">SENT</div> 
-                SENT
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>  
-         
-          <Dropdown pointing='top right' className='ui dropdown item'
-            trigger={(<div>
-              <i className="mail envelop icon mr-0"></i>
-              <div className="ui mini red label envelop">{countUnread}</div>
-            </div>)} icon={null} >
-            <Dropdown.Menu>
-              <Dropdown.Item>
-                {latestFiveUnreadMessages}             
-              </Dropdown.Item>
-              <Dropdown.Item>              
-                <Link to="/conversations"><strong className="blue">{T.translate("internal_navigation.see_all_messages")}</strong></Link>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-          
-          <Dropdown pointing='top right' className='ui dropdown item'
-            trigger={(
-              <span>
-                <Image avatar src={avatarPlaceholderSmall} alt="avatar-placeholder-small" /> {currentUser && currentUser.firstName}
-              </span>)} >
-            <Dropdown.Menu>
-              <Dropdown.Item>
-                <i className="tasks icon"></i>
-                {T.translate("internal_navigation.tasks")}
-                <div className="ui right floated blue label">1</div>
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <Link to='/settings'>
-                  <i className="settings icon"></i>
-                  {T.translate("internal_navigation.settings")}
-                </Link>
-              </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item as='a' onClick={this.logout.bind(this)}>
-                <i className="sign out icon"></i>
-                {T.translate("internal_navigation.sign_out")}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>             
-        </Menu.Menu>
-      </nav>
+          <Menu.Menu position='right'>
+            <Dropdown pointing='top right' className='ui dropdown item' 
+              trigger={(<i className="alarm icon mr-0"></i>)} icon={null} > 
+              <Dropdown.Menu>
+                <Dropdown.Item as='a'>
+                  <div className="ui label orange">WAR</div> 
+                  It is a long established.
+                </Dropdown.Item>
+                <Dropdown.Item as='a'>
+                  <div className="ui label blue">NEW</div> 
+                  NEW
+                </Dropdown.Item>
+                <Dropdown.Item as='a'>
+                  <div className="ui label green">SENT</div> 
+                  SENT
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>  
+           
+            <Dropdown pointing='top right' className='ui dropdown item'
+              trigger={(<div>
+                <i className="mail envelop icon mr-0"></i>
+                <div className="ui mini red label envelop">{countUnread}</div>
+              </div>)} icon={null} >
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  {latestFiveUnreadMessages}             
+                </Dropdown.Item>
+                <Dropdown.Item>              
+                  <Link to="/conversations"><strong className="blue">{T.translate("internal_navigation.see_all_messages")}</strong></Link>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            
+            <Dropdown pointing='top right' className='ui dropdown item'
+              trigger={(
+                <span>
+                  <Image avatar src={avatarPlaceholderSmall} alt="avatar-placeholder-small" /> {currentUser && currentUser.firstName}
+                </span>)} >
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  <i className="tasks icon"></i>
+                  {T.translate("internal_navigation.tasks")}
+                  <div className="ui right floated blue label">1</div>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <Link to='/settings'>
+                    <i className="settings icon"></i>
+                    {T.translate("internal_navigation.settings")}
+                  </Link>
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item as='a' onClick={this.logout.bind(this)}>
+                  <i className="sign out icon"></i>
+                  {T.translate("internal_navigation.sign_out")}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>             
+          </Menu.Menu>
+        </nav>
+
+        <Breadcrumb />
+      </div>
     )
 
     const guestLinks = (
