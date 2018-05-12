@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export const GET_SALES_QUERY = gql`
-  {
-    getSales {
+  query getSales($offset: Int!, $limit: Int!, $order: String!) {
+    getSales(offset: $offset, limit: $limit, order: $order) {
       id
       name 
       deadline
@@ -15,7 +15,7 @@ export const GET_SALES_QUERY = gql`
         firstName
       }
     }
-}
+  }
 `
 export const GET_SALE_QUERY = gql`
   query getSale($id: Int!) {
@@ -37,25 +37,6 @@ export const GET_SALE_QUERY = gql`
         quantity
         price
         vat
-      }
-    }
-  }
-`
-
-export const GET_CUSTOMERS_SALES_QUERY = gql`
-  query {
-    getCustomers {
-      id
-      name
-    }
-    getSales {
-      id
-      name 
-      deadline
-      status
-      description
-      customer {
-        name
       }
     }
   }

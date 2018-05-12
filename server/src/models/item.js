@@ -58,18 +58,3 @@ export default (sequelize, DataTypes) => {
   return Item
 }
 
-//   // Push items and increment total to related Sale object
-//   Sale.findByIdAndUpdate(this._creator, { $push: {items: this._id}, $inc: {total: this.price} }, { new: true }, (err, sale) => {
-//     if (err) {
-//       errors: {
-//         cant_update_sale: {
-//           message: err
-//         } 
-//       }
-//     }
-//   })
-
-//   next()
-// })
-
-

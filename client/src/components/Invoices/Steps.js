@@ -6,7 +6,7 @@ import T from 'i18n-react'
 
 export default function Steps({currentStep}) {
   return (      
-    <div className="ui text container basic segment p-0"> 
+    <div className="ui basic segment p-0"> 
       <div className="ui small unstackable steps">
         <div className={classnames("step", {active: currentStep === 'step1'})}>
           <div>

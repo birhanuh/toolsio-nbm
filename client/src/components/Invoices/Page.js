@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Table from './Table' 
 import { graphql} from 'react-apollo'
 import { GET_INVOICES_QUERY } from '../../graphql/invoices'
+import { Pagination } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -10,17 +11,15 @@ import T from 'i18n-react'
 import Breadcrumb from '../Layouts/Breadcrumb'
 
 class Page extends Component {
-
-  componentDidMount() {
-    
-  }
   
   render() {
+    const { params } = this.props.match
+    let offset = params.offset ? parseInt(params.offset) : 0
+    let limit = params.limit ? parseInt(params.limit) : 10
 
     const { getInvoices } = this.props.data
 
     return (
-
       <div className="row column">  
 
         <Breadcrumb />
@@ -49,20 +48,23 @@ class Page extends Component {
             </div>
           </div>
 
-          { getInvoices && <Table invoices={getInvoices} /> } 
+          { getInvoices && <Table invoices={getInvoices.invoices} /> } 
 
-          <div className="ui clearing segment basic segment p-0">
-            <div className="ui right floated button">            
-              <p>Pagination...</p>
-            </div>
+          <div className="ui left aligned clearing basic segment">        
+            { getInvoices && <Pagination path="invoices" count={getInvoices.count} offset={offset} limit={limit} /> } 
           </div>
-
         </div>
-
       </div>  
     )
-
   }
 }
 
-export default graphql(GET_INVOICES_QUERY)(Page)
+export default graphql(GET_INVOICES_QUERY, {
+    options: (props) => ({
+      variables: {
+        order: props.match.params.order ? props.match.params.order.toUpperCase() : 'DESC',
+        offset: props.match.params.offset ? parseInt(props.match.params.offset) : 0,
+        limit: props.match.params.limit ? parseInt(props.match.params.limit) : 10
+      }
+    })
+  })(Page)

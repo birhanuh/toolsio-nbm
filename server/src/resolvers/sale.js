@@ -5,7 +5,8 @@ export default {
   Query: {
     getSale: requiresAuth.createResolver((parent, { id }, { models }) => models.Sale.findOne({ where: { id } }, { raw: true })),
     
-    getSales: requiresAuth.createResolver((parent, args, { models }) => models.Sale.findAll()),
+    getSales: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
+      models.Sale.findAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
 
     getSalesWithoutInvoice: requiresAuth.createResolver((parent, args, { models }) => 
       models.sequelize.query('SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id FROM sales s LEFT JOIN invoices i ON s.id = i.sale_id WHERE i.sale_id IS NULL', {

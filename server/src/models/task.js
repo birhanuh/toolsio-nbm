@@ -70,19 +70,3 @@ export default (sequelize, DataTypes) => {
 
   return Task
 }
-
-// taskSchema.post('save', function (doc, next) {
-
-//   // Push task and increment total value to related Project object
-//   Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id}, $inc: {total: this.price} }, { new: true }, (err, project) => {
-//     if (err) {
-//       errors: {
-//         cantUpdateProject: {
-//           message: err
-//         } 
-//       }
-//     }
-//   })
-
-//   next()
-// })

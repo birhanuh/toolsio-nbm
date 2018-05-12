@@ -5,7 +5,22 @@ export default {
   Query: {
     getCustomer: requiresAuth.createResolver((parent, { id }, { models }) => models.Customer.findOne({ where: { id } }, { raw: true })),
 
-    getCustomers: requiresAuth.createResolver((parent, args, { models }) => models.Customer.findAll())
+    getCustomers: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
+      models.Customer.findAndCountAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })
+        .then(result => {  
+          return {
+            count: result.count,
+            customers: result.rows
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            count: 0,
+            customers: []
+          }
+        })
+      )
   },
 
   Mutation: {

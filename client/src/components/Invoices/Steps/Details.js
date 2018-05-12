@@ -95,7 +95,7 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
       </Form.Field>
 
       { id &&
-        <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'pending', green: status === 'paid', red: status === 'overdue'})}>
+        <Form.Field inline className={classnames("show", {blue: step2.status === 'new', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>
           <label className={classnames({red: !!errors.status})}>{T.translate("invoices.form.status")}</label>
           <Select 
             placeholder={T.translate("invoices.form.select_status")}
@@ -115,11 +115,10 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
         </Form.Field>
       }
 
-      <Form.Field>  
+      <Form.Field inline>  
         <label>{T.translate("invoices.form.description")}</label>
-        <Input 
+        <TextArea
           placeholder={T.translate("invoices.form.description")}
-          control={TextArea}
           name="description" 
           value={step2.description} 
           onChange={(e, {value}) => handleChange('description', value)} 

@@ -106,7 +106,13 @@ class Show extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: GET_CUSTOMERS_QUERY })
+        const data = proxy.readQuery({ query: GET_CUSTOMERS_QUERY,
+          variables: {
+            order: 'DESC',
+            offset: 0,
+            limit: 10
+          } 
+        })
         // Add our comment from the mutation to the end.
         
         let updatedData = data.getCustomers.filter(customer => customer.id !== id) 
@@ -329,7 +335,15 @@ const MutationQuery =  compose(
   graphql(DELETE_CUSTOMER_MUTATION, {
     name : 'deleteCustomerMutation'
   }),
-  graphql(GET_CUSTOMERS_QUERY),
+  graphql(GET_CUSTOMERS_QUERY, {
+    options: (props) => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
+  }),
   graphql(GET_CUSTOMER_QUERY, {
     options: (props) => ({
       variables: {

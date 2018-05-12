@@ -261,7 +261,8 @@
       "progress": "Progress",
       "deadline": "Deadline",
       "invoiced": "Invoiced",
-      "description": "All created Projects are shown here."
+      "description": "All created Projects are shown here.",
+      "load_more_button": "Load more"
     },
     "form": {
       "new_project": "New Project",
@@ -357,7 +358,8 @@
       "no_cutomer": "No Customer",
       "deadline": "Deadline",
       "invoiced": "Invoiced",
-      "description": "All created Sales are shown here."
+      "description": "All created Sales are shown here.",
+      "load_more_button": "Load more"
     },
     "form": {
       "new_sale": "New Sale",

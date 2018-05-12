@@ -23,7 +23,7 @@ class Channel extends Component {
 
   handleChange = (name, value) => {
 
-    if (!this.state.errors[name]) {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
       delete errors[name]
@@ -115,18 +115,19 @@ class Channel extends Component {
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-        <Form.Group error={errors.name}>
-          <Form.Field 
-            label={T.translate("conversations.form.name")}
+        <Form.Field>
+          <label className={classnames({red: !!errors.name})}>{T.translate("conversations.form.name")}</label>
+          <Input 
             placeholder={T.translate("conversations.form.name")}
             control={Input}
             name="name" 
             value={name} 
             onChange={(e, {value}) => this.handleChange('name', value)} 
             error={!!errors.name}
+            fluid
           />
           <span className="red">{errors.name}</span>
-        </Form.Group>
+        </Form.Field>
   
         <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.create")}</button>
         

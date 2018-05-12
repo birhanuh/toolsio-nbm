@@ -46,20 +46,3 @@ export default (sequelize, DataTypes) => {
   return Sale
 }
 
-
-// saleSchema.post('save', function(doc, next) {
-
-//   // Push sale to related Customer object
-//   Customer.findByIdAndUpdate(this.customer, { $push: { sales: this._id }}, { new: true }, (err, customer) => {
-//     if (err) {
-//       errors: {
-//         cantUpdateCustomer: {
-//           message: err
-//         } 
-//       }
-//     }
-//   })
-
-//   next()
-// })
-

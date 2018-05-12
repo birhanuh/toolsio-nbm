@@ -186,7 +186,13 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY })
+            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY,
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10
+              } 
+           })
             // Add our comment from the mutation to the end.
             
             let updatedCustomers = data.getCustomers.map(item => {
@@ -239,7 +245,13 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY })
+            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY,
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10
+              }  
+            })
             // Add our comment from the mutation to the end.
             data.getCustomers.push(customer)
             // Write our data back to the cache.
@@ -445,12 +457,21 @@ const MutationsQueries =  compose(
   graphql(UPDATE_CUSTOMER_MUTATION, {
     name: 'updateCustomerMutation'
   }),
-  graphql(GET_CUSTOMERS_QUERY),
+  graphql(GET_CUSTOMERS_QUERY, {
+    name: 'getCustomersQuery', 
+    options: (props) => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
+  }),
   graphql(GET_CUSTOMER_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0
-      },
+      }
     })
   })
 )(FormPage)

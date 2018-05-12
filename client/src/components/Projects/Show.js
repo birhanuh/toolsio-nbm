@@ -221,7 +221,13 @@ class Show extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = store.readQuery({ query: GET_PROJECTS_QUERY })
+        const data = store.readQuery({ query: GET_PROJECTS_QUERY, 
+          variables: {
+            order: 'DESC',
+            offset: 0,
+            limit: 10
+          }  
+        })
         // Add our comment from the mutation to the end.
    
         let updatedProjects = data.getProjects.filter(project => project.id !== id) 
@@ -365,12 +371,20 @@ const MutationQuery =  compose(
   graphql(DELETE_PROJECT_MUTATION, {
     name : 'deleteProjectMutation'
   }),
-  graphql(GET_PROJECTS_QUERY),
+  graphql(GET_PROJECTS_QUERY, {
+    options: (props) => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
+  }),
   graphql(GET_PROJECT_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)
-      },
+      }
     })
   })
 )(Show)

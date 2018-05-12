@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import map from 'lodash/map'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 // Semantic UI Form elements
 import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_SALE_QUERY, GET_CUSTOMERS_SALES_QUERY, CREATE_SALE_MUTATION, UPDATE_SALE_MUTATION } from '../../graphql/sales'
+import { GET_CUSTOMERS_QUERY } from '../../graphql/customers'
+import { GET_SALE_QUERY, GET_SALES_QUERY, CREATE_SALE_MUTATION, UPDATE_SALE_MUTATION } from '../../graphql/sales'
 
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -57,8 +57,7 @@ class FormPage extends Component {
       this.setState({
         [name]: value,
         errors
-      })
-     
+      })     
     } else {
 
       this.setState({
@@ -99,7 +98,13 @@ class FormPage extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: GET_CUSTOMERS_SALES_QUERY })
+          const data = store.readQuery({ query: GET_SALES_QUERY,
+            variables: {
+              order: 'DESC',
+              offset: 0,
+              limit: 10
+            } 
+          })
           // Add our comment from the mutation to the end.
           
           let updatedSales = data.getSales.map(item => {
@@ -112,7 +117,7 @@ class FormPage extends Component {
           data.getSales = updatedSales
 
           // Write our data back to the cache.
-          store.writeQuery({ query: GET_CUSTOMERS_SALES_QUERY, data })
+          store.writeQuery({ query: GET_SALES_QUERY, data })
         }})
         .then(res => {
 
@@ -143,11 +148,17 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_CUSTOMERS_SALES_QUERY });
+            const data = store.readQuery({ query: GET_SALES_QUERY,
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10
+              } 
+            })
             // Add our comment from the mutation to the end.
             data.getSales.push(sale);
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_CUSTOMERS_SALES_QUERY, data });
+            store.writeQuery({ query: GET_SALES_QUERY, data });
           }})
           .then(res => {          
 
@@ -192,9 +203,9 @@ class FormPage extends Component {
   render() {
     const { id, name, deadline, customerId, status, description, errors, isLoading } = this.state
     
-    const { getCustomers } = this.props.getCustomersSalesQuery
+    const { getCustomers } = this.props.getCustomersQuery
   
-    const customersOptions = map(getCustomers, (customer) => 
+    const customersOptions = getCustomers && getCustomers.customers.map(customer => 
       ({ key: customer.id, value: customer.id, text: customer.name })
     )
 
@@ -235,22 +246,24 @@ class FormPage extends Component {
               <span className="red">{errors.deadline}</span>
             </Form.Field>
 
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.customerId})}>{T.translate("sales.form.customer")}</label>
-              <Select
-                placeholder={T.translate("sales.form.select_customer")}
-                name="customerId"
-                value={customerId && customerId} 
-                onChange={(e, {value}) => this.handleChange('customerId', value)} 
-                error={!!errors.customerId}
-                options={customersOptions}
-                selection
-              />
-              <span className="red">{errors.customerId}</span>
-            </Form.Field>
-
-             {
-              customersOptions.length === 0 &&
+            { customersOptions && 
+              <Form.Field inline>
+                <label className={classnames({red: !!errors.customerId})}>{T.translate("sales.form.customer")}</label>
+                <Select
+                  placeholder={T.translate("sales.form.select_customer")}
+                  name="customerId"
+                  value={customerId && customerId} 
+                  onChange={(e, {value}) => this.handleChange('customerId', value)} 
+                  error={!!errors.customerId}
+                  options={customersOptions}
+                  selection
+                />
+                <span className="red">{errors.customerId}</span>
+              </Form.Field>
+            }
+              
+            {
+              customersOptions && customersOptions.length === 0 &&
                 <div className="inline field">
                   <div className="ui mini info message mb-1">
                     <p>{T.translate("sales.form.empty_customers_message")}</p>
@@ -327,8 +340,25 @@ const MutationsQuery =  compose(
   graphql(UPDATE_SALE_MUTATION, {
     name: 'updateSaleMutation'
   }),
-  graphql(GET_CUSTOMERS_SALES_QUERY, {
-    name: 'getCustomersSalesQuery'
+  graphql(GET_SALES_QUERY, {
+    name: 'getSalesQuery',
+    options: (props) => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
+  }),
+  graphql(GET_CUSTOMERS_QUERY, {
+    name: 'getCustomersQuery',
+    options: (props) => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
   }),
   graphql(GET_SALE_QUERY, {
     options: (props) => ({

@@ -102,7 +102,13 @@ class Page extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: GET_INVOICES_QUERY })
+        const data = proxy.readQuery({ query: GET_INVOICES_QUERY,
+          variables: {
+            order: 'DESC',
+            offset: 0,
+            limit: 10
+          } 
+        })
         // Add our comment from the mutation to the end.
         
         let updatedData = data.getInvoices.filter(invoice => invoice.id !== id) 
@@ -158,7 +164,7 @@ class Page extends Component {
         <Breadcrumb />
 
         <div className="twelve wide column">
-          <div className="ui segment">    
+          <div className="ui segment pd-3">    
             <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
               
               {project && <Link to={`/projects/show/${project.id}`} className={classnames("sub header d-inline-block pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({project.name})</Link>}
@@ -261,7 +267,7 @@ const MutationQuery =  compose(
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)
-      },
+      }
     })
   })
 )(Page)
