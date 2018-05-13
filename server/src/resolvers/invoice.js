@@ -93,14 +93,14 @@ export default {
 
     total: async ({ projectId, saleId }, args, { models }) => {
       if (projectId) {    
-        const totalSum = await models.Task.sum('price', {
+        const totalSum = await models.Task.sum('unit_price', {
             where: { projectId }
           }) 
        
         return totalSum ? totalSum : 0      
       }
       if (saleId) {
-        return models.Item.sum('price',
+        return models.Item.sum('unit_price',
           { where: {saleId} }, { raw: true })  
       }
       return null

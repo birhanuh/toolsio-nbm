@@ -35,8 +35,8 @@ export const GET_SALE_QUERY = gql`
         name
         unit
         quantity
-        price
-        vat
+        unitPrice
+        total
       }
     }
   }

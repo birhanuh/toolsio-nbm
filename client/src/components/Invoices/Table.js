@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tr from './Tr'
+import { Pagination } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
 
-export default function Table({ invoices }) {
+export default function Table({ getInvoices, offset, limit }) {
   const emptyMessage = (
     <tbody>
       <tr>
@@ -21,7 +22,7 @@ export default function Table({ invoices }) {
 
   const invoicesList = (
     <tbody>
-      { invoices.map(invoice => <Tr invoice={invoice} key={invoice.id} />) }
+      { getInvoices.invoices.map(invoice => <Tr invoice={invoice} key={invoice.id} />) }
     </tbody>
   )
 
@@ -38,11 +39,21 @@ export default function Table({ invoices }) {
         </tr>
       </thead>
 
-      { invoices.length === 0 ? emptyMessage : invoicesList }
+      { getInvoices.invoices.length === 0 ? emptyMessage : invoicesList }
+
+      <tfoot>
+        <tr>
+          <th colSpan="6">
+            <div className="ui right floated pagination menu">
+              { <Pagination path="invoices" count={getInvoices.count} offset={offset} limit={limit} /> } 
+            </div>
+          </th>
+        </tr>
+      </tfoot>
     </table>
   )
 }
 
 Table.propTypes = {
-  invoices: PropTypes.array.isRequired
+  getInvoices: PropTypes.object.isRequired
 }

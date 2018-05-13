@@ -496,13 +496,27 @@ nav.ui.menu .item>a {
 }
 
 // Segment
+.ui.segment {
+  padding: 2em 3em;
+}
+
+.ui.vertical.segment, .ui.basic.segment {
+  padding: initial;
+}
+
 .ui.segments > .segment, .ui.segment, .ui.message, .ui.card, .ui.cards>.card {
   @include border-radius(3px);
+  border: 1px solid $light-grey;
   box-shadow: 0 1px 2px 0 rgba(224,224,224,1);
 }
 
-.ui.attached.segment {
+.ui.attached.block.header, .ui.attached.segment {
   border: 1px solid $light-grey;
+  box-shadow: 0 1px 2px 0 rgba(224,224,224,1);
+}
+
+.ui.attached.block.header {
+  background: $xx-light-grey;
 }
 
 .ui.vertical.segment:first-child {
@@ -562,16 +576,6 @@ nav.ui.menu .item>a {
 .dropdown-menu {
   min-width: 180px;
 }
-
-// Description list
-dl.dl-horizontal {
-  dd, dt {
-    padding: 4px 0;
-  }
-  dt {
-    font-weight: bold;
-  }
-} 
 
 // Label
 .ui[class*="right floated"].label {
@@ -866,6 +870,44 @@ dl.dl-horizontal {
   .ui.header a {
     width: auto;
   }
+  .ui.sizer.vertical p {
+    color: $xx-light-dark-grey;
+  }
+  .ui.sizer.vertical p > strong {
+    display: block;
+    margin-top: 5px;
+    color: $body-color;
+  } 
+  .row:first-child .eight.wide.column {
+    display: table;
+    height: 100%;
+    h1 {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+  .ui.header a.sub.header:hover {
+    text-decoration: underline;
+  }
+}
+
+// Customers
+.customer.show {
+  .ui.sizer.vertical p {
+    color: $xx-light-dark-grey;
+  }
+  .ui.sizer.vertical p > strong {
+    display: block;
+    margin-top: 5px;
+    color: $body-color;
+  } 
+  .ui.sizer.vertical p > i {
+    display: block;
+    margin-top: 5px;
+  } 
+  .card .header a:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Extra small devices (phones, less than 433px) */
@@ -905,20 +947,7 @@ dl.dl-horizontal {
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: $screen-sm) {
-  .dl-horizontal {
-    dt {
-      float: left;
-      width: 130px;
-      overflow: hidden;
-      clear: left;
-      text-align: right;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    dd {
-      margin-left: 150px;
-    }
-  }
+ 
 }
 
 /* Small medium devices (tablets, 768px and upto desktops, 992px) */

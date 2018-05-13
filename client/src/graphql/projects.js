@@ -53,8 +53,8 @@ export const GET_PROJECT_QUERY = gql`
         name
         hours
         paymentType
-        price
-        vat
+        unitPrice
+        total
         projectId
       }
       user {

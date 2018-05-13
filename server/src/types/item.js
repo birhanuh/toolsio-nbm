@@ -5,8 +5,8 @@ export default `
     name: String!
     unit: String!
     quantity: Int!
-    price: Float!
-    vat: Int
+    unitPrice: Float!
+    total: Float!
     saleId: Int!
   }
 

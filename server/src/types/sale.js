@@ -6,6 +6,7 @@ export default `
     deadline: Date!
     status:  String!
     description:  String!
+    tax: Float!
     items: [Item!]
     customerId: Int!
     customer: Customer!

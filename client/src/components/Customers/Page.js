@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import Table from './Table' 
 import { graphql} from 'react-apollo'
 import { GET_CUSTOMERS_QUERY } from '../../graphql/customers'
-import { Pagination } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -26,26 +25,25 @@ class Page extends Component {
             </Link>
           </div>  
           
-          <div className="ui clearing segment">
-            <div className="ui right floated vertical segment">
-              <div className="ui icon input">
-                <i className="search icon"></i>
-                <input type="text" placeholder="Search..." />
+          <div className="ui segment">
+            <div className="ui clearing segment basic segment pl-0 pr-0">
+              <div className="ui right floated input">
+                <div className="ui icon input">
+                  <i className="search icon"></i>
+                  <input type="text" placeholder="Search..." />
+                </div>
+              </div>
+              <div className="ui left floated select">
+                <select className="ui dropdown">
+                  <option value="10" default>10</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
               </div>
             </div>
-            <div className="ui left floated vertical segment border-bottom-none">
-              <select className="ui dropdown">
-                <option value="10" default>10</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
 
-            { getCustomers && <Table customers={getCustomers.customers} /> }
+            { getCustomers && <Table getCustomers={getCustomers} offset={offset} limit={limit} /> }
 
-            <div className="ui left aligned clearing basic segment">        
-              { getCustomers && <Pagination path="customers" count={getCustomers.count} offset={offset} limit={limit} /> } 
-            </div>
           </div>  
         </div>
       </div>  

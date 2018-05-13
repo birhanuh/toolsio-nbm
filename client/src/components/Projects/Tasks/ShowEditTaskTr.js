@@ -11,8 +11,8 @@ export default function ShowEditTaskTr({task, editTask, handleEdit, handleCancel
       <td className="show-task">{task.name}</td>
       <td className="show-task">{task.paymentType}</td>
       <td className="show-task">{task.hours}</td>
-      <td className="show-task">{task.price}</td>
-      <td className="show-task">{task.vat}</td>
+      <td className="show-task">{task.unitPrice}</td>
+      <td className="show-task">{task.total}</td>
       <td className="show-task" width="120px">
         <div className="show-task ui fluid small buttons">
           <button className="ui negative icon basic button" onClick={showConfirmationModal}><i className="delete icon"></i></button>
@@ -67,27 +67,19 @@ export default function ShowEditTaskTr({task, editTask, handleEdit, handleCancel
         <Form.Field>
           <Input 
             placeholder="0.00"
-            name="price" 
-            value={editTask.price} 
-            onChange={(e, {value}) => handleEditTaskChange('price', value, task)} 
-            error={!!editTask.errors.price}
+            name="unitPrice" 
+            value={editTask.unitPrice} 
+            onChange={(e, {value}) => handleEditTaskChange('unitPrice', value, task)} 
+            error={!!editTask.errors.unitPrice}
             className="ui small d-block input"
           />
-          <span className="red">{task.errors && task.errors.price}</span>
+          <span className="red">{task.errors && task.errors.unitPrice}</span>
         </Form.Field>
       </td>
       <td className="edit-task">
-        <Form.Field>
-          <Input 
-            placeholder="0%"
-            name="vat" 
-            value={editTask.vat} 
-            onChange={(e, {value}) => handleEditTaskChange('vat', value, task)} 
-            error={!!editTask.errors.vat}
-            className="ui small d-block input"
-          />
-          <span className="red">{task.errors && task.errors.vat}</span>
-        </Form.Field>
+        <div className="p-2">
+          {task.total}
+        </div>
       </td>
       <td className="edit-task" width="120px">  
         <div className="edit-item ui fluid small buttons">

@@ -29,7 +29,7 @@ class Form extends Component {
         unit: "",
         quantity: "",
         price: "",
-        vat: "",
+        total: "",
         errors: {},
         isLoading: false
       },
@@ -40,7 +40,7 @@ class Form extends Component {
         unit: "",
         quantity: "",
         price: "",
-        vat: "",
+        total: "",
         errors: {},
         isLoading: false
       },      
@@ -91,10 +91,10 @@ class Form extends Component {
 
     // Validation
     if (this.isValidNewItem()) { 
-      const { saleId, name, unit, quantity, price, vat } = this.state.newItem
+      const { saleId, name, unit, quantity, price, total } = this.state.newItem
 
       this.props.createItemMutation({
-        variables: { saleId, name, unit, quantity, price, vat },
+        variables: { saleId, name, unit, quantity, price, total },
         update: (store, { data: { createItem } }) => {
           const { success, item } = createItem
 
@@ -124,7 +124,7 @@ class Form extends Component {
             updatedItem.unit = ""
             updatedItem.quantity = ""
             updatedItem.price = ""
-            updatedItem.vat = ""
+            updatedItem.total = ""
             updatedItem.isLoading = false
              this.setState({
               newItem: updatedItem
@@ -195,7 +195,7 @@ class Form extends Component {
     updatedItem.unit = item.unit
     updatedItem.quantity = item.quantity
     updatedItem.price = item.price
-    updatedItem.vat = item.vat
+    updatedItem.total = item.total
     this.setState({
       editItem: updatedItem
     })
@@ -228,10 +228,10 @@ class Form extends Component {
 
     // Validation
     if (this.isValidEditItem()) { 
-      const { id, saleId, name, unit, quantity, price, vat } = this.state.editItem
+      const { id, saleId, name, unit, quantity, price, total } = this.state.editItem
       
       this.props.updateItemMutation({
-        variables: { id, saleId, name, unit, quantity, price, vat },
+        variables: { id, saleId, name, unit, quantity, price, total },
         update: (store, { data: { updateItem } }) => {
           const { success, item } = updateItem
 
@@ -268,7 +268,7 @@ class Form extends Component {
             updatedItem.unit = ""
             updatedItem.quantity = ""
             updatedItem.price = ""
-            updatedItem.vat = ""
+            updatedItem.total = ""
             updatedItem.isLoading = false
              this.setState({
               editItem: updatedItem
@@ -380,7 +380,7 @@ class Form extends Component {
   render() {
     const { newItem, editItem } = this.state
   
-    let { items, total } = this.props  
+    let { items, itemsTotal } = this.props  
 
     const itemsList = (
       items.map(item => 
@@ -404,8 +404,8 @@ class Form extends Component {
               <th>{T.translate("sales.items.form.name")}</th>
               <th>{T.translate("sales.items.form.unit")}</th>
               <th>{T.translate("sales.items.form.quantity")}</th>
-              <th>{T.translate("sales.items.form.price")}</th>
-              <th>{T.translate("sales.items.form.vat")}</th>
+              <th>{T.translate("sales.items.form.unit_price")}</th>
+              <th>{T.translate("sales.items.form.total")}</th>
               <th width="110px">{T.translate("sales.items.form.actions")}</th>
             </tr>
           </thead>
@@ -419,12 +419,11 @@ class Form extends Component {
               handleCreate={this.handleCreate.bind(this)} /> 
             
             <tr>
-              <td colSpan="3"><strong>{T.translate("sales.items.form.total")}</strong></td>
-              <td><strong>{total}</strong></td>
-              <td></td>
+              <td colSpan="3"></td>
+              <td><strong>{T.translate("sales.items.form.total")}</strong></td>
+              <td><strong>{itemsTotal}</strong></td>
               <td></td>
             </tr>
-
           </tbody>
         </table>
         <div className="ui small modal item">

@@ -55,30 +55,24 @@ export default function AddItemTr({item, handleNewItemChange, handleCreate}) {
         </Form.Field>
       </td>
       <td className="add-item">
-        <Form.Field inline error={item.errors && item.errors.price}>
+        <Form.Field inline error={item.errors && item.errors.unitPrice}>
           <Input 
             placeholder="0.00"
-            name="price" 
-            value={item.price} 
-            onChange={(e, {value}) => handleNewItemChange('price', value)} 
-            error={!!item.errors.price}
+            name="unitPrice" 
+            value={item.unitPrice} 
+            onChange={(e, {value}) => handleNewItemChange('unitPrice', value)} 
+            error={!!item.errors.unitPrice}
             className="ui small d-block input"
           />
-          <span className="red">{item.errors && item.errors.price}</span>
+          <span className="red">{item.errors && item.errors.unitPrice}</span>
         </Form.Field>
       </td>
       <td className="add-item">
-        <Form.Field inline error={item.errors && item.errors.vat}>
-          <Input 
-            placeholder="0%"
-            name="vat" 
-            value={item.vat} 
-            onChange={(e, {value}) => handleNewItemChange('vat', value)} 
-            error={!!item.errors.vat}
-            className="ui small d-block input"
-          />
-          <span className="red">{item.errors && item.errors.vat}</span>
-        </Form.Field>
+        <div className="field">
+          <div className="ui input ui small d-block input">
+            {item.total}
+          </div>
+        </div>
       </td>
       <td className="add-item" width="120px">     
         <button disabled={item.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.items.form.add_item")}</button> 

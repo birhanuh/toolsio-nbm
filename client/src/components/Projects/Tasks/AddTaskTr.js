@@ -42,7 +42,7 @@ export default function AddTaskTr({task, handleNewTaskChange, handleCreate}) {
       <td className="add-task">
         <Form.Field>
           <Input 
-            placeholder="0.00"
+            placeholder={T.translate("projects.tasks.form.hours_placeholder")} 
             name="hours" 
             value={task.hours} 
             onChange={(e, {value}) => handleNewTaskChange('hours', value)} 
@@ -56,27 +56,19 @@ export default function AddTaskTr({task, handleNewTaskChange, handleCreate}) {
         <Form.Field>
           <Input 
             placeholder="0.00"
-            name="price" 
-            value={task.price} 
-            onChange={(e, {value}) => handleNewTaskChange('price', value)} 
-            error={!!task.errors.price}
+            name="unitPrice" 
+            value={task.unitPrice} 
+            onChange={(e, {value}) => handleNewTaskChange('unitPrice', value)} 
+            error={!!task.errors.unitPrice}
             className="ui small d-block input"
           />
-          <span className="red">{task.errors && task.errors.price}</span>
+          <span className="red">{task.errors && task.errors.unitPrice}</span>
         </Form.Field>
       </td>
       <td className="add-task">
-        <Form.Field>
-          <Input 
-            placeholder="0%"
-            name="vat" 
-            value={task.vat} 
-            onChange={(e, {value}) => handleNewTaskChange('vat', value)} 
-            error={!!task.errors.vat}
-            className="ui small d-block input"
-          />
-          <span className="red">{task.errors && task.errors.vat}</span>
-        </Form.Field>
+        <div className="p-2">
+          {task.total}
+        </div>
       </td>
       <td className="add-task" width="120px">     
         <button disabled={task.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.form.add_task")}</button> 

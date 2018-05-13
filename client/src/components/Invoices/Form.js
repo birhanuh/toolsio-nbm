@@ -347,34 +347,32 @@ class Form extends Component {
       ({ key: project.id, value: project.id, text: project.name })
     )
 
-    return ( 
-      <div className="ui stackable grid">        
-        <div className="row columun">
-          <div className="ui text container">
-            {/* Steps component */}
-            <Steps currentStep={this.state.currentStep}/> 
+    return (        
+      <div className="row columun">
+        <div className="ui text container">
+          {/* Steps component */}
+          <Steps currentStep={this.state.currentStep}/> 
 
-            <div className="ui segment">
-              {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption} 
-                projectsOption={projectsOption} step1={step1} handleChange={this.handleChange} 
-                handleNext={this.handleNext.bind(this)} errors={errors} />}
+          <div className="ui segment">
+            {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption} 
+              projectsOption={projectsOption} step1={step1} handleChange={this.handleChange} 
+              handleNext={this.handleNext.bind(this)} errors={errors} />}
 
-              {currentStep === 'step2' && <Details id={id} step1={step1} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} 
-                handleChange={this.handleChange} handlePrevious={this.handlePrevious.bind(this)}
-                handleNext={this.handleNext.bind(this)} errors={errors} /> }
+            {currentStep === 'step2' && <Details id={id} step1={step1} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} 
+              handleChange={this.handleChange} handlePrevious={this.handlePrevious.bind(this)}
+              handleNext={this.handleNext.bind(this)} errors={errors} /> }
 
-              <form className={classnames("ui form", { loading: isLoading })}>
+            <form className={classnames("ui form", { loading: isLoading })}>
 
-                { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-                {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={step1.sale} project={step1.project} 
-                  handlePrevious={this.handlePrevious.bind(this)} 
-                  handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
+              {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={step1.sale} project={step1.project} 
+                handlePrevious={this.handlePrevious.bind(this)} 
+                handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
 
-              </form> 
-            </div>
-          </div> 
-        </div>
+            </form> 
+          </div>
+        </div> 
       </div>
     )
   }

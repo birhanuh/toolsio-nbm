@@ -29,6 +29,11 @@ module.exports = {
         defaultValue: 0,
         type: Sequelize.INTEGER
       },
+      tax: {
+        allowNull : true,
+        defaultValue: 0,
+        type: Sequelize.DECIMAL
+      },
       customer_id: {
         type: Sequelize.INTEGER,
         references: {

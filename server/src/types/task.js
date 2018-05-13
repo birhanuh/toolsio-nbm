@@ -5,8 +5,8 @@ export default `
     name: String!
     hours: String!
     paymentType: String!
-    price: Float!
-    vat: Int
+    unitPrice: Float!
+    total: Float!
     projectId: Int!
   }
 

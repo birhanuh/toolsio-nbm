@@ -22,7 +22,14 @@ export default (sequelize, DataTypes) => {
         notEmpty: true  // don't allow empty strings
       } 
     },
-    description: DataTypes.TEXT
+    description: DataTypes.TEXT,
+    tax: {
+      type: DataTypes.DECIMAL,
+      allowNull : true,
+      validate: {     
+        isDecimal: true //  checks for any numbers
+      } 
+    }
   })
 
   Sale.associate = (models) => {

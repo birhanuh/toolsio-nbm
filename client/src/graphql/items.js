@@ -1,16 +1,16 @@
 import gql from 'graphql-tag'
 
 export const CREATE_ITEM_MUTATION = gql`
-  mutation createItem($name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $saleId: Int!) {
-    createItem(name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, saleId: $saleId) {
+  mutation createItem($name: String!, $unit: String!, $quantity: Int!, $unitPrice: Float!, $total: Float!, $saleId: Int!) {
+    createItem(name: $name, unit: $unit, quantity: $quantity, unitPrice: $unitPrice, total: $total, saleId: $saleId) {
       success
       item {
         id
         name
         unit
         quantity
-        price
-        vat
+        unitPrice
+        total
         saleId
       }
       errors {
@@ -21,16 +21,16 @@ export const CREATE_ITEM_MUTATION = gql`
   }
 `
 export const UPDATE_ITEM_MUTATION = gql`
-  mutation updateItem($id: Int!, $name: String!, $unit: String!, $quantity: Int!, $price: Float!, $vat: Int!, $saleId: Int!) {
-    updateItem(id: $id, name: $name, unit: $unit, quantity: $quantity, price: $price, vat: $vat, saleId: $saleId) {
+  mutation updateItem($id: Int!, $name: String!, $unit: String!, $quantity: Int!, $unitPrice: Float!, $total: Float!, $saleId: Int!) {
+    updateItem(id: $id, name: $name, unit: $unit, quantity: $quantity, unitPrice: $unitPrice, total: $total, saleId: $saleId) {
       success
       item {
         id
         name
         unit
         quantity
-        price
-        vat
+        unitPrice
+        total
         saleId
       }
       errors {

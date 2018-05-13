@@ -190,7 +190,6 @@ class UserForm extends Component {
   }
 
   render() {
-
     const { firstName, lastName, email, avatarUrl, password, confirmPassword, errors, isLoadingAvatar, isLoadingForm } = this.state
   
     return (            

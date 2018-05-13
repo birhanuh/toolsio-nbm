@@ -55,8 +55,8 @@ export const GET_INVOICE_QUERY = gql`
           name
           hours
           paymentType
-          price
-          vat
+          unitPrice
+          total
         }
       }
       sale {
@@ -69,8 +69,8 @@ export const GET_INVOICE_QUERY = gql`
           name
           unit
           quantity
-          price
-          vat
+          unitPrice
+          total
         }
       }
       customer {

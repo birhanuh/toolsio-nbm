@@ -165,55 +165,83 @@ class Show extends Component {
   render() {
     const { id, name, deadline, customer, status, description, items, user } = this.state
     
-    let total = 0
-    items.map(item => (total+=item.price))
+    let itemsTotal = 0
+    items.map(item => (itemsTotal+=item.unitPrice))
 
     return (
-      <div className="ui stackable grid">
+      <div className="column row">
         <div className="twelve wide column">
           <div className="ui segment">    
-            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
-            <dl className="dl-horizontal">
-              <dt>{T.translate("sales.show.customer")}</dt>
-              <dd>{customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}</dd>
-              <dt>{T.translate("sales.show.user")}</dt>
-              <dd>{user && user.firstName}</dd>
-              <dt>{T.translate("sales.show.deadline")}</dt>
-              <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
-              <dt>{T.translate("sales.show.status")}</dt>
-              <dd>
-                <Form.Field 
-                  placeholder={T.translate("projects.form.select_status")}
-                  control={Select}
-                  name="status"
-                  value={status} 
-                  onChange={(e, {value}) => this.handleStatusChange(value)} 
-                  className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  options={[
-                    { key: "default", value: "new", disabled: true, text: 'NEW' },
-                    { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
-                    { key: "finished", value: "finished", text: 'FINISHED' },
-                    { key: "delayed", value: "delayed", text: 'DELAYED' },
-                    { key: "delivered", value: "delivered", text: 'DELIVERED' }
-                  ]}
-                  selection
-                />
-              </dd>
-             
-              <dt>{T.translate("sales.show.description")}</dt>
-              <dd>
-                {description ? description : '-'}
-              </dd>    
-            </dl>  
+            <h1 className={classnames("ui dividing header", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
+            <table className="ui very basic collapsing celled fluid table">
+              <tbody>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("sales.show.customer")}</i>
+                  </td>
+                  <td>
+                    {customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("sales.show.user")}</i>
+                  </td>
+                  <td>
+                    {user && user.firstName}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("sales.show.deadline")}</i>
+                  </td>
+                  <td>
+                    {Moment(deadline).format('DD/MM/YYYY')}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("sales.show.status")}</i>
+                  </td>
+                  <td>
+                    <Form.Field 
+                      placeholder={T.translate("sales.form.select_status")}
+                      control={Select}
+                      name="status"
+                      value={status} 
+                      onChange={(e, {value}) => this.handleStatusChange(value)} 
+                      className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
+                      options={[
+                        { key: "default", value: "new", disabled: true, text: 'NEW' },
+                        { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
+                        { key: "finished", value: "finished", text: 'FINISHED' },
+                        { key: "delayed", value: "delayed", text: 'DELAYED' },
+                        { key: "delivered", value: "delivered", text: 'DELIVERED' }
+                      ]}
+                      selection
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("sales.show.description")}</i>
+                  </td>
+                  <td>
+                    {description ? description : '-'}
+                  </td>
+                </tr>
+              </tbody>
+            </table> 
 
-            <h3 className="ui header">{T.translate("sales.items.header")}</h3>
-
-            { (items && id) && <ItemsForm saleId={id} total={total} items={items} /> }
+            <h4 className="ui top attached block header">{T.translate("projects.items.header")}</h4>
+            <div className="ui bottom attached segment">
+              { (items && id) && <ItemsForm saleId={id} itemsTotal={itemsTotal} items={items} /> }
+            </div>
             
-            <div className="ui divider"></div>
-
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("sales.show.delete")}</button>
-            <Link to={`/sales/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("sales.show.edit")}</Link>
+            <div className="ui vertical segment">
+              <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("sales.show.delete")}</button>
+              <Link to={`/sales/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("sales.show.edit")}</Link>
+            </div>
           </div>    
         </div>
 

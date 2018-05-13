@@ -21,18 +21,19 @@ export default (sequelize, DataTypes) => {
         isInt: true, // checks for int
       } 
     },
-    price: {
+    unitPrice: {
       type: DataTypes.DECIMAL,
       allowNull : false,
       validate: {     
         isDecimal: true, // checks for any numbers
-      } 
+      },
+      field: 'unit_price'
     },
-    vat: {
-      type: DataTypes.INTEGER, 
+    total: {
+      type: DataTypes.DECIMAL,
       allowNull : true,
-      validate: {    
-        isInt: true // checks for int
+      validate: {     
+        isDecimal: true //  checks for any numbers
       } 
     }
   }, {

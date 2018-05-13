@@ -9,6 +9,7 @@ export default `
     status: String!
     description: String
     progress: Int
+    tax: Float!
     tasks: [Task!]
     customerId: Int!
     customer: Customer!

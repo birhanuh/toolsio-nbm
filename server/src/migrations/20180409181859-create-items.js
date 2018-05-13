@@ -20,12 +20,13 @@ module.exports = {
         allowNull : false,
         type: Sequelize.INTEGER
       },
-      price: {
+      unit_price: {
         allowNull : false,
         type: Sequelize.DECIMAL
       },
-      vat: {
-        type: Sequelize.INTEGER
+      total: {
+        allowNull : false,
+        type: Sequelize.DECIMAL
       },
       sale_id: {
         type: Sequelize.INTEGER,

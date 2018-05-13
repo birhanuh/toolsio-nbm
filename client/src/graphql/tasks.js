@@ -1,16 +1,16 @@
 import gql from 'graphql-tag'
 
 export const CREATE_TASK_MUTATION = gql`
-  mutation createTask($name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
-    createTask(name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
+  mutation createTask($name: String!, $hours: String!, $paymentType: String!, $unitPrice: Float!, $total: Float!, $projectId: Int!) {
+    createTask(name: $name, hours: $hours, paymentType: $paymentType, unitPrice: $unitPrice, total: $total, projectId: $projectId) {
       success
       task {
         id
         name
         hours
         paymentType
-        price
-        vat
+        unitPrice
+        total
         projectId
       }
       errors {
@@ -22,16 +22,16 @@ export const CREATE_TASK_MUTATION = gql`
 `
 
 export const UPDATE_TASK_MUTATION = gql`
-  mutation updateTask($id: Int!, $name: String!, $hours: String!, $paymentType: String!, $price: Float!, $vat: Int!, $projectId: Int!) {
-    updateTask(id: $id, name: $name, hours: $hours, paymentType: $paymentType, price: $price, vat: $vat, projectId: $projectId) {
+  mutation updateTask($id: Int!, $name: String!, $hours: String!, $paymentType: String!, $unitPrice: Float!, $total: Float!, $projectId: Int!) {
+    updateTask(id: $id, name: $name, hours: $hours, paymentType: $paymentType, unitPrice: $unitPrice, total: $total, projectId: $projectId) {
       success
       task {
         id
         name
         hours
         paymentType
-        price
-        vat
+        unitPrice
+        total
         projectId
       }
       errors {

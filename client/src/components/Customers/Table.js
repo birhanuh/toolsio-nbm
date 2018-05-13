@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tr from './Tr'
+import { Pagination } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
 
-export default function Table({ customers }) {
+export default function Table({ getCustomers, offset, limit }) {
   const emptyMessage = (
     <tbody>
       <tr>
@@ -21,7 +22,7 @@ export default function Table({ customers }) {
 
   const customersList = (
     <tbody>
-      { customers.map(customer => <Tr customer={customer} key={customer.id} />) }
+      { getCustomers.customers.map(customer => <Tr customer={customer} key={customer.id} />) }
     </tbody>
   )
 
@@ -38,11 +39,21 @@ export default function Table({ customers }) {
         </tr>
       </thead>
 
-      { customers.length === 0 ? emptyMessage : customersList }
+      { getCustomers.customers.length === 0 ? emptyMessage : customersList }
+
+      <tfoot>
+        <tr>
+          <th colSpan="6">
+            <div className="ui right floated pagination menu">
+              { <Pagination path="invoices" count={getCustomers.count} offset={offset} limit={limit} /> } 
+            </div>
+          </th>
+        </tr>
+      </tfoot>
     </table>
   )
 }
 
 Table.propTypes = {
-  customers: PropTypes.array.isRequired
+  getCustomers: PropTypes.object.isRequired
 }

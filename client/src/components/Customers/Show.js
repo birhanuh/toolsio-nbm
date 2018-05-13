@@ -8,8 +8,6 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
 import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, DELETE_CUSTOMER_MUTATION } from '../../graphql/customers'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 // Localization 
 import T from 'i18n-react'
 
@@ -159,25 +157,19 @@ class Show extends Component {
       </div>
     )
 
-    const projectsList = map(projects, (project) => 
-      <div key={project.id} className="ui segment">
-        <div className="ui three column grid">
-          <div className="eight wide column">
-            <Link to={`/projects/show/${project.id}`} className="ui header">
-              <h3 className={classnames({blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}>
-                {project.name}
-              </h3>
+    const projectsList = map(projects, (project) =>      
+      <div key={project.id} className="card">
+        <div className="content">
+          <div className={classnames("ui right floated uppercase tiny label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}> 
+            {project.status}
+          </div>
+          <div className="header">
+            <Link to={`/projects/show/${project.id}`} className={classnames({blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}>
+              {project.name}
             </Link>
           </div>
-
-          <div className="four wide column">
-            <div className={classnames("ui uppercase tiny right label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}> 
-              {project.status}
-            </div>
-          </div>
-          
-          <div className="four wide column">
-            <span>{project.deadline}</span>
+          <div className="meta">
+            {project.deadline}
           </div>
         </div>
       </div>
@@ -192,26 +184,19 @@ class Show extends Component {
     )
 
     const salesList = map(sales, (sale) => 
-      <div key={sale.id} className="ui segment">
-        <div className="ui three column grid">
-          <div className="eight wide column">
-            <Link to={`/sales/show/${sale.id}`} className="ui header">
-              <h3 className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}>
-                {sale.name}
-              </h3>
+      <div key={sale.id} className="card">
+        <div className="content">
+          <div className={classnames("ui right floated uppercase tiny label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+            {sale.status}
+          </div>
+          <div className="header">  
+            <Link to={`/sales/show/${sale.id}`} className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}>
+              {sale.name}
             </Link>
           </div>
-
-          <div className="four wide column">
-            <div className={classnames("ui uppercase tiny right label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}> 
-              {sale.status}
-            </div>
+          <div className="meta">
+            {sale.deadline}
           </div>
-          
-          <div className="four wide column">  
-            <span>{sale.deadline}</span>
-          </div>
-
         </div>
       </div>
     )
@@ -225,86 +210,110 @@ class Show extends Component {
     )
 
     const invoicesList = map(invoices, (invoice) => 
-       <div key={invoice.id} className="ui segment">
-        <div className="ui three column grid">
-          <div className="eight wide column">
-            <Link to={`/invoices/show/${invoice.id}`} className="ui header">
-              <h3 className={classnames({blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
-                {invoice.referenceNumber}
-              </h3>
+      <div key={invoice.id} className="card">
+        <div className="content">
+          <div className={classnames("ui right floated uppercase tiny label", {blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
+            {invoice.status}
+          </div>
+          <div className="header">
+            <Link to={`/invoices/show/${invoice.id}`} className={classnames({blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
+              {invoice.referenceNumber}
             </Link>
           </div>
-
-          <div className="four wide column">
-            <div className={classnames("ui uppercase tiny label", {blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
-            {invoice.status}
-            </div>
+          <div className="meta">
+            {invoice.deadline || invoice.paymentTerm}
           </div>
-
-          <div className="four wide column">
-            <span>{invoice.deadline || invoice.paymentTerm}</span>
-          </div>
-
         </div>
       </div>
     )
 
     return (
-      <div className="ui stackable grid">
-
-        <Breadcrumb />
-
-        <div className="twelve wide column">
+      <div className="column row">
+        <div className="twelve wide column customer show">
           <div className="ui segment">    
-            <h1 className="ui header">{name}</h1> 
-            <dl className="dl-horizontal">
-              <dt>{T.translate("customers.show.vat_number")}</dt>
-              <dd>{vatNumber}</dd>
-              <dt>{T.translate("customers.show.user")}</dt>
-              <dd>{user && user.firstName}</dd>
-              
-              <h3 className="ui header">{T.translate("customers.show.contact.header")}</h3>
-              <dt>{T.translate("customers.show.contact.phone_number")}</dt>
-              <dd>{contact.phoneNumber ? contact.phoneNumber : '-'}</dd>
-              <dt>{T.translate("customers.show.contact.email")}</dt>
-              <dd>{contact.email ? contact.email : '-'}</dd>
-              
-              <dt>{T.translate("customers.show.include_contact_in_invoice")}</dt>
-              <dd>
-                {isContactIncludedInInvoice ? <i className="check circle icon green"></i> :
-                  <i className="minus circle icon red"></i>
-                }
-              </dd>
+            <h1 className="ui dividing header">{name}</h1> 
+            <div className="ui three column stackable grid">
+              <div className="six wide column">
+                <div className="ui sizer vertical segment">
+                  <p>
+                    {T.translate("customers.show.vat_number")}
+                    <strong>{vatNumber}</strong>
+                  </p>
+                  <p>
+                    {T.translate("customers.show.user")}
+                    <strong>{user && user.firstName}</strong>
+                  </p>
+                  <p>
+                    {T.translate("customers.show.include_contact_in_invoice")}
+                    {isContactIncludedInInvoice ? <i className="check circle icon green"></i> :
+                      <i className="minus circle icon red"></i>
+                    }
+                  </p>
+                </div> 
+              </div>
+              <div className="four wide column">
+                <div className="ui sizer vertical segment">
+                  <h3 className="ui header">{T.translate("customers.show.contact.header")}</h3>
+                  <p>
+                    {T.translate("customers.show.contact.phone_number")}
+                    <strong>{contact.phoneNumber ? contact.phoneNumber : '-'}</strong>
+                  </p>
+                  <p>
+                    {T.translate("customers.show.contact.email")}
+                    <strong>{contact.email ? contact.email : '-'}</strong>
+                  </p>
+                </div> 
+              </div>
 
-              <h3 className="ui header">{T.translate("customers.show.address.header")}</h3>
-              <dt>{T.translate("customers.show.address.street")}</dt>
-              <dd>{address.street}</dd>
-              <dt>{T.translate("customers.show.address.postal_code")}</dt>
-              <dd>{address.postalCode}</dd>
-              <dt>{T.translate("customers.show.address.region")}</dt>
-              <dd>{address.region}</dd>
-              <dt>{T.translate("customers.show.address.country")}</dt>
-              <dd>{address.country}</dd>
-            </dl>  
-
-            <h3 className="ui header">{T.translate("projects.page.header")}</h3>
-            { projects && (projects.length === 0 ? emptyProjectsMessage : projectsList) }
+              <div className="six wide column">
+                <div className="ui sizer vertical segment">
+                  <p>
+                    {T.translate("customers.show.address.street")}
+                    <strong>{address && address.street}</strong>
+                  </p>
+                  <p>
+                    {T.translate("customers.show.address.postal_code")}
+                    <strong>{address && address.postalCode}</strong>
+                  </p>
+                  <p>
+                    {T.translate("customers.show.address.region")}
+                    <strong>{address && address.region}</strong>
+                  </p>
+                  <p>
+                    {T.translate("customers.show.address.country")}
+                    <strong>{address && address.country}</strong>
+                  </p>
+                </div> 
+              </div>
+            </div>
             
             <div className="ui divider"></div>
 
-            <h3 className="ui header">{T.translate("sales.page.header")}</h3>
-            { sales && sales.length === 0 ? emptySalesMessage : salesList }
+            <h4 className="ui top attached block header">{T.translate("projects.page.header")}</h4>
+            <div className="ui bottom attached segment">
+              <div  className="ui three cards">
+                { projects && (projects.length === 0 ? emptyProjectsMessage : projectsList) }
+              </div>
+            </div>
+            
+            <h4 className="ui top attached block header">{T.translate("sales.page.header")}</h4>
+            <div className="ui bottom attached segment">
+              <div  className="ui three cards">
+                { sales && sales.length === 0 ? emptySalesMessage : salesList }
+              </div>
+            </div>
+            
+            <h4 className="ui top attached block header">{T.translate("invoices.page.header")}</h4>
+            <div className="ui bottom attached segment">
+              <div  className="ui three cards">
+                { invoices && invoices.length === 0 ? emptyInvoicesMessage : invoicesList }
+              </div>
+            </div>
 
-            <div className="ui divider"></div>
-
-
-            <h3 className="ui header">{T.translate("invoices.page.header")}</h3>
-            { invoices && invoices.length === 0 ? emptyInvoicesMessage : invoicesList }
-
-            <div className="ui divider"></div>
-
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("customers.show.delete")}</button>
-            <Link to={`/customers/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("customers.show.edit")}</Link>
+            <div className="ui vertical segment">
+              <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("customers.show.delete")}</button>
+              <Link to={`/customers/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("customers.show.edit")}</Link>
+            </div>
           </div>    
         </div>
 

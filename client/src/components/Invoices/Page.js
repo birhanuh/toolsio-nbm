@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import Table from './Table' 
 import { graphql} from 'react-apollo'
 import { GET_INVOICES_QUERY } from '../../graphql/invoices'
-import { Pagination } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -44,11 +43,8 @@ class Page extends Component {
               </div>
             </div>
 
-            { getInvoices && <Table invoices={getInvoices.invoices} /> } 
+            { getInvoices && <Table getInvoices={getInvoices} offset={offset} limit={limit} /> } 
 
-            <div className="ui left aligned clearing basic segment">        
-              { getInvoices && <Pagination path="invoices" count={getInvoices.count} offset={offset} limit={limit} /> } 
-            </div>
           </div>
         </div>
       </div>  

@@ -322,10 +322,11 @@
         "header": "Task",
         "name": "Name",
         "hours": "Hours",
+        "hours_placeholder": "1.5 or 1:30",
         "payment_type": "Payment type",
         "select_payment_type": "-Select Payment type-",
-        "price": "Price",
-        "vat": "Vat (in %)",
+        "unit_price": "Unit price",
+        "amount": "Amount",
         "total": "Total",
         "actions": "Actions",
         "name_required": "Name is required",
@@ -419,7 +420,8 @@
         "unit": "Unit",
         "select_unit": "-Select unit-",
         "price": "Price",
-        "vat": "Vat (in %)",
+        "unit_price": "Unit price",
+        "amount": "Amount",
         "total": "Total",
         "actions": "Actions",
         "name_required": "Name is required",
@@ -606,6 +608,18 @@
           "country": "Country"
         }
       },
+      "account": {
+        "user": {
+          "first_name": "First name",
+          "email": "Email"
+        },        
+        "address": {
+          "street": "Street",
+          "postal_code": "Postal code",
+          "region": "Region",
+          "country": "Country"
+        } 
+      },
       "sale_status": "Sale status",
       "project_status": "Project status",
       "user": "User",
@@ -616,6 +630,9 @@
       "interest_in_arrears": "Interest in arrears",
       "reference_number": "Reference number",
       "description": "Description",
+      "invoice_total": "Invoice total",
+      "subtotal": "Subtotal",
+      "tax": "tax",
       "view": "View",
       "edit_project": "Edit Project",
       "edit_sale": "Edit Sale",

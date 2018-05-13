@@ -21,8 +21,6 @@ import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 import $ from 'jquery'
 $.fn.checkbox = require('semantic-ui-checkbox')
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 class FormPage extends Component {
   constructor(props) {
     super(props)
@@ -306,9 +304,6 @@ class FormPage extends Component {
 
     return (  
       <div className="row column">
-
-        <Breadcrumb />
-
         <div className="ui text container segment">  
 
           <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
