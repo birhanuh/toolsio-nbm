@@ -5,7 +5,7 @@ import { Input, Select, Form } from 'semantic-ui-react'
 // Localization 
 import T from 'i18n-react'
 
-export default function AddItemTr({item, handleNewItemChange, handleCreate}) {
+export default function AddItemTr({item, handleNewItemChange, handleNewItemBlur, handleCreate}) {
   return (
     <tr>
       <td className="add-item">
@@ -47,7 +47,8 @@ export default function AddItemTr({item, handleNewItemChange, handleCreate}) {
             placeholder="0"
             name="quantity" 
             value={item.quantity} 
-            onChange={(e, {value}) => handleNewItemChange('quantity', value)} 
+            onChange={(e, {value}) => handleNewItemChange('quantity', value)}
+            onBlur={handleNewItemBlur}  
             error={!!item.errors.quantity}
             className="ui small d-block input"
           />
@@ -60,7 +61,8 @@ export default function AddItemTr({item, handleNewItemChange, handleCreate}) {
             placeholder="0.00"
             name="unitPrice" 
             value={item.unitPrice} 
-            onChange={(e, {value}) => handleNewItemChange('unitPrice', value)} 
+            onChange={(e, {value}) => handleNewItemChange('unitPrice', value)}
+            onBlur={handleNewItemBlur}  
             error={!!item.errors.unitPrice}
             className="ui small d-block input"
           />
@@ -68,10 +70,8 @@ export default function AddItemTr({item, handleNewItemChange, handleCreate}) {
         </Form.Field>
       </td>
       <td className="add-item">
-        <div className="field">
-          <div className="ui input ui small d-block input">
-            {item.total}
-          </div>
+        <div className="p-2">
+          {item.total}
         </div>
       </td>
       <td className="add-item" width="120px">     

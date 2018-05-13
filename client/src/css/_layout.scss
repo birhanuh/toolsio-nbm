@@ -886,7 +886,7 @@ nav.ui.menu .item>a {
       vertical-align: middle;
     }
   }
-  .ui.header a.sub.header:hover {
+  .ui.header a.sub.header:hover, .ui.card a:hover {
     text-decoration: underline;
   }
 }

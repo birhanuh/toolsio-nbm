@@ -59,8 +59,8 @@ export default function Sale({ sale }) {
               <th>{T.translate("invoices.show.sale.items.name")}</th>
               <th>{T.translate("invoices.show.sale.items.unit")}</th>
               <th>{T.translate("invoices.show.sale.items.quantity")}</th>
-              <th>{T.translate("invoices.show.sale.items.vat")}</th>              
-              <th>{T.translate("invoices.show.sale.items.price")}</th>
+              <th>{T.translate("invoices.show.sale.items.unit_price")}</th>              
+              <th>{T.translate("invoices.show.sale.items.total")}</th>
             </tr>
           </thead>
           <tbody>
@@ -69,8 +69,8 @@ export default function Sale({ sale }) {
                 <td>{item.name}</td>
                 <td>{item.unit}</td>
                 <td>{item.quantity}</td>
-                <td>{item.vat}</td>
-                <td>{item.price}</td>
+                <td>{item.unitPrice}</td>
+                <td>{item.total}</td>
               </tr>
             )}
             <tr>

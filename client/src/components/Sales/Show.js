@@ -233,8 +233,8 @@ class Show extends Component {
               </tbody>
             </table> 
 
-            <h4 className="ui top attached block header">{T.translate("projects.items.header")}</h4>
-            <div className="ui bottom attached segment">
+            <h4 className="ui top attached block header">{T.translate("sales.items.header")}</h4>
+            <div className="ui bottom attached segment p-3">
               { (items && id) && <ItemsForm saleId={id} itemsTotal={itemsTotal} items={items} /> }
             </div>
             
@@ -273,7 +273,7 @@ const MutationQuery =  compose(
     name : 'deleteSaleMutation'
   }),
   graphql(GET_SALES_QUERY, {
-    options: (props) => ({
+    options: () => ({
       variables: {
         order: 'DESC',
         offset: 0,

@@ -59,8 +59,8 @@ export default function Project({ project }) {
               <th>{T.translate("invoices.show.project.tasks.name")}</th>
               <th>{T.translate("invoices.show.project.tasks.payment_type")}</th>
               <th>{T.translate("invoices.show.project.tasks.hours")}</th>
-              <th>{T.translate("invoices.show.project.tasks.vat")}</th>
-              <th>{T.translate("invoices.show.project.tasks.price")}</th>
+              <th>{T.translate("invoices.show.project.tasks.unit_price")}</th>
+              <th>{T.translate("invoices.show.project.tasks.total")}</th>
             </tr>
           </thead>
           <tbody>
@@ -69,8 +69,8 @@ export default function Project({ project }) {
                 <td>{task.name}</td>
                 <td>{task.paymentType}</td>
                 <td>{task.hours}</td>
-                <td>{task.vat}</td>
-                <td>{task.price}</td>
+                <td>{task.unitPrice}</td>
+                <td>{task.total}</td>
               </tr>
             )}
             <tr>

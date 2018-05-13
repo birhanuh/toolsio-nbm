@@ -57,20 +57,6 @@ class Form extends Component {
       updatedTask[name] = value
       updatedTask.errors = errors 
 
-      const { hours } = this.state.newTask
-      if (hours !== "" && name === 'unitPrice') {
-        if (hours.indexOf(':') > -1) {
-          let tokens = this.state.newTask.hours.split(':') 
-          let totalTime = parseInt(tokens[0]) + parseFloat(tokens[1]/60)
-          
-          updatedTask['total'] = parseInt(value) * totalTime
-        } else if (hours.indexOf('.') > -1) {
-          updatedTask['total'] = parseInt(unitPrice) * parseFloat(hours)
-        } else {
-          updatedTask['total'] = parseInt(value) * parseInt(hours)
-        }
-      }
-
       this.setState({
         newTask: updatedTask
       })
@@ -79,24 +65,43 @@ class Form extends Component {
       updatedTask.projectId = this.props.projectId
       updatedTask[name] = value
 
-      const { hours } = this.state.newTask
-      if (hours !== "" && name === 'unitPrice') {
+      this.setState({
+        newTask: updatedTask
+      })
+    }
+  }
+
+  handleNewTaskBlur = (e) => {
+    if (!this.state.newTask.errors[e.target.name]) {
+      let updatedTask = Object.assign({}, this.state.newTask)
+
+      const { hours, unitPrice } = this.state.newTask
+
+      if (unitPrice !== "" && hours !== "") {
         if (hours.indexOf(':') > -1) {
-          let tokens = this.state.newTask.hours.split(':') 
+          let tokens = hours.split(':') 
           let totalTime = parseInt(tokens[0]) + parseFloat(tokens[1]/60)
 
-          updatedTask['total'] = parseInt(value) * totalTime
+          updatedTask['total'] = parseInt(unitPrice) * totalTime.toFixed(2)
         } else if (hours.indexOf('.') > -1) {
-          updatedTask['total'] = parseInt(value) * parseFloat(hours)
+          updatedTask['total'] = parseInt(unitPrice) * parseFloat(hours).toFixed(2)
         } else {
-          updatedTask['total'] = parseInt(value) * parseInt(hours)
+          updatedTask['total'] = parseInt(unitPrice) * parseInt(hours)
         }
+      }
+      
+      if (unitPrice !== "" && hours === "") {
+        updatedTask['total'] = parseInt(unitPrice)
+      }
+
+      if (unitPrice === "" && hours === "") {
+        updatedTask['total'] = ""
       }
 
       this.setState({
         newTask: updatedTask
       })
-    }
+    } 
   }
 
   isValidNewTask() {
@@ -210,6 +215,39 @@ class Form extends Component {
     }
   }
 
+  handleEditTaskBlur = (e) => {
+    if (!this.state.editTask.errors[e.target.name]) {
+      let updatedTask = Object.assign({}, this.state.editTask)
+
+      const { hours, unitPrice } = this.state.editTask
+
+      if (unitPrice !== "" && hours !== "") {
+        if (hours.indexOf(':') > -1) {
+          let tokens = hours.split(':') 
+          let totalTime = parseInt(tokens[0]) + parseFloat(tokens[1]/60)
+
+          updatedTask['total'] = parseInt(unitPrice) * totalTime.toFixed(2)
+        } else if (hours.indexOf('.') > -1) {
+          updatedTask['total'] = parseInt(unitPrice) * parseFloat(hours).toFixed(2)
+        } else {
+          updatedTask['total'] = parseInt(unitPrice) * parseInt(hours)
+        }
+      }
+      
+      if (unitPrice !== "" && hours === "") {
+        updatedTask['total'] = parseInt(unitPrice)
+      }
+
+      if (unitPrice === "" && hours === "") {
+        updatedTask['total'] = ""
+      }
+
+      this.setState({
+        editTask: updatedTask
+      })
+    } 
+  }
+
   handleEdit(task, event) {
     event.preventDefault()
 
@@ -243,7 +281,7 @@ class Form extends Component {
     
     if (!isValid) {
       let updatedTask = Object.assign({}, this.state.editTask)
-      updatedTask.errors.message.errors = errors
+      updatedTask.errors = errors
       this.setState({
         editTask: updatedTask
       })
@@ -422,6 +460,7 @@ class Form extends Component {
           editTask={editTask}
           handleCancelEdit={this.handleCancelEdit.bind(this, task)}
           handleEditTaskChange={this.handleEditTaskChange} 
+          handleEditTaskBlur={this.handleEditTaskBlur.bind(this)} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, task)}
           showConfirmationModal={this.showConfirmationModal.bind(this, task)}/> 
@@ -438,7 +477,7 @@ class Form extends Component {
               <th>{T.translate("projects.tasks.form.hours")}</th>
               <th>{T.translate("projects.tasks.form.unit_price")}</th>
               <th>{T.translate("projects.tasks.form.total")}</th>
-              <th width="110px">{T.translate("projects.tasks.form.actions")}</th>
+              <th className="center aligned">{T.translate("projects.tasks.form.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -448,6 +487,7 @@ class Form extends Component {
             <AddTaskTr
               task={newTask} 
               handleNewTaskChange={this.handleNewTaskChange} 
+              handleNewTaskBlur={this.handleNewTaskBlur.bind(this)} 
               handleCreate={this.handleCreate.bind(this)} /> 
             
             <tr>

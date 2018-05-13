@@ -1,15 +1,13 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import classnames from 'classnames'
 import List from './List' 
-import { Query, graphql } from 'react-apollo'
+import { Query } from 'react-apollo'
 import { GET_PROJECTS_QUERY } from '../../graphql/projects'
 
 // Localization 
 import T from 'i18n-react'
 
-const Page = ({ match }) => (
+const Page = () => (
   <Query 
     query={GET_PROJECTS_QUERY}
     variables={{
@@ -37,9 +35,7 @@ const Page = ({ match }) => (
               </Link>   
             </div> 
 
-            <div className={classnames({ loading: loading })}>                   
-              { getProjects && <List projects={getProjects} /> }             
-            </div>   
+            { getProjects && <List projects={getProjects} loading={loading} /> }             
 
             <div className="ui center aligned basic segment">           
               <button className="ui primary large button" onClick={() =>

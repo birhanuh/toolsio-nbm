@@ -79,7 +79,7 @@ export default {
     user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true }),
 
     total: async ({ id }, args, { models }) => {     
-      const totalSum = await models.Task.sum('price', {
+      const totalSum = await models.Task.sum('total', {
           where: { projectId: id }
         }) 
      
@@ -97,7 +97,7 @@ export default {
     customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
 
     total: async ({ id }, args, { models }) => {     
-      const totalSum = await models.Task.sum('price', {
+      const totalSum = await models.Task.sum('total', {
           where: { projectId: id }
         }) 
      
@@ -109,7 +109,7 @@ export default {
     customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
 
     total: async ({ id }, args, { models }) => {     
-      const totalSum = await models.Task.sum('price', {
+      const totalSum = await models.Task.sum('total', {
           where: { projectId: id }
         }) 
      

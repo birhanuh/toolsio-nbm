@@ -5,7 +5,7 @@ import { Input, Select, Form } from 'semantic-ui-react'
 // Localization 
 import T from 'i18n-react'
 
-export default function ShowEditItemTr({item, editItem, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, showConfirmationModal}) {
+export default function ShowEditItemTr({item, editItem, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, handleEditItemBlur, showConfirmationModal}) {
   return (
     <tr key={item.id} id={item.id}>      
       <td className="show-item">{item.name}</td>
@@ -58,7 +58,8 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
             placeholder="0"
             name="quantity" 
             value={editItem.quantity} 
-            onChange={(e, {value}) => handleEditItemChange('quantity', value, item)} 
+            onChange={(e, {value}) => handleEditItemChange('quantity', value, item)}
+            onBlur={handleEditItemBlur}   
             error={!!editItem.errors.quantity}
             className="ui small d-block input"
           />
@@ -71,7 +72,8 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
             placeholder="0.00"
             name="unitPrice" 
             value={editItem.unitPrice} 
-            onChange={(e, {value}) => handleEditItemChange('unitPrice', value, item)} 
+            onChange={(e, {value}) => handleEditItemChange('unitPrice', value, item)}
+            onBlur={handleEditItemBlur}   
             error={!!editItem.errors.unitPrice}
             className="ui small d-block input"
           />
@@ -80,7 +82,7 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
       </td>
       <td className="edit-item">
         <div className="p-2">
-          {item.total}
+          {editItem.total}
         </div>
       </td>
       <td className="edit-item" width="120px">  

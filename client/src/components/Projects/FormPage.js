@@ -407,7 +407,7 @@ const MutationsQuery =  compose(
   }),
   graphql(GET_PROJECTS_QUERY, {
     name: 'getProjectsQuery',
-    options: (props) => ({
+    options: () => ({
       variables: {
         order: 'DESC',
         offset: 0,
@@ -417,7 +417,7 @@ const MutationsQuery =  compose(
   }),
   graphql(GET_CUSTOMERS_QUERY, {
     name: 'getCustomersQuery',
-    options: (props) => ({
+    options: () => ({
       variables: {
         order: 'DESC',
         offset: 0,

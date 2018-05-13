@@ -13,7 +13,7 @@ export default {
         .then(task => {  
           return {
             success: true,
-            project: task
+            task
           }
         })
         .catch(err => {
@@ -29,7 +29,7 @@ export default {
         .then(result => {  
           return {
             success: true,
-            project: result[1].dataValues
+            task: result[1].dataValues
           }
         })
         .catch(err => {

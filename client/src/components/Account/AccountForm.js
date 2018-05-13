@@ -300,7 +300,7 @@ class AccountForm extends Component {
                     </div>
                   </div>
                 </div>
-                <img className="ui rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
+                <img className="ui rounded image" src={logoUrl ? logoUrl : logoPlaceholderMedium} alt="logo" />
               </div>
             </div>
 

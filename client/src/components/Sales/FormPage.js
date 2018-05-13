@@ -18,8 +18,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 // Localization 
 import T from 'i18n-react'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 class FormPage extends Component {
   constructor(props) {
     super(props)
@@ -339,7 +337,7 @@ const MutationsQuery =  compose(
   }),
   graphql(GET_SALES_QUERY, {
     name: 'getSalesQuery',
-    options: (props) => ({
+    options: () => ({
       variables: {
         order: 'DESC',
         offset: 0,
@@ -349,7 +347,7 @@ const MutationsQuery =  compose(
   }),
   graphql(GET_CUSTOMERS_QUERY, {
     name: 'getCustomersQuery',
-    options: (props) => ({
+    options: () => ({
       variables: {
         order: 'DESC',
         offset: 0,

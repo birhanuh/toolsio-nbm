@@ -332,8 +332,7 @@
         "name_required": "Name is required",
         "payment_type_required": "Payment type is required",
         "hours_required": "Hours is required",
-        "price_required": "Price is required",
-        "vat_required": "Vat is required",
+        "unit_price_required": "Unit price is required",
         "edit_task": "Edit Task",
         "update_task": "Update task",
         "add_task": "Add Task",
@@ -419,16 +418,13 @@
         "quantity": "Quantity",
         "unit": "Unit",
         "select_unit": "-Select unit-",
-        "price": "Price",
         "unit_price": "Unit price",
-        "amount": "Amount",
         "total": "Total",
         "actions": "Actions",
         "name_required": "Name is required",
         "unit_required": "Unit is required",
         "quantity_required": "Quantity is required",
-        "price_required": "Price is required",
-        "vat_required": "Vat is required",
+        "unit_price_required": "Unit price is required",
         "add_item": "Add Item",
         "edit_item": "Edit Item", 
         "update_item": "Update Item",       
@@ -650,8 +646,8 @@
           "name": "Name",
           "unit": "Unit",
           "quantity": "Quantity",
-          "vat": "Vat",
-          "price": "Price"
+          "unit_price": "Unit price",
+          "total": "Total"
         }
       },
       "project": {
@@ -665,8 +661,8 @@
           "name": "Name",
           "payment_type": "Payment type",
           "hours": "Hours",
-          "vat": "Vat",
-          "price": "Price"
+          "unit_price": "Unit price",
+          "total": "Total"
         }
       },
       "confirmation_msg": "Are you sure to delete this invoice?",      

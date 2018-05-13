@@ -163,11 +163,8 @@ export default {
     if (!data.hours) {
       errors['hours'] = T.translate("projects.tasks.form.hours_required")
     }
-    if (!data.price) {
-      errors['price'] = T.translate("projects.tasks.form.price_required")
-    }
-    if (!data.vat) {
-      errors['vat'] = T.translate("projects.tasks.form.vat_required")
+    if (!data.unitPrice) {
+      errors['unitPrice'] = T.translate("projects.tasks.form.unit_price_required")
     }
 
     return {
@@ -188,11 +185,8 @@ export default {
     if (!data.quantity) {
       errors['quantity'] = T.translate("sales.items.form.quantity_required")
     }
-    if (!data.price) {
-      errors['price'] = T.translate("sales.items.form.price_required")
-    }
-    if (!data.vat) {
-      errors['vat'] = T.translate("sales.items.form.vat_required")
+    if (!data.unitPrice) {
+      errors['unitPrice'] = T.translate("sales.items.form.unit_price_required")
     }
 
     return {

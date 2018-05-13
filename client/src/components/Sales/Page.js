@@ -1,15 +1,13 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import classnames from 'classnames'
 import List from './List' 
-import { Query, graphql } from 'react-apollo'
+import { Query } from 'react-apollo'
 import { GET_SALES_QUERY } from '../../graphql/sales'
 
 // Localization 
 import T from 'i18n-react'
 
-const Page = ({ match }) => (
+const Page = () => (
   <Query 
     query={GET_SALES_QUERY}
     variables={{
@@ -36,10 +34,8 @@ const Page = ({ match }) => (
                 {T.translate("sales.page.create_new_sale")}
               </Link>   
             </div> 
-
-            <div className={classnames({ loading: loading })}>                   
-              { getSales && <List sales={getSales} /> }             
-            </div>   
+                  
+            { getSales && <List sales={getSales} loading={loading} /> }             
 
             <div className="ui center aligned basic segment">           
               <button className="ui primary large button" onClick={() =>

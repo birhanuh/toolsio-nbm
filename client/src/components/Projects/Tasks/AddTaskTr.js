@@ -5,7 +5,7 @@ import { Input, Select, Form } from 'semantic-ui-react'
 // Localization 
 import T from 'i18n-react'
 
-export default function AddTaskTr({task, handleNewTaskChange, handleCreate}) {
+export default function AddTaskTr({task, handleNewTaskChange, handleNewTaskBlur, handleCreate}) {
   return (
     <tr>
       <td className="add-task">
@@ -45,7 +45,8 @@ export default function AddTaskTr({task, handleNewTaskChange, handleCreate}) {
             placeholder={T.translate("projects.tasks.form.hours_placeholder")} 
             name="hours" 
             value={task.hours} 
-            onChange={(e, {value}) => handleNewTaskChange('hours', value)} 
+            onChange={(e, {value}) => handleNewTaskChange('hours', value)}
+            onBlur={handleNewTaskBlur}  
             error={!!task.errors.hours}
             className="ui small d-block input"
           />
@@ -58,7 +59,8 @@ export default function AddTaskTr({task, handleNewTaskChange, handleCreate}) {
             placeholder="0.00"
             name="unitPrice" 
             value={task.unitPrice} 
-            onChange={(e, {value}) => handleNewTaskChange('unitPrice', value)} 
+            onChange={(e, {value}) => handleNewTaskChange('unitPrice', value)}
+            onBlur={handleNewTaskBlur}  
             error={!!task.errors.unitPrice}
             className="ui small d-block input"
           />

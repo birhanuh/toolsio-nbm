@@ -3,8 +3,6 @@ import decode from 'jwt-decode'
 import { graphql } from 'react-apollo'
 import { GET_USERS_QUERY } from '../../graphql/users'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 import List from './List' 
 import FormPage from './FormPage'
 

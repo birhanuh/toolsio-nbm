@@ -207,7 +207,7 @@ class UserForm extends Component {
                     </div>
                   </div>
                 </div>
-                <img src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
+                <img src={avatarUrl ? avatarUrl : avatarPlaceholderSmall} alt="avatar" />
               </div>
             </div>
 

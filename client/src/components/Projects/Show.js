@@ -267,8 +267,8 @@ class Show extends Component {
     const { id, name, deadline, customer, status, description, progress, tasks, user } = this.state
     
     let tasksTotal = 0
-    tasks.map(task => (tasksTotal+=task.unitPrice))
-
+    //tasks.map(task => tasksTotal += task.total)
+    console.log('tasks ', tasks)
     return (
       <div className="column row">
         <div className="twelve wide column">
@@ -354,7 +354,7 @@ class Show extends Component {
             </table>
 
             <h4 className="ui top attached block header">{T.translate("projects.tasks.header")}</h4>
-            <div className="ui bottom attached segment">
+            <div className="ui bottom attached segment p-3">
               { (tasks && id) && <TasksForm projectId={id} tasksTotal={tasksTotal} tasks={tasks} /> }
             </div>
             
@@ -396,7 +396,7 @@ const MutationQuery =  compose(
     name : 'deleteProjectMutation'
   }),
   graphql(GET_PROJECTS_QUERY, {
-    options: (props) => ({
+    options: () => ({
       variables: {
         order: 'DESC',
         offset: 0,

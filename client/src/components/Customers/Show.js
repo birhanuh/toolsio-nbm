@@ -345,7 +345,7 @@ const MutationQuery =  compose(
     name : 'deleteCustomerMutation'
   }),
   graphql(GET_CUSTOMERS_QUERY, {
-    options: (props) => ({
+    options: () => ({
       variables: {
         order: 'DESC',
         offset: 0,

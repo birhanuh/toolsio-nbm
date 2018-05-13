@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import sumBy from 'lodash/sumBy'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
 import { GET_ACCOUNT_QUERY } from '../../../graphql/accounts'
@@ -151,15 +150,6 @@ class Page extends Component {
     const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, user, createdAt } = this.state
     
     const { getAccountQuery: { getAccount } } = this.props
-
-    const customerContact = (      
-      <div>
-        <dt>{T.translate("invoices.show.customer.contact.phone_number")}</dt>
-        <dd>{customer ? customer.phoneNumber : '-'}</dd>
-        <dt>{T.translate("invoices.show.customer.contact.email")}</dt>
-        <dd>{customer ? customer.email : '-'}</dd>
-      </div>
-    )
 
     return (
       <div className="column row">
@@ -323,7 +313,7 @@ const MutationQuery =  compose(
   }),
   graphql(GET_ACCOUNT_QUERY, {
     name : 'getAccountQuery', 
-    options: (props) => ({
+    options: () => ({
       variables: {
         subdomain: Authorization.getSubdomain()
       }

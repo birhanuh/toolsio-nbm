@@ -10,10 +10,10 @@ export default {
   Mutation: {
     createItem: requiresAuth.createResolver((parent, args, { models }) => 
       models.Item.create(args)
-        .then(project => {
+        .then(item => {
             return {
               success: true,
-              project
+              item
             }
           })
           .catch(err => {
