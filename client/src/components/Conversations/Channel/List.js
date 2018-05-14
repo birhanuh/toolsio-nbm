@@ -29,7 +29,7 @@ class List extends Component {
       <Link key={channel.id} to={`/conversations/channel/${channel.id}`} 
         className={classnames('item', {active: channelId && parseInt(channelId) === channel.id})}>
         
-        <div className="ui small blue label">
+        <div className="ui blue label">
           {T.translate("conversations.channel.members")}
           <div className="detail">{channel.getUsersCount}</div>
         </div>

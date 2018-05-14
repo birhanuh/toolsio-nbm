@@ -250,19 +250,6 @@ export default {
     }
   },
 
-  validateConversationInput: (data) => {
-    let errors = {}
-
-    if (!data.body) {
-      errors['body'] = T.translate("conversations.form.body_required")
-    }
-    
-    return {
-      errors,
-      isValid: isEmpty(errors)
-    }
-  },
-
   validateChannelInput: (data) => {
     let errors = {}
 
@@ -281,22 +268,6 @@ export default {
 
     if (!data.userId) {
       errors['userId'] = T.translate("conversations.form.user_required")
-    }
-    
-    return {
-      errors,
-      isValid: isEmpty(errors)
-    }
-  },
-
-  validateConversationReplyInput: (data) => {
-    let errors = {}
-
-    if (!data.title) {
-      errors['title'] = T.translate("conversations.form.title_required")
-    }
-    if (!data.body) {
-      errors['body'] = T.translate("conversations.form.body_required")
     }
     
     return {

@@ -497,11 +497,11 @@ nav.ui.menu .item>a {
 
 // Segment
 .ui.segment {
-  padding: 2em 3em;
+  padding: 2em 2em;
 }
 
 .ui.vertical.segment, .ui.basic.segment {
-  padding: initial;
+  padding: 1em 1em;
 }
 
 .ui.segments > .segment, .ui.segment, .ui.message, .ui.card, .ui.cards>.card {
@@ -653,6 +653,10 @@ nav.ui.menu .item>a {
   >.actions {
     padding: 0.7rem 1rem;
   }  
+}
+
+.ui.dimmer.modals.page.transition.visible.active {
+  display: flex !important;
 }
 
 // Custome fieldset and legend

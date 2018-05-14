@@ -93,7 +93,7 @@ class Users extends Component {
             this.setState({ isLoading: false })
 
             // Close modal on success
-            this.props.hideConfirmationModal(e)
+            this.props.onClose()
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)

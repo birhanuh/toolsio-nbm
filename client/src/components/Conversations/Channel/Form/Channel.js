@@ -119,7 +119,6 @@ class Channel extends Component {
           <label className={classnames({red: !!errors.name})}>{T.translate("conversations.form.name")}</label>
           <Input 
             placeholder={T.translate("conversations.form.name")}
-            control={Input}
             name="name" 
             value={name} 
             onChange={(e, {value}) => this.handleChange('name', value)} 

@@ -23,7 +23,7 @@ import moment from 'moment'
 // Modal
 $.fn.dimmer = require('semantic-ui-dimmer')
 
-// Images
+// Avatar placeholder
 import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
 
 class UserForm extends Component {

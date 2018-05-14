@@ -13,7 +13,7 @@ export default {
     getNewChannelMessage: {
       subscribe: requiresChannelAccess.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_CHANNEL_MESSAGE), 
-        (payload, args) => console.log('sdfsdf', payload.getNewChannelMessage)
+        (payload, args) => payload.channelId === args.channelId
       ))
     }
   },

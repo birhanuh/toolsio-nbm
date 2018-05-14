@@ -16,6 +16,7 @@ export default `
     firstName: String
     lastName: String
     email: String!
+    avatarUrl: String
     isConfirmed: Boolean!
   }
 

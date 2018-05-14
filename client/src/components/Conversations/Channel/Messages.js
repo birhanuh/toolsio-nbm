@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-
+import { Button, Modal } from 'semantic-ui-react'
 import MessageForm from './Form/Message'
 import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
 
 // Localization 
 import T from 'i18n-react'
-
-import $ from 'jquery'
-
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
 
 import avatarPlaceholderSmall from '../../../images/avatar-placeholder-small.png'
 
@@ -35,13 +29,38 @@ const NEW_CHANNEL_MESSAGE_SUBSCRIPTION = gql`
     }
   }
 `
+
+const AddChannelModal = ({ open, onClose, channelId }) => (
+  <Modal
+    className="ui small modal add-member"
+    open={open}
+    onClose={(e) => {
+      onClose(e)
+    }}
+  >
+    <Modal.Header>{T.translate("conversations.messages.add_member")}</Modal.Header>
+    <Modal.Content>
+      <UsersForm channelId={channelId} onClose={onClose} />
+    </Modal.Content>
+    <Modal.Actions>
+      <Button
+        onClick={(e) => {
+          onClose(e)
+        }}
+      >
+        {T.translate("conversations.form.cancel")}
+      </Button>
+     </Modal.Actions>
+  </Modal>
+)
+
 const Message = ({ message: {uploadPath, body, mimetype} }) => {
   
   if (uploadPath) {
     if (mimetype.startsWith('image/')) {
       return (<div className="ui small message">
-        <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
-      </div>)
+          <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
+        </div>)
     } else if (mimetype.startsWith('text/')) {
       return <RenderText uploadPath={uploadPath} />
     } else if (mimetype.startsWith('audio/')) {
@@ -58,6 +77,10 @@ const Message = ({ message: {uploadPath, body, mimetype} }) => {
 }
 
 class Messages extends Component {
+
+  state = {
+    openAddChannelModal: false
+  }
 
   componentDidMount() {
     this.unsubscribe = this.subscribe(this.props.channelId)
@@ -95,22 +118,17 @@ class Messages extends Component {
     })
   
 
-  showConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.add-member').modal('show')
-  }
-
-  hideConfirmationModal(event) {
-    event.persist()
-
-    // Show modal
-    $('.small.modal.add-member').modal('hide')
+  toggleAddChannelModal = (e) => {
+    if (e) {
+      e.preventDefault()  
+    }
+    
+    this.setState(state => ({ openAddChannelModal: !state.openAddChannelModal }))
   }
 
   render() {
-
+    const { openAddChannelModal } = this.state
+    
     const { getChannelQuery: { getChannel }, getChannelMessagesQuery: { getChannelMessages } } = this.props
 
     const emptyMessage = (
@@ -140,42 +158,34 @@ class Messages extends Component {
       </div>
     )
 
-    return (
-      <div className="messages">
-
-        <div className="ui clearing vertical segment border-bottom-none">
-          <div className="ui left floated header mt-2">
-            <h3 className="header capitalize-text">{getChannel && getChannel.name}</h3>
-          </div>  
-
-          <button id="add-member" className="ui right floated primary button" onClick={this.showConfirmationModal.bind(this)}>
+    return [
+      <div key="channel-messages" className="messages"> 
+        <div className="ui clearing vertical segment p-0">
+          <h3 className="ui left floated header capitalize mt-2">
+            {getChannel && getChannel.name}           
+          </h3> 
+          <button id="add-member" className="ui right floated primary outline button" onClick={this.toggleAddChannelModal.bind(this)}>
             <i className="add circle icon"></i>
             {T.translate("conversations.messages.add_member")}
-          </button>        
-        </div>   
+          </button> 
+        </div>
 
-        <div className="ui divider mt-0"></div>
+        <div className="ui divider"></div> 
 
         <div className="ui comments">
 
           { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
-
         </div>   
         
         <MessageForm channelId={this.props.channelId} />
-
-        <div className="ui small modal add-member">
-          <div className="header">{T.translate("conversations.messages.add_member")}</div>
-          <div className="content">
-
-            <UsersForm channelId={this.props.channelId} hideConfirmationModal={this.hideConfirmationModal.bind(this)} />
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.form.cancel")}</button>
-          </div>
-        </div>
-      </div>
-    ) 
+      </div>,
+      <AddChannelModal
+        onClose={this.toggleAddChannelModal.bind(this)}
+        open={openAddChannelModal}
+        key="add-channel-modal"
+        channelId={this.props.channelId}
+      />
+    ] 
   }
 }
 
