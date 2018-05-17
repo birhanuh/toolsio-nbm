@@ -49,10 +49,10 @@ class App extends Component {
   componentDidMount = () => {
     $('#app .ui.sidebar')
       .sidebar({
+        transition: 'overlay',
         context: $('#app')
       })
       .sidebar('attach events', '#app .menu .item.anchor')
-    ;
   }
 
   render() {

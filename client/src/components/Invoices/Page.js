@@ -1,14 +1,21 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import Table from './Table' 
+// Semantic UI JS
+import { Select } from 'semantic-ui-react'
 import { graphql} from 'react-apollo'
 import { GET_INVOICES_QUERY } from '../../graphql/invoices'
+
+import Table from './Table' 
 
 // Localization 
 import T from 'i18n-react'
 
 class Page extends Component {
   
+  handleLimitSelectionChange = (name, value) => {
+    console.log('limit: ', value)
+  }
+
   render() {
     const { params } = this.props.match
     let offset = params.offset ? parseInt(params.offset) : 0
@@ -19,7 +26,7 @@ class Page extends Component {
     return (
       <div className="row column">    
         <div className="sixteen wide column">      
-          <div className="ui vertical segment">
+          <div className="ui vertical segment pl-0 pr-0">
             <Link className="ui primary button" to="/invoices/new">
               <i className="add circle icon"></i>
               {T.translate("invoices.page.create_new_invoice")}
@@ -35,11 +42,19 @@ class Page extends Component {
                 </div>
               </div>
               <div className="ui left floated select">
-                <select className="ui dropdown">
-                  <option value="10" default>10</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
+                <Select
+                  name="limit"
+                  value="10" 
+                  onChange={(e, {value}) => this.handleLimitSelectionChange('limit', value)} 
+                  options={[
+                    { key: "default", value: "10", text: '10' },
+                    { key: "50", value: "50", text: '50' },
+                    { key: "100", value: "100", text: '100' },
+                    { key: "500", value: "500", text: '500' }
+                  ]}
+                  selection
+                  compact
+                />
               </div>
             </div>
 

@@ -1,4 +1,4 @@
-import { requiresAuth } from '../middlewares/authentication'
+import requiresAuth from '../middlewares/authentication'
 // lodash
 import _ from 'lodash'
 

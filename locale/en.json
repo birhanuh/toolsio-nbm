@@ -697,6 +697,9 @@
       "members": "members",
       "message": "Message"
     },
+    "direct": {
+      "search_select_user": "Search/Select User"
+    },
     "messages": {
       "add_member": "Add member",
       "add_user": "Add user",

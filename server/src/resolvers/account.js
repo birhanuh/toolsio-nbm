@@ -1,4 +1,4 @@
-import { requiresAuth } from '../middlewares/authentication'
+import requiresAuth from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 // AWS
 import AWS from 'aws-sdk'

@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
+import { Comment } from 'semantic-ui-react'
 import gql from 'graphql-tag'
-import { Button, Modal } from 'semantic-ui-react'
+import { Button, Modal, Message } from 'semantic-ui-react'
 import MessageForm from './Form/Message'
 import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
 
 // Localization 
 import T from 'i18n-react'
+
+import moment from 'moment'
+
+import $ from 'jquery'
 
 import avatarPlaceholderSmall from '../../../images/avatar-placeholder-small.png'
 
@@ -54,7 +59,7 @@ const AddChannelModal = ({ open, onClose, channelId }) => (
   </Modal>
 )
 
-const Message = ({ message: {uploadPath, body, mimetype} }) => {
+const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
   
   if (uploadPath) {
     if (mimetype.startsWith('image/')) {
@@ -84,6 +89,9 @@ class Messages extends Component {
 
   componentDidMount() {
     this.unsubscribe = this.subscribe(this.props.channelId)
+
+    // Scrolle bottom
+    $(".comments").animate({ scrollTop: $(document).height() }, "slow")
   }
 
   componentWillReceiveProps({ channelId }) {    
@@ -132,30 +140,27 @@ class Messages extends Component {
     const { getChannelQuery: { getChannel }, getChannelMessagesQuery: { getChannelMessages } } = this.props
 
     const emptyMessage = (
-      <div className="ui info message">
-        <h3>{T.translate(`conversations.messages.empty_message_header`)}</h3>
+      <Message info>
+        <Message.Header><h3>{T.translate(`conversations.messages.empty_message_header`)}</h3></Message.Header>
         <p>{T.translate(`conversations.messages.empty_channel_message_message`)}</p>
-      </div>
+      </Message>
     )
 
     const messagesList = getChannelMessages && getChannelMessages.map(message => 
-      <div key={message.id} className="comment">
-        <a className="avatar">
-          {message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
-          alt="avatar-placeholder-small" />}
-        </a>
-        <div className="content">
-          <a className="author">{message.user.email}</a>
-          <div className="metadata">
-            <span className="date">{message.createdAt}</span>
-          </div>
-          <div className="text">
-
-            <Message message={message} />
-
-          </div>
-        </div>
-      </div>
+      <Comment key={message.id}>
+        <Comment.Avatar src={message.user.avatarUrl ? message.user.avatarUrl : avatarPlaceholderSmall}
+          alt="avatar" />
+        <Comment.Content>
+          <Comment.Author as="a">{message.user.email}</Comment.Author>
+          <Comment.Metadata>
+            <div>{moment(message.createdAt).format('DD/MM/YYYY')}</div>
+          </Comment.Metadata>
+          <Comment.Text>
+           
+           <MessageTypes message={message} />
+          </Comment.Text>
+        </Comment.Content>
+      </Comment>
     )
 
     return [
@@ -164,7 +169,7 @@ class Messages extends Component {
           <h3 className="ui left floated header capitalize mt-2">
             {getChannel && getChannel.name}           
           </h3> 
-          <button id="add-member" className="ui right floated primary outline button" onClick={this.toggleAddChannelModal.bind(this)}>
+          <button id="add-member" className="ui right floated primary outline small button" onClick={this.toggleAddChannelModal.bind(this)}>
             <i className="add circle icon"></i>
             {T.translate("conversations.messages.add_member")}
           </button> 
@@ -172,10 +177,9 @@ class Messages extends Component {
 
         <div className="ui divider"></div> 
 
-        <div className="ui comments">
-
+        <Comment.Group>
           { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
-        </div>   
+        </Comment.Group>   
         
         <MessageForm channelId={this.props.channelId} />
       </div>,
@@ -221,7 +225,7 @@ const getChannelMessagesQuery = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const Queries =  compose(
   graphql(getChannelQuery, {
     "name": "getChannelQuery",
     options: (props) => ({
@@ -241,6 +245,6 @@ const MutationsAndQuery =  compose(
   })
 )(Messages)
 
-export default MutationsAndQuery
+export default Queries
 
 

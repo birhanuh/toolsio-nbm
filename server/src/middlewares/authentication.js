@@ -20,7 +20,8 @@ const createResolver = (resolver) => {
   return baseResolver
 }
 
-export const requiresAuth = createResolver((parent, args, context ) => {
+// requiresAuth
+export default createResolver((parent, args, context ) => {
   if (!context.user || !context.user.id) {
     throw new Error('Not authenticated')
   }
@@ -30,13 +31,13 @@ export const requiresChannelAccess = createResolver(async (parent, { channelId }
   if (!user || !user.id) {
     throw new Error('Not authenticated')
   }
+
   // Check if part of the member
-  const memeber = await models.Member.findOne({ where: { channelId, userId: user.id } })
- 
+  const member = await models.Member.findOne({ where: { channelId, userId: user.id } })
+
   if (!member) {
     throw new Error("You have to be a member of the channel to subscribe for it's messages")
-  }
-  
+  }  
 })
 
 export const requiresDirectMessageAccess = createResolver(async (parent, { receiverId }, { models, user }) => {
@@ -44,14 +45,14 @@ export const requiresDirectMessageAccess = createResolver(async (parent, { recei
     throw new Error('Not authenticated')
   }
 
-  const directMessagers = await models.DirectMessage.findAll({
+  const users = await models.User.findAll({
     where: {
-      [models.sequelize.Op.or]: [{ recieverId }, { senderId: user.id }],
-    },
+      [models.sequelize.Op.or]: [{ id: receiverId }, { id: user.id }],
+    }
   })
-  console.log('directMessagers ', directMessagers)
-  if (directMessagers.length !== 2) {
-    throw new Error('Something went wrong');
+
+  if (!users) {
+    throw new Error('Something went wrong')
   }
 })
 

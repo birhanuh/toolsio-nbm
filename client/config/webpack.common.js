@@ -17,7 +17,8 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      template: './public/index.html'
+      template: './public/index.html',
+      'PUBLIC_URL': ''
     }),
     // Watcher doesn't work well if you mistype casing in a path so we use
     // a plugin that prints an error when you attempt to do this.

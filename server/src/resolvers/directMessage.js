@@ -1,6 +1,6 @@
 import { PubSub, withFilter } from 'graphql-subscriptions'
 
-import { requiresAuth, requiresDirectMessageAccess } from '../middlewares/authentication'
+import requiresAuth,  { requiresDirectMessageAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 import { processUpload } from '../utils/uploadFile'
 
@@ -11,7 +11,7 @@ const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE'
 export default {
   Subscription: {
     getNewDirectMessage: {
-      subscribe: requiresAuth.createResolver(withFilter(
+      subscribe: requiresDirectMessageAccess.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_DIRECT_MESSAGE), 
         (payload, args, { models, user }) => {
           
@@ -25,20 +25,73 @@ export default {
   Query: {
     getDirectMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.DirectMessage.findOne({ where: { id } }, { raw: true })),
 
-    getDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => {
-      return models.DirectMessage.findAll({ 
+    getDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => 
+      models.DirectMessage.findAll({ 
         where: { [models.sequelize.Op.or]: [
           { [models.sequelize.Op.and]: [{ receiverId: args.receiverId, senderId: user.id }]},
           { [models.sequelize.Op.and]: [{ senderId: args.receiverId, receiverId: user.id }]}
           ] },
-        order: [['created_at', 'ASC']] }, { raw: true })
-    }),
+        order: [['created_at', 'ASC']] }, { raw: true })),
 
     getDirectMessageUsers: requiresAuth.createResolver((parent, args, { models }) => 
       models.sequelize.query('select distinct on (u.id) u.id, u.first_name, u.email from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id)', {
           model: models.User,
           raw: true,
-        }))
+        })),
+
+    getSentDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => 
+      models.DirectMessage.findAll({ 
+          where: { senderId: user.id },
+          order: [['created_at', 'ASC']] }, { raw: true })
+        ),
+
+    getInboxDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => 
+      models.DirectMessage.findAll({ 
+        include: [
+          {
+            model: models.User,
+            where: { receiverId: user.id }
+          }
+        ],
+        order: [['created_at', 'ASC']] }, { raw: true })),
+
+    getUnreadCounts: async (parent, args, { models, user }) => 
+      models.sequelize.query('SELECT count(*), sender_id FROM direct_messages WHERE receiver_id='+user.id+' GROUP BY sender_id', {
+        model: models.DirectMessage,
+        raw: true
+      }) 
+      .then(result => {
+        console.log('result ', result)
+        return {
+          success: true,
+          unreadCount: result.count
+        }
+      })
+      .catch(err => {
+        console.log('err: ', err)
+        return {
+          success: false,
+          errors: formatErrors(err, models)
+        }
+      })
+      // models.DirectMessage.findAndCountAll({ 
+      //     where: { receiverId: user.id, isRead: false },
+      //     group: ['sender_id', 'id']
+      //   }, { raw: true })
+      //   .then(result => {
+      //     console.log('result ', result)
+      //     return {
+      //       success: true,
+      //       unreadCount: result.count
+      //     }
+      //   })
+      //   .catch(err => {
+      //     console.log('err: ', err)
+      //     return {
+      //       success: false,
+      //       errors: formatErrors(err, models)
+      //     }
+      //   })
 
   },
 

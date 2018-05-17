@@ -369,24 +369,36 @@ nav.ui.menu {
   color: $dark-green;
   background: $white-green;
   box-shadow: 0 0 0 1px $green inset, 0 0 0 0 transparent;
+  .header {
+    color: $dark-green;
+  }
 }
 
 .ui.warning.message {
-  color: $dark-orange;
+  color: $dark-green;
   background: $white-orange;
   box-shadow: 0 0 0 1px $orange inset, 0 0 0 0 transparent;
+  .header {
+    color: $dark-green;
+  }
 }
 
 .ui.negative.message {
   color: $dark-red;
   background: $white-red;
   box-shadow: 0 0 0 1px $red inset, 0 0 0 0 transparent;
+  .header {
+    color: $dark-red;
+  }
 }
 
 .ui.info.message {
   color: $blue;
   background: $white-blue;
   box-shadow: 0 0 0 1px $blue inset, 0 0 0 0 transparent;
+  .header {
+    color: $blue;
+  }
 }
 
 .sixteen.wide.column.flash-message {

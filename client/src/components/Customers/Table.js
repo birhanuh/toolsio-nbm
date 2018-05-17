@@ -43,10 +43,8 @@ export default function Table({ getCustomers, offset, limit }) {
 
       <tfoot>
         <tr>
-          <th colSpan="6">
-            <div className="ui right floated pagination menu">
-              { <Pagination path="invoices" count={getCustomers.count} offset={offset} limit={limit} /> } 
-            </div>
+          <th colSpan="6" className="pt-4 pb-4">
+            <Pagination path="invoices" count={getCustomers.count} offset={offset} limit={limit} />
           </th>
         </tr>
       </tfoot>

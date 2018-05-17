@@ -45,7 +45,7 @@ export default function Pagination({ path, count, offset, limit }) {
   }
 
   const paginationElement =
-    (<div className="ui right floated pagination menu">
+    (<div key="pagination-element" className="ui right floated pagination menu">
       {previousLink}
       { currentPage > 0 &&
         <Link to={`/${path}/${((currentPage)*10)-10}/${limit}`} className={classnames("item", {active: activePage === currentPage})}>
@@ -74,9 +74,7 @@ export default function Pagination({ path, count, offset, limit }) {
     </div>
   )
 
-  return(    
-    <div>
-      {paginationElement}
-    </div>
-    )
+  return [  
+      paginationElement
+    ]
 }

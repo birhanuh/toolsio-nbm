@@ -88,11 +88,10 @@ app.use(async (req, res, next) => {
   next()
 })
 
-// GraphQL
-const graphqlEndPoint = '/graphql'
+const endpointURL = '/graphql'
 
 app.use(
-  graphqlEndPoint, 
+  endpointURL, 
   bodyParser.json(),
   apolloUploadExpress(), 
   graphqlExpress(req => ({ 
@@ -100,7 +99,8 @@ app.use(
     context: {
       models,
       subdomain: req.headers.subdomain,
-      user: req.user,
+      //user: req.user,
+      user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2
     }
@@ -109,7 +109,7 @@ app.use(
 
 app.use(
   '/graphiql', 
-  graphiqlExpress({ endpointURL: graphqlEndPoint, 
+  graphiqlExpress({ endpointURL: endpointURL, 
     subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' 
   })
 )
@@ -167,8 +167,7 @@ server.listen(app.get('port'), () => {
     schema: schema,
     onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
       
-      if (authToken && refreshAuthToken) {
-      
+      if (authToken && refreshAuthToken) {      
         try {
           const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)
           return { models, user }           
@@ -176,16 +175,16 @@ server.listen(app.get('port'), () => {
           const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
           return { models, user: newAuthTokens.user }
         }
+      }
+      return { models }
     }
-
-    return { models }
-  }}, {
-    server: server,
-    path: '/subscriptions',
-  })
-  console.log('Server started on port: ' + process.env.SERVER_PORT)
-  console.log('Environment: ' + process.env.NODE_ENV)
-  console.log('------------------------')
+  }, {
+      server: server,
+      path: '/subscriptions',
+    })
+    console.log('Server started on port: ' + process.env.SERVER_PORT)
+    console.log('Environment: ' + process.env.NODE_ENV)
+    console.log('------------------------')
 })
 
 

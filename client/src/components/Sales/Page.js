@@ -23,7 +23,7 @@ const Page = () => (
       return ( 
         <div className="row column"> 
           <div className="sixteen wide column">
-            <div className="ui clearing basic segment p-0">
+            <div className="ui clearing basic segment pl-0 pr-0">
               <div className="ui right floated icon input">
                 <input type="text" placeholder="Search..." />
                 <i className="inverted circular search link icon"></i>

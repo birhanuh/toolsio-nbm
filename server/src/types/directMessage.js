@@ -28,12 +28,24 @@ export default `
     email: String!
   }
 
+  type GetUnreadCountsMessageResponse {
+    success: Boolean!
+    unreadCount: Int!
+    errors: [Error!]
+  }
+
   type Query {
     getDirectMessage(id: Int!): DirectMessage
     
     getDirectMessages(receiverId: Int!): [DirectMessage!]!
     
     getDirectMessageUsers: [DirectMessageUser!]!
+
+    getInboxDirectMessages: [DirectMessage!]!
+
+    getSentDirectMessages: [DirectMessage!]!
+    
+    getUnreadCounts: GetUnreadCountsMessageResponse!
   }
 
   type Mutation {

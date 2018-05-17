@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Moment from 'moment'
+import { Comment, Message } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -8,6 +8,8 @@ import RenderText from '../RenderText'
 
 // Localization 
 import T from 'i18n-react'
+
+import moment from 'moment'
 
 import avatarPlaceholderSmall from '../../../images/avatar-placeholder-small.png'
 
@@ -29,7 +31,7 @@ const NEW_DIRECT_MESSAGE_SUBSCRIPTION = gql`
   }
 `
 
-const Message = ({ message: {uploadPath, body, mimetype} }) => {
+const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
   
   if (uploadPath) {
     if (mimetype.startsWith('image/')) {
@@ -93,51 +95,40 @@ class Messages extends Component {
     const { getUserQuery: { getUser }, getDirectMessagesQuery: { getDirectMessages } } = this.props
 
     const emptyMessage = (
-      <div className="ui info message">
-        <h3>{T.translate(`conversations.messages.empty_message_header`)}</h3>
+      <Message info>
+        <Message.Header><h3>{T.translate(`conversations.messages.empty_message_header`)}</h3></Message.Header>
         <p>{T.translate(`conversations.messages.empty_direct_message_message`)}</p>
-      </div>
+      </Message>
     )
 
     const messagesList = getDirectMessages && getDirectMessages.map(message => 
-      <div key={message.id} className="comment">
-        <a className="avatar">
-          {message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
-          alt="avatar-placeholder-small" />}
-        </a>
-        <div className="content">
-          <a className="author">{message.user.email}</a>
-          <div className="metadata">
-            <span className="date">{Moment(message.createdAt).format('DD/MM/YYYY')}</span>
-          </div>
-          <div className="text">
+      <Comment key={message.id}>
+        <Comment.Avatar src={message.user.avatarUrl ? message.user.avatarUrl : avatarPlaceholderSmall}
+          alt="avatar" />
+        <Comment.Content>
+          <Comment.Author as="a">{message.user.email}</Comment.Author>
+          <Comment.Metadata>
+            <div>{moment(message.createdAt).format('DD/MM/YYYY')}</div>
+          </Comment.Metadata>
+          <Comment.Text>
            
-           <Message message={message} />
-
-          </div>
-        </div>
-      </div>
+           <MessageTypes message={message} />
+          </Comment.Text>
+        </Comment.Content>
+      </Comment>
     )
 
     return (
       <div className="messages">
-
-        <div className="ui clearing vertical segment border-bottom-none">
-          <div className="ui left floated header">
-            <h3 className="header capitalize-text">{getUser && getUser.firstName}</h3>
-          </div>        
-        </div>   
-
-        <div className="ui divider mt-0"></div>
-
-        <div className="ui comments">
-
+        <div className="ui clearing vertical segment">
+          <h3 className="ui dividing header capitalize">{getUser && getUser.firstName}</h3>
+        </div>
+          
+        <Comment.Group>
           { getDirectMessages && getDirectMessages.length === 0 ? emptyMessage : messagesList }
-
-        </div>   
+        </Comment.Group>   
         
         <MessageForm receiverId={this.props.receiverId} />
-
       </div>
     ) 
   }
@@ -171,7 +162,7 @@ const getDirectMessagesQuery = gql`
   }
 `
 
-const MutationsAndQuery =  compose(
+const Queries =  compose(
   graphql(getUserQuery, {
     "name": "getUserQuery",
     options: (props) => ({
@@ -191,6 +182,6 @@ const MutationsAndQuery =  compose(
   })
 )(Messages)
 
-export default MutationsAndQuery
+export default Queries
 
 

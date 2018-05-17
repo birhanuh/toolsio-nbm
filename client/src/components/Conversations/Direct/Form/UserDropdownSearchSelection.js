@@ -1,8 +1,11 @@
 import React from 'react' 
 import { withRouter } from 'react-router-dom'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import { GET_USERS_QUERY } from '../../../../graphql/users'
+
+// Localization 
+import T from 'i18n-react'
 
 // Avatar placeholder
 import avatarPlaceholderSmall from '../../../../images/avatar-placeholder-small.png'
@@ -23,15 +26,16 @@ const UserDropdownSearchSelection = ({ onClose, history, data: { getUsers } }) =
     )
 
   return (
-    <div>
+    <Form.Field>
+      <label>{T.translate("conversations.direct.search_select_user")}</label>
       { usersOptions && <Dropdown 
-        placeholder='Search/Select User' 
+        placeholder={T.translate("conversations.direct.search_select_user")} 
         fluid search 
         selection 
         options={usersOptions}
         onChange={(e, { value }) => handleChange('user', value)}
         /> }
-    </div>
+    </Form.Field>
     )
 }
 

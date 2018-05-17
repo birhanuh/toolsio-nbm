@@ -156,7 +156,6 @@ class Message extends Component {
     const { body, errors, isLoading } = this.state
 
     return (  
-
       <div className={classnames("ui form", { loading: isLoading })} >
 
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }

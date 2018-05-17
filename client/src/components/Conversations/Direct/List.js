@@ -84,7 +84,7 @@ class List extends Component {
           </button>  
         </div>
 
-        { userList }        
+        { userList }
 
       </div>,
       <AddUserModal
