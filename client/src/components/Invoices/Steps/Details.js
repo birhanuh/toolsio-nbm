@@ -50,6 +50,8 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
             onChange={(e, {value}) => handleChange('paymentTerm', value)} 
             error={!!errors.paymentTerm}
             options={paymentTermOptions}
+            search
+            searchInput={{ type: 'number' }}
             selection
           />
           <span className="red">{errors.paymentTerm}</span>

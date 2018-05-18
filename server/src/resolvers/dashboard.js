@@ -187,7 +187,7 @@ export default {
         raw: true
       })
 
-      const idSaleStatusPromise = await models.sequelize.query("SELECT p.name, invoice.id, invoice.status FROM sales p JOIN invoices invoice ON p.id = invoice.sale_id WHERE invoice.status='pending' OR invoice.status='overdue' GROUP BY 1,2", {
+      const idSaleStatusPromise = await models.sequelize.query("SELECT s.name, invoice.id, invoice.status FROM sales s JOIN invoices invoice ON s.id = invoice.sale_id WHERE invoice.status='pending' OR invoice.status='overdue' GROUP BY 1,2", {
         model: models.Sale,
         raw: true
       })

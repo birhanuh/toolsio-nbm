@@ -24,8 +24,8 @@ export default {
   },
 
   Mutation: {
-    createCustomer: requiresAuth.createResolver((parent, args, { models, user }) => {
-      return models.Customer.create({...args, userId: user.id})
+    createCustomer: requiresAuth.createResolver((parent, args, { models, user }) => 
+      models.Customer.create({...args, userId: user.id})
         .then(customer => {
           return {
             success: true,
@@ -38,11 +38,10 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    }),
+        })),
 
-    updateCustomer: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Customer.update(args, { where: {id: args.id}, returning: true, plain: true })
+    updateCustomer: requiresAuth.createResolver((parent, args, { models }) =>
+      models.Customer.update(args, { where: {id: args.id}, returning: true, plain: true })
         .then(result => {
           return {
             success: true,
@@ -55,11 +54,10 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    }),
+        })),
 
-    deleteCustomer: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Customer.destroy({ where: {id: args.id}, force: true })
+    deleteCustomer: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Customer.destroy({ where: {id: args.id}, force: true })
         .then(res => {
           
           return {
@@ -72,8 +70,7 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    })      
+        }))      
 
   },
 

@@ -109,10 +109,10 @@ nav.ui.menu {
   .ui.dropdown .menu>.item {
     padding: .98571429em 1.14285714em!important;
   }
-  .label.envelop {
-    position: absolute;
-    right: 5px;
-    top: 7px;
+  .floating.label {
+    top: 0.7em;
+    margin: 0 0 0 -2.3em !important;
+    padding: .2833em .533em;
   }
 }
 

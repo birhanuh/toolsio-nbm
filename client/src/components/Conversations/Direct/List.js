@@ -1,9 +1,9 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { Button, Modal } from 'semantic-ui-react'
+import { Label, Button, Modal } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
-import { GET_DIRECT_MESSAGE_USERS_QUERY } from '../../../graphql/directMessages'
+import { GET_USERS_WITH_UNREAD_MESSAGES_COUNT_QUERY } from '../../../graphql/directMessages'
 
 // Localization 
 import T from 'i18n-react'
@@ -62,15 +62,21 @@ class List extends Component {
   render() {    
     const { openAddUserModal } = this.state
 
-    const { data: { getDirectMessageUsers }, receiverId } = this.props
+    const { data: { getDirectMessageUsersWithUnreadMessagesCount }, receiverId } = this.props
 
-    const userList = getDirectMessageUsers && getDirectMessageUsers.map(user => 
-      <Link key={user.id} to={`/conversations/receiver/${user.id}`} 
-        className={classnames('item', {active: receiverId && parseInt(receiverId) === user.id})}>
+    const userList = getDirectMessageUsersWithUnreadMessagesCount && getDirectMessageUsersWithUnreadMessagesCount.usersUnreadDirectMessagesCount.map(item => 
+      <Link key={item.sender_id} to={`/conversations/receiver/${item.sender_id}`} 
+        className={classnames('item', {active: receiverId && parseInt(receiverId) === item.sender_id})}>
+
+        { item.count !== 0 &&
+          <Label className="red">
+            {item.count}
+          </Label>
+        }
 
         <div>
           <i className="user icon"></i>&nbsp;
-          {user.first_name}
+          {item.user.firstName}
         </div>
       </Link>
     )
@@ -96,7 +102,7 @@ class List extends Component {
   }
 }
 
-export default graphql(GET_DIRECT_MESSAGE_USERS_QUERY)(List)
+export default graphql(GET_USERS_WITH_UNREAD_MESSAGES_COUNT_QUERY)(List)
 
 
 

@@ -99,8 +99,8 @@ app.use(
     context: {
       models,
       subdomain: req.headers.subdomain,
-      //user: req.user,
-      user: { id: 1 },
+      user: req.user,
+      //user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2
     }

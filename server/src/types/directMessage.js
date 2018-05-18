@@ -28,9 +28,19 @@ export default `
     email: String!
   }
 
+  type UnreadDirectMessagesCount {
+    count: Int!
+  }
+
+  type UsersUnreadDirectMessagesCount {
+    count: Int!
+    sender_id: Int!
+    user: User!
+  }
+
   type GetUnreadCountsMessageResponse {
     success: Boolean!
-    unreadCount: Int!
+    usersUnreadDirectMessagesCount: [UsersUnreadDirectMessagesCount!]
     errors: [Error!]
   }
 
@@ -45,7 +55,9 @@ export default `
 
     getSentDirectMessages: [DirectMessage!]!
     
-    getUnreadCounts: GetUnreadCountsMessageResponse!
+    getUnreadDirectMessagesCount: UnreadDirectMessagesCount!
+
+    getDirectMessageUsersWithUnreadMessagesCount: GetUnreadCountsMessageResponse!
   }
 
   type Mutation {
