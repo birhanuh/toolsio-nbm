@@ -135,8 +135,8 @@ class Invitation extends Component {
             <span className="red">{errors.lastName}</span>
           </Form.Field>
 
-          <Form.Field>
-            <label className={classnames({red: !!errors.email})}>{T.translate("sign_up.email")}</label>
+          <Form.Field  error={!!errors.email}>
+            <label>{T.translate("sign_up.email")}</label>
             <Input
               placeholder={T.translate("sign_up.email")}
               control={Input}
@@ -148,8 +148,8 @@ class Invitation extends Component {
             <span className="red">{errors.email}</span>
           </Form.Field>
 
-          <Form.Field>
-            <label className={classnames({red: !!errors.password})}>{T.translate("sign_up.password")}</label>
+          <Form.Field error={!!errors.password}>
+            <label>{T.translate("sign_up.password")}</label>
             <Input
               placeholder={T.translate("sign_up.password")}
               control={Input}
@@ -161,8 +161,8 @@ class Invitation extends Component {
             <span className="red">{errors.password}</span>
           </Form.Field>
 
-          <Form.Field>
-            <label className={classnames({red: !!errors.confirmPassword})}>{T.translate("sign_up.confirm_password")}</label>
+          <Form.Field error={!!errors.confirmPassword}>
+            <label>{T.translate("sign_up.confirm_password")}</label>
             <Input
               placeholder={T.translate("sign_up.confirm_password")}
               control={Input}

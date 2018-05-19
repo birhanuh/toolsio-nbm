@@ -228,7 +228,6 @@ class UserForm extends Component {
                   name="firstName" 
                   value={firstName} 
                   onChange={(e, {value}) => this.handleChange('firstName', value)} 
-                  error={!!errors.firstName}
                 />
                 <span className="red">{errors.firstName}</span>
               </Form.Field>
@@ -240,13 +239,12 @@ class UserForm extends Component {
                   name="lasttName" 
                   value={lastName} 
                   onChange={(e, {value}) => this.handleChange('lasttName', value)} 
-                  error={!!errors.lasttName}
                 />
                 <span className="red">{errors.lasttName}</span>
               </Form.Field>
 
-              <Form.Field>
-                <label className={classnames({red: !!errors.email})}>{T.translate("settings.user.email")}</label>
+              <Form.Field error={!!errors.email}>
+                <label>{T.translate("settings.user.email")}</label>
                 <Input
                   placeholder={T.translate("settings.user.email")}
                   name="email" 
@@ -257,8 +255,8 @@ class UserForm extends Component {
                 <span className="red">{errors.email}</span>
               </Form.Field>
 
-              <Form.Field>
-                <label className={classnames({red: !!errors.password})}>{T.translate("settings.user.password")}</label>
+              <Form.Field error={!!errors.password}>
+                <label>{T.translate("settings.user.password")}</label>
                 <Input
                   placeholder={T.translate("settings.user.password")}
                   name="password" 
@@ -269,8 +267,8 @@ class UserForm extends Component {
                 <span className="red">{errors.password}</span>
               </Form.Field>
 
-              <Form.Field>
-                <label className={classnames({red: !!errors.confirmPassword})}>{T.translate("settings.user.confirm_password")}</label>
+              <Form.Field error={!!errors.confirmPassword}>
+                <label>{T.translate("settings.user.confirm_password")}</label>
                 <Input
                   placeholder={T.translate("settings.user.confirm_password")}
                   name="confirmPassword" 

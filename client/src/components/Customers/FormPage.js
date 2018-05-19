@@ -314,8 +314,8 @@ class FormPage extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.name})}>{T.translate("customers.form.name")}</label>
+            <Form.Field inline error={!!errors.name}>
+              <label>{T.translate("customers.form.name")}</label>
               <Input
                 placeholder={T.translate("customers.form.name")}
                 name="name" 
@@ -326,8 +326,8 @@ class FormPage extends Component {
               <span className="red">{errors.name}</span>
             </Form.Field>
 
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.vatNumber})}>{T.translate("customers.form.vat_number")}</label>
+            <Form.Field inline error={!!errors.vatNumber}>
+              <label>{T.translate("customers.form.vat_number")}</label>
               <Input
                 placeholder={T.translate("customers.form.vat_number")}
                 name="vatNumber" 
@@ -339,8 +339,8 @@ class FormPage extends Component {
             </Form.Field>
              <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
-              <Form.Field inline>
-                <label className={classnames({red: errors.contact && !!errors.contact.phoneNumber})}>{T.translate("customers.form.contact.phone_number")}</label>
+              <Form.Field inline error={errors.contact}>
+                <label>{T.translate("customers.form.contact.phone_number")}</label>
                 <Input
                   placeholder={T.translate("customers.form.contact.phone_number")}
                   name="phoneNumber" 
@@ -348,10 +348,9 @@ class FormPage extends Component {
                   onChange={(e, {value}) => this.handleChange('phoneNumber', value)} 
                   error={errors.contact && errors.contact.phoneNumber}
                 />
-                <span className="red">{errors.name}</span>
               </Form.Field>
-              <Form.Field inline>
-                <label className={classnames({red: errors.contact && !!errors.contact.email})}>{T.translate("customers.form.contact.email")}</label>
+              <Form.Field inline error={errors.contact}>
+                <label>{T.translate("customers.form.contact.email")}</label>
                 <Input
                   placeholder={T.translate("customers.form.contact.email")}
                   name="email" 
@@ -359,11 +358,13 @@ class FormPage extends Component {
                   onChange={(e, {value}) => this.handleChange('email', value)} 
                   error={errors.contact && errors.contact.email}
                 />
-                <span className="red">{errors.email}</span>
               </Form.Field>
+              <p>
+                <span className="red">{errors.contact}</span>
+              </p>
             </fieldset>
-             <Form.Field inline>
-              <label className={classnames({red: !!errors.isContactIncludedInInvoice})}>{T.translate("customers.form.include_contact_in_invoice")}</label>
+             <Form.Field inline error={!!errors.isContactIncludedInInvoice}>
+              <label>{T.translate("customers.form.include_contact_in_invoice")}</label>
               <Checkbox
                 toggle
                 name="isContactIncludedInInvoice" 
@@ -376,8 +377,8 @@ class FormPage extends Component {
 
             <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.address.header")}</legend>
-              <Form.Field inline>
-                <label className={classnames({red: errors.address && !!errors.address.street})}>{T.translate("customers.form.address.street")}</label>
+              <Form.Field inline error={errors.address && !!errors.address.street}>
+                <label>{T.translate("customers.form.address.street")}</label>
                 <Input
                   placeholder={T.translate("customers.form.address.street")}
                   name="street" 
@@ -387,8 +388,8 @@ class FormPage extends Component {
                 />
                 <span className="red">{errors.name}</span>
               </Form.Field>
-              <Form.Field inline>
-                <label className={classnames({red: errors.address && !!errors.address.postalCode})}>{T.translate("customers.form.address.postal_code")}</label>
+              <Form.Field inline error={errors.address && !!errors.address.postalCode}>
+                <label>{T.translate("customers.form.address.postal_code")}</label>
                 <Input
                   placeholder={T.translate("customers.form.address.postal_code")}
                   name="postalCode" 
@@ -407,7 +408,7 @@ class FormPage extends Component {
                   error={errors.address && errors.address.country} />
                 
                 <span className={classnames({red: errors.address && errors.address.country})}>{errors.address && errors.address.country}</span>  
-              </div>  
+              </div> 
               <div className={classnames("inline field", {error: errors.address && errors.address.region})}>              
                 <label>{T.translate("customers.show.address.region")}</label> 
                 <RegionDropdown

@@ -63,7 +63,7 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
   
   if (uploadPath) {
     if (mimetype.startsWith('image/')) {
-      return (<div className="ui small message">
+      return (<div className="ui small message img">
           <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
         </div>)
     } else if (mimetype.startsWith('text/')) {

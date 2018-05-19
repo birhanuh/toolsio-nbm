@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Comment, Message } from 'semantic-ui-react'
+import { Comment, Message, Modal, Image, Button } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -31,23 +31,64 @@ const NEW_DIRECT_MESSAGE_SUBSCRIPTION = gql`
   }
 `
 
+const ShowInModal = ({ trigger, body, src, mimetype }) => {
+  let content
+  
+  if (mimetype.startsWith('image/')) {
+    content = (<Modal.Content scrolling image>
+        <Image wrapped src={src} />
+      </Modal.Content>)
+  } else if (mimetype.startsWith('audio/')) {
+      content = (<Modal.Content>
+          <Modal.Description>
+            <audio controls>
+              <source src={src} />
+            </audio></Modal.Description>
+        </Modal.Content>)
+    } else if (mimetype.startsWith('video/')) {
+      content = (<Modal.Content>
+          <Modal.Description>
+            <video controls>
+              <source src={src} />
+            </video>
+          </Modal.Description>
+        </Modal.Content>)
+    }
+
+  return (<Modal trigger={trigger} className="messages">
+    {content}
+  </Modal>)
+}
+
 const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
   
   if (uploadPath) {
     if (mimetype.startsWith('image/')) {
-      return (<div className="ui small message">
-        <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
+      return (<div className="ui small message img">
+        <ShowInModal trigger={<img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />} src={uploadPath} mimetype={mimetype} />
       </div>)
-    } else if (mimetype.startsWith('text/')) {
-      return <RenderText uploadPath={uploadPath} />
     } else if (mimetype.startsWith('audio/')) {
-      return (<div className="ui small message"><audio controls>
+      return (<ShowInModal 
+        trigger={<div className="ui small message audio"><audio controls>
           <source src={uploadPath} type={mimetype} />
-        </audio></div>)
+        </audio></div>} 
+        src={uploadPath} 
+        mimetype={mimetype} />)
     } else if (mimetype.startsWith('video/')) {
-      return (<div className="ui small message"><video controls>
+      return (<ShowInModal 
+        trigger={<div className="ui small message video"><video controls>
           <source src={uploadPath} type={mimetype} />
-        </video></div>)
+        </video></div>} 
+        src={uploadPath} 
+        mimetype={mimetype} />)
+    } else if (mimetype) { // For all rest file types (E.g. text, pdf, doc...)
+      return (<div className="ui small message pre">
+          <RenderText uploadPath={uploadPath} />
+          <div className="buttons">
+            <Button basic size="small" icon='download' />
+            <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
+          </div>
+        </div>)
     }
   }
   return (body)            

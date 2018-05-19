@@ -51,7 +51,7 @@ class HeaderNav extends Component {
       <Query 
         query={GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY}
         fetchPolicy="cache-and-network">  
-        {( { loading, data } ) => {
+        {( { data } ) => {
 
           const { getUnreadDirectMessagesCount } = data
           let count = getUnreadDirectMessagesCount && getUnreadDirectMessagesCount.count !== 0 && getUnreadDirectMessagesCount.count
@@ -101,7 +101,7 @@ class HeaderNav extends Component {
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item
-                      onClick={(e) => {
+                      onClick={() => {
                         this.context.router.history.push('/conversations')
                       }}
                     >              
@@ -144,7 +144,7 @@ class HeaderNav extends Component {
       </Query>
       )
 
-    const GuestLinks = (
+    const GuestLinks = () => (
       <div>
         <div className="ui large top fixed menu transition hidden pointing menu">
           <div className="ui container">

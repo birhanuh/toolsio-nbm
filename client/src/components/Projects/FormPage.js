@@ -273,8 +273,8 @@ class FormPage extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.name})}>{T.translate("projects.form.name")}</label>
+            <Form.Field inline error={!!errors.name}>
+              <label>{T.translate("projects.form.name")}</label>
               <Input
                 placeholder={T.translate("projects.form.name")}
                 name="name" 
@@ -285,8 +285,8 @@ class FormPage extends Component {
               <span className="red">{errors.name}</span>
             </Form.Field>
 
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.deadline})}>{T.translate("projects.form.deadline")}</label>
+            <Form.Field inline error={!!errors.deadline}>
+              <label>{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
@@ -296,8 +296,8 @@ class FormPage extends Component {
             </Form.Field>
 
             { customersOptions && 
-              <Form.Field inline>
-                <label className={classnames({red: !!errors.customerId})}>{T.translate("projects.form.customer")}</label>
+              <Form.Field inline error={!!errors.customerId}>
+                <label>{T.translate("projects.form.customer")}</label>
                 <Select
                   placeholder={T.translate("projects.form.select_customer")}
                   name="customerId"
@@ -326,9 +326,10 @@ class FormPage extends Component {
             }
 
             { id &&
-              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
+              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', 
+                green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed', error: !!errors.status})}
                >
-                <label className={classnames({red: !!errors.status})}>{T.translate("projects.form.status")}</label>
+                <label>{T.translate("projects.form.status")}</label>
                 <Select
                   label={T.translate("projects.form.status")}
                   placeholder={T.translate("projects.form.select_status")}

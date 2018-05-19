@@ -219,8 +219,8 @@ class FormPage extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.name})}>{T.translate("sales.form.name")}</label>
+            <Form.Field inline error={!!errors.name}>
+              <label>{T.translate("sales.form.name")}</label>
               <Input
                 placeholder={T.translate("sales.form.name")}
                 name="name" 
@@ -231,8 +231,8 @@ class FormPage extends Component {
               <span className="red">{errors.name}</span>
             </Form.Field>
 
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.deadline})}>{T.translate("sales.form.deadline")}</label>
+            <Form.Field inline error={!!errors.deadline}>
+              <label>{T.translate("sales.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
@@ -242,8 +242,8 @@ class FormPage extends Component {
             </Form.Field>
 
             { customersOptions && 
-              <Form.Field inline>
-                <label className={classnames({red: !!errors.customerId})}>{T.translate("sales.form.customer")}</label>
+              <Form.Field inline error={!!errors.customerId}>
+                <label>{T.translate("sales.form.customer")}</label>
                 <Select
                   placeholder={T.translate("sales.form.select_customer")}
                   name="customerId"
@@ -272,8 +272,9 @@ class FormPage extends Component {
             }
 
             { id &&
-              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>
-                <label className={classnames({red: !!errors.status})}>{T.translate("sales.form.status")}</label>
+              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', 
+                green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed', error: !!errors.status})}>
+                <label>{T.translate("sales.form.status")}</label>
                 <Select
                   label={T.translate("sales.form.status")}
                   placeholder={T.translate("sales.form.select_status")}
