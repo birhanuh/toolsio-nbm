@@ -57,7 +57,7 @@ class Page extends Component {
               </div>
             </div>
 
-            { getCustomers && <Table getCustomers={getCustomers} offset={offset} limit={limit} /> }
+            { getCustomers && <Table customers={getCustomers.customers} count={getCustomers.count} offset={offset} limit={limit} /> }
 
           </div>  
         </div>

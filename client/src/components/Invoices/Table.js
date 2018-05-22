@@ -6,7 +6,7 @@ import { Pagination } from '../../utils'
 // Localization 
 import T from 'i18n-react'
 
-export default function Table({ getInvoices, offset, limit }) {
+export default function Table({ invoices, count, offset, limit }) {
   const emptyMessage = (
     <tbody>
       <tr>
@@ -22,7 +22,7 @@ export default function Table({ getInvoices, offset, limit }) {
 
   const invoicesList = (
     <tbody>
-      { getInvoices.invoices.map(invoice => <Tr invoice={invoice} key={invoice.id} />) }
+      { invoices.map(invoice => <Tr invoice={invoice} key={invoice.id} />) }
     </tbody>
   )
 
@@ -39,12 +39,12 @@ export default function Table({ getInvoices, offset, limit }) {
         </tr>
       </thead>
 
-      { getInvoices.invoices.length === 0 ? emptyMessage : invoicesList }
+      { invoices.length === 0 ? emptyMessage : invoicesList }
 
       <tfoot>
         <tr>
           <th colSpan="6" className="pt-4 pb-4">
-            <Pagination path="invoices" count={getInvoices.count} offset={offset} limit={limit} />
+            <Pagination path="invoices" count={count} offset={offset} limit={limit} />
           </th>
         </tr>
       </tfoot>
@@ -53,5 +53,5 @@ export default function Table({ getInvoices, offset, limit }) {
 }
 
 Table.propTypes = {
-  getInvoices: PropTypes.object.isRequired
+  invoices: PropTypes.array.isRequired
 }

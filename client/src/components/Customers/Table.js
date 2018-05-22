@@ -6,7 +6,7 @@ import { Pagination } from '../../utils'
 // Localization 
 import T from 'i18n-react'
 
-export default function Table({ getCustomers, offset, limit }) {
+export default function Table({ customers, count, offset, limit }) {
   const emptyMessage = (
     <tbody>
       <tr>
@@ -22,7 +22,7 @@ export default function Table({ getCustomers, offset, limit }) {
 
   const customersList = (
     <tbody>
-      { getCustomers.customers.map(customer => <Tr customer={customer} key={customer.id} />) }
+      { customers.map(customer => <Tr customer={customer} key={customer.id} />) }
     </tbody>
   )
 
@@ -39,12 +39,12 @@ export default function Table({ getCustomers, offset, limit }) {
         </tr>
       </thead>
 
-      { getCustomers.customers.length === 0 ? emptyMessage : customersList }
+      { customers.length === 0 ? emptyMessage : customersList }
 
       <tfoot>
         <tr>
           <th colSpan="6" className="pt-4 pb-4">
-            <Pagination path="invoices" count={getCustomers.count} offset={offset} limit={limit} />
+            <Pagination path="customers" count={count} offset={offset} limit={limit} />
           </th>
         </tr>
       </tfoot>
@@ -53,5 +53,5 @@ export default function Table({ getCustomers, offset, limit }) {
 }
 
 Table.propTypes = {
-  getCustomers: PropTypes.object.isRequired
+  customers: PropTypes.array.isRequired
 }

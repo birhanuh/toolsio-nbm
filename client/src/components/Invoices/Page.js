@@ -58,7 +58,7 @@ class Page extends Component {
               </div>
             </div>
 
-            { getInvoices && <Table getInvoices={getInvoices} offset={offset} limit={limit} /> } 
+            { getInvoices && <Table invoices={getInvoices.invoices} count={getInvoices.count} offset={offset} limit={limit} /> } 
 
           </div>
         </div>

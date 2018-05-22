@@ -1,17 +1,12 @@
 import gql from 'graphql-tag'
 
-export const GET_USERS_WITH_UNREAD_MESSAGES_COUNT_QUERY = gql`
+export const GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY = gql`
   {
-    getDirectMessageUsersWithUnreadMessagesCount {
+    getUnreadDirectMessagesCountSender {
       success
-      usersUnreadDirectMessagesCount {
+      unreadDirectMessagesCountSender {
         sender_id
         count
-        user {
-          id
-          firstName
-          email
-        }
       }
       errors {
         path
@@ -39,6 +34,34 @@ export const GET_DIRECT_MESSAGE_USERS_QUERY = gql`
   }
 `
 
+export const GET_USER_QUERY = gql`
+  query getUser($id: Int!) {
+    getUser(id: $id) {
+      id
+      firstName
+      email
+    }
+  }
+`
+
+export const GET_DIRECT_MESSAGES_QUERY = gql`
+  query getDirectMessages($receiverId: Int!) {
+    getDirectMessages(receiverId: $receiverId) {
+      id
+      body
+      uploadPath
+      mimetype
+      isRead
+      createdAt
+      user {
+        id
+        email
+        avatarUrl
+      }
+    }
+  }
+`
+
 export const CREATE_DIRECT_MESSAGE_MUTATION = gql`
   mutation ($body: String, $file: Upload, $receiverId: Int!) {
     createDirectMessage(body: $body, file: $file, receiverId: $receiverId) {
@@ -46,6 +69,18 @@ export const CREATE_DIRECT_MESSAGE_MUTATION = gql`
       message {
         id
       } 
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+export const MARK_DIRECT_MESSAGES_AS_READ_MUTATION = gql`
+  mutation ($senderId: Int!) {
+    markDirectMessagesAsRead(senderId: $senderId) {
+      success 
       errors {
         path
         message

@@ -54,9 +54,9 @@ class HeaderNav extends Component {
         {( { data } ) => {
 
           const { getUnreadDirectMessagesCount } = data
-          let count = getUnreadDirectMessagesCount && getUnreadDirectMessagesCount.count !== 0 && getUnreadDirectMessagesCount.count
+          let count = getUnreadDirectMessagesCount && getUnreadDirectMessagesCount.count 
 
-          const latestFiveUnreadMessages = (T.translate("internal_navigation.unread_messages", {unread_messages_number: count}))
+          const unreadMessagesCount = (T.translate("internal_navigation.unread_messages", {unread_messages_number: count}))
 
           return [
             <nav key="nav" className="ui fixed menu">
@@ -91,13 +91,11 @@ class HeaderNav extends Component {
                 <Dropdown pointing='top right' className='ui dropdown item'
                   trigger={(<div>
                     <Icon name='mail' className="mr-0" />
-                    <Label size="tiny" color="red" floating>
-                      {count}
-                    </Label>
+                    {count !== 0 && <Label size="tiny" color="red" floating>{count !== 0 && count}</Label>}
                   </div>)} icon={null} >
                   <Dropdown.Menu>
                     <Dropdown.Item disabled>
-                      {latestFiveUnreadMessages}             
+                      {unreadMessagesCount}             
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item

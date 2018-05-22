@@ -166,7 +166,7 @@ class Form extends Component {
           })
           // Add our comment from the mutation to the end.
           
-          let updatedInvoices = data.getInvoices.map(item => {
+          let updatedInvoices = data.getInvoices.invoices.map(item => {
             if (item.id === invoice.id) {
               return {...invoice, __typename: 'Invoice'}
             }
@@ -216,7 +216,7 @@ class Form extends Component {
               } 
             })
             // Add our comment from the mutation to the end.
-            data.getInvoices.push(invoice)
+            data.getInvoices.invoices.push(invoice)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_INVOICES_QUERY, data })
           }})

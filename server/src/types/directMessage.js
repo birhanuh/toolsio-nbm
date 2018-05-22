@@ -32,15 +32,19 @@ export default `
     count: Int!
   }
 
-  type UsersUnreadDirectMessagesCount {
+  type UnreadDirectMessagesCountSender {
     count: Int!
     sender_id: Int!
-    user: User!
   }
 
-  type GetUnreadCountsMessageResponse {
+  type UnreadDirectMessagesCountResponse {
     success: Boolean!
-    usersUnreadDirectMessagesCount: [UsersUnreadDirectMessagesCount!]
+    unreadDirectMessagesCountSender: [UnreadDirectMessagesCountSender!]
+    errors: [Error!]
+  }
+
+  type MarkDirectMessageAsReadResponse {
+    success: Boolean!
     errors: [Error!]
   }
 
@@ -57,11 +61,13 @@ export default `
     
     getUnreadDirectMessagesCount: UnreadDirectMessagesCount!
 
-    getDirectMessageUsersWithUnreadMessagesCount: GetUnreadCountsMessageResponse!
+    getUnreadDirectMessagesCountSender: UnreadDirectMessagesCountResponse!
   }
 
   type Mutation {
-    createDirectMessage(body: String, file: Upload, receiverId: Int! ): CreateDirectMessageResponse!
+    createDirectMessage(body: String, file: Upload, receiverId: Int!): CreateDirectMessageResponse!
+
+    markDirectMessagesAsRead(senderId: Int): MarkDirectMessageAsReadResponse!
   }
 
   type Subscription {

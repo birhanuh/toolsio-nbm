@@ -107,34 +107,35 @@ class Message extends Component {
     this.setState({ isLoading: true })
        
     await this.props.mutate({ 
-      variables: { file, receiverId: parseInt(receiverId) },
-      optimisticResponse: {
-        createDirectMessage: {
-          __typename: "Mutation",
-          id: -1,
-          success: true,
-          errors: null,
-          message: {
-            __typename: "Message",
+        variables: { file, receiverId: parseInt(receiverId) },
+        optimisticResponse: {
+          createDirectMessage: {
+            __typename: "Mutation",
             id: -1,
+            success: true,
+            errors: null,
+            message: {
+              __typename: "Message",
+              id: -1,
+            }
+          }            
+        },
+        update: (store) => {
+          const data = store.readQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY })
+          const notUserInList = data.getDirectMessageUsers.every(user => user.id !== parseInt(receiverId, 10))
+          
+          if (notUserInList) {
+            data.getDirectMessageUsers.push({
+              __typename: 'DirectMessageUser',
+              id: parseInt(receiverId, 10),
+              first_name: this.props.data.getUser.firstName,
+              email: this.props.data.getUser.email
+            })
           }
-        }            
-      },
-      update: (store) => {
-        const data = store.readQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY })
-        const notUserInList = data.getDirectMessageUsers.every(user => user.id !== parseInt(receiverId, 10))
-        
-        if (notUserInList) {
-          data.getDirectMessageUsers.push({
-            __typename: 'DirectMessageUser',
-            id: parseInt(receiverId, 10),
-            first_name: this.props.data.getUser.firstName,
-            email: this.props.data.getUser.email
-          })
+          // Write our data back to the cache.
+          store.writeQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY, data })
         }
-        // Write our data back to the cache.
-        store.writeQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY, data })
-      }})
+      })
       .then(res => {            
 
         const { success, errors } = res.data.createDirectMessage

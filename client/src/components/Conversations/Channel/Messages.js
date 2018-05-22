@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { graphql, compose } from 'react-apollo'
 import { Comment } from 'semantic-ui-react'
-import gql from 'graphql-tag'
 import { Button, Modal, Message } from 'semantic-ui-react'
 import MessageForm from './Form/Message'
 import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
+import gql from 'graphql-tag'
+import { graphql, compose } from 'react-apollo'
+import { GET_CHANNEL_QUERY, GET_CHANNEL_MESSAGE_QUERY } from '../../../graphql/messages'
 
 // Localization 
 import T from 'i18n-react'
@@ -193,40 +194,8 @@ class Messages extends Component {
   }
 }
 
-const getChannelQuery = gql`
-  query getChannel($id: Int!) {
-    getChannel(id: $id) {
-      id
-      name
-      users {
-        id
-        email
-      }
-    }
-  }
-`
-
-const getChannelMessagesQuery = gql`
-  query getChannelMessages($channelId: Int!) {
-    getChannelMessages(channelId: $channelId) {
-      id
-      body
-      uploadPath
-      mimetype
-      userId
-      isRead
-      createdAt
-      user {
-        id
-        email
-        avatarUrl
-      }
-    }
-  }
-`
-
 const Queries =  compose(
-  graphql(getChannelQuery, {
+  graphql(GET_CHANNEL_QUERY, {
     "name": "getChannelQuery",
     options: (props) => ({
       variables: {
@@ -234,7 +203,7 @@ const Queries =  compose(
       }
     })
   }),
-  graphql(getChannelMessagesQuery, {
+  graphql(GET_CHANNEL_MESSAGE_QUERY, {
     "name": "getChannelMessagesQuery",
     options: (props) => ({
       variables: {

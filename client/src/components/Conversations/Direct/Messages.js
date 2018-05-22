@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Comment, Message, Modal, Image, Button } from 'semantic-ui-react'
-import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
+import { graphql, compose } from 'react-apollo'
+import { GET_DIRECT_MESSAGES_QUERY, MARK_DIRECT_MESSAGES_AS_READ_MUTATION, GET_USER_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/directMessages'
 
 import MessageForm from './Form/Message'
 import RenderText from '../RenderText'
@@ -31,7 +32,7 @@ const NEW_DIRECT_MESSAGE_SUBSCRIPTION = gql`
   }
 `
 
-const ShowInModal = ({ trigger, body, src, mimetype }) => {
+const ShowInModal = ({ trigger, src, mimetype }) => {
   let content
   
   if (mimetype.startsWith('image/')) {
@@ -81,7 +82,7 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
         </video></div>} 
         src={uploadPath} 
         mimetype={mimetype} />)
-    } else if (mimetype) { // For all rest file types (E.g. text, pdf, doc...)
+    } else if (mimetype) { // For all rest file types (E.g. text, pdf, doc...()
       return (<div className="ui small message pre">
           <RenderText uploadPath={uploadPath} />
           <div className="buttons">
@@ -98,6 +99,36 @@ class Messages extends Component {
 
   componentDidMount() {
     this.unsubscribe = this.subscribe(this.props.receiverId)
+
+    // Mark messages as unread for this reciever
+    this.props.markDirectMessagesAsReadMutation({ 
+        variables: { senderId: parseInt(this.props.receiverId) },
+        update: (store) => {
+          const data = store.readQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY })
+          
+          const updatedUnreadDirectMessagesCountSender = data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender.map(item => {
+            if (item.sender_id === parseInt(this.props.receiverId)) {
+              return {...item, count: 0}
+            }
+            return item
+          })
+      
+          data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender = updatedUnreadDirectMessagesCountSender
+
+          // Write our data back to the cache.
+          store.writeQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY, data })
+        }
+      })
+      .then(res => { 
+        const { success, errors } = res.data.markDirectMessagesAsRead
+
+        if (success) {
+          console.log('success: ', success)
+        } else {
+          console.log('errors: ', errors)
+        }
+      })
+      .catch(err => console.log('err: ', err))
   }
 
   componentWillReceiveProps({ receiverId }) {    
@@ -107,6 +138,36 @@ class Messages extends Component {
       }
       this.unsubscribe = this.subscribe(receiverId)
     }
+
+    // Mark messages as unread for this reciever
+    this.props.markDirectMessagesAsReadMutation({ 
+        variables: { senderId: parseInt(receiverId) },
+        update: (store) => {
+          const data = store.readQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY })
+          
+          const updatedUnreadDirectMessagesCountSender = data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender.map(item => {
+            if (item.sender_id === parseInt(receiverId)) {
+              return {...item, count: 0}
+            }
+            return item
+          })
+        
+          data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender = updatedUnreadDirectMessagesCountSender
+         
+          // Write our data back to the cache.
+          store.writeQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY, data })
+        }
+      })
+      .then(res => { 
+        const { success, errors } = res.data.markDirectMessagesAsRead
+
+        if (success) {
+          console.log('success: ', success)
+        } else {
+          console.log('errors: ', errors)
+        }
+      })
+      .catch(err => console.log('err: ', err))
   }﻿
 
   componentWillUnmount() {   
@@ -175,36 +236,11 @@ class Messages extends Component {
   }
 }
 
-const getUserQuery = gql`
-  query getUser($id: Int!) {
-    getUser(id: $id) {
-      id
-      firstName
-      email
-    }
-  }
-`
-
-const getDirectMessagesQuery = gql`
-  query getDirectMessages($receiverId: Int!) {
-    getDirectMessages(receiverId: $receiverId) {
-      id
-      body
-      uploadPath
-      mimetype
-      isRead
-      createdAt
-      user {
-        id
-        email
-        avatarUrl
-      }
-    }
-  }
-`
-
-const Queries =  compose(
-  graphql(getUserQuery, {
+const QueriesMutation =  compose(
+  graphql(MARK_DIRECT_MESSAGES_AS_READ_MUTATION, {
+    name: 'markDirectMessagesAsReadMutation'
+  }),
+  graphql(GET_USER_QUERY, {
     "name": "getUserQuery",
     options: (props) => ({
       variables: {
@@ -212,7 +248,7 @@ const Queries =  compose(
       }
     })
   }),
-  graphql(getDirectMessagesQuery, {
+  graphql(GET_DIRECT_MESSAGES_QUERY, {
     "name": "getDirectMessagesQuery",
     options: (props) => ({
       variables: {
@@ -223,6 +259,6 @@ const Queries =  compose(
   })
 )(Messages)
 
-export default Queries
+export default QueriesMutation
 
 

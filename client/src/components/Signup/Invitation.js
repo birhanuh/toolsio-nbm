@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
-import classnames from 'classnames'
 import jwt from 'jsonwebtoken'
 // Semantic UI Form elements
 import { Input, Form } from 'semantic-ui-react'

@@ -193,7 +193,7 @@ class FormPage extends Component {
            })
             // Add our comment from the mutation to the end.
             
-            let updatedCustomers = data.getCustomers.map(item => {
+            let updatedCustomers = data.getCustomers.customers.map(item => {
               if (item.id === customer.id) {
                 return {...customer, __typename: 'Customer'}
               }
@@ -251,7 +251,7 @@ class FormPage extends Component {
               }  
             })
             // Add our comment from the mutation to the end.
-            data.getCustomers.push(customer)
+            data.getCustomers.customers.push(customer)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
           }})
