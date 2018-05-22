@@ -22,7 +22,14 @@ export default (sequelize, DataTypes) => {
         notEmpty: true  // don't allow empty strings
       } 
     },
-    description: DataTypes.TEXT
+    description: DataTypes.TEXT,
+    tax: {
+      type: DataTypes.DECIMAL,
+      allowNull : true,
+      validate: {     
+        isDecimal: true //  checks for any numbers
+      } 
+    }
   })
 
   Sale.associate = (models) => {
@@ -45,21 +52,4 @@ export default (sequelize, DataTypes) => {
 
   return Sale
 }
-
-
-// saleSchema.post('save', function(doc, next) {
-
-//   // Push sale to related Customer object
-//   Customer.findByIdAndUpdate(this.customer, { $push: { sales: this._id }}, { new: true }, (err, customer) => {
-//     if (err) {
-//       errors: {
-//         cantUpdateCustomer: {
-//           message: err
-//         } 
-//       }
-//     }
-//   })
-
-//   next()
-// })
 

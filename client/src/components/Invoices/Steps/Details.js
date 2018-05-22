@@ -29,8 +29,8 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
       <fieldset className="custom-fieldset">
         <legend className="custom-legend">{T.translate("invoices.form.select_payment_term_or_deadline")}</legend>
 
-        <Form.Field inline>
-          <label className={classnames({red: !!errors.deadline})}>{T.translate("invoices.form.deadline")}</label>
+        <Form.Field inline error={!!errors.deadline}>
+          <label>{T.translate("invoices.form.deadline")}</label>
           <DatePicker
             dateFormat="DD/MM/YYYY"
             selected={step2.deadline}
@@ -41,8 +41,8 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
         
         <div className="ui horizontal divider">Or</div>
 
-        <Form.Field inline>
-          <label className={classnames({red: !!errors.paymentTerm})}>{T.translate("invoices.form.payment_term")}</label>
+        <Form.Field inline error={!!errors.paymentTerm}>
+          <label>{T.translate("invoices.form.payment_term")}</label>
           <Select 
             placeholder={T.translate("invoices.form.select_days")}
             name="paymentTerm" 
@@ -50,14 +50,16 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
             onChange={(e, {value}) => handleChange('paymentTerm', value)} 
             error={!!errors.paymentTerm}
             options={paymentTermOptions}
+            search
+            searchInput={{ type: 'number' }}
             selection
           />
           <span className="red">{errors.paymentTerm}</span>
         </Form.Field>
       </fieldset>  
 
-      <Form.Field inline>
-        <label className={classnames({red: !!errors.interestInArrears})}>{T.translate("invoices.form.interest_in_arrears")}</label>
+      <Form.Field inline  error={!!errors.interestInArrears}>
+        <label>{T.translate("invoices.form.interest_in_arrears")}</label>
         <Input 
           placeholder="0%"
           name="interestInArrears" 
@@ -68,8 +70,8 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
         <span className="red">{errors.interestInArrears}</span>
       </Form.Field>
 
-      <Form.Field inline>
-        <label className={classnames({red: !!errors.tax})}>{T.translate("invoices.form.tax")}</label>
+      <Form.Field inline error={!!errors.tax}>
+        <label>{T.translate("invoices.form.tax")}</label>
         <Input 
           placeholder="0%"
           name="tax" 
@@ -81,8 +83,8 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
         <span className="red">{errors.tax}</span>
       </Form.Field>
       
-      <Form.Field inline>
-        <label className={classnames({red: !!errors.total})}>{T.translate("invoices.form.total")}</label>
+      <Form.Field inline error={!!errors.total}>
+        <label>{T.translate("invoices.form.total")}</label>
         <Input 
           placeholder="0%"
           name="total" 
@@ -95,8 +97,9 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
       </Form.Field>
 
       { id &&
-        <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'pending', green: status === 'paid', red: status === 'overdue'})}>
-          <label className={classnames({red: !!errors.status})}>{T.translate("invoices.form.status")}</label>
+        <Form.Field inline className={classnames("show", {blue: step2.status === 'new', orange: step2.status === 'pending', 
+          green: step2.status === 'paid', red: step2.status === 'overdue', error: !!errors.staus})}>
+          <label>{T.translate("invoices.form.status")}</label>
           <Select 
             placeholder={T.translate("invoices.form.select_status")}
             name="status"
@@ -115,11 +118,10 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
         </Form.Field>
       }
 
-      <Form.Field>  
+      <Form.Field inline>  
         <label>{T.translate("invoices.form.description")}</label>
-        <Input 
+        <TextArea
           placeholder={T.translate("invoices.form.description")}
-          control={TextArea}
           name="description" 
           value={step2.description} 
           onChange={(e, {value}) => handleChange('description', value)} 

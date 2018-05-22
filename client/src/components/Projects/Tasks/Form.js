@@ -29,8 +29,8 @@ class Form extends Component {
         name: "",
         paymentType: "",
         hours: "",
-        price: "",
-        vat: "",
+        unitPrice: "",
+        total: "",
         errors: {},
         isLoading: false
       },
@@ -40,8 +40,8 @@ class Form extends Component {
         name: "",
         paymentType: "",
         hours: "",
-        price: "",
-        vat: "",
+        unitPrice: "",
+        total: "",
         errors: {},
         isLoading: false
       }
@@ -71,6 +71,39 @@ class Form extends Component {
     }
   }
 
+  handleNewTaskBlur = (e) => {
+    if (!this.state.newTask.errors[e.target.name]) {
+      let updatedTask = Object.assign({}, this.state.newTask)
+
+      const { hours, unitPrice } = this.state.newTask
+
+      if (unitPrice !== "" && hours !== "") {
+        if (hours.indexOf(':') > -1) {
+          let tokens = hours.split(':') 
+          let totalTime = parseInt(tokens[0]) + parseFloat(tokens[1]/60)
+
+          updatedTask['total'] = parseInt(unitPrice) * totalTime.toFixed(2)
+        } else if (hours.indexOf('.') > -1) {
+          updatedTask['total'] = parseInt(unitPrice) * parseFloat(hours).toFixed(2)
+        } else {
+          updatedTask['total'] = parseInt(unitPrice) * parseInt(hours)
+        }
+      }
+      
+      if (unitPrice !== "" && hours === "") {
+        updatedTask['total'] = parseInt(unitPrice)
+      }
+
+      if (unitPrice === "" && hours === "") {
+        updatedTask['total'] = ""
+      }
+
+      this.setState({
+        newTask: updatedTask
+      })
+    } 
+  }
+
   isValidNewTask() {
     const { errors, isValid } = Validation.validateTaskInput(this.state.newTask)
     
@@ -90,10 +123,10 @@ class Form extends Component {
 
     // Validation
     if (this.isValidNewTask()) { 
-      const { projectId, name, paymentType, hours, price, vat } = this.state.newTask
+      const { projectId, name, paymentType, hours, unitPrice, total } = this.state.newTask
 
       this.props.createTaskMutation({ 
-        variables: { projectId, name, paymentType, hours, price, vat },
+        variables: { projectId, name, paymentType, hours, unitPrice, total },
         update: (store, { data: { createTask } }) => {
           const { success, task } = createTask
 
@@ -122,8 +155,8 @@ class Form extends Component {
             updatedTask.name = ""
             updatedTask.paymentType = ""
             updatedTask.hours = ""
-            updatedTask.price = ""
-            updatedTask.vat = ""
+            updatedTask.unitPrice = ""
+            updatedTask.total = ""
             updatedTask.isLoading = false
             
             this.setState({
@@ -182,6 +215,39 @@ class Form extends Component {
     }
   }
 
+  handleEditTaskBlur = (e) => {
+    if (!this.state.editTask.errors[e.target.name]) {
+      let updatedTask = Object.assign({}, this.state.editTask)
+
+      const { hours, unitPrice } = this.state.editTask
+
+      if (unitPrice !== "" && hours !== "") {
+        if (hours.indexOf(':') > -1) {
+          let tokens = hours.split(':') 
+          let totalTime = parseInt(tokens[0]) + parseFloat(tokens[1]/60)
+
+          updatedTask['total'] = parseInt(unitPrice) * totalTime.toFixed(2)
+        } else if (hours.indexOf('.') > -1) {
+          updatedTask['total'] = parseInt(unitPrice) * parseFloat(hours).toFixed(2)
+        } else {
+          updatedTask['total'] = parseInt(unitPrice) * parseInt(hours)
+        }
+      }
+      
+      if (unitPrice !== "" && hours === "") {
+        updatedTask['total'] = parseInt(unitPrice)
+      }
+
+      if (unitPrice === "" && hours === "") {
+        updatedTask['total'] = ""
+      }
+
+      this.setState({
+        editTask: updatedTask
+      })
+    } 
+  }
+
   handleEdit(task, event) {
     event.preventDefault()
 
@@ -195,8 +261,8 @@ class Form extends Component {
     updatedTask.name = task.name
     updatedTask.paymentType = task.paymentType
     updatedTask.hours = task.hours
-    updatedTask.price = task.price
-    updatedTask.vat = task.vat
+    updatedTask.unitPrice = task.unitPrice
+    updatedTask.total = task.total
     this.setState({
       editTask: updatedTask
     })
@@ -215,7 +281,7 @@ class Form extends Component {
     
     if (!isValid) {
       let updatedTask = Object.assign({}, this.state.editTask)
-      updatedTask.errors.message.errors = errors
+      updatedTask.errors = errors
       this.setState({
         editTask: updatedTask
       })
@@ -229,10 +295,10 @@ class Form extends Component {
 
     // Validation
     if (this.isValidEditTask()) { 
-      const { id, projectId, name, paymentType, hours, price, vat } = this.state.editTask
+      const { id, projectId, name, paymentType, hours, unitPrice, total } = this.state.editTask
       
       this.props.updateTaskMutation({ 
-        variables: { id, projectId, name, paymentType, hours, price, vat },
+        variables: { id, projectId, name, paymentType, hours, unitPrice, total },
         update: (store, { data: { updateTask } }) => {
           const { success, task } = updateTask
 
@@ -268,8 +334,8 @@ class Form extends Component {
             updatedTask.name = ""
             updatedTask.paymentType = ""
             updatedTask.hours = ""
-            updatedTask.price = ""
-            updatedTask.vat = ""
+            updatedTask.unitPrice = ""
+            updatedTask.total = ""
             updatedTask.isLoading = false
             
             this.setState({
@@ -383,7 +449,7 @@ class Form extends Component {
   render() {
     const { newTask, editTask } = this.state
 
-    const { tasks, total } = this.props
+    const { tasks, tasksTotal } = this.props
     
 
     const tasksList = (
@@ -394,6 +460,7 @@ class Form extends Component {
           editTask={editTask}
           handleCancelEdit={this.handleCancelEdit.bind(this, task)}
           handleEditTaskChange={this.handleEditTaskChange} 
+          handleEditTaskBlur={this.handleEditTaskBlur.bind(this)} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, task)}
           showConfirmationModal={this.showConfirmationModal.bind(this, task)}/> 
@@ -408,9 +475,9 @@ class Form extends Component {
               <th>{T.translate("projects.tasks.form.name")}</th>
               <th>{T.translate("projects.tasks.form.payment_type")}</th>
               <th>{T.translate("projects.tasks.form.hours")}</th>
-              <th>{T.translate("projects.tasks.form.price")}</th>
-              <th>{T.translate("projects.tasks.form.vat")}</th>
-              <th width="110px">{T.translate("projects.tasks.form.actions")}</th>
+              <th>{T.translate("projects.tasks.form.unit_price")}</th>
+              <th>{T.translate("projects.tasks.form.total")}</th>
+              <th className="center aligned">{T.translate("projects.tasks.form.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -420,15 +487,15 @@ class Form extends Component {
             <AddTaskTr
               task={newTask} 
               handleNewTaskChange={this.handleNewTaskChange} 
+              handleNewTaskBlur={this.handleNewTaskBlur.bind(this)} 
               handleCreate={this.handleCreate.bind(this)} /> 
             
             <tr>
-              <td colSpan="3"><strong>{T.translate("projects.tasks.form.total")}</strong></td>
-              <td><strong>{total}</strong></td>
-              <td></td>
+              <td colSpan="3"></td>
+              <td><strong>{T.translate("projects.tasks.form.total")}</strong></td>
+              <td><strong>{tasksTotal}</strong></td>
               <td></td>
             </tr>
-
           </tbody>
         </table>
         <div className="ui small modal task">

@@ -9,6 +9,7 @@ export default `
     status: String!
     description: String
     progress: Int
+    tax: Float!
     tasks: [Task!]
     customerId: Int!
     customer: Customer!
@@ -63,7 +64,7 @@ export default `
   type Query {
     getProject(id: Int!): Project
     
-    getProjects: [GetProjectsResponse!]!
+    getProjects(offset: Int!, limit: Int!, order: String!): [GetProjectsResponse!]!
 
     getProjectsWithoutInvoice: [GetProjectsWithoutInvoiceResponse!]!
 

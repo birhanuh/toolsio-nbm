@@ -28,8 +28,8 @@ class Form extends Component {
         name: "",
         unit: "",
         quantity: "",
-        price: "",
-        vat: "",
+        unitPrice: "",
+        total: "",
         errors: {},
         isLoading: false
       },
@@ -39,8 +39,8 @@ class Form extends Component {
         name: "",
         unit: "",
         quantity: "",
-        price: "",
-        vat: "",
+        unitPrice: "",
+        total: "",
         errors: {},
         isLoading: false
       },      
@@ -72,6 +72,34 @@ class Form extends Component {
     }
   }
 
+  handleNewItemBlur = (e) => {
+    if (!this.state.newItem.errors[e.target.name]) {
+      let updatedItem = Object.assign({}, this.state.newItem)
+
+      const { quantity, unitPrice } = this.state.newItem
+
+      if (unitPrice !== "" && quantity !== "") {
+        if (quantity.indexOf('.') > -1) {
+          updatedItem['total'] = parseInt(unitPrice) * parseFloat(quantity).toFixed(2)
+        } else {
+          updatedItem['total'] = parseInt(unitPrice) * parseInt(quantity)
+        }
+      }
+      
+      if (unitPrice !== "" && quantity === "") {
+        updatedItem['total'] = parseInt(unitPrice)
+      }
+
+      if (unitPrice === "" && quantity === "") {
+        updatedItem['total'] = ""
+      }
+
+      this.setState({
+        newItem: updatedItem
+      })
+    } 
+  }
+
   isValidNewItem() {
     const { errors, isValid } = Validation.validateItemInput(this.state.newItem)
     
@@ -91,10 +119,10 @@ class Form extends Component {
 
     // Validation
     if (this.isValidNewItem()) { 
-      const { saleId, name, unit, quantity, price, vat } = this.state.newItem
+      const { saleId, name, unit, quantity, unitPrice, total } = this.state.newItem
 
       this.props.createItemMutation({
-        variables: { saleId, name, unit, quantity, price, vat },
+        variables: { saleId, name, unit, quantity, unitPrice, total },
         update: (store, { data: { createItem } }) => {
           const { success, item } = createItem
 
@@ -123,8 +151,8 @@ class Form extends Component {
             updatedItem.name = ""
             updatedItem.unit = ""
             updatedItem.quantity = ""
-            updatedItem.price = ""
-            updatedItem.vat = ""
+            updatedItem.unitPrice = ""
+            updatedItem.total = ""
             updatedItem.isLoading = false
              this.setState({
               newItem: updatedItem
@@ -181,6 +209,34 @@ class Form extends Component {
     }
   }
 
+  handleEditItemBlur = (e) => {
+    if (!this.state.editItem.errors[e.target.name]) {
+      let updatedItem = Object.assign({}, this.state.editItem)
+
+      const { quantity, unitPrice } = this.state.editItem
+
+      if (unitPrice !== "" && quantity !== "") {
+        if (quantity.indexOf('.') > -1) {
+          updatedItem['total'] = parseInt(unitPrice) * parseFloat(quantity).toFixed(2)
+        } else {
+          updatedItem['total'] = parseInt(unitPrice) * parseInt(quantity)
+        }
+      }
+      
+      if (unitPrice !== "" && quantity === "") {
+        updatedItem['total'] = parseInt(unitPrice)
+      }
+
+      if (unitPrice === "" && quantity === "") {
+        updatedItem['total'] = ""
+      }
+
+      this.setState({
+        editItem: updatedItem
+      })
+    } 
+  }
+
   handleEdit(item, event) {
     event.preventDefault()
 
@@ -194,8 +250,8 @@ class Form extends Component {
     updatedItem.name = item.name
     updatedItem.unit = item.unit
     updatedItem.quantity = item.quantity
-    updatedItem.price = item.price
-    updatedItem.vat = item.vat
+    updatedItem.unitPrice = item.unitPrice
+    updatedItem.total = item.total
     this.setState({
       editItem: updatedItem
     })
@@ -228,10 +284,10 @@ class Form extends Component {
 
     // Validation
     if (this.isValidEditItem()) { 
-      const { id, saleId, name, unit, quantity, price, vat } = this.state.editItem
+      const { id, saleId, name, unit, quantity, unitPrice, total } = this.state.editItem
       
       this.props.updateItemMutation({
-        variables: { id, saleId, name, unit, quantity, price, vat },
+        variables: { id, saleId, name, unit, quantity, unitPrice, total },
         update: (store, { data: { updateItem } }) => {
           const { success, item } = updateItem
 
@@ -267,8 +323,8 @@ class Form extends Component {
             updatedItem.name = ""
             updatedItem.unit = ""
             updatedItem.quantity = ""
-            updatedItem.price = ""
-            updatedItem.vat = ""
+            updatedItem.unitPrice = ""
+            updatedItem.total = ""
             updatedItem.isLoading = false
              this.setState({
               editItem: updatedItem
@@ -380,7 +436,7 @@ class Form extends Component {
   render() {
     const { newItem, editItem } = this.state
   
-    let { items, total } = this.props  
+    let { items, itemsTotal } = this.props  
 
     const itemsList = (
       items.map(item => 
@@ -389,7 +445,8 @@ class Form extends Component {
           item={item} 
           editItem={editItem}
           handleCancelEdit={this.handleCancelEdit.bind(this, item)}
-          handleEditItemChange={this.handleEditItemChange} 
+          handleEditItemChange={this.handleEditItemChange}
+          handleEditItemBlur={this.handleEditItemBlur.bind(this)}  
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, item)}
           showConfirmationModal={this.showConfirmationModal.bind(this, item)}/> 
@@ -404,9 +461,9 @@ class Form extends Component {
               <th>{T.translate("sales.items.form.name")}</th>
               <th>{T.translate("sales.items.form.unit")}</th>
               <th>{T.translate("sales.items.form.quantity")}</th>
-              <th>{T.translate("sales.items.form.price")}</th>
-              <th>{T.translate("sales.items.form.vat")}</th>
-              <th width="110px">{T.translate("sales.items.form.actions")}</th>
+              <th>{T.translate("sales.items.form.unit_price")}</th>
+              <th>{T.translate("sales.items.form.total")}</th>
+              <th className="center aligned">{T.translate("sales.items.form.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -416,15 +473,15 @@ class Form extends Component {
             <AddItemTr
               item={newItem} 
               handleNewItemChange={this.handleNewItemChange} 
+              handleNewItemBlur={this.handleNewItemBlur.bind(this)} 
               handleCreate={this.handleCreate.bind(this)} /> 
             
             <tr>
-              <td colSpan="3"><strong>{T.translate("sales.items.form.total")}</strong></td>
-              <td><strong>{total}</strong></td>
-              <td></td>
+              <td colSpan="3"></td>
+              <td><strong>{T.translate("sales.items.form.total")}</strong></td>
+              <td><strong>{itemsTotal}</strong></td>
               <td></td>
             </tr>
-
           </tbody>
         </table>
         <div className="ui small modal item">

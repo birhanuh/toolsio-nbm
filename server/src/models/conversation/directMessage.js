@@ -16,6 +16,7 @@ export default (sequelize, DataTypes) => {
       field: 'created_at'
     }
   }, {})
+
   directMessage.associate = function(models) {
      // 1:M
     directMessage.belongsTo(models.User, {
@@ -31,6 +32,7 @@ export default (sequelize, DataTypes) => {
         field: 'sender_id'
       }
     })
-  };
+  }
+
   return directMessage
 };

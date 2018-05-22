@@ -16,8 +16,6 @@ import Confirmation from './Steps/Confirmation'
 // Localization 
 import T from 'i18n-react'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 // Moment
 import moment from 'moment'
 
@@ -159,10 +157,16 @@ class Form extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: GET_INVOICES_QUERY })
+          const data = store.readQuery({ query: GET_INVOICES_QUERY, 
+            variables: {
+              order: 'DESC',
+              offset: 0,
+              limit: 10
+            } 
+          })
           // Add our comment from the mutation to the end.
           
-          let updatedInvoices = data.getInvoices.map(item => {
+          let updatedInvoices = data.getInvoices.invoices.map(item => {
             if (item.id === invoice.id) {
               return {...invoice, __typename: 'Invoice'}
             }
@@ -204,9 +208,15 @@ class Form extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_INVOICES_QUERY })
+            const data = store.readQuery({ query: GET_INVOICES_QUERY,
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10
+              } 
+            })
             // Add our comment from the mutation to the end.
-            data.getInvoices.push(invoice)
+            data.getInvoices.invoices.push(invoice)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_INVOICES_QUERY, data })
           }})
@@ -337,35 +347,33 @@ class Form extends Component {
       ({ key: project.id, value: project.id, text: project.name })
     )
 
-    return ( 
-      <div className="ui stackable grid">
+    return (        
+      <div className="row columun">
+        <div className="ui text container">
+          {/* Steps component */}
+          <Steps currentStep={this.state.currentStep}/> 
 
-        <Breadcrumb />
-       
-        {/* Steps component */}
-        <Steps currentStep={this.state.currentStep}/> 
+          <div className="ui segment">
+            {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption} 
+              projectsOption={projectsOption} step1={step1} handleChange={this.handleChange} 
+              handleNext={this.handleNext.bind(this)} errors={errors} />}
 
-        <div className="ui text container segment">
-          {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption} 
-            projectsOption={projectsOption} step1={step1} handleChange={this.handleChange} 
-            handleNext={this.handleNext.bind(this)} errors={errors} />}
+            {currentStep === 'step2' && <Details id={id} step1={step1} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} 
+              handleChange={this.handleChange} handlePrevious={this.handlePrevious.bind(this)}
+              handleNext={this.handleNext.bind(this)} errors={errors} /> }
 
-          {currentStep === 'step2' && <Details id={id} step1={step1} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} 
-            handleChange={this.handleChange} handlePrevious={this.handlePrevious.bind(this)}
-            handleNext={this.handleNext.bind(this)} errors={errors} /> }
+            <form className={classnames("ui form", { loading: isLoading })}>
 
-          <form className={classnames("ui form", { loading: isLoading })}>
+              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+              {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={step1.sale} project={step1.project} 
+                handlePrevious={this.handlePrevious.bind(this)} 
+                handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
 
-            {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={step1.sale} project={step1.project} 
-              handlePrevious={this.handlePrevious.bind(this)} 
-              handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
-
-          </form> 
-        </div>
+            </form> 
+          </div>
+        </div> 
       </div>
-
     )
   }
 }
@@ -393,13 +401,20 @@ const MutationsQuery =  compose(
     name : 'getProjectsSalesWithInvoiceQuery'
   }),
   graphql(GET_INVOICES_QUERY, {
-    name : 'getInvoicesQuery'
+    name : 'getInvoicesQuery', 
+    options: (props) => ({
+      variables: {
+        order: props.match.params.order ? props.match.params.order.toUpperCase() : 'DESC',
+        offset: props.match.params.offset ? parseInt(props.match.params.offset) : 0,
+        limit: props.match.params.limit ? parseInt(props.match.params.limit) : 10
+      }
+    })
   }),
   graphql(GET_INVOICE_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0
-      },
+      }
     })
   })
 )(Form)

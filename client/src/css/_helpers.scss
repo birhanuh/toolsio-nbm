@@ -480,7 +480,7 @@ i.orange.icon {
   padding-right: 3rem !important;
 }
 
-// borders
+// Borders
 .border-top-none {
   border-top: none !important;
 }
@@ -489,7 +489,16 @@ i.orange.icon {
   border-bottom: none !important;
 }
 
-// alignment
+// Text transform
+.capitalize {
+  text-transform: capitalize !important;
+}
+
+.uppercase {
+  text-transform: uppercase !important;
+}
+
+// Alignment
 .vertical-text {
   transform: rotate(-90deg);
   transform-origin: left top 0;

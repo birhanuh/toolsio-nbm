@@ -1,20 +1,48 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { graphql } from 'react-apollo'
-import { GET_DIRECT_MESSAGE_USERS_QUERY } from '../../../graphql/directMessages'
+import { Label, Button, Modal } from 'semantic-ui-react'
+import { graphql, compose } from 'react-apollo'
+import { GET_DIRECT_MESSAGE_USERS_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/directMessages'
 
 // Localization 
 import T from 'i18n-react'
 
 // jQuery
 import $ from 'jquery'
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
 
-import UsersDownshift from './Form/UsersDownshift'
+// Downshift
+import UserDropdownSearchSelection from './Form/UserDropdownSearchSelection'
+
+const AddUserModal = ({ open, onClose }) => (
+  <Modal
+    className="ui small modal add-user"
+    open={open}
+    onClose={(e) => {
+      onClose(e)
+    }}
+  >
+    <Modal.Header>{T.translate("conversations.messages.add_user")}</Modal.Header>
+    <Modal.Content>
+      <UserDropdownSearchSelection onClose={onClose} />
+    </Modal.Content>
+    <Modal.Actions>
+      <Button
+        onClick={(e) => {
+          onClose(e)
+        }}
+      >
+        {T.translate("conversations.form.cancel")}
+      </Button>
+     </Modal.Actions>
+  </Modal>
+)
+
 class List extends Component {
+
+  state = {
+    openAddUserModal: false
+  }
 
   componentDidMount() {
     $('.ui .item').on('click', function() {
@@ -23,28 +51,28 @@ class List extends Component {
     })  
   }
 
-  showConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.add-user').modal('show')
-  }
-
-  hideConfirmationModal(event) {
-    if (event) {
-      event.preventDefault()  
+  toggleAddUserModal = (e) => {
+    if (e) {
+      e.preventDefault()  
     }
-
-    // Close modal
-    $('.small.modal.add-user').modal('hide')
+    
+    this.setState(state => ({ openAddUserModal: !state.openAddUserModal }))
   }
 
   render() {    
-    const { data: { getDirectMessageUsers }, receiverId } = this.props
+    const { openAddUserModal } = this.state
+
+    const { data: { getUnreadDirectMessagesCountSender }, getDirectMessageUsersQuery: { getDirectMessageUsers }, receiverId } = this.props
+    
+    let countSender = getUnreadDirectMessagesCountSender && getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender
+    const unreadLabel = (user) => countSender && countSender.find(item => item.sender_id === user.id)
 
     const userList = getDirectMessageUsers && getDirectMessageUsers.map(user => 
       <Link key={user.id} to={`/conversations/receiver/${user.id}`} 
         className={classnames('item', {active: receiverId && parseInt(receiverId) === user.id})}>
+        
+        {unreadLabel(user) && unreadLabel(user).count !== 0 && 
+          <Label className="red">{unreadLabel(user).count}</Label>}
 
         <div>
           <i className="user icon"></i>&nbsp;
@@ -52,36 +80,36 @@ class List extends Component {
         </div>
       </Link>
     )
-    console.log('user ', userList)
-    return (
-      <div>
 
+    return [
+      <div key="user-list">
         <div className="ui center aligned vertical segment">
-          <button id="add-user" className="ui primary button" onClick={this.showConfirmationModal.bind(this)}>
+          <button id="add-user" className="ui primary button" onClick={this.toggleAddUserModal.bind(this)}>
             <i className="add circle icon"></i>
             {T.translate("conversations.messages.add_user")}
           </button>  
         </div>
 
-        { userList }        
+        { userList }
 
-        <div className="ui small modal add-user">
-          <div className="header">{T.translate("conversations.messages.add_user")}</div>
-          <div className="content">
-
-            <UsersDownshift onClose={this.hideConfirmationModal.bind(this)} />
-
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("conversations.form.cancel")}</button>
-          </div>
-        </div>
-      </div>
-    )
+      </div>,
+      <AddUserModal
+        onClose={this.toggleAddUserModal.bind(this)}
+        open={openAddUserModal}
+        key="add-user-modal"
+      />
+    ]
   }
 }
 
-export default graphql(GET_DIRECT_MESSAGE_USERS_QUERY)(List)
+const Queries =  compose(
+  graphql(GET_DIRECT_MESSAGE_USERS_QUERY, {
+    "name": "getDirectMessageUsersQuery"
+  }),
+  graphql(GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY)
+)(List)
+
+export default Queries
 
 
 

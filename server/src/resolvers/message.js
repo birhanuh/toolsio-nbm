@@ -1,6 +1,6 @@
 import { PubSub, withFilter } from 'graphql-subscriptions'
 
-import { requiresAuth, requiresChannelAccess } from '../middlewares/authentication'
+import requiresAuth, { requiresChannelAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 import { processUpload } from '../utils/uploadFile'
 
@@ -13,7 +13,7 @@ export default {
     getNewChannelMessage: {
       subscribe: requiresChannelAccess.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_CHANNEL_MESSAGE), 
-        (payload, args) => console.log('sdfsdf', payload.getNewChannelMessage)
+        (payload, args) => payload.channelId === args.channelId
       ))
     }
   },
@@ -25,49 +25,8 @@ export default {
       return models.Message.findAll({ 
         where: { channelId: args.channelId },
         order: [['created_at', 'ASC']] }, { raw: true })
-    }),
-
-    getSentMessages: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Message.findAll({ 
-        where: { userId: user.id },
-        order: [['created_at', 'ASC']] }, { raw: true })
-    }),
-
-    getInboxMessages: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Message.findAll({ 
-        include: [
-          {
-            model: models.User,
-            where: { id: user.id }
-          }
-        ],
-        order: [['created_at', 'ASC']] }, { raw: true })
-    }),
-
-    getUnreadCounts: requiresAuth.createResolver(async (parent, args, { models }) => {
-      try {
-        const unreadCount = await models.Message.count({ 
-          where: { isRead: false },
-          include: [
-            {
-              model: models.User,
-              where: { id: user.id }
-            }
-          ]}, { raw: true })
-
-        return {
-          success: true,
-          unreadCount
-        }
-      } catch(err) {
-        console.log('err: ', err)
-        return {
-          success: false,
-          errors: formatErrors(err, models)
-        }
-      }
-
     })
+
   },
 
   Mutation: {

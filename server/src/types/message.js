@@ -14,12 +14,6 @@ export default `
     mimetype: String
   }
 
-  type GetUnreadCountsMessageResponse {
-    success: Boolean!
-    unreadCount: Int!
-    errors: [Error!]
-  }
-
   type CreateMessageResponse {
     success: Boolean!
     message: Message! 
@@ -28,10 +22,8 @@ export default `
 
   type Query {
     getMessage(id: Int!): Message
+
     getChannelMessages(channelId: Int!): [Message!]!
-    getInboxMessages: [Message!]!
-    getSentMessages: [Message!]!
-    getUnreadCounts: GetUnreadCountsMessageResponse!
   }
 
   type Mutation {

@@ -5,7 +5,7 @@ import { Input, Select, Form } from 'semantic-ui-react'
 // Localization 
 import T from 'i18n-react'
 
-export default function AddItemTr({item, handleNewItemChange, handleCreate}) {
+export default function AddItemTr({item, handleNewItemChange, handleNewItemBlur, handleCreate}) {
   return (
     <tr>
       <td className="add-item">
@@ -47,7 +47,8 @@ export default function AddItemTr({item, handleNewItemChange, handleCreate}) {
             placeholder="0"
             name="quantity" 
             value={item.quantity} 
-            onChange={(e, {value}) => handleNewItemChange('quantity', value)} 
+            onChange={(e, {value}) => handleNewItemChange('quantity', value)}
+            onBlur={handleNewItemBlur}  
             error={!!item.errors.quantity}
             className="ui small d-block input"
           />
@@ -55,30 +56,23 @@ export default function AddItemTr({item, handleNewItemChange, handleCreate}) {
         </Form.Field>
       </td>
       <td className="add-item">
-        <Form.Field inline error={item.errors && item.errors.price}>
+        <Form.Field inline error={item.errors && item.errors.unitPrice}>
           <Input 
             placeholder="0.00"
-            name="price" 
-            value={item.price} 
-            onChange={(e, {value}) => handleNewItemChange('price', value)} 
-            error={!!item.errors.price}
+            name="unitPrice" 
+            value={item.unitPrice} 
+            onChange={(e, {value}) => handleNewItemChange('unitPrice', value)}
+            onBlur={handleNewItemBlur}  
+            error={!!item.errors.unitPrice}
             className="ui small d-block input"
           />
-          <span className="red">{item.errors && item.errors.price}</span>
+          <span className="red">{item.errors && item.errors.unitPrice}</span>
         </Form.Field>
       </td>
       <td className="add-item">
-        <Form.Field inline error={item.errors && item.errors.vat}>
-          <Input 
-            placeholder="0%"
-            name="vat" 
-            value={item.vat} 
-            onChange={(e, {value}) => handleNewItemChange('vat', value)} 
-            error={!!item.errors.vat}
-            className="ui small d-block input"
-          />
-          <span className="red">{item.errors && item.errors.vat}</span>
-        </Form.Field>
+        <div className="p-2">
+          {item.total}
+        </div>
       </td>
       <td className="add-item" width="120px">     
         <button disabled={item.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.items.form.add_item")}</button> 

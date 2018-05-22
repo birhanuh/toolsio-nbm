@@ -2,31 +2,17 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 
-export default function Pagination({ path, total, offset, limit }) {
-    
-  let currentPage = 0
-  offset = offset ? offset : 0
-  
-  if (!total) {
-    if ((offset/limit) < (parseInt(total)-5)) {
-      currentPage = offset ? Math.ceil(offset/limit) + 1 : 1
-    } else {
-      currentPage = !!total && parseInt(total)-4
-    }  
-  }
-
-  // Active page
-  let activePage = offset ? Math.ceil(offset/limit) + 1 : 1
+export default function Pagination({ path, count, offset, limit }) {
   
   // Prevoius link
   let previousLink 
 
-  if (currentPage && currentPage === 1 || currentPage < 0) {
+  if (offset === 0) {
     previousLink = (<div className="item disabled">
         <i className="angle left icon"></i>
       </div>)
   } else {
-    previousLink = (<Link to={currentPage && currentPage === 1 ? `/${path}/${parseInt(offset)}/${limit}` : `/${path}/${parseInt(offset)-10}/${limit}`} className={classnames("item", {disabled: currentPage && currentPage === 1 || currentPage < 0 })} >
+    previousLink = (<Link to={`/${path}/${offset-10}/${limit}`} className="item">
         <i className="angle left icon"></i>
       </Link>)
   }
@@ -34,50 +20,56 @@ export default function Pagination({ path, total, offset, limit }) {
   // Next link
   let nextLink 
 
-  if (currentPage && currentPage+4 === total) {      
+  if ((parseInt(count/10, 10)) === (offset/10)) {      
     nextLink = (<div className="item disabled">
       <i className="angle right icon"></i>
     </div>)
   } else {
-    nextLink = (<Link to={!offset ? `/${path}/${50}/${limit}` : (currentPage && currentPage+4 === (total) ? `/${path}/${parseInt(offset)}/${limit}` : `/${path}/${parseInt(offset)+10}/${limit}`)} className={classnames("item", {disabled: currentPage && currentPage+4 === total})}>
+    nextLink = (<Link to={`/${path}/${offset+10}/${limit}`} className="item">
         <i className="angle right icon"></i>
     </Link>)
   }
 
-  const paginationElement = !!total &&
+  let link1 = parseInt(offset) >= 50 ? (parseInt(offset/10, 10)-3) : 1
+  let link2 = parseInt(offset) >= 50 ? (parseInt(offset/10, 10)-2) : 2
+  let link3 = parseInt(offset) >= 50 ? (parseInt(offset/10, 10)-1) : 3
+  let link4 = parseInt(offset) >= 50 ? parseInt(offset/10, 10) : 4
+  let link5 = parseInt(offset) >= 50 ? (parseInt(offset/10, 10)+1) : 5
+
+  const paginationElement =
     (<div className="ui right floated pagination menu">
       {previousLink}
-      { currentPage > 0 &&
-        <Link to={`/${path}/${((currentPage)*10)-10}/${limit}`} className={classnames("item", {active: activePage === currentPage})}>
-          {currentPage}
+      { count > 0 &&
+        <Link to={`/${path}/${parseInt(offset) >= 50 ? (offset-40) : 0}/${limit}`} className={classnames("item", {active: link1 === ((offset/10)+1)})}>
+          {link1}
         </Link>
       }
-      {currentPage+1 > 0 &&
-        <Link to={`/${path}/${((currentPage+1)*10)-10}/${limit}`} className={classnames("item", {active: activePage === currentPage+1})}>
-          {currentPage+1}
+      {count > 10 &&
+        <Link to={`/${path}/${parseInt(offset) >= 50 ? (offset-30) : 10}/${limit}`} className={classnames("item", {active: link2 === ((offset/10)+1)})}>
+          {link2}
         </Link>
       }
-      {currentPage+2 > 0 &&
-        <Link to={`/${path}/${((currentPage+2)*10)-10}/${limit}`} className={classnames("item", {active: activePage === currentPage+2})}>
-          {currentPage+2}
+      {count > 20 &&
+        <Link to={`/${path}/${parseInt(offset) >= 50 ? (offset-20) : 20}/${limit}`} className={classnames("item", {active: link3 === ((offset/10)+1)})}>
+          {link3}
         </Link>
       }
-      {currentPage+3 > 0 &&
-        <Link to={`/${path}/${((currentPage+3)*10)-10}/${limit}`} className={classnames("item", {active: activePage === currentPage+3})}>
-          {currentPage+3}
+      {count > 30 &&
+        <Link to={`/${path}/${parseInt(offset) >= 50 ? (offset-10) : 30}/${limit}`} className={classnames("item", {active: link4 === ((offset/10)+1)})}>
+          {link4}
         </Link>
       }
-      <Link to={`/${path}/${((currentPage+4)*10)-10}/${limit}`} className={classnames("item 4", {active: activePage === currentPage+4})}>
-        {currentPage+4}
-      </Link>
+      {count > 40 &&
+        <Link to={`/${path}/${parseInt(offset) >= 50 ? offset : 40}/${limit}`} className={classnames("item 4", {active: link5 === ((offset/10)+1)})}>
+          {link5}
+        </Link>
+      }
       {nextLink}
     </div>
   )
 
-  return(
-    
-    <div>
-      {paginationElement}
-    </div>
+  return ( 
+      paginationElement
     )
 }
+

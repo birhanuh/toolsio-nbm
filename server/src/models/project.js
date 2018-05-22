@@ -30,7 +30,14 @@ export default (sequelize, DataTypes) => {
         isDecimal: true // checks for any numbers
       } 
     },
-    description: DataTypes.TEXT
+    description: DataTypes.TEXT,
+    tax: {
+      type: DataTypes.DECIMAL,
+      allowNull : true,
+      validate: {     
+        isDecimal: true //  checks for any numbers
+      } 
+    }
   })
 
   Project.associate = (models) => {
@@ -54,22 +61,3 @@ export default (sequelize, DataTypes) => {
   return Project
 }
 
-
-
-// projectSchema.post('save', function(doc, next) {
-
-//   // Push project to related Customer object
-//   Customer.findByIdAndUpdate(this.customer, { $push: { projects: this._id }}, { new: true }, (err, customer) => {
-//     if (err) {
-//       errors: {
-//         cantUpdateCustomer: {
-//           message: err
-//         } 
-//       }
-//     }
-//   })
-
-//   next()
-// })
-
-// module.exports = mongoose.model('project', projectSchema)

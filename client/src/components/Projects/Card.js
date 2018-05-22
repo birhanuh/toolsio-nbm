@@ -53,10 +53,8 @@ export default function Card({project}) {
             </tr>
           </tbody>
         </table>
-
       </div>
     </div>
-
   )
 }
 

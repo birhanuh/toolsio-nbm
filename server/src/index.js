@@ -68,15 +68,16 @@ app.use(async (req, res, next) => {
   console.log('subdomain: ', subdomain)
   // Parse authToken 
   const authToken = req.headers['x-auth-token']
-  
-  if (authToken !== 'null') {
+
+  if (authToken && authToken !== 'null') {
     try {
-      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)      
+      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)     
       req.user = user
-    
-    } catch (err) {
+       
+    } catch (err) { 
       let refreshAuthToken = req.headers['x-refresh-auth-token']
       const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
+      
       if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
         res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
         res.set('x-auth-token', newAuthTokens.authToken)
@@ -88,11 +89,10 @@ app.use(async (req, res, next) => {
   next()
 })
 
-// GraphQL
-const graphqlEndPoint = '/graphql'
+const endpointURL = '/graphql'
 
 app.use(
-  graphqlEndPoint, 
+  endpointURL, 
   bodyParser.json(),
   apolloUploadExpress(), 
   graphqlExpress(req => ({ 
@@ -101,6 +101,7 @@ app.use(
       models,
       subdomain: req.headers.subdomain,
       user: req.user,
+      //user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2
     }
@@ -109,7 +110,7 @@ app.use(
 
 app.use(
   '/graphiql', 
-  graphiqlExpress({ endpointURL: graphqlEndPoint, 
+  graphiqlExpress({ endpointURL: endpointURL, 
     subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' 
   })
 )
@@ -167,8 +168,7 @@ server.listen(app.get('port'), () => {
     schema: schema,
     onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
       
-      if (authToken && refreshAuthToken) {
-      
+      if (authToken && refreshAuthToken) {      
         try {
           const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)
           return { models, user }           
@@ -176,16 +176,16 @@ server.listen(app.get('port'), () => {
           const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
           return { models, user: newAuthTokens.user }
         }
+      }
+      return { models }
     }
-
-    return { models }
-  }}, {
-    server: server,
-    path: '/subscriptions',
-  })
-  console.log('Server started on port: ' + process.env.SERVER_PORT)
-  console.log('Environment: ' + process.env.NODE_ENV)
-  console.log('------------------------')
+  }, {
+      server: server,
+      path: '/subscriptions',
+    })
+    console.log('Server started on port: ' + process.env.SERVER_PORT)
+    console.log('Environment: ' + process.env.NODE_ENV)
+    console.log('------------------------')
 })
 
 
@@ -202,110 +202,5 @@ server.listen(app.get('port'), () => {
 //   db.close() 
 // })
 
-/*
-mutation {
-  registerUser(firstName: "testa", lastName: "testa", email: 
-      "testa@toolsio.com", password: "ppppp", subdomain: "testa", industry: "testa" ) {
-      success
-      user {
-        id
-      } 
-      errors {
-        path
-        message
-      }
-    }
-}
 
-mutation {
-  createProject(name: "Project 1", deadline: 1521243824165, status: "new", 
-    description: "Desciption 1...", customerId: 1) {
-    success
-    project {
-      id
-      name
-      deadline
-      status
-      description
-    }
-    errors {
-      path
-      message
-    }
-  }
-}
-
-mutation createCustomer($name: String!, $vatNumber: String!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
-  createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
-    postalCode: $postalCode, region: $region, country: $country) {
-    success
-    errors {
-      path
-      message
-    }
-  }
-}
-
-query {
-  getProjects {
-    name
-    deadline
-  }
-}
-
-mutation {
-  createInvoice(deadline: 1521822820714, interestInArrears: 2, status:"new",
-    total: 30, projectId: 1, customerId: 1) {
-    success
-    invoice {
-      id
-    }
-    errors {
-      path
-      message
-    }
-  }
-}
-
-mutation {
-  createMessage(body: "Testa...", channelId: 1 ) {
-      success
-      message {
-        id
-      } 
-      conversation {
-        id
-      }
-      errors {
-        path
-        message
-      }
-    }
-}
-
-mutation {
-  createChannel(name: "channel1") {
-    success
-    channel {
-      id
-      name
-    }
-    errors {
-      path
-      message
-    }
-  }
-}
-
-query {
-  getChannel(id: 1) {
-    id
-    name
-    users {
-      id
-      email
-    }
-  }
-}
-*/
 

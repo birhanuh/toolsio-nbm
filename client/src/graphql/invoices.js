@@ -1,27 +1,30 @@
 import gql from 'graphql-tag'
 
 export const GET_INVOICES_QUERY = gql`
-  query {
-    getInvoices {
-      id
-      deadline
-      referenceNumber
-      status
-      tax
-      total
-      project {
+  query getInvoices($offset: Int!, $limit: Int!, $order: String!) {
+    getInvoices(offset: $offset, limit: $limit, order: $order) {
+      count
+      invoices {
         id
-        name
+        deadline
+        referenceNumber
         status
-      }
-      sale {
-        id
-        name
-        status
-      }
-      customer {
-        id
-        name
+        tax
+        total
+        project {
+          id
+          name
+          status
+        }
+        sale {
+          id
+          name
+          status
+        }
+        customer {
+          id
+          name
+        }
       }
     }
   }
@@ -52,8 +55,8 @@ export const GET_INVOICE_QUERY = gql`
           name
           hours
           paymentType
-          price
-          vat
+          unitPrice
+          total
         }
       }
       sale {
@@ -66,8 +69,8 @@ export const GET_INVOICE_QUERY = gql`
           name
           unit
           quantity
-          price
-          vat
+          unitPrice
+          total
         }
       }
       customer {

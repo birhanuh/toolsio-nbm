@@ -9,23 +9,24 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-         allowNull : false,
+        allowNull : false,
         type: Sequelize.STRING
       },
       hours: {
-         allowNull : false,
+        allowNull : false,
         type: Sequelize.STRING
       },
       payment_type: {
          allowNull : false,
         type: Sequelize.STRING
       },
-      price: {
-         allowNull : false,
+      unit_price: {
+        allowNull : false,
         type: Sequelize.DECIMAL
       },
-      vat: {
-        type: Sequelize.INTEGER
+     total: {
+        allowNull : false,
+        type: Sequelize.DECIMAL
       },
       project_id: {
         type: Sequelize.INTEGER,

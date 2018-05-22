@@ -28,16 +28,46 @@ export default `
     email: String!
   }
 
+  type UnreadDirectMessagesCount {
+    count: Int!
+  }
+
+  type UnreadDirectMessagesCountSender {
+    count: Int!
+    sender_id: Int!
+  }
+
+  type UnreadDirectMessagesCountResponse {
+    success: Boolean!
+    unreadDirectMessagesCountSender: [UnreadDirectMessagesCountSender!]
+    errors: [Error!]
+  }
+
+  type MarkDirectMessageAsReadResponse {
+    success: Boolean!
+    errors: [Error!]
+  }
+
   type Query {
     getDirectMessage(id: Int!): DirectMessage
     
     getDirectMessages(receiverId: Int!): [DirectMessage!]!
     
     getDirectMessageUsers: [DirectMessageUser!]!
+
+    getInboxDirectMessages: [DirectMessage!]!
+
+    getSentDirectMessages: [DirectMessage!]!
+    
+    getUnreadDirectMessagesCount: UnreadDirectMessagesCount!
+
+    getUnreadDirectMessagesCountSender: UnreadDirectMessagesCountResponse!
   }
 
   type Mutation {
-    createDirectMessage(body: String, file: Upload, receiverId: Int! ): CreateDirectMessageResponse!
+    createDirectMessage(body: String, file: Upload, receiverId: Int!): CreateDirectMessageResponse!
+
+    markDirectMessagesAsRead(senderId: Int): MarkDirectMessageAsReadResponse!
   }
 
   type Subscription {

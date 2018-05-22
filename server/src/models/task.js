@@ -22,18 +22,19 @@ export default (sequelize, DataTypes) => {
       },
       field: 'payment_type'
     },
-    price: {
+    unitPrice: {
       type: DataTypes.DECIMAL,
       allowNull : false,
       validate: {     
         isDecimal: true // checks for any numbers
-      } 
+      },
+      field: 'unit_price'
     },
-    vat: {
-      type: DataTypes.INTEGER,
+    total: {
+      type: DataTypes.DECIMAL,
       allowNull : true,
       validate: {     
-        isInt: true // checks for int
+        isDecimal: true //  checks for any numbers
       } 
     }
   }, {
@@ -70,19 +71,3 @@ export default (sequelize, DataTypes) => {
 
   return Task
 }
-
-// taskSchema.post('save', function (doc, next) {
-
-//   // Push task and increment total value to related Project object
-//   Project.findByIdAndUpdate(this._creator, { $push: { tasks: this._id}, $inc: {total: this.price} }, { new: true }, (err, project) => {
-//     if (err) {
-//       errors: {
-//         cantUpdateProject: {
-//           message: err
-//         } 
-//       }
-//     }
-//   })
-
-//   next()
-// })

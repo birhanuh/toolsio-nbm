@@ -5,8 +5,6 @@ import { Authorization } from '../../utils'
 import AccountForm from './AccountForm'
 import UserForm from './UserForm'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 class Page extends Component {
 
   render() {
@@ -27,14 +25,13 @@ class Page extends Component {
     }
     
     return (
-      <div className="ui stackable grid account">  
-
-        <Breadcrumb />
+      <div className="row column"> 
+        <div className="twelve wide column">
 
           <AccountForm subdomain={subdomain} /> 
              
           { currentUser.user && <UserForm email={currentUser.email} /> }
-
+        </div>  
       </div>  
     )
   }

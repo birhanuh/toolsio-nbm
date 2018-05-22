@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import Moment from 'moment'
-import { graphql, compose } from 'react-apollo'
+import { Comment, Message, Modal, Image, Button } from 'semantic-ui-react'
 import gql from 'graphql-tag'
+import { graphql, compose } from 'react-apollo'
+import { GET_DIRECT_MESSAGES_QUERY, MARK_DIRECT_MESSAGES_AS_READ_MUTATION, GET_USER_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/directMessages'
 
 import MessageForm from './Form/Message'
 import RenderText from '../RenderText'
 
 // Localization 
 import T from 'i18n-react'
+
+import moment from 'moment'
 
 import avatarPlaceholderSmall from '../../../images/avatar-placeholder-small.png'
 
@@ -29,23 +32,64 @@ const NEW_DIRECT_MESSAGE_SUBSCRIPTION = gql`
   }
 `
 
-const Message = ({ message: {uploadPath, body, mimetype} }) => {
+const ShowInModal = ({ trigger, src, mimetype }) => {
+  let content
+  
+  if (mimetype.startsWith('image/')) {
+    content = (<Modal.Content scrolling image>
+        <Image wrapped src={src} />
+      </Modal.Content>)
+  } else if (mimetype.startsWith('audio/')) {
+      content = (<Modal.Content>
+          <Modal.Description>
+            <audio controls>
+              <source src={src} />
+            </audio></Modal.Description>
+        </Modal.Content>)
+    } else if (mimetype.startsWith('video/')) {
+      content = (<Modal.Content>
+          <Modal.Description>
+            <video controls>
+              <source src={src} />
+            </video>
+          </Modal.Description>
+        </Modal.Content>)
+    }
+
+  return (<Modal trigger={trigger} className="messages">
+    {content}
+  </Modal>)
+}
+
+const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
   
   if (uploadPath) {
     if (mimetype.startsWith('image/')) {
-      return (<div className="ui small message">
-        <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
+      return (<div className="ui small message img">
+        <ShowInModal trigger={<img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />} src={uploadPath} mimetype={mimetype} />
       </div>)
-    } else if (mimetype.startsWith('text/')) {
-      return <RenderText uploadPath={uploadPath} />
     } else if (mimetype.startsWith('audio/')) {
-      return (<div className="ui small message"><audio controls>
+      return (<ShowInModal 
+        trigger={<div className="ui small message audio"><audio controls>
           <source src={uploadPath} type={mimetype} />
-        </audio></div>)
+        </audio></div>} 
+        src={uploadPath} 
+        mimetype={mimetype} />)
     } else if (mimetype.startsWith('video/')) {
-      return (<div className="ui small message"><video controls>
+      return (<ShowInModal 
+        trigger={<div className="ui small message video"><video controls>
           <source src={uploadPath} type={mimetype} />
-        </video></div>)
+        </video></div>} 
+        src={uploadPath} 
+        mimetype={mimetype} />)
+    } else if (mimetype) { // For all rest file types (E.g. text, pdf, doc...()
+      return (<div className="ui small message pre">
+          <RenderText uploadPath={uploadPath} />
+          <div className="buttons">
+            <Button basic size="small" icon='download' />
+            <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
+          </div>
+        </div>)
     }
   }
   return (body)            
@@ -55,6 +99,36 @@ class Messages extends Component {
 
   componentDidMount() {
     this.unsubscribe = this.subscribe(this.props.receiverId)
+
+    // Mark messages as unread for this reciever
+    this.props.markDirectMessagesAsReadMutation({ 
+        variables: { senderId: parseInt(this.props.receiverId) },
+        update: (store) => {
+          const data = store.readQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY })
+          
+          const updatedUnreadDirectMessagesCountSender = data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender.map(item => {
+            if (item.sender_id === parseInt(this.props.receiverId)) {
+              return {...item, count: 0}
+            }
+            return item
+          })
+      
+          data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender = updatedUnreadDirectMessagesCountSender
+
+          // Write our data back to the cache.
+          store.writeQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY, data })
+        }
+      })
+      .then(res => { 
+        const { success, errors } = res.data.markDirectMessagesAsRead
+
+        if (success) {
+          console.log('success: ', success)
+        } else {
+          console.log('errors: ', errors)
+        }
+      })
+      .catch(err => console.log('err: ', err))
   }
 
   componentWillReceiveProps({ receiverId }) {    
@@ -64,6 +138,36 @@ class Messages extends Component {
       }
       this.unsubscribe = this.subscribe(receiverId)
     }
+
+    // Mark messages as unread for this reciever
+    this.props.markDirectMessagesAsReadMutation({ 
+        variables: { senderId: parseInt(receiverId) },
+        update: (store) => {
+          const data = store.readQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY })
+          
+          const updatedUnreadDirectMessagesCountSender = data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender.map(item => {
+            if (item.sender_id === parseInt(receiverId)) {
+              return {...item, count: 0}
+            }
+            return item
+          })
+        
+          data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender = updatedUnreadDirectMessagesCountSender
+         
+          // Write our data back to the cache.
+          store.writeQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY, data })
+        }
+      })
+      .then(res => { 
+        const { success, errors } = res.data.markDirectMessagesAsRead
+
+        if (success) {
+          console.log('success: ', success)
+        } else {
+          console.log('errors: ', errors)
+        }
+      })
+      .catch(err => console.log('err: ', err))
   }﻿
 
   componentWillUnmount() {   
@@ -93,86 +197,50 @@ class Messages extends Component {
     const { getUserQuery: { getUser }, getDirectMessagesQuery: { getDirectMessages } } = this.props
 
     const emptyMessage = (
-      <div className="ui info message">
-        <h3>{T.translate(`conversations.messages.empty_message_header`)}</h3>
+      <Message info>
+        <Message.Header><h3>{T.translate(`conversations.messages.empty_message_header`)}</h3></Message.Header>
         <p>{T.translate(`conversations.messages.empty_direct_message_message`)}</p>
-      </div>
+      </Message>
     )
 
     const messagesList = getDirectMessages && getDirectMessages.map(message => 
-      <div key={message.id} className="comment">
-        <a className="avatar">
-          {message.user.avatarUrl ? <img src={message.user.avatarUrl} alt="avatar-url-small" /> : <img src={avatarPlaceholderSmall}
-          alt="avatar-placeholder-small" />}
-        </a>
-        <div className="content">
-          <a className="author">{message.user.email}</a>
-          <div className="metadata">
-            <span className="date">{Moment(message.createdAt).format('DD/MM/YYYY')}</span>
-          </div>
-          <div className="text">
+      <Comment key={message.id}>
+        <Comment.Avatar src={message.user.avatarUrl ? message.user.avatarUrl : avatarPlaceholderSmall}
+          alt="avatar" />
+        <Comment.Content>
+          <Comment.Author as="a">{message.user.email}</Comment.Author>
+          <Comment.Metadata>
+            <div>{moment(message.createdAt).format('DD/MM/YYYY')}</div>
+          </Comment.Metadata>
+          <Comment.Text>
            
-           <Message message={message} />
-
-          </div>
-        </div>
-      </div>
+           <MessageTypes message={message} />
+          </Comment.Text>
+        </Comment.Content>
+      </Comment>
     )
 
     return (
       <div className="messages">
-
-        <div className="ui clearing vertical segment border-bottom-none">
-          <div className="ui left floated header">
-            <h3 className="header capitalize-text">{getUser && getUser.firstName}</h3>
-          </div>        
-        </div>   
-
-        <div className="ui divider mt-0"></div>
-
-        <div className="ui comments">
-
+        <div className="ui clearing vertical segment">
+          <h3 className="ui dividing header capitalize">{getUser && getUser.firstName}</h3>
+        </div>
+          
+        <Comment.Group>
           { getDirectMessages && getDirectMessages.length === 0 ? emptyMessage : messagesList }
-
-        </div>   
+        </Comment.Group>   
         
         <MessageForm receiverId={this.props.receiverId} />
-
       </div>
     ) 
   }
 }
 
-const getUserQuery = gql`
-  query getUser($id: Int!) {
-    getUser(id: $id) {
-      id
-      firstName
-      email
-    }
-  }
-`
-
-const getDirectMessagesQuery = gql`
-  query getDirectMessages($receiverId: Int!) {
-    getDirectMessages(receiverId: $receiverId) {
-      id
-      body
-      uploadPath
-      mimetype
-      isRead
-      createdAt
-      user {
-        id
-        email
-        avatarUrl
-      }
-    }
-  }
-`
-
-const MutationsAndQuery =  compose(
-  graphql(getUserQuery, {
+const QueriesMutation =  compose(
+  graphql(MARK_DIRECT_MESSAGES_AS_READ_MUTATION, {
+    name: 'markDirectMessagesAsReadMutation'
+  }),
+  graphql(GET_USER_QUERY, {
     "name": "getUserQuery",
     options: (props) => ({
       variables: {
@@ -180,7 +248,7 @@ const MutationsAndQuery =  compose(
       }
     })
   }),
-  graphql(getDirectMessagesQuery, {
+  graphql(GET_DIRECT_MESSAGES_QUERY, {
     "name": "getDirectMessagesQuery",
     options: (props) => ({
       variables: {
@@ -191,6 +259,6 @@ const MutationsAndQuery =  compose(
   })
 )(Messages)
 
-export default MutationsAndQuery
+export default QueriesMutation
 
 

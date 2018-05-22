@@ -1,13 +1,16 @@
 import gql from 'graphql-tag'
 
 export const GET_CUSTOMERS_QUERY = gql`
-  {
-    getCustomers {
-      id
-      name
-      vatNumber
-      phoneNumber
-      email
+  query getCustomers($offset: Int!, $limit: Int!, $order: String!) {
+    getCustomers(offset: $offset, limit: $limit, order: $order) {
+      count
+      customers {
+        id
+        name
+        vatNumber
+        phoneNumber
+        email
+      }
     }
   }
 `

@@ -49,10 +49,10 @@ class App extends Component {
   componentDidMount = () => {
     $('#app .ui.sidebar')
       .sidebar({
+        transition: 'overlay',
         context: $('#app')
       })
       .sidebar('attach events', '#app .menu .item.anchor')
-    ;
   }
 
   render() {
@@ -71,43 +71,41 @@ class App extends Component {
 
         { !authPages && <HeaderNav /> }
 
-        <section className={classnames({'ui stackable grid basic segment internal-page': internalPages, 'ui stackable centered grid auth-pages': authPages})}>          
-                   
-          { !authPages && <FlashMessage /> }
+        <section className={classnames({'ui stackable grid basic segment internal-page': internalPages, 'ui stackable grid auth-pages': authPages})}>                    
+
+          { !authPages && <FlashMessage /> }          
           
-          <div className={classnames({'sixteen wide column': internalPages, 'six wide column': authPages})}>           
-            <Switch>
-              <Route exact path="/" component={Landing} />
-              <Route exact path="/signup" component={Signup} />
-              <Route exact path="/signup/invitation" component={Invitation} />
-              <Route path="/subdomain" component={Subdomain} />
-              <SubdomainRoute exact path="/login" component={Login} />
-              <SubdomainRoute exact path="/login/confirmation/:token?" component={Login} />
-              <PrivateRoute path="/dashboard" component={Dashboard} />
-              <PrivateRoute exact path="/settings" component={Account} />
-              <PrivateRoute exact path="/projects" component={ProjectsPage} />
-              <PrivateRoute exact path="/projects/edit/:id?" component={ProjectsForm} /> 
-              <PrivateRoute exact path="/projects/show/:id?" component={ProjectsShow} />
-              <PrivateRoute exact path="/projects/new" component={ProjectsForm} />
-              <PrivateRoute exact path="/projects/:start?/:length?" component={ProjectsPage} />
-              <PrivateRoute exact path="/sales" component={SalesPage} />
-              <PrivateRoute exact path="/sales/edit/:id?" component={SalesForm} /> 
-              <PrivateRoute exact path="/sales/new" component={SalesForm} />
-              <PrivateRoute exact path="/sales/show/:id?" component={SalesShow} />
-              <PrivateRoute exact path="/customers" component={CustomersPage} />
-              <PrivateRoute exact path="/customers/edit/:id?" component={CustomersForm} /> 
-              <PrivateRoute exact path="/customers/new" component={CustomersForm} />
-              <PrivateRoute exact path="/customers/show/:id?" component={CustomersShow} /> 
-              <PrivateRoute exact path="/invoices" component={InvoicesPage} />
-              <PrivateRoute exact path="/invoices/edit/:id?" component={InvoicesForm} /> 
-              <PrivateRoute exact path="/invoices/new" component={InvoicesForm} />
-              <PrivateRoute exact path="/invoices/show/:id?" component={InvoicesShow} /> 
-              <PrivateRoute exact path="/conversations" component={ConversationsPage} />
-              <PrivateRoute exact path="/conversations/channel/:channelId?" component={ConversationsPage} />
-              <PrivateRoute exact path="/conversations/receiver/:receiverId?" component={ConversationsPage} />
-              <PrivateRoute exact path="/users" component={UsersPage} /> 
-            </Switch>
-          </div>
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/signup/invitation" component={Invitation} />
+            <Route path="/subdomain" component={Subdomain} />
+            <SubdomainRoute exact path="/login" component={Login} />
+            <SubdomainRoute exact path="/login/confirmation/:token" component={Login} />
+            <PrivateRoute path="/dashboard" component={Dashboard} />
+            <PrivateRoute exact path="/settings" component={Account} />
+            <PrivateRoute exact path="/projects" component={ProjectsPage} />
+            <PrivateRoute exact path="/projects/edit/:id" component={ProjectsForm} /> 
+            <PrivateRoute exact path="/projects/show/:id" component={ProjectsShow} />
+            <PrivateRoute exact path="/projects/new" component={ProjectsForm} />
+            <PrivateRoute exact path="/projects" component={ProjectsPage} />
+            <PrivateRoute exact path="/sales" component={SalesPage} />
+            <PrivateRoute exact path="/sales/edit/:id" component={SalesForm} /> 
+            <PrivateRoute exact path="/sales/new" component={SalesForm} />
+            <PrivateRoute exact path="/sales/show/:id?" component={SalesShow} />
+            <PrivateRoute exact path="/customers/new" component={CustomersForm} />
+            <PrivateRoute exact path="/customers/edit/:id" component={CustomersForm} /> 
+            <PrivateRoute exact path="/customers/show/:id" component={CustomersShow} /> 
+            <PrivateRoute exact path="/customers/:offset?/:limit?" component={CustomersPage} />
+            <PrivateRoute exact path="/invoices/edit/:id" component={InvoicesForm} /> 
+            <PrivateRoute exact path="/invoices/new" component={InvoicesForm} />
+            <PrivateRoute exact path="/invoices/show/:id" component={InvoicesShow} /> 
+            <PrivateRoute exact path="/invoices/:offset?/:limit?" component={InvoicesPage} />
+            <PrivateRoute exact path="/conversations" component={ConversationsPage} />
+            <PrivateRoute exact path="/conversations/channel/:channelId" component={ConversationsPage} />
+            <PrivateRoute exact path="/conversations/receiver/:receiverId" component={ConversationsPage} />
+            <PrivateRoute exact path="/users" component={UsersPage} /> 
+          </Switch>
         </section>
         
         { internalPages &&

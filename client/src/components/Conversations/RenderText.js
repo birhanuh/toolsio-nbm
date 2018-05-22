@@ -16,9 +16,9 @@ export default class RenderText extends Component {
     const { text } = this. state
 
     return (
-      <div className="ui small message">
+      <pre>
         {text}
-      </div>
+      </pre>
       )
   }
 }

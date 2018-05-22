@@ -1,37 +1,25 @@
 // Sizes
 h1, h1.ui.header {
-  line-height: 1.25;
-  letter-spacing: -0.2px;
   font-weight: 600;
 }
 
 h2, h2.ui.header {
-  line-height: 1.15;
-  letter-spacing: -0.2px;
   font-weight: 600;
 }
 
 h3, h3.ui.header {
-  line-height: 1.05;
-  letter-spacing: -0.2px;
   font-weight: 600;
 }
 
 h4, h4.ui.header {
-  line-height: 1.25;
-  letter-spacing: -0.2px;
   font-weight: 600;
 }
 
 h5, h5.ui.header {
-  line-height: 1.15;
-  letter-spacing: -0.2px;
   font-weight: 600;
 }
 
 h6, h6.ui.header {
-  line-height: 1.05;
-  letter-spacing: -0.2px;
   font-weight: 600;
 }
 
@@ -118,3 +106,4 @@ a.text-danger:hover, a.text-danger:focus {
 .ui.red.header {
   color: $red !important;
 }
+

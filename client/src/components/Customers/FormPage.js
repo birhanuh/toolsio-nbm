@@ -21,8 +21,6 @@ import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 import $ from 'jquery'
 $.fn.checkbox = require('semantic-ui-checkbox')
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 class FormPage extends Component {
   constructor(props) {
     super(props)
@@ -186,10 +184,16 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY })
+            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY,
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10
+              } 
+           })
             // Add our comment from the mutation to the end.
             
-            let updatedCustomers = data.getCustomers.map(item => {
+            let updatedCustomers = data.getCustomers.customers.map(item => {
               if (item.id === customer.id) {
                 return {...customer, __typename: 'Customer'}
               }
@@ -239,9 +243,15 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY })
+            const data = store.readQuery({ query: GET_CUSTOMERS_QUERY,
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10
+              }  
+            })
             // Add our comment from the mutation to the end.
-            data.getCustomers.push(customer)
+            data.getCustomers.customers.push(customer)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
           }})
@@ -294,9 +304,6 @@ class FormPage extends Component {
 
     return (  
       <div className="row column">
-
-        <Breadcrumb />
-
         <div className="ui text container segment">  
 
           <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
@@ -307,8 +314,8 @@ class FormPage extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.name})}>{T.translate("customers.form.name")}</label>
+            <Form.Field inline error={!!errors.name}>
+              <label>{T.translate("customers.form.name")}</label>
               <Input
                 placeholder={T.translate("customers.form.name")}
                 name="name" 
@@ -319,8 +326,8 @@ class FormPage extends Component {
               <span className="red">{errors.name}</span>
             </Form.Field>
 
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.vatNumber})}>{T.translate("customers.form.vat_number")}</label>
+            <Form.Field inline error={!!errors.vatNumber}>
+              <label>{T.translate("customers.form.vat_number")}</label>
               <Input
                 placeholder={T.translate("customers.form.vat_number")}
                 name="vatNumber" 
@@ -332,8 +339,8 @@ class FormPage extends Component {
             </Form.Field>
              <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
-              <Form.Field inline>
-                <label className={classnames({red: errors.contact && !!errors.contact.phoneNumber})}>{T.translate("customers.form.contact.phone_number")}</label>
+              <Form.Field inline error={errors.contact}>
+                <label>{T.translate("customers.form.contact.phone_number")}</label>
                 <Input
                   placeholder={T.translate("customers.form.contact.phone_number")}
                   name="phoneNumber" 
@@ -341,10 +348,9 @@ class FormPage extends Component {
                   onChange={(e, {value}) => this.handleChange('phoneNumber', value)} 
                   error={errors.contact && errors.contact.phoneNumber}
                 />
-                <span className="red">{errors.name}</span>
               </Form.Field>
-              <Form.Field inline>
-                <label className={classnames({red: errors.contact && !!errors.contact.email})}>{T.translate("customers.form.contact.email")}</label>
+              <Form.Field inline error={errors.contact}>
+                <label>{T.translate("customers.form.contact.email")}</label>
                 <Input
                   placeholder={T.translate("customers.form.contact.email")}
                   name="email" 
@@ -352,11 +358,13 @@ class FormPage extends Component {
                   onChange={(e, {value}) => this.handleChange('email', value)} 
                   error={errors.contact && errors.contact.email}
                 />
-                <span className="red">{errors.email}</span>
               </Form.Field>
+              <p>
+                <span className="red">{errors.contact}</span>
+              </p>
             </fieldset>
-             <Form.Field inline>
-              <label className={classnames({red: !!errors.isContactIncludedInInvoice})}>{T.translate("customers.form.include_contact_in_invoice")}</label>
+             <Form.Field inline error={!!errors.isContactIncludedInInvoice}>
+              <label>{T.translate("customers.form.include_contact_in_invoice")}</label>
               <Checkbox
                 toggle
                 name="isContactIncludedInInvoice" 
@@ -369,8 +377,8 @@ class FormPage extends Component {
 
             <fieldset className="custom-fieldset">
               <legend className="custom-legend">{T.translate("customers.show.address.header")}</legend>
-              <Form.Field inline>
-                <label className={classnames({red: errors.address && !!errors.address.street})}>{T.translate("customers.form.address.street")}</label>
+              <Form.Field inline error={errors.address && !!errors.address.street}>
+                <label>{T.translate("customers.form.address.street")}</label>
                 <Input
                   placeholder={T.translate("customers.form.address.street")}
                   name="street" 
@@ -380,8 +388,8 @@ class FormPage extends Component {
                 />
                 <span className="red">{errors.name}</span>
               </Form.Field>
-              <Form.Field inline>
-                <label className={classnames({red: errors.address && !!errors.address.postalCode})}>{T.translate("customers.form.address.postal_code")}</label>
+              <Form.Field inline error={errors.address && !!errors.address.postalCode}>
+                <label>{T.translate("customers.form.address.postal_code")}</label>
                 <Input
                   placeholder={T.translate("customers.form.address.postal_code")}
                   name="postalCode" 
@@ -400,7 +408,7 @@ class FormPage extends Component {
                   error={errors.address && errors.address.country} />
                 
                 <span className={classnames({red: errors.address && errors.address.country})}>{errors.address && errors.address.country}</span>  
-              </div>  
+              </div> 
               <div className={classnames("inline field", {error: errors.address && errors.address.region})}>              
                 <label>{T.translate("customers.show.address.region")}</label> 
                 <RegionDropdown
@@ -445,12 +453,21 @@ const MutationsQueries =  compose(
   graphql(UPDATE_CUSTOMER_MUTATION, {
     name: 'updateCustomerMutation'
   }),
-  graphql(GET_CUSTOMERS_QUERY),
+  graphql(GET_CUSTOMERS_QUERY, {
+    name: 'getCustomersQuery', 
+    options: () => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
+  }),
   graphql(GET_CUSTOMER_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0
-      },
+      }
     })
   })
 )(FormPage)

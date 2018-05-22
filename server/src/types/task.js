@@ -5,8 +5,8 @@ export default `
     name: String!
     hours: String!
     paymentType: String!
-    price: Float!
-    vat: Int
+    unitPrice: Float!
+    total: Float!
     projectId: Int!
   }
 
@@ -28,11 +28,11 @@ export default `
   }
 
   type Mutation {
-    createTask(name: String!, hours: String!, paymentType: String!, price: Float!, 
-      vat: Int!, projectId: Int!): CreateUpdateTaskResponse!
+    createTask(name: String!, hours: String!, paymentType: String!, unitPrice: Float!, 
+      total: Float!, projectId: Int!): CreateUpdateTaskResponse!
 
-    updateTask(id: Int!, name: String!, hours: String!, paymentType: String!, price: Float!, 
-      vat: Int!, projectId: Int!): CreateUpdateTaskResponse!
+    updateTask(id: Int!, name: String!, hours: String!, paymentType: String!, unitPrice: Float!, 
+      total: Float!, projectId: Int!): CreateUpdateTaskResponse!
 
     deleteTask(id: Int!): DeleteTaskResponse!
   }

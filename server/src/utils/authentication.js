@@ -45,30 +45,32 @@ export const refreshAuthTokens = async (authToken, refreshAuthToken, models, SEC
     const { user: { id } } = jwt.decode(refreshAuthToken)
     userId = id
   } catch(err) {
-    return
+    return {}
   }
 
   if (!userId) {
-    return
+    return {}
   }
 
   const user = await models.User.findOne({ where: { id: userId }, raw: true })
 
   if (!user) {
     // user not found
-    return 
+    return {}
   }
 
+  const refreshSecret = user.password + SECRET2
+  
   try {
-    jwt.verify(refreshAuthToken, user.password + SECRET2)
+    jwt.verify(refreshAuthToken, refreshSecret)
   } catch (err) {
-    return
-  }
-
-  const [newAuthToken, newRefreshAuthToken] = await createAuthTokens(user, SECRET, user.password + SECRET2)
+    return {}
+  }  
+  
+  const [newAuthToken, newRefreshAuthToken] = await createAuthTokens(user, SECRET, refreshSecret)
+  
   return {    
-    authToken, 
-    newAuthToken,
+    authToken: newAuthToken,
     refreshAuthToken: newRefreshAuthToken,
     user
   } 

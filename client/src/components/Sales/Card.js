@@ -45,9 +45,7 @@ export default function Card({sale}) {
             </tr>
           </tbody>
         </table>
-
-      </div>  
-   
+      </div>     
     </div>
   )
 }

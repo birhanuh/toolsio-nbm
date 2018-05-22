@@ -23,7 +23,7 @@ import moment from 'moment'
 // Modal
 $.fn.dimmer = require('semantic-ui-dimmer')
 
-// Images
+// Avatar placeholder
 import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
 
 class UserForm extends Component {
@@ -190,112 +190,106 @@ class UserForm extends Component {
   }
 
   render() {
-
     const { firstName, lastName, email, avatarUrl, password, confirmPassword, errors, isLoadingAvatar, isLoadingForm } = this.state
   
     return (            
-
-      <div className="twelve wide column"> 
-        <div className="ui items segment user">
-          <div className="ui item">    
-            <div className="image">
-              <div className={classnames("ui card circular image form", { loading: isLoadingAvatar })}>
-                <div className="blurring dimmable image">
-                  <div className="ui dimmer">
-                    <div className="content">
-                      <div className="center">
-                        <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
-                          {T.translate("settings.user.select_avatar")}
-                        </Dropzone>
-                      </div>
+      <div className="ui items segment user">
+        <div className="ui item">    
+          <div className="image">
+            <div className={classnames("ui card circular image form", { loading: isLoadingAvatar })}>
+              <div className="blurring dimmable image">
+                <div className="ui dimmer">
+                  <div className="content">
+                    <div className="center">
+                      <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
+                        {T.translate("settings.user.select_avatar")}
+                      </Dropzone>
                     </div>
                   </div>
-                  <img src={avatarPlaceholderSmall} alt="avatar-placeholder-small" />
                 </div>
+                <img src={avatarUrl ? avatarUrl : avatarPlaceholderSmall} alt="avatar" />
               </div>
-
-              <button disabled={isLoadingAvatar} onClick={this.handleSubmitImage.bind(this)} className="fluid ui primary button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.upload")}</button>
-             
             </div>
-            <div className="content">                
-              <h1 className="ui header mt-2 mb-3">{T.translate("settings.user.header")}</h1> 
 
-              <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)}>
-             
-                { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
-                
-                <Form.Field>
-                  <label>{T.translate("settings.user.first_name")}</label>
-                  <Input
-                    placeholder={T.translate("settings.user.first_name")}
-                    name="firstName" 
-                    value={firstName} 
-                    onChange={(e, {value}) => this.handleChange('firstName', value)} 
-                    error={!!errors.firstName}
-                  />
-                  <span className="red">{errors.firstName}</span>
-                </Form.Field>
+            <button disabled={isLoadingAvatar} onClick={this.handleSubmitImage.bind(this)} className="fluid ui primary button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.upload")}</button>
+           
+          </div>
+          <div className="content">                
+            <h1 className="ui header mt-2 mb-3">{T.translate("settings.user.header")}</h1> 
 
-                <Form.Field>
-                  <label>{T.translate("settings.user.last_name")}</label>
-                  <Input
-                    placeholder={T.translate("settings.user.last_name")}
-                    name="lasttName" 
-                    value={lastName} 
-                    onChange={(e, {value}) => this.handleChange('lasttName', value)} 
-                    error={!!errors.lasttName}
-                  />
-                  <span className="red">{errors.lasttName}</span>
-                </Form.Field>
+            <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)}>
+           
+              { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
+              
+              <Form.Field>
+                <label>{T.translate("settings.user.first_name")}</label>
+                <Input
+                  placeholder={T.translate("settings.user.first_name")}
+                  name="firstName" 
+                  value={firstName} 
+                  onChange={(e, {value}) => this.handleChange('firstName', value)} 
+                />
+                <span className="red">{errors.firstName}</span>
+              </Form.Field>
 
-                <Form.Field>
-                  <label className={classnames({red: !!errors.email})}>{T.translate("settings.user.email")}</label>
-                  <Input
-                    placeholder={T.translate("settings.user.email")}
-                    name="email" 
-                    value={email} 
-                    onChange={(e, {value}) => this.handleChange('email', value)} 
-                    error={!!errors.email}
-                  />
-                  <span className="red">{errors.email}</span>
-                </Form.Field>
+              <Form.Field>
+                <label>{T.translate("settings.user.last_name")}</label>
+                <Input
+                  placeholder={T.translate("settings.user.last_name")}
+                  name="lasttName" 
+                  value={lastName} 
+                  onChange={(e, {value}) => this.handleChange('lasttName', value)} 
+                />
+                <span className="red">{errors.lasttName}</span>
+              </Form.Field>
 
-                <Form.Field>
-                  <label className={classnames({red: !!errors.password})}>{T.translate("settings.user.password")}</label>
-                  <Input
-                    placeholder={T.translate("settings.user.password")}
-                    name="password" 
-                    value={password} 
-                    onChange={(e, {value}) => this.handleChange('password', value)} 
-                    error={!!errors.password}
-                  />
-                  <span className="red">{errors.password}</span>
-                </Form.Field>
+              <Form.Field error={!!errors.email}>
+                <label>{T.translate("settings.user.email")}</label>
+                <Input
+                  placeholder={T.translate("settings.user.email")}
+                  name="email" 
+                  value={email} 
+                  onChange={(e, {value}) => this.handleChange('email', value)} 
+                  error={!!errors.email}
+                />
+                <span className="red">{errors.email}</span>
+              </Form.Field>
 
-                <Form.Field>
-                  <label className={classnames({red: !!errors.confirmPassword})}>{T.translate("settings.user.confirm_password")}</label>
-                  <Input
-                    placeholder={T.translate("settings.user.confirm_password")}
-                    name="confirmPassword" 
-                    value={confirmPassword} 
-                    onChange={(e, {value}) => this.handleChange('confirmPassword', value)} 
-                    error={!!errors.confirmPassword}
-                  />
-                  <span className="red">{errors.confirmPassword}</span>
-                </Form.Field>
+              <Form.Field error={!!errors.password}>
+                <label>{T.translate("settings.user.password")}</label>
+                <Input
+                  placeholder={T.translate("settings.user.password")}
+                  name="password" 
+                  value={password} 
+                  onChange={(e, {value}) => this.handleChange('password', value)} 
+                  error={!!errors.password}
+                />
+                <span className="red">{errors.password}</span>
+              </Form.Field>
 
-                <div className="field">  
-                  <Link className="ui primary outline button" to="/dashboard">
-                    <i className="minus circle icon"></i>
-                    {T.translate("settings.user.cancel")}
-                  </Link>  
-                  <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.edit")}</button>
-                </div>  
-              </Form>      
+              <Form.Field error={!!errors.confirmPassword}>
+                <label>{T.translate("settings.user.confirm_password")}</label>
+                <Input
+                  placeholder={T.translate("settings.user.confirm_password")}
+                  name="confirmPassword" 
+                  value={confirmPassword} 
+                  onChange={(e, {value}) => this.handleChange('confirmPassword', value)} 
+                  error={!!errors.confirmPassword}
+                />
+                <span className="red">{errors.confirmPassword}</span>
+              </Form.Field>
 
-            </div>  
-          </div> 
-        </div>
+              <div className="field">  
+                <Link className="ui primary outline button" to="/dashboard">
+                  <i className="minus circle icon"></i>
+                  {T.translate("settings.user.cancel")}
+                </Link>  
+                <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.edit")}</button>
+              </div>  
+            </Form>      
+
+          </div>  
+        </div> 
       </div>  
     )
   }

@@ -6,6 +6,7 @@ export default `
     deadline: Date!
     status:  String!
     description:  String!
+    tax: Float!
     items: [Item!]
     customerId: Int!
     customer: Customer!
@@ -57,7 +58,7 @@ export default `
   type Query {
     getSale(id: Int!): Sale
     
-    getSales: [GetSalesResponse!]!
+    getSales(offset: Int!, limit: Int!, order: String!): [GetSalesResponse!]!
 
     getSalesWithoutInvoice: [GetSalesWithoutInvoiceResponse!]!
 

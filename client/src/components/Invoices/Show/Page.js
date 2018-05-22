@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
+import { GET_ACCOUNT_QUERY } from '../../../graphql/accounts'
 import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, DELETE_INVOICE_MUTATION } from '../../../graphql/invoices'
 
-import Breadcrumb from '../../Layouts/Breadcrumb'
+import { Authorization } from '../../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -102,7 +103,13 @@ class Page extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: GET_INVOICES_QUERY })
+        const data = proxy.readQuery({ query: GET_INVOICES_QUERY,
+          variables: {
+            order: 'DESC',
+            offset: 0,
+            limit: 10
+          } 
+        })
         // Add our comment from the mutation to the end.
         
         let updatedData = data.getInvoices.filter(invoice => invoice.id !== id) 
@@ -136,109 +143,149 @@ class Page extends Component {
         })  
 
         this.setState({ errors: err, isLoading: false })
-      })
-    
+      })    
   }
 
   render() {
     const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, user, createdAt } = this.state
-  
-    const customerContact = (      
-      <div>
-        <dt>{T.translate("invoices.show.customer.contact.phone_number")}</dt>
-        <dd>{customer ? customer.phoneNumber : '-'}</dd>
-        <dt>{T.translate("invoices.show.customer.contact.email")}</dt>
-        <dd>{customer ? customer.email : '-'}</dd>
-      </div>
-    )
+    
+    const { getAccountQuery: { getAccount } } = this.props
 
     return (
-      <div className="ui stackable grid invoice show">
+      <div className="column row">
+        <div className="twelve wide column invoice show">
+          <div className="ui segment">
+            <div className="ui vertically divided grid">
+              <div className="row pb-0">
+                <div className="eight wide column">
+                  <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
+                    
+                    {project && <Link to={`/projects/show/${project.id}`} className={classnames("sub header d-inline-block pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({project.name})</Link>}
 
-        <Breadcrumb />
+                    {sale && <Link to={`/sales/show/${sale.id}`} className={classnames("sub header d-inline-block pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({sale.name})</Link>}
 
-        <div className="twelve wide column">
-          <div className="ui segment">    
-            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
-              
-              {project && <Link to={`/projects/show/${project.id}`} className={classnames("sub header d-inline-block pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({project.name})</Link>}
+                  </h1> 
+                </div>
+                <div className="four wide column">
+                  <div className="ui sizer vertical segment">
+                    <p>
+                      {T.translate("invoices.show.account.user.first_name")}
+                      <strong>{user && user.firstName}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.account.user.email")}
+                      <strong>{user && user.email}</strong>
+                    </p>
+                  </div> 
+                </div>
 
-              {sale && <Link to={`/sales/show/${sale.id}`} className={classnames("sub header d-inline-block pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({sale.name})</Link>}
+                <div className="four wide column">
+                  <div className="ui sizer vertical segment">
+                    <p>
+                      {T.translate("invoices.show.account.address.street")}
+                       <strong>{getAccount && getAccount.street}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.account.address.postal_code")}
+                      <strong>{getAccount && getAccount.postalCode}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.account.address.region")}
+                      <strong>{getAccount && getAccount.region}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.account.address.country")}
+                      <strong>{getAccount && getAccount.country}</strong>
+                    </p>
+                  </div> 
+                </div>
+              </div>
 
-            </h1> 
-            <div className={classnames("ui uppercase huge right corner label", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
-              <p>{status}</p>
+              <div className="row pt-0">
+                <div className="eight wide column">
+                  <div className="ui sizer vertical segment">
+                    <p>
+                      {T.translate("invoices.show.customer.name")}
+                      <strong>{customer && <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link>}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.customer.vat_number")}
+                      <strong>{customer && customer.vatNumber}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.customer.address.street")}
+                      <strong>{customer && customer.street}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.customer.address.postal_code")}
+                      <strong>{customer && customer.postalCode}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.customer.address.region")}
+                      <strong>{customer && customer.region}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.customer.address.country")}
+                      <strong>{customer && customer.country}</strong>
+                    </p>
+                  </div> 
+                </div>
+
+                <div className="eight wide column">
+                  <div className="ui sizer vertical segment">
+                    <p>
+                      {T.translate("invoices.show.date_of_an_invoice")}
+                      <strong>{moment(createdAt).format("YYYY-MM-DD")}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.deadline")}
+                      <strong>{deadline ? moment(deadline).format("YYYY-MM-DD") : '-'}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.payment_term")}
+                      <strong>{paymentTerm ? paymentTerm : '-'}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.interest_in_arrears")}
+                      <strong>{interestInArrears ? interestInArrears : ''}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.reference_number")}
+                      <strong>{referenceNumber}</strong>
+                    </p>
+                    <p>
+                      {T.translate("invoices.show.description")}
+                      <strong>{description ? description : '-'}</strong>
+                    </p>
+                  </div> 
+                </div>
+              </div>
             </div>
 
-            <div className="ui clearing vertical segment border-bottom-none">
-              <div className="ui left floated vertical segment p-0 m-0">
-                <dl className="dl-horizontal">      
-                  <dt>{T.translate("invoices.show.date_of_an_invoice")}</dt>
-                  <dd>{moment(createdAt).format("YYYY-MM-DD")}</dd>
-                  <dt>{T.translate("invoices.show.deadline")}</dt>
-                  <dd>{deadline ? moment(deadline).format("YYYY-MM-DD") : '-'}</dd>
-                  <dt>{T.translate("invoices.show.payment_term")}</dt>
-                  <dd>{paymentTerm ? paymentTerm : '-'}</dd>
-                  <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
-                  <dd>{interestInArrears ? interestInArrears : ''}</dd>
-                  <dt>{T.translate("invoices.show.reference_number")}</dt>
-                  <dd>{referenceNumber}</dd>
-                  <dt>{T.translate("invoices.show.description")}</dt>
-                  <dd>{description ? description : '-'}</dd>
-                </dl>  
-              </div>
-              <div className="ui right floated vertical segment p-0 m-0">
-                <dl className="dl-horizontal">
-                  <dt>{T.translate("invoices.show.customer.name")}</dt>
-                  <dd>{customer && <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link>}</dd>          
-                  <dt>{T.translate("invoices.show.customer.vat_number")}</dt>
-                  <dd>{customer && customer.vatNumber}</dd>
-                  
-                  { customer && customer.includeContactOnInvoice && customerContact }
-
-                  <dt>{T.translate("invoices.show.customer.address.street")}</dt>
-                  <dd>{customer && customer.street}</dd>
-                  <dt>{T.translate("invoices.show.customer.address.postal_code")}</dt>
-                  <dd>{customer && customer.postalCode}</dd>
-                  <dt>{T.translate("invoices.show.customer.address.region")}</dt>
-                  <dd>{customer && customer.region}</dd>
-                  <dt>{T.translate("invoices.show.customer.address.country")}</dt>
-                  <dd>{customer && customer.country}</dd>
-                </dl>  
-              </div>
+            <div className={classnames("ui uppercase huge right corner label", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}> 
+              <p>{status}</p>
             </div>
 
             { sale && <Sale sale={sale} /> }
 
             { project && <Project project={project} /> }
-            
-            <div className="ui divider"></div>
 
-            <div className="ui clearing vertical segment border-bottom-none pt-0">
-              <div className="ui right floated vertical segment p-0 m-0">
-                <dl className="dl-horizontal">                
-                <dt>{T.translate("settings.user.first_name")}</dt>
-                <dd>{user && user.firstName}</dd> 
-                <dt>{T.translate("settings.user.email")}</dt>
-                <dd>{user && user.email}</dd> 
-              </dl>  
-              </div>
+            <div className="ui vertical segment">
+              <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("invoices.show.delete")}</button>
+              <Link to={`/invoices/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
             </div>
+          </div>
 
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("invoices.show.delete")}</button>
-            <Link to={`/invoices/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
+          <div className="ui small modal invoice">
+            <div className="header">Confirmation</div>
+            <div className="content">
+              <p className="red">{T.translate("invoices.show.confirmation_msg")}</p>
+            </div>
+            <div className="actions">
+              <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("invoices.show.cancel")}</button>
+              <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("invoices.show.delete")}</button>
+            </div>
           </div>    
-        </div>
-
-        <div className="ui small modal invoice">
-          <div className="header">Confirmation</div>
-          <div className="content">
-            <p className="red">{T.translate("invoices.show.confirmation_msg")}</p>
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("invoices.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("invoices.show.delete")}</button>
-          </div>
         </div>
       </div>
     )
@@ -261,7 +308,15 @@ const MutationQuery =  compose(
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)
-      },
+      }
+    })
+  }),
+  graphql(GET_ACCOUNT_QUERY, {
+    name : 'getAccountQuery', 
+    options: () => ({
+      variables: {
+        subdomain: Authorization.getSubdomain()
+      }
     })
   })
 )(Page)

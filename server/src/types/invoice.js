@@ -18,7 +18,7 @@ export default `
     total: Float!
   }
 
-  type GetInvoicesResponse {
+  type GetInvoicesResponseRows {
     id: Int!
     deadline: Date!
     referenceNumber: String!
@@ -30,6 +30,11 @@ export default `
     project: Project
     sale: Sale
     customer: Customer! 
+  }
+
+  type GetInvoicesResponse {
+    count: Int!
+    invoices: [GetInvoicesResponseRows!]!
   }
 
   type CreateUpdateInvoiceResponse {
@@ -46,7 +51,7 @@ export default `
   type Query {
     getInvoice(id: Int!): Invoice
     
-    getInvoices: [GetInvoicesResponse!]!
+    getInvoices(offset: Int!, limit: Int!, order: String!): GetInvoicesResponse!
   }
 
   type Mutation {

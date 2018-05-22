@@ -17,12 +17,17 @@ export default `
     user: User!
   }
 
-  type GetCustomersResponse {
+  type GetCustomersResponseRows {
     id: Int!
     name: String!
     vatNumber: String!
     email: String
     phoneNumber: String
+  }
+
+  type GetCustomersResponse {
+    count: Int!
+    customers: [GetCustomersResponseRows!]!
   }
 
   type CreateUpdateCustomerResponse {
@@ -39,7 +44,7 @@ export default `
   type Query {
     getCustomer(id: Int!): Customer
     
-    getCustomers: [GetCustomersResponse!]!
+    getCustomers(offset: Int!, limit: Int!, order: String!): GetCustomersResponse!
   }
 
   type Mutation {

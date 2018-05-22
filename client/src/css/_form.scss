@@ -189,13 +189,6 @@
   margin-left: .25em;
 }
 
-// dropdown-select
-select.ui.dropdown, .ui.selection.dropdown {
-  height: auto;
-  line-height: 1.2;
-  padding: .7571429em 1em;
-}
-
 select {
   @include web-appearance(none);
   background: url('../images/up-down-arrow.png') no-repeat 95% 50% !important;

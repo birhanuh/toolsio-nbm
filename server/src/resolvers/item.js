@@ -1,4 +1,4 @@
-import { requiresAuth } from '../middlewares/authentication'
+import requiresAuth from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 
 export default {
@@ -10,10 +10,10 @@ export default {
   Mutation: {
     createItem: requiresAuth.createResolver((parent, args, { models }) => 
       models.Item.create(args)
-        .then(project => {
+        .then(item => {
             return {
               success: true,
-              project
+              item
             }
           })
           .catch(err => {

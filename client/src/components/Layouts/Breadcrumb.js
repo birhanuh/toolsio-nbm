@@ -63,8 +63,7 @@ export default function Breadcrumb(props, context) {
       )
     })
 
-  return(
-
+  return (
     <div className="ui fixed menu header-breadcrumb">          
       <div className="left menu">
         <div className="item">

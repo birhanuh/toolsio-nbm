@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
+import { Menu } from 'semantic-ui-react'
 
 import ChannelMessages from './Channel/Messages'
 import ChannelsList from './Channel/List'
@@ -7,28 +8,21 @@ import ChannelForm from './Channel/Form/Channel'
 import DirectMessages from './Direct/Messages'
 import UsersList from './Direct/List'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 class Page extends Component {
 
-  render() {
-    
+  render() {    
     const { match } = this.props    
     
     return (
-
-      <div className="ui stackable grid">
-
-        <Breadcrumb />
-
+      <div className="column row">
         <div className="four wide column">
-          <div className="ui vertical fluid menu">
+          <Menu vertical fluid>
             <ChannelsList  channelId={match.params.channelId} />
 
             <div className="ui divider"></div>
 
             <UsersList receiverId={match.params.receiverId} />
-          </div>
+          </Menu>
         </div>
 
         <div className="twelve wide stretched column">

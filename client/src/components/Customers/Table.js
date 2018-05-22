@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tr from './Tr'
+import { Pagination } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
 
-export default function Table({ customers }) {
+export default function Table({ customers, count, offset, limit }) {
   const emptyMessage = (
     <tbody>
       <tr>
@@ -39,6 +40,14 @@ export default function Table({ customers }) {
       </thead>
 
       { customers.length === 0 ? emptyMessage : customersList }
+
+      <tfoot>
+        <tr>
+          <th colSpan="6" className="pt-4 pb-4">
+            <Pagination path="customers" count={count} offset={offset} limit={limit} />
+          </th>
+        </tr>
+      </tfoot>
     </table>
   )
 }

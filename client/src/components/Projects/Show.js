@@ -11,8 +11,6 @@ import { Select, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../graphql/projects'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
 import TasksForm from './Tasks/Form'
 
 // Localization 
@@ -221,7 +219,13 @@ class Show extends Component {
           return
         }
         // Read the data from our cache for this query.
-        const data = store.readQuery({ query: GET_PROJECTS_QUERY })
+        const data = store.readQuery({ query: GET_PROJECTS_QUERY, 
+          variables: {
+            order: 'DESC',
+            offset: 0,
+            limit: 10
+          }  
+        })
         // Add our comment from the mutation to the end.
    
         let updatedProjects = data.getProjects.filter(project => project.id !== id) 
@@ -259,79 +263,105 @@ class Show extends Component {
     
   }
 
-
-
   render() {
     const { id, name, deadline, customer, status, description, progress, tasks, user } = this.state
     
-    let total = 0
-    tasks.map(task => (total+=task.price))
-
+    let tasksTotal = 0
+    //tasks.map(task => tasksTotal += task.total)
+    console.log('tasks ', tasks)
     return (
-      <div className="ui stackable grid">
-
-        <Breadcrumb />
-
+      <div className="column row">
         <div className="twelve wide column">
           <div className="ui segment">    
-            <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
-            <dl className="dl-horizontal">
-              <dt>{T.translate("projects.show.customer")}</dt>
-              <dd>{customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}</dd>
-              <dt>{T.translate("projects.show.user")}</dt>
-              <dd>{user && user.firstName}</dd>
-              <dt>{T.translate("projects.show.deadline")}</dt>
-              <dd>{Moment(deadline).format('DD/MM/YYYY')}</dd>
-              <dt>{T.translate("projects.show.status")}</dt>
-              <dd>               
-                <Form.Field 
-                  placeholder={T.translate("projects.form.select_status")}
-                  control={Select}
-                  name="status"
-                  value={status} 
-                  onChange={(e, {value}) => this.handleStatusChange(value)} 
-                  className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
-                  options={[
-                    { key: "default", value: "new", disabled: true, text: 'NEW' },
-                    { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
-                    { key: "finished", value: "finished", text: 'FINISHED' },
-                    { key: "delayed", value: "delayed", text: 'DELAYED' },
-                    { key: "delivered", value: "delivered", text: 'DELIVERED' }
-                  ]}
-                  selection
-                />
-              </dd>
-             
-              <dt>{T.translate("projects.show.description")}</dt>
-              <dd>
-                {description ? description : '-'}
-              </dd>    
+            <h1 className={classnames("ui dividing header", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
+            <table className="ui very basic collapsing celled fluid table">
+              <tbody>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("projects.show.customer")}</i>
+                  </td>
+                  <td>
+                    {customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("projects.show.user")}</i>
+                  </td>
+                  <td>
+                    {user && user.firstName}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("projects.show.deadline")}</i>
+                  </td>
+                  <td>
+                    {Moment(deadline).format('DD/MM/YYYY')}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("projects.show.status")}</i>
+                  </td>
+                  <td>
+                    <Form.Field 
+                      placeholder={T.translate("projects.form.select_status")}
+                      control={Select}
+                      name="status"
+                      value={status} 
+                      onChange={(e, {value}) => this.handleStatusChange(value)} 
+                      className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
+                      options={[
+                        { key: "default", value: "new", disabled: true, text: 'NEW' },
+                        { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
+                        { key: "finished", value: "finished", text: 'FINISHED' },
+                        { key: "delayed", value: "delayed", text: 'DELAYED' },
+                        { key: "delivered", value: "delivered", text: 'DELIVERED' }
+                      ]}
+                      selection
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("projects.show.progress")}</i>
+                  </td>
+                  <td>
+                    <div style={{width: "50%"}}>
+                      <div id="progress" className="ui success progress mb-3 mt-2">
+                        <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
+                          <div className="progress">{progress}%</div>
+                        </div>
+                      </div>
 
-              <dt>{T.translate("projects.show.progress")}</dt>
-              <dd>
-                <div style={{width: "50%"}}>
-                  <div id="progress" className="ui success progress mb-3 mt-2">
-                    <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
-                      <div className="progress">{progress}%</div>
+                      <div className="ui icon mini buttons">
+                        <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
+                        <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
+                      </div>
                     </div>
-                  </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <i className="ui tiny header">{T.translate("projects.show.description")}</i>
+                  </td>
+                  <td>
+                    {description ? description : '-'}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-                  <div className="ui icon mini buttons">
-                    <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
-                    <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
-                  </div>
-                </div>
-              </dd>
-            </dl>  
-
-            <h3 className="ui header">{T.translate("projects.tasks.header")}</h3>
-
-            { (tasks && id) && <TasksForm projectId={id} total={total} tasks={tasks} /> }
+            <h4 className="ui top attached block header">{T.translate("projects.tasks.header")}</h4>
+            <div className="ui bottom attached segment p-3">
+              { (tasks && id) && <TasksForm projectId={id} tasksTotal={tasksTotal} tasks={tasks} /> }
+            </div>
             
-            <div className="ui divider"></div>
-
-            <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("projects.show.delete")}</button>
-            <Link to={`/projects/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("projects.show.edit")}</Link>
+            <div className="ui vertical segment">
+              <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("projects.show.delete")}</button>
+              <Link to={`/projects/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("projects.show.edit")}</Link>
+            </div>
           </div>    
         </div>
 
@@ -365,12 +395,20 @@ const MutationQuery =  compose(
   graphql(DELETE_PROJECT_MUTATION, {
     name : 'deleteProjectMutation'
   }),
-  graphql(GET_PROJECTS_QUERY),
+  graphql(GET_PROJECTS_QUERY, {
+    options: () => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
+  }),
   graphql(GET_PROJECT_QUERY, {
     options: (props) => ({
       variables: {
         id: parseInt(props.match.params.id)
-      },
+      }
     })
   })
 )(Show)

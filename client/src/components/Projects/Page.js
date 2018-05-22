@@ -1,77 +1,65 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import classnames from 'classnames'
 import List from './List' 
-import { Pagination } from '../../utils'
-import { graphql } from 'react-apollo'
+import { Query } from 'react-apollo'
 import { GET_PROJECTS_QUERY } from '../../graphql/projects'
 
 // Localization 
 import T from 'i18n-react'
 
-import Breadcrumb from '../Layouts/Breadcrumb'
-
-class Page extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
+const Page = () => (
+  <Query 
+    query={GET_PROJECTS_QUERY}
+    variables={{
+      order: "DESC",
       offset: 0,
-      length: 10
-    }
-  }
+      limit: 10
+    }}
+    fetchPolicy="cache-and-network">  
+    {( { loading, data, fetchMore } ) => {
 
-  componentDidMount() {
+      const { getProjects } = data
 
-    const { offset, length } = this.state
-    
-    const { match } = this.props
+      return ( 
+        <div className="row column"> 
+          <div className="sixteen wide column">
+            <div className="ui clearing basic segment pl-0 pr-0">
+              <div className="ui right floated icon input">
+                <input type="text" placeholder="Search..." />
+                <i className="inverted circular search link icon"></i>
+              </div>
 
-    // if (!!match.params.offset) {   
-    //   this.props.fetchProjects(match.params.offset, match.params.length)
-    // } else {
-    //   this.props.fetchProjects(offset, length)
-    // }
+              <Link className="ui left floated primary button" to="/projects/new">
+                <i className="add circle icon"></i>
+                {T.translate("projects.page.create_new_project")}
+              </Link>   
+            </div> 
 
-  }
+            { getProjects && <List projects={getProjects} loading={loading} /> }             
 
-  render() {
-
-    const { length } = this.state
-
-    const { match } = this.props
-    const { getProjects } = this.props.data
-
-    return (
-      <div className="row column"> 
-
-        <Breadcrumb />
-
-        <div className="ui clearing basic segment p-0">
-          <div className="ui right floated icon input">
-            <input type="text" placeholder="Search..." />
-            <i className="inverted circular search link icon"></i>
+            <div className="ui center aligned basic segment">           
+              <button className="ui primary large button" onClick={() =>
+                  fetchMore({
+                    variables: {
+                      offset: data.getProjects.length
+                    },
+                    updateQuery: (prev, { fetchMoreResult }) => {
+                      if (!fetchMoreResult) return prev
+                      return Object.assign({}, prev, {
+                        getProjects: [...prev.getProjects, ...fetchMoreResult.getProjects]
+                      })
+                    }
+                  })
+                }>    
+                <i className="sync alternate icon"></i>
+                {T.translate("projects.page.load_more_button")}
+              </button>
+            </div>  
           </div>
+        </div>  
+      )
+    }}
+  </Query>
+  )
 
-          <Link className="ui left floated primary button" to="/projects/new">
-            <i className="add circle icon"></i>
-            {T.translate("projects.page.create_new_project")}
-          </Link>   
-        </div> 
-        
-        <div className="row column">     
-          { getProjects && <List projects={getProjects} /> }
-        </div>    
-
-        <div className="ui clearing vertical segment border-bottom-none">
-         
-          {/*<Pagination path="projects" pages={getProjects.pages} match={match} length={length} /> */}          
-           
-        </div>   
-      </div>   
-    )
-  }
-}
-
-export default graphql(GET_PROJECTS_QUERY)(Page)
+export default Page

@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import map from 'lodash/map'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 // Semantic UI JS
 import { Input, Select, TextArea, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_PROJECT_QUERY, GET_CUSTOMERS_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../graphql/projects'
+import { GET_CUSTOMERS_QUERY } from '../../graphql/customers'
+import { GET_PROJECT_QUERY, GET_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../graphql/projects'
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
@@ -21,8 +21,6 @@ import T from 'i18n-react'
 
 import $ from 'jquery'
 $.fn.progress = require('semantic-ui-progress')
-
-import Breadcrumb from '../Layouts/Breadcrumb'
 
 class FormPage extends Component {
   constructor(props) {
@@ -105,7 +103,13 @@ class FormPage extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY })
+          const data = store.readQuery({ query: GET_PROJECTS_QUERY,
+            variables: {
+              order: 'DESC',
+              offset: 0,
+              limit: 10
+            }
+          })
           // Add our comment from the mutation to the end.
 
           let updatedProjects = data.getProjects.map(item => {
@@ -118,7 +122,7 @@ class FormPage extends Component {
           data.getProjects = updatedProjects
 
           // Write our data back to the cache.
-          store.writeQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY, data })
+          store.writeQuery({ query: GET_PROJECTS_QUERY, data })
         }})
         .then(res => {          
 
@@ -140,7 +144,7 @@ class FormPage extends Component {
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
       } else {
-
+       
         this.props.createProjectMutation({ 
           variables: { name, deadline, status, progress, description, customerId: parseInt(customerId) },
           update: (store, { data: { createProject } }) => {
@@ -150,11 +154,17 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY })
+            const data = store.readQuery({ query: GET_PROJECTS_QUERY,
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10
+              } 
+            })
             // Add our comment from the mutation to the end.
             data.getProjects.push(project)
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_CUSTOMERS_PROJECTS_QUERY, data })
+            store.writeQuery({ query: GET_PROJECTS_QUERY, data })
           }})
           .then(res => {          
 
@@ -163,7 +173,7 @@ class FormPage extends Component {
             if (success) {
               this.props.addFlashMessage({
                 type: 'success',
-                text: T.translate("projects.form.flash.success_update", { name: project.name})
+                text: T.translate("projects.form.flash.success_create", { name: project.name})
               })  
 
               this.context.router.history.push('/projects')
@@ -245,17 +255,14 @@ class FormPage extends Component {
   render() {
     const { id, name, deadline, customerId, status, progress, description, errors, isLoading } = this.state
    
-    const { getCustomers } = this.props.getCustomersProjectsQuery
+    const { getCustomers } = this.props.getCustomersQuery
   
-    const customersOptions = map(getCustomers, (customer) => 
+    const customersOptions = getCustomers && getCustomers.customers.map(customer => 
       ({ key: customer.id, value: customer.id, text: customer.name })
     )
   
     return (
       <div className="row column">
-
-        <Breadcrumb />
-
         <div className="ui text container segment">  
 
           <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
@@ -266,8 +273,8 @@ class FormPage extends Component {
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.name})}>{T.translate("projects.form.name")}</label>
+            <Form.Field inline error={!!errors.name}>
+              <label>{T.translate("projects.form.name")}</label>
               <Input
                 placeholder={T.translate("projects.form.name")}
                 name="name" 
@@ -278,8 +285,8 @@ class FormPage extends Component {
               <span className="red">{errors.name}</span>
             </Form.Field>
 
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.deadline})}>{T.translate("projects.form.deadline")}</label>
+            <Form.Field inline error={!!errors.deadline}>
+              <label>{T.translate("projects.form.deadline")}</label>
               <DatePicker
                 dateFormat="DD/MM/YYYY"
                 selected={deadline}
@@ -288,22 +295,24 @@ class FormPage extends Component {
               <span className="red">{errors.deadline}</span>
             </Form.Field>
 
-            <Form.Field inline>
-              <label className={classnames({red: !!errors.customerId})}>{T.translate("projects.form.customer")}</label>
-              <Select
-                placeholder={T.translate("projects.form.select_customer")}
-                name="customerId"
-                value={customerId && customerId} 
-                onChange={(e, {value}) => this.handleChange('customerId', value)} 
-                error={!!errors.customerId}
-                options={customersOptions}
-                selection
-              />
-              <span className="red">{errors.customerId}</span>
-            </Form.Field>
-
+            { customersOptions && 
+              <Form.Field inline error={!!errors.customerId}>
+                <label>{T.translate("projects.form.customer")}</label>
+                <Select
+                  placeholder={T.translate("projects.form.select_customer")}
+                  name="customerId"
+                  value={customerId && customerId} 
+                  onChange={(e, {value}) => this.handleChange('customerId', value)} 
+                  error={!!errors.customerId}
+                  options={customersOptions}
+                  selection
+                />
+                <span className="red">{errors.customerId}</span>
+              </Form.Field>
+            }
+              
             {
-              customersOptions.length === 0 &&
+              customersOptions && customersOptions.length === 0 &&
                 <div className="inline field">
                   <div className="ui mini info message mb-1">
                     <p>{T.translate("projects.form.empty_customers_message")}</p>
@@ -317,9 +326,10 @@ class FormPage extends Component {
             }
 
             { id &&
-              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
+              <Form.Field inline className={classnames("show", {blue: status === 'new', orange: status === 'in progress', 
+                green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed', error: !!errors.status})}
                >
-                <label className={classnames({red: !!errors.status})}>{T.translate("projects.form.status")}</label>
+                <label>{T.translate("projects.form.status")}</label>
                 <Select
                   label={T.translate("projects.form.status")}
                   placeholder={T.translate("projects.form.select_status")}
@@ -396,8 +406,25 @@ const MutationsQuery =  compose(
   graphql(UPDATE_PROJECT_MUTATION, {
     name: 'updateProjectMutation'
   }),
-  graphql(GET_CUSTOMERS_PROJECTS_QUERY, {
-    name: 'getCustomersProjectsQuery'
+  graphql(GET_PROJECTS_QUERY, {
+    name: 'getProjectsQuery',
+    options: () => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
+  }),
+  graphql(GET_CUSTOMERS_QUERY, {
+    name: 'getCustomersQuery',
+    options: () => ({
+      variables: {
+        order: 'DESC',
+        offset: 0,
+        limit: 10
+      }
+    })
   }),
   graphql(GET_PROJECT_QUERY, {
     options: (props) => ({

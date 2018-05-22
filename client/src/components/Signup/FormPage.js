@@ -5,7 +5,6 @@ import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Input, Select, Form } from 'semantic-ui-react'
-import classnames from 'classnames'
 import { graphql } from 'react-apollo'
 import { REGISTER_USER_MUTATION } from '../../graphql/authentications'
 
@@ -149,8 +148,8 @@ class FormPage extends Component {
             <span className="red">{errors.lastName}</span>
           </Form.Field>
 
-          <Form.Field>
-            <label className={classnames({red: !!errors.email})}>{T.translate("sign_up.email")}</label>
+          <Form.Field error={!!errors.email}>
+            <label>{T.translate("sign_up.email")}</label>
             <Input
               placeholder={T.translate("sign_up.email")}
               name="email" 
@@ -161,8 +160,8 @@ class FormPage extends Component {
             <span className="red">{errors.email}</span>
           </Form.Field>
 
-          <Form.Field>
-            <label className={classnames({red: !!errors.password})}>{T.translate("sign_up.password")}</label>
+          <Form.Field error={!!errors.password}>
+            <label>{T.translate("sign_up.password")}</label>
             <Input
               placeholder={T.translate("sign_up.password")}
               name="password" 
@@ -173,8 +172,8 @@ class FormPage extends Component {
             <span className="red">{errors.password}</span>
           </Form.Field>
 
-          <Form.Field>
-            <label className={classnames({red: !!errors.confirmPassword})}>{T.translate("sign_up.confirm_password")}</label>
+          <Form.Field error={!!errors.confirmPassword}>
+            <label>{T.translate("sign_up.confirm_password")}</label>
             <Input
               placeholder={T.translate("sign_up.confirm_password")}
               name="confirmPassword" 
@@ -185,8 +184,8 @@ class FormPage extends Component {
             <span className="red">{errors.confirmPassword}</span>
           </Form.Field>
          
-          <Form.Field>
-            <label className={classnames({red: !!errors.industry})}>{T.translate("sign_up.account.industry")}</label>
+          <Form.Field error={!!errors.industry}>
+            <label>{T.translate("sign_up.account.industry")}</label>
             <Select
               placeholder={T.translate("sign_up.account.select_industry")}
               name="industry"
@@ -206,8 +205,8 @@ class FormPage extends Component {
             <span className="red">{errors.industry}</span>
           </Form.Field>
 
-          <Form.Field>
-            <label className={classnames({red: !!errors.subdomain})}>{T.translate("sign_up.account.subdomain")}</label>
+          <Form.Field error={!!errors.subdomain}>
+            <label>{T.translate("sign_up.account.subdomain")}</label>
             <Input
               label="toolsio.com"
               placeholder={T.translate("sign_up.account.subdomain")}

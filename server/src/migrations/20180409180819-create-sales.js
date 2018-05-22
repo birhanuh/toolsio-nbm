@@ -24,6 +24,11 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+      tax: {
+        allowNull : true,
+        defaultValue: 0,
+        type: Sequelize.DECIMAL
+      },
       customer_id: {
         type: Sequelize.INTEGER,
         references: {

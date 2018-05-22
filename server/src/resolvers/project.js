@@ -1,4 +1,4 @@
-import { requiresAuth } from '../middlewares/authentication'
+import requiresAuth from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 
 export default {
@@ -6,7 +6,8 @@ export default {
   Query: {
     getProject: requiresAuth.createResolver((parent, { id }, { models }) =>  models.Project.findOne({ where: { id } })),
     
-    getProjects: requiresAuth.createResolver((parent, args, { models }) => models.Project.findAll()),
+    getProjects: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
+      models.Project.findAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
 
     getProjectsWithoutInvoice: requiresAuth.createResolver((parent, args, { models }) => 
       models.sequelize.query('SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p LEFT JOIN invoices i ON p.id = i.project_id WHERE i.project_id IS NULL', {
@@ -78,7 +79,7 @@ export default {
     user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true }),
 
     total: async ({ id }, args, { models }) => {     
-      const totalSum = await models.Task.sum('price', {
+      const totalSum = await models.Task.sum('total', {
           where: { projectId: id }
         }) 
      
@@ -96,7 +97,7 @@ export default {
     customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
 
     total: async ({ id }, args, { models }) => {     
-      const totalSum = await models.Task.sum('price', {
+      const totalSum = await models.Task.sum('total', {
           where: { projectId: id }
         }) 
      
@@ -108,7 +109,7 @@ export default {
     customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
 
     total: async ({ id }, args, { models }) => {     
-      const totalSum = await models.Task.sum('price', {
+      const totalSum = await models.Task.sum('total', {
           where: { projectId: id }
         }) 
      

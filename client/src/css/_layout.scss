@@ -109,10 +109,10 @@ nav.ui.menu {
   .ui.dropdown .menu>.item {
     padding: .98571429em 1.14285714em!important;
   }
-  .label.envelop {
-    position: absolute;
-    right: 5px;
-    top: 7px;
+  .floating.label {
+    top: 0.7em;
+    margin: 0 0 0 -2.3em !important;
+    padding: .2833em .533em;
   }
 }
 
@@ -369,24 +369,36 @@ nav.ui.menu {
   color: $dark-green;
   background: $white-green;
   box-shadow: 0 0 0 1px $green inset, 0 0 0 0 transparent;
+  .header {
+    color: $dark-green;
+  }
 }
 
 .ui.warning.message {
-  color: $dark-orange;
+  color: $dark-green;
   background: $white-orange;
   box-shadow: 0 0 0 1px $orange inset, 0 0 0 0 transparent;
+  .header {
+    color: $dark-green;
+  }
 }
 
 .ui.negative.message {
   color: $dark-red;
   background: $white-red;
   box-shadow: 0 0 0 1px $red inset, 0 0 0 0 transparent;
+  .header {
+    color: $dark-red;
+  }
 }
 
 .ui.info.message {
   color: $blue;
   background: $white-blue;
   box-shadow: 0 0 0 1px $blue inset, 0 0 0 0 transparent;
+  .header {
+    color: $blue;
+  }
 }
 
 .sixteen.wide.column.flash-message {
@@ -417,10 +429,7 @@ nav.ui.menu {
     text-transform: capitalize;
   }
   .ui.comments {
-    grid-row: 2;
-    grid-column: 3;
-    display: flex;
-    flex-direction: column;
+    padding-right: 10px;
     overflow-y: auto;
     max-height: 360px;
   }
@@ -437,6 +446,30 @@ nav.ui.menu {
     border-top-right-radius: 0!important;
     border-bottom-right-radius: 0!important;
     border-right-color: transparent!important;
+  }
+  .ui.small.message.pre, .ui.small.message.img {
+    max-width: 100%;
+    max-height: 100px;
+    padding: 0;
+  }
+  .ui.small.message.video {
+    max-width: 100%;
+    max-height: 200px;
+    padding: 0;
+  }
+  .text img, .text pre, .text video {
+    max-width: inherit;
+    max-height: inherit;
+    padding: 1em 1.5em;
+    overflow: hidden;
+  }
+  .content .description video, .content .description audio {
+    max-width: 100%;
+  }
+  .ui.message.pre .buttons {
+    position: absolute;
+    top: 5px;
+    right: 10px;
   }
 }
 
@@ -496,13 +529,27 @@ nav.ui.menu .item>a {
 }
 
 // Segment
+.ui.segment {
+  padding: 2em 2em;
+}
+
+.ui.vertical.segment, .ui.basic.segment {
+  padding: 1em 1em;
+}
+
 .ui.segments > .segment, .ui.segment, .ui.message, .ui.card, .ui.cards>.card {
   @include border-radius(3px);
+  border: 1px solid $light-grey;
   box-shadow: 0 1px 2px 0 rgba(224,224,224,1);
 }
 
-.ui.attached.segment {
+.ui.attached.block.header, .ui.attached.segment {
   border: 1px solid $light-grey;
+  box-shadow: 0 1px 2px 0 rgba(224,224,224,1);
+}
+
+.ui.attached.block.header {
+  background: $xx-light-grey;
 }
 
 .ui.vertical.segment:first-child {
@@ -562,16 +609,6 @@ nav.ui.menu .item>a {
 .dropdown-menu {
   min-width: 180px;
 }
-
-// Description list
-dl.dl-horizontal {
-  dd, dt {
-    padding: 4px 0;
-  }
-  dt {
-    font-weight: bold;
-  }
-} 
 
 // Label
 .ui[class*="right floated"].label {
@@ -649,6 +686,10 @@ dl.dl-horizontal {
   >.actions {
     padding: 0.7rem 1rem;
   }  
+}
+
+.ui.dimmer.modals.page.transition.visible.active {
+  display: flex !important;
 }
 
 // Custome fieldset and legend
@@ -866,6 +907,44 @@ dl.dl-horizontal {
   .ui.header a {
     width: auto;
   }
+  .ui.sizer.vertical p {
+    color: $xx-light-dark-grey;
+  }
+  .ui.sizer.vertical p > strong {
+    display: block;
+    margin-top: 5px;
+    color: $body-color;
+  } 
+  .row:first-child .eight.wide.column {
+    display: table;
+    height: 100%;
+    h1 {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+  .ui.header a.sub.header:hover, .ui.card a:hover {
+    text-decoration: underline;
+  }
+}
+
+// Customers
+.customer.show {
+  .ui.sizer.vertical p {
+    color: $xx-light-dark-grey;
+  }
+  .ui.sizer.vertical p > strong {
+    display: block;
+    margin-top: 5px;
+    color: $body-color;
+  } 
+  .ui.sizer.vertical p > i {
+    display: block;
+    margin-top: 5px;
+  } 
+  .card .header a:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Extra small devices (phones, less than 433px) */
@@ -905,20 +984,7 @@ dl.dl-horizontal {
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: $screen-sm) {
-  .dl-horizontal {
-    dt {
-      float: left;
-      width: 130px;
-      overflow: hidden;
-      clear: left;
-      text-align: right;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    dd {
-      margin-left: 150px;
-    }
-  }
+ 
 }
 
 /* Small medium devices (tablets, 768px and upto desktops, 992px) */

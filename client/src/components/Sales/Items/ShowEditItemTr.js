@@ -5,14 +5,14 @@ import { Input, Select, Form } from 'semantic-ui-react'
 // Localization 
 import T from 'i18n-react'
 
-export default function ShowEditItemTr({item, editItem, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, showConfirmationModal}) {
+export default function ShowEditItemTr({item, editItem, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, handleEditItemBlur, showConfirmationModal}) {
   return (
     <tr key={item.id} id={item.id}>      
       <td className="show-item">{item.name}</td>
       <td className="show-item">{item.unit}</td>
       <td className="show-item">{item.quantity}</td>
-      <td className="show-item">{item.price}</td>
-      <td className="show-item">{item.vat}</td>
+      <td className="show-item">{item.unitPrice}</td>
+      <td className="show-item">{item.total}</td>
       <td className="show-item" width="120px">
         <div className="show-item ui fluid small buttons">
           <button className="ui negative icon basic button" onClick={showConfirmationModal}><i className="delete icon"></i></button>
@@ -58,7 +58,8 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
             placeholder="0"
             name="quantity" 
             value={editItem.quantity} 
-            onChange={(e, {value}) => handleEditItemChange('quantity', value, item)} 
+            onChange={(e, {value}) => handleEditItemChange('quantity', value, item)}
+            onBlur={handleEditItemBlur}   
             error={!!editItem.errors.quantity}
             className="ui small d-block input"
           />
@@ -69,27 +70,20 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
         <Form.Field>
           <Input 
             placeholder="0.00"
-            name="price" 
-            value={editItem.price} 
-            onChange={(e, {value}) => handleEditItemChange('price', value, item)} 
-            error={!!editItem.errors.price}
+            name="unitPrice" 
+            value={editItem.unitPrice} 
+            onChange={(e, {value}) => handleEditItemChange('unitPrice', value, item)}
+            onBlur={handleEditItemBlur}   
+            error={!!editItem.errors.unitPrice}
             className="ui small d-block input"
           />
-          <span className="red">{item.errors && item.errors.price}</span>
+          <span className="red">{item.errors && item.errors.unitPrice}</span>
         </Form.Field>
       </td>
       <td className="edit-item">
-        <Form.Field>
-          <Input 
-            placeholder="0%"
-            name="vat" 
-            value={editItem.vat} 
-            onChange={(e, {value}) => handleEditItemChange('vat', value, item)} 
-            error={!!editItem.errors.vat}
-            className="ui small d-block input"
-          />
-          <span className="red">{item.errors && item.errors.vat}</span>
-        </Form.Field>
+        <div className="p-2">
+          {editItem.total}
+        </div>
       </td>
       <td className="edit-item" width="120px">  
         <div className="edit-item ui fluid small buttons">

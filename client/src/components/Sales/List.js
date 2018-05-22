@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classnames from 'classnames'
 import Card from './Card'
 
 // Localization 
 import T from 'i18n-react'
 
-export default function List({ sales }) {
+export default function List({ sales, loading }) {
   const emptyMessage = (
     <div className="ui info message">
       <div className="header">
@@ -16,7 +17,7 @@ export default function List({ sales }) {
   )
 
   const salesList = (
-    <div className="ui two cards sales">
+    <div className={classnames("ui two cards sales", { loading: loading })}>
       { sales.map(sale => <Card sale={sale} key={sale.id} />) }
     </div>
   )

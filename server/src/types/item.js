@@ -5,8 +5,8 @@ export default `
     name: String!
     unit: String!
     quantity: Int!
-    price: Float!
-    vat: Int
+    unitPrice: Float!
+    total: Float!
     saleId: Int!
   }
 
@@ -28,10 +28,10 @@ export default `
   }
 
   type Mutation {
-    createItem(name: String!, unit: String!, quantity: Int!, price: Float!, vat: Int, 
+    createItem(name: String!, unit: String!, quantity: Int!, unitPrice: Float!, total: Float!, 
       saleId: Int!): CreateUpdateItemResponse!
 
-    updateItem(id: Int!, name: String!, unit: String!, quantity: Int!, price: Float!, vat: Int, 
+    updateItem(id: Int!, name: String!, unit: String!, quantity: Int!, unitPrice: Float!, total: Float!, 
       saleId: Int!): CreateUpdateItemResponse!
 
     deleteItem(id: Int!): DeleteItemResponse!
