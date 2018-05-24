@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Comment, Message, Modal, Image, Button, Icon } from 'semantic-ui-react'
+import { Comment, Message, Modal, Image, Button } from 'semantic-ui-react'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
 import { GET_DIRECT_MESSAGES_QUERY, MARK_DIRECT_MESSAGES_AS_READ_MUTATION, GET_USER_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/directMessages'
@@ -135,7 +135,7 @@ class Messages extends Component {
       .catch(err => console.log('err: ', err))
   }
 
-  componentWillReceiveProps({ data: { getDirectMessages }, receiverId }) {    
+  componentWillReceiveProps({ receiverId }) {    
     if (this.props.receiverId !== receiverId) {
       if (this.unsubscribe) {
         this.unsubscribe()
@@ -224,7 +224,7 @@ class Messages extends Component {
 
   render() {
 
-    const { getUserQuery: { getUser }, data: { getDirectMessages, fetchMore }, receiverId } = this.props
+    const { getUserQuery: { getUser }, data: { getDirectMessages }, receiverId } = this.props
 
     const emptyMessage = (
       <Message info>

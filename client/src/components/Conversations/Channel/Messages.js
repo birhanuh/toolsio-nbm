@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Comment } from 'semantic-ui-react'
-import { Modal, Message, Image, Button, Icon } from 'semantic-ui-react'
+import { Modal, Message, Image, Button } from 'semantic-ui-react'
 import MessageForm from './Form/Message'
 import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
