@@ -1,10 +1,10 @@
-import { PubSub, withFilter } from 'graphql-subscriptions'
+import { withFilter } from 'graphql-subscriptions'
 
 import requiresAuth, { requiresChannelAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 import { processUpload } from '../utils/uploadFile'
 
-const pubsub = new PubSub()
+import pubsub from '../utils/pubsub'
 
 const NEW_CHANNEL_MESSAGE = 'NEW_CHANNEL_MESSAGE'
 
@@ -19,12 +19,20 @@ export default {
   },
 
   Query: {
-    getMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.Message.findOne({ where: { id } }, { raw: true })),
+    getMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.ChannelMessage.findOne({ where: { id } }, { raw: true })),
 
-    getChannelMessages: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Message.findAll({ 
-        where: { channelId: args.channelId },
-        order: [['created_at', 'ASC']] }, { raw: true })
+    getChannelMessages: requiresAuth.createResolver((parent, { channelId, cursor }, { models }) => {
+      const options = { 
+        where: { channelId: channelId },
+        order: [['created_at', 'DESC']], limit: 5 }
+   
+      if (cursor) {
+        options.where.created_at = {
+          [models.sequelize.Op.lt]: cursor
+        }
+      }
+
+      return models.ChannelMessage.findAll(options, { raw: true })
     })
 
   },
@@ -41,7 +49,7 @@ export default {
           messageData.mimetype = uploadFile.mimetype
         }
 
-        const message = await models.Message.create({ ...messageData, userId: user.id })
+        const message = await models.ChannelMessage.create({ ...messageData, userId: user.id })
 
         // Do both asynchronously
         const asyncFunc = async () => {

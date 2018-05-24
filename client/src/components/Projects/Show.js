@@ -297,7 +297,7 @@ class Show extends Component {
                     <i className="ui tiny header">{T.translate("projects.show.deadline")}</i>
                   </td>
                   <td>
-                    {Moment(deadline).format('DD/MM/YYYY')}
+                    {Moment(deadline).format('ll') }
                   </td>
                 </tr>
                 <tr>

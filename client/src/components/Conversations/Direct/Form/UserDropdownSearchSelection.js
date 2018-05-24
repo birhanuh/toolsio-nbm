@@ -27,9 +27,9 @@ const UserDropdownSearchSelection = ({ onClose, history, data: { getUsers } }) =
 
   return (
     <Form.Field>
-      <label>{T.translate("conversations.direct.search_select_user")}</label>
+      <label>{T.translate("conversations.direct_messages.search_select_user")}</label>
       { usersOptions && <Dropdown 
-        placeholder={T.translate("conversations.direct.search_select_user")} 
+        placeholder={T.translate("conversations.direct_messages.search_select_user")} 
         fluid search 
         selection 
         options={usersOptions}

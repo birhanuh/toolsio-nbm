@@ -432,6 +432,8 @@ nav.ui.menu {
     padding-right: 10px;
     overflow-y: auto;
     max-height: 360px;
+    display: flex;
+    flex-direction: column-reverse;
   }
   .ui.fluid.input .field {
     max-width: 100%;

@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('messages', {
+    return queryInterface.createTable('channel_messages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -38,9 +38,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    }, {
+      indexes: [
+        { fields: ['created_at'] }
+      ]
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('messages');
+    return queryInterface.dropTable('channel_messages');
   }
 };

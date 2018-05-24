@@ -45,8 +45,8 @@ export const GET_USER_QUERY = gql`
 `
 
 export const GET_DIRECT_MESSAGES_QUERY = gql`
-  query getDirectMessages($receiverId: Int!) {
-    getDirectMessages(receiverId: $receiverId) {
+  query getDirectMessages($cursor: String, $receiverId: Int!) {
+    getDirectMessages(cursor: $cursor, receiverId: $receiverId) {
       id
       body
       uploadPath

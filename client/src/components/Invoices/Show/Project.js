@@ -26,7 +26,7 @@ export default function Project({ project }) {
                 <i className="ui tiny header">{T.translate("invoices.show.project.deadline")}</i>
               </td>
               <td>
-                {project && moment(project.deadline).format("DD/MM/YYYY")}
+                {project && moment(project.deadline).format('ll') }
               </td>
             </tr>
             <tr>

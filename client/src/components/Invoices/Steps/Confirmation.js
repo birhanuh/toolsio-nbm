@@ -21,7 +21,7 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
       
       <dl className="dl-horizontal">
         <dt>{T.translate("invoices.show.deadline")}</dt>
-        <dd>{step2.deadline ? moment(step2.deadline).format("DD/MM/YYYY") : '-'}</dd>
+        <dd>{step2.deadline ? moment(step2.deadline).format('ll')  : '-'}</dd>
         <dt>{T.translate("invoices.show.status")}</dt>
         <dd><div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div></dd>
         <dt>{T.translate("invoices.show.payment_term")}</dt>

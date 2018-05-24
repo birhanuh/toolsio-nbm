@@ -1,10 +1,10 @@
-import { PubSub, withFilter } from 'graphql-subscriptions'
+import { withFilter } from 'graphql-subscriptions'
 
 import requiresAuth,  { requiresDirectMessageAccess } from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 import { processUpload } from '../utils/uploadFile'
 
-const pubsub = new PubSub()
+import pubsub from '../utils/pubsub'
 
 const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE'
 
@@ -25,13 +25,22 @@ export default {
   Query: {
     getDirectMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.DirectMessage.findOne({ where: { id } }, { raw: true })),
 
-    getDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => 
-      models.DirectMessage.findAll({ 
+    getDirectMessages: requiresAuth.createResolver((parent, { receiverId, cursor }, { models, user }) => {
+      const options = { 
         where: { [models.sequelize.Op.or]: [
-          { [models.sequelize.Op.and]: [{ receiverId: args.receiverId, senderId: user.id }]},
-          { [models.sequelize.Op.and]: [{ senderId: args.receiverId, receiverId: user.id }]}
-          ] },
-        order: [['created_at', 'ASC']] }, { raw: true })),
+          {[models.sequelize.Op.and]: [{ receiverId:receiverId, senderId: user.id }]},
+          {[models.sequelize.Op.and]: [{ senderId:receiverId, receiverId: user.id }]} ]
+        },
+        order: [['created_at', 'DESC']], limit: 10 }
+   
+      if (cursor) {
+        options.where.created_at = {
+          [models.sequelize.Op.lt]: cursor
+        }
+      }
+
+      return models.DirectMessage.findAll(options, { raw: true })
+    }),
 
     getDirectMessageUsers: requiresAuth.createResolver((parent, args, { models }) => 
       models.sequelize.query('select distinct on (u.id) u.id, u.first_name, u.email from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id)', {

@@ -15,7 +15,11 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       field: 'created_at'
     }
-  }, {})
+  }, {
+    indexes: [
+      { fields: ['created_at'] }
+    ]
+  })
 
   directMessage.associate = function(models) {
      // 1:M

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Button, Icon } from 'semantic-ui-react'
 import List from './List' 
 import { Query } from 'react-apollo'
 import { GET_SALES_QUERY } from '../../graphql/sales'
@@ -38,7 +39,10 @@ const Page = () => (
             { getSales && <List sales={getSales} loading={loading} /> }             
 
             <div className="ui center aligned basic segment">           
-              <button className="ui primary large button" onClick={() =>
+              <Button 
+                primary
+                size="large"
+                onClick={() =>
                   fetchMore({
                     variables: {
                       offset: data.getSales.length
@@ -50,10 +54,11 @@ const Page = () => (
                       })
                     }
                   })
-                }>    
-                <i className="sync alternate icon"></i>
-                {T.translate("sales.page.load_more_button")}
-              </button>
+                }
+              >    
+                <Icon name='refresh' />&nbsp;
+                {T.translate("sales.page.load_more")}
+              </Button>
             </div>  
           </div>
         </div>  
