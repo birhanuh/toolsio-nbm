@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Comment } from 'semantic-ui-react'
-import { Button, Modal, Message } from 'semantic-ui-react'
+import { Modal, Message, Image, Button } from 'semantic-ui-react'
 import MessageForm from './Form/Message'
 import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
-import { GET_CHANNEL_QUERY, GET_CHANNEL_MESSAGE_QUERY } from '../../../graphql/messages'
+import { GET_CHANNEL_QUERY, GET_CHANNEL_MESSAGE_QUERY } from '../../../graphql/channelMessages'
 
 // Localization 
 import T from 'i18n-react'
@@ -60,23 +60,64 @@ const AddChannelModal = ({ open, onClose, channelId }) => (
   </Modal>
 )
 
+const ShowInModal = ({ trigger, src, mimetype }) => {
+  let content
+  
+  if (mimetype.startsWith('image/')) {
+    content = (<Modal.Content scrolling image>
+        <Image wrapped src={src} />
+      </Modal.Content>)
+  } else if (mimetype.startsWith('audio/')) {
+      content = (<Modal.Content>
+          <Modal.Description>
+            <audio controls>
+              <source src={src} />
+            </audio></Modal.Description>
+        </Modal.Content>)
+    } else if (mimetype.startsWith('video/')) {
+      content = (<Modal.Content>
+          <Modal.Description>
+            <video controls>
+              <source src={src} />
+            </video>
+          </Modal.Description>
+        </Modal.Content>)
+    }
+
+  return (<Modal trigger={trigger} className="messages">
+    {content}
+  </Modal>)
+}
+
 const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
   
   if (uploadPath) {
     if (mimetype.startsWith('image/')) {
       return (<div className="ui small message img">
-          <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
-        </div>)
-    } else if (mimetype.startsWith('text/')) {
-      return <RenderText uploadPath={uploadPath} />
+        <ShowInModal trigger={<img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />} src={uploadPath} mimetype={mimetype} />
+      </div>)
     } else if (mimetype.startsWith('audio/')) {
-      return (<div className="ui small message"><audio controls>
+      return (<ShowInModal 
+        trigger={<div className="ui small message audio"><audio controls>
           <source src={uploadPath} type={mimetype} />
-        </audio></div>)
+        </audio></div>} 
+        src={uploadPath} 
+        mimetype={mimetype} />)
     } else if (mimetype.startsWith('video/')) {
-      return (<div className="ui small message"><video controls>
+      return (<ShowInModal 
+        trigger={<div className="ui small message video"><video controls>
           <source src={uploadPath} type={mimetype} />
-        </video></div>)
+        </video></div>} 
+        src={uploadPath} 
+        mimetype={mimetype} />)
+    } else if (mimetype) { // For all rest file types (E.g. text, pdf, doc...()
+      return (<div className="ui small message pre">
+          <RenderText uploadPath={uploadPath} />
+          <div className="buttons">
+            <Button basic size="small" icon='download' />
+            <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
+          </div>
+        </div>)
     }
   }
   return (body)            
@@ -85,7 +126,8 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
 class Messages extends Component {
 
   state = {
-    openAddChannelModal: false
+    openAddChannelModal: false,
+    hasMoreItems: true
   }
 
   componentDidMount() {
@@ -111,17 +153,17 @@ class Messages extends Component {
   }﻿
 
   subscribe = (channelId) => 
-    this.props.getChannelMessagesQuery.subscribeToMore({
+    this.props.data.subscribeToMore({
       document: NEW_CHANNEL_MESSAGE_SUBSCRIPTION,
       variables: {
         channelId: parseInt(channelId)
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
-        console.log('subscriptionData.data', subscriptionData.data)
+      
         return {
           ...prev,
-          getChannelMessages: [...prev.getChannelMessages, subscriptionData.data.getNewChannelMessage],
+          getChannelMessages: [ subscriptionData.data.getNewChannelMessage, ...prev.getChannelMessages],
         }
       }
     })
@@ -135,10 +177,36 @@ class Messages extends Component {
     this.setState(state => ({ openAddChannelModal: !state.openAddChannelModal }))
   }
 
+  handleScroll = () => {
+    const { data: { getDirectMessages, fetchMore }, receiverId } = this.props
+
+    if (this.scroller && this.scroller.scrollTop === 0 && 
+      (this.state.hasMoreItems) && (getDirectMessages && getDirectMessages.length >= 10)) {
+      
+      fetchMore({
+        variables: {
+          receiverId: parseInt(receiverId),
+          cursor: getDirectMessages[getDirectMessages.length - 1].createdAt
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev
+
+          if (fetchMoreResult.getDirectMessages.length < 10) {
+            this.setState({ hasMoreItems: false })
+          }
+          
+          return Object.assign({}, prev, {
+            getDirectMessages: [...prev.getDirectMessages, ...fetchMoreResult.getDirectMessages]
+          })
+        }
+      })
+    }
+  }
+
   render() {
     const { openAddChannelModal } = this.state
     
-    const { getChannelQuery: { getChannel }, getChannelMessagesQuery: { getChannelMessages } } = this.props
+    const { getChannelQuery: { getChannel }, data: { getChannelMessages } } = this.props
 
     const emptyMessage = (
       <Message info>
@@ -154,7 +222,7 @@ class Messages extends Component {
         <Comment.Content>
           <Comment.Author as="a">{message.user.email}</Comment.Author>
           <Comment.Metadata>
-            <div>{moment(message.createdAt).format('DD/MM/YYYY')}</div>
+            <div>{moment(message.createdAt).format('llll') }</div>
           </Comment.Metadata>
           <Comment.Text>
            
@@ -178,9 +246,14 @@ class Messages extends Component {
 
         <div className="ui divider"></div> 
 
-        <Comment.Group>
+        <div className="ui comments"
+          onScroll={this.handleScroll}
+          ref={(scroller) => {
+            this.scroller = scroller
+          }}
+        >
           { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
-        </Comment.Group>   
+        </div>   
         
         <MessageForm channelId={this.props.channelId} />
       </div>,
@@ -204,7 +277,6 @@ const Queries =  compose(
     })
   }),
   graphql(GET_CHANNEL_MESSAGE_QUERY, {
-    "name": "getChannelMessagesQuery",
     options: (props) => ({
       variables: {
         channelId: parseInt(props.channelId)

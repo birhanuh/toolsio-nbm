@@ -14,8 +14,8 @@ export const GET_CHANNEL_QUERY = gql`
 `
 
 export const GET_CHANNEL_MESSAGE_QUERY = gql`
-  query getChannelMessages($channelId: Int!) {
-    getChannelMessages(channelId: $channelId) {
+  query getChannelMessages($cursor: String, $channelId: Int!) {
+    getChannelMessages(cursor: $cursor, channelId: $channelId) {
       id
       body
       uploadPath

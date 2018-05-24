@@ -38,6 +38,10 @@ module.exports = {
           key: 'id'
         },
       }
+    }, {
+      indexes: [
+        { fields: ['created_at'] }
+      ]
     });
   },
   down: (queryInterface, Sequelize) => {

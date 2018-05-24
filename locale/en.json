@@ -262,7 +262,7 @@
       "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Projects are shown here.",
-      "load_more_button": "Load more"
+      "load_more": "Load more"
     },
     "form": {
       "new_project": "New Project",
@@ -359,7 +359,7 @@
       "deadline": "Deadline",
       "invoiced": "Invoiced",
       "description": "All created Sales are shown here.",
-      "load_more_button": "Load more"
+      "load_more": "Load more"
     },
     "form": {
       "new_sale": "New Sale",
@@ -528,7 +528,8 @@
       "customer": "Customer",
       "total": "Total",
       "status": "Status",
-      "view": "View"
+      "view": "View",
+      "invoice_for": "Invoice for"
     },
     "form": {
       "new_invoice": "New Invoice",
@@ -697,15 +698,17 @@
       "members": "members",
       "message": "Message"
     },
-    "direct": {
-      "search_select_user": "Search/Select User"
+    "direct_messages": {
+      "search_select_user": "Search/Select User",
+      "load_more": "Load more"
     },
     "messages": {
       "add_member": "Add member",
       "add_user": "Add user",
       "empty_message_header": "Message is empty",
       "empty_channel_message_message": "Create your first message by sending a message to memebers of this channel.",
-      "empty_direct_message_message": "Create your first message by sending a message to selected memeber."
+      "empty_direct_message_message": "Create your first message by sending a message to selected memeber.",
+      "load_more": "Load more"
     },
     "form": {
       "create_channel": "Create Channel",

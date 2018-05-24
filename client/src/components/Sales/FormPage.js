@@ -283,7 +283,7 @@ class FormPage extends Component {
                   onChange={(e, {value}) => this.handleChange('status', value)} 
                   error={!!errors.staus}
                   options={[
-                    { key: "default", value: "new", disabled: true, text: 'NEW' },
+                    { key: "default", value: "new", text: 'NEW' },
                     { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
                     { key: "finished", value: "finished", text: 'FINISHED' },
                     { key: "delayed", value: "delayed", text: 'DELAYED' },

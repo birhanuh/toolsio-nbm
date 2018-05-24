@@ -14,12 +14,10 @@ export const GET_INVOICES_QUERY = gql`
         project {
           id
           name
-          status
         }
         sale {
           id
           name
-          status
         }
         customer {
           id

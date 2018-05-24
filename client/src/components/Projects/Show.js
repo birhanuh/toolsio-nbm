@@ -297,7 +297,7 @@ class Show extends Component {
                     <i className="ui tiny header">{T.translate("projects.show.deadline")}</i>
                   </td>
                   <td>
-                    {Moment(deadline).format('DD/MM/YYYY')}
+                    {Moment(deadline).format('ll') }
                   </td>
                 </tr>
                 <tr>
@@ -313,7 +313,7 @@ class Show extends Component {
                       onChange={(e, {value}) => this.handleStatusChange(value)} 
                       className={classnames("inline field show", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}
                       options={[
-                        { key: "default", value: "new", disabled: true, text: 'NEW' },
+                        { key: "default", value: "new", text: 'NEW' },
                         { key: "in progress", value: "in progress", text: 'IN PROGRESS' },
                         { key: "finished", value: "finished", text: 'FINISHED' },
                         { key: "delayed", value: "delayed", text: 'DELAYED' },

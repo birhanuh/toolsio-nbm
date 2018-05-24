@@ -97,6 +97,10 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
 
 class Messages extends Component {
 
+  state = {
+    hasMoreItems: true
+  }
+
   componentDidMount() {
     this.unsubscribe = this.subscribe(this.props.receiverId)
 
@@ -177,24 +181,50 @@ class Messages extends Component {
   }﻿
 
   subscribe = (receiverId) => 
-    this.props.getDirectMessagesQuery.subscribeToMore({
+    this.props.data.subscribeToMore({
       document: NEW_DIRECT_MESSAGE_SUBSCRIPTION,
       variables: {
         receiverId: parseInt(receiverId)
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
-        console.log('subscriptionData.data', subscriptionData.data)
+
         return {
           ...prev,
-          getDirectMessages: [...prev.getDirectMessages, subscriptionData.data.getNewDirectMessage],
+          getDirectMessages: [subscriptionData.data.getNewDirectMessage, ...prev.getDirectMessages]
         }
       }
     })
 
+  handleScroll = () => {
+    const { data: { getDirectMessages, fetchMore }, receiverId } = this.props
+
+    if (this.scroller && this.scroller.scrollTop === 0 && 
+      (this.state.hasMoreItems) && (getDirectMessages && getDirectMessages.length >= 10)) {
+      
+      fetchMore({
+        variables: {
+          receiverId: parseInt(receiverId),
+          cursor: getDirectMessages[getDirectMessages.length - 1].createdAt
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev
+
+          if (fetchMoreResult.getDirectMessages.length < 10) {
+            this.setState({ hasMoreItems: false })
+          }
+          
+          return Object.assign({}, prev, {
+            getDirectMessages: [...prev.getDirectMessages, ...fetchMoreResult.getDirectMessages]
+          })
+        }
+      })
+    }
+  }
+
   render() {
 
-    const { getUserQuery: { getUser }, getDirectMessagesQuery: { getDirectMessages } } = this.props
+    const { getUserQuery: { getUser }, data: { getDirectMessages }, receiverId } = this.props
 
     const emptyMessage = (
       <Message info>
@@ -210,7 +240,7 @@ class Messages extends Component {
         <Comment.Content>
           <Comment.Author as="a">{message.user.email}</Comment.Author>
           <Comment.Metadata>
-            <div>{moment(message.createdAt).format('DD/MM/YYYY')}</div>
+            <div>{moment(message.createdAt).format('llll') }</div>
           </Comment.Metadata>
           <Comment.Text>
            
@@ -224,13 +254,51 @@ class Messages extends Component {
       <div className="messages">
         <div className="ui clearing vertical segment">
           <h3 className="ui dividing header capitalize">{getUser && getUser.firstName}</h3>
-        </div>
-          
-        <Comment.Group>
+        </div>        
+        {/*
+        { (this.state.hasMoreItems) && (getDirectMessages && getDirectMessages.length >= 10) &&
+          <div className="ui center aligned basic segment pt-0">       
+            <Button 
+              primary
+              size="small" 
+              icon
+              disabled={!this.state.hasMoreItems} 
+              onClick={() => {
+                fetchMore({
+                  variables: {
+                    receiverId: parseInt(receiverId),
+                    cursor: getDirectMessages[getDirectMessages.length - 1].createdAt
+                  },
+                  updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prev
+
+                    if (fetchMoreResult.getDirectMessages.length < 5) {
+                      this.setState({ hasMoreItems: false })
+                    }
+                    
+                    return Object.assign({}, prev, {
+                      getDirectMessages: [...prev.getDirectMessages, ...fetchMoreResult.getDirectMessages]
+                    })
+                  }
+                })
+              }}
+            >
+              <Icon name='refresh' />&nbsp;
+              {T.translate("conversations.direct_messages.load_more")}
+            </Button>
+          </div>
+        }
+        */}
+        <div className="ui comments"
+          onScroll={this.handleScroll}
+          ref={(scroller) => {
+            this.scroller = scroller
+          }}
+        >
           { getDirectMessages && getDirectMessages.length === 0 ? emptyMessage : messagesList }
-        </Comment.Group>   
-        
-        <MessageForm receiverId={this.props.receiverId} />
+        </div>           
+
+        <MessageForm receiverId={receiverId} />
       </div>
     ) 
   }
@@ -249,7 +317,6 @@ const QueriesMutation =  compose(
     })
   }),
   graphql(GET_DIRECT_MESSAGES_QUERY, {
-    "name": "getDirectMessagesQuery",
     options: (props) => ({
       variables: {
         receiverId: parseInt(props.receiverId)

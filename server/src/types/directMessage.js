@@ -51,7 +51,7 @@ export default `
   type Query {
     getDirectMessage(id: Int!): DirectMessage
     
-    getDirectMessages(receiverId: Int!): [DirectMessage!]!
+    getDirectMessages(cursor: String, receiverId: Int!): [DirectMessage!]!
     
     getDirectMessageUsers: [DirectMessageUser!]!
 

@@ -26,7 +26,7 @@ export default function Sale({ sale }) {
                 <i className="ui tiny header">{T.translate("invoices.show.sale.deadline")}</i>
               </td>
               <td>
-                {sale && moment(sale.deadline).format("DD/MM/YYYY")}
+                {sale && moment(sale.deadline).format('ll') }
               </td>
             </tr>
             <tr>

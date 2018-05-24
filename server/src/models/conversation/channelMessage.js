@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Message = sequelize.define('messages', {
+  const channelMessage = sequelize.define('channel_messages', {
     body: DataTypes.TEXT,
     uploadPath: {
       type: DataTypes.STRING,
@@ -15,18 +15,22 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       field: 'created_at'
     }
+  }, {
+    indexes: [
+      { fields: ['created_at'] }
+    ]
   })
 
-  Message.associate = (models) => {
+  channelMessage.associate = (models) => {
     // 1:M
-    Message.belongsTo(models.Channel, {
+    channelMessage.belongsTo(models.Channel, {
       foreignKey: {
         name: 'channelId',
         field: 'channel_id'
       }
     })
 
-    Message.belongsTo(models.User, {
+    channelMessage.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
         field: 'user_id'
@@ -34,7 +38,7 @@ export default (sequelize, DataTypes) => {
     })
   }
 
-  return Message
+  return channelMessage
 }
 
 

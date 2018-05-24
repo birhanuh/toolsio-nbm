@@ -64,7 +64,11 @@ const isAuthenticated = () => {
   
   try {
     decode(authToken)
-    decode(refreshAuthToken)
+    const { exp } = decode(refreshAuthToken)
+
+    if (Date.now() / 1000 > exp) {
+      return false
+    }
   } catch(err) {
     return false 
   }
