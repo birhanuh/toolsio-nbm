@@ -85,7 +85,7 @@ export default {
 
   },
 
-  GetChannelAndUsersCountResponse: {
+  GetChannelUsersCountResponse: {
     getUsersCount: ({ id }, args, { models }) => {
       return models.User.count({ 
         include: [

@@ -6,7 +6,7 @@ export default `
     users: [User!]!
   }
 
-  type GetChannelAndUsersCountResponse {
+  type GetChannelUsersCountResponse {
     id: Int!
     name: String!
     getUsersCount: Int!
@@ -27,7 +27,7 @@ export default `
   type Query {
     getChannel(id: Int!): Channel!
     
-    getChannels: [GetChannelAndUsersCountResponse!]!
+    getChannels: [GetChannelUsersCountResponse!]!
   }
 
   type Mutation {

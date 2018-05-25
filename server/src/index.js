@@ -10,6 +10,7 @@ import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import cors from 'cors'
 import { apolloUploadExpress } from 'apollo-upload-server'
+import DataLoader from 'dataloader'
 
 // Authentication packages 
 import session from 'express-session'
@@ -33,6 +34,9 @@ import jwtConfig from '../../config/jwt.json'
 // Models
 import models from './models'
 import { refreshAuthTokens } from './utils/authentication'
+
+// Batch functions 
+import { customerBatcher } from './utils/batchFunctions'
 
 // Schema
 const types = fileLoader(path.join(__dirname + '/types'))
@@ -103,7 +107,8 @@ app.use(
       user: req.user,
       //user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
-      SECRET2: jwtConfig.jwtSecret2
+      SECRET2: jwtConfig.jwtSecret2,
+      customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models, req.user)) 
     }
   }))
 )

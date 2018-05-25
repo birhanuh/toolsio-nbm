@@ -6,7 +6,7 @@ export default {
   Query: {
     getInvoice: requiresAuth.createResolver((parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true })),
     
-    getInvoices: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
+    getInvoices: (parent, { offset, limit, order }, { models }) => 
       models.Invoice.findAndCountAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })
         .then(result => {  
           return {
@@ -21,7 +21,7 @@ export default {
             invoices: []
           }
         })
-      )
+      
   },
 
   Mutation: {
@@ -89,7 +89,7 @@ export default {
 
     sale: ({ saleId }, args, { models }) => models.Sale.findOne({ where: {id: saleId} }, { raw: true }),
 
-    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
+    customer: ({ customerId }, args, { customerLoader }) => customerLoader.load(customerId),
 
     total: async ({ projectId, saleId }, args, { models }) => {
       if (projectId) {    
