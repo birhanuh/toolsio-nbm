@@ -5,16 +5,16 @@ export default {
   Query: {
     getChannel: requiresAuth.createResolver((parent, { id }, { models }) => models.Channel.findOne({ where: { id } })),
 
-    getChannels: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Channel.findAll({
+    getChannelsUsersCount:  requiresAuth.createResolver((parent, args, { models, user }) => 
+      models.Channel.findAll({
         include: [
           {
             model: models.User,
-            where: { id: 1 }
+            where: { id: user.id }
           }
         ]
-      }, { raw: true })
-    })
+      }, { raw: true }))
+
   },
 
   Mutation: {
@@ -85,8 +85,8 @@ export default {
 
   },
 
-  GetChannelUsersCountResponse: {
-    getUsersCount: ({ id }, args, { models }) => {
+  GetChannelsUsersCountResponse: {
+    usersCount: ({ id }, args, { models }) => {
       return models.User.count({ 
         include: [
           {

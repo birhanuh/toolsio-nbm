@@ -6,7 +6,7 @@ export default {
   Query: {
     getInvoice: requiresAuth.createResolver((parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true })),
     
-    getInvoices: (parent, { offset, limit, order }, { models }) => 
+    getInvoices: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
       models.Invoice.findAndCountAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })
         .then(result => {  
           return {
@@ -20,7 +20,7 @@ export default {
             count: 0,
             invoices: []
           }
-        })
+        }))
       
   },
 
@@ -85,11 +85,11 @@ export default {
   },
 
   GetInvoicesResponseRows: {
-    project: ({ projectId }, args, { models }) => models.Project.findOne({ where: {id: projectId} }, { raw: true }),
-
-    sale: ({ saleId }, args, { models }) => models.Sale.findOne({ where: {id: saleId} }, { raw: true }),
-
     customer: ({ customerId }, args, { customerLoader }) => customerLoader.load(customerId),
+
+    project: ({ projectId }, args, { projectLoader }) => projectId && projectLoader.load(projectId),
+
+    sale: ({ saleId }, args, { saleLoader }) => saleId && saleLoader.load(saleId),
 
     total: async ({ projectId, saleId }, args, { models }) => {
       if (projectId) {    
@@ -108,7 +108,6 @@ export default {
   },
 
   Invoice: {
-
     customer: ({ customerId }, args, { models }) => 
       models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
 

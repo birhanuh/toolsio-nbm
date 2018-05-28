@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone'
 // Semantic UI Form elements
 import { Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
-import { CREATE_MESSAGE_MUTATION } from '../../../../graphql/conversations'
+import { CREATE_CHANNEL_MESSAGE_MUTATION } from '../../../../graphql/channelMessages'
 
 // Localization 
 import T from 'i18n-react'
@@ -53,7 +53,7 @@ class Message extends Component {
           variables: { body, channelId: parseInt(channelId) }
           })
           .then(res => {
-            const { success, errors } = res.data.createMessage
+            const { success, errors } = res.data.createChannelMessage
 
             if (success) {
               // Rest message state
@@ -85,7 +85,7 @@ class Message extends Component {
       })
       .then(res => {       
 
-        const { success, message, errors } = res.data.createMessage
+        const { success, message, errors } = res.data.createChannelMessage
 
         if (success) {
           // Reset reload
@@ -128,5 +128,5 @@ class Message extends Component {
   }
 }
 
-export default graphql(CREATE_MESSAGE_MUTATION)(Message)
+export default graphql(CREATE_CHANNEL_MESSAGE_MUTATION)(Message)
 

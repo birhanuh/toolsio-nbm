@@ -52,27 +52,12 @@ export const CREATE_CHANNEL_MUTATION = gql`
   }
 `
 
-export const GET_CHANNELS_QUERY = gql`
+export const GET_CHANNELS_USERS_COUNT_QUERY = gql`
   {
-    getChannels {
+    getChannelsUsersCount {
       id
       name
-      getUsersCount 
-    }
-  }
-`
-
-export const CREATE_MESSAGE_MUTATION = gql`
-  mutation ($body: String, $file: Upload, $channelId: Int!) {
-    createMessage(body: $body, file: $file, channelId: $channelId)  {
-      success
-      message {
-        id
-      } 
-      errors {
-        path
-        message
-      }
+      usersCount 
     }
   }
 `

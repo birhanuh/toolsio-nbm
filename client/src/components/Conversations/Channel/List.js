@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import { Label } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import { GET_CHANNELS_USERS_COUNT_QUERY } from '../../../graphql/channels'
 
 // Localization 
 import T from 'i18n-react'
@@ -23,15 +24,15 @@ class List extends Component {
   }
 
   render() {    
-    const { data: { getChannels }, channelId } = this.props
+    const { data: { getChannelsUsersCount }, channelId } = this.props
 
-    const channelList = getChannels && getChannels.map(channel => 
+    const channelList = getChannelsUsersCount && getChannelsUsersCount.map(channel => 
       <Link key={channel.id} to={`/conversations/channel/${channel.id}`} 
         className={classnames('item', {active: channelId && parseInt(channelId) === channel.id})}>
         
         <Label className="blue">
           {T.translate("conversations.channel.members")}
-          <div className="detail">{channel.getUsersCount}</div>
+          <div className="detail">{channel.usersCount}</div>
         </Label>
 
         <div>
@@ -54,16 +55,7 @@ class List extends Component {
   }
 }
 
-const getChannelsQuery = gql`
-  {
-    getChannels {
-      id
-      name
-      getUsersCount 
-    }
-  }
-`
-export default graphql(getChannelsQuery)(List)
+export default graphql(GET_CHANNELS_USERS_COUNT_QUERY)(List)
 
 
 

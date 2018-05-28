@@ -31,3 +31,18 @@ export const GET_CHANNEL_MESSAGE_QUERY = gql`
     }
   }
 `
+
+export const CREATE_CHANNEL_MESSAGE_MUTATION = gql`
+  mutation ($body: String, $file: Upload, $channelId: Int!) {
+    createChannelMessage(body: $body, file: $file, channelId: $channelId)  {
+      success
+      message {
+        id
+      } 
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
