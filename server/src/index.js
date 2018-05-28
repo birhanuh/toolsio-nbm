@@ -36,7 +36,7 @@ import models from './models'
 import { refreshAuthTokens } from './utils/authentication'
 
 // Batch functions 
-import { customerBatcher, projectBatcher, saleBatcher } from './utils/batchFunctions'
+import { userBatcher, customerBatcher, projectBatcher, saleBatcher } from './utils/batchFunctions'
 
 // Schema
 const types = fileLoader(path.join(__dirname + '/types'))
@@ -108,9 +108,10 @@ app.use(
       user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2,
+      userLoader: new DataLoader(userId => userBatcher(userId, models)),
       customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models)),
       projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models)),
-      saleIdsLoader: new DataLoader(saleIds => saleBatcher(saleIds, models))
+      saleLoader: new DataLoader(saleIds => saleBatcher(saleIds, models))
     }
   }))
 )

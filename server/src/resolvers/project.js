@@ -88,9 +88,9 @@ export default {
   },
 
   GetProjectsResponse: {
-    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
+    customer: ({ customerId }, args, { customerLoader }) => customerLoader.load(customerId),
 
-    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true })
+    user: ({ userId }, args, { userLoader }) => userLoader.load(userId)
   },
 
   GetProjectsWithoutInvoiceResponse: {

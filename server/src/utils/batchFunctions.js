@@ -24,9 +24,25 @@ export const projectBatcher = async (projectIds, models) => {
   return projectIds.map(id => data[id])
 }
 
-export const saleBatcher = (saleIds, models) => 
-  models.Sale.findAll({ where: {id: {[models.sequelize.Op.in]: saleIds} } }, { raw: true })
+export const saleBatcher = async (saleIds, models) => {
+  const results = await models.Sale.findAll({ where: {id: {[models.sequelize.Op.in]: saleIds} } }, { raw: true })
 
+  const data = {}
+
+  // group by id
+  results.forEach((r) => {
+    data[r.id] = r
+  })
+  
+  return saleIds.map(id => data[id])
+}
+
+
+export const userBatcher = async (userId, models) => {
+  const result = await models.User.findOne({ where: {id: userId} }, { raw: true })
+
+  return [result]
+}
 
 export const usersCountLoaderBatcher = async (ids, models) => {
   const results = await models.User.findAll({ 
