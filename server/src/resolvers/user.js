@@ -202,7 +202,7 @@ export default {
       
     }),
 
-    s3SignAvatar: requiresAuth.createResolver(async (parent, args, { models }) => {
+    s3SignAvatar: requiresAuth.createResolver(async (parent, args) => {
 
       const s3Params = {
         Bucket: process.env.S3_BUCKET,

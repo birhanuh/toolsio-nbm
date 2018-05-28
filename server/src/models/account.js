@@ -84,7 +84,7 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      beforeValidate: (account, options) => {
+      beforeValidate: (account) => {
         if (account.phoneNumber === "") {
           account.phoneNumber = null
         }

@@ -104,8 +104,8 @@ app.use(
     context: {
       models,
       subdomain: req.headers.subdomain,
-      //user: req.user,
-      user: { id: 1 },
+      user: req.user,
+      //user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2,
       userLoader: new DataLoader(userId => userBatcher(userId, models)),
@@ -174,7 +174,7 @@ server.listen(app.get('port'), () => {
     execute,
     subscribe,
     schema: schema,
-    onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
+    onConnect: async ({authToken, refreshAuthToken}) => {
       
       if (authToken && refreshAuthToken) {      
         try {

@@ -18,7 +18,7 @@ export default {
   },
 
   Mutation: {
-    createChannel: requiresAuth.createResolver(async (parent, { name }, { models, user }) => {
+    createChannel: requiresAuth.createResolver(async (parent, { name }, { models }) => {
       try {
       
         const channel = await models.Channel.findOne({ where: { name } }, { raw: true })
@@ -51,7 +51,7 @@ export default {
       }
     }),
 
-    addMember: requiresAuth.createResolver(async (parent, { members, channelId }, { models, user }) => {
+    addMember: requiresAuth.createResolver(async (parent, { channelId }, { models }) => {
 
       try {
         const members = await models.Member.bulkCreate(members.map(member => ({ userId: member, channelId: channelId })))

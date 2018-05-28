@@ -38,7 +38,7 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      beforeValidate: (item, options) => {
+      beforeValidate: (item) => {
         if (item.vat === "") {
           item.vat = null
         }

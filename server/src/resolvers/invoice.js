@@ -27,12 +27,10 @@ export default {
   Mutation: {
     createInvoice: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
-        const customer = models.Customer.findOne({where: {id: args.customerId} }, { raw: true })
         
         let date = new Date(args.deadline)
         let dataFormated = date.getDate().toString()+(date.getMonth()+1).toString()+date.getFullYear().toString() 
         
-        //let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()+user.id.toString()
         let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()
        
         const invoice = await models.Invoice.create({...args, referenceNumber, userId: user.id})

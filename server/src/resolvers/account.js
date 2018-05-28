@@ -19,7 +19,7 @@ export default {
   },
 
   Mutation: {
-    isSubdomainExist: (parent, { subdomain }, { models, user }) => 
+    isSubdomainExist: (parent, { subdomain }, { models }) => 
       models.Account.findOne({ where: { subdomain } }, { raw: true })
         .then(account => {
           if (account) {
@@ -94,7 +94,7 @@ export default {
         })
     }),
 
-    s3SignLogo: requiresAuth.createResolver(async (parent, args, { models }) => {
+    s3SignLogo: requiresAuth.createResolver(async (parent, args) => {
 
       const s3Params = {
         Bucket: process.env.S3_BUCKET,

@@ -86,7 +86,7 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      beforeValidate: (customer, options) => {
+      beforeValidate: (customer) => {
         if (customer.email === "" && customer.phoneNumber === "") {
 
           const type = 'Validation error'

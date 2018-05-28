@@ -13,7 +13,7 @@ export default {
     getNewDirectMessage: {
       subscribe: requiresDirectMessageAccess.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_DIRECT_MESSAGE), 
-        (payload, args, { models, user }) => {
+        (payload, args, { user }) => {
           
           return (payload.getNewDirectMessage.senderId === user.id && payload.getNewDirectMessage.receiverId === args.receiverId)
           || (payload.getNewDirectMessage.senderId === args.receiverId && payload.getNewDirectMessage.receiverId === user.id)

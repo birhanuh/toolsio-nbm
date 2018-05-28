@@ -1,6 +1,5 @@
 import Conversation from '../models/messaging/conversation'
 import Message from '../models/messaging/message'
-import User from '../models/user'
 import mongoose from 'mongoose'
 
 export default {

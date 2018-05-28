@@ -8,6 +8,8 @@ import { LOGIN_USER_MUTATION } from '../../graphql/authentications'
 
 import { Validation } from '../../utils'
 
+import { wsLink } from '../../apollo'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -92,6 +94,9 @@ class Form extends Component {
           if (success) {
             localStorage.setItem('authToken', authToken)
             localStorage.setItem('refreshAuthToken', refreshAuthToken)
+            
+            // Re-connect to wsLink
+            wsLink.subscriptionClient.tryConnect()
             
             this.props.addFlashMessage({
               type: 'success',
