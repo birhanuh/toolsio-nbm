@@ -29,7 +29,7 @@ const app = express()
 require('dotenv').config()
 
 // Config
-import jwtConfig from '../../config/jwt.json'
+import jwtConfig from '../config/jwt.json'
 
 // Models
 import models from './models'

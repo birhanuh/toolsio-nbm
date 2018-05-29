@@ -9,7 +9,7 @@ import nodemailer from 'nodemailer'
 import AWS from 'aws-sdk'
 
 // jwt config
-import jwtConfig from '../../../config/jwt.json'
+import jwtConfig from '../../config/jwt.json'
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',

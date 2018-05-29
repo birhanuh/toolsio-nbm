@@ -7,6 +7,8 @@
     "test": "./src/__test__"
   },
   "scripts": {
+    "serve": "node dist/index.js",
+    "build": "babel src -d dist",
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
     "db:reset": "cd src && './__test__/helpers/reset_db.sh'",
     "tstart": "NODE_ENV=test npm run db:reset && NODE_ENV=test babel-node -- src/index.js",
@@ -26,6 +28,7 @@
     "apollo-server-express": "^1.3.4",
     "apollo-upload-server": "^5.0.0",
     "aws-sdk": "^2.220.1",
+    "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
@@ -64,6 +67,7 @@
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",
     "faker": "^4.1.0",
