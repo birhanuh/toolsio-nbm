@@ -35,8 +35,9 @@ export default `
     status: String!
     description: String
     progress: Int
-    customer: Customer!
     total: Float
+    customer_id: Int!
+    customer_name: String!
   }
 
   type GetProjectsWithInvoiceResponse {
@@ -66,9 +67,9 @@ export default `
     
     getProjects(offset: Int!, limit: Int!, order: String!): [GetProjectsResponse!]!
 
-    getProjectsWithoutInvoice: [GetProjectsWithoutInvoiceResponse!]!
+    getProjectsWithoutInvoice(name: String!): [GetProjectsWithoutInvoiceResponse!]!
 
-    getProjectsWithInvoice: [GetProjectsWithoutInvoiceResponse!]!
+    getProjectsWithInvoice: [GetProjectsWithInvoiceResponse!]!
   }
 
   type Mutation {

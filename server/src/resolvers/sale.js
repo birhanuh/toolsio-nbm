@@ -8,11 +8,12 @@ export default {
     getSales: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
       models.Sale.findAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
 
-    getSalesWithoutInvoice: requiresAuth.createResolver((parent, args, { models }) => 
-      models.sequelize.query('SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id FROM sales s LEFT JOIN invoices i ON s.id = i.sale_id WHERE i.sale_id IS NULL', {
-        model: models.Sale,
-        raw: true,
-      })),
+    getSalesWithoutInvoice: requiresAuth.createResolver((parent, { name }, { models }) => 
+      models.sequelize.query('SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id, c.id AS customer_id, c.name AS customer_name FROM sales s LEFT JOIN invoices i ON s.id = i.sale_id JOIN customers c ON s.customer_id=c.id WHERE i.sale_id IS NULL AND s.name ILIKE :saleName', 
+        {  replacements: { saleName: '%'+name+'%' },
+          model: models.Sale,
+          raw: true,
+        })),
 
     getSalesWithInvoice: requiresAuth.createResolver((parent, args, { models }) => 
       models.sequelize.query('SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id FROM sales s INNER JOIN invoices i ON s.id = i.sale_id', {
@@ -94,8 +95,6 @@ export default {
   },
 
   GetSalesWithoutInvoiceResponse: {
-    customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
-
     total: async ({ id }, args, { models }) => {     
       const totalSum = await models.Item.sum('total', {
           where: { saleId: id }

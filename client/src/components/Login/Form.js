@@ -96,7 +96,7 @@ class Form extends Component {
             localStorage.setItem('refreshAuthToken', refreshAuthToken)
             
             // Re-connect to wsLink
-            wsLink.subscriptionClient.tryConnect()
+            wsLink.subscriptionClient.tryReconnect()
             
             this.props.addFlashMessage({
               type: 'success',

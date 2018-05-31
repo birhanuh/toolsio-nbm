@@ -9,14 +9,15 @@ export default {
     getProjects: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
       models.Project.findAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
 
-    getProjectsWithoutInvoice: requiresAuth.createResolver((parent, args, { models }) => 
-      models.sequelize.query('SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p LEFT JOIN invoices i ON p.id = i.project_id WHERE i.project_id IS NULL', {
-        model: models.Project,
-        raw: true,
-      })),
+    getProjectsWithoutInvoice: requiresAuth.createResolver((parent, { name }, { models }) => 
+      models.sequelize.query("SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id, c.id AS customer_id, c.name AS customer_name FROM projects p LEFT JOIN invoices i ON p.id=i.project_id JOIN customers c ON p.customer_id = c.id WHERE i.project_id IS NULL AND p.name ILIKE :projectName", 
+        { replacements: { projectName: '%'+name+'%' },
+          model: models.Project,
+          raw: true
+        })),
 
     getProjectsWithInvoice: requiresAuth.createResolver((parent, args, { models }) => 
-      models.sequelize.query('SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p INNER JOIN invoices i ON p.id = i.project_id', {
+      models.sequelize.query('SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p INNER JOIN invoices i ON p.id = i.project_id', { 
         model: models.Project,
         raw: true,
       }))
@@ -94,8 +95,6 @@ export default {
   },
 
   GetProjectsWithoutInvoiceResponse: {
-    customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
-
     total: async ({ id }, args, { models }) => {     
       const totalSum = await models.Task.sum('total', {
           where: { projectId: id }

@@ -61,7 +61,7 @@ class HeaderNav extends Component {
           return [
             <nav key="nav" className="ui fixed menu">
               <div className="left menu">
-                <a className="item anchor"><i className="sidebar icon"></i></a>
+                <a className="item anchor" onClick={this.props.toggleVisibility}><i className="sidebar icon"></i></a>
                 <div className="logo item">
                   <Link to="/dashboard">
                     <img src={logoInverted} alt="logo-inverted" />

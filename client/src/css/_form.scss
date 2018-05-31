@@ -239,8 +239,14 @@ select {
     border: 1px solid $red;
   }
 }
+
 select.date {
   background-position: 93% 50%;
+}
+
+.invoices .ui.form .inline.field > .selection.dropdown, 
+.invoices .ui.form .inline.fields .field > .selection.dropdown {
+  width: 73%;
 }
 
 // input to link

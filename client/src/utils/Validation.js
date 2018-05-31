@@ -228,7 +228,7 @@ export default {
     let errors = {}
     
     if (data.currentStep === 'step1') {
-      if ((!data.step1.saleId && !data.step1.projectId) || (data.step1.saleId && data.step1.projectId)) {
+      if ((!data.step1.sale && !data.step1.project) || ((data.step1.sale && data.step1.sale.id) && (data.step1.project && data.step1.project.id))) {
         errors['saleId'] = T.translate("invoices.form.sale_or_project_required")
         errors['projectId'] = T.translate("invoices.form.sale_or_project_required")
       }      

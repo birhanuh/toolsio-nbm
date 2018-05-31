@@ -37,7 +37,6 @@ export const saleBatcher = async (saleIds, models) => {
   return saleIds.map(id => data[id])
 }
 
-
 export const userBatcher = async (userId, models) => {
   const result = await models.User.findOne({ where: {id: userId} }, { raw: true })
 

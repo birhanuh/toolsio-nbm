@@ -30,8 +30,9 @@ export default `
     deadline: Date!
     status: String!
     description: String
-    customer: Customer!
     total: Float
+    customer_id: Int!
+    customer_name: String!
   }
 
   type GetSalesWithInvoiceResponse {
@@ -60,9 +61,9 @@ export default `
     
     getSales(offset: Int!, limit: Int!, order: String!): [GetSalesResponse!]!
 
-    getSalesWithoutInvoice: [GetSalesWithoutInvoiceResponse!]!
+    getSalesWithoutInvoice(name: String!): [GetSalesWithoutInvoiceResponse!]!
 
-    getSalesWithInvoice: [GetSalesWithoutInvoiceResponse!]!
+    getSalesWithInvoice: [GetSalesWithInvoiceResponse!]!
   }
 
   type Mutation {

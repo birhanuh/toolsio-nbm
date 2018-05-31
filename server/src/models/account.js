@@ -14,7 +14,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       validate: {     
         is: {
-          arg: /^[A-Za-z \/ ]+$/,            // will only allow letters and slashes with RegExp,
+          arg: /^[A-Za-z / ]+$/,            // will only allow letters and slashes with RegExp,
           msg: 'Wrong industry format'
         }
       } 

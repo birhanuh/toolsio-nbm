@@ -7,53 +7,116 @@ import T from 'i18n-react'
 
 import moment from 'moment'
 
-export default function Confirmation ({ _id, step2, sale, project, handlePrevious, handleSubmit, isLoading }) {
+export default function Confirmation ({ id, step2, sale, project, handlePrevious, handleSubmit, isLoading, errors }) {
 
   return (
-    <div className="ui form"> 
+    <form className={classnames("ui form text container", { loading: isLoading })}>
+      { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+
       <div className="inline field"> 
-        {_id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
+        {id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
           <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
             <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.confirmation")}</div>
           </h1>
         }
       </div> 
       
-      <dl className="dl-horizontal">
-        <dt>{T.translate("invoices.show.deadline")}</dt>
-        <dd>{step2.deadline ? moment(step2.deadline).format('ll')  : '-'}</dd>
-        <dt>{T.translate("invoices.show.status")}</dt>
-        <dd><div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div></dd>
-        <dt>{T.translate("invoices.show.payment_term")}</dt>
-        <dd>{step2.paymentTerm ? step2.paymentTerm : '-'}</dd>
-        <dt>{T.translate("invoices.show.interest_in_arrears")}</dt>
-        <dd>{step2.interestInArrears}</dd>
-        <dt>{T.translate("invoices.show.description")}</dt>
-        <dd>{step2.description ? step2.description : '-'}</dd>
-        <dt><strong>{T.translate("invoices.show.total")}</strong></dt>
-        <dd><strong>
-          {project && project.total} {sale && sale.total}
-          </strong>
-        </dd>
-      </dl>  
+      <table className="ui column very basic collapsing celled table">
+        <tbody>
+          <tr>
+            <td>
+              <i className="ui tiny header">{T.translate("invoices.show.deadline")}</i>
+            </td>
+            <td>
+              {step2.deadline ? moment(step2.deadline).format('ll')  : '-'}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <i className="ui tiny header">{T.translate("invoices.show.status")}</i>
+            </td>
+            <td>
+              <div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <i className="ui tiny header">{T.translate("invoices.show.payment_term")}</i>
+            </td>
+            <td>
+              {step2.paymentTerm ? step2.paymentTerm : '-'}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <i className="ui tiny header">{T.translate("invoices.show.interest_in_arrears")}</i>
+            </td>
+            <td>
+              {step2.interestInArrears}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <i className="ui tiny header"><strong>{T.translate("invoices.show.total")}</strong></i>
+            </td>
+            <td>
+              {project && project.total} {sale && sale.total}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <i className="ui tiny header">{T.translate("invoices.show.tax")}</i>
+            </td>
+            <td>
+              {step2.tax}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <i className="ui tiny header">{T.translate("invoices.show.description")}</i>
+            </td>
+            <td>
+              {step2.description ? step2.description : '-'}
+            </td>
+          </tr>
+        </tbody>
+      </table>
       
       {sale &&
         <div>
           <div className="inline field"> 
             <h2 className="ui header">{T.translate("invoices.form.sale.header")}</h2>
           </div>
-          <dl className="dl-horizontal">
-            <dt>{T.translate("invoices.form.sale.name")}</dt>
-            <dd>{sale.name}</dd>
-            <dt>{T.translate("invoices.form.sale.status")}</dt>
-            <dd>
-              <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
-                {sale.status}
-              </div>
-            </dd>
-            <dt>{T.translate("invoices.form.sale.customer")}</dt>
-            <dd>{sale.customer && sale.customer.name}</dd>
-          </dl>
+          <table className="ui very basic collapsing celled table">
+            <tbody>
+              <tr>
+                <td>
+                  <i className="ui tiny header">{T.translate("invoices.form.sale.name")}</i>
+                </td>
+                <td>
+                  {sale.name}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <i className="ui tiny header">{T.translate("invoices.form.sale.status")}</i>
+                </td>
+                <td>
+                  <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
+                    {sale.status}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <i className="ui tiny header">{T.translate("invoices.form.sale.customer")}</i>
+                </td>
+                <td>
+                  {id ? step2.customer.name : sale.customer_name }
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       }
       
@@ -62,18 +125,36 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
           <div className="inline field"> 
             <h2 className="ui header">{T.translate("invoices.form.project.header")}</h2>
           </div>
-          <dl className="dl-horizontal">
-            <dt>{T.translate("invoices.form.project.name")}</dt>
-            <dd>{project.name}</dd>
-            <dt>{T.translate("invoices.form.project.status")}</dt>
-            <dd>
-              <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
+          <table className="ui very basic collapsing celled table">
+            <tbody>
+              <tr>
+                <td>
+                  <i className="ui tiny header">{T.translate("invoices.form.project.name")}</i>
+                </td>
+                <td>
+                  {project.name}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <i className="ui tiny header">{T.translate("invoices.form.project.status")}</i>
+                </td>
+                <td>
+                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
                 {project.status}
               </div>
-            </dd>
-            <dt>{T.translate("invoices.form.project.customer")}</dt>
-            <dd>{project.customer && project.customer.name}</dd>
-          </dl>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <i className="ui tiny header">{T.translate("invoices.form.project.customer")}</i>
+                </td>
+                <td>
+                  {id ? step2.customer.name : project.customer_name }
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       }
       <br/>
@@ -84,7 +165,7 @@ export default function Confirmation ({ _id, step2, sale, project, handlePreviou
         
         <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
       </div>  
-    </div>
+    </form>
     )
 }
 

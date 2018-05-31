@@ -23,7 +23,7 @@ body {
           text-size-adjust: 100%;
 }
 
-body.pushable > .pusher {
+.pushable > .pusher {
   background: $body-background-color;
 }
 
@@ -228,11 +228,8 @@ nav.ui.menu {
   border: none;
   .item {    
     color: #d9d9d9;
-    border-bottom: 1px solid $light-dark-grey;
-    padding: 12px;
     font-weight: 600;
     text-transform: uppercase !important;
-    height: 40px;
   }
   .active.item, .active.item:hover, .active.item:focus {
     background: $body-background-color;
