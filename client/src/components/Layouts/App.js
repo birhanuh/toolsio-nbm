@@ -1,7 +1,7 @@
 import React, { Component } from 'react' 
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
-import { Sidebar, Menu } from 'semantic-ui-react'
+import { Sidebar } from 'semantic-ui-react'
 
 import Dashboard from '../Dashboard/Page'
 import Landing from './Landing'
@@ -29,6 +29,8 @@ import UsersPage from '../Users/Page'
 import HeaderNav from './HeaderNav'
 import FlashMessage from '../../flash/FlashMessage'
 
+import { OuterSidebarScrollableHeaderNav, InnerSidebar } from './SidebarsHeader'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -40,16 +42,6 @@ import '../../css/app.scss'
 
 // Images
 import logo from '../../images/logo-square.png' 
-import logoPlaceholderMedium from '../../images/logo-placeholder.svg'
-
-const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
-  <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
-    <Link className={match ? 'active item' : 'item' } to={to}>
-      <i className={icon}></i>
-      <span>{label}</span>
-    </Link>
-  )} />
-)
 
 class App extends Component {
   
@@ -64,6 +56,15 @@ class App extends Component {
   toggleOuterSidebarVisibility = () => 
     this.setState({ visibleOuterSidebar: !this.state.visibleOuterSidebar })
 
+  // Hide Sidebar when click outside Sidebar area
+  hideSidebarVisibility = () => {
+    const { visibleInnerSidebar, visibleOuterSidebar } = this.state
+
+    if (visibleInnerSidebar || visibleOuterSidebar) {
+      this.setState({ visibleInnerSidebar: false, visibleOuterSidebar: false })
+    }
+  }
+    
   render() {
     const { visibleInnerSidebar, visibleOuterSidebar } = this.state
 
@@ -75,34 +76,14 @@ class App extends Component {
 
     return (
       <Sidebar.Pushable>
-        <Sidebar as={Menu} animation='overlay' width='thin' visible={visibleOuterSidebar} vertical inverted>
-          <ActiveLink activeOnlyWhenExact className="active item" to="#home" label={T.translate("landing.home.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#features" label={T.translate("landing.features.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#clients" label={T.translate("landing.clients.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#testimonials" label={T.translate("landing.testmonial.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#pricing" label={T.translate("landing.pricing.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#contacts" label={T.translate("landing.contacts.header")} />
-          <Link className="item" to="/subdomain">{T.translate("log_in.log_in")}</Link>    
-          <Link className="item" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
-        </Sidebar>
+        {landingPage &&
+          <OuterSidebarScrollableHeaderNav visibleOuterSidebar={visibleOuterSidebar} />
+        }
 
         { internalPages &&
-          <Sidebar as={Menu} animation='slide along' visible={visibleInnerSidebar} vertical inverted>
-            <div className="ui center aligned vertical segment account">
-              <Link to="/settings">
-                <img className="ui centered tiny rounded image mt-3" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
-              </Link>
-              <p className="mt-3 mb-2">Birhanu (Admin)</p>
-            </div>
-            <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboard.header")} />
-            <ActiveLink activeOnlyWhenExact to="/projects" icon="suitcase icon" label={T.translate("projects.page.header")} />
-            <ActiveLink activeOnlyWhenExact to="/sales" icon="cart icon" label={T.translate("sales.page.header")} />
-            <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.page.header")}/>
-            <ActiveLink activeOnlyWhenExact to="/invoices" icon="file text outline icon" label={T.translate("invoices.page.header")}/>
-            <ActiveLink activeOnlyWhenExact to="/users" icon="user icon" label={T.translate("users.header")}/>
-          </Sidebar>
+          <InnerSidebar visibleInnerSidebar={visibleInnerSidebar} />
         }
-        <Sidebar.Pusher>
+        <Sidebar.Pusher onClick={this.hideSidebarVisibility}>
           { !authPages && <HeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
 
           <section className={classnames({'ui stackable grid basic segment internal-page': internalPages, 'ui stackable grid auth-pages': authPages})}>                    
