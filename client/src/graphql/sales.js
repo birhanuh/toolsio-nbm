@@ -8,6 +8,7 @@ export const GET_SALES_QUERY = gql`
       deadline
       status
       description
+      isInvoiced
       customer {
         name
       }
@@ -26,6 +27,7 @@ export const GET_SALE_QUERY = gql`
       status
       description
       customerId
+      isInvoiced
       customer {
         id
         name

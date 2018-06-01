@@ -11,6 +11,7 @@ export default `
     progress: Int
     tax: Float!
     tasks: [Task!]
+    isInvoiced: Boolean!
     customerId: Int!
     customer: Customer!
     user: User!
@@ -24,6 +25,7 @@ export default `
     status: String!
     description: String
     progress: Int
+    isInvoiced: Boolean!
     customer: Customer!
     user: User!
   }

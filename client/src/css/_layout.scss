@@ -223,22 +223,19 @@ nav.ui.menu {
   overflow-x: initial;
 }
 
-.ui.vertical.sidebar {
+.ui.vertical.inverted.sidebar {
   background-color: $dark-mid-night-blue;
   border: none;
   .item {    
     color: #d9d9d9;
     font-weight: 600;
     text-transform: uppercase !important;
+    border-bottom: 1px solid $light-dark-grey;
   }
-  .active.item, .active.item:hover, .active.item:focus {
-    background: $body-background-color;
-    color: $dark-mid-night-blue;
-  }
-  .item:hover, .item:focus {
+  .item:hover, .item:focus, .active.item {
     background: $body-background-color;
     outline: none;
-    color: $body-color;
+    color: $dark-mid-night-blue !important;
   }
   .item>i.icon {
     float: left; 

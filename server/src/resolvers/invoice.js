@@ -33,11 +33,23 @@ export default {
         
         let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()
        
-        const invoice = await models.Invoice.create({...args, referenceNumber, userId: user.id})
+        const response = await models.sequelize.transaction(async (transaction) => {
+          const invoice = await models.Invoice.create({...args, referenceNumber, userId: user.id}, { transaction })
+          
+          if (args.projectId) {
+            models.Project.update({isInvoiced: true}, { where: {id: args.projectId} }, { transaction })
+          }
+
+          if (args.saleId) {
+            models.Sale.update({isInvoiced: true}, { where: {id: args.saleId} }, { transaction })
+          }
+
+          return { invoice }
+        })
 
         return {
           success: true,
-          invoice: invoice
+          invoice: response.invoice
         }
       } catch (err) {
         console.log('err: ', err)

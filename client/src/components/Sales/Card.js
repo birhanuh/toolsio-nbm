@@ -40,7 +40,12 @@ export default function Card({sale}) {
               <td>{moment(sale.deadline).format('ll') }</td>
               <td>{sale.customer ? sale.customer.name: <p className="blue">{T.translate("sales.page.no_customer")}</p>}</td>
               <td>
-                <i className={classnames("check circle outline icon", {blue: sale.status === 'new', orange: sale.status === 'in progress', red: sale.status === 'delayed', green: sale.status === 'ready' || sale.status === 'delivered'})}></i>
+                { sale.isInvoiced === true && 
+                  <i className="check circle outline green icon"></i>
+                }
+                { sale.isInvoiced === false && 
+                  <i className="times circle outline red icon"></i>
+                }
               </td>
             </tr>
           </tbody>

@@ -48,7 +48,12 @@ export default function Card({project}) {
                 </div>
               </td>
               <td>
-                <i className={classnames("check circle outline icon", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}></i>
+                { project.isInvoiced === true && 
+                  <i className="check circle outline green icon"></i>
+                }
+                { project.isInvoiced === false && 
+                  <i className="times circle outline red icon"></i>
+                }
               </td>
             </tr>
           </tbody>

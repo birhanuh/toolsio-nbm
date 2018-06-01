@@ -53,13 +53,19 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
 
 class App extends Component {
   
-  state = { visible: false }
+  state = { 
+    visibleInnerSidebar: false,
+    visibleOuterSidebar: false  
+  }
 
-  toggleVisibility = () => 
-    this.setState({ visible: !this.state.visible })
+  toggleInnerSidebarVisibility = () => 
+    this.setState({ visibleInnerSidebar: !this.state.visibleInnerSidebar })
+
+  toggleOuterSidebarVisibility = () => 
+    this.setState({ visibleOuterSidebar: !this.state.visibleOuterSidebar })
 
   render() {
-    const { visible } = this.state
+    const { visibleInnerSidebar, visibleOuterSidebar } = this.state
 
     let landingPage = window.location.pathname === '/' ? true : false
     let authPages = window.location.pathname.indexOf('/login') === 0 || window.location.pathname.indexOf('/signup') === 0
@@ -69,11 +75,22 @@ class App extends Component {
 
     return (
       <Sidebar.Pushable>
-        { !authPages &&
-          <Sidebar as={Menu} animation='push' visible={visible} vertical inverted>
+        <Sidebar as={Menu} animation='overlay' width='thin' visible={visibleOuterSidebar} vertical inverted>
+          <ActiveLink activeOnlyWhenExact className="active item" to="#home" label={T.translate("landing.home.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#features" label={T.translate("landing.features.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#clients" label={T.translate("landing.clients.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#testimonials" label={T.translate("landing.testmonial.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#pricing" label={T.translate("landing.pricing.header")} />
+          <ActiveLink activeOnlyWhenExact className="item" to="#contacts" label={T.translate("landing.contacts.header")} />
+          <Link className="item" to="/subdomain">{T.translate("log_in.log_in")}</Link>    
+          <Link className="item" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+        </Sidebar>
+
+        { internalPages &&
+          <Sidebar as={Menu} animation='slide along' visible={visibleInnerSidebar} vertical inverted>
             <div className="ui center aligned vertical segment account">
               <Link to="/settings">
-                <img className="ui centered tiny rounded image" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
+                <img className="ui centered tiny rounded image mt-3" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
               </Link>
               <p className="mt-3 mb-2">Birhanu (Admin)</p>
             </div>
@@ -86,7 +103,7 @@ class App extends Component {
           </Sidebar>
         }
         <Sidebar.Pusher>
-          { !authPages && <HeaderNav toggleVisibility={this.toggleVisibility} /> }
+          { !authPages && <HeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
 
           <section className={classnames({'ui stackable grid basic segment internal-page': internalPages, 'ui stackable grid auth-pages': authPages})}>                    
 

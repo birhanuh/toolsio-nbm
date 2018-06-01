@@ -61,7 +61,7 @@ class HeaderNav extends Component {
           return [
             <nav key="nav" className="ui fixed menu">
               <div className="left menu">
-                <a className="item anchor" onClick={this.props.toggleVisibility}><i className="sidebar icon"></i></a>
+                <a className="item anchor" onClick={this.props.toggleInnerSidebarVisibility}><i className="sidebar icon"></i></a>
                 <div className="logo item">
                   <Link to="/dashboard">
                     <img src={logoInverted} alt="logo-inverted" />
@@ -166,22 +166,12 @@ class HeaderNav extends Component {
             </div>  
           </div>
         </div>
-        <div className="ui vertical inverted sidebar menu left">
-          <ActiveLink activeOnlyWhenExact className="active item" to="#home" label={T.translate("landing.home.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#features" label={T.translate("landing.features.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#clients" label={T.translate("landing.clients.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#testimonials" label={T.translate("landing.testmonial.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#pricing" label={T.translate("landing.pricing.header")} />
-          <ActiveLink activeOnlyWhenExact className="item" to="#contacts" label={T.translate("landing.contacts.header")} />
-          <Link className="item" to="/subdomain">{T.translate("log_in.log_in")}</Link>    
-          <Link className="item" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
-        </div>
         <div id="home" className="ui inverted vertical masthead center aligned segment">
           <div className="ui container">
             <div className="ui large secondary inverted pointing menu">
-              <Link className="toc item" to="/">
+              <a className="toc item" onClick={this.props.toggleOuterSidebarVisibility}>
                 <i className="sidebar icon"></i>
-              </Link> 
+              </a> 
 
               <div className="left menu">
                 <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
