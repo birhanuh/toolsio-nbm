@@ -20,26 +20,36 @@ export default {
             count: 0,
             invoices: []
           }
-        })
-      )
+        }))
+      
   },
 
   Mutation: {
     createInvoice: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
-        const customer = models.Customer.findOne({where: {id: args.customerId} }, { raw: true })
         
         let date = new Date(args.deadline)
         let dataFormated = date.getDate().toString()+(date.getMonth()+1).toString()+date.getFullYear().toString() 
         
-        //let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()+user.id.toString()
         let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()
        
-        const invoice = await models.Invoice.create({...args, referenceNumber, userId: user.id})
+        const response = await models.sequelize.transaction(async (transaction) => {
+          const invoice = await models.Invoice.create({...args, referenceNumber, userId: user.id}, { transaction })
+          
+          if (args.projectId) {
+            models.Project.update({isInvoiced: true}, { where: {id: args.projectId} }, { transaction })
+          }
+
+          if (args.saleId) {
+            models.Sale.update({isInvoiced: true}, { where: {id: args.saleId} }, { transaction })
+          }
+
+          return { invoice }
+        })
 
         return {
           success: true,
-          invoice: invoice
+          invoice: response.invoice
         }
       } catch (err) {
         console.log('err: ', err)
@@ -85,11 +95,11 @@ export default {
   },
 
   GetInvoicesResponseRows: {
-    project: ({ projectId }, args, { models }) => models.Project.findOne({ where: {id: projectId} }, { raw: true }),
+    customer: ({ customerId }, args, { customerLoader }) => customerLoader.load(customerId),
 
-    sale: ({ saleId }, args, { models }) => models.Sale.findOne({ where: {id: saleId} }, { raw: true }),
+    project: ({ projectId }, args, { projectLoader }) => projectId && projectLoader.load(projectId),
 
-    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
+    sale: ({ saleId }, args, { saleLoader }) => saleId && saleLoader.load(saleId),
 
     total: async ({ projectId, saleId }, args, { models }) => {
       if (projectId) {    
@@ -108,7 +118,6 @@ export default {
   },
 
   Invoice: {
-
     customer: ({ customerId }, args, { models }) => 
       models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
 

@@ -328,7 +328,7 @@ class Show extends Component {
                     <i className="ui tiny header">{T.translate("projects.show.progress")}</i>
                   </td>
                   <td>
-                    <div style={{width: "50%"}}>
+                    <div>
                       <div id="progress" className="ui success progress mb-3 mt-2">
                         <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
                           <div className="progress">{progress}%</div>

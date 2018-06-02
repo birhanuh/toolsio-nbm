@@ -39,12 +39,12 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      beforeValidate: (task, options) => {
+      beforeValidate: (task) => {
         if (task.vat === "") {
           task.vat = null
         }
       },
-      beforeUpdate: (task, options) => {
+      beforeUpdate: (task) => {
         console.log('task sd', task)
       }
     }

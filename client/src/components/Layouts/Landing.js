@@ -1,12 +1,7 @@
 import React, { Component } from 'react'
 
-// JS Custome
-import '../../js/landing.js'
-
 // Localization 
 import T from 'i18n-react'
-
-// Images
 
 class Landing extends Component {
 

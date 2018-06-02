@@ -5,20 +5,20 @@ export default {
   Query: {
     getChannel: requiresAuth.createResolver((parent, { id }, { models }) => models.Channel.findOne({ where: { id } })),
 
-    getChannels: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Channel.findAll({
+    getChannelsUsersCount:  requiresAuth.createResolver((parent, args, { models, user }) => 
+      models.Channel.findAll({
         include: [
           {
             model: models.User,
-            where: { id: 1 }
+            where: { id: user.id }
           }
         ]
-      }, { raw: true })
-    })
+      }, { raw: true }))
+
   },
 
   Mutation: {
-    createChannel: requiresAuth.createResolver(async (parent, { name }, { models, user }) => {
+    createChannel: requiresAuth.createResolver(async (parent, { name }, { models }) => {
       try {
       
         const channel = await models.Channel.findOne({ where: { name } }, { raw: true })
@@ -51,7 +51,7 @@ export default {
       }
     }),
 
-    addMember: requiresAuth.createResolver(async (parent, { members, channelId }, { models, user }) => {
+    addMember: requiresAuth.createResolver(async (parent, { channelId }, { models }) => {
 
       try {
         const members = await models.Member.bulkCreate(members.map(member => ({ userId: member, channelId: channelId })))
@@ -85,8 +85,8 @@ export default {
 
   },
 
-  GetChannelAndUsersCountResponse: {
-    getUsersCount: ({ id }, args, { models }) => {
+  GetChannelsUsersCountResponse: {
+    usersCount: ({ id }, args, { models }) => {
       return models.User.count({ 
         include: [
           {

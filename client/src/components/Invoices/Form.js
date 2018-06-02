@@ -1,13 +1,12 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import Steps from './Steps'
 import { graphql, compose } from 'react-apollo'
-import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, GET_PROJECTS_SALES_WITH_INVOICE_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../graphql/invoices'
+import { GET_INVOICES_QUERY, GET_INVOICE_FORM_QUERY, GET_PROJECTS_WITHOUT_INVOICE_QUERY, GET_SALES_WITHOUT_INVOICE_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../graphql/invoices'
 
 import SaleProject from './Steps/SaleProject'
 import Details from './Steps/Details'
@@ -25,8 +24,10 @@ class Form extends Component {
     this.state = {
       id: this.props.data.getInvoice ? this.props.data.getInvoice.id : null,
       step1: {
-        saleId: this.props.data.getInvoice ? (this.props.data.getInvoice.sale ? this.props.data.getInvoice.sale.id : '') : '',
-        projectId: this.props.data.getInvoice ? (this.props.data.getInvoice.project ? this.props.data.getInvoice.project.id : '') : '' 
+        sale: this.props.data.getInvoice ? this.props.data.getInvoice.sale : null,
+        project: this.props.data.getInvoice ? this.props.data.getInvoice.project : null,
+        projectsWithoutInvoice: [],
+        salesWithoutInvoice: []
       },
       step2: {
         deadline: this.props.data.getInvoice ? moment(this.props.data.getInvoice.deadline) : moment(),
@@ -35,9 +36,6 @@ class Form extends Component {
         status: this.props.data.getInvoice ? this.props.data.getInvoice.status : 'new',
         description: this.props.data.getInvoice ? this.props.data.getInvoice.description : '',
         tax: this.props.data.getInvoice ? this.props.data.getInvoice.tax : '',
-        customerId: this.props.data.getInvoice ? this.props.data.getInvoice.customerId : null,
-        sale: this.props.data.getInvoice ? this.props.data.getInvoice.sale : null,
-        project: this.props.data.getInvoice ? this.props.data.getInvoice.project : null,
       },
       currentStep: 'step1',
       errors: {},
@@ -50,8 +48,8 @@ class Form extends Component {
       this.setState({
         id: nextProps.data.getInvoice.id,
         step1: {
-          saleId: nextProps.data.getInvoice.sale && nextProps.data.getInvoice.sale.id,
-          projectId: nextProps.data.getInvoice.project && nextProps.data.getInvoice.project.id,
+          sale: nextProps.data.getInvoice.sale,
+          project: nextProps.data.getInvoice.project
         },
         step2: {
           deadline: nextProps.data.getInvoice.deadline ? moment(nextProps.data.getInvoice.deadline) : null,
@@ -60,10 +58,9 @@ class Form extends Component {
           status: nextProps.data.getInvoice.status,
           description: nextProps.data.getInvoice.description,
           tax: nextProps.data.getInvoice.tax,
-          customerId: nextProps.data.getInvoice.customerId,
-          sale: nextProps.data.getInvoice.sale,
-          project: nextProps.data.getInvoice.project
+          customer: nextProps.data.getInvoice.customer
         },
+        currentStep: 'step2',
       })
     }
   }
@@ -74,10 +71,18 @@ class Form extends Component {
       let errors = Object.assign({}, this.state.errors)
       delete errors[name]
 
-      if (name === "saleId" || name === "projectId") {
-    
+      if (name === "saleId") {
+        const sale = this.state.step1.salesWithoutInvoice.find(item => item.id === parseInt(value) ) 
+
         this.setState({
-          step1: { ...this.state.step1, [name]: value },
+          step1: { ...this.state.step1, sale },
+          errors
+        })
+      } else if (name === "projectId") {
+        const project = this.state.step1.projectsWithoutInvoice.find(item => item.id === parseInt(value) ) 
+
+        this.setState({
+          step1: { ...this.state.step1, project },
           errors
         })
       } else if (name === "deadline" || name === "paymentTerm"
@@ -97,10 +102,18 @@ class Form extends Component {
       }
     } else {
 
-     if (name === "saleId" || name === "projectId") {
-    
+      if (name === "saleId") {
+        const sale = this.state.step1.salesWithoutInvoice.find(item => item.id === parseInt(value) ) 
+
         this.setState({
-          step1: { ...this.state.step1, [name]: value }
+          step1: { ...this.state.step1, sale }
+        })
+      }
+      else if (name === "projectId") {
+        const project = this.state.step1.projectsWithoutInvoice.find(item => item.id === parseInt(value) ) 
+
+        this.setState({
+          step1: { ...this.state.step1, project }
         })
       } else if (name === "deadline" || name === "paymentTerm"
         || name === "interestInArrears" || name === "status"
@@ -117,6 +130,38 @@ class Form extends Component {
       }
     }
    
+  }
+
+  handleSearchChangeProject = (e) => {
+    e.preventDefault()
+    
+    if (e.target.value !== "") {
+      this.props.getProjectsWithoutInvoiceQuery.fetchMore({ 
+        variables: { name: e.target.value },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev
+          
+          this.setState({
+            step1: { ...this.state.step1, projectsWithoutInvoice: fetchMoreResult.getProjectsWithoutInvoice }
+          }) 
+        }})   
+    }
+  }
+
+  handleSearchChangeSale = (e) => {
+    e.preventDefault()
+    
+    if (e.target.value !== "") {
+      this.props.getSalesWithoutInvoiceQuery.fetchMore({ 
+        variables: { name: e.target.value },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev
+          
+          this.setState({
+            step1: { ...this.state.step1, salesWithoutInvoice: fetchMoreResult.getSalesWithoutInvoice }
+          }) 
+        }})   
+    }
   }
 
   isValid() {
@@ -140,16 +185,16 @@ class Form extends Component {
     // Validation
     if (this.isValid()) { 
       const { id } = this.state
-      const { saleId, projectId, project, sale } = this.state.step1
-      const { deadline, paymentTerm, interestInArrears, status, description, tax, customerId } = this.state.step2
+      const { project, sale } = this.state.step1
+      const { deadline, paymentTerm, interestInArrears, status, description, tax, customer } = this.state.step2
 
       this.setState({ isLoading: true })
     
       if (id) {
         this.props.updateInvoiceMutation({ 
         variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
-          status, description, tax, projectId: parseInt(projectId), 
-          saleId: parseInt(saleId), customerId },
+          status, description, tax, projectId: project && parseInt(project.id), 
+          saleId: sale && parseInt(sale.id), customerId: customer.id },
         update: (store, { data: { updateInvoice } }) => {
           const { success, invoice } = updateInvoice
 
@@ -199,8 +244,8 @@ class Form extends Component {
       } else { 
         this.props.createInvoiceMutation({ 
           variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
-            status, description, tax, projectId: parseInt(projectId), 
-            saleId: parseInt(saleId), customerId: parseInt(customerId) },
+            status, description, tax, projectId: project && parseInt(project.id), 
+            saleId: sale && parseInt(sale.id), customerId: parseInt(project ? project.customer_id : sale.customer_id) },
           update: (store, { data: { createInvoice } }) => {
             const { success, invoice } = createInvoice
 
@@ -244,8 +289,6 @@ class Form extends Component {
 
   handleNext = (e) => {
     e.preventDefault()
-    
-    const { id } = this.state
 
     if (this.state.currentStep === 'step1') {
       // Validation
@@ -256,40 +299,6 @@ class Form extends Component {
       // Validation
       if (this.isValid()) { 
         this.setState({ currentStep: 'step3' })
-      }
-    }
-
-    if (id === null) {
-      const sale = this.props.getProjectsSalesWithoutInvoiceQuery.getSalesWithoutInvoice.find(item => item.id === parseInt(this.state.step1.saleId) ) 
-      if (sale) {
-        this.setState({
-          step1: { ...this.state.step1, sale: sale },
-          step2: { ...this.state.step2, customerId: sale.customer.id }
-        })
-      }
-
-      const project = this.props.getProjectsSalesWithoutInvoiceQuery.getProjectsWithoutInvoice.find(item => item.id === parseInt(this.state.step1.projectId) )  
-      if (project) {
-        this.setState({
-          step1: { ...this.state.step1, project: project },
-          step2: { ...this.state.step2, customerId: project.customer.id }
-        })
-      }
-    } else {
-      const sale = this.props.getProjectsSalesWithInvoiceQuery.getSalesWithInvoice.find(item => item.id === parseInt(this.state.step1.saleId) ) 
-      if (sale) {
-        this.setState({
-          step1: { ...this.state.step1, sale: sale },
-          step2: { ...this.state.step2, customerId: sale.customer.id }
-        })
-      }
-
-      const project = this.props.getProjectsSalesWithInvoiceQuery.getProjectsWithInvoice.find(item => item.id === parseInt(this.state.step1.projectId) )  
-      if (project) {
-        this.setState({
-          step1: { ...this.state.step1, project: project },
-          step2: { ...this.state.step2, customerId: project.customer.id }
-        })
       }
     }
   }
@@ -325,25 +334,13 @@ class Form extends Component {
   render() {
     const { id, step1, step2, errors, isLoading, currentStep } = this.state
     
-    const { getProjectsWithInvoice, getSalesWithInvoice } = this.props.getProjectsSalesWithInvoiceQuery
-    const { getProjectsWithoutInvoice, getSalesWithoutInvoice } = this.props.getProjectsSalesWithoutInvoiceQuery
+    const { projectsWithoutInvoice, salesWithoutInvoice } = step1
 
-    let salesList
-    let projectsList
-
-    if (id) {
-      salesList = getSalesWithInvoice
-      projectsList = getProjectsWithInvoice
-    } else {
-      salesList = getSalesWithoutInvoice
-      projectsList = getProjectsWithoutInvoice 
-    }
-
-    const salesOption = salesList && map(salesList, (sale) => 
+    const salesOption = salesWithoutInvoice && map(salesWithoutInvoice, (sale) => 
       ({ key: sale.id, value: sale.id, text: sale.name })
     )
     
-    const projectsOption = projectsList && map(projectsList, (project) => 
+    const projectsOption = projectsWithoutInvoice && map(projectsWithoutInvoice, (project) => 
       ({ key: project.id, value: project.id, text: project.name })
     )
 
@@ -353,24 +350,19 @@ class Form extends Component {
           {/* Steps component */}
           <Steps currentStep={this.state.currentStep}/> 
 
-          <div className="ui segment">
-            {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption} 
-              projectsOption={projectsOption} step1={step1} handleChange={this.handleChange} 
-              handleNext={this.handleNext.bind(this)} errors={errors} />}
+          <div className="ui segment invoices">
+            {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption}  projectsOption={projectsOption} 
+              handleChange={this.handleChange} step1={step1} handleSearchChangeProject={this.handleSearchChangeProject} 
+              handleSearchChangeSale={this.handleSearchChangeSale} handleNext={this.handleNext.bind(this)} errors={errors} />}
 
             {currentStep === 'step2' && <Details id={id} step1={step1} step2={step2} handleChangeDate={this.handleChangeDate.bind(this)} 
               handleChange={this.handleChange} handlePrevious={this.handlePrevious.bind(this)}
               handleNext={this.handleNext.bind(this)} errors={errors} /> }
 
-            <form className={classnames("ui form", { loading: isLoading })}>
+            {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={step1.sale} project={step1.project} 
+              handlePrevious={this.handlePrevious.bind(this)} 
+              handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} errors={errors} /> }
 
-              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
-
-              {currentStep === 'step3' && <Confirmation id={id} step2={step2} sale={step1.sale} project={step1.project} 
-                handlePrevious={this.handlePrevious.bind(this)} 
-                handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} /> }
-
-            </form> 
           </div>
         </div> 
       </div>
@@ -394,23 +386,25 @@ const MutationsQuery =  compose(
   graphql(UPDATE_INVOICE_MUTATION, {
     name: 'updateInvoiceMutation'
   }),
-  graphql(GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY, {
-    name : 'getProjectsSalesWithoutInvoiceQuery'
-  }),
-  graphql(GET_PROJECTS_SALES_WITH_INVOICE_QUERY, {
-    name : 'getProjectsSalesWithInvoiceQuery'
-  }),
-  graphql(GET_INVOICES_QUERY, {
-    name : 'getInvoicesQuery', 
+  graphql(GET_PROJECTS_WITHOUT_INVOICE_QUERY, {
+    name : 'getProjectsWithoutInvoiceQuery',
     options: (props) => ({
       variables: {
-        order: props.match.params.order ? props.match.params.order.toUpperCase() : 'DESC',
-        offset: props.match.params.offset ? parseInt(props.match.params.offset) : 0,
-        limit: props.match.params.limit ? parseInt(props.match.params.limit) : 10
-      }
+        name: props.name ? props.name : '-//-'
+      },
+      fetchPolicy: 'network-only'
     })
   }),
-  graphql(GET_INVOICE_QUERY, {
+  graphql(GET_SALES_WITHOUT_INVOICE_QUERY, {
+    name : 'getSalesWithoutInvoiceQuery',
+    options: (props) => ({
+      variables: {
+        name: props.name ? props.name : '-//-'
+      },
+      fetchPolicy: 'network-only'
+    })
+  }),
+  graphql(GET_INVOICE_FORM_QUERY, {
     options: (props) => ({
       variables: {
         id: props.match.params.id ? parseInt(props.match.params.id) : 0

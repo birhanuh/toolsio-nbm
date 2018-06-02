@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import { Link } from 'react-router-dom'
 import Form from './Form'
 import FlashMessage from '../../flash/FlashMessage'
 
@@ -13,9 +14,9 @@ class Page extends Component {
     return (       
       <div className="ui text container">
         <h2 className="ui teal image header">
-          <a className="" href="/">
+          <Link className="" to="/">
             <img src={logo} className="image" alt="logo-square" />
-          </a>
+          </Link>
           <div className="content">
             {T.translate("log_in.header")}
           </div>
@@ -26,7 +27,7 @@ class Page extends Component {
         <Form />
 
         <div className="ui message">
-          {T.translate("log_in.new_to_us")}&nbsp;<a href="/signup">{T.translate("sign_up.sign_up")}</a>
+          {T.translate("log_in.new_to_us")}&nbsp;<a href={process.env.HTTP+process.env.DNS+"/signup"}>{T.translate("sign_up.sign_up")}</a>
         </div>
         <div className="ui center aligned vertical segment">
           <small className="d-block">{T.translate("landing.footer.copyright")}</small>

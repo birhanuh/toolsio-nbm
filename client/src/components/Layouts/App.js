@@ -1,6 +1,7 @@
 import React, { Component } from 'react' 
 import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
+import { Sidebar } from 'semantic-ui-react'
 
 import Dashboard from '../Dashboard/Page'
 import Landing from './Landing'
@@ -26,8 +27,12 @@ import ConversationsPage from '../Conversations/Page'
 import UsersPage from '../Users/Page'
 
 import HeaderNav from './HeaderNav'
-import Sidebar from './Sidebar'
 import FlashMessage from '../../flash/FlashMessage'
+
+import { OuterSidebarScrollableHeaderNav, InnerSidebar } from './SidebarsHeader'
+
+// Localization 
+import T from 'i18n-react'
 
 // Semantic CSS
 import 'semantic-ui-css/semantic.min.css'
@@ -38,24 +43,65 @@ import '../../css/app.scss'
 // Images
 import logo from '../../images/logo-square.png' 
 
-// Jquery
+/* Third party libraries */
 import $ from 'jquery'
-
-// Sidebar
-$.fn.sidebar = require('semantic-ui-sidebar')
+$.animate = require('jquery.easing')
+$.fn.transition = require('semantic-ui-transition')
+$.fn.visibility = require('semantic-ui-visibility')
 
 class App extends Component {
   
-  componentDidMount = () => {
-    $('#app .ui.sidebar')
-      .sidebar({
-        transition: 'overlay',
-        context: $('#app')
-      })
-      .sidebar('attach events', '#app .menu .item.anchor')
+  state = { 
+    visibleInnerSidebar: false,
+    visibleOuterSidebar: false  
   }
 
+  componentDidMount = () => {
+    // fix menu when passed
+    $('.masthead .ui.text.container')
+    .visibility({
+      once: false,
+      onBottomPassed: function()  {
+        $('.fixed.menu').transition('fade in')
+      },
+      onBottomPassedReverse: function()  {
+        $('.fixed.menu').transition('fade out')
+      }
+    })
+
+    // Scroll to top
+    $(window).scroll(function() {
+      if ($(this).scrollTop() > 100) {
+        $('.back-to-top').fadeIn()
+      } else {
+        $('.back-to-top').fadeOut()
+      }
+    })
+
+    $('.back-to-top').click(function() {
+      $("html, body").animate({ scrollTop: 0 }, 1000)
+      return false
+    }) 
+  }
+
+  toggleInnerSidebarVisibility = () => 
+    this.setState({ visibleInnerSidebar: !this.state.visibleInnerSidebar })
+
+  toggleOuterSidebarVisibility = () => 
+    this.setState({ visibleOuterSidebar: !this.state.visibleOuterSidebar })
+
+  // Hide Sidebar when click outside Sidebar area
+  hideSidebarVisibility = () => {
+    const { visibleInnerSidebar, visibleOuterSidebar } = this.state
+
+    if (visibleInnerSidebar || visibleOuterSidebar) {
+      this.setState({ visibleInnerSidebar: false, visibleOuterSidebar: false })
+    }
+  }
+    
   render() {
+    const { visibleInnerSidebar, visibleOuterSidebar } = this.state
+
     let landingPage = window.location.pathname === '/' ? true : false
     let authPages = window.location.pathname.indexOf('/login') === 0 || window.location.pathname.indexOf('/signup') === 0
       || window.location.pathname.indexOf('/subdomain') === 0 ? true : false
@@ -63,114 +109,118 @@ class App extends Component {
     let internalPages = (landingPage || authPages) ? false : true 
 
     return (
-      <div className="pusher">
-        
-        { internalPages && 
-          <Sidebar />
+      <Sidebar.Pushable>
+        {landingPage &&
+          <OuterSidebarScrollableHeaderNav visibleOuterSidebar={visibleOuterSidebar} />
         }
 
-        { !authPages && <HeaderNav /> }
-
-        <section className={classnames({'ui stackable grid basic segment internal-page': internalPages, 'ui stackable grid auth-pages': authPages})}>                    
-
-          { !authPages && <FlashMessage /> }          
-          
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/signup/invitation" component={Invitation} />
-            <Route path="/subdomain" component={Subdomain} />
-            <SubdomainRoute exact path="/login" component={Login} />
-            <SubdomainRoute exact path="/login/confirmation/:token" component={Login} />
-            <PrivateRoute path="/dashboard" component={Dashboard} />
-            <PrivateRoute exact path="/settings" component={Account} />
-            <PrivateRoute exact path="/projects" component={ProjectsPage} />
-            <PrivateRoute exact path="/projects/edit/:id" component={ProjectsForm} /> 
-            <PrivateRoute exact path="/projects/show/:id" component={ProjectsShow} />
-            <PrivateRoute exact path="/projects/new" component={ProjectsForm} />
-            <PrivateRoute exact path="/projects" component={ProjectsPage} />
-            <PrivateRoute exact path="/sales" component={SalesPage} />
-            <PrivateRoute exact path="/sales/edit/:id" component={SalesForm} /> 
-            <PrivateRoute exact path="/sales/new" component={SalesForm} />
-            <PrivateRoute exact path="/sales/show/:id?" component={SalesShow} />
-            <PrivateRoute exact path="/customers/new" component={CustomersForm} />
-            <PrivateRoute exact path="/customers/edit/:id" component={CustomersForm} /> 
-            <PrivateRoute exact path="/customers/show/:id" component={CustomersShow} /> 
-            <PrivateRoute exact path="/customers/:offset?/:limit?" component={CustomersPage} />
-            <PrivateRoute exact path="/invoices/edit/:id" component={InvoicesForm} /> 
-            <PrivateRoute exact path="/invoices/new" component={InvoicesForm} />
-            <PrivateRoute exact path="/invoices/show/:id" component={InvoicesShow} /> 
-            <PrivateRoute exact path="/invoices/:offset?/:limit?" component={InvoicesPage} />
-            <PrivateRoute exact path="/conversations" component={ConversationsPage} />
-            <PrivateRoute exact path="/conversations/channel/:channelId" component={ConversationsPage} />
-            <PrivateRoute exact path="/conversations/receiver/:receiverId" component={ConversationsPage} />
-            <PrivateRoute exact path="/users" component={UsersPage} /> 
-          </Switch>
-        </section>
-        
         { internalPages &&
-          <footer className="ui vertical footer segment internal-footer">
-            <div className="ui stackable inverted grid">      
-              <div className="ten wide column">
-                <h4 className="ui inverted header">Footer Header</h4>
-                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-              </div>
-            </div>
-          </footer>
+          <InnerSidebar visibleInnerSidebar={visibleInnerSidebar} />
         }
+        <Sidebar.Pusher onClick={this.hideSidebarVisibility}>
+          { !authPages && <HeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
+
+          <section className={classnames({'ui stackable grid basic segment internal-page': internalPages, 'ui stackable grid auth-pages': authPages})}>                    
+
+            { !authPages && <FlashMessage /> }          
+            
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/signup" component={Signup} />
+              <Route exact path="/signup/invitation" component={Invitation} />
+              <Route path="/subdomain" component={Subdomain} />
+              <SubdomainRoute exact path="/login" component={Login} />
+              <SubdomainRoute exact path="/login/confirmation/:token" component={Login} />
+              <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/settings" component={Account} />
+              <PrivateRoute exact path="/projects" component={ProjectsPage} />
+              <PrivateRoute exact path="/projects/edit/:id" component={ProjectsForm} /> 
+              <PrivateRoute exact path="/projects/show/:id" component={ProjectsShow} />
+              <PrivateRoute exact path="/projects/new" component={ProjectsForm} />
+              <PrivateRoute exact path="/projects" component={ProjectsPage} />
+              <PrivateRoute exact path="/sales" component={SalesPage} />
+              <PrivateRoute exact path="/sales/edit/:id" component={SalesForm} /> 
+              <PrivateRoute exact path="/sales/new" component={SalesForm} />
+              <PrivateRoute exact path="/sales/show/:id?" component={SalesShow} />
+              <PrivateRoute exact path="/customers/new" component={CustomersForm} />
+              <PrivateRoute exact path="/customers/edit/:id" component={CustomersForm} /> 
+              <PrivateRoute exact path="/customers/show/:id" component={CustomersShow} /> 
+              <PrivateRoute exact path="/customers/:offset?/:limit?" component={CustomersPage} />
+              <PrivateRoute exact path="/invoices/edit/:id" component={InvoicesForm} /> 
+              <PrivateRoute exact path="/invoices/new" component={InvoicesForm} />
+              <PrivateRoute exact path="/invoices/show/:id" component={InvoicesShow} /> 
+              <PrivateRoute exact path="/invoices/:offset?/:limit?" component={InvoicesPage} />
+              <PrivateRoute exact path="/conversations" component={ConversationsPage} />
+              <PrivateRoute exact path="/conversations/channel/:channelId" component={ConversationsPage} />
+              <PrivateRoute exact path="/conversations/receiver/:receiverId" component={ConversationsPage} />
+              <PrivateRoute exact path="/users" component={UsersPage} /> 
+            </Switch>
+          </section>
           
-        { landingPage &&
-          <footer className="ui inverted vertical footer segment">
-            <div className="ui center aligned container">
-              <div className="ui stackable inverted divided grid">
-                <div className="three wide column">
-                  <h4 className="ui inverted header">Group 1</h4>
-                  <div className="ui inverted link list">
-                    <a href="#" className="item">Link One</a>
-                    <a href="#" className="item">Link Two</a>
-                    <a href="#" className="item">Link Three</a>
-                    <a href="#" className="item">Link Four</a>
-                  </div>
-                </div>
-                <div className="three wide column">
-                  <h4 className="ui inverted header">Group 2</h4>
-                  <div className="ui inverted link list">
-                    <a href="#" className="item">Link One</a>
-                    <a href="#" className="item">Link Two</a>
-                    <a href="#" className="item">Link Three</a>
-                    <a href="#" className="item">Link Four</a>
-                  </div>
-                </div>
-                <div className="three wide column">
-                  <h4 className="ui inverted header">Group 3</h4>
-                  <div className="ui inverted link list">
-                    <a href="#" className="item">Link One</a>
-                    <a href="#" className="item">Link Two</a>
-                    <a href="#" className="item">Link Three</a>
-                    <a href="#" className="item">Link Four</a>
-                  </div>
-                </div>
-                <div className="seven wide column">
+          { internalPages &&
+            <footer className="ui vertical footer segment internal-footer">
+              <div className="ui stackable inverted grid">      
+                <div className="ten wide column">
                   <h4 className="ui inverted header">Footer Header</h4>
                   <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
                 </div>
               </div>
-              <div className="ui inverted section divider"></div>
-              <img src={logo} className="ui centered mini image" alt="logo-square"/>
-              <div className="ui horizontal inverted small divided link list">
-                <a className="item" href="#">Site Map</a>
-                <a className="item" href="#">Contact Us</a>
-                <a className="item" href="#">Terms and Conditions</a>
-                <a className="item" href="#">Privacy Policy</a>
+            </footer>
+          }
+            
+          { landingPage &&
+            <footer className="ui inverted vertical footer segment">
+              <div className="ui center aligned container">
+                <div className="ui stackable inverted divided grid">
+                  <div className="three wide column">
+                    <h4 className="ui inverted header">Group 1</h4>
+                    <div className="ui inverted link list">
+                      <a href="#" className="item">Link One</a>
+                      <a href="#" className="item">Link Two</a>
+                      <a href="#" className="item">Link Three</a>
+                      <a href="#" className="item">Link Four</a>
+                    </div>
+                  </div>
+                  <div className="three wide column">
+                    <h4 className="ui inverted header">Group 2</h4>
+                    <div className="ui inverted link list">
+                      <a href="#" className="item">Link One</a>
+                      <a href="#" className="item">Link Two</a>
+                      <a href="#" className="item">Link Three</a>
+                      <a href="#" className="item">Link Four</a>
+                    </div>
+                  </div>
+                  <div className="three wide column">
+                    <h4 className="ui inverted header">Group 3</h4>
+                    <div className="ui inverted link list">
+                      <a href="#" className="item">Link One</a>
+                      <a href="#" className="item">Link Two</a>
+                      <a href="#" className="item">Link Three</a>
+                      <a href="#" className="item">Link Four</a>
+                    </div>
+                  </div>
+                  <div className="seven wide column">
+                    <h4 className="ui inverted header">Footer Header</h4>
+                    <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+                  </div>
+                </div>
+                <div className="ui inverted section divider"></div>
+                <img src={logo} className="ui centered mini image" alt="logo-square"/>
+                <div className="ui horizontal inverted small divided link list">
+                  <a className="item" href="#">{T.translate("landing.footer.site_map")}</a>
+                  <a className="item" href="#">{T.translate("landing.footer.contact_us")}</a>
+                  <a className="item" href="#">{T.translate("landing.footer.terms_and_conditions")}</a>
+                  <a className="item" href="#">{T.translate("landing.footer.privacy_policy")}</a>
+                </div>
               </div>
-            </div>
 
-            <a href="#" className="back-to-top">
-              <i className="chevron up icon"></i>  
-            </a>
-          </footer>
-        }
-      </div>
+              <a href="#" className="back-to-top">
+                <i className="chevron up icon"></i>  
+              </a>
+            </footer>
+          }
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
     )
   }
 }

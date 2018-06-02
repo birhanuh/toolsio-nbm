@@ -3,9 +3,9 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return [
-      queryInterface.addColumn('messages', 'upload_path', {
+      queryInterface.addColumn('channel_messages', 'upload_path', {
         type: Sequelize.STRING }),
-      queryInterface.addColumn('messages', 'mimetype', {
+      queryInterface.addColumn('channel_messages', 'mimetype', {
         type: Sequelize.STRING }),
       queryInterface.addColumn('direct_messages', 'upload_path', {
         type: Sequelize.STRING }),
@@ -14,11 +14,11 @@ module.exports = {
     ];
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return [
-      queryInterface.removeColumn('messages', 'upload_path'),
+      queryInterface.removeColumn('channel_messages', 'upload_path'),
       queryInterface.removeColumn('direct_messages', 'upload_path'),
-      queryInterface.removeColumn('messages', 'mimetype'),
+      queryInterface.removeColumn('channel_messages', 'mimetype'),
       queryInterface.removeColumn('direct_messages', 'mimetype')
     ];
   }

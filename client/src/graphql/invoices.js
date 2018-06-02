@@ -37,6 +37,7 @@ export const GET_INVOICE_QUERY = gql`
       interestInArrears
       referenceNumber
       status
+      description
       createdAt
       user {
         firstName
@@ -82,6 +83,40 @@ export const GET_INVOICE_QUERY = gql`
         postalCode
         region
         country
+      }
+    }
+  }
+`
+
+export const GET_INVOICE_FORM_QUERY = gql`
+  query getInvoice($id: Int!) {
+    getInvoice(id: $id) {
+      id
+      deadline
+      paymentTerm
+      interestInArrears
+      referenceNumber
+      status
+      tax
+      createdAt
+      project {
+        id
+        name
+        deadline
+        progress
+        status
+        total
+      }
+      sale {
+        id
+        name
+        deadline
+        status
+        total
+      }
+      customer {
+        id
+        name
       }
     }
   }
@@ -171,9 +206,9 @@ export const DELETE_INVOICE_MUTATION = gql`
   }
 `
 
-export const GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY = gql`
-  {
-    getProjectsWithoutInvoice {
+export const GET_PROJECTS_WITHOUT_INVOICE_QUERY = gql`
+  query getProjectsWithoutInvoice($name: String!) {
+    getProjectsWithoutInvoice(name: $name) {
       id
       name 
       deadline
@@ -181,52 +216,23 @@ export const GET_PROJECTS_SALES_WITHOUT_INVOICE_QUERY = gql`
       progress
       description
       total
-      customer {
-        id
-        name
-      }
+      customer_id
+      customer_name
     }
-    getSalesWithoutInvoice {
-      id
-      name 
-      deadline
-      status
-      description
-      total
-      customer {
-        id
-        name
-      }
-    }
-}
+  }
 `
 
-export const GET_PROJECTS_SALES_WITH_INVOICE_QUERY = gql`
-  {
-    getProjectsWithInvoice {
-      id
-      name 
-      deadline
-      status
-      progress
-      description
-      total
-      customer {
-        id
-        name
-      }
-    }
-    getSalesWithInvoice {
+export const GET_SALES_WITHOUT_INVOICE_QUERY = gql`
+  query getSalesWithoutInvoice($name: String!) {
+    getSalesWithoutInvoice(name: $name) {
       id
       name 
       deadline
       status
       description
       total
-      customer {
-        id
-        name
-      }
+      customer_id
+      customer_name
     }
-}
+  }
 `

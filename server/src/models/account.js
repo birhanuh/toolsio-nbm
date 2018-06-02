@@ -14,7 +14,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       validate: {     
         is: {
-          arg: /^[A-Za-z \/ ]+$/,            // will only allow letters and slashes with RegExp,
+          arg: /^[A-Za-z / ]+$/,            // will only allow letters and slashes with RegExp,
           msg: 'Wrong industry format'
         }
       } 
@@ -84,7 +84,7 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      beforeValidate: (account, options) => {
+      beforeValidate: (account) => {
         if (account.phoneNumber === "") {
           account.phoneNumber = null
         }

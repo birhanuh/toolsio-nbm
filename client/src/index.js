@@ -47,7 +47,7 @@ if (language.length > 2) {
   language = language.split("-")[0]
 }    
 
-T.setTexts(require("../../locale/" +language+ ".json"))
+T.setTexts(require("../locale/" +language+ ".json"))
 
 render(
   <Provider store={store}>

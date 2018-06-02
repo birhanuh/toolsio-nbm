@@ -10,6 +10,7 @@ import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import cors from 'cors'
 import { apolloUploadExpress } from 'apollo-upload-server'
+import DataLoader from 'dataloader'
 
 // Authentication packages 
 import session from 'express-session'
@@ -28,11 +29,14 @@ const app = express()
 require('dotenv').config()
 
 // Config
-import jwtConfig from '../../config/jwt.json'
+import jwtConfig from '../config/jwt.json'
 
 // Models
 import models from './models'
 import { refreshAuthTokens } from './utils/authentication'
+
+// Batch functions 
+import { userBatcher, customerBatcher, projectBatcher, saleBatcher } from './utils/batchFunctions'
 
 // Schema
 const types = fileLoader(path.join(__dirname + '/types'))
@@ -103,7 +107,11 @@ app.use(
       user: req.user,
       //user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
-      SECRET2: jwtConfig.jwtSecret2
+      SECRET2: jwtConfig.jwtSecret2,
+      userLoader: new DataLoader(userId => userBatcher(userId, models)),
+      customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models)),
+      projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models)),
+      saleLoader: new DataLoader(saleIds => saleBatcher(saleIds, models))
     }
   }))
 )
@@ -166,7 +174,7 @@ server.listen(app.get('port'), () => {
     execute,
     subscribe,
     schema: schema,
-    onConnect: async ({authToken, refreshAuthToken}, webSocket) => {
+    onConnect: async ({authToken, refreshAuthToken}) => {
       
       if (authToken && refreshAuthToken) {      
         try {

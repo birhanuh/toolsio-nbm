@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 export default {
   Query: {
-    getTotalIncomeData: async (parent, args, { models }) =>  {
+    getTotalIncomeData: requiresAuth.createResolver(async (parent, args, { models }) =>  {
       const paidTasksSumPromise = models.sequelize.query("SELECT SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid'", {
         model: models.Task,
         raw: true,
@@ -22,9 +22,9 @@ export default {
         tasksTotalSum: paidTasksSum[0].sum,
         itemsTotalSum: paidItemsSum[0].sum
       } 
-    },
+    }),
     
-    getIncomesData: async (parent, args, { models }) =>  {
+    getIncomesData: requiresAuth.createResolver(async (parent, args, { models }) =>  {
       const paidTasksSumDayPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'DD/MM/YYYY') AS day, SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1", {
         model: models.Task,
         raw: true,
@@ -69,9 +69,9 @@ export default {
         daySum: groupByDaySum,
         monthSum: groupByMonthSum
       } 
-    },
+    }),
 
-    getProjectsData: async (parent, args, { models }) => {
+    getProjectsData: requiresAuth.createResolver(async (parent, args, { models }) => {
       // const data = await models.Project.findAll({
       //   group: ['status'],
       //   attributes: ['status', [models.sequelize.fn('COUNT', 'status'), 'count']],
@@ -93,9 +93,9 @@ export default {
         countStatus,
         countMonth 
       }
-    },
+    }),
 
-    getSalesData: async (parent, args, { models }) => {
+    getSalesData: requiresAuth.createResolver(async (parent, args, { models }) => {
 
       const countStatusPromise = models.sequelize.query('SELECT count(*), status FROM sales GROUP BY status', {
         model: models.Sale,
@@ -113,13 +113,13 @@ export default {
         countStatus,
         countMonth 
       }
-    },
+    }),
 
-    getCustomersData: async (parent, args, { models }) => {
+    getCustomersData: requiresAuth.createResolver(async (parent, args, { models }) => {
 
-    },
+    }),
 
-    getInvoicesData: async (parent, args, { models }) => {
+    getInvoicesData: requiresAuth.createResolver(async (parent, args, { models }) => {
       const countStatusPromise = models.sequelize.query("SELECT to_char(created_at, 'Mon/YYYY') AS month, count(*) FROM invoices GROUP BY 1 LIMIT 2", {
         model: models.Invoice,
         raw: true
@@ -136,9 +136,9 @@ export default {
         countMonth: countMonth,
         countStatusMonth: countStatusMonth 
       }
-    },
+    }),
 
-    getProjectTasksData: async (parent, args, { models }) => {
+    getProjectTasksData: requiresAuth.createResolver(async (parent, args, { models }) => {
       const countStatusPromise = await models.sequelize.query("SELECT count(*), status FROM projects WHERE status='new' OR status='delayed' GROUP BY status", {
         model: models.Project,
         raw: true
@@ -155,9 +155,9 @@ export default {
         countStatus,
         idNameStatus
       }
-    },
+    }),
 
-    getSaleTasksData: async (parent, args, { models }) => {
+    getSaleTasksData: requiresAuth.createResolver(async (parent, args, { models }) => {
       const countStatusPromise = await models.sequelize.query("SELECT count(*), status FROM sales WHERE status='new' OR status='delayed' GROUP BY status", {
         model: models.Sale,
         raw: true
@@ -174,9 +174,9 @@ export default {
         countStatus,
         idNameStatus
       }
-    },
+    }),
 
-    getInvoiceTasksData: async (parent, args, { models }) => {
+    getInvoiceTasksData: requiresAuth.createResolver(async (parent, args, { models }) => {
       const countStatusPromise = await models.sequelize.query("SELECT count(*), status FROM invoices WHERE status='pending' OR status='overdue' GROUP BY status", {
         model: models.Invoice,
         raw: true
@@ -199,7 +199,7 @@ export default {
         idProjectStatus,
         idSaleStatus
       }
-    }
+    })
 
   }
 }

@@ -37,6 +37,12 @@ export default (sequelize, DataTypes) => {
       validate: {     
         isDecimal: true //  checks for any numbers
       } 
+    },
+    isInvoiced: {
+      type: DataTypes.BOOLEAN,
+      allowNull : false,
+      defaultValue : false,
+      field: 'is_invoiced'
     }
   })
 

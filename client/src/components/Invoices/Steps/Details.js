@@ -78,23 +78,39 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
           value={step2.tax && step2.tax.toString()} 
           onChange={(e, {value}) => handleChange('tax', value)} 
           error={!!errors.tax}
-          disabled={true}
         />
         <span className="red">{errors.tax}</span>
       </Form.Field>
       
-      <Form.Field inline error={!!errors.total}>
-        <label>{T.translate("invoices.form.total")}</label>
-        <Input 
-          placeholder="0%"
-          name="total" 
-          value={(step1.sale && step1.sale.total) || (step1.project && step1.project.total)} 
-          onChange={(e, {value}) => handleChange('total', value)} 
-          error={!!errors.total}
-          disabled={true}
-        />
-        <span className="red">{errors.total}</span>
-      </Form.Field>
+      {step1.sale &&
+        <Form.Field inline error={!!errors.total}>
+          <label>{T.translate("invoices.form.total")}</label>
+          <Input 
+            placeholder="0%"
+            name="total" 
+            value={step1.sale.total} 
+            onChange={(e, {value}) => handleChange('total', value)} 
+            error={!!errors.total}
+            disabled={true}
+          />
+          <span className="red">{errors.total}</span>
+        </Form.Field>
+      }
+      
+      {step1.project &&
+        <Form.Field inline error={!!errors.total}>
+          <label>{T.translate("invoices.form.total")}</label>
+          <Input 
+            placeholder="0%"
+            name="total" 
+            value={step1.project.total} 
+            onChange={(e, {value}) => handleChange('total', value)} 
+            error={!!errors.total}
+            disabled={true}
+          />
+          <span className="red">{errors.total}</span>
+        </Form.Field>
+      }
 
       { id &&
         <Form.Field inline className={classnames("show", {blue: step2.status === 'new', orange: step2.status === 'pending', 
@@ -133,7 +149,10 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
         <button className="ui button" onClick={handlePrevious}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
         <button className="ui primary button" onClick={handleNext}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
 
-        <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
+        <Link to="/invoices" className="ui primary outline button mt-3"> 
+          <i className="minus circle icon"></i>
+          {T.translate("invoices.form.cancel")}
+        </Link>
       </div>  
     </div> 
     )

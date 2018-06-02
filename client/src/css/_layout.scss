@@ -23,7 +23,7 @@ body {
           text-size-adjust: 100%;
 }
 
-body.pushable > .pusher {
+.pushable > .pusher {
   background: $body-background-color;
 }
 
@@ -218,30 +218,19 @@ nav.ui.menu {
   margin-top: 98px;
 }
 
-// Sidebar 
-.pushable {
-  overflow-x: initial;
-}
-
-.ui.vertical.sidebar {
+.ui.vertical.inverted.sidebar {
   background-color: $dark-mid-night-blue;
   border: none;
   .item {    
     color: #d9d9d9;
-    border-bottom: 1px solid $light-dark-grey;
-    padding: 12px;
     font-weight: 600;
     text-transform: uppercase !important;
-    height: 40px;
+    border-bottom: 1px solid $light-dark-grey;
   }
-  .active.item, .active.item:hover, .active.item:focus {
-    background: $body-background-color;
-    color: $dark-mid-night-blue;
-  }
-  .item:hover, .item:focus {
+  .item:hover, .item:focus, .active.item {
     background: $body-background-color;
     outline: none;
-    color: $body-color;
+    color: $dark-mid-night-blue !important;
   }
   .item>i.icon {
     float: left; 
@@ -375,11 +364,11 @@ nav.ui.menu {
 }
 
 .ui.warning.message {
-  color: $dark-green;
+  color: $dark-orange;
   background: $white-orange;
   box-shadow: 0 0 0 1px $orange inset, 0 0 0 0 transparent;
   .header {
-    color: $dark-green;
+    color: $dark-orange;
   }
 }
 

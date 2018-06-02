@@ -239,6 +239,7 @@ select {
     border: 1px solid $red;
   }
 }
+
 select.date {
   background-position: 93% 50%;
 }
@@ -253,69 +254,8 @@ select.date {
   cursor: pointer;
 }
 
-// Horizontal form
-.ui.form .inline.field {
-  display: inherit;
-}
-
-.ui.form .inline.field > div {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.ui.form .inline.field > .info.message {
-  left: 27%;
-  width: 72%;
-}
-
-.ui.form .inline.field>label {
-  width: 25%;
-  text-align: right;
-}
-
-.ui.form .inline.field>select, .ui.form .inline.field>input {
-  width: 72%;
-}
-
-.ui.form .inline.field>textarea, .ui.form .inline.field>div>input  {
-  width: 72%;
-  display: inline-block;
-  margin-top: 0;
-  margin-bottom: 0;
-  vertical-align: middle;
-  font-size: 1em;
-}
-
-.ui.form .inline.field.progress {
-  display: inline-block;
-  margin-left: 27% !important;
-  width: 73%;
-  div:first-child {
-    display: block;
-  }
-  div:first-child + div {
-    display: inline-flex;
-  }
-}
-
-.ui.form .inline.field> .header, .ui.form .inline.field>button:first-child, .ui.form .inline.field>a {
-  display: inline-block;
-  margin-left: 27% !important;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.ui.form .field.error span, .ui.form .input.error span  {
-  display: inherit;
-  text-align: left;
-}
-
 .ui.form .field.error label  {
   color: #9F3A38 !important;
-}
-
-.ui.form .inline.field.error>span {
-  margin-left: 27% !important;
 }
 
 .ui.input.error {
@@ -332,9 +272,6 @@ select.date {
 
 /* Extra mall devices (phones, less than 433px) */
 @media (max-width: $screen-xs) {
-  .ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
-    text-align: left;
-  }
   .react-datepicker__input-container {
     position: inherit;
     display: table-cell;
@@ -346,9 +283,6 @@ select.date {
 
 /* Small medium devices (tablets, 768px and upto desktops, 991px) */
 @media (min-width: $screen-sm) and (max-width: $screen-md) {
-  .ui.form .inline.field>:first-child, .ui.form .inline.fields .field>:first-child {
-    text-align: left;
-  }
   .react-datepicker__input-container {
     position: inherit;
     display: table-cell;
@@ -360,5 +294,65 @@ select.date {
 
 /* Small devices (phones, less than 768px) */
 @media (max-width: $screen-sm) {
-  
+  .ui.form .field .ui.input, .ui.form .fields .field .ui.input, .ui.form .wide.field .ui.input,
+  .ui.form .inline.field > .selection.dropdown, .ui.form .inline.fields .field > .selection.dropdown {
+    width: 100% !important;
+  }
 }
+
+/* Medium, Big devices (tablets, desktops, greater than 768px) */
+@media (min-width: $screen-sm) {
+  // Horizontal form
+  .ui.form .inline.field > div {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .ui.form .inline.field > .info.message {
+    margin-left: 27%;
+    width: 72%;
+  }
+
+  .ui.form .inline.field>label {
+    width: 25%;
+    text-align: right;
+  }
+
+  .ui.form .inline.field>select, .ui.form .inline.field>textarea, .ui.form .inline.field>.ui.input  {
+    width: 72% !important;
+    vertical-align: middle;
+  }
+
+  .ui.form .inline.field>.ui.input input {
+    width: 100%;
+  }
+
+  .ui.form .inline.field>.ui.selection.dropdown {
+    width: 72%;
+  }
+
+  .ui.form .inline.field.progress {
+    display: inline-block;
+    margin-left: 27% !important;
+    width: 73%;
+    div:first-child {
+      display: block;
+    }
+    div:first-child + div {
+      display: inline-flex;
+    }
+  }
+
+  .ui.form .inline.field> .header, .ui.form .inline.field>button:first-child, .ui.form .inline.field>a {
+    display: inline-block;
+    margin-left: 27% !important;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .ui.form .inline.field.error>span,
+  .ui.form .inline.field>.ui.table {
+    margin-left: 27% !important;
+  }
+}
+

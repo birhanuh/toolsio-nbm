@@ -202,8 +202,11 @@ export default {
       errors['name'] = T.translate("customers.form.name_required")
     }
     if (!data.contact.phoneNumber && !data.contact.email) {
+      errors['vatNumber'] = T.translate("customers.form.vat_number_required")
+    }
+    if (!data.contact.phoneNumber && !data.contact.email) {
       errors['phoneNumber'] = T.translate("customers.form.phone_number_or_email_required")
-       errors['email'] = T.translate("customers.form.phone_number_or_email_required")
+      errors['email'] = T.translate("customers.form.phone_number_or_email_required")
     }
     if (!data.address.street) {
       errors['street'] = T.translate("customers.form.street_required")
@@ -228,7 +231,7 @@ export default {
     let errors = {}
     
     if (data.currentStep === 'step1') {
-      if ((!data.step1.saleId && !data.step1.projectId) || (data.step1.saleId && data.step1.projectId)) {
+      if ((!data.step1.sale && !data.step1.project) || ((data.step1.sale && data.step1.sale.id) && (data.step1.project && data.step1.project.id))) {
         errors['saleId'] = T.translate("invoices.form.sale_or_project_required")
         errors['projectId'] = T.translate("invoices.form.sale_or_project_required")
       }      
@@ -241,6 +244,9 @@ export default {
       }
       if (!data.step2.interestInArrears) {
         errors['interestInArrears'] = T.translate("invoices.form.intereset_in_arrears_required")
+      }
+      if (!data.step2.tax) {
+        errors['tax'] = T.translate("invoices.form.tax_required")
       }
     }
 

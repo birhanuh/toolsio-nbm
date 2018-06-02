@@ -24,6 +24,7 @@ export const GET_PROJECTS_QUERY = gql`
       status
       progress
       description
+      isInvoiced
       customer {
         id
         name
@@ -44,6 +45,7 @@ export const GET_PROJECT_QUERY = gql`
       status
       progress
       description
+      isInvoiced
       customer {
         id
         name

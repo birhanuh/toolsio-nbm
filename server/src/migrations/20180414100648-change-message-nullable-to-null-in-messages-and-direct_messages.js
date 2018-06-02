@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return [
-      queryInterface.changeColumn('messages', 'message', {
+      queryInterface.changeColumn('channel_messages', 'message', {
         type: Sequelize.STRING,
         allowNull: true }),
       queryInterface.changeColumn('direct_messages', 'message', {
@@ -15,7 +15,7 @@ module.exports = {
 
   down: (queryInterface, Sequelize) => {
     return [
-       queryInterface.changeColumn('messages', 'message', {
+       queryInterface.changeColumn('channel_messages', 'message', {
         type: Sequelize.STRING,
         allowNull: false }),
       queryInterface.changeColumn('direct_messages', 'message', {

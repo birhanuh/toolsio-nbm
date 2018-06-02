@@ -9,7 +9,7 @@ import nodemailer from 'nodemailer'
 import AWS from 'aws-sdk'
 
 // jwt config
-import jwtConfig from '../../../config/jwt.json'
+import jwtConfig from '../../config/jwt.json'
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -202,7 +202,7 @@ export default {
       
     }),
 
-    s3SignAvatar: requiresAuth.createResolver(async (parent, args, { models }) => {
+    s3SignAvatar: requiresAuth.createResolver(async (parent, args) => {
 
       const s3Params = {
         Bucket: process.env.S3_BUCKET,

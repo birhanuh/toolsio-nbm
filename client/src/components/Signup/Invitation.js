@@ -13,7 +13,7 @@ import { REGISTER_INVITED_USER_MUTATION } from '../../graphql/authentications'
 import T from 'i18n-react'
 
 // Config
-import jwtConfig from '../../../../config/jwt.json'
+import jwtConfig from '../../../config/jwt.json'
 
 class Invitation extends Component {
   constructor(props) {

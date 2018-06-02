@@ -34,6 +34,11 @@ module.exports = {
         defaultValue: 0,
         type: Sequelize.DECIMAL
       },
+      is_true: {
+        defaultValue: false,
+        allowNull : false,
+        type: Sequelize.BOOLEAN
+      },
       customer_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -51,7 +56,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('projects');
   }
 };
