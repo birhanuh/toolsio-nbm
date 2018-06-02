@@ -40,6 +40,9 @@ export const GET_SALE_QUERY = gql`
         unitPrice
         total
       }
+      user {
+        firstName
+      }
     }
   }
 `

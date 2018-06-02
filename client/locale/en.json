@@ -481,7 +481,7 @@
       "phone_number_or_email_required": "Either Phone number or email should be filled.",
       "street_required": "Street is required.",
       "postal_code_required": "Postal code is required.",
-      "regoin_required": "Region is required.",
+      "region_required": "Region is required.",
       "country_required": "Country is required.",
       "flash": {
         "success_create": "Customer *{name}* is created!",
@@ -579,6 +579,7 @@
       "sale_or_project_required": "Select either Sale or Project.",
       "deadline_or_payment_required": "Select either Deadline or Payment term.",
       "intereset_in_arrears_required": "Interset in arrears is required.",
+      "tax_required": "Tax is required.",
       "flash": {
         "success_create": "Invoice for *{name}* created!",
         "success_update": "Invoice for *{name}* is updated!"

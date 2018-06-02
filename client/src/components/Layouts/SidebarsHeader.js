@@ -40,7 +40,7 @@ export function InnerSidebar({ visibleInnerSidebar}) {
 export function OuterSidebarScrollableHeaderNav({ visibleOuterSidebar }) {
 
   return [
-      <div key="scroll-header-nav" className="ui large top fixed menu transition hidden">
+      <div key="scroll-header-nav" className="ui large top fixed pointing menu hidden">
         <div className="ui container">
           <div className="left menu">
             <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
@@ -56,7 +56,7 @@ export function OuterSidebarScrollableHeaderNav({ visibleOuterSidebar }) {
               <Link className="ui inverted button"  to="/login">{T.translate("log_in.log_in")}</Link>     
             </div>
             <div className="item">   
-              <a className="ui inverted button" href={process.env.HTP+process.env.DNS+"/signup"}>{T.translate("sign_up.sign_up")}</a>    
+              <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
             </div>
           </div>  
         </div>

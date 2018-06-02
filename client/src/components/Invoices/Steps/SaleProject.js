@@ -58,10 +58,12 @@ export default function SaleProject({ id, step1, salesOption, projectsOption, ha
         
       </fieldset>
 
-      <div className="mt-5"> 
+      <div className="inline field mt-5"> 
+        <Link to="/invoices" className="ui primary outline button"> 
+          <i className="minus circle icon"></i>
+          {T.translate("invoices.form.cancel")}
+        </Link>
         <button className="ui primary button" onClick={handleNext}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
-        &nbsp;
-        <Link to="/invoices" className="ui button baic">{T.translate("invoices.form.cancel")}</Link>
       </div>  
     </div> 
     )    

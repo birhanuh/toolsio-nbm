@@ -218,11 +218,6 @@ nav.ui.menu {
   margin-top: 98px;
 }
 
-// Sidebar 
-.pushable {
-  overflow-x: initial;
-}
-
 .ui.vertical.inverted.sidebar {
   background-color: $dark-mid-night-blue;
   border: none;
@@ -369,11 +364,11 @@ nav.ui.menu {
 }
 
 .ui.warning.message {
-  color: $dark-green;
+  color: $dark-orange;
   background: $white-orange;
   box-shadow: 0 0 0 1px $orange inset, 0 0 0 0 transparent;
   .header {
-    color: $dark-green;
+    color: $dark-orange;
   }
 }
 

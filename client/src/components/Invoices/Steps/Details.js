@@ -149,7 +149,10 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
         <button className="ui button" onClick={handlePrevious}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
         <button className="ui primary button" onClick={handleNext}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
 
-        <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
+        <Link to="/invoices" className="ui primary outline button mt-3"> 
+          <i className="minus circle icon"></i>
+          {T.translate("invoices.form.cancel")}
+        </Link>
       </div>  
     </div> 
     )

@@ -92,36 +92,34 @@ class FormPage extends Component {
     const { email, errors, isLoading } = this.state
 
     return(
+        <div className="ui text segment">  
 
-      <div className="ui text segment">  
+          <fieldset className="custom-fieldset">
+            <legend className="custom-legend">{T.translate("users.form.invite_user_label")}</legend>
 
-        <fieldset className="custom-fieldset">
-          <legend className="custom-legend">{T.translate("users.form.invite_user_label")}</legend>
+            <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>          
+              
+              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
 
-          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>          
-            
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+              <Form.Field error={!!errors.email}>
+                <label>{T.translate("users.form.email")}</label>
+                <Input 
+                  placeholder={T.translate("users.form.email")}
+                  name="email" 
+                  value={email} 
+                  onChange={(e, {value}) => this.handleChange('email', value)} 
+                  fluid
+                />
+                <span className="red">{errors.email}</span>
+              </Form.Field>
 
-            <Form.Group error={errors.email}>
-              <Form.Field 
-                placeholder={T.translate("users.form.email")}
-                control={Input}
-                name="email" 
-                value={email} 
-                onChange={(e, {value}) => this.handleChange('email', value)} 
-                error={!!errors.email}
-              />
-              <span className="red">{errors.email}</span>
-            </Form.Group>
+              <button disabled={isLoading} className="ui primary button">
+                <i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("users.form.invite_user")}
+              </button> 
 
-            <button disabled={isLoading} className="ui primary button">
-              <i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("users.form.invite_user")}
-            </button> 
-
-          </Form>
-        </fieldset>  
-      </div>
-
+            </Form>
+          </fieldset>  
+        </div>
       )
   }
 }

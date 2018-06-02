@@ -21,7 +21,22 @@ const ActiveLink = ({ label, to, activeOnlyWhenExact }) => (
   )} />
 )
 
+/* Third party libraries */
+import $ from 'jquery'
+$.animate = require('jquery.easing')
+
 class HeaderNav extends Component {
+
+  componentDidMount = () => {    
+    //jQuery for page scrolling feature - requires jQuery Easing plugin
+    $('.ui.large.menu .left.menu a').bind('click', function() {
+      var $anchor = $(this)
+      $('html, body').stop().animate({
+          scrollTop: $($anchor.attr('href')).offset().top - 50
+      }, 1500, 'easeInOutExpo')
+      event.preventDefault()
+    })
+  }
 
   logout(e) {
     e.preventDefault()
@@ -161,7 +176,7 @@ class HeaderNav extends Component {
 
             <div className="right item">                                                   
               <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
-              <a className="ui inverted button" href={process.env.HTP+process.env.DNS+"/signup"}>{T.translate("sign_up.sign_up")}</a>     
+              <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>     
             </div>  
           </div>
         </div>

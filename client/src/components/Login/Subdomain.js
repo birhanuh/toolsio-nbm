@@ -1,5 +1,6 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
@@ -110,9 +111,9 @@ class Subdomain extends Component {
     return (  
       <div className="ui text container">
         <h2 className="ui teal image header">
-          <a className="" href="/">
+          <Link className="" to="/">
             <img src={logo} className="image" alt="logo-square" />
-          </a>
+          </Link>
           <div className="content">
             {T.translate("log_in.subdomain.header")}
           </div>
@@ -136,7 +137,7 @@ class Subdomain extends Component {
           </div>
         </form>  
         <div className="ui message">
-          {T.translate("log_in.new_to_us")}&nbsp;<a href="/signup">{T.translate("sign_up.sign_up")}</a>
+          {T.translate("log_in.new_to_us")}&nbsp;<Link to="/signup">{T.translate("sign_up.sign_up")}</Link>
         </div>
         <div className="ui center aligned vertical segment">
           <small className="d-block">{T.translate("landing.footer.copyright")}</small>

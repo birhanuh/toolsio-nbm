@@ -1,4 +1,5 @@
 import React, { Component } from 'react' 
+import { Link } from 'react-router-dom'
 import FormPage from './FormPage'
 import Invitation from './Invitation'
 import { Authorization } from '../../utils'
@@ -30,9 +31,9 @@ class Page extends Component {
     return (          
       <div className="ui text container">
         <h2 className="ui teal image header">
-          <a className="" href="/">
+          <Link className="" to="/">
             <img src={logo} className="image" alt="logo-square" />
-          </a>
+          </Link>
           <div className="content">{T.translate("sign_up.header")}</div>
         </h2>
         
@@ -41,7 +42,7 @@ class Page extends Component {
         {form}
 
         <div className="ui message"> 
-          {T.translate("sign_up.already_a_user")}&nbsp;<a href="/login">{T.translate("sign_up.log_in_here")}</a>
+          {T.translate("sign_up.already_a_user")}&nbsp;<Link to="/subdomain">{T.translate("sign_up.log_in_here")}</Link>
         </div>
         <div className="ui center aligned vertical segment">
           <small className="d-block">{T.translate("landing.footer.copyright")}</small>

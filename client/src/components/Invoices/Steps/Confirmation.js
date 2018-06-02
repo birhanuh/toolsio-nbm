@@ -21,72 +21,73 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
         }
       </div> 
       
-      <table className="ui column very basic collapsing celled table">
-        <tbody>
-          <tr>
-            <td>
-              <i className="ui tiny header">{T.translate("invoices.show.deadline")}</i>
-            </td>
-            <td>
-              {step2.deadline ? moment(step2.deadline).format('ll')  : '-'}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <i className="ui tiny header">{T.translate("invoices.show.status")}</i>
-            </td>
-            <td>
-              <div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <i className="ui tiny header">{T.translate("invoices.show.payment_term")}</i>
-            </td>
-            <td>
-              {step2.paymentTerm ? step2.paymentTerm : '-'}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <i className="ui tiny header">{T.translate("invoices.show.interest_in_arrears")}</i>
-            </td>
-            <td>
-              {step2.interestInArrears}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <i className="ui tiny header"><strong>{T.translate("invoices.show.total")}</strong></i>
-            </td>
-            <td>
-              {project && project.total} {sale && sale.total}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <i className="ui tiny header">{T.translate("invoices.show.tax")}</i>
-            </td>
-            <td>
-              {step2.tax}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <i className="ui tiny header">{T.translate("invoices.show.description")}</i>
-            </td>
-            <td>
-              {step2.description ? step2.description : '-'}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="inline field"> 
+        <table className="ui column very basic collapsing celled table">
+          <tbody>
+            <tr>
+              <td>
+                <i className="ui tiny header">{T.translate("invoices.show.deadline")}</i>
+              </td>
+              <td>
+                {step2.deadline ? moment(step2.deadline).format('ll')  : '-'}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i className="ui tiny header">{T.translate("invoices.show.status")}</i>
+              </td>
+              <td>
+                <div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i className="ui tiny header">{T.translate("invoices.show.payment_term")}</i>
+              </td>
+              <td>
+                {step2.paymentTerm ? step2.paymentTerm : '-'}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i className="ui tiny header">{T.translate("invoices.show.interest_in_arrears")}</i>
+              </td>
+              <td>
+                {step2.interestInArrears}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i className="ui tiny header"><strong>{T.translate("invoices.show.total")}</strong></i>
+              </td>
+              <td>
+                {project && project.total} {sale && sale.total}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i className="ui tiny header">{T.translate("invoices.show.tax")}</i>
+              </td>
+              <td>
+                {step2.tax}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i className="ui tiny header">{T.translate("invoices.show.description")}</i>
+              </td>
+              <td>
+                {step2.description ? step2.description : '-'}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       
       {sale &&
-        <div>
-          <div className="inline field"> 
-            <h2 className="ui header">{T.translate("invoices.form.sale.header")}</h2>
-          </div>
+        <div className="inline field"> 
+          <h2 className="ui header">{T.translate("invoices.form.sale.header")}</h2>
+         
           <table className="ui very basic collapsing celled table">
             <tbody>
               <tr>
@@ -121,10 +122,8 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
       }
       
       {project &&
-        <div>
-          <div className="inline field"> 
-            <h2 className="ui header">{T.translate("invoices.form.project.header")}</h2>
-          </div>
+        <div className="inline field"> 
+          <h2 className="ui header">{T.translate("invoices.form.project.header")}</h2>
           <table className="ui very basic collapsing celled table">
             <tbody>
               <tr>
@@ -163,7 +162,10 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
         <button className="ui button" onClick={handlePrevious}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
         <button disabled={isLoading} className="ui primary button" onClick={handleSubmit}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.save")}</button>
         
-        <Link to="/invoices" className="ui negative d-block mt-3">{T.translate("invoices.form.cancel")}</Link>
+        <Link to="/invoices" className="ui primary outline button mt-3"> 
+          <i className="minus circle icon"></i>
+          {T.translate("invoices.form.cancel")}
+        </Link>
       </div>  
     </form>
     )
