@@ -207,10 +207,10 @@ class App extends Component {
                 <div className="ui inverted section divider"></div>
                 <img src={logo} className="ui centered mini image" alt="logo-square"/>
                 <div className="ui horizontal inverted small divided link list">
-                  <a className="item" href="#">Site Map</a>
-                  <a className="item" href="#">Contact Us</a>
-                  <a className="item" href="#">Terms and Conditions</a>
-                  <a className="item" href="#">Privacy Policy</a>
+                  <a className="item" href="#">{T.translate("landing.footer.site_map")}</a>
+                  <a className="item" href="#">{T.translate("landing.footer.contact_us")}</a>
+                  <a className="item" href="#">{T.translate("landing.footer.terms_and_conditions")}</a>
+                  <a className="item" href="#">{T.translate("landing.footer.privacy_policy")}</a>
                 </div>
               </div>
 

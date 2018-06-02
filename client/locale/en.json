@@ -51,7 +51,11 @@
     "footer": {
       "copyright": "Copyright &copy; Toolsio, Ltd. 2017",
       "address": "Pyyntitie 2 C 50, 02230, Espoo, Finland",
-      "toolsio": "Toolsio"
+      "toolsio": "Toolsio",
+      "site_map": "Site Map",
+      "contact_us": "Contact us",
+      "terms_and_conditions": "Terms and Conditions",
+      "privacy_policy": "Privacy Policy"
     }
   },
   "sign_up": {        
