@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 import _ from 'lodash'
 import nodemailer from 'nodemailer'

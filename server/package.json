@@ -29,7 +29,7 @@
     "apollo-upload-server": "^5.0.0",
     "aws-sdk": "^2.220.1",
     "babel-runtime": "^6.26.0",
-    "bcrypt": "^1.0.3",
+    "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "connect-pg-simple": "^4.2.1",
