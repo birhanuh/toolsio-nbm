@@ -7,12 +7,12 @@
     "test": "./src/__test__"
   },
   "scripts": {
-    "serve": "node dist/index.js",
+    "serve": "NODE_ENV=production node dist/index.js",
     "build": "babel src -d dist",
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
-    "db:reset": "cd src && './__test__/helpers/reset_db.sh'",
+    "db:reset": "./__test__/helpers/reset_db.sh",
     "tstart": "NODE_ENV=test npm run db:reset && NODE_ENV=test babel-node -- src/index.js",
-    "test": "NODE_ENV=test jest './src/__test__'"
+    "test": "NODE_ENV=test jest './__test__'"
   },
   "repository": {
     "type": "git",

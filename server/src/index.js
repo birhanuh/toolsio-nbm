@@ -133,16 +133,14 @@ app.use(session({
   //cookie: {secure: true}
   cookie: { maxAge: 2628000000 },
   store: new (require('connect-pg-simple')(session))({
-    conString : process.env.DB_HOST + process.env.DB_DEVELOPMENT
+    conString : process.env.DB_HOST + process.env.POSTGRES_DB
   })
 }))
 **/
 app.use(passport.initialize())
 app.use(passport.session())
 
-let env = process.env.NODE_ENV || 'development'
-
-if (env === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.locals.pretty = true
 }
 
@@ -200,7 +198,7 @@ server.listen(app.get('port'), () => {
 
 // // Connect to mognodb
 // if (env === 'development') {
-//   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+//   db.connect(process.env.DB_HOST+'accounts'+process.env.POSTGRES_DB)
 // } else if (env === 'test') {
 //   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
 // }

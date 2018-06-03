@@ -57,7 +57,7 @@ router.put('/update/:id', async (req, res) => {
 
   // Connect to accounts db
   if (env === 'development') {
-    await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_DEVELOPMENT)
+    await db.connect(process.env.DB_HOST+'accounts'+process.env.POSTGRES_DB)
   } else if (env === 'test') {
     await db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
   }
