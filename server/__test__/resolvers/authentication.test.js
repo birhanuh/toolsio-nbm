@@ -10,34 +10,11 @@ import accountFactory from '../factories/account'
 describe("User", () => { 
 
   beforeAll(async () => {
-    await truncate()
+    //await truncate()
   })
 
   afterAll(async () => {  
-    await truncate()   
-  })
-
-  test('getUsers', async () => {
-
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `query {
-        getUsers {
-          id
-          firstName
-          lastName
-          email
-        }
-      }`
-    }) 
-
-    const { data } = response
-    
-    expect(data).toMatchObject({
-      data: {
-        getUsers: [
-        ]
-      }
-    })
+    //await truncate()   
   })
 
   describe("Authenticate User", () => { 
@@ -51,16 +28,16 @@ describe("User", () => {
       userFactoryLocal = await userFactory()
       accountFactoryLocal = await accountFactory()
     })
-
+   
     test('createUser', async () => {
 
       const response = await axios.post('http://localhost:8080/graphql', {
         query: `mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
           registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
             success
-            user {
-              id
-            } 
+            account {
+              subdomain
+            }
             errors {
               path
               message
@@ -76,15 +53,16 @@ describe("User", () => {
           industry: accountFactoryLocal.industry
         }
       }) 
-
       const { data } = response
-      const { data: { registerUser: { user } } } = response.data
-      
+      const { data: { registerUser: { account } } } = response.data
+   
       expect(data).toMatchObject({
         data: {
           registerUser: {
             success: true,
-            user: user,
+            account: {
+              subdomain: account.subdomain
+            },
             errors: null
           }
         }
@@ -111,8 +89,8 @@ describe("User", () => {
         }
       }) 
 
-      const { data: { loginUser: {success, authToken, refreshAuthToken} } } = response.data
-      
+      const { data: { loginUser: {success, authToken } } } = response.data
+ 
       expect(success).toBe(true)
       expect(authToken).not.toBeNull() 
 

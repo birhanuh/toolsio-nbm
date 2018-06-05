@@ -26,7 +26,7 @@ describe("Project",  () => {
   })
 
   afterAll(async () => {  
-    await truncate()   
+    //await truncate()   
   })
 
   it('should fail with validation errors for each required field', async () => {

@@ -6,6 +6,10 @@ services:
       - webnet
   postgres: 
     image: postgres
+    volumes: 
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "3030:5432"
     networks: 
       - webnet
     environment: 
@@ -22,6 +26,7 @@ services:
       NODE_ENV: production
       SERVER_PORT: 8080
       REDIS_HOST: redis
+    command: sequelize db:migrate
     command: ["./wait-for-it.sh", "postgres:5432", "--", "node", "dist/index.js"]
 networks:
   webnet: 

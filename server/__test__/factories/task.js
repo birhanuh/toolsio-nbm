@@ -1,6 +1,6 @@
 // test/factories/user.js
 import faker from 'faker'
-import models from '../../models'
+import models from '../../src/models'
 
 const data = async (props = {}) => {
   const defaultProps = {

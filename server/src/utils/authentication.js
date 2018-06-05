@@ -1,18 +1,6 @@
 import bcrypt from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 import _ from 'lodash'
-import nodemailer from 'nodemailer'
-import AWS from 'aws-sdk'
-
-let env = process.env.NODE_ENV || 'development'
-
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-})
 
 export const createAuthTokens = async (user, secret, secret2) => {
   const createAuthToken = jwt.sign(
@@ -90,7 +78,7 @@ export const loginUserWithToken = async (email, password, models, SECRET, SECRET
     } 
   }
 
-  const valid = await bcrypt.compare(password, user.password)
+  const valid = bcrypt.compareSync(password, user.password)
 
   if (!valid) {
     // user not found

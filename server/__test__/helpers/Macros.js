@@ -1,4 +1,4 @@
-import models from '../../models'
+import models from '../../src/models'
 import map from 'lodash/map'
 
 export async function resetDb() {

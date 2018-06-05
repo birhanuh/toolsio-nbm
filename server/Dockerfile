@@ -2,8 +2,12 @@ FROM node:9
 WORKDIR /app
 COPY package-lock.json .
 COPY package.json .
-RUN npm install 
+COPY migrations ./migrations
+RUN npm install --production
+RUN npm install -g sequelize-cli
 COPY dist ./dist
 COPY config ./config
 COPY wait-for-it.sh .
-CMD node dist/index.js
+RUN ls
+RUN pwd
+#CMD node dist/index.js

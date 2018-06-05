@@ -13,10 +13,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        is: {
-          arg: /^[A-Za-z / ]+$/,            // will only allow letters and slashes with RegExp,
-          msg: 'Wrong industry format'
-        }
+        is: /^[A-Za-z \/ ]+$/            // will only allow letters and slashes with RegExp
       } 
     },
     phoneNumber: {
@@ -41,20 +38,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: {
-          arg: /^[a-zA-Z0-9_ ]*$/,      // will only allow letter, numbers, spaces with RegExp,
-          msg: 'Wrong street format'
-        }
+        is: /^[a-zA-Z0-9_ ]*$/      // will only allow letter, numbers, spaces with RegExp,
       } 
     },
     postalCode: {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: {
-          arg: /^[0-9- ]*$/, // will only allow numbers, spaces, dash characters with RegExp,
-          msg: 'Wrong postal code format'
-        }
+        is: /^[0-9- ]*$/ // will only allow numbers, spaces, dash characters with RegExp
       },
       field: 'postal_code' 
     },
@@ -62,10 +53,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: {
-          arg: /^[a-zA-Z_ ]*$/,            // will only allow letters, spaces  with RegExp,
-          msg: 'Wrong country format'
-        }
+        is: /^[a-zA-Z_ ]*$/,            // will only allow letters, spaces  with RegExp
       } 
     },
     country: {

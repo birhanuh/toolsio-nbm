@@ -17,7 +17,7 @@ describe("Sale",  () => {
   let saleCreated
 
   beforeAll(async () => {
-    await truncate()
+    //await truncate()
 
     const logedInUser = await registerAndLoginUser()
 

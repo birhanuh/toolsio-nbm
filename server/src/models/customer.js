@@ -4,10 +4,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        isAlpha: {
-          arg: true,            // will only allow letters
-          msg: "Wrong name format"
-        }
+        is: /^([^0-9]*)$/            /// will not allow numbers
       } 
     },
     vatNumber: {
@@ -47,10 +44,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        is: {
-          arg: /^[a-zA-Z0-9 ]+$/,      // checks for letter, numbers, spaces with RegExp,
-          msg: 'Wrong street format'
-        }
+        is: /^[a-zA-Z0-9 ]+$/      // checks for letter, numbers, spaces with RegExp
       } 
     },
     postalCode: {

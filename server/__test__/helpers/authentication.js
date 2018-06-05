@@ -6,7 +6,7 @@ import userFactory from '../factories/user'
 import accountFactory from '../factories/account'
 import customerFactory from '../factories/customer'
 
-export async function registerAndLoginUser() {
+export async function registerLoginUser() {
 
   let userFactoryLocal = await userFactory()
   let accountFactoryLocal = await accountFactory()
@@ -15,11 +15,9 @@ export async function registerAndLoginUser() {
     query: `mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
       registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
         success
-        user {
-          id
-          email
-          password
-        } 
+        account {
+          subdomain
+        }
         errors {
           path
           message
@@ -36,8 +34,8 @@ export async function registerAndLoginUser() {
     }
   }) 
 
-  const { data: { registerUser: { success, user } } } = response.data
-  console.log('registerUser', user)
+  const { data: { registerUser: { success, account } } } = response.data
+  console.log('registerUser', account)
 
   if (success) {
     const response = await axios.post('http://localhost:8080/graphql', {
