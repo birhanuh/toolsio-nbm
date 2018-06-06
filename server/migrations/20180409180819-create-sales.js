@@ -29,7 +29,7 @@ module.exports = {
         defaultValue: 0,
         type: Sequelize.DECIMAL
       },
-      is_true: {
+      is_invoiced: {
         defaultValue: false,
         allowNull : false,
         type: Sequelize.BOOLEAN
@@ -40,6 +40,13 @@ module.exports = {
           model: 'customers',
           key: 'id'
         },
+      },
+      user_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
       },
       created_at: {
         allowNull: false,

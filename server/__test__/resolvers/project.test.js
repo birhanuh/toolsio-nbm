@@ -1,42 +1,43 @@
 // Schema
 import axios from 'axios'
 
-import { truncate } from '../helpers/macros'
+import { resetDb } from '../helpers/macros'
 
 // Load factories 
 import projectFactory from '../factories/project'
 
+// Tokens
+let tokens 
+
 // Authentication
-import { registerAndLoginUser, createCustomer } from '../helpers/authentication'
+import { registerUser, loginUser } from '../helpers/authentication'
+import { createCustomer } from '../helpers/parents'
 
 describe("Project",  () => { 
 
-  let authToken
-  let refreshAuthToken
-
-  let projectCreated
-
   beforeAll(async () => {
-    await truncate()
+    await resetDb()
+    let response = await registerUser()
+    const { success, email, password } = response
 
-    const logedInUser = await registerAndLoginUser()
-
-    authToken = logedInUser.authToken
-    refreshAuthToken = logedInUser.refreshAuthToken 
+    if (success) {
+      tokens = await loginUser(email, password)
+    }
   })
 
-  afterAll(async () => {  
-    //await truncate()   
+  afterAll(async () => { 
+    await resetDb()       
   })
 
   it('should fail with validation errors for each required field', async () => {
 
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
-        createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+      query: `mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $customerId: Int!) {
+        createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
           success
           project {
             id
+            name 
           }
           errors {
             path
@@ -48,33 +49,36 @@ describe("Project",  () => {
         name: "",
         deadline: "",
         status: "",
+        progress: 0,
         description: "",
-        customerId: 0
+        customerId: 1
+      }
+    }, 
+    {
+      headers: {
+        'x-auth-token': tokens.authToken,
+        'x-refresh-auth-token': tokens.refreshAuthToken,
       }
     })
 
     const { data: { createProject: { success, errors } } } = response.data
-    console.log('getProjects errors', errors)  
-    expect(errors.length).not.toEqual(0)
+ 
+    expect(success).toBe(false)
   })
 
-  it('createProject', async (done) => {
-    
-    // Create customer 
-    let customer = await createCustomer(authToken, refreshAuthToken)
+  it('createProject', async () => {   
 
     let projectFactoryLocal = await projectFactory()
+      // Create customer 
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
 
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
-        createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+      query: `mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $customerId: Int!) {
+        createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
           success
           project {
             id
-            name
-            deadline
-            status
-            description
+            name 
           }
           errors {
             path
@@ -89,28 +93,29 @@ describe("Project",  () => {
         description: projectFactoryLocal.description,
         customerId: customer.id
       }
+    }, 
+    {
+      headers: {
+        'x-auth-token': tokens.authToken,
+        'x-refresh-auth-token': tokens.refreshAuthToken,
+      }
     })
 
     const { data: { createProject: { success, project } } }  = response.data
     
-    // Assign created project
-    projectCreated = project
-    console.log('projectCreated', projectCreated)
     expect(success).toBe(true)
     expect(project).not.toBe(null)
-
-    done()
   })
 
-  it('updateProject', async (done) => { 
+  it('updateProject', async () => { 
     
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation updateProject($id: Int!, $name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $total: Int, $customerId: Int!) {
-        updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, total: $total, customerId: $customerId) {
+      query: `mutation updateProject($id: Int!, $name: String, $deadline: Date, $status: String, $progress: Int, $description: String, $customerId: Int) {
+        updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
           success
           project {
             id
-            name 
+            name  
           }
           errors {
             path
@@ -119,24 +124,24 @@ describe("Project",  () => {
         }
       }`,
       variables: {
-        id: projectCreated.id,
-        name: "Project name updated",
-        deadline: projectCreated.deadline,
-        status: projectCreated.status,
-        description: projectCreated.description,
-        customerId: projectCreated.customerId
+        id: 1,
+        name: "Project name updated"
       }
-    }) 
+    }, 
+    {
+      headers: {
+        'x-auth-token': tokens.authToken,
+        'x-refresh-auth-token': tokens.refreshAuthToken,
+      }
+    })
 
     const { data: { updateProject: { success, project } } } = response.data
-    console.log('updateProject', project)
+
     expect(success).toBe(true)
     expect(project.name).toEqual("Project name updated")
-
-    done()
   })
 
-  it('deleteProject', async (done) => { 
+  it('deleteProject', async () => { 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: ` mutation deleteProject($id: Int!) {
         deleteProject(id: $id) {
@@ -148,15 +153,19 @@ describe("Project",  () => {
         } 
       }`,
       variables: {
-        id: projectCreated.id
+        id: 1
+      }
+    }, 
+    {
+      headers: {
+        'x-auth-token': tokens.authToken,
+        'x-refresh-auth-token': tokens.refreshAuthToken,
       }
     }) 
 
     const { data: { deleteProject: { success, errors } } } = response.data
    
     expect(success).toBe(true)
-   
-    done()
   })
 
 })

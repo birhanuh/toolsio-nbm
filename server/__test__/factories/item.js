@@ -6,9 +6,8 @@ const data = async (props = {}) => {
     name: faker.commerce.productName(),
     unit: 'meter',
     quantity: 10,
-    price: 15,
-    vat: 20,
-    saleId: 1,
+    unitPrice: 15,
+    total: 0
   }
   return Object.assign({}, defaultProps, props)
 }

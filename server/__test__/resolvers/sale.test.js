@@ -1,42 +1,43 @@
 // Schema
 import axios from 'axios'
 
-import { truncate } from '../helpers/macros'
+import { resetDb } from '../helpers/macros'
 
 // Load factories 
 import saleFactory from '../factories/sale'
 
+// Tokens
+let tokens 
+
 // Authentication
-import { registerAndLoginUser, createCustomer } from '../helpers/authentication'
+import { registerUser, loginUser } from '../helpers/authentication'
+import { createCustomer } from '../helpers/parents'
 
 describe("Sale",  () => { 
 
-  let authToken
-  let refreshAuthToken
-
-  let saleCreated
-
   beforeAll(async () => {
-    //await truncate()
+    await resetDb()
+    let response = await registerUser()
+    const { success, email, password } = response
 
-    const logedInUser = await registerAndLoginUser()
-
-    authToken = logedInUser.authToken
-    refreshAuthToken = logedInUser.refreshAuthToken 
+    if (success) {
+      tokens = await loginUser(email, password)
+    }
   })
 
-  afterAll(async () => {  
-    //await truncate()   
+  afterAll(async () => { 
+    await resetDb()       
   })
 
   it('should fail with validation errors for each required field', async () => {
 
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
-        createSale(name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
+      query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
+        createSale(name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
           success
           sale {
             id
+            name 
           }
           errors {
             path
@@ -48,33 +49,36 @@ describe("Sale",  () => {
         name: "",
         deadline: "",
         status: "",
+        progress: 0,
         description: "",
-        customerId: 0
+        customerId: 1
+      }
+    }, 
+    {
+      headers: {
+        'x-auth-token': tokens.authToken,
+        'x-refresh-auth-token': tokens.refreshAuthToken,
       }
     })
 
     const { data: { createSale: { success, errors } } } = response.data
-    console.log('getSales errors', errors)  
-    expect(errors.length).not.toEqual(0)
+     
+    expect(success).toBe(false)
   })
 
-  it('createSale', async (done) => {
-    
-    // Create customer 
-    let customer = await createCustomer(authToken, refreshAuthToken)
+  it('createSale', async () => {   
 
     let saleFactoryLocal = await saleFactory()
+      // Create customer 
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
 
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
-        createSale(name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
+      query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
+        createSale(name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
           success
           sale {
             id
-            name
-            deadline
-            status
-            description
+            name 
           }
           errors {
             path
@@ -89,28 +93,30 @@ describe("Sale",  () => {
         description: saleFactoryLocal.description,
         customerId: customer.id
       }
+    }, 
+    {
+      headers: {
+        'x-auth-token': tokens.authToken,
+        'x-refresh-auth-token': tokens.refreshAuthToken,
+      }
     })
 
     const { data: { createSale: { success, sale } } }  = response.data
     
-    // Assign created sale
-    saleCreated = sale
-    console.log('saleCreated', saleCreated)
     expect(success).toBe(true)
     expect(sale).not.toBe(null)
 
-    done()
   })
 
-  it('updateSale', async (done) => { 
+  it('updateSale', async () => { 
     
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation updateSale($id: Int!, $name: String!, $deadline: Date!, $status: String!, $description: String, $total: Int, $customerId: Int!) {
-        updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, total: $total, customerId: $customerId) {
+      query: `mutation updateSale($id: Int!, $name: String, $deadline: Date, $status: String, $description: String, $customerId: Int) {
+        updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
           success
           sale {
             id
-            name 
+            name  
           }
           errors {
             path
@@ -119,24 +125,24 @@ describe("Sale",  () => {
         }
       }`,
       variables: {
-        id: saleCreated.id,
-        name: "Sale name updated",
-        deadline: saleCreated.deadline,
-        status: saleCreated.status,
-        description: saleCreated.description,
-        customerId: saleCreated.customerId
+        id: 1,
+        name: "Sale name updated"
       }
-    }) 
+    }, 
+    {
+      headers: {
+        'x-auth-token': tokens.authToken,
+        'x-refresh-auth-token': tokens.refreshAuthToken,
+      }
+    })
 
     const { data: { updateSale: { success, sale } } } = response.data
-    console.log('updateSale', response.data)
-    //expect(success).toBe(true)
-    //expect(sale.name).toEqual("Sale name updated")
 
-    done()
+    expect(success).toBe(true)
+    expect(sale.name).toEqual("Sale name updated")
   })
 
-  xit('deleteSale', async (done) => { 
+  it('deleteSale', async () => { 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: ` mutation deleteSale($id: Int!) {
         deleteSale(id: $id) {
@@ -148,15 +154,20 @@ describe("Sale",  () => {
         } 
       }`,
       variables: {
-        id: saleCreated.id
+        id: 1
+      }
+    }, 
+    {
+      headers: {
+        'x-auth-token': tokens.authToken,
+        'x-refresh-auth-token': tokens.refreshAuthToken,
       }
     }) 
 
     const { data: { deleteSale: { success, errors } } } = response.data
    
     expect(success).toBe(true)
-   
-    done()
   })
 
 })
+

@@ -4,7 +4,6 @@ COPY package-lock.json .
 COPY package.json .
 COPY migrations ./migrations
 RUN npm install --production
-RUN npm install -g sequelize-cli
 COPY dist ./dist
 COPY config ./config
 COPY wait-for-it.sh .

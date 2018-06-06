@@ -14,7 +14,7 @@ export default `
 
   type CreateChannelResponse {
     success: Boolean!
-    channel: Channel!
+    channel: Channel
     errors: [Error!]
   }
 

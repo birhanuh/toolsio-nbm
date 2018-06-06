@@ -25,7 +25,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       unique: true,
       validate: {     
-        isEmail: { // checks for email format (foo@bar.com) 
+        isEmail: {                    // checks for email format (foo@bar.com) 
           arg: true,
           msg: 'Invalid email format'
         }

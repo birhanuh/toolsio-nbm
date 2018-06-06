@@ -3,8 +3,9 @@ export default (sequelize, DataTypes) => {
     name: { 
       type: DataTypes.STRING,
       allowNull : false,
-      validate: {     
-        is: /^([^0-9]*)$/            /// will not allow numbers
+      validate: {    
+        notEmpty: true,      
+        is: /^([^0-9]*)$/            // will not allow numbers
       } 
     },
     vatNumber: {
@@ -12,7 +13,7 @@ export default (sequelize, DataTypes) => {
       unique: true,
       allowNull : false,
       validate: {     
-        isDecimal: true // checks for any numbers
+        isDecimal: true             // checks for any numbers
       },
       field: 'vat_number'
     },
@@ -21,7 +22,7 @@ export default (sequelize, DataTypes) => {
       allowNull : true,
       validate: {     
         isNumeric: {
-          arg: true, // will only allow numbers
+          arg: true,                // will only allow numbers
           msg: "Wrong phone number format"
         }
       },
@@ -31,7 +32,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        isEmail: true // checks for email format (foo@bar.com) 
+        isEmail: true               // checks for email format (foo@bar.com) 
       } 
     },
     isContactIncludedInInvoice: {
@@ -52,7 +53,7 @@ export default (sequelize, DataTypes) => {
       allowNull: true,
       validate: {     
         isNumeric: {
-          arg: true,      // will only allow numbers,
+          arg: true,                // will only allow numbers,
           msg: 'Wrong postal code format'
         }
       },
@@ -63,7 +64,7 @@ export default (sequelize, DataTypes) => {
       allowNull: true,
       validate: {     
         isAlpha: {
-          arg: true,  // will only allow letters
+          arg: true,                // will only allow letters
           msg: 'Wrong country format'
         }
       } 
@@ -73,7 +74,7 @@ export default (sequelize, DataTypes) => {
       allowNull: true,
       validate: {     
         isAlpha: {
-          arg: true,            // will only allow letters
+          arg: true,                // will only allow letters
           msg: 'Wrong country format'
         }
       } 

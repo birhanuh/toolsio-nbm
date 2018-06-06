@@ -10,9 +10,11 @@
     "serve": "NODE_ENV=production node dist/index.js",
     "build": "babel src -d dist",
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
-    "db:reset": "./__test__/helpers/reset_db.sh",
     "tstart": "NODE_ENV=test npm run db:reset && NODE_ENV=test babel-node -- src/index.js",
-    "test": "NODE_ENV=test jest './__test__'"
+    "test": "NODE_ENV=test jest './__test__'",
+    "db:reset": "./__test__/helpers/reset_db.sh",
+    "db:migrate": "./node_modules/.bin/sequelize db:migrate",
+    "db:seed": "./node_modules/.bin/sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -75,8 +77,9 @@
     "gulp-babel": "^7.0.1",
     "gulp-nodemon": "^2.2.1",
     "jest": "^22.4.3",
-    "nodemon": "^1.17.3",
+    "nodemon": "^1.17.5",
     "phantomjs": "^2.1.7",
+    "sequelize-cli": "^4.0.0",
     "umzug": "^2.1.0"
   }
 }

@@ -49,7 +49,7 @@ export default `
 
   type CreateUpdateSaleResponse {
     success: Boolean!
-    sale: Sale!
+    sale: Sale
     errors: [Error!]
   }
 

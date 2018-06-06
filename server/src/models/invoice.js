@@ -4,14 +4,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull : true,
       validate: {     
-        isDate: true // only allow date strings
+        isDate: true              // only allow date strings
       } 
     },
     paymentTerm: {
       type: DataTypes.INTEGER,
       allowNull : true, 
       validate: {    
-        isInt: true, // checks for int
+        isInt: true,              // checks for int
       }, 
       field: 'payment_term',
     },
@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull : false,
       validate: {     
-        isInt: true // checks for int
+        isInt: true               // checks for int
       },
       field: 'interest_in_arrears'
     },
@@ -28,7 +28,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       defaultValue : "new",
       validate: {     
-        notEmpty: true  // don't allow empty strings
+        notEmpty: true            // don't allow empty strings
       } 
     },
     referenceNumber: {

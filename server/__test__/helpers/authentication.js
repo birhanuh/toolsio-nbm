@@ -6,7 +6,7 @@ import userFactory from '../factories/user'
 import accountFactory from '../factories/account'
 import customerFactory from '../factories/customer'
 
-export async function registerLoginUser() {
+export async function registerUser() {
 
   let userFactoryLocal = await userFactory()
   let accountFactoryLocal = await accountFactory()
@@ -34,10 +34,22 @@ export async function registerLoginUser() {
     }
   }) 
 
-  const { data: { registerUser: { success, account } } } = response.data
-  console.log('registerUser', account)
+  const { data: { registerUser: { success } } } = response.data
 
   if (success) {
+    return {
+        success,
+        email: userFactoryLocal.email,
+        password: userFactoryLocal.password
+      } 
+  } else {
+    return null
+  }
+}
+
+
+export async function loginUser(email, password) {
+
     const response = await axios.post('http://localhost:8080/graphql', {
       query: `mutation($email: String!, $password: String!) {
         loginUser(email: $email, password: $password) {
@@ -51,57 +63,19 @@ export async function registerLoginUser() {
         }
       }`,
       variables: {
-        email: userFactoryLocal.email,
-        password: userFactoryLocal.password
+        email: email,
+        password: password
       }
     }) 
 
-    const { data: { loginUser } } = response.data      
-    
-    return loginUser
+    const { data: { loginUser: { success, authToken, refreshAuthToken } } } = response.data    
+ 
+  if (success) {  
+    return {
+      authToken,
+      refreshAuthToken
+    }
   } else {
     return null
   }
-}
-
-export async function createCustomer(authToken, refreshAuthToken) {
-
-  let customerFactoryLocal = await customerFactory()
-
-  const response = await axios.post('http://localhost:8080/graphql', {
-    query: `mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
-      createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
-        postalCode: $postalCode, region: $region, country: $country) {
-        success
-        customer {
-          id
-        }
-        errors {
-          path
-          message
-        }
-      }
-    }`,
-    variables: {
-      name: customerFactoryLocal.name,
-      vatNumber: customerFactoryLocal.vatNumber,
-      email: customerFactoryLocal.email,
-      phoneNumber: customerFactoryLocal.phoneNumber,
-      isContactIncludedInInvoice: customerFactoryLocal.isContactIncludedInInvoice,
-      street: customerFactoryLocal.street,
-      postalCode: customerFactoryLocal.postalCode,
-      region: customerFactoryLocal.region,
-      country: customerFactoryLocal.country
-    }
-  }, 
-  {
-    headers: {
-      'x-auth-token': authToken,
-      'x-refresh-auth-token': refreshAuthToken,
-    }
-  }) 
-
-  const { data: { createCustomer: { customer } } } = response.data
-  console.log('createCustomer: ', response.data)
-  return customer
 }

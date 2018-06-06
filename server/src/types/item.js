@@ -31,8 +31,8 @@ export default `
     createItem(name: String!, unit: String!, quantity: Int!, unitPrice: Float!, total: Float!, 
       saleId: Int!): CreateUpdateItemResponse!
 
-    updateItem(id: Int!, name: String!, unit: String!, quantity: Int!, unitPrice: Float!, total: Float!, 
-      saleId: Int!): CreateUpdateItemResponse!
+    updateItem(id: Int!, name: String, unit: String, quantity: Int, unitPrice: Float, total: Float, 
+      saleId: Int): CreateUpdateItemResponse!
 
     deleteItem(id: Int!): DeleteItemResponse!
   }

@@ -2,15 +2,20 @@
 import axios from 'axios'
 
 //import { truncate } from '../helpers/macros'
-import { registerLoginUser } from '../helpers/authentication'
+import { registerUser, loginUser } from '../helpers/authentication'
 
-let user 
+let tokens 
 
 describe("User", () => { 
 
   beforeAll(async () => {
     //await truncate()
-    user = await registerLoginUser()
+    let response = await registerUser()
+    const { success, email, password } = response
+
+    if (success) {
+      tokens = await loginUser(email, password)
+    }
   })
 
   afterAll(async () => {  
@@ -30,8 +35,8 @@ describe("User", () => {
       }`
     },{
       headers: {
-        'x-auth-token': user.authToken,
-        'x-auth-refresh-token': user.refreshAuthToken
+        'x-auth-token': tokens.authToken,
+        'x-auth-refresh-token': tokens.refreshAuthToken
       }
     }) 
    
