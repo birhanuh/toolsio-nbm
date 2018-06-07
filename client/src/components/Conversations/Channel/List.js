@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { Label } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
-import { GET_CHANNELS_USERS_COUNT_QUERY } from '../../../graphql/channels'
+import { GET_CHANNELS_USERS_COUNT_QUERY } from '../../../graphql/conversations/channels'
 
 // Localization 
 import T from 'i18n-react'

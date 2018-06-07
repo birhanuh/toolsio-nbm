@@ -6,13 +6,10 @@ const data = async (props = {}) => {
     deadline: faker.date.future(),
     paymentTerm: null,
     interestInArrears: 5,
-    referenceNumber: faker.random.number(),
     status: 'new',
     description: faker.lorem.sentence(),
     total: faker.random.number(),
-    projectId: 1,
-    saleId: null,
-    customerId: 1,
+    tax: 0
   }
   return Object.assign({}, defaultProps, props)
 }

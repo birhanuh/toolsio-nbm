@@ -37,8 +37,8 @@ export const GET_CHANNEL_USERS_QUERY = gql`
 `
 
 export const CREATE_CHANNEL_MUTATION = gql`
-  mutation createChannel($name: String!) {
-    createChannel(name: $name) {
+  mutation createChannel($name: String!, $isPublic: Boolean) {
+    createChannel(name: $name, isPublic: $isPublic) {
       success
       channel {
         id 

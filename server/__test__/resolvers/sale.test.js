@@ -61,7 +61,7 @@ describe("Sale",  () => {
       }
     })
 
-    const { data: { createSale: { success, errors } } } = response.data
+    const { data: { createSale: { success } } } = response.data
      
     expect(success).toBe(false)
   })
@@ -164,7 +164,7 @@ describe("Sale",  () => {
       }
     }) 
 
-    const { data: { deleteSale: { success, errors } } } = response.data
+    const { data: { deleteSale: { success } } } = response.data
    
     expect(success).toBe(true)
   })

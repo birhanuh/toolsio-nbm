@@ -34,11 +34,12 @@ export async function registerUser() {
     }
   }) 
 
-  const { data: { registerUser: { success } } } = response.data
+  const { data: { registerUser: { account: { subdomain }, success } } } = response.data
 
   if (success) {
     return {
         success,
+        subdomain,
         email: userFactoryLocal.email,
         password: userFactoryLocal.password
       } 

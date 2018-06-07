@@ -1,10 +1,10 @@
 import { withFilter } from 'graphql-subscriptions'
 
-import requiresAuth, { requiresChannelAccess } from '../middlewares/authentication'
-import { formatErrors } from '../utils/formatErrors'
-import { processUpload } from '../utils/uploadFile'
+import requiresAuth, { requiresChannelAccess } from '../../middlewares/authentication'
+import { formatErrors } from '../../utils/formatErrors'
+import { processUpload } from '../../utils/uploadFile'
 
-import pubsub from '../utils/pubsub'
+import pubsub from '../../utils/pubsub'
 
 const NEW_CHANNEL_MESSAGE = 'NEW_CHANNEL_MESSAGE'
 

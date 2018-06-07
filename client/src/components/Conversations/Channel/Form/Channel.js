@@ -5,7 +5,7 @@ import { Validation } from '../../../../utils'
 // Semantic UI Form elements
 import { Input, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_CHANNELS_USERS_COUNT_QUERY, CREATE_CHANNEL_MUTATION } from '../../../../graphql/channels'
+import { GET_CHANNELS_USERS_COUNT_QUERY, CREATE_CHANNEL_MUTATION } from '../../../../graphql/conversations/channels'
 
 // Localization 
 import T from 'i18n-react'
@@ -16,6 +16,7 @@ class Channel extends Component {
     super(props)
     this.state = {
       name: '',
+      isPublic: true,
       errors: {},
       isLoading: false
     }
@@ -62,12 +63,12 @@ class Channel extends Component {
 
     // Validation
     if (this.isValid()) { 
-      const { name } = this.state
+      const { name, isPublic } = this.state
 
       this.setState({ isLoading: true })
 
       this.props.createChannelMutation({ 
-        variables: { name },
+        variables: { name, isPublic },
         update: (proxy, { data: { createChannel } }) => {
           const { success, channel } = createChannel
 

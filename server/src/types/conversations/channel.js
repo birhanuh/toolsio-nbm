@@ -3,6 +3,7 @@ export default `
   type Channel {
     id: Int!
     name: String!
+    isPublic: Boolean
     users: [User!]!
   }
 
@@ -31,7 +32,7 @@ export default `
   }
 
   type Mutation {
-    createChannel(name: String): CreateChannelResponse!
+    createChannel(name: String!, isPublic: Boolean): CreateChannelResponse!
     
     addMember(members: [Int!], channelId: Int!): AddMemberResponse!
   }

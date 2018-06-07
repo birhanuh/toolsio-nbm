@@ -5,25 +5,22 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       unique: true,
       validate: {    
-        is: ["^[a-z]+$",'i'],     // will only allow letters
-        notContains: 'www'        // don't allow www substrings
+        is: ["^[a-z]+$",'i'],       // will only allow letters
+        notContains: 'www'          // don't allow www substrings
       } 
     },
     industry: {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        is: /^[A-Za-z \/ ]+$/     // will only allow letters and slashes with RegExp
+        is: /^[A-Za-z \/ ]+$/       // will only allow letters and slashes with RegExp
       } 
     },
     phoneNumber: {
       type: DataTypes.STRING,
       allowNull : true,
-      validate: {     
-        isNumeric: {
-          arg: true,              // will only allow numbers
-          msg: 'Wrong phone number format'
-        }
+      validate: {       
+        is: /^[0-9#+\-()]+$/      // will only allow numbers and special characters
       },
       field: 'phone_number'
     },
@@ -38,14 +35,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: /^[a-zA-Z0-9_ ]*$/      // will only allow letter, numbers, spaces with RegExp,
+        is: /^[a-zA-Z0-9_ ]*$/      // will only allow letter, numbers, spaces
       } 
     },
     postalCode: {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: /^[0-9- ]*$/             // will only allow numbers, spaces, dash characters with RegExp
+        is: /^[0-9\-()]+$/,         // will only allow letters, spaces
       },
       field: 'postal_code' 
     },
@@ -53,14 +50,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: /^[a-zA-Z_ ]*$/          // will only allow letters, spaces  with RegExp
+        is: /^[A-z ]+$/,            // will only allow letters, spaces
       } 
     },
     country: {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {       
-        is: /^[a-zA-Z_ ]*$/          // will only allow letters, spaces  with RegExp
+        is: /^[A-z ]+$/,             // will only allow letters, spaces
       } 
     },
     logoUrl: {

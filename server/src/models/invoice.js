@@ -51,7 +51,7 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      beforeValidate: (invoice) => {
+      beforeCreate: (invoice) => {
         if (!invoice.deadline && !invoice.paymentTerm) {
           throw new Error("Either deadline or payment term is required")
         }

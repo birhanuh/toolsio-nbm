@@ -5,7 +5,7 @@ import Dropzone from 'react-dropzone'
 import { Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_USER_QUERY } from '../../../../graphql/users'
-import { GET_DIRECT_MESSAGE_USERS_QUERY, CREATE_DIRECT_MESSAGE_MUTATION } from '../../../../graphql/directMessages'
+import { GET_DIRECT_MESSAGE_USERS_QUERY, CREATE_DIRECT_MESSAGE_MUTATION } from '../../../../graphql/conversations/directMessages'
 
 // Localization 
 import T from 'i18n-react'

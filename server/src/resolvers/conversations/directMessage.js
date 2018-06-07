@@ -1,10 +1,10 @@
 import { withFilter } from 'graphql-subscriptions'
 
-import requiresAuth,  { requiresDirectMessageAccess } from '../middlewares/authentication'
-import { formatErrors } from '../utils/formatErrors'
-import { processUpload } from '../utils/uploadFile'
+import requiresAuth,  { requiresDirectMessageAccess } from '../../middlewares/authentication'
+import { formatErrors } from '../../utils/formatErrors'
+import { processUpload } from '../../utils/uploadFile'
 
-import pubsub from '../utils/pubsub'
+import pubsub from '../../utils/pubsub'
 
 const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE'
 

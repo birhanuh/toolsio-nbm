@@ -6,18 +6,20 @@ import { registerUser, loginUser } from '../helpers/authentication'
 
 // Tokens
 let tokens 
+let subdomainLocal
 
 // Load factories 
-import customerFactory from '../factories/customer'
+import accountFactory from '../factories/account'
 
-describe("Customer", () => { 
+describe("Account", () => { 
 
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, email, password } = response
+    const { success, subdomain, email, password } = response
 
     if (success) {
+      subdomainLocal = subdomain
       tokens = await loginUser(email, password)
     }
   })
@@ -26,93 +28,16 @@ describe("Customer", () => {
     await resetDb()       
   })
 
-
-  it('should fail with validation errors for each required field', async () => {
+  it('finds Account', async () => { 
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
-        createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
-          postalCode: $postalCode, region: $region, country: $country) {
-          success
-          errors {
-            path
-            message
-          }
-        }
-      }`,
-      variables: {
-        name: '',
-        vatNumber: 0,
-        email: '',
-        phoneNumber: '',
-        isContactIncludedInInvoice: false,
-        street: '',
-        postalCode: '',
-        region: '',
-        country: ''
-      }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-      }
-    }) 
-
-    const { data: { createCustomer: { success } } } = response.data
-    
-    expect(success).toBe(false)
-  })
-
-  it('saves Customer', async () => {
-    let customerFactoryLocal = await customerFactory()
-
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
-        createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
-          postalCode: $postalCode, region: $region, country: $country) {
-          success
-          errors {
-            path
-            message
-          }
-        }
-      }`,
-      variables: {
-        name: customerFactoryLocal.name,
-        vatNumber: customerFactoryLocal.vatNumber,
-        email: customerFactoryLocal.email,
-        phoneNumber: customerFactoryLocal.phoneNumber,
-        isContactIncludedInInvoice: customerFactoryLocal.isContactIncludedInInvoice,
-        street: customerFactoryLocal.street,
-        postalCode: customerFactoryLocal.postalCode,
-        region: customerFactoryLocal.region,
-        country: customerFactoryLocal.country
-      }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-      }
-    }) 
-
-    const { data: { createCustomer: { success } } } = response.data
-        
-    expect(success).toBe(true)
-
-   
-  })
-
-  it('finds Customer', async () => { 
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `query getCustomer($id: Int!) {
-        getCustomer(id: $id) {
+      query: `query getAccount($subdomain: String!) {
+        getAccount(subdomain: $subdomain) {
           id
-          name
+          subdomain
         }
       }`,
       variables: {
-        id: 1
+        subdomain: subdomainLocal
       }
     }, 
     {
@@ -122,21 +47,24 @@ describe("Customer", () => {
       }
     }) 
 
-    const { data: { getCustomer } } = response.data
+    const { data: { getAccount } } = response.data
 
-    expect(getCustomer).not.toBe(null)
+    expect(getAccount).not.toBe(null)
 
   })
 
-  it('updates Customer', async () => { 
+  it('updates Account', async () => { 
+    let accountFactoryLocal = await accountFactory()
+
     // Update name
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation updateCustomer($id: Int!, $name: String, $vatNumber: Int, $email: String, $phoneNumber: String, $isContactIncludedInInvoice: Boolean, $street: String, $postalCode: String, $region: String, $country: String) {
-        updateCustomer(id: $id, name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, postalCode: $postalCode, region: $region, country: $country) {
+      query: `mutation updateAccount($subdomain: String!, $industry: String, $email: String, $phoneNumber: String, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
+        updateAccount(subdomain: $subdomain, industry: $industry, email: $email, phoneNumber: $phoneNumber, logoUrl: $logoUrl, street: $street, postalCode: $postalCode, region: $region, country: $country) {
           success
-          customer {
+          account {
             id
-            name
+            subdomain
+            industry
           }
           errors {
             path
@@ -145,8 +73,15 @@ describe("Customer", () => {
         }
       }`,
       variables: {
-        id: 1,
-        name: "name updated",
+        subdomain: subdomainLocal,
+        industry: accountFactoryLocal.industry,
+        email: accountFactoryLocal.email,
+        phoneNumber: accountFactoryLocal.phoneNumber,
+        logoUrl: accountFactoryLocal.logoUrl,
+        street: accountFactoryLocal.street,
+        postalCode: accountFactoryLocal.postalCode,
+        region: accountFactoryLocal.region,
+        country: accountFactoryLocal.country
       }
     }, 
     {
@@ -156,22 +91,24 @@ describe("Customer", () => {
       }
     }) 
 
-    const { data: { updateCustomer } } = response.data
+    const { data: { updateAccount } } = response.data
     
-    expect(updateCustomer).toMatchObject({
+    expect(updateAccount).toMatchObject({
         "success": true,
-        "customer": {
+        "account": {
           "id": 1,
-          "name": "name updated"
-        }
+          "subdomain": subdomainLocal,
+          "industry": accountFactoryLocal.industry
+        }, 
+        "errors": null
     })
    
   })
 
-  it('deletes Customer', async () => { 
+  it('deletes Account', async () => { 
     const response = await axios.post('http://localhost:8080/graphql', {
-     query: ` mutation deleteCustomer($id: Int!) {
-        deleteCustomer(id: $id) {
+     query: `mutation deleteAccount($subdomain: String!) {
+        deleteAccount(subdomain: $subdomain) {
           success
           errors {
             path
@@ -180,7 +117,7 @@ describe("Customer", () => {
         }
       }`,
       variables: {
-        id: 1,
+        subdomain: subdomainLocal,
       }
     }, 
     {
@@ -190,7 +127,7 @@ describe("Customer", () => {
       }
     }) 
 
-    const { data: { deleteCustomer: { success } } } = response.data
+    const { data: { deleteAccount: { success } } } = response.data
     
     expect(success).toBe(true)
 

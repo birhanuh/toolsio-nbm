@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { Label, Button, Modal } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_DIRECT_MESSAGE_USERS_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/directMessages'
+import { GET_DIRECT_MESSAGE_USERS_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/conversations/directMessages'
 
 // Localization 
 import T from 'i18n-react'

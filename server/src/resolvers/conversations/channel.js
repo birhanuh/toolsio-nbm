@@ -1,5 +1,5 @@
-import requiresAuth from '../middlewares/authentication'
-import { formatErrors } from '../utils/formatErrors'
+import requiresAuth from '../../middlewares/authentication'
+import { formatErrors } from '../../utils/formatErrors'
 
 export default {
   Query: {
@@ -18,7 +18,7 @@ export default {
   },
 
   Mutation: {
-    createChannel: requiresAuth.createResolver(async (parent, { name }, { models }) => {
+    createChannel: requiresAuth.createResolver(async (parent, { name, isPublic }, { models }) => {
       try {
       
         const channel = await models.Channel.findOne({ where: { name } }, { raw: true })
@@ -34,7 +34,7 @@ export default {
             ]
           }    
         } else {
-          const channel = await models.Channel.create({ name, owner: 1 })
+          const channel = await models.Channel.create({ name, isPublic, owner: 1 })
           await models.Member.create({ userId: 1, channelId: channel.dataValues.id })
 
           return {

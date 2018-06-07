@@ -57,7 +57,7 @@ describe("Item",  () => {
       }
     })
 
-    const { data: { createItem: { success, errors } } } = response.data
+    const { data: { createItem: { success } } } = response.data
  
     expect(success).toBe(false)
   })
@@ -162,7 +162,7 @@ describe("Item",  () => {
       }
     }) 
 
-    const { data: { deleteItem: { success, errors } } } = response.data
+    const { data: { deleteItem: { success } } } = response.data
    
     expect(success).toBe(true)
   })

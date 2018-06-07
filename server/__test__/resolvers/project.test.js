@@ -61,7 +61,7 @@ describe("Project",  () => {
       }
     })
 
-    const { data: { createProject: { success, errors } } } = response.data
+    const { data: { createProject: { success } } } = response.data
  
     expect(success).toBe(false)
   })
@@ -163,7 +163,7 @@ describe("Project",  () => {
       }
     }) 
 
-    const { data: { deleteProject: { success, errors } } } = response.data
+    const { data: { deleteProject: { success } } } = response.data
    
     expect(success).toBe(true)
   })

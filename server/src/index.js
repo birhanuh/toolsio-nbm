@@ -39,11 +39,11 @@ import { refreshAuthTokens } from './utils/authentication'
 import { userBatcher, customerBatcher, projectBatcher, saleBatcher } from './utils/batchFunctions'
 
 // Schema
-const types = fileLoader(path.join(__dirname + '/types'))
+const types = fileLoader(path.join(__dirname + '/types'), { recursive: true })
 const typeDefs = mergeTypes(types) 
 
 // Resolvers
-const resolvers =  mergeResolvers(fileLoader(path.join(__dirname + '/resolvers'))) 
+const resolvers =  mergeResolvers(fileLoader(path.join(__dirname + '/resolvers'), { recursive: true })) 
 
 const schema = makeExecutableSchema({
   typeDefs,

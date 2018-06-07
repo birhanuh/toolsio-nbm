@@ -11,7 +11,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Input, Form } from 'semantic-ui-react'
 import classnames from 'classnames'
 import { graphql, compose } from 'react-apollo'
-import { GET_USER_BY_EMAIL_QUERY, UPDATE_USER_MUTATION, S3_SIGN_AVATAR_MUTATION } from '../../graphql/accounts'
+import { GET_USER_BY_EMAIL_QUERY, UPDATE_USER_MUTATION, S3_SIGN_AVATAR_MUTATION } from '../../graphql/settings'
 
 // Localization 
 import T from 'i18n-react'

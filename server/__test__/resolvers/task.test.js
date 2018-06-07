@@ -57,7 +57,7 @@ describe("Task",  () => {
       }
     })
 
-    const { data: { createTask: { success, errors } } } = response.data
+    const { data: { createTask: { success } } } = response.data
  
     expect(success).toBe(false)
   })
@@ -162,7 +162,7 @@ describe("Task",  () => {
       }
     }) 
 
-    const { data: { deleteTask: { success, errors } } } = response.data
+    const { data: { deleteTask: { success } } } = response.data
    
     expect(success).toBe(true)
   })

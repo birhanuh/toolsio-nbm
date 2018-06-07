@@ -5,7 +5,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       validate: {    
         notEmpty: true,      
-        is: /^([^0-9]*)$/            // will not allow numbers
+        is: /^([^0-9]*)$/           // will not allow numbers
       } 
     },
     vatNumber: {
@@ -21,10 +21,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        isNumeric: {
-          arg: true,                // will only allow numbers
-          msg: "Wrong phone number format"
-        }
+        is: /^[0-9#+\-()]+$/        // will only allow numbers and special characters
       },
       field: 'phone_number'
     },
@@ -45,17 +42,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        is: /^[a-zA-Z0-9 ]+$/      // checks for letter, numbers, spaces with RegExp
+        is: /^[a-zA-Z0-9 ]+$/       // checks for letter, numbers, spaces
       } 
     },
     postalCode: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        isNumeric: {
-          arg: true,                // will only allow numbers,
-          msg: 'Wrong postal code format'
-        }
+        is: /^[0-9\-()]+$/,         // will only allow letters, dashes
       },
       field: 'postal_code'
     },
@@ -63,20 +57,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        isAlpha: {
-          arg: true,                // will only allow letters
-          msg: 'Wrong country format'
-        }
+        is: /^[A-z ]+$/,             // will only allow letters, spaces
       } 
     },
     country: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        isAlpha: {
-          arg: true,                // will only allow letters
-          msg: 'Wrong country format'
-        }
+        is: /^[A-z ]+$/,             // will only allow letters, spaces
       } 
     }
   }, {
