@@ -7,12 +7,14 @@
     "test": "./src/__test__"
   },
   "scripts": {
-    "serve": "node dist/index.js",
+    "serve": "NODE_ENV=production node dist/index.js",
     "build": "babel src -d dist",
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
-    "db:reset": "cd src && './__test__/helpers/reset_db.sh'",
     "tstart": "NODE_ENV=test npm run db:reset && NODE_ENV=test babel-node -- src/index.js",
-    "test": "NODE_ENV=test jest './src/__test__'"
+    "test": "NODE_ENV=test jest './__test__'",
+    "db:reset": "./__test__/helpers/reset_db.sh",
+    "db:migrate": "./node_modules/.bin/sequelize db:migrate",
+    "db:seed": "./node_modules/.bin/sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -29,7 +31,7 @@
     "apollo-upload-server": "^5.0.0",
     "aws-sdk": "^2.220.1",
     "babel-runtime": "^6.26.0",
-    "bcrypt": "^1.0.3",
+    "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "connect-pg-simple": "^4.2.1",
@@ -75,8 +77,9 @@
     "gulp-babel": "^7.0.1",
     "gulp-nodemon": "^2.2.1",
     "jest": "^22.4.3",
-    "nodemon": "^1.17.3",
+    "nodemon": "^1.17.5",
     "phantomjs": "^2.1.7",
+    "sequelize-cli": "^4.0.0",
     "umzug": "^2.1.0"
   }
 }

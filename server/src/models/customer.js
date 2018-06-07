@@ -3,11 +3,9 @@ export default (sequelize, DataTypes) => {
     name: { 
       type: DataTypes.STRING,
       allowNull : false,
-      validate: {     
-        isAlpha: {
-          arg: true,            // will only allow letters
-          msg: "Wrong name format"
-        }
+      validate: {    
+        notEmpty: true,      
+        is: /^([^0-9]*)$/           // will not allow numbers
       } 
     },
     vatNumber: {
@@ -15,7 +13,7 @@ export default (sequelize, DataTypes) => {
       unique: true,
       allowNull : false,
       validate: {     
-        isDecimal: true // checks for any numbers
+        isDecimal: true             // checks for any numbers
       },
       field: 'vat_number'
     },
@@ -23,10 +21,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        isNumeric: {
-          arg: true, // will only allow numbers
-          msg: "Wrong phone number format"
-        }
+        is: /^[0-9#+\-()]+$/        // will only allow numbers and special characters
       },
       field: 'phone_number'
     },
@@ -34,7 +29,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        isEmail: true // checks for email format (foo@bar.com) 
+        isEmail: true               // checks for email format (foo@bar.com) 
       } 
     },
     isContactIncludedInInvoice: {
@@ -47,20 +42,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        is: {
-          arg: /^[a-zA-Z0-9 ]+$/,      // checks for letter, numbers, spaces with RegExp,
-          msg: 'Wrong street format'
-        }
+        is: /^[a-zA-Z0-9 ]+$/       // checks for letter, numbers, spaces
       } 
     },
     postalCode: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        isNumeric: {
-          arg: true,      // will only allow numbers,
-          msg: 'Wrong postal code format'
-        }
+        is: /^[0-9\-()]+$/,         // will only allow letters, dashes
       },
       field: 'postal_code'
     },
@@ -68,20 +57,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        isAlpha: {
-          arg: true,  // will only allow letters
-          msg: 'Wrong country format'
-        }
+        is: /^[A-z ]+$/,             // will only allow letters, spaces
       } 
     },
     country: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        isAlpha: {
-          arg: true,            // will only allow letters
-          msg: 'Wrong country format'
-        }
+        is: /^[A-z ]+$/,             // will only allow letters, spaces
       } 
     }
   }, {

@@ -6,7 +6,7 @@ import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
-import { GET_CHANNEL_QUERY, GET_CHANNEL_MESSAGE_QUERY } from '../../../graphql/channelMessages'
+import { GET_CHANNEL_QUERY, GET_CHANNEL_MESSAGE_QUERY } from '../../../graphql/conversations/channelMessages'
 
 // Localization 
 import T from 'i18n-react'

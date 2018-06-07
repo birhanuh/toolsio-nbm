@@ -57,7 +57,7 @@
       "src/**/*.js"
     ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/src/__mocks__/styleMock.js"
     },
     "transformIgnorePatterns": [
@@ -117,7 +117,7 @@
   "scripts": {
     "start": "webpack-dev-server --open --config ./config/webpack.dev.js --mode development",
     "build": "webpack --config ./config/webpack.prod.js --mode production",
-    "test": "jest",
+    "test": "jest './__test__'",
     "test:watch": "npm test -- --watch"
   }
 }

@@ -23,6 +23,7 @@ errorShots
 
 # DB
 logfile
+pgdata
 
 # Production
 

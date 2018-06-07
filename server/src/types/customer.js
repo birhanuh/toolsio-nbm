@@ -32,7 +32,7 @@ export default `
 
   type CreateUpdateCustomerResponse {
     success: Boolean!
-    customer: Customer!
+    customer: Customer
     errors: [Error!]
   }
 

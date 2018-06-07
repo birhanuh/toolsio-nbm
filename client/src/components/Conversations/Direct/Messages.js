@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Comment, Message, Modal, Image, Button } from 'semantic-ui-react'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
-import { GET_DIRECT_MESSAGES_QUERY, MARK_DIRECT_MESSAGES_AS_READ_MUTATION, GET_USER_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/directMessages'
+import { GET_DIRECT_MESSAGES_QUERY, MARK_DIRECT_MESSAGES_AS_READ_MUTATION, GET_USER_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/conversations/directMessages'
 
 import MessageForm from './Form/Message'
 import RenderText from '../RenderText'

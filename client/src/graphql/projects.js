@@ -91,8 +91,8 @@ export const CREATE_PROJECT_MUTATION = gql`
 `
 
 export const UPDATE_PROJECT_MUTATION = gql`
-  mutation updateProject($id: Int!, $status: String, $progress: Int) {
-    updateProject(id: $id, status: $status, progress: $progress) {
+  mutation updateProject($id: Int!, $name: String, $deadline: Date, $status: String, $progress: Int, $description: String, $customerId: Int) {
+    updateProject(id: $id, name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
       success
       project {
         id

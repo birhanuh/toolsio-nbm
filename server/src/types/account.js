@@ -22,7 +22,7 @@ export default `
 
   type UpdateAccountResponse {
     success: Boolean!
-    account: Account!
+    account: Account
     errors: [Error!]
   }
 

@@ -35,7 +35,7 @@ export default `
 
   type SendInvitationResponse {
     success: Boolean!
-    account: Account!
+    account: Account
     errors: [Error!]
   }
 

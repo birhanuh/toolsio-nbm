@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone'
 // Semantic UI Form elements
 import { Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
-import { CREATE_CHANNEL_MESSAGE_MUTATION } from '../../../../graphql/channelMessages'
+import { CREATE_CHANNEL_MESSAGE_MUTATION } from '../../../../graphql/conversations/channelMessages'
 
 // Localization 
 import T from 'i18n-react'

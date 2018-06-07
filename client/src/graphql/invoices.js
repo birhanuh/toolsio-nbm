@@ -159,8 +159,8 @@ export const CREATE_INVOICE_MUTATION = gql`
 `
 
 export const UPDATE_INVOICE_MUTATION = gql`
-  mutation updateInvoice($id: Int!, $deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
-    $description: String, $tax: Float!, $projectId: Int, $saleId: Int, $customerId: Int!) {
+  mutation updateInvoice($id: Int!, $deadline: Date, $paymentTerm: Int, $interestInArrears: Int, $status: String, 
+    $description: String, $tax: Float, $projectId: Int, $saleId: Int, $customerId: Int) {
     updateInvoice(id: $id, deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
       description: $description, tax: $tax, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
       success
@@ -236,3 +236,21 @@ export const GET_SALES_WITHOUT_INVOICE_QUERY = gql`
     }
   }
 `
+
+export const GET_ACCOUNT_QUERY = gql`
+  query getAccount($subdomain: String!) {
+    getAccount(subdomain: $subdomain) {
+      id
+      subdomain
+      industry
+      email
+      phoneNumber
+      street
+      postalCode
+      region
+      country
+      logoUrl
+    }
+  }
+`
+

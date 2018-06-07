@@ -4,7 +4,7 @@ import { Link, Route } from 'react-router-dom'
 import decode from 'jwt-decode'
 import { Image, Dropdown, Menu, Label, Icon } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
-import { GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY } from '../../graphql/directMessages'
+import { GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY } from '../../graphql/conversations/directMessages'
 
 import Breadcrumb from './Breadcrumb'
 

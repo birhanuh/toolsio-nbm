@@ -4,21 +4,21 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        notEmpty: true, // don't allow empty strings
+        notEmpty: true,               // don't allow empty strings
       } 
     },
     hours: {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        notEmpty: true, // don't allow empty strings
+        notEmpty: true,               // don't allow empty strings
       } 
     },
     paymentType: {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        notEmpty: true, // don't allow empty strings
+        notEmpty: true,               // don't allow empty strings
       },
       field: 'payment_type'
     },
@@ -26,7 +26,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL,
       allowNull : false,
       validate: {     
-        isDecimal: true // checks for any numbers
+        isDecimal: true               // checks for any numbers
       },
       field: 'unit_price'
     },
@@ -34,7 +34,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL,
       allowNull : true,
       validate: {     
-        isDecimal: true //  checks for any numbers
+        isDecimal: true               //  checks for any numbers
       } 
     }
   }, {

@@ -1,0 +1,32 @@
+version: '3'
+services:
+  redis: 
+    image: redis
+    networks: 
+      - webnet
+  postgres: 
+    image: postgres
+    volumes: 
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "3030:5432"
+    networks: 
+      - webnet
+    environment: 
+      POSTGRES_USER: toolsio
+      POSTGRES_PASSWORD: toolsio
+      POSTGRES_DB: toolsio
+  web:
+    image: toolsio-server
+    ports:
+      - "8080:8080"
+    networks:
+      - webnet 
+    environment: 
+      NODE_ENV: production
+      SERVER_PORT: 8080
+      REDIS_HOST: redis
+    command: sequelize db:migrate
+    command: ["./wait-for-it.sh", "postgres:5432", "--", "node", "dist/index.js"]
+networks:
+  webnet: 

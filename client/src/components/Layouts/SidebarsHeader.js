@@ -53,10 +53,10 @@ export function OuterSidebarScrollableHeaderNav({ visibleOuterSidebar }) {
        
           <div className="right menu">
             <div className="item">                     
-              <Link className="ui inverted button"  to="/login">{T.translate("log_in.log_in")}</Link>     
+              <Link className="ui primary outline button"  to="/login">{T.translate("log_in.log_in")}</Link>     
             </div>
             <div className="item">   
-              <Link className="ui inverted button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+              <Link className="ui primary outline button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
             </div>
           </div>  
         </div>

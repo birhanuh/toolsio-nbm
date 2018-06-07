@@ -79,7 +79,7 @@ router.post('/register', async (req, res) => {
     
     // Connect to subdomain db
     if (env === 'development') {
-      await db.connect(process.env.DB_HOST+accountInvitedTo.subdomain+process.env.DB_DEVELOPMENT)
+      await db.connect(process.env.DB_HOST+accountInvitedTo.subdomain+process.env.POSTGRES_DB)
     } else if (env === 'test') {
       await db.connect(process.env.DB_HOST+accountInvitedTo.subdomain+process.env.DB_TEST)
     }
@@ -141,7 +141,7 @@ router.get('/:email', async (req, res) => {
   // Connect to subdomain db
   if (req.headers.subdomain) {
     if (env === 'development') {
-      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_DEVELOPMENT)
+      await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.POSTGRES_DB)
     } else if (env === 'test') {
       await db.connect(process.env.DB_HOST+req.headers.subdomain+process.env.DB_TEST)
     }
@@ -346,7 +346,7 @@ router.put('/update/:id', async (req, res) => {
 
   // Connect to accounts db
   if (env === 'development') {
-    await db.connect(process.env.DB_HOST+subdomain+process.env.DB_DEVELOPMENT)
+    await db.connect(process.env.DB_HOST+subdomain+process.env.POSTGRES_DB)
   } else if (env === 'test') {
     await db.connect(process.env.DB_HOST+subdomain+process.env.DB_TEST)
   }

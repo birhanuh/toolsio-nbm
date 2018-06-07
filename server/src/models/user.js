@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt-nodejs'
 import Promise from 'bluebird'
 const SALT_WORK_FACTOR = 10
 
@@ -9,10 +9,7 @@ export default (sequelize, DataTypes) => {
       field: 'first_name',
       allowNull: false,
       validate: {     
-        isAlpha: {
-          arg: true,            // will only allow letters
-          msg: 'Wrong first name format'
-        }
+        not: ["[0-9]",'i']            // will only allow numbers
       } 
     },
     lastName: {
@@ -20,10 +17,7 @@ export default (sequelize, DataTypes) => {
       field: 'last_name',
       allowNull: false,
       validate: {     
-        isAlpha: {
-          arg: true,            // will only allow letters
-          msg: 'Wrong last name format'
-        }
+        not: ["[0-9]",'i']            // will only allow numbers
       } 
     },
     email: {
@@ -31,7 +25,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       unique: true,
       validate: {     
-        isEmail: { // checks for email format (foo@bar.com) 
+        isEmail: {                    // checks for email format (foo@bar.com) 
           arg: true,
           msg: 'Invalid email format'
         }
@@ -79,7 +73,7 @@ export default (sequelize, DataTypes) => {
             if (err) return reject(err)
 
             // hash the password using our new salt
-            return bcrypt.hash(user.password, salt, (err, hash) => {
+            return bcrypt.hash(user.password, salt, null, (err, hash) => {
               if (err) return reject(err)
              
               // override the cleartext password with the hashed one

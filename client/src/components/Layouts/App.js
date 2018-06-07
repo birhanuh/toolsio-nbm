@@ -10,7 +10,7 @@ import Invitation from '../Signup/Invitation'
 import Login from '../Login/Page'
 import Subdomain from '../Login/Subdomain'
 import { PrivateRoute, SubdomainRoute } from '../../utils/requireAuth'
-import Account from '../Account/Page'
+import Settings from '../Settings/Page'
 import ProjectsPage from '../Projects/Page'
 import ProjectsForm from '../Projects/FormPage'
 import ProjectsShow from '../Projects/Show'
@@ -132,7 +132,7 @@ class App extends Component {
               <SubdomainRoute exact path="/login" component={Login} />
               <SubdomainRoute exact path="/login/confirmation/:token" component={Login} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
-              <PrivateRoute exact path="/settings" component={Account} />
+              <PrivateRoute exact path="/settings" component={Settings} />
               <PrivateRoute exact path="/projects" component={ProjectsPage} />
               <PrivateRoute exact path="/projects/edit/:id" component={ProjectsForm} /> 
               <PrivateRoute exact path="/projects/show/:id" component={ProjectsShow} />
