@@ -12,37 +12,48 @@ import T from 'i18n-react'
 
 class Page extends Component {
   
-  state = { search: "", limit: 0 }
+  state = { search: "", limit: this.props.match.params.limit ? parseInt(this.props.match.params.limit) : 10 }
 
   handleChange = (name, value) => {
     this.setState({
       [name]: value
     })
+
+    if (name === 'limit') {
+      this.props.data.fetchMore({
+        variables: {
+          limit: value
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev
+           
+          return Object.assign({}, prev, {
+            getInvioces: fetchMoreResult.getInvioces
+          })
+        }
+      })
+    }
   }
 
   handleSearch = () => {
-    this.props.fetchMore({
+    this.props.data.fetchMore({
       variables: {
-        name: this.state.name,
-        fetchPolicy: 'network-only'
+        search: this.state.search
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
         return Object.assign({}, prev, {
-          getInvoices: [...fetchMoreResult.getInvoices]
+          getInvoices: fetchMoreResult.getInvoices
         })
       }
     })
   }
 
-  handleLimitSelectionChange = (name, value) => {
-    console.log('limit: ', value)
-  }
-
   render() {
+    const { limit } = this.state
     const { params } = this.props.match
+
     let offset = params.offset ? parseInt(params.offset) : 0
-    let limit = params.limit ? parseInt(params.limit) : 10
 
     const { getInvoices } = this.props.data
 
@@ -67,7 +78,7 @@ class Page extends Component {
               <div className="ui left floated select">
                 <Select
                   name="limit"
-                  value="10" 
+                  value={limit.toString()} 
                   onChange={(e, {value}) => this.handleChange('limit', value)} 
                   options={[
                     { key: "default", value: "10", text: '10' },
@@ -97,6 +108,7 @@ export default graphql(GET_INVOICES_QUERY, {
         offset: props.match.params.offset ? parseInt(props.match.params.offset) : 0,
         limit: props.match.params.limit ? parseInt(props.match.params.limit) : 10,
         search: ""
-      }
+      },
+      fetchPolicy: 'cache-network-only'
     })
   })(Page)

@@ -12,7 +12,7 @@ import T from 'i18n-react'
 
 class Page extends Component {
 
-  state = { name: "", limit: 10 }
+  state = { name: "", limit: this.props.match.params.limit ? parseInt(this.props.match.params.limit) : 10 }
 
   handleChange = (name, value) => {
     this.setState({
@@ -20,10 +20,9 @@ class Page extends Component {
     })
 
     if (name === 'limit') {
-      console.log('ye')
       this.props.data.fetchMore({
         variables: {
-          limit: parseInt(this.state.limit)
+          limit: value
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev
@@ -52,9 +51,11 @@ class Page extends Component {
   }
 
   render() {
+    const { limit } = this.state
     const { params } = this.props.match
+
     let offset = params.offset ? parseInt(params.offset) : 0
-    let limit = params.limit ? parseInt(params.limit) : 10
+
     const { getCustomers } = this.props.data
     
     return (
@@ -78,7 +79,7 @@ class Page extends Component {
               <div className="ui left floated select">
                 <Select
                   name="limit"
-                  value="10" 
+                  value={limit.toString()} 
                   onChange={(e, {value}) => this.handleChange('limit', value)} 
                   options={[
                     { key: "default", value: "10", text: '10' },
