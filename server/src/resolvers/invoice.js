@@ -6,8 +6,17 @@ export default {
   Query: {
     getInvoice: requiresAuth.createResolver((parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true })),
     
-    getInvoices: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
-      models.Invoice.findAndCountAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })
+    getInvoices: requiresAuth.createResolver((parent, { offset, limit, order, search }, { models }) => 
+      models.Invoice.findAndCountAll({  
+        include: [
+          {
+            model: models.Project,
+            where: {
+              name: {
+                [models.sequelize.Op.iLike]: '%'+search+'%'
+              }
+            }
+        }], offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })
         .then(result => {  
           return {
             count: result.count,

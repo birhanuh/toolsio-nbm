@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export const GET_INVOICES_QUERY = gql`
-  query getInvoices($offset: Int!, $limit: Int!, $order: String!) {
-    getInvoices(offset: $offset, limit: $limit, order: $order) {
+  query getInvoices($offset: Int!, $limit: Int!, $order: String!, $search: String) {
+    getInvoices(offset: $offset, limit: $limit, order: $order, search: $search) {
       count
       invoices {
         id

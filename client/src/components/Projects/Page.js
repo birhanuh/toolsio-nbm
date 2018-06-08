@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Icon } from 'semantic-ui-react'
+import { Input, Button, Icon } from 'semantic-ui-react'
 import List from './List' 
 import { Query } from 'react-apollo'
 import { GET_PROJECTS_QUERY } from '../../graphql/projects'
@@ -8,63 +8,87 @@ import { GET_PROJECTS_QUERY } from '../../graphql/projects'
 // Localization 
 import T from 'i18n-react'
 
-const Page = () => (
-  <Query 
-    query={GET_PROJECTS_QUERY}
-    variables={{
-      order: "DESC",
-      offset: 0,
-      limit: 10
-    }}
-    fetchPolicy="cache-and-network">  
-    {( { loading, data, fetchMore } ) => {
+class Page extends Component {
 
-      const { getProjects } = data
+  state = { name: "" }
 
-      return ( 
-        <div className="row column"> 
-          <div className="sixteen wide column">
-            <div className="ui clearing basic segment pl-0 pr-0">
-              <div className="ui right floated icon input">
-                <input type="text" placeholder="Search..." />
-                <i className="inverted circular search link icon"></i>
-              </div>
+  handleChange = (name, value) => {
+    this.setState({
+      [name]: value
+    })
+  }
 
-              <Link className="ui left floated primary button" to="/projects/new">
-                <i className="add circle icon"></i>
-                {T.translate("projects.page.create_new_project")}
-              </Link>   
-            </div> 
+  render() {
+    return (
+      <Query 
+        query={GET_PROJECTS_QUERY}
+        variables={{
+          order: "DESC",
+          offset: 0,
+          limit: 10,
+          name: ""
+        }}
+        fetchPolicy="cache-and-network">  
+        {( { loading, data, fetchMore } ) => {
+         
+          const { getProjects } = data
 
-            { getProjects && <List projects={getProjects} loading={loading} /> }             
+          return ( 
+            <div className="row column"> 
+              <div className="sixteen wide column">
+                <div className="ui clearing basic segment pl-0 pr-0">
+                  <div className="ui right floated icon input">
+                    <Input name="name" value={this.state.name} onChange={(e, {value}) => this.handleChange('name', value)} 
+                      icon={<Icon name='search' inverted circular link onClick={() => {
+                        fetchMore({
+                          variables: {
+                            name: this.state.name
+                          },
+                          updateQuery: (prev, { fetchMoreResult }) => {
+                            if (!fetchMoreResult) return prev
+                            return Object.assign({}, prev, {
+                              getProjects: fetchMoreResult.getProjects
+                            })
+                          }
+                        })
+                      }} />} placeholder='Search...' />
+                  </div>
 
-            <div className="ui center aligned basic segment">           
-              <Button 
-                primary
-                size="large"
-                 onClick={() =>
-                  fetchMore({
-                    variables: {
-                      offset: data.getProjects.length
-                    },
-                    updateQuery: (prev, { fetchMoreResult }) => {
-                      if (!fetchMoreResult) return prev
-                      return Object.assign({}, prev, {
-                        getProjects: [...prev.getProjects, ...fetchMoreResult.getProjects]
+                  <Link className="ui left floated primary button" to="/projects/new">
+                    <i className="add circle icon"></i>
+                    {T.translate("projects.page.create_new_project")}
+                  </Link>   
+                </div> 
+
+                { getProjects && <List projects={getProjects} loading={loading} /> }             
+
+                <div className="ui center aligned basic segment">           
+                  <Button 
+                    primary
+                    size="large"
+                     onClick={() =>
+                      fetchMore({
+                        variables: {
+                          offset: data.getProjects.length
+                        },
+                        updateQuery: (prev, { fetchMoreResult }) => {
+                          if (!fetchMoreResult) return prev
+                          return Object.assign({}, prev, {
+                            getProjects: [...prev.getProjects, ...fetchMoreResult.getProjects]
+                          })
+                        }
                       })
                     }
-                  })
-                }
-              >    
-                <Icon name='refresh' />&nbsp;
-                {T.translate("projects.page.load_more")}
-              </Button>
+                  >    
+                    <Icon name='refresh' />&nbsp;
+                    {T.translate("projects.page.load_more")}
+                  </Button>
+                </div>  
+              </div>
             </div>  
-          </div>
-        </div>  
-      )
-    }}
-  </Query>
-  )
-
+          )
+        }}
+      </Query>)
+    }
+}
 export default Page

@@ -44,7 +44,7 @@ export default `
   type Query {
     getCustomer(id: Int!): Customer
     
-    getCustomers(offset: Int!, limit: Int!, order: String!): GetCustomersResponse!
+    getCustomers(offset: Int!, limit: Int!, order: String!, name: String): GetCustomersResponse!
   }
 
   type Mutation {
