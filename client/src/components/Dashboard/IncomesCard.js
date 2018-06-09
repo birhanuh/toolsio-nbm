@@ -1,8 +1,8 @@
 import React  from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import gql from "graphql-tag"
-import { Query } from "react-apollo"
+import { Query } from 'react-apollo'
+import { GET_INCOMES_DATA } from '../../graphql/dashboard'
 
 import pick from 'lodash/pick'
 
@@ -11,22 +11,8 @@ import { Line } from 'react-chartjs-2'
 // Localization 
 import T from 'i18n-react'
 
-const GET_INCOMES = gql`
-  {
-    getIncomesData {
-      daySum {
-        day
-        sum
-      }
-      monthSum {
-        month
-        sum
-      }
-    }
-  }
-`
 const IncomesCard = () => (
-  <Query query={GET_INCOMES}>
+  <Query query={GET_INCOMES_DATA}>
     {({ loading, error, data }) => {
      
       const daySum = data && data.getIncomesData && data.getIncomesData.daySum
@@ -51,9 +37,6 @@ const IncomesCard = () => (
 
       const chartOptions = {
         responsive: true,
-        title: {
-          display: true
-        },
         tooltips: {
           mode: 'label'
         },
@@ -102,7 +85,7 @@ const IncomesCard = () => (
           <div className="content">
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
-              <div className="meta">{T.translate("dashboard.this_month")}</div>
+              <div className="meta">{monthSum && monthSum ? (monthSum[0].month ? monthSum[0].month : '-') : '-'}</div>
               <div className="header">
                 {monthSum && monthSum ? (monthSum[0].sum ? monthSum[0].sum : '-') : '-'}
                 {monthSum && monthSum[1] && ((monthSum[1].sum > monthSum[0].sum) ? <i className="long arrow down red icon"></i> : 
@@ -110,7 +93,7 @@ const IncomesCard = () => (
                 </div>
             </div>     
             <div className="left floated">
-              <div className="meta">{T.translate("dashboard.last_month")}</div>
+              <div className="meta">{monthSum && monthSum[1] ? (monthSum[1].month ? monthSum[1].month : '-') : '-'}</div>
               <div className="header">
                 {monthSum && monthSum[1] ? (monthSum[1].sum ? monthSum[1].sum : '-') : '-'}
               </div>

@@ -1,89 +1,68 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import gql from "graphql-tag"
-import { Query } from "react-apollo"
+import { Query } from 'react-apollo'
+import { GET_CUSTOMERS_DATA } from '../../graphql/dashboard'
 
 import pick from 'lodash/pick'
 
-import { Line } from 'react-chartjs-2'
+import { Polar } from 'react-chartjs-2'
 
 // Localization 
 import T from 'i18n-react'
 
-const GET_CUSTOMERS = gql`
-  {
-    getIncomesData {
-      daySum {
-        day
-        sum
-      }
-      monthSum {
-        month
-        sum
-      }
-    }
-  }
-`
 const CustomersCard = () => (
-  <Query query={GET_CUSTOMERS}>
+  <Query query={GET_CUSTOMERS_DATA}>
     {({ loading, error, data }) => {
-     
+      
       const daySum = data && data.getIncomesData && data.getIncomesData.daySum
       const monthSum = data && data.getIncomesData && data.getIncomesData.monthSum
 
       let dayPick = daySum && daySum.map(item => pick(item, ['day']).day.substring(0, 5))
       let sumPick = daySum && daySum.map(item => pick(item, ['sum']).sum)
-      
+
       let chartData = {
-        labels: dayPick,
-        datasets: [
-          {
-            label: 'Customers',
-            data: sumPick,
-            borderColor: "#7DA40D",
-            borderWidth: 1,
-            fill: false,
-            pointRadius: 2,
-            pointBackgroundColor: "#7DA40D",
-          },
-          // {
-          //   borderColor: "#be0a0a",
-          //   borderWidth: 1,
-          //   fill: false,
-          //   pointRadius: 2,
-          //   pointBackgroundColor: "#be0a0a",
-          //   data: 4
-          // }
-          ]
+        labels: [
+           'Red',
+          'Green',
+          'Yellow',
+          'Blue'
+        ],
+        datasets: [{
+          data: [
+            60,
+            37,
+            20,
+            41
+          ],
+          backgroundColor: [
+            '#FF6384',
+            '#4BC0C0',
+            '#FFCE56',
+            '#36A2EB'
+          ],
+          label: 'My dataset' // for legend
+        }]        
       }
 
       const chartOptions = {
         responsive: true,
+        legend: {
+          position: 'right',
+        },
         title: {
-          display: true
+          display: true,
+          text: 'Chart.js Polar Area Chart'
         },
-        tooltips: {
-          mode: 'label'
+        scale: {
+          ticks: {
+            beginAtZero: true
+          },
+          reverse: false
         },
-        hover: {
-          mode: 'dataset'
-        },
-        scales: {
-          xAxes: [
-            {
-              display: true,
-              scaleLabel: {
-                show: true,
-                labelString: 'DD/MM/YYYY'
-              },
-              ticks: {
-                autoSkip: false,
-                maxRotation: 90,
-                minRotation: 90
-              }
-            }
-          ]
+        animation: {
+          animateRotate: false,
+          animateScale: true
         }
       }
 
@@ -104,14 +83,14 @@ const CustomersCard = () => (
 
           <div className="image">
 
-            <Line data={chartData} options={chartOptions} />
+            <Polar data={chartData} options={chartOptions} />
 
           </div>
           
           <div className="content">
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
-              <div className="meta">{T.translate("dashboard.this_month")}</div>
+              <div className="meta">{monthSum && monthSum ? (monthSum[0].month ? monthSum[0].month : '-') : '-'}</div>
               <div className="header">
                 {monthSum && monthSum ? (monthSum[0].sum ? monthSum[0].sum : '-') : '-'}
                 {monthSum && monthSum[1] && ((monthSum[1].sum > monthSum[0].sum) ? <i className="long arrow down red icon"></i> : 
@@ -119,7 +98,7 @@ const CustomersCard = () => (
                 </div>
             </div>     
             <div className="left floated">
-              <div className="meta">{T.translate("dashboard.last_month")}</div>
+              <div className="meta">{monthSum && monthSum[1] ? (monthSum[1].month ? monthSum[1].month : '-') : '-'}</div>
               <div className="header">
                 {monthSum && monthSum[1] ? (monthSum[1].sum ? monthSum[1].sum : '-') : '-'}
               </div>

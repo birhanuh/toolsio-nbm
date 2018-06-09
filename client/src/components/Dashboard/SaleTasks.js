@@ -1,27 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import gql from "graphql-tag"
-import { Query } from "react-apollo"
+import { Query } from 'react-apollo'
+import { GET_SALE_TASKS_DATA } from '../../graphql/dashboard'
 
 // Localization 
 import T from 'i18n-react'
 
-const GET_SALE_TASKS_DATA = gql`
-  {
-    getSaleTasksData {
-      countStatus {
-        status
-        count
-      }
-      idNameStatus {
-        id
-        name 
-        status
-      }
-    }
-  }
-`
 const SaleTasksCard = () => (
   <Query query={GET_SALE_TASKS_DATA}>
     {({ loading, error, data }) => {

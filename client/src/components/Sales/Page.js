@@ -51,7 +51,7 @@ class Page extends Component {
                             })
                           }
                         })
-                      }} />} placeholder='Search...' />
+                      }} />} placeholder={T.translate("sales.page.search")} />
                   </div>
 
                   <Link className="ui left floated primary button" to="/sales/new">

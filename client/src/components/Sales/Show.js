@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
-import { Select, Form } from 'semantic-ui-react'
+import { Select, Form, Modal } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_SALES_QUERY, GET_SALE_QUERY, UPDATE_SALE_MUTATION, DELETE_SALE_MUTATION } from '../../graphql/sales'
 
@@ -14,12 +14,6 @@ import ItemsForm from './Items/Form'
 
 // Localization 
 import T from 'i18n-react'
-
-import $ from 'jquery'
-
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
 
 class Show extends Component {
   
@@ -34,7 +28,8 @@ class Show extends Component {
       description: this.props.data.getSale ? this.props.data.getSale.description : '',
       items: this.props.data.getSale ? this.props.data.getSale.items : [],
       user: this.props.data.getSale ? this.props.data.getSale.user : null,
-      total: this.props.data.getSale ? this.props.data.getSale.total : 0
+      total: this.props.data.getSale ? this.props.data.getSale.total : 0,
+      openConfirmationModal: false 
     }
   }
 
@@ -68,18 +63,8 @@ class Show extends Component {
     } 
   }
 
-  showConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.sale').modal('show')
-  }
-
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.sale').modal('hide')
+  toggleConfirmationModal = () => {    
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal }))
   }
 
   handleStatusChange = (value) => {
@@ -163,13 +148,13 @@ class Show extends Component {
   }
 
   render() {
-    const { id, name, deadline, customer, status, description, items, user } = this.state
+    const { id, name, deadline, customer, status, description, items, user, openConfirmationModal } = this.state
     
     let itemsTotal = 0
     items.map(item => (itemsTotal+=item.unitPrice))
 
-    return (
-      <div className="column row">
+    return [
+      <div key="segment" className="column row">
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className={classnames("ui dividing header", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
@@ -239,24 +224,27 @@ class Show extends Component {
             </div>
             
             <div className="ui vertical segment">
-              <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("sales.show.delete")}</button>
+              <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("sales.show.delete")}</button>
               <Link to={`/sales/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("sales.show.edit")}</Link>
             </div>
           </div>    
         </div>
+      </div>,
 
-        <div className="ui small modal sale">
-          <div className="header">Confirmation</div>
-          <div className="content">
-            <p className="red">{T.translate("sales.show.confirmation_msg")}</p>
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("sales.show.delete")}</button>
-          </div>
-        </div>
-      </div>
-    )
+      <Modal 
+        key="modal" 
+        className="ui small modal sale"
+        open={openConfirmationModal}>
+        <Modal.Header>{T.translate("sales.show.confirmation_header")}</Modal.Header>
+        <Modal.Content>
+         <p className="red">{T.translate("sales.show.confirmation_msg")}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="ui button" onClick={this.toggleConfirmationModal}>{T.translate("sales.show.cancel")}</button>
+          <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("sales.show.delete")}</button>
+        </Modal.Actions>
+      </Modal>
+    ]
   }
 }
 

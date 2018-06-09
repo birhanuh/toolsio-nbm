@@ -73,7 +73,7 @@ class Page extends Component {
               <div className="ui right floated input">
                 <div className="ui icon input">
                   <Input name="name" value={this.state.name} onChange={(e, {value}) => this.handleChange('name', value)} 
-                    icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Search...' />
+                    icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder={T.translate("customers.page.search")} />
                 </div>
               </div>
               <div className="ui left floated select">

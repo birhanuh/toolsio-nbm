@@ -16,15 +16,15 @@ import gql from 'graphql-tag'
 
 import renderer from 'react-test-renderer'
 
-import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../graphql/projects'
+import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../src/graphql/projects'
 
 // Configure Adapter
 configure({ adapter: new Adapter() })
 
 // Components 
-import FormPage from '../../components/Projects/FormPage'
-import Page from '../../components/Projects/Page'
-import Show from '../../components/Projects/Show'
+import FormPage from '../../src/components/Projects/FormPage'
+import Page from '../../src/components/Projects/Page'
+import Show from '../../src/components/Projects/Show'
 
 // Setups
 const middlewares = [thunk] // add your middlewares like `redux-thunk`

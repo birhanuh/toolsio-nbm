@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
+// Semantic UI JS
+import { Modal } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, DELETE_INVOICE_MUTATION, GET_ACCOUNT_QUERY } from '../../../graphql/invoices'
 
@@ -40,15 +42,20 @@ class Page extends Component {
       referenceNumber: this.props.data.getInvoice ? this.props.data.getInvoice.referenceNumber : '',
       description: this.props.data.getInvoice ? this.props.data.getInvoice.description : '',
       user: this.props.data.getInvoice ? this.props.data.getInvoice.user : null,
-      total: this.props.data.getInvoice ? this.props.data.getInvoice.total : 0
+      total: this.props.data.getInvoice ? this.props.data.getInvoice.total : 0,
+      openConfirmationModal: false 
     }
   }
 
   componentDidMount = () => {
-    // Fetch Invoice when id is present in params
+     // Fetch Project when id is present in params
     const { match } = this.props
-    if (match.params.id) {
-      //this.props.fetchInvoice(match.params.id)
+
+    // Check if param id is an int
+    const invoiceId = parseInt(match.params.id, 10)
+    
+    if (!invoiceId) {
+      return <Redirect to="/invoices" />
     } 
   }
 
@@ -72,18 +79,8 @@ class Page extends Component {
     }
   }
 
-  showConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.invoice').modal('show')
-  }
-
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.invoice').modal('hide')
+  toggleConfirmationModal = () => {    
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal }))
   }
 
   handleDelete(id, event) {
@@ -146,12 +143,12 @@ class Page extends Component {
   }
 
   render() {
-    const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, user, createdAt } = this.state
+    const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, user, createdAt, openConfirmationModal } = this.state
     
     const { getAccountQuery: { getAccount } } = this.props
 
-    return (
-      <div className="column row">
+    return [
+      <div key="segment" className="column row">
         <div className="twelve wide column invoice show">
           <div className="ui segment">
             <div className="ui vertically divided grid">
@@ -270,24 +267,27 @@ class Page extends Component {
             { project && <Project project={project} /> }
 
             <div className="ui vertical segment">
-              <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("invoices.show.delete")}</button>
+              <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("invoices.show.delete")}</button>
               <Link to={`/invoices/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
             </div>
           </div>
-
-          <div className="ui small modal invoice">
-            <div className="header">Confirmation</div>
-            <div className="content">
-              <p className="red">{T.translate("invoices.show.confirmation_msg")}</p>
-            </div>
-            <div className="actions">
-              <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("invoices.show.cancel")}</button>
-              <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("invoices.show.delete")}</button>
-            </div>
-          </div>    
         </div>
-      </div>
-    )
+      </div>,
+
+      <Modal 
+        key="modal" 
+        className="ui small modal invoice"
+        open={openConfirmationModal}>
+        <Modal.Header>{T.translate("invoices.show.confirmation_header")}</Modal.Header>
+        <Modal.Content>
+         <p className="red">{T.translate("invoices.show.confirmation_msg")}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="ui button" onClick={this.toggleConfirmationModal}>{T.translate("invoices.show.cancel")}</button>
+          <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("invoices.show.delete")}</button>
+        </Modal.Actions>
+      </Modal>
+    ]
   }
 }
 

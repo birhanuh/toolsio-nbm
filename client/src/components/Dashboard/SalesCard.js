@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import gql from "graphql-tag"
-import { Query } from "react-apollo"
+import { Query } from 'react-apollo'
+import { GET_SALES_DATA } from '../../graphql/dashboard'
 
 import pick from 'lodash/pick'
 
@@ -11,20 +11,6 @@ import { Doughnut } from 'react-chartjs-2'
 // Localization 
 import T from 'i18n-react'
 
-const GET_SALES_DATA = gql`
-  {
-    getSalesData {
-      countStatus {
-        status
-        count
-      }
-      countMonth {
-        month
-        count
-      }
-    }
-  }
-`
 const SalesCard = () => (
   <Query query={GET_SALES_DATA}>
     {({ loading, error, data }) => {
@@ -48,9 +34,6 @@ const SalesCard = () => (
 
       const chartOptions = {
         responsive: true,
-        title: {
-          display: true
-        },
         tooltips: {
           mode: 'label'
         },
@@ -89,7 +72,7 @@ const SalesCard = () => (
           <div className="content">
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
-              <div className="meta">{T.translate("dashboard.this_month")}</div>
+              <div className="meta">{countMonth && countMonth ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
               <div className="header">
                 {countMonth && countMonth ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
                 {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow down red icon"></i> : 
@@ -97,7 +80,7 @@ const SalesCard = () => (
                 </div>
             </div>     
             <div className="left floated">
-              <div className="meta">{T.translate("dashboard.last_month")}</div>
+              <div className="meta">{countMonth && countMonth[1] ? (countMonth[1].month ? countMonth[1].month : '-') : '-'}</div>
               <div className="header">
                 {countMonth && countMonth[1] ? (countMonth[1].count ? countMonth[1].count : '-') : '-'}
               </div>

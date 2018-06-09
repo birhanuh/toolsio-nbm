@@ -1,21 +1,13 @@
 import React  from 'react'
 import classnames from 'classnames'
-import gql from "graphql-tag"
-import { Query } from "react-apollo"
+import { Query } from 'react-apollo'
+import { GET_TOTAL_INCOME_DATA } from '../../graphql/dashboard'
 
 // Localization 
 import T from 'i18n-react'
 
-const GET_TOTAL_INCOME = gql`
-  {
-    getTotalIncomeData {
-      tasksTotalSum
-      itemsTotalSum
-    }
-  }
-`
 const TotalIncomeCard = () => (
-  <Query query={GET_TOTAL_INCOME}>
+  <Query query={GET_TOTAL_INCOME_DATA}>
     {({ loading, error, data }) => {
       if (loading) return "Loading...";
       if (error) return `Error! ${error.message}`;

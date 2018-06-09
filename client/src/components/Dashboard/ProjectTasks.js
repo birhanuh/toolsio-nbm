@@ -1,27 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import gql from "graphql-tag"
-import { Query } from "react-apollo"
+import { Query } from 'react-apollo'
+import { GET_PROJECT_TASKS_DATA } from '../../graphql/dashboard'
 
 // Localization 
 import T from 'i18n-react'
 
-const GET_PROJECT_TASKS_DATA = gql`
-  {
-    getProjectTasksData {
-      countStatus {
-        status
-        count
-      }
-      idNameStatus {
-        id
-        name 
-        status
-      }
-    }
-  }
-`
 const ProjectTasksCard = () => (
   <Query query={GET_PROJECT_TASKS_DATA}>
     {({ loading, error, data }) => {

@@ -31,7 +31,7 @@ services:
     depends_on:
       - db
     command: sequelize db:migrate
-    command: node dist/index.js
+    command: ["node", "dist/index.js"]
     #command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/index.js"]
 networks:
   webnet: 
