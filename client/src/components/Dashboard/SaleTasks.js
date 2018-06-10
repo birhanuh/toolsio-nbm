@@ -11,8 +11,8 @@ const SaleTasksCard = () => (
   <Query query={GET_SALE_TASKS_DATA}>
     {({ loading, error, data }) => {
     
-    const countStatus = data && data.getSaleTasksData && data.getSaleTasksData.countStatus
-    const idNameStatus = data && data.getSaleTasksData && data.getSaleTasksData.idNameStatus
+    const countStatus = data.getSaleTasksData && data.getSaleTasksData.countStatus
+    const idNameStatus = data.getSaleTasksData && data.getSaleTasksData.idNameStatus
 
     let newNotification  
     let delayedNotification 

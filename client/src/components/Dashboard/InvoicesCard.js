@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { Header, Card, Icon } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_INVOICES_DATA } from '../../graphql/dashboard'
 
@@ -15,8 +16,8 @@ const InvoicesCard = () => (
   <Query query={GET_INVOICES_DATA}>
     {({ loading, error, data }) => {
     
-      const countStatusMonth = data && data.getInvoicesData && data.getInvoicesData.countStatusMonth
-      const countMonth = data && data.getInvoicesData && data.getInvoicesData.countMonth
+      const countStatusMonth = data.getInvoicesData && data.getInvoicesData.countStatusMonth
+      const countMonth = data.getInvoicesData && data.getInvoicesData.countMonth
 
       let statusPick = countStatusMonth && countStatusMonth.map(item => pick(item, ['status']).status)
       let monthPick = countStatusMonth && countStatusMonth.map(item => pick(item, ['month']).month.substring(0, 3))
@@ -78,38 +79,33 @@ const InvoicesCard = () => (
             borderWidth: false
           }
         },
-        scales: {
-          xAxes: [{
-            stacked: true,
-          }],
-          yAxes: [{
-            stacked: true
-          }]
-        }
+        // scales: {
+        //   xAxes: [{
+        //     stacked: true,
+        //   }],
+        //   yAxes: [{
+        //     stacked: true
+        //   }]
+        // }
       }
 
       return (
-        <div className={classnames("ui card dashboard form", { loading: loading })}>
-          <div className="content">
-            <div className="right floated">
-              <h4 className="ui header">
-                <i className="file text outline icon"></i>
-              </h4>
-            </div> 
-            <div className="left floated">
-              <h4 className="ui header">
-                {T.translate("dashboard.invoices.header")}
-              </h4>
-            </div>       
-          </div>
-
+        <Card className={classnames("dashboard form", { loading: loading })}>
+          <Card.Content>
+            <Card.Header>
+              <Header as='h4' floated='right'>
+                <Icon floated='right' name='file text outline' />
+              </Header>
+              <Header as='h4' floated='left'>
+                {T.translate("dashboard.projects.header")}
+              </Header>
+            </Card.Header>
+          </Card.Content>        
           <div className="image">
-
             <Bar data={chartData} options={chartOptions} />
-
           </div>
           
-          <div className="content">
+          <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
               <div className="meta">{countMonth && countMonth ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
@@ -125,7 +121,7 @@ const InvoicesCard = () => (
                 {countMonth && countMonth[1] ? (countMonth[1].count ? countMonth[1].count : '-') : '-'}
               </div>
             </div>    
-          </div> 
+          </Card.Content> 
 
           {countStatusMonth && countStatusMonth.length === 0 || countMonth && countMonth.length === 0 && 
             <div className="content-btn-outer-container">
@@ -136,7 +132,7 @@ const InvoicesCard = () => (
               </div>
             </div>
           }          
-        </div>
+        </Card>
       )
     }}
   </Query>

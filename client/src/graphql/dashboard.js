@@ -27,13 +27,9 @@ export const GET_INCOMES_DATA = gql`
 export const GET_CUSTOMERS_DATA = gql`
   {
     getCustomersData {
-      daySum {
-        day
-        sum
-      }
-      monthSum {
-        month
-        sum
+      nameCountProjectsSales {
+        name
+        projectsSalesCount
       }
     }
   }

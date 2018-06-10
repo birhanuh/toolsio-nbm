@@ -11,9 +11,9 @@ const InvoiceTasksCard = () => (
   <Query query={GET_INVOICE_TASKS_DATA}>
     {({ loading, error, data }) => {
     
-    const countStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.countStatus
-    const idProjectStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.idProjectStatus
-    const idSaleStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.idSaleStatus
+    const countStatus = data.getInvoiceTasksData && data.getInvoiceTasksData.countStatus
+    const idProjectStatus = data.getInvoiceTasksData && data.getInvoiceTasksData.idProjectStatus
+    const idSaleStatus = data.getInvoiceTasksData && data.getInvoiceTasksData.idSaleStatus
   
     let newNotification  
     let overdueNotification 

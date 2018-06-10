@@ -115,7 +115,29 @@ export default {
     }),
 
     getCustomersData: requiresAuth.createResolver(async (parent, args, { models }) => {
+      const countProjectPromise = models.sequelize.query('SELECT c.name, count(p) FROM projects p JOIN customers c ON p.customer_id = c.id GROUP BY c.name', {
+        model: models.Project,
+        raw: true
+      })
+      const countSalePromise = models.sequelize.query('SELECT c.name, count(s) FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.name', {
+        model: models.Sale,
+        raw: true
+      })
 
+      const [countProject, countSale] = await Promise.all([countProjectPromise, countSalePromise]) 
+      // countProject [ { name: 'Customera', count: '4' }, { name: 'Customerb', count: '7' } ]
+      // countSale [ { name: 'Customerb', count: '2' }, { name: 'Customera', count: '6' } ]
+      let mergedCountProjectCountSale = [...countProject, ...countSale]
+
+      let groupByCustomersCountProjectSale = _(mergedCountProjectCountSale).groupBy('name').map((objs, key) => ({
+        'name': key,
+        'projectsSalesCount': _.sum(objs.map(item => parseInt(item.count))) 
+      })).value()
+      // groupByCustomersCountProjectSale [ { name: 'Customera', count: 10 }, { name: 'Customerb', count: 9 } ]
+
+      return {
+        nameCountProjectsSales: groupByCustomersCountProjectSale
+      }
     }),
 
     getInvoicesData: requiresAuth.createResolver(async (parent, args, { models }) => {

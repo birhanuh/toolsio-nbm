@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { Header, Card, Icon } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_SALES_DATA } from '../../graphql/dashboard'
 
@@ -15,8 +16,8 @@ const SalesCard = () => (
   <Query query={GET_SALES_DATA}>
     {({ loading, error, data }) => {
     
-      const countStatus = data && data.getSalesData && data.getSalesData.countStatus
-      const countMonth = data && data.getSalesData && data.getSalesData.countMonth
+      const countStatus = data.getSalesData && data.getSalesData.countStatus
+      const countMonth = data.getSalesData && data.getSalesData.countMonth
 
       let statusPick = countStatus && countStatus.map(item => pick(item, ['status']).status)
       let countPick = countStatus && countStatus.map(item => pick(item, ['count']).count)
@@ -49,27 +50,22 @@ const SalesCard = () => (
       }
 
       return (
-        <div className={classnames("ui card dashboard form", { loading: loading })}>
-          <div className="content">
-            <div className="right floated">
-              <h4 className="ui header">
-                <i className="cart icon"></i>
-              </h4>
-            </div> 
-            <div className="left floated">
-              <h4 className="ui header">
+        <Card className={classnames("dashboard form", { loading: loading })}>
+          <Card.Content>
+            <Card.Header>
+              <Header as='h4' floated='right'>
+                <Icon floated='right' name='cart' />
+              </Header>
+              <Header as='h4' floated='left'>
                 {T.translate("dashboard.sales.header")}
-              </h4>
-            </div>       
-          </div>
-
+              </Header>
+            </Card.Header>
+          </Card.Content>        
           <div className="image">
-
             <Doughnut data={chartData} options={chartOptions} />
-
           </div>
           
-          <div className="content">
+          <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
               <div className="meta">{countMonth && countMonth ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
@@ -85,7 +81,7 @@ const SalesCard = () => (
                 {countMonth && countMonth[1] ? (countMonth[1].count ? countMonth[1].count : '-') : '-'}
               </div>
             </div>    
-          </div> 
+          </Card.Content> 
 
           {countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0 && 
             <div className="content-btn-outer-container">
@@ -96,7 +92,7 @@ const SalesCard = () => (
               </div>
             </div>
           }          
-        </div>
+        </Card>
       )
     }}
   </Query>

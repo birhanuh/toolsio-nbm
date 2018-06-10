@@ -11,8 +11,8 @@ const ProjectTasksCard = () => (
   <Query query={GET_PROJECT_TASKS_DATA}>
     {({ loading, error, data }) => {
     
-    const countStatus = data && data.getProjectTasksData && data.getProjectTasksData.countStatus
-    const idNameStatus = data && data.getProjectTasksData && data.getProjectTasksData.idNameStatus
+    const countStatus = data.getProjectTasksData && data.getProjectTasksData.countStatus
+    const idNameStatus = data.getProjectTasksData && data.getProjectTasksData.idNameStatus
 
     let newNotification  
     let delayedNotification 

@@ -1,6 +1,7 @@
 import React  from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { Header, Card, Icon } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_INCOMES_DATA } from '../../graphql/dashboard'
 
@@ -15,11 +16,11 @@ const IncomesCard = () => (
   <Query query={GET_INCOMES_DATA}>
     {({ loading, error, data }) => {
      
-      const daySum = data && data.getIncomesData && data.getIncomesData.daySum
-      const monthSum = data && data.getIncomesData && data.getIncomesData.monthSum
+      const daySum = data.getIncomesData && data.getIncomesData.daySum
+      const monthSum = data.getIncomesData && data.getIncomesData.monthSum
 
       let dayPick = daySum && daySum.map(item => pick(item, ['day']).day.substring(0, 5))
-      let sumPick = daySum && daySum.map(item => pick(item, ['sum']).sum)
+      let sumPick = monthSum && daySum.map(item => pick(item, ['sum']).sum)
 
       let chartData = {
         labels: dayPick,
@@ -62,27 +63,22 @@ const IncomesCard = () => (
       }
 
       return (
-        <div className={classnames("ui card dashboard form", { loading: loading })}>
-          <div className="content">
-            <div className="right floated">
-              <h4 className="ui header">
-                <i className="money icon"></i>
-              </h4>
-            </div> 
-            <div className="left floated">
-              <h4 className="ui header">
+        <Card className={classnames("dashboard form", { loading: loading })}>
+          <Card.Content>
+            <Card.Header>
+              <Header as='h4' floated='right'>
+                <Icon floated='right' name='money' />
+              </Header>
+              <Header as='h4' floated='left'>
                 {T.translate("dashboard.incomes.header")}
-              </h4>
-            </div>       
-          </div>
-
+              </Header>
+            </Card.Header>
+          </Card.Content>        
           <div className="image">
-
             <Line data={chartData} options={chartOptions} />
-
           </div>
           
-          <div className="content">
+          <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
               <div className="meta">{monthSum && monthSum ? (monthSum[0].month ? monthSum[0].month : '-') : '-'}</div>
@@ -98,7 +94,7 @@ const IncomesCard = () => (
                 {monthSum && monthSum[1] ? (monthSum[1].sum ? monthSum[1].sum : '-') : '-'}
               </div>
             </div>    
-          </div> 
+          </Card.Content> 
 
           {daySum && daySum.length === 0 || monthSum && monthSum.length === 0 && 
             <div className="content-btn-outer-container">
@@ -109,7 +105,7 @@ const IncomesCard = () => (
               </div>
             </div>
           }          
-        </div>
+        </Card>
       )
     }}
   </Query>
