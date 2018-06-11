@@ -20,7 +20,7 @@ const IncomesCard = () => (
       const monthSum = data.getIncomesData && data.getIncomesData.monthSum
 
       let dayPick = daySum && daySum.map(item => pick(item, ['day']).day.substring(0, 5))
-      let sumPick = monthSum && daySum.map(item => pick(item, ['sum']).sum)
+      let sumPick = daySum && daySum.map(item => pick(item, ['sum']).sum)
 
       let chartData = {
         labels: dayPick,
@@ -81,9 +81,9 @@ const IncomesCard = () => (
           <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
-              <div className="meta">{monthSum && monthSum ? (monthSum[0].month ? monthSum[0].month : '-') : '-'}</div>
+              <div className="meta">{monthSum && monthSum.length !== 0 ? (monthSum[0].month ? monthSum[0].month : '-') : '-'}</div>
               <div className="header">
-                {monthSum && monthSum ? (monthSum[0].sum ? monthSum[0].sum : '-') : '-'}
+                {monthSum && monthSum.length !== 0 ? (monthSum[0].sum ? monthSum[0].sum : '-') : '-'}
                 {monthSum && monthSum[1] && ((monthSum[1].sum > monthSum[0].sum) ? <i className="long arrow down red icon"></i> : 
                   <i className="long arrow up green icon"></i>)}
                 </div>
@@ -96,7 +96,7 @@ const IncomesCard = () => (
             </div>    
           </Card.Content> 
 
-          {daySum && daySum.length === 0 || monthSum && monthSum.length === 0 && 
+          {(daySum && daySum.length === 0 || monthSum && monthSum.length === 0) && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/invoices" className="ui primary outline button small">

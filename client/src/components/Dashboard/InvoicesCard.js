@@ -90,7 +90,7 @@ const InvoicesCard = () => (
       }
 
       return (
-        <Card className={classnames("dashboard form", { loading: loading })}>
+        <Card className={classnames("dashboard invoice form", { loading: loading })}>
           <Card.Content>
             <Card.Header>
               <Header as='h4' floated='right'>
@@ -108,9 +108,9 @@ const InvoicesCard = () => (
           <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
-              <div className="meta">{countMonth && countMonth ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
+              <div className="meta">{countMonth && countMonth.length !== 0 ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
               <div className="header">
-                {countMonth && countMonth ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
+                {countMonth && countMonth.length !== 0 ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
                 {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow down red icon"></i> : 
                   <i className="long arrow up green icon"></i>)}
                 </div>
@@ -123,7 +123,7 @@ const InvoicesCard = () => (
             </div>    
           </Card.Content> 
 
-          {countStatusMonth && countStatusMonth.length === 0 || countMonth && countMonth.length === 0 && 
+          {(countStatusMonth && countStatusMonth.length === 0 || countMonth && countMonth.length === 0) && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/invoices" className="ui primary outline button small">

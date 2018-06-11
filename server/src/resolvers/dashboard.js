@@ -16,11 +16,10 @@ export default {
       })
 
       const [paidTasksSum, paidItemsSum] = await Promise.all([paidTasksSumPromise, paidItemsSumPromise])
-      console.log('paidTasksSum', paidTasksSum)
-
+      
       return {
-        tasksTotalSum: paidTasksSum[0].sum,
-        itemsTotalSum: paidItemsSum[0].sum
+        tasksTotalSum: paidTasksSum[0].sum ? paidTasksSum[0].sum : 0,
+        itemsTotalSum: paidItemsSum[0].sum ? paidItemsSum[0].sum : 0
       } 
     }),
     

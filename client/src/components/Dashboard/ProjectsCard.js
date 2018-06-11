@@ -68,9 +68,9 @@ const ProjectsCard = () => (
           <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
-              <div className="meta">{countMonth && countMonth ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
+              <div className="meta">{countMonth && countMonth.length !== 0 ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
               <div className="header">
-                {countMonth && countMonth ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
+                {countMonth && countMonth.length !== 0 ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
                 {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow down red icon"></i> : 
                   <i className="long arrow up green icon"></i>)}
                 </div>
@@ -83,7 +83,7 @@ const ProjectsCard = () => (
             </div>    
           </Card.Content> 
 
-          {countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0 && 
+          {(countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0) && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/invoices" className="ui primary outline button small">

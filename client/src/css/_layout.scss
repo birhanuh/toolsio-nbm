@@ -577,6 +577,14 @@ nav.ui.menu .item>a {
   }
 }
 
+.ui.card.dashboard.customer > .content-btn-outer-container {
+  height: 395px;
+}
+
+.ui.card.dashboard.invoice > .content-btn-outer-container {
+  height: 580px;
+}
+
 .sub-header {
   position: relative;
   display: block;

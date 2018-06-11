@@ -83,7 +83,7 @@ class Users extends Component {
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',
-          //   text: T.translate("messages.form.flash.success_compose")
+          //   text: T.translate("conversations.form.flash.success_compose")
           // })  
           // this.context.router.history.push('/conversations')          
 

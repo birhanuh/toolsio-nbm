@@ -27,7 +27,7 @@ export default `
   }
 
   type Mutation {
-    createMessage(body: String, file: Upload, channelId: Int! ): CreateMessageResponse!
+    createChannelMessage(body: String, file: Upload, channelId: Int! ): CreateMessageResponse!
   }
 
   type Subscription {

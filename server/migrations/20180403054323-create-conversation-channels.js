@@ -17,6 +17,13 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: true
       },
+      owner: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id'
+        },
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

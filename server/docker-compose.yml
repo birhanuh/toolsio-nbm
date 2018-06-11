@@ -26,12 +26,14 @@ services:
       NODE_ENV: production
       SERVER_PORT: 8080
       REDIS_HOST: redis
-    volumes:
-      - .:/app  
+      #DB_HOST: db # We would need this if we use env variables in Sequelize constructor instead of json. 
+    #volumes:
+    #  - .:/app  
     depends_on:
       - db
-    command: sequelize db:migrate
-    command: ["node", "dist/index.js"]
-    #command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/index.js"]
+      - redis
+    #command: "node dist/index.js"
+    command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/index.js"]
+    #command: sequelize db:migrate
 networks:
   webnet: 

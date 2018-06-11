@@ -38,7 +38,7 @@ export default {
   },
 
   Mutation: {
-    createMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, user }) => {
+    createChannelMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, user }) => {
       try {
         
         const messageData = args

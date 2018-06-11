@@ -25,7 +25,7 @@
     "username": "toolsio",
     "password": "toolsio",
     "database": "toolsio",
-    "host": "postgres",
+    "host": "db",
     "dialect": "postgres",
     "operatorsAliases": "Sequelize.Op",
     "define": {

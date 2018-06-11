@@ -52,7 +52,7 @@ const CustomersCard = () => (
       }
 
       return (
-        <Card className={classnames("dashboard form", { loading: loading })}>
+        <Card className={classnames("dashboard customer form", { loading: loading })}>
           <Card.Content>
             <Card.Header>
               <Header as='h4' floated='right'>
