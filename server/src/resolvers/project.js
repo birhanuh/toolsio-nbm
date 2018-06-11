@@ -6,8 +6,12 @@ export default {
   Query: {
     getProject: requiresAuth.createResolver((parent, { id }, { models }) =>  models.Project.findOne({ where: { id } })),
     
-    getProjects: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
-      models.Project.findAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
+    getProjects: requiresAuth.createResolver((parent, { offset, limit, order, name }, { models }) => 
+      models.Project.findAll({ where: {
+        name: {
+          [models.sequelize.Op.iLike]: '%'+name+'%'
+        }
+      }, offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
 
     getProjectsWithoutInvoice: requiresAuth.createResolver((parent, { name }, { models }) => 
       models.sequelize.query("SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id, c.id AS customer_id, c.name AS customer_name FROM projects p LEFT JOIN invoices i ON p.id=i.project_id JOIN customers c ON p.customer_id = c.id WHERE i.project_id IS NULL AND p.name ILIKE :projectName", 

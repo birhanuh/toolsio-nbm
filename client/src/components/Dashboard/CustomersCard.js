@@ -1,132 +1,76 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import gql from "graphql-tag"
-import { Query } from "react-apollo"
+import { Header, Card, Icon } from 'semantic-ui-react'
+import { Query } from 'react-apollo'
+import { GET_CUSTOMERS_DATA } from '../../graphql/dashboard'
 
-import pick from 'lodash/pick'
-
-import { Line } from 'react-chartjs-2'
+import { Polar } from 'react-chartjs-2'
 
 // Localization 
 import T from 'i18n-react'
 
-const GET_CUSTOMERS = gql`
-  {
-    getIncomesData {
-      daySum {
-        day
-        sum
-      }
-      monthSum {
-        month
-        sum
-      }
-    }
-  }
-`
 const CustomersCard = () => (
-  <Query query={GET_CUSTOMERS}>
+  <Query query={GET_CUSTOMERS_DATA}>
     {({ loading, error, data }) => {
-     
-      const daySum = data && data.getIncomesData && data.getIncomesData.daySum
-      const monthSum = data && data.getIncomesData && data.getIncomesData.monthSum
-
-      let dayPick = daySum && daySum.map(item => pick(item, ['day']).day.substring(0, 5))
-      let sumPick = daySum && daySum.map(item => pick(item, ['sum']).sum)
       
+      const nameCountProjectsSales = data.getCustomersData && data.getCustomersData.nameCountProjectsSales
+
+      let colorsCollection = ['#25959f', '#038b98', '#165b61', '#88A60D', '#7DA40D', '#619E0D', '#BE220A', '#be0a0a', '#B50921', '#FAC30A',
+        '#faca0a', '#FAD10A', '#f08b34', '#F0730F', '#c05c0c', '#199CD5', '#1C89D6', '#FFF5DD', '#ffecbf', '#DAC084', '#b6b6b6', '#cccccc', 
+        '#d6d6d6', '#3C3C3C', ' #484848', '#2d2f32', '#3b3f45', '#5e656e']
+
+      const nameCountProjectsSalesColors = nameCountProjectsSales && nameCountProjectsSales.map(item => ({name: item.name, projectsSalesCount: item.projectsSalesCount, color: colorsCollection[Math.floor(Math.random() * colorsCollection.length)]}))
+
+      const names = nameCountProjectsSalesColors && nameCountProjectsSalesColors.map(item => item.name)
+      const projectsSalesCounts = nameCountProjectsSalesColors && nameCountProjectsSalesColors.map(item =>item.projectsSalesCount)
+      const colors = nameCountProjectsSalesColors && nameCountProjectsSalesColors.map(item => item.color)
+
       let chartData = {
-        labels: dayPick,
-        datasets: [
-          {
-            label: 'Customers',
-            data: sumPick,
-            borderColor: "#7DA40D",
-            borderWidth: 1,
-            fill: false,
-            pointRadius: 2,
-            pointBackgroundColor: "#7DA40D",
-          },
-          // {
-          //   borderColor: "#be0a0a",
-          //   borderWidth: 1,
-          //   fill: false,
-          //   pointRadius: 2,
-          //   pointBackgroundColor: "#be0a0a",
-          //   data: 4
-          // }
-          ]
+        labels: names,
+        datasets: [{
+          data: projectsSalesCounts,
+          backgroundColor: colors
+        }]        
       }
 
       const chartOptions = {
         responsive: true,
-        title: {
-          display: true
+        legend: {
+          position: 'right',
         },
-        tooltips: {
-          mode: 'label'
+        scale: {
+          ticks: {
+            beginAtZero: true
+          },
+          reverse: false
         },
-        hover: {
-          mode: 'dataset'
-        },
-        scales: {
-          xAxes: [
-            {
-              display: true,
-              scaleLabel: {
-                show: true,
-                labelString: 'DD/MM/YYYY'
-              },
-              ticks: {
-                autoSkip: false,
-                maxRotation: 90,
-                minRotation: 90
-              }
-            }
-          ]
+        animation: {
+          animateRotate: false,
+          animateScale: true
         }
       }
 
       return (
-        <div className={classnames("ui card dashboard form", { loading: loading })}>
-          <div className="content">
-            <div className="right floated">
-              <h4 className="ui header">
-                <i className="users icon"></i>
-              </h4>
-            </div> 
-            <div className="left floated">
-              <h4 className="ui header">
+        <Card className={classnames("dashboard customer form", { loading: loading })}>
+          <Card.Content>
+            <Card.Header>
+              <Header as='h4' floated='right'>
+                <Icon floated='right' name='users' />
+              </Header>
+              <Header as='h4' floated='left'>
                 {T.translate("dashboard.customers.header")}
-              </h4>
-            </div>       
-          </div>
-
+              </Header>
+            </Card.Header>
+          </Card.Content>        
           <div className="image">
-
-            <Line data={chartData} options={chartOptions} />
-
+            <Polar data={chartData} options={chartOptions} />
           </div>
-          
-          <div className="content">
+          <Card.Content extra className="p-5 mt-2">
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
-            <div className="right floated">
-              <div className="meta">{T.translate("dashboard.this_month")}</div>
-              <div className="header">
-                {monthSum && monthSum ? (monthSum[0].sum ? monthSum[0].sum : '-') : '-'}
-                {monthSum && monthSum[1] && ((monthSum[1].sum > monthSum[0].sum) ? <i className="long arrow down red icon"></i> : 
-                  <i className="long arrow up green icon"></i>)}
-                </div>
-            </div>     
-            <div className="left floated">
-              <div className="meta">{T.translate("dashboard.last_month")}</div>
-              <div className="header">
-                {monthSum && monthSum[1] ? (monthSum[1].sum ? monthSum[1].sum : '-') : '-'}
-              </div>
-            </div>    
-          </div> 
+          </Card.Content>        
 
-          {daySum && daySum.length === 0 || monthSum && monthSum.length === 0 && 
+          {nameCountProjectsSales && nameCountProjectsSales.length === 0 && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/customers" className="ui primary outline button small">
@@ -135,7 +79,7 @@ const CustomersCard = () => (
               </div>
             </div>
           }          
-        </div>
+        </Card>
       )
     }}
   </Query>

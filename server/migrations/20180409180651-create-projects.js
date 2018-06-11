@@ -34,7 +34,7 @@ module.exports = {
         defaultValue: 0,
         type: Sequelize.DECIMAL
       },
-      is_invocied: {
+      is_invoiced: {
         defaultValue: false,
         allowNull : false,
         type: Sequelize.BOOLEAN

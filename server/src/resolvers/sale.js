@@ -5,8 +5,12 @@ export default {
   Query: {
     getSale: requiresAuth.createResolver((parent, { id }, { models }) => models.Sale.findOne({ where: { id } }, { raw: true })),
     
-    getSales: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
-      models.Sale.findAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
+    getSales: requiresAuth.createResolver((parent, { offset, limit, order, name }, { models }) => 
+      models.Sale.findAll({ where: {
+        name: {
+          [models.sequelize.Op.iLike]: '%'+name+'%'
+        }
+      }, offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
 
     getSalesWithoutInvoice: requiresAuth.createResolver((parent, { name }, { models }) => 
       models.sequelize.query('SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id, c.id AS customer_id, c.name AS customer_name FROM sales s LEFT JOIN invoices i ON s.id = i.sale_id JOIN customers c ON s.customer_id=c.id WHERE i.sale_id IS NULL AND s.name ILIKE :saleName', 

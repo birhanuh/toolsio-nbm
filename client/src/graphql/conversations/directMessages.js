@@ -16,14 +16,6 @@ export const GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY = gql`
   }
 `
 
-export const GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY = gql`
-  {
-    getUnreadDirectMessagesCount {
-      count
-    }
-  }
-`
-
 export const GET_DIRECT_MESSAGE_USERS_QUERY = gql`
   {
     getDirectMessageUsers {

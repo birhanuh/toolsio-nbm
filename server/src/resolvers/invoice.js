@@ -6,8 +6,28 @@ export default {
   Query: {
     getInvoice: requiresAuth.createResolver((parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true })),
     
-    getInvoices: requiresAuth.createResolver((parent, { offset, limit, order }, { models }) => 
-      models.Invoice.findAndCountAll({ offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })
+    getInvoices: requiresAuth.createResolver((parent, { offset, limit, order, search }, { models }) => {
+
+      const options = {include: [], where: {}, offset, limit, order: [['updated_at', ''+order+'']] }
+
+      if (/^\d/.test(search)) {
+        options.where = {
+          referenceNumber: {
+            [models.sequelize.Op.iLike]: '%'+search+'%'
+          }        
+        }
+      } else if (/[a-zA-Z]/.test(search)) {
+        options.include = [{
+          model: models.Customer,
+          where: {
+            name: {
+              [models.sequelize.Op.iLike]: '%'+search+'%'
+            }
+          }
+        }]        
+      }
+   
+      return models.Invoice.findAndCountAll(options, { raw: true })
         .then(result => {  
           return {
             count: result.count,
@@ -20,7 +40,8 @@ export default {
             count: 0,
             invoices: []
           }
-        }))
+        })
+    })
       
   },
 

@@ -59,8 +59,13 @@ export default `
     countMonth: [CountMonth]! 
   }
 
+  type NameCountProjectsSales {
+    name: String!
+    projectsSalesCount: Int!
+  }
+
   type CustomersData {
-    data: Float!
+    nameCountProjectsSales: [NameCountProjectsSales!]!
   }
 
   type InvoicesData {

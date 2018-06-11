@@ -16,8 +16,8 @@ import gql from 'graphql-tag'
 // `
 
 export const GET_PROJECTS_QUERY = gql`
-  query getProjects($offset: Int!, $limit: Int!, $order: String!) {
-    getProjects(offset: $offset, limit: $limit, order: $order) {
+  query getProjects($offset: Int!, $limit: Int!, $order: String!, $name: String) {
+    getProjects(offset: $offset, limit: $limit, order: $order, name: $name) {
       id
       name 
       deadline

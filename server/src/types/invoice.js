@@ -51,7 +51,7 @@ export default `
   type Query {
     getInvoice(id: Int!): Invoice
     
-    getInvoices(offset: Int!, limit: Int!, order: String!): GetInvoicesResponse!
+    getInvoices(offset: Int!, limit: Int!, order: String!, search: String): GetInvoicesResponse!
   }
 
   type Mutation {

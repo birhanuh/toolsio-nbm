@@ -1,39 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import gql from "graphql-tag"
 import { Query } from "react-apollo"
+import { GET_INVOICE_TASKS_DATA } from '../../graphql/dashboard'
 
 // Localization 
 import T from 'i18n-react'
 
-const GET_INVOICE_TASKS_DATA = gql`
-  {
-    getInvoiceTasksData {
-      countStatus {
-        count
-        status
-      }
-      idProjectStatus {
-        id
-        status
-        name
-      }
-      idSaleStatus {
-        id
-        status
-        name
-      }
-    }
-  }
-`
 const InvoiceTasksCard = () => (
   <Query query={GET_INVOICE_TASKS_DATA}>
     {({ loading, error, data }) => {
     
-    const countStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.countStatus
-    const idProjectStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.idProjectStatus
-    const idSaleStatus = data && data.getInvoiceTasksData && data.getInvoiceTasksData.idSaleStatus
+    const countStatus = data.getInvoiceTasksData && data.getInvoiceTasksData.countStatus
+    const idProjectStatus = data.getInvoiceTasksData && data.getInvoiceTasksData.idProjectStatus
+    const idSaleStatus = data.getInvoiceTasksData && data.getInvoiceTasksData.idSaleStatus
   
     let newNotification  
     let overdueNotification 

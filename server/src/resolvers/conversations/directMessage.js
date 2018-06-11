@@ -28,8 +28,8 @@ export default {
     getDirectMessages: requiresAuth.createResolver((parent, { receiverId, cursor }, { models, user }) => {
       const options = { 
         where: { [models.sequelize.Op.or]: [
-          {[models.sequelize.Op.and]: [{ receiverId:receiverId, senderId: user.id }]},
-          {[models.sequelize.Op.and]: [{ senderId:receiverId, receiverId: user.id }]} ]
+          {[models.sequelize.Op.and]: [{ receiverId: receiverId, senderId: user.id }]},
+          {[models.sequelize.Op.and]: [{ senderId: receiverId, receiverId: user.id }]} ]
         },
         order: [['created_at', 'DESC']], limit: 10 }
    

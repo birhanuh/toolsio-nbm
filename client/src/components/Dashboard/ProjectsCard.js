@@ -1,8 +1,9 @@
 import React  from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import gql from "graphql-tag"
-import { Query } from "react-apollo"
+import { Header, Card, Icon } from 'semantic-ui-react'
+import { Query } from 'react-apollo'
+import { GET_PROJECTS_DATA } from '../../graphql/dashboard'
 
 import pick from 'lodash/pick'
 
@@ -11,26 +12,12 @@ import { Doughnut } from 'react-chartjs-2'
 // Localization 
 import T from 'i18n-react'
 
-const GET_PROJECTS_DATA = gql`
-  {
-    getProjectsData {
-      countStatus {
-        status
-        count
-      }
-      countMonth {
-        month
-        count
-      }
-    }
-  }
-`
 const ProjectsCard = () => (
   <Query query={GET_PROJECTS_DATA}>
     {({ loading, error, data }) => {
     
-      const countStatus = data && data.getProjectsData && data.getProjectsData.countStatus
-      const countMonth = data && data.getProjectsData && data.getProjectsData.countMonth
+      const countStatus = data.getProjectsData && data.getProjectsData.countStatus
+      const countMonth = data.getProjectsData && data.getProjectsData.countMonth
 
       let statusPick = countStatus && countStatus.map(item => pick(item, ['status']).status)
       let countPick = countStatus && countStatus.map(item => pick(item, ['count']).count)
@@ -48,9 +35,6 @@ const ProjectsCard = () => (
 
       const chartOptions = {
         responsive: true,
-        title: {
-          display: true
-        },
         tooltips: {
           mode: 'label'
         },
@@ -66,45 +50,40 @@ const ProjectsCard = () => (
       }
 
       return (
-        <div className={classnames("ui card dashboard form", { loading: loading })}>
-          <div className="content">
-            <div className="right floated">
-              <h4 className="ui header">
-                <i className="suitcase icon"></i>
-              </h4>
-            </div> 
-            <div className="left floated">
-              <h4 className="ui header">
+        <Card className={classnames("dashboard form", { loading: loading })}>
+          <Card.Content>
+            <Card.Header>
+              <Header as='h4' floated='right'>
+                <Icon floated='right' name='suitcase' />
+              </Header>
+              <Header as='h4' floated='left'>
                 {T.translate("dashboard.projects.header")}
-              </h4>
-            </div>       
-          </div>
-
+              </Header>
+            </Card.Header>
+          </Card.Content>        
           <div className="image">
-
             <Doughnut data={chartData} options={chartOptions} />
-
           </div>
           
-          <div className="content">
+          <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="right floated">
-              <div className="meta">{T.translate("dashboard.this_month")}</div>
+              <div className="meta">{countMonth && countMonth.length !== 0 ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
               <div className="header">
-                {countMonth && countMonth ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
+                {countMonth && countMonth.length !== 0 ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
                 {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow down red icon"></i> : 
                   <i className="long arrow up green icon"></i>)}
                 </div>
             </div>     
             <div className="left floated">
-              <div className="meta">{T.translate("dashboard.last_month")}</div>
+              <div className="meta">{countMonth && countMonth[1] ? (countMonth[1].month ? countMonth[1].month : '-') : '-'}</div>
               <div className="header">
                 {countMonth && countMonth[1] ? (countMonth[1].count ? countMonth[1].count : '-') : '-'}
               </div>
             </div>    
-          </div> 
+          </Card.Content> 
 
-          {countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0 && 
+          {(countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0) && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/invoices" className="ui primary outline button small">
@@ -113,7 +92,7 @@ const ProjectsCard = () => (
               </div>
             </div>
           }          
-        </div>
+        </Card>
       )
     }}
   </Query>

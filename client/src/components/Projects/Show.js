@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
-import { Select, Form } from 'semantic-ui-react'
+import { Select, Form, Modal, Progress, Button, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../graphql/projects'
 
@@ -15,13 +15,6 @@ import TasksForm from './Tasks/Form'
 
 // Localization 
 import T from 'i18n-react'
-
-import $ from 'jquery'
-
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
-$.fn.progress = require('semantic-ui-progress')
 
 class Show extends Component {
   
@@ -37,7 +30,8 @@ class Show extends Component {
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
       tasks: this.props.data.getProject ? this.props.data.getProject.tasks : [],
       user: this.props.data.getProject ? this.props.data.getProject.user : null,
-      total: this.props.data.getProject ? this.props.data.getProject.total : 0
+      total: this.props.data.getProject ? this.props.data.getProject.total : 0,
+      openConfirmationModal: false 
     }
   }
 
@@ -67,25 +61,11 @@ class Show extends Component {
     
     if (!projectId) {
       return <Redirect to="/projects" />
-    } else {
-      //this.props.getProjectMutation({ variables: {id: projectId} })
     } 
-    // Progress
-    //$("#progress").progress('increment')
   }
 
-  showConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.project').modal('show')
-  }
-
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.project').modal('hide')
+  toggleConfirmationModal = () => {    
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal }))
   }
 
   handleStatusChange = (value) => {
@@ -118,23 +98,12 @@ class Show extends Component {
     const { id, progress } = this.state
 
     if (progress <= 90) {
-      this.setState({
-        progress: progress+10
-      })
-
-      $("#progress").progress({
-        percent: progress,
-        label: 'percent',
-        text: {
-          percent: `${progress+10}%`
-        },
-        className : {
-          active: 'success'
-        }
-      })
-
       // Update Project
       let progressUpdated = progress+10
+
+      this.setState({
+        progress: progressUpdated
+      })
 
       this.props.updateProjectMutation({ 
           variables: { id, progress: progressUpdated }
@@ -165,23 +134,12 @@ class Show extends Component {
     const { id, progress } = this.state
 
     if (progress >= 10) {
-      this.setState({
-        progress: progress-10
-      })
-
-      $("#progress").progress({
-        percent: progress,
-        label: 'percent',
-        text: {
-          percent: `${progress-10}%`
-        },
-        className : {
-          active: 'success'
-        }
-      })
-
       // Update Project
       let progressUpdated = progress-10
+
+      this.setState({
+        progress: progressUpdated
+      })
 
       this.props.updateProjectMutation({ 
           variables: { id, progress: progressUpdated }
@@ -205,6 +163,7 @@ class Show extends Component {
         .catch(err => this.setState({ errors: err, isLoading: false }))
     }
   }
+
   handleDelete(id, event) {
     event.preventDefault()
     
@@ -264,13 +223,13 @@ class Show extends Component {
   }
 
   render() {
-    const { id, name, deadline, customer, status, description, progress, tasks, user } = this.state
+    const { id, name, deadline, customer, status, description, progress, tasks, user, openConfirmationModal } = this.state
     
     let tasksTotal = 0
     //tasks.map(task => tasksTotal += task.total)
     console.log('tasks ', tasks)
-    return (
-      <div className="column row">
+    return [
+      <div key="segment" className="column row">
         <div className="twelve wide column">
           <div className="ui segment">    
             <h1 className={classnames("ui dividing header", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
@@ -329,17 +288,12 @@ class Show extends Component {
                   </td>
                   <td>
                     <div>
-                      <div id="progress" className="ui success progress mb-3 mt-2">
-                        <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
-                          <div className="progress">{progress}%</div>
-                        </div>
-                      </div>
-
-                      <div className="ui icon mini buttons">
-                        <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
-                        <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
-                      </div>
-                    </div>
+                      <Progress progress percent={progress} success className="mb-3" />
+                      <Button.Group size="mini">
+                        <Button className="ui basic red" onClick={this.handleDecreaseProgress} icon><Icon name="minus" /></Button>
+                        <Button className="ui basic green" onClick={this.handleIncreaseProgress} icon><Icon name="plus" /></Button>
+                      </Button.Group>
+                    </div> 
                   </td>
                 </tr>
                 <tr>
@@ -359,24 +313,27 @@ class Show extends Component {
             </div>
             
             <div className="ui vertical segment">
-              <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("projects.show.delete")}</button>
+              <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("projects.show.delete")}</button>
               <Link to={`/projects/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("projects.show.edit")}</Link>
             </div>
           </div>    
         </div>
+      </div>,      
 
-        <div className="ui small modal project">
-          <div className="header">Confirmation</div>
-          <div className="content">
-            <p className="red">{T.translate("projects.show.confirmation_msg")}</p>
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("projects.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("projects.show.delete")}</button>
-          </div>
-        </div>
-      </div>
-    )
+      <Modal 
+        key="modal" 
+        className="ui small modal project"
+        open={openConfirmationModal}>
+        <Modal.Header>{T.translate("projects.show.confirmation_header")}</Modal.Header>
+        <Modal.Content>
+         <p className="red">{T.translate("projects.show.confirmation_msg")}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="ui button" onClick={this.toggleConfirmationModal}>{T.translate("projects.show.cancel")}</button>
+          <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("projects.show.delete")}</button>
+        </Modal.Actions>
+      </Modal>
+    ]
   }
 }
 

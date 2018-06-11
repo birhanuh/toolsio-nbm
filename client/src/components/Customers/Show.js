@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import map from 'lodash/map'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
+// Semantic UI JS
+import { Modal } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, DELETE_CUSTOMER_MUTATION } from '../../graphql/customers'
 
@@ -40,14 +42,19 @@ class Show extends Component {
       projects: this.props.data.getCustomer ? this.props.data.getCustomer.projects : null,
       invoices: this.props.data.getCustomer ? this.props.data.getCustomer.invoices : null,
       user: this.props.data.getCustomer ? this.props.data.getCustomer.user : null,
+      openConfirmationModal: false 
     }
   }
 
   componentDidMount = () => {
-    // Fetch Customer when id is present in params
+    // Fetch Project when id is present in params
     const { match } = this.props
-    if (match.params.id) {
-      //this.props.fetchCustomer(match.params.id)
+
+    // Check if param id is an int
+    const customerId = parseInt(match.params.id, 10)
+    
+    if (!customerId) {
+      return <Redirect to="/customers" />
     } 
   }
 
@@ -76,18 +83,8 @@ class Show extends Component {
     }
   }
 
-  showConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.customer').modal('show')
-  }
-
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.customer').modal('hide')
+  toggleConfirmationModal = () => {    
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal }))
   }
 
   handleDelete(id, event) {
@@ -147,7 +144,7 @@ class Show extends Component {
   }
 
   render() {
-    const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, projects, sales, invoices, user } = this.state
+    const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, projects, sales, invoices, user, openConfirmationModal } = this.state
     
     const emptyProjectsMessage = (
       <div className="ui mini info message">
@@ -227,8 +224,8 @@ class Show extends Component {
       </div>
     )
 
-    return (
-      <div className="column row">
+    return [
+      <div key="segment" className="column row">
         <div className="twelve wide column customer show">
           <div className="ui segment">    
             <h1 className="ui dividing header">{name}</h1> 
@@ -311,24 +308,27 @@ class Show extends Component {
             </div>
 
             <div className="ui vertical segment">
-              <button className="ui negative button" onClick={this.showConfirmationModal.bind(this)}><i className="trash icon"></i>{T.translate("customers.show.delete")}</button>
+              <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("customers.show.delete")}</button>
               <Link to={`/customers/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("customers.show.edit")}</Link>
             </div>
           </div>    
         </div>
-
-        <div className="ui small modal customer">
-          <div className="header">Confirmation</div>
-          <div className="content">
-            <p className="red">{T.translate("customers.show.confirmation_msg")}</p>
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("customers.show.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("customers.show.delete")}</button>
-          </div>
-        </div>
-      </div>
-    )
+      </div>,
+      
+      <Modal 
+        key="modal" 
+        className="ui small modal customer"
+        open={openConfirmationModal}>
+        <Modal.Header>{T.translate("customers.show.confirmation_header")}</Modal.Header>
+        <Modal.Content>
+         <p className="red">{T.translate("customers.show.confirmation_msg")}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="ui button" onClick={this.toggleConfirmationModal}>{T.translate("customers.show.cancel")}</button>
+          <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("customers.show.delete")}</button>
+        </Modal.Actions>
+      </Modal>
+    ]
   }
 }
 

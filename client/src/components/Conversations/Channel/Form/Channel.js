@@ -1,7 +1,9 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../../utils'
+import { addFlashMessage } from '../../../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Input, Form } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
@@ -89,9 +91,9 @@ class Channel extends Component {
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("messages.form.flash.success_create_channel", { name: channel.name})
+              text: T.translate("conversations.form.flash.success_create_channel", { name: channel.name})
             })  
-
+            this.setState({ isLoading: false })
             this.context.router.history.push('/conversations')
           } else {
             let errorsList = {}
@@ -136,6 +138,10 @@ class Channel extends Component {
   }
 }
 
+Channel.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired,
+}
+
 Channel.contextTypes = {
   router: PropTypes.object.isRequired
 }
@@ -147,5 +153,5 @@ const MutationsAndQuery =  compose(
   graphql(GET_CHANNELS_USERS_COUNT_QUERY)
 )(Channel)
 
-export default MutationsAndQuery
+export default connect(null, { addFlashMessage } ) (MutationsAndQuery)
 

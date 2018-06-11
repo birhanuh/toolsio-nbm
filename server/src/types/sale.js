@@ -61,7 +61,7 @@ export default `
   type Query {
     getSale(id: Int!): Sale
     
-    getSales(offset: Int!, limit: Int!, order: String!): [GetSalesResponse!]!
+    getSales(offset: Int!, limit: Int!, order: String!, name: String): [GetSalesResponse!]!
 
     getSalesWithoutInvoice(name: String!): [GetSalesWithoutInvoiceResponse!]!
 

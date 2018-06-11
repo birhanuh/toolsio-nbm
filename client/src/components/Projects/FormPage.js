@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 // Semantic UI JS
-import { Input, Select, TextArea, Form } from 'semantic-ui-react'
+import { Input, Select, TextArea, Form, Progress, Button, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_CUSTOMERS_QUERY } from '../../graphql/customers'
 import { GET_PROJECT_QUERY, GET_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../graphql/projects'
@@ -18,9 +18,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 // Localization 
 import T from 'i18n-react'
-
-import $ from 'jquery'
-$.fn.progress = require('semantic-ui-progress')
 
 class FormPage extends Component {
   constructor(props) {
@@ -215,17 +212,6 @@ class FormPage extends Component {
       this.setState({
         progress: progress+10
       })
-
-      $("#progress").progress({
-        percent: progress,
-        label: 'percent',
-        text: {
-          percent : `${progress+10}%`
-        },
-        className : {
-          active: 'success'
-        }
-      })
     }
   }
 
@@ -237,17 +223,6 @@ class FormPage extends Component {
     if (progress >= 10) {
       this.setState({
         progress: progress-10
-      })
-
-      $("#progress").progress({
-        percent: progress,
-        label: 'percent',
-        text: {
-          percent : `${progress-10}%`
-        },
-        className : {
-          active: 'success'
-        }
       })
     }
   }
@@ -352,16 +327,11 @@ class FormPage extends Component {
 
             { id &&
               <div className="inline field progress">
-                <div id="progress" className="ui success progress mb-3 mt-2">
-                  <div className="bar" style={{transitionDuration: '300ms', width: ''+progress+'%'}}>
-                    <div className="progress">{progress}%</div>
-                  </div>
-                </div>
-
-                <div className="ui icon mini buttons">
-                  <div className="decrement ui basic red button icon" onClick={this.handleDecreaseProgress.bind(this)}><i className="minus icon"></i></div>
-                  <div className="increment ui basic green button icon" onClick={this.handleIncreaseProgress.bind(this)}><i className="plus icon"></i></div>
-                </div>
+                <Progress progress percent={progress} success className="mb-3 mt-2" />
+                <Button.Group size="mini">
+                  <Button className="ui basic red" onClick={this.handleDecreaseProgress} icon><Icon name="minus" /></Button>
+                  <Button className="ui basic green" onClick={this.handleIncreaseProgress} icon><Icon name="plus" /></Button>
+                </Button.Group>
               </div>
             }
             
@@ -422,7 +392,8 @@ const MutationsQuery =  compose(
       variables: {
         order: 'DESC',
         offset: 0,
-        limit: 10
+        limit: 10,
+        name: ""
       }
     })
   }),

@@ -16,11 +16,10 @@ export default {
       })
 
       const [paidTasksSum, paidItemsSum] = await Promise.all([paidTasksSumPromise, paidItemsSumPromise])
-      console.log('paidTasksSum', paidTasksSum)
-
+      
       return {
-        tasksTotalSum: paidTasksSum[0].sum,
-        itemsTotalSum: paidItemsSum[0].sum
+        tasksTotalSum: paidTasksSum[0].sum ? paidTasksSum[0].sum : 0,
+        itemsTotalSum: paidItemsSum[0].sum ? paidItemsSum[0].sum : 0
       } 
     }),
     
@@ -42,9 +41,8 @@ export default {
 
       let groupByDaySum = _(paidTasksItemsSumDay).groupBy('day').map((objs, key) => ({
         'day': key,
-        'sum': _.sumBy(objs, 'sum')
+        'sum': _.sum(objs.map(item => parseInt(item.sum))) // objs = [{ day: '26/04/2018', sum: '40' }, { day: '26/04/2018', sum: '25' } ] select sum and convert to int = [40, 25]
       })).value()
-      console.log('groupByDaySum', groupByDaySum)
 
       const paidTasksSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'MM/YYYY') AS month, SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
         model: models.Task,
@@ -62,7 +60,7 @@ export default {
 
       let groupByMonthSum = _(paidTasksItemsSumMonth).groupBy('month').map((objs, key) => ({
         'month': key,
-        'sum': _.sumBy(objs, 'sum')
+        'sum': _.sum(objs.map(item => parseInt(item.sum))) 
       })).value()
       console.log('paidItemsSumMonth', paidItemsSumMonth)
       return {
@@ -116,7 +114,29 @@ export default {
     }),
 
     getCustomersData: requiresAuth.createResolver(async (parent, args, { models }) => {
+      const countProjectPromise = models.sequelize.query('SELECT c.name, count(p) FROM projects p JOIN customers c ON p.customer_id = c.id GROUP BY c.name', {
+        model: models.Project,
+        raw: true
+      })
+      const countSalePromise = models.sequelize.query('SELECT c.name, count(s) FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.name', {
+        model: models.Sale,
+        raw: true
+      })
 
+      const [countProject, countSale] = await Promise.all([countProjectPromise, countSalePromise]) 
+      // countProject [ { name: 'Customera', count: '4' }, { name: 'Customerb', count: '7' } ]
+      // countSale [ { name: 'Customerb', count: '2' }, { name: 'Customera', count: '6' } ]
+      let mergedCountProjectCountSale = [...countProject, ...countSale]
+
+      let groupByCustomersCountProjectSale = _(mergedCountProjectCountSale).groupBy('name').map((objs, key) => ({
+        'name': key,
+        'projectsSalesCount': _.sum(objs.map(item => parseInt(item.count))) 
+      })).value()
+      // groupByCustomersCountProjectSale [ { name: 'Customera', count: 10 }, { name: 'Customerb', count: 9 } ]
+
+      return {
+        nameCountProjectsSales: groupByCustomersCountProjectSale
+      }
     }),
 
     getInvoicesData: requiresAuth.createResolver(async (parent, args, { models }) => {
@@ -150,7 +170,7 @@ export default {
       })
 
       const [countStatus, idNameStatus] = await Promise.all([countStatusPromise, idNameStatusPromise])
-      console.log('countStatus ', idNameStatus)
+    
       return {
         countStatus,
         idNameStatus

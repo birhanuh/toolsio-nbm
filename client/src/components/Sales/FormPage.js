@@ -352,7 +352,8 @@ const MutationsQuery =  compose(
       variables: {
         order: 'DESC',
         offset: 0,
-        limit: 10
+        limit: 10,
+        name: ""
       }
     })
   }),

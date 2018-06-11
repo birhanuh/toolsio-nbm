@@ -123,15 +123,7 @@ class Messages extends Component {
           store.writeQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY, data })
         }
       })
-      .then(res => { 
-        const { success, errors } = res.data.markDirectMessagesAsRead
-
-        if (success) {
-          console.log('success: ', success)
-        } else {
-          console.log('errors: ', errors)
-        }
-      })
+      .then(res => console.log('res: ', res.data.markDirectMessagesAsRead))
       .catch(err => console.log('err: ', err))
   }
 
@@ -142,36 +134,6 @@ class Messages extends Component {
       }
       this.unsubscribe = this.subscribe(receiverId)
     }
-
-    // Mark messages as unread for this reciever
-    this.props.markDirectMessagesAsReadMutation({ 
-        variables: { senderId: parseInt(receiverId) },
-        update: (store) => {
-          const data = store.readQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY })
-          
-          const updatedUnreadDirectMessagesCountSender = data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender.map(item => {
-            if (item.sender_id === parseInt(receiverId)) {
-              return {...item, count: 0}
-            }
-            return item
-          })
-        
-          data.getUnreadDirectMessagesCountSender.unreadDirectMessagesCountSender = updatedUnreadDirectMessagesCountSender
-         
-          // Write our data back to the cache.
-          store.writeQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY, data })
-        }
-      })
-      .then(res => { 
-        const { success, errors } = res.data.markDirectMessagesAsRead
-
-        if (success) {
-          console.log('success: ', success)
-        } else {
-          console.log('errors: ', errors)
-        }
-      })
-      .catch(err => console.log('err: ', err))
   }﻿
 
   componentWillUnmount() {   

@@ -4,7 +4,7 @@ services:
     image: redis
     networks: 
       - webnet
-  postgres: 
+  db: 
     image: postgres
     volumes: 
       - ./pgdata:/var/lib/postgresql/data
@@ -26,7 +26,14 @@ services:
       NODE_ENV: production
       SERVER_PORT: 8080
       REDIS_HOST: redis
-    command: sequelize db:migrate
-    command: ["./wait-for-it.sh", "postgres:5432", "--", "node", "dist/index.js"]
+      #DB_HOST: db # We would need this if we use env variables in Sequelize constructor instead of json. 
+    #volumes:
+    #  - .:/app  
+    depends_on:
+      - db
+      - redis
+    #command: "node dist/index.js"
+    command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/index.js"]
+    #command: sequelize db:migrate
 networks:
   webnet: 

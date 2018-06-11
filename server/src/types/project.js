@@ -67,7 +67,7 @@ export default `
   type Query {
     getProject(id: Int!): Project
     
-    getProjects(offset: Int!, limit: Int!, order: String!): [GetProjectsResponse!]!
+    getProjects(offset: Int!, limit: Int!, order: String!, name: String): [GetProjectsResponse!]!
 
     getProjectsWithoutInvoice(name: String!): [GetProjectsWithoutInvoiceResponse!]!
 
