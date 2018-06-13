@@ -160,12 +160,12 @@ app.use((req, res) => {
 })
 
 // Set port
-app.set('port', process.env.SERVER_PORT)
+app.set('port', process.env.SERVER_PORT || 8080)
 
 const server = createServer(app)
 
 // app.listen(app.get('port'), () => 
-//   console.log('Server started on port: ' + process.env.SERVER_PORT)
+//   console.log('Server started on port: ' + process.env.SERVER_PORT || 8080)
 // )
 server.listen(app.get('port'), () => {
   new SubscriptionServer({
@@ -189,8 +189,8 @@ server.listen(app.get('port'), () => {
       server: server,
       path: '/subscriptions',
     })
-    console.log('Server started on port: ' + process.env.SERVER_PORT)
-    console.log('Environment: ' + process.env.NODE_ENV)
+    console.log('Server started on port: ' + process.env.SERVER_PORT || 8080)
+    console.log('Environment: ' + process.env.NODE_ENV || 'development')
     console.log('------------------------')
 })
 

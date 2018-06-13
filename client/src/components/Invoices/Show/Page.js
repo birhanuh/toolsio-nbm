@@ -21,10 +21,6 @@ import Project from './Project'
 
 import moment from 'moment'
 
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
-
 class Page extends Component {
   
   constructor(props) {

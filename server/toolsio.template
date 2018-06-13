@@ -1,0 +1,9 @@
+server {
+  location / {
+    proxy_pass http://web:8080; #Locally dns would be http://localhost:8080
+  }
+
+  location /images/ {
+    root /data;
+  }
+}
