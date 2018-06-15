@@ -17,7 +17,7 @@ export default function List({ projects, loading }) {
   )
 
   const projectsList = (
-    <div className={classnames("ui two cards sales", { loading: loading })}>
+    <div className={classnames("ui two cards projects", { loading: loading })}>
       { projects.map(project => <Card project={project} key={project.id} />) }
     </div>
   )

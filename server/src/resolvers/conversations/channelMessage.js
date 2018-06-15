@@ -78,7 +78,7 @@ export default {
   },
 
   Message: {
-    uploadPath: parent => parent.uploadPath && process.env.DNS+parent.uploadPath,
+    uploadPath: parent => parent.uploadPath && process.env.SERVER_URL+parent.uploadPath,
 
     user: ({ user, userId }, args, { models }) => {
 

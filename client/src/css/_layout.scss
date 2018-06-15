@@ -547,9 +547,12 @@ nav.ui.menu .item>a {
   border-bottom: none;
 }
 
-.ui.two.cards.sales, .ui.two.cards.projects {
+.ui.two.cards.projects, .ui.two.cards.sales {
   .card a.ui.header {
     margin-top: -20px;
+  }
+  .table.projects, .table.sales {
+    margin: 1em auto auto -10px;
   }
 }
 
@@ -898,6 +901,9 @@ nav.ui.menu .item>a {
   .ui.huge.corner {
     font-size: 1.62857143rem;
   }
+  strong {
+    font-size: 1.125em;
+  }
   .corner p {
     font-size: 0.6em;
     margin: 23px auto 15px 15px;
@@ -914,7 +920,7 @@ nav.ui.menu .item>a {
     margin-top: 5px;
     color: $body-color;
   } 
-  .row:first-child .eight.wide.column {
+  .row:first-child .seven.wide.column {
     display: table;
     height: 100%;
     h1 {
@@ -922,8 +928,26 @@ nav.ui.menu .item>a {
       vertical-align: middle;
     }
   }
+  .ui.card > .content, .ui.cards > .card > .content {
+    padding: 2em 2em;
+  }
   .ui.header a.sub.header:hover, .ui.card a:hover {
     text-decoration: underline;
+  }
+  .row.blue, .row.orange, .row.red, .row.green {
+    background-color: #ffffff !important;
+  }
+  .row.blue:before {
+    box-shadow: 0 -1px 0 0 rgba(25,156,213, 1);
+  }
+  .row.orange:before {
+    box-shadow: 0 -1px 0 0 rgba(240,115,15, 1);
+  }
+  .row.red:before {
+    box-shadow: 0 -1px 0 0 rgba(190,10,10, 1);
+  }
+  .row.green:before {
+    box-shadow: 0 -1px 0 0 rgba(125,164,13, 1);
   }
 }
 

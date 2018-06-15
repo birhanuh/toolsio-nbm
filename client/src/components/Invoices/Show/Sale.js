@@ -10,13 +10,15 @@ import T from 'i18n-react'
 
 import moment from 'moment'
 
-export default function Sale({ sale }) {
+export default function Sale({ sale, status, tax }) {
+
+  let itemsTotal = sumBy(sale.tasks, 'unitPrice')
+  let invoiceTotal = itemsTotal+((tax/100)*itemsTotal)
+
   return(
     <div className="ui fluid card">
-      <div className="content">
-        <div className="left floated">
-          <h4 className="ui header">{sale && <Link to={`/sales/show/${sale.id}`}>{sale.name}</Link>}</h4>
-        </div>
+      <div className="content p-4">
+        <h3 className="ui header">{<Link to={`/sales/show/${sale.id}`}>{sale.name}</Link>}</h3>
       </div>
       <div className="content">
         <table className="ui very basic collapsing celled table">
@@ -26,7 +28,7 @@ export default function Sale({ sale }) {
                 <i className="ui tiny header">{T.translate("invoices.show.sale.deadline")}</i>
               </td>
               <td>
-                {sale && moment(sale.deadline).format('ll') }
+                {moment(sale.deadline).format('ll') }
               </td>
             </tr>
             <tr>
@@ -34,7 +36,7 @@ export default function Sale({ sale }) {
                 <i className="ui tiny header">{T.translate("invoices.show.sale.status")}</i>
               </td>
               <td>
-                { sale && 
+                { 
                   <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
                     {sale.status}
                   </div>
@@ -46,7 +48,7 @@ export default function Sale({ sale }) {
                 <i className="ui tiny header">{T.translate("invoices.show.sale.description")}</i>
               </td>
               <td>
-                {sale && sale.description ? sale.description : ''}
+                {sale.description ? sale.description : ''}
               </td>
             </tr>
           </tbody>
@@ -64,7 +66,7 @@ export default function Sale({ sale }) {
             </tr>
           </thead>
           <tbody>
-            { sale && map(sale.items, (item) => 
+            { map(sale.items, (item) => 
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td>{item.unit}</td>
@@ -78,23 +80,27 @@ export default function Sale({ sale }) {
               <td className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
                 {T.translate("invoices.show.subtotal")}
               </td>
-              <td><strong>{sale && sumBy(sale.items, 'price')}</strong></td>
+              <td className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
+                <strong>{itemsTotal}</strong>
+              </td>
             </tr>
             <tr>
               <td colSpan="3"></td>
               <td className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
                 {T.translate("invoices.show.tax")}
               </td>
-              <td><strong>{(sale && sale.tax) || (sale && sale.tax)}</strong></td>
+              <td className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
+                <strong>{tax}%</strong>
+              </td>
             </tr>
             <tr>
               <td colSpan="3"></td>
-              <td className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}>
+              <td className={classnames({blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid'})}>
                 <strong>{T.translate("invoices.show.invoice_total")}</strong>
               </td>
               <td>
-                <h1 className={classnames("ui header m-0", {blue: sale.status === 'new', orange: sale.status === 'pending', red: sale.status === 'overdue', green: sale.status === 'paid' })}>
-                  {sale && sumBy(sale.tasks, 'price')}
+                <h1 className={classnames("ui header m-0", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid'})}>
+                  {invoiceTotal}
                 </h1>
               </td>
             </tr>

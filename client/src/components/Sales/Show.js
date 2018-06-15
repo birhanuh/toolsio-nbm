@@ -223,7 +223,7 @@ class Show extends Component {
               { (items && id) && <ItemsForm saleId={id} itemsTotal={itemsTotal} items={items} /> }
             </div>
             
-            <div className="ui vertical segment">
+            <div className="pt-3">
               <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("sales.show.delete")}</button>
               <Link to={`/sales/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("sales.show.edit")}</Link>
             </div>

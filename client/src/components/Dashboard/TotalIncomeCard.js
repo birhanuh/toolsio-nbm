@@ -17,9 +17,11 @@ const TotalIncomeCard = () => (
       return (
         <Card className={classnames("dashboard form", { loading })}>
           <Card.Content>
-            <Header as='h4' floated='right'>
-              {T.translate("dashboard.total_income.header")}
-            </Header>
+            <Card.Header>
+              <Header as='h4'>
+                {T.translate("dashboard.total_income.header")}
+              </Header>
+            </Card.Header>
           </Card.Content>
           <Card.Content style={{display: 'table-cell', verticalAlign: 'middle', borderTop: 'none'}}>
             <Header as='h1' className="green centered bold">{tasksItemTotalSum && tasksItemTotalSum}</Header>

@@ -44,7 +44,7 @@ class Subdomain extends Component {
             })
 
             // Redirect to login page with subdoamin set 
-            window.location = ''+process.env.HTTP+subdomain+'.'+process.env.DNS+'/login'
+            window.location = ''+process.env.SERVER_PROTOCOL+subdomain+'.'+process.env.SERVER_HOST+'/login'
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -94,7 +94,7 @@ class Subdomain extends Component {
             })
 
             // Redirect to login page with subdoamin set 
-            window.location = ''+process.env.HTTP+subdomain+'.'+process.env.DNS+'/login'
+            window.location = ''+process.env.HTTP+subdomain+'.'+process.env.SERVER_URL+'/login'
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)

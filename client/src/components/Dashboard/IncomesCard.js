@@ -66,11 +66,11 @@ const IncomesCard = () => (
         <Card className={classnames("dashboard form", { loading: loading })}>
           <Card.Content>
             <Card.Header>
-              <Header as='h4' floated='right'>
-                <Icon floated='right' name='money' />
-              </Header>
               <Header as='h4' floated='left'>
                 {T.translate("dashboard.incomes.header")}
+              </Header>
+              <Header as='h4' floated='right' className="mr-0">
+                <Icon floated='right' name='money' className="mr-0"/>
               </Header>
             </Card.Header>
           </Card.Content>        

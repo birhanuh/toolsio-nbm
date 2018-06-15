@@ -93,11 +93,11 @@ const InvoicesCard = () => (
         <Card className={classnames("dashboard invoice form", { loading: loading })}>
           <Card.Content>
             <Card.Header>
-              <Header as='h4' floated='right'>
-                <Icon floated='right' name='file text outline' />
-              </Header>
               <Header as='h4' floated='left'>
                 {T.translate("dashboard.projects.header")}
+              </Header>
+              <Header as='h4' floated='right' className="mr-0">
+                <Icon floated='right' name='file text outline' className="mr-0"/>
               </Header>
             </Card.Header>
           </Card.Content>        

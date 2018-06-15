@@ -27,8 +27,9 @@ services:
       SERVER_PORT: 8080
       REDIS_HOST: redis
       #DB_HOST: db # We would need this if we use env variables in Sequelize constructor instead of json. 
-    #volumes:
+    volumes:
     #  - .:/app  
+      - ./uploads:/app/uploads
     depends_on:
       - db
       - redis
@@ -55,14 +56,17 @@ services:
       - webnet 
     volumes:
       - ./toolsio.template:/etc/nginx/conf.d/toolsio.template
+      - ./uploads:/uploads
     ports:
       - "8080:80"
-    #environment:
-    #  - NGINX_HOST=foobar.com
-    #  - NGINX_PORT=80
+    environment:
+      - NGINX_HOST=toolsio.com
+      - NGINX_PORT=80
+      - HTTP_UPGRADE=""
     depends_on: 
       - web
-    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/toolsio.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"  
+    command: /bin/bash -c "cat < /etc/nginx/conf.d/toolsio.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"  
+    #command: [nginx-debug, '-g', 'daemon off;'] # Run nginx in debug mode
 networks:
   webnet: 
 

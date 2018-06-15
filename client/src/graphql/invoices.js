@@ -37,6 +37,7 @@ export const GET_INVOICE_QUERY = gql`
       interestInArrears
       referenceNumber
       status
+      tax
       description
       createdAt
       user {
