@@ -307,7 +307,7 @@ class Show extends Component {
               </div>
             </div>
 
-            <div className="ui vertical segment">
+            <div className="pt-3">
               <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("customers.show.delete")}</button>
               <Link to={`/customers/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("customers.show.edit")}</Link>
             </div>

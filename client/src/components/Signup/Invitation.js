@@ -88,7 +88,7 @@ class Invitation extends Component {
             })
             
             // Redirect to login
-            window.location = `${process.env.HTTP}${account.subdomain}.${process.env.DNS}/login`
+            window.location = `${process.env.SERVER_PROTOCOL}${account.subdomain}.${process.env.SERVER_HOST}/login`
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)

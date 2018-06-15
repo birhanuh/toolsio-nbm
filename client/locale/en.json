@@ -23,7 +23,7 @@
       },
       "analysis": {
         "header": "Business analysis",
-        "text": "Report business activies on daily and weekly basis. Forcast milestone using exsiting activity records."
+        "text": "Reports of collected and aggregated metrics presented in a coherent set of visualizations of the key business activity data, such as active average sales per week or record paid invoice month. Forcast milestone by analysed exsiting activity data."
       }
     },
     "clients": {
@@ -194,7 +194,7 @@
     "description": "Summary of your business activties are shown infographically.",
     "total_income": {
       "header": "Total income",
-      "description": "Cumulative income, (i.e total summary of all your PAID invoices)."
+      "description": "Cumulative of all PAID invoices with out including taxes, (i.e Net income)."
     },
     "incomes": {
       "header": "Incomes"
@@ -604,6 +604,7 @@
       "date_of_an_invoice": "Date of an invoice",
       "from": "From",
       "customer": {
+        "billed_to": "Billed to",
         "name": "Name",
         "vat_number": "Vat number",
         "contact": {

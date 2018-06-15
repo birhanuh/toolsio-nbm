@@ -14,16 +14,10 @@ import { Authorization } from '../../../utils'
 // Localization 
 import T from 'i18n-react'
 
-import $ from 'jquery'
-
 import Sale from './Sale'
 import Project from './Project'
 
 import moment from 'moment'
-
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
 
 class Page extends Component {
   
@@ -40,6 +34,7 @@ class Page extends Component {
       interestInArrears: this.props.data.getInvoice ? this.props.data.getInvoice.interestInArrears : '',
       status: this.props.data.getInvoice ? this.props.data.getInvoice.status : '',
       referenceNumber: this.props.data.getInvoice ? this.props.data.getInvoice.referenceNumber : '',
+      tax: this.props.data.getInvoice ? this.props.data.getInvoice.tax : '',
       description: this.props.data.getInvoice ? this.props.data.getInvoice.description : '',
       user: this.props.data.getInvoice ? this.props.data.getInvoice.user : null,
       total: this.props.data.getInvoice ? this.props.data.getInvoice.total : 0,
@@ -72,6 +67,7 @@ class Page extends Component {
         interestInArrears: nextProps.data.getInvoice.interestInArrears,
         status: nextProps.data.getInvoice.status,
         referenceNumber: nextProps.data.getInvoice.referenceNumber,
+        tax: nextProps.data.getInvoice.tax,
         description: nextProps.data.getInvoice.description,
         user: nextProps.data.getInvoice.user,
         total: nextProps.data.getInvoice.total
@@ -143,7 +139,7 @@ class Page extends Component {
   }
 
   render() {
-    const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, description, user, createdAt, openConfirmationModal } = this.state
+    const { id, sale, project, customer, deadline, paymentTerm, interestInArrears, status, referenceNumber, tax, description, user, createdAt, openConfirmationModal } = this.state
     
     const { getAccountQuery: { getAccount } } = this.props
 
@@ -153,8 +149,8 @@ class Page extends Component {
           <div className="ui segment">
             <div className="ui vertically divided grid">
               <div className="row pb-0">
-                <div className="eight wide column">
-                  <h1 className={classnames("ui header", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
+                <div className="seven wide column">
+                  <h1 className={classnames("ui header uppercase", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>{T.translate("invoices.show.header")}
                     
                     {project && <Link to={`/projects/show/${project.id}`} className={classnames("sub header d-inline-block pl-1", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>({project.name})</Link>}
 
@@ -162,7 +158,7 @@ class Page extends Component {
 
                   </h1> 
                 </div>
-                <div className="four wide column">
+                <div className="four wide right aligned column">
                   <div className="ui sizer vertical segment">
                     <p>
                       {T.translate("invoices.show.account.user.first_name")}
@@ -175,7 +171,7 @@ class Page extends Component {
                   </div> 
                 </div>
 
-                <div className="four wide column">
+                <div className="four wide right aligned column">
                   <div className="ui sizer vertical segment">
                     <p>
                       {T.translate("invoices.show.account.address.street")}
@@ -197,9 +193,10 @@ class Page extends Component {
                 </div>
               </div>
 
-              <div className="row pt-0">
+              <div className={classnames("row pt-0", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid' })}>
                 <div className="eight wide column">
                   <div className="ui sizer vertical segment">
+                    <h3 className="body-color">{T.translate("invoices.show.customer.billed_to")}</h3>
                     <p>
                       {T.translate("invoices.show.customer.name")}
                       <strong>{customer && <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link>}</strong>
@@ -262,11 +259,11 @@ class Page extends Component {
               <p>{status}</p>
             </div>
 
-            { sale && <Sale sale={sale} /> }
+            { sale && <Sale sale={sale} status={status} tax={tax} /> }
 
-            { project && <Project project={project} /> }
+            { project && <Project project={project} status={status} tax={tax} /> }
 
-            <div className="ui vertical segment">
+            <div className="pt-3">
               <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("invoices.show.delete")}</button>
               <Link to={`/invoices/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("invoices.show.edit")}</Link>
             </div>
