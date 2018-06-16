@@ -169,7 +169,9 @@
     }
   },
   "users": {
-    "header": "Users",
+    "page": {
+      "header": "Users"
+    },
     "form": {
       "email": "Email",
       "invite_user": "Invite User",
@@ -760,8 +762,8 @@
     }
   },
   "events": {
-    "index": {
-      "header": "Calendar",
+    "page": {
+      "header": "Events",
       "description": "Organize your schedules and appointements here."
     },
     "new": {

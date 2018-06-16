@@ -721,6 +721,56 @@ nav.ui.menu .item>a {
   margin: 20px 15px;
 }
 
+// Events 
+.fc-right, .fc-left {
+ .fc-button-group {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    /* flex-direction: row; */
+    vertical-align: baseline;
+    margin: 0 .25em 0 0;
+  }
+  button {
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    cursor: pointer;
+    display: inline-block;
+    min-height: 1em;
+    outline: 0;
+    border: none;
+    vertical-align: baseline;
+    background: transparent none!important;
+    color: rgba(0,0,0,.6)!important;
+    font-weight: 400;
+    border-radius: 0;
+    line-height: 0;
+    padding: 20px;
+    font-style: normal;
+    text-align: center;
+    text-decoration: none;
+    text-transform: none;
+    text-shadow: none!important;
+    -webkit-box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+    box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+  }
+  > :first-child {  
+    border-left: none;
+    margin-left: 0;
+    border-top-left-radius: .28571429rem;
+    border-bottom-left-radius: .28571429rem;
+  }
+  > :last-child {
+    border-top-right-radius: .28571429rem;
+    border-bottom-right-radius: .28571429rem;
+  }
+  button .fc-icon {
+    top: -.45em;
+  }
+}
+
 // Animation
 .animation-delay-1 {
   @include animation-delay(.1s);

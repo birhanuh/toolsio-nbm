@@ -32,7 +32,8 @@ export function InnerSidebar({ visibleInnerSidebar}) {
         <ActiveLink activeOnlyWhenExact to="/sales" icon="cart icon" label={T.translate("sales.page.header")} />
         <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.page.header")}/>
         <ActiveLink activeOnlyWhenExact to="/invoices" icon="file text outline icon" label={T.translate("invoices.page.header")}/>
-        <ActiveLink activeOnlyWhenExact to="/users" icon="user icon" label={T.translate("users.header")}/>
+        <ActiveLink activeOnlyWhenExact to="/users" icon="user icon" label={T.translate("users.page.header")}/>
+        <ActiveLink activeOnlyWhenExact to="/events" icon="calendar alternate icon" label={T.translate("events.page.header")}/>
       </Sidebar>  
     )
 }
