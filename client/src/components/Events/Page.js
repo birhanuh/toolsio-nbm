@@ -12,6 +12,9 @@ class Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: "",
+      description: "",
+      url: "",
       events:[
         {
           title: 'All Day Event',
@@ -73,18 +76,13 @@ class Page extends React.Component {
       eventLimit: true, // allow "more" link when too many events
       selectable: true,
       events: this.state.events,
-      eventRender: function(event, element) {
-        element.qtip({
-          content: event.description
-        });
-      },
       // put your options and callbacks here
       // dayClick: function(date, jsEvent, view) {
       //   console.log('clicked on ' + date.format())
       // },
       select: function( start, end, jsEvent, view) {
-        console.log('select start' + start.format())
-        console.log('select end' +end.format())
+        console.log('select start' + start)
+        console.log('select end' +end)
       },
       eventDragStart: function(event, jsEvent, ui, view) {
         console.log('eventDragStart date ' + event)
