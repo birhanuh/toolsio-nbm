@@ -293,6 +293,19 @@ export default {
       errors,
       isValid: isEmpty(errors)
     }
-  }
+  },
+
+  validateEventInput: (data) => {
+    let errors = {}
+
+    if (!data.title) {
+      errors['title'] = T.translate("events.form.title_required")
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
 
 }  

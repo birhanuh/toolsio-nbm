@@ -87,7 +87,6 @@ class FormPage extends Component {
     // Validation
     if (this.isValid()) { 
       this.setState({ isLoading: true })
-
       const { id, name, deadline, status, progress, description, customerId } = this.state
       
       if (id) {
@@ -140,8 +139,7 @@ class FormPage extends Component {
           }
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
-      } else {
-       
+      } else {       
         this.props.createProjectMutation({ 
           variables: { name, deadline, status, progress, description, customerId: parseInt(customerId) },
           update: (store, { data: { createProject } }) => {
@@ -163,8 +161,7 @@ class FormPage extends Component {
             // Write our data back to the cache.
             store.writeQuery({ query: GET_PROJECTS_QUERY, data })
           }})
-          .then(res => {          
-
+          .then(res => {   
             const { success, project, errors } = res.data.createProject
 
             if (success) {

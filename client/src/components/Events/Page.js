@@ -1,5 +1,7 @@
 // import React...
 import React, { Component } from 'react'
+import { graphql, compose } from 'react-apollo'
+import { GET_EVENTS_QUERY, GET_EVENT_QUERY, DELETE_EVENT_MUTATION } from '../../graphql/events'
 
 import 'fullcalendar'
 
@@ -15,54 +17,28 @@ class Page extends Component {
     this.state = {
       start: null,
       end: null,
-      openConfirmationModal: false,
-      events:[
-        {
-          title: 'All Day Event',
-          url: 'http://google.com/',
-          start: '2018-06-01'
-        },
-        {
-          title: 'Long Event',
-          description: 'This is a cool event',
-          start: '2018-06-07',
-          end: '2018-06-10'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2018-06-09T16:00:00'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2018-06-16T16:00:00'
-        },
-        {
-          title: 'Conference',
-          start: '2018-07-11',
-          end: '2018-07-13'
-        },
-        {
-          title: 'Meeting',
-          start: '2018-07-12T10:30:00',
-          end: '2018-07-12T12:30:00'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2018-07-13T07:00:00'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2018-07-28'
-        }
-      ],    
+      events: this.props.data.getEvents ? this.props.data.getEvents : [],
+      openConfirmationModal: false
     }
   }
 
-  componentDidMount = () => {
+  componentWillReceiveProps = (nextProps) => {  
+    if (nextProps) {
+      this.setState({
+        events: nextProps.data.getEvents
+      })
 
+      // Remove previous events and re-fetch manually by adding event source
+      $("#calendar").fullCalendar('removeEvents')
+      $('#calendar').fullCalendar('addEventSource', {
+        events: nextProps.data.getEvents
+      })
+    }
+  }
+
+  componentDidMount = () => {    
+    const { events } = this.state.events
+   
     $('#calendar').fullCalendar({
       themeSystem: 'standard',
       header: {
@@ -76,7 +52,7 @@ class Page extends Component {
       editable: true,
       eventLimit: true, // allow "more" link when too many events
       selectable: true,
-      events: this.state.events,
+      events: events,
       // put your options and callbacks here
       // dayClick: function(date, jsEvent, view) {
       //   console.log('clicked on ' + date.format())
@@ -86,6 +62,11 @@ class Page extends Component {
         this.toggleConfirmationModal()
         console.log('select start' + start)
         console.log('select end' +end)
+      },
+      eventClick: function(event, element) {
+        console.log('event', event.id)
+        event.title = "CLICKED!"
+        $('#calendar').fullCalendar('updateEvent', event)
       },
       eventDragStart: (event, jsEvent, ui, view) => {
         console.log('eventDragStart date ' + event)
@@ -103,7 +84,7 @@ class Page extends Component {
   }
 
   render() {
-     const { start, end, openConfirmationModal } = this.state
+    const { start, end, events, openConfirmationModal } = this.state
 
     return [
         <div key="segment" className="row column"> 
@@ -118,4 +99,20 @@ class Page extends Component {
   }
 }
 
-export default Page
+const Queries =  compose(
+  graphql(DELETE_EVENT_MUTATION, {
+    name: 'deleteProjectMutation'
+  }),
+  graphql(GET_EVENTS_QUERY),
+  graphql(GET_EVENT_QUERY, {
+    name: 'getEventQuery',
+    options: (props) => ({
+      variables: {
+        id: props.match.params.id ? parseInt(props.match.params.id) : 0
+      }
+    })
+  })
+)(Page)
+
+export default Queries
+

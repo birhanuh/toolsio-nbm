@@ -741,7 +741,6 @@ nav.ui.menu .item>a {
     font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
     cursor: pointer;
     display: inline-block;
-    min-height: 1em;
     outline: 0;
     border: none;
     vertical-align: baseline;
@@ -750,7 +749,7 @@ nav.ui.menu .item>a {
     font-weight: 400;
     border-radius: 0;
     line-height: 0;
-    padding: 20px;
+    padding: 10px;
     font-style: normal;
     text-align: center;
     text-decoration: none;
@@ -782,9 +781,6 @@ nav.ui.menu .item>a {
   > :last-child {
     border-top-right-radius: .28571429rem;
     border-bottom-right-radius: .28571429rem;
-  }
-  button .fc-icon {
-    top: -.45em;
   }
 }
 

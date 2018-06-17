@@ -1,7 +1,11 @@
 // import React...
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
+import { graphql, compose } from 'react-apollo'
+import { GET_EVENTS_QUERY, GET_EVENT_QUERY, CREATE_EVENT_MUTATION, UPDATE_EVENT_MUTATION } from '../../graphql/events'
 
 // Semantic UI JS
 import { Form, Input, TextArea, Modal } from 'semantic-ui-react'
@@ -13,6 +17,7 @@ class FormPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: null,
       title: "",
       description: "",
       url: "",
@@ -49,12 +54,12 @@ class FormPage extends Component {
     if (!isValid) {
       this.setState({ errors: updatedErrors })
     }
-
+    console.log('isValid ', isValid)
     return isValid
   }
 
-  handleSubmit = async (event) => {
-     event.preventDefault()
+  handleSubmit = (event) => {
+    event.preventDefault()
 
     // Validation
     if (this.isValid()) { 
@@ -73,29 +78,22 @@ class FormPage extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: GET_PROJECTS_QUERY,
-            variables: {
-              order: 'DESC',
-              offset: 0,
-              limit: 10
-            }
-          })
+          const data = store.readQuery({ query: GET_EVENTS_QUERY})
           // Add our comment from the mutation to the end.
 
-          let updatedEvents = data.getEvents.map(item => {
-            if (item.id === event.id) {
+          let updatedEvents = data.getEvents.map(event => {
+            if (event.id === event.id) {
               return {...event, __typename: 'Event'}
             }
-            return item
+            return event
           })
 
           data.getEvents = updatedEvents
 
           // Write our data back to the cache.
-          store.writeQuery({ query: GET_PROJECTS_QUERY, data })
+          store.writeQuery({ query: GET_EVENTS_QUERY, data })
         }})
-        .then(res => {          
-
+        .then(res => {      
           const { success, event, errors } = res.data.updateEvent
 
           if (success) {
@@ -104,7 +102,7 @@ class FormPage extends Component {
               text: T.translate("events.form.flash.success_update", { title: event.title})
             })  
 
-            this.context.router.history.push('/events')
+            this.props.toggleConfirmationModal()
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -124,7 +122,7 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_PROJECTS_QUERY,
+            const data = store.readQuery({ query: GET_EVENTS_QUERY,
               variables: {
                 order: 'DESC',
                 offset: 0,
@@ -134,7 +132,7 @@ class FormPage extends Component {
             // Add our comment from the mutation to the end.
             data.getEvents.push(event)
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_PROJECTS_QUERY, data })
+            store.writeQuery({ query: GET_EVENTS_QUERY, data })
           }})
           .then(res => {          
 
@@ -146,7 +144,7 @@ class FormPage extends Component {
                 text: T.translate("events.form.flash.success_create", { title: event.title})
               })  
 
-              this.context.router.history.push('/events')
+              this.props.toggleConfirmationModal()
             } else {
               let errorsList = {}
               errors.map(error => errorsList[error.path] = error.message)
@@ -172,11 +170,11 @@ class FormPage extends Component {
            { id ? T.translate("events.form.edit_event") : T.translate("events.form.new_event") }
         </Modal.Header>
         <Modal.Content>
-          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+          <Form loading={isLoading}>
 
             { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
             
-            <Form.Field error={!!errors.name}>
+            <Form.Field error={!!errors.title}>
               <label>{T.translate("events.form.title")}</label>
               <Input
                 placeholder={T.translate("events.form.title")}
@@ -214,7 +212,7 @@ class FormPage extends Component {
         </Modal.Content>
         <Modal.Actions>
           <button className="ui button" onClick={toggleConfirmationModal}>{T.translate("events.form.cancel")}</button>
-          <button disabled={isLoading} className="ui primary button">
+          <button disabled={isLoading} className="ui primary button" onClick={this.handleSubmit.bind(this)}>
             <i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("events.form.save")}
           </button>
         </Modal.Actions>
@@ -224,11 +222,21 @@ class FormPage extends Component {
 }
 
 FormPage.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired,
   start: PropTypes.object.isRequired,
   end: PropTypes.object.isRequired,
   openConfirmationModal: PropTypes.bool.isRequired
 }
 
-export default FormPage
+const Mutations =  compose(
+  graphql(CREATE_EVENT_MUTATION, {
+    name : 'createEventMutation'
+  }),
+  graphql(UPDATE_EVENT_MUTATION, {
+    name: 'updateEventMutation'
+  })
+)(FormPage)
+
+export default connect(null, { addFlashMessage } ) (Mutations)
 
 

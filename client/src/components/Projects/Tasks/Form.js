@@ -325,7 +325,6 @@ class Form extends Component {
           store.writeQuery({ query: GET_PROJECT_QUERY, data }) 
         }})
         .then(res => {
-
           const { success, task, errors } = res.data.updateTask
 
           if (success) {
