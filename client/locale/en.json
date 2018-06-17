@@ -766,8 +766,21 @@
       "header": "Events",
       "description": "Organize your schedules and appointements here."
     },
-    "new": {
-      "select_color": "-Select color-"
+    "form": {
+      "new_event": "New Event",
+      "edit_event": "Edit Event",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "title": "Title (*)",
+      "description": "Description",
+      "url": "URL",
+      "title_required": "Title is required",
+      "flash": {
+        "success_create": "Event *{title}* is created!",
+        "success_update": "Event *{title}* is updated!"
+      },
+      "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
     }
   }
 }

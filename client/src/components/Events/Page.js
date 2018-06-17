@@ -1,20 +1,21 @@
 // import React...
-import React from 'react'
+import React, { Component } from 'react'
 
-// ... and fullcalendar-reactwrapper.
 import 'fullcalendar'
 
 import $ from 'jquery'
 
 import 'fullcalendar/dist/fullcalendar.min.css'
 
-class Page extends React.Component {
+import FromPage from './FormPage'
+
+class Page extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      description: "",
-      url: "",
+      start: null,
+      end: null,
+      openConfirmationModal: false,
       events:[
         {
           title: 'All Day Event',
@@ -80,30 +81,40 @@ class Page extends React.Component {
       // dayClick: function(date, jsEvent, view) {
       //   console.log('clicked on ' + date.format())
       // },
-      select: function( start, end, jsEvent, view) {
+      select: ( start, end, jsEvent, view) => {
+        this.setState(state => ({ start, end }))
+        this.toggleConfirmationModal()
         console.log('select start' + start)
         console.log('select end' +end)
       },
-      eventDragStart: function(event, jsEvent, ui, view) {
+      eventDragStart: (event, jsEvent, ui, view) => {
         console.log('eventDragStart date ' + event)
         console.log('eventDragStart envet' + jsEvent)
       },
-      eventDragStop: function(event, jsEvent, ui, view) {
+      eventDragStop: (event, jsEvent, ui, view) => {
         console.log('eventDragStop date ' + event)
         console.log('eventDragStop envet' + jsEvent)
       }
     })
   }
 
+  toggleConfirmationModal = () => {    
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal }))
+  }
+
   render() {
-    return (
-      <div className="row column"> 
-        <div className="twelve wide column centered grid">
-          <div className="ui segment">
-            <div id="calendar"></div>
+     const { start, end, openConfirmationModal } = this.state
+
+    return [
+        <div key="segment" className="row column"> 
+          <div className="twelve wide column centered grid">
+            <div className="ui segment">
+              <div id="calendar"></div>
+            </div>
           </div>
-        </div>
-      </div>)
+        </div>,      
+        <div key='form-page'>{ start && end && <FromPage start={start} end={end} openConfirmationModal={openConfirmationModal} toggleConfirmationModal={this.toggleConfirmationModal} /> }</div> 
+      ]
   }
 }
 

@@ -4,19 +4,43 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
   Query: {
     getEvent: requiresAuth.createResolver((parent, {id}, { models }) => models.Event.findOne({ where: {id} })),
-    getEvents: requiresAuth.createResolver((parent, args, { models }) => models.Event.findAll({ 
-        where: { start: {
+    
+    getEvents: requiresAuth.createResolver((parent, args, { models }) => models.Event.findAll()),
+
+    getProjectEvents: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Project.findAll({ 
+        where: { deadline: {
           [models.sequelize.Op.gt]: new Date()
-        }}}))
+        }}})
+        .then(project => {
+            return {
+              id: project.id,
+              title: project.name,
+              description: project.description,
+              start: project.deadline,
+              end: project.deadline
+            }
+          })
+          .catch(err => {
+            console.log('err: ', err)
+          })
+      ),
+
+    getSaleEvents: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Sale.findAll({ 
+        where: { deadline: {
+          [models.sequelize.Op.gt]: new Date()
+        }}})
+      )
   },
 
   Mutation: {
     createEvent: requiresAuth.createResolver((parent, args, { models }) => 
       models.Event.create(args)
-        .then(Event => {
+        .then(event => {
             return {
               success: true,
-              Event
+              event
             }
           })
           .catch(err => {

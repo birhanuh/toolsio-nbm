@@ -722,6 +722,9 @@ nav.ui.menu .item>a {
 }
 
 // Events 
+.fc-event, .fc-event-dot {
+  background-color: $turquoise;
+}
 .fc-right, .fc-left {
  .fc-button-group {
     display: -webkit-inline-box;
@@ -742,7 +745,7 @@ nav.ui.menu .item>a {
     outline: 0;
     border: none;
     vertical-align: baseline;
-    background: transparent none!important;
+    background: $medium-grey;
     color: rgba(0,0,0,.6)!important;
     font-weight: 400;
     border-radius: 0;
@@ -755,6 +758,20 @@ nav.ui.menu .item>a {
     text-shadow: none!important;
     -webkit-box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
     box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+    -webkit-appearance: none;
+  }
+  button:hover, button.focus {
+    background: $dark-medium-grey;
+  }
+  button.fc-state-active {
+    background: $dark-medium-grey;
+  }
+  button.fc-state-disabled {
+    cursor: default;
+    opacity: 0.45 !important;
+  }
+  button.fc-state-disabled:hover {
+    background: $medium-grey;
   }
   > :first-child {  
     border-left: none;

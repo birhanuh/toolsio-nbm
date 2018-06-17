@@ -3,8 +3,17 @@ export default `
   type Event {
     id: Int!
     title: String!
-    description: String!
-    url: String!
+    description: String
+    url: String
+    start: Date!
+    end: Date!
+  }
+
+  type ProjectSaleEvent {
+    id: Int!
+    title: String!
+    description: String
+    url: String
     start: Date!
     end: Date!
   }
@@ -24,10 +33,14 @@ export default `
     getEvent(id: Int!): Event!
     
     getEvents: [Event!]!
+
+    getProjectEvents: [ProjectSaleEvent!]!
+
+    getSaleEvents: [ProjectSaleEvent!]!
   }
 
   type Mutation {
-    createEvent(title: String!, description: String!, url: String!, start: Date!, end: Date!): CreateUpdateEventResponse!
+    createEvent(title: String!, description: String, url: String, start: Date!, end: Date!): CreateUpdateEventResponse!
 
     updateEvent(id: Int!, title: String, description: String, url: String, start: Date, end: Date): CreateUpdateEventResponse!
 
