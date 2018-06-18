@@ -11,23 +11,22 @@ export default {
     createItem: requiresAuth.createResolver((parent, args, { models }) => 
       models.Item.create(args)
         .then(item => {
-            return {
-              success: true,
-              item
-            }
-          })
-          .catch(err => {
-            console.log('err: ', err)
-            return {
-              success: false,
-              errors: formatErrors(err, models)
-            }
-          })),
+          return {
+            success: true,
+            item
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })),
 
     updateItem: requiresAuth.createResolver((parent, args, { models }) => 
       models.Item.update(args, { where: {id: args.id}, returning: true, plain: true })
-        .then(result => {
-  
+        .then(result => {  
           return {
             success: true,
             item: result[1].dataValues
@@ -43,8 +42,7 @@ export default {
 
     deleteItem: requiresAuth.createResolver((parent, args, { models }) => 
       models.Item.destroy({ where: {id: args.id}, force: true })
-        .then(res => {
-          
+        .then(res => {          
           return {
             success: (res === 1)
           }

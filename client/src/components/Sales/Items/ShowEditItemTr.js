@@ -5,7 +5,7 @@ import { Input, Select, Form } from 'semantic-ui-react'
 // Localization 
 import T from 'i18n-react'
 
-export default function ShowEditItemTr({item, editItem, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, handleEditItemBlur, showConfirmationModal}) {
+export default function ShowEditItemTr({item, editItem, handleEdit, handleCancelEdit, handleUpdate, handleEditItemChange, handleEditItemBlur, toggleConfirmationModal}) {
   return (
     <tr key={item.id} id={item.id}>      
       <td className="show-item">{item.name}</td>
@@ -15,7 +15,7 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
       <td className="show-item">{item.total}</td>
       <td className="show-item" width="120px">
         <div className="show-item ui fluid small buttons">
-          <button className="ui negative icon basic button" onClick={showConfirmationModal}><i className="delete icon"></i></button>
+          <button className="ui negative icon basic button" onClick={toggleConfirmationModal}><i className="delete icon"></i></button>
           <button className="ui positive icon basic button" onClick={handleEdit}><i className="edit icon"></i></button>
         </div>
       </td>

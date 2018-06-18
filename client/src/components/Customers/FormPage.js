@@ -161,6 +161,7 @@ class FormPage extends Component {
             if (!success) {
               return
             }
+
             // Read the data from our cache for this query.
             const data = store.readQuery({ query: GET_CUSTOMERS_QUERY,
               variables: {
@@ -169,17 +170,14 @@ class FormPage extends Component {
                 limit: 10
               } 
            })
-            // Add our comment from the mutation to the end.
-            
+            // Add our Customer from the mutation to the end.            
             let updatedCustomers = data.getCustomers.customers.map(item => {
               if (item.id === customer.id) {
                 return {...customer, __typename: 'Customer'}
               }
               return item
             })
-
             data.getCustomers = updatedCustomers
-
             // Write our data back to the cache.
             store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
           }})
@@ -220,6 +218,7 @@ class FormPage extends Component {
             if (!success) {
               return
             }
+
             // Read the data from our cache for this query.
             const data = store.readQuery({ query: GET_CUSTOMERS_QUERY,
               variables: {
@@ -228,7 +227,7 @@ class FormPage extends Component {
                 limit: 10
               }  
             })
-            // Add our comment from the mutation to the end.
+            // Add our Customer from the mutation to the end.
             data.getCustomers.customers.push(customer)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })

@@ -103,9 +103,8 @@ class UserForm extends Component {
       // Make submit
       this.props.updateUserMutation({ variables: { firstName, lastName, email, password, confirmPassword, avatarUrl } })
         .then((res) => {
-
-          const { success, errors } = res.data.updateUser
-           
+          const { success, errors } = res.data.updateUser     
+                
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
@@ -115,7 +114,6 @@ class UserForm extends Component {
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
-
             this.setState({ errors: errorsList, isLoading: false })
           }
         })

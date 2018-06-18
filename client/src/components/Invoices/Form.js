@@ -201,6 +201,7 @@ class Form extends Component {
           if (!success) {
             return
           }
+
           // Read the data from our cache for this query.
           const data = store.readQuery({ query: GET_INVOICES_QUERY, 
             variables: {
@@ -209,17 +210,14 @@ class Form extends Component {
               limit: 10
             } 
           })
-          // Add our comment from the mutation to the end.
-          
+          // Add our Invoice from the mutation to the end.          
           let updatedInvoices = data.getInvoices.invoices.map(item => {
             if (item.id === invoice.id) {
               return {...invoice, __typename: 'Invoice'}
             }
             return item
           })
-
           data.getInvoices = updatedInvoices
-
           // Write our data back to the cache.
           store.writeQuery({ query: GET_INVOICES_QUERY, data })
         }})
@@ -252,6 +250,7 @@ class Form extends Component {
             if (!success) {
               return
             }
+
             // Read the data from our cache for this query.
             const data = store.readQuery({ query: GET_INVOICES_QUERY,
               variables: {
@@ -260,7 +259,7 @@ class Form extends Component {
                 limit: 10
               } 
             })
-            // Add our comment from the mutation to the end.
+            // Add our Invoice from the mutation to the end.
             data.getInvoices.invoices.push(invoice)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_INVOICES_QUERY, data })

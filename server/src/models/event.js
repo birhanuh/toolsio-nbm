@@ -15,7 +15,6 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
     end: {
-      allowNull: false,
       type: DataTypes.DATE
     }
   })

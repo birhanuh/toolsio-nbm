@@ -27,7 +27,7 @@ export const GET_EVENT_QUERY = gql`
 `
 
 export const CREATE_EVENT_MUTATION = gql`
-  mutation createEvent($title: String!, $description: String, $url: String, $start: Date!, $end: Date!) {
+  mutation createEvent($title: String!, $description: String, $url: String, $start: Date!, $end: Date) {
     createEvent(title: $title, description: $description, url: $url, start: $start, end: $end) {
       success
       event {

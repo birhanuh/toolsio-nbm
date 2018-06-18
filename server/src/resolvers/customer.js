@@ -62,8 +62,7 @@ export default {
 
     deleteCustomer: requiresAuth.createResolver((parent, args, { models }) => 
       models.Customer.destroy({ where: {id: args.id}, force: true })
-        .then(res => {
-          
+        .then(res => {          
           return {
             success: (res === 1)
           }

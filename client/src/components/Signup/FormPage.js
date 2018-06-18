@@ -91,8 +91,7 @@ class FormPage extends Component {
       const { account: { subdomain, industry }, user: { firstName, lastName, email, password } } = this.state
       
       this.props.mutate({variables: { firstName, lastName, email, password, subdomain, industry }})
-        .then(res => {
-      
+        .then(res => {      
           const { success, account, errors } = res.data.registerUser
          
           if (success) {

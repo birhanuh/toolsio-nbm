@@ -17,12 +17,27 @@ class FormPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: null,
-      title: "",
-      description: "",
-      url: "",
+      start: this.props.start ? this.props.start : "",
+      end: this.props.end ? this.props.end : "",
+      id: this.props.id ? this.props.id : null,
+      title: this.props.title ? this.props.title : "",
+      description: this.props.description ? this.props.description : "",
+      url: this.props.url ? this.props.url : "",
       errors: {},
       isValid: false
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {  
+    if (nextProps) {
+      this.setState({
+        start: nextProps.start,
+        end: nextProps.end,
+        id: nextProps.id,
+        title: nextProps.title,
+        description: nextProps.description,
+        url: nextProps.url
+      })
     }
   }
 
@@ -54,7 +69,7 @@ class FormPage extends Component {
     if (!isValid) {
       this.setState({ errors: updatedErrors })
     }
-    console.log('isValid ', isValid)
+  
     return isValid
   }
 
@@ -65,8 +80,7 @@ class FormPage extends Component {
     if (this.isValid()) { 
       this.setState({ isLoading: true })
 
-      const { id, title, url, description } = this.state
-      const { start, end } = this.props
+      const { start, end, id, title, url, description } = this.state
 
       if (id) {
         this.props.updateEventMutation({ 
@@ -78,9 +92,9 @@ class FormPage extends Component {
             return
           }
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: GET_EVENTS_QUERY})
-          // Add our comment from the mutation to the end.
+          const data = store.readQuery({ query: GET_EVENTS_QUERY })
 
+          // Add our event from the mutation to the end.
           let updatedEvents = data.getEvents.map(event => {
             if (event.id === event.id) {
               return {...event, __typename: 'Event'}
@@ -102,6 +116,7 @@ class FormPage extends Component {
               text: T.translate("events.form.flash.success_update", { title: event.title})
             })  
 
+            this.setState({ isLoading: false })
             this.props.toggleConfirmationModal()
           } else {
             let errorsList = {}
@@ -114,7 +129,7 @@ class FormPage extends Component {
       } else {
        
         this.props.createEventMutation({ 
-          variables: { id, title, url, description, start, end },
+          variables: { start, end, id, title, url, description },
           update: (store, { data: { createEvent } }) => {
             const { success, event } = createEvent
 
@@ -122,13 +137,8 @@ class FormPage extends Component {
               return
             }
             // Read the data from our cache for this query.
-            const data = store.readQuery({ query: GET_EVENTS_QUERY,
-              variables: {
-                order: 'DESC',
-                offset: 0,
-                limit: 10
-              } 
-            })
+            const data = store.readQuery({ query: GET_EVENTS_QUERY })
+
             // Add our comment from the mutation to the end.
             data.getEvents.push(event)
             // Write our data back to the cache.
@@ -144,6 +154,7 @@ class FormPage extends Component {
                 text: T.translate("events.form.flash.success_create", { title: event.title})
               })  
 
+              this.setState({ isLoading: false })
               this.props.toggleConfirmationModal()
             } else {
               let errorsList = {}
@@ -223,8 +234,11 @@ class FormPage extends Component {
 
 FormPage.propTypes = {
   addFlashMessage: PropTypes.func.isRequired,
-  start: PropTypes.object.isRequired,
-  end: PropTypes.object.isRequired,
+  start: PropTypes.object,
+  end: PropTypes.object,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  url: PropTypes.string,
   openConfirmationModal: PropTypes.bool.isRequired
 }
 

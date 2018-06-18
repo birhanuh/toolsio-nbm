@@ -15,9 +15,12 @@ class Page extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      start: null,
-      end: null,
-      events: this.props.data.getEvents ? this.props.data.getEvents : [],
+      start: {},
+      end: {},
+      id: null,
+      title: "",
+      description: "",
+      url: "",
       openConfirmationModal: false
     }
   }
@@ -27,7 +30,6 @@ class Page extends Component {
       this.setState({
         events: nextProps.data.getEvents
       })
-
       // Remove previous events and re-fetch manually by adding event source
       $("#calendar").fullCalendar('removeEvents')
       $('#calendar').fullCalendar('addEventSource', {
@@ -37,7 +39,6 @@ class Page extends Component {
   }
 
   componentDidMount = () => {    
-    const { events } = this.state.events
    
     $('#calendar').fullCalendar({
       themeSystem: 'standard',
@@ -52,21 +53,21 @@ class Page extends Component {
       editable: true,
       eventLimit: true, // allow "more" link when too many events
       selectable: true,
-      events: events,
+      events: this.props.data.getEvents,
       // put your options and callbacks here
       // dayClick: function(date, jsEvent, view) {
       //   console.log('clicked on ' + date.format())
       // },
       select: ( start, end, jsEvent, view) => {
-        this.setState(state => ({ start, end }))
-        this.toggleConfirmationModal()
-        console.log('select start' + start)
-        console.log('select end' +end)
+        this.setState(state => ({ start, end, id: null, title: "", description: "", url: "" }))
+        this.toggleConfirmationModal() 
       },
-      eventClick: function(event, element) {
-        console.log('event', event.id)
-        event.title = "CLICKED!"
-        $('#calendar').fullCalendar('updateEvent', event)
+      eventClick: (event, element) => {
+        this.setState(state => ({ start: event.start, end: event.end, id: event.id, title: event.title, description: event.description, url: event.url }))
+        this.toggleConfirmationModal()
+        console.log('title ' +this.state.title)
+        // event.title = "CLICKED!"
+        // $('#calendar').fullCalendar('updateEvent', event)
       },
       eventDragStart: (event, jsEvent, ui, view) => {
         console.log('eventDragStart date ' + event)
@@ -84,7 +85,7 @@ class Page extends Component {
   }
 
   render() {
-    const { start, end, events, openConfirmationModal } = this.state
+    const { start, end, id, title, description, url, openConfirmationModal } = this.state
 
     return [
         <div key="segment" className="row column"> 
@@ -94,7 +95,7 @@ class Page extends Component {
             </div>
           </div>
         </div>,      
-        <div key='form-page'>{ start && end && <FromPage start={start} end={end} openConfirmationModal={openConfirmationModal} toggleConfirmationModal={this.toggleConfirmationModal} /> }</div> 
+        <FromPage key="form-page" start={start} end={end} id={id} title={title} description={description} url={url} openConfirmationModal={openConfirmationModal}  toggleConfirmationModal={this.toggleConfirmationModal} /> 
       ]
   }
 }

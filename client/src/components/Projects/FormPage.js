@@ -98,6 +98,7 @@ class FormPage extends Component {
           if (!success) {
             return
           }
+
           // Read the data from our cache for this query.
           const data = store.readQuery({ query: GET_PROJECTS_QUERY,
             variables: {
@@ -106,17 +107,14 @@ class FormPage extends Component {
               limit: 10
             }
           })
-          // Add our comment from the mutation to the end.
-
+          // Add our Project from the mutation to the end.
           let updatedProjects = data.getProjects.map(item => {
             if (item.id === project.id) {
               return {...project, __typename: 'Project'}
             }
             return item
           })
-
           data.getProjects = updatedProjects
-
           // Write our data back to the cache.
           store.writeQuery({ query: GET_PROJECTS_QUERY, data })
         }})
@@ -148,6 +146,7 @@ class FormPage extends Component {
             if (!success) {
               return
             }
+
             // Read the data from our cache for this query.
             const data = store.readQuery({ query: GET_PROJECTS_QUERY,
               variables: {
@@ -156,7 +155,7 @@ class FormPage extends Component {
                 limit: 10
               } 
             })
-            // Add our comment from the mutation to the end.
+            // Add our Project from the mutation to the end.
             data.getProjects.push(project)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_PROJECTS_QUERY, data })

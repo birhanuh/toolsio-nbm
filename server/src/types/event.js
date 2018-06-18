@@ -6,7 +6,7 @@ export default `
     description: String
     url: String
     start: Date!
-    end: Date!
+    end: Date
   }
 
   type ProjectSaleEvent {
@@ -15,7 +15,7 @@ export default `
     description: String
     url: String
     start: Date!
-    end: Date!
+    end: Date
   }
 
   type CreateUpdateEventResponse {
@@ -40,7 +40,7 @@ export default `
   }
 
   type Mutation {
-    createEvent(title: String!, description: String, url: String, start: Date!, end: Date!): CreateUpdateEventResponse!
+    createEvent(title: String!, description: String, url: String, start: Date!, end: Date): CreateUpdateEventResponse!
 
     updateEvent(id: Int!, title: String, description: String, url: String, start: Date, end: Date): CreateUpdateEventResponse!
 

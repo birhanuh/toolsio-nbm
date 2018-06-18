@@ -53,11 +53,10 @@ export default {
 
     updateEvent: requiresAuth.createResolver((parent, args, { models }) => 
       models.Event.update(args, { where: {id: args.id}, returning: true, plain: true })
-        .then(result => {
-  
+        .then(result => {  
           return {
             success: true,
-            Event: result[1].dataValues
+            event: result[1].dataValues
           }
         })
         .catch(err => {
@@ -70,8 +69,7 @@ export default {
 
     deleteEvent: requiresAuth.createResolver((parent, args, { models }) => 
       models.Event.destroy({ where: {id: args.id}, force: true })
-        .then(res => {
-          
+        .then(res => {          
           return {
             success: (res === 1)
           }
