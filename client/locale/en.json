@@ -46,9 +46,9 @@
       "name_required": "Name is required",
       "email_required": "Email is required",
       "message_body_required": "Message is required",
-      "create": {
-        "notice": "Thank you for your message. We will contact you soon!",
-        "error": "Can not send message."
+      "flash": {
+        "success_create_contact_message": "Thank you for your message. We will contact you back soon!",
+        "error_create_contact_message": "Something went wrong when sending your message. Try sending us again."
       }
     },
     "footer": {

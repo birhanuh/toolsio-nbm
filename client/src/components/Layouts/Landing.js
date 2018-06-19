@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 // Semantic UI JS
 import { Input, TextArea, Form } from 'semantic-ui-react'
+import { graphql, compose } from 'react-apollo'
+import { CREATE_CONTACT_MESSAGE_MUTATION } from '../../graphql/contactMessage'
 
 // Localization 
 import T from 'i18n-react'
@@ -67,6 +72,31 @@ class Landing extends Component {
       $("html, body").animate({ scrollTop: 0 }, 1000)
       return false
     }) 
+
+    // Custome carousel
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+      let i
+      let slides = $(".slide-item")
+      let dots = $(".dot")
+      
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none"  
+      }
+      
+      slideIndex++
+      if (slideIndex > slides.length) {slideIndex = 1}    
+      
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "")
+      }
+
+      slides[slideIndex-1].style.display = "block"  
+      dots[slideIndex-1].className += " active"
+      setTimeout(showSlides, 5000); // Change image every 5 seconds
+    }
   }
 
   handleSubmit = async (event) => {
@@ -75,10 +105,10 @@ class Landing extends Component {
     // Validation
     if (this.isValid()) { 
       this.setState({ isLoading: true })
-      const { name, email, message } = this.state
+      const { name, email, messageBody } = this.state
         
         this.props.createContactMessageMutation({ 
-          variables: { name, email, message, },
+          variables: { name, email, messageBody, },
           })
           .then(res => {   
             const { success, errors } = res.data.createContactMessage
@@ -96,7 +126,14 @@ class Landing extends Component {
               this.setState({ errors: errorsList, isLoading: false })
             }
           })
-          .catch(err => this.setState({ errors: err, isLoading: false }))
+          .catch(err => {
+              this.props.addFlashMessage({
+                type: 'error',
+                text: T.translate("landing.contacts.flash.error_create_contact_message")
+              })  
+              
+              this.setState({ errors: err, isLoading: false })
+            })
     }
   }    
   
@@ -180,27 +217,34 @@ class Landing extends Component {
 
         <div id="testimonials" className="ui vertical stripe">
           <div className="ui text container">
-            <div className="center aligned row">
-              <div className="column">
+            <div className="ui center aligned grid">
+              <div className="column row">
                 <div className="slider slider1"> 
                   <div className="slides">
-                    <div className="slide-item item1">
+                    <div className="slide-item item1 fade">
                       <i className="quote left icon"></i>
-                      <h5 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
+                      <h5 className="ui header">Simply dummy text of the printing and typesetting industry. Simply dummy text of the printing and typesetting industry. Simply dummy text of the printing and typesetting industry.</h5>
                       <p>- Jonathan Deo</p>
                     </div>    
-                    <div className="slide-item item2">
+                    <div className="slide-item item2 fade">
                       <i className="quote left icon"></i>
-                      <h5 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
-                      <p>- Jonathan Deo</p>
+                      <h5 className="ui header">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Simply dummy text of the printing and typesetting industry.</h5>
+                      <p>- Anthon Marchal</p>
                     </div>  
-                    <div className="slide-item item3">
+                    <div className="slide-item item3 fade">
                       <i className="quote left icon"></i>
-                      <h5 className="ui header"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, dolorum, fugiat, eligendi magni quibusdam iure cupiditate ex voluptas unde Lorem ipsum dolor sit amet..</h5>
-                      <p>- Jonathan Deo</p>
+                      <h5 className="ui header">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</h5>
+                      <p>- Thomas Deep</p>
                     </div>  
                   </div>
                 </div>
+              </div>
+            </div>            
+            <div className="ui centered grid">
+              <div className="column row">
+                <span className="dot"></span> 
+                <span className="dot"></span> 
+                <span className="dot"></span> 
               </div>
             </div>
           </div>  
@@ -325,4 +369,14 @@ class Landing extends Component {
   }  
 }
 
-export default Landing
+Landing.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+}
+
+const MutationsQuery =  compose(
+  graphql(CREATE_CONTACT_MESSAGE_MUTATION, {
+    name : 'createContactMessageMutation'
+  })
+)(Landing)
+
+export default connect(null, { addFlashMessage } ) (MutationsQuery)
