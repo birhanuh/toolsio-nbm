@@ -88,7 +88,6 @@ class Form extends Component {
 
       this.props.mutate({variables: { email, password }})
         .then(res => {
-         
           const { success, authToken, refreshAuthToken, errors } = res.data.loginUser
       
           if (success) {

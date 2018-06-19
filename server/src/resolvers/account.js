@@ -43,8 +43,8 @@ export default {
         })
     ,
 
-    updateAccount: requiresAuth.createResolver((parent, args, { models, user }) => {
-      return models.Account.update(args, { where: {subdomain: args.subdomain}, returning: true, plain: true })
+    updateAccount: requiresAuth.createResolver((parent, args, { models, user }) =>
+      models.Account.update(args, { where: {subdomain: args.subdomain}, returning: true, plain: true })
         .then(result => {
           console.log('retur: ', result)
           // Delete previous logoUrl from S3
@@ -74,13 +74,11 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    }),
+        })),
 
-    deleteAccount: requiresAuth.createResolver((parent, args, { models }) => {
-      return models.Account.destroy({ where: {subdomain: args.subdomain}, force: true })
-        .then(res => {
-          
+    deleteAccount: requiresAuth.createResolver((parent, args, { models }) => 
+      models.Account.destroy({ where: {subdomain: args.subdomain}, force: true })
+        .then(res => {          
           return {
             success: (res === 1)
           }
@@ -91,8 +89,7 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })
-    }),
+        })),
 
     s3SignLogo: requiresAuth.createResolver(async (parent, args) => {
 

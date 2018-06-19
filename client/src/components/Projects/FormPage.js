@@ -87,7 +87,6 @@ class FormPage extends Component {
     // Validation
     if (this.isValid()) { 
       this.setState({ isLoading: true })
-
       const { id, name, deadline, status, progress, description, customerId } = this.state
       
       if (id) {
@@ -99,6 +98,7 @@ class FormPage extends Component {
           if (!success) {
             return
           }
+
           // Read the data from our cache for this query.
           const data = store.readQuery({ query: GET_PROJECTS_QUERY,
             variables: {
@@ -107,17 +107,14 @@ class FormPage extends Component {
               limit: 10
             }
           })
-          // Add our comment from the mutation to the end.
-
+          // Add our Project from the mutation to the end.
           let updatedProjects = data.getProjects.map(item => {
             if (item.id === project.id) {
               return {...project, __typename: 'Project'}
             }
             return item
           })
-
           data.getProjects = updatedProjects
-
           // Write our data back to the cache.
           store.writeQuery({ query: GET_PROJECTS_QUERY, data })
         }})
@@ -140,8 +137,7 @@ class FormPage extends Component {
           }
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
-      } else {
-       
+      } else {       
         this.props.createProjectMutation({ 
           variables: { name, deadline, status, progress, description, customerId: parseInt(customerId) },
           update: (store, { data: { createProject } }) => {
@@ -150,6 +146,7 @@ class FormPage extends Component {
             if (!success) {
               return
             }
+
             // Read the data from our cache for this query.
             const data = store.readQuery({ query: GET_PROJECTS_QUERY,
               variables: {
@@ -158,13 +155,12 @@ class FormPage extends Component {
                 limit: 10
               } 
             })
-            // Add our comment from the mutation to the end.
+            // Add our Project from the mutation to the end.
             data.getProjects.push(project)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_PROJECTS_QUERY, data })
           }})
-          .then(res => {          
-
+          .then(res => {   
             const { success, project, errors } = res.data.createProject
 
             if (success) {

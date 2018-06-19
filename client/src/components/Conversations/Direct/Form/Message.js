@@ -136,8 +136,7 @@ class Message extends Component {
           store.writeQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY, data })
         }
       })
-      .then(res => {            
-
+      .then(res => {          
         const { success, errors } = res.data.createDirectMessage
 
         if (success) {              

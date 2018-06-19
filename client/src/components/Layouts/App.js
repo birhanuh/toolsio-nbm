@@ -25,6 +25,7 @@ import InvoicesForm from '../Invoices/Form'
 import InvoicesShow from '../Invoices/Show/Page'
 import ConversationsPage from '../Conversations/Page'
 import UsersPage from '../Users/Page'
+import EventsPage from '../Events/Page'
 
 import HeaderNav from './HeaderNav'
 import FlashMessage from '../../flash/FlashMessage'
@@ -154,6 +155,7 @@ class App extends Component {
               <PrivateRoute exact path="/conversations/channel/:channelId" component={ConversationsPage} />
               <PrivateRoute exact path="/conversations/receiver/:receiverId" component={ConversationsPage} />
               <PrivateRoute exact path="/users" component={UsersPage} /> 
+              <PrivateRoute exact path="/events" component={EventsPage} /> 
             </Switch>
           </section>
           

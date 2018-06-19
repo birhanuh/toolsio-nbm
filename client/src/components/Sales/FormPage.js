@@ -145,6 +145,7 @@ class FormPage extends Component {
             if (!success) {
               return
             }
+            
             // Read the data from our cache for this query.
             const data = store.readQuery({ query: GET_SALES_QUERY,
               variables: {
@@ -153,7 +154,7 @@ class FormPage extends Component {
                 limit: 10
               } 
             })
-            // Add our comment from the mutation to the end.
+            // Add our Sale from the mutation to the end.
             data.getSales.push(sale);
             // Write our data back to the cache.
             store.writeQuery({ query: GET_SALES_QUERY, data });

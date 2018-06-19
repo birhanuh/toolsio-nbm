@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
+// Semantic UI JS
+import { Modal } from 'semantic-ui-react'
 import AddItemTr from './AddItemTr'
 import ShowEditItemTr from './ShowEditItemTr'
 import { graphql, compose } from 'react-apollo'
@@ -14,10 +16,6 @@ import { CREATE_ITEM_MUTATION, UPDATE_ITEM_MUTATION, DELETE_ITEM_MUTATION } from
 import T from 'i18n-react'
 
 import $ from 'jquery'
-
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
 
 class Form extends Component {
    constructor(props) {
@@ -46,6 +44,7 @@ class Form extends Component {
       },      
       itemToBeDeleated: {},
       errors: {},
+      openConfirmationModal: false 
     }
   }
 
@@ -136,13 +135,12 @@ class Form extends Component {
               id: saleId,
             }
           })
-          // Add our comment from the mutation to the end.
+          // Add our Task from the mutation to the end.
           data.getSale.items.push(item)
           // Write our data back to the cache.
           store.writeQuery({ query: GET_SALE_QUERY, data }) 
         }})
       .then(res => {
-
           const { success, item, errors } = res.data.createItem
 
           if (success) {
@@ -301,7 +299,7 @@ class Form extends Component {
                 id: saleId,
               }
              })
-          // Add our comment from the mutation to the end.
+          // Add our Item from the mutation to the end.
           let updatedItems = data.getSale.items.map(item2 => {
             if (item2.id === item.id) {
               return {...item, __typename: 'Item'}
@@ -309,12 +307,10 @@ class Form extends Component {
             return item2
           })
           data.getSale.items = updatedItems
-
           // Write our data back to the cache.
           store.writeQuery({ query: GET_SALE_QUERY, data })
         }})
       .then(res => {
-
           const { success, item, errors } = res.data.updateItem
 
           if (success) {
@@ -359,22 +355,12 @@ class Form extends Component {
     }
   }
 
-  showConfirmationModal(item, event) {
-    event.preventDefault()
-    
-    this.setState({
-      itemToBeDeleated: item
-    })
+  toggleConfirmationModal = (item, event) => {
+    if (event) {
+      event.preventDefault() 
+    }
 
-    // Show modal
-    $('.small.modal.item').modal('show')
-  }
-    
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.item').modal('hide')
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal, itemToBeDeleated: item }))
   }
 
   handleDelete(item, event) {
@@ -391,17 +377,16 @@ class Form extends Component {
         if (!success) {
           return
         }
+
         // Read the data from our cache for this query.
         const data = proxy.readQuery({ query: GET_SALE_QUERY,
             variables: {
               id: saleId,
             } 
           })
-        // Add our comment from the mutation to the end.
-   
+        // Add our Item from the mutation to the end.   
         let updatedItems = data.getSale.items.filter(item => item.id !== id) 
-        data.getSale.items = updatedItems
- 
+        data.getSale.items = updatedItems 
         // Write our data back to the cache.
         proxy.writeQuery({ query: GET_SALE_QUERY, data })
       }})
@@ -415,7 +400,7 @@ class Form extends Component {
             text: T.translate("sales.items.form.flash.success_delete", { name: name})
           })  
 
-          this.setState({ itemToBeDeleated: {} })
+          this.setState({ itemToBeDeleated: {}, openConfirmationModal: !this.state.openConfirmationModal })
         } else {
           let errorsList = {}
           errors.map(error => errorsList[error.path] = error.message)
@@ -429,12 +414,12 @@ class Form extends Component {
           text: T.translate("sales.items.form.flash.error_delete", { name: name})
         })  
 
-        this.setState({ errors: err, isLoading: false })  
+        this.setState({ errors: err, isLoading: false, openConfirmationModal: !this.state.openConfirmationModal })  
       }) 
   }
 
   render() {
-    const { newItem, editItem } = this.state
+    const { newItem, editItem, openConfirmationModal } = this.state
   
     let { items, itemsTotal } = this.props  
 
@@ -449,12 +434,12 @@ class Form extends Component {
           handleEditItemBlur={this.handleEditItemBlur.bind(this)}  
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, item)}
-          showConfirmationModal={this.showConfirmationModal.bind(this, item)}/> 
+          toggleConfirmationModal={this.toggleConfirmationModal.bind(this, item)}/> 
         )
     )
 
-    return(
-      <form className={classnames("ui small form", { loading: newItem.isLoading || editItem.isRequired })}>
+    return [
+      <form key="form" className={classnames("ui small form", { loading: newItem.isLoading || editItem.isRequired })}>
         <table className="ui very basic table items">
           <thead>
             <tr>
@@ -484,18 +469,20 @@ class Form extends Component {
             </tr>
           </tbody>
         </table>
-        <div className="ui small modal item">
-          <div className="header">Confirmation</div>
-          <div className="content">
-            <p className="red">{T.translate("sales.items.form.confirmation_msg")}</p>
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("sales.items.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.itemToBeDeleated)}>{T.translate("sales.items.delete")}</button>
-          </div>
-        </div>
-      </form>
-    )
+      </form>,
+      <Modal 
+        key="modal" 
+        className="ui small modal items"
+        open={openConfirmationModal}>
+        <Modal.Header>{T.translate("sales.items.form.confirmation_header")}</Modal.Header>
+        <Modal.Content>
+         <p className="red">{T.translate("sales.items.form.confirmation_msg")}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="ui button" onClick={this.toggleConfirmationModal}>{T.translate("sales.items.cancel")}</button>
+          <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.itemToBeDeleated)}>{T.translate("sales.items.delete")}</button>
+        </Modal.Actions>
+      </Modal>]
   }
   
 }

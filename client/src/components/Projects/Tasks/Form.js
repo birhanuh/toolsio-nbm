@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
+// Semantic UI JS
+import { Modal } from 'semantic-ui-react'
 import AddTaskTr from './AddTaskTr'
 import ShowEditTaskTr from './ShowEditTaskTr'
 import { graphql, compose } from 'react-apollo'
@@ -14,10 +16,6 @@ import { CREATE_TASK_MUTATION, UPDATE_TASK_MUTATION, DELETE_TASK_MUTATION } from
 import T from 'i18n-react'
 
 import $ from 'jquery'
-
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
 
 class Form extends Component {
    constructor(props) {
@@ -44,7 +42,8 @@ class Form extends Component {
         total: "",
         errors: {},
         isLoading: false
-      }
+      },
+      openConfirmationModal: false 
     }
   }
 
@@ -140,13 +139,12 @@ class Form extends Component {
               id: projectId,
             }
           })
-          // Add our comment from the mutation to the end.
+          // Add our Task from the mutation to the end.
           data.getProject.tasks.push(task)
           // Write our data back to the cache.
           store.writeQuery({ query: GET_PROJECT_QUERY, data }) 
         }})
         .then(res => {
-
           const { success, task, errors } = res.data.createTask
 
           if (success) {
@@ -312,20 +310,18 @@ class Form extends Component {
                 id: projectId,
               }
              })
-          // Add our comment from the mutation to the end.
+          // Add our Task from the mutation to the end.
           let updatedTasks = data.getProject.tasks.map(item => {
             if (item.id === task.id) {
               return {...task, __typename: 'Task'}
             }
             return item
           })
-          data.getProject.tasks = updatedTasks
-      
+          data.getProject.tasks = updatedTasks      
           // Write our data back to the cache.
           store.writeQuery({ query: GET_PROJECT_QUERY, data }) 
         }})
         .then(res => {
-
           const { success, task, errors } = res.data.updateTask
 
           if (success) {
@@ -372,22 +368,12 @@ class Form extends Component {
     }
   }
 
-  showConfirmationModal(task, event) {
-    event.preventDefault()
-    
-    this.setState({
-      taskToBeDeleated: task
-    })
+  toggleConfirmationModal = (task, event) => {
+    if (event) {
+      event.preventDefault() 
+    }
 
-    // Show modal
-    $('.small.modal.task').modal('show')
-  }
-    
-  hideConfirmationModal(event) {
-    event.preventDefault()
-
-    // Show modal
-    $('.small.modal.task').modal('hide')
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal, taskToBeDeleated: task }))
   }
 
   handleDelete(task, event) {
@@ -395,7 +381,7 @@ class Form extends Component {
     
     const { id, name } = task
     const { projectId } = this.props
-
+    
     this.props.deleteTaskMutation({ 
       variables: { id },
       update: (proxy, { data: { deleteTask } }) => {
@@ -404,31 +390,29 @@ class Form extends Component {
         if (!success) {
           return
         }
+        
         // Read the data from our cache for this query.
         const data = proxy.readQuery({ query: GET_PROJECT_QUERY,
             variables: {
               id: projectId,
-            }
+            } 
           })
-        // Add our comment from the mutation to the end.
-   
+        // Add our Task from the mutation to the end.   
         let updatedTasks = data.getProject.tasks.filter(task => task.id !== id) 
-        data.getProject.tasks = updatedTasks
- 
+        data.getProject.tasks = updatedTasks 
         // Write our data back to the cache.
         proxy.writeQuery({ query: GET_PROJECT_QUERY, data })
       }})
       .then(res => {          
-
-        const { success, project, errors } = res.data.deleteTask
+        const { success, errors } = res.data.deleteTask
 
         if (success) {
           this.props.addFlashMessage({
             type: 'success',
-            text: T.translate("projects.tasks.form.flash.success_delete", { name: project.name})
+            text: T.translate("projects.tasks.form.flash.success_delete", { name: name})
           })  
 
-          this.setState({ itemToBeDeleated: {} })
+          this.setState({ taskToBeDeleated: {}, openConfirmationModal: !this.state.openConfirmationModal })
         } else {
           let errorsList = {}
           errors.map(error => errorsList[error.path] = error.message)
@@ -436,18 +420,18 @@ class Form extends Component {
           this.setState({ errors: errorsList, isLoading: false })
         }
       })
-      .catch(() => {
+      .catch(err => {
         this.props.addFlashMessage({
           type: 'error',
           text: T.translate("projects.tasks.form.flash.error_delete", { name: name})
         })  
 
-        this.setState({ errors: err, isLoading: false })  
+        this.setState({ errors: err, isLoading: false, openConfirmationModal: !this.state.openConfirmationModal })  
       }) 
   }
 
   render() {
-    const { newTask, editTask } = this.state
+    const { newTask, editTask,  openConfirmationModal } = this.state
 
     const { tasks, tasksTotal } = this.props
     
@@ -463,12 +447,12 @@ class Form extends Component {
           handleEditTaskBlur={this.handleEditTaskBlur.bind(this)} 
           handleUpdate={this.handleUpdate.bind(this)}
           handleEdit={this.handleEdit.bind(this, task)}
-          showConfirmationModal={this.showConfirmationModal.bind(this, task)}/> 
+          toggleConfirmationModal={this.toggleConfirmationModal.bind(this, task)}/> 
         )
     )
 
-    return(
-      <form className={classnames("ui small form", { loading: newTask.isLoading || editTask.isRequired })}>
+    return [
+      <form key="form" className={classnames("ui small form", { loading: newTask.isLoading || editTask.isRequired })}>
         <table className="ui very basic table tasks">
           <thead>
             <tr>
@@ -498,18 +482,20 @@ class Form extends Component {
             </tr>
           </tbody>
         </table>
-        <div className="ui small modal task">
-          <div className="header">Confirmation</div>
-          <div className="content">
-            <p className="red">{T.translate("projects.tasks.form.confirmation_msg")}</p>
-          </div>
-          <div className="actions">
-            <button className="ui button" onClick={this.hideConfirmationModal.bind(this)}>{T.translate("projects.tasks.cancel")}</button>
-            <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.taskToBeDeleated)}>{T.translate("projects.tasks.delete")}</button>
-          </div>
-        </div>
-      </form>
-    )
+      </form>,
+      <Modal 
+        key="modal" 
+        className="ui small modal tasks"
+        open={openConfirmationModal}>
+        <Modal.Header>{T.translate("projects.tasks.form.confirmation_header")}</Modal.Header>
+        <Modal.Content>
+         <p className="red">{T.translate("projects.tasks.form.confirmation_msg")}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="ui button" onClick={this.toggleConfirmationModal}>{T.translate("projects.tasks.cancel")}</button>
+          <button className="ui negative button" onClick={this.handleDelete.bind(this, this.state.taskToBeDeleated)}>{T.translate("projects.tasks.delete")}</button>
+        </Modal.Actions>
+      </Modal>]
   }
   
 }

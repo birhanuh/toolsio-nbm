@@ -68,34 +68,46 @@ class HeaderNav extends Component {
       const { getUnreadDirectMessagesCount } = this.props.data
       let count = getUnreadDirectMessagesCount && getUnreadDirectMessagesCount.count 
 
+      // Count unread messages
       const unreadMessagesCount = (T.translate("internal_navigation.unread_messages", {unread_messages_number: count}))
 
       const { getProjectTasksDataQuery: { getProjectTasksData }, getSaleTasksDataQuery: 
         { getSaleTasksData}, getInvoiceTasksDataQuery: { getInvoiceTasksData} } = this.props
 
+      // Count notificaitions
+      let countNotifications = 0
+
       const projectData = getProjectTasksData && getProjectTasksData.countStatus.map(item => {
         if (item.status === 'delayed') {
+          countNotifications += item.count
+
           return(<Dropdown.Item as='a' key={item.status}>
             <Label color="red">{item.count} DELAYED</Label> 
             Projects
           </Dropdown.Item>)              
         }
         if (item.status === 'new') {
+          countNotifications += item.count
+
           return(<Dropdown.Item as='a' key={item.status}>
             <Label color="blue">{item.count} NEW</Label> 
             Projects
           </Dropdown.Item>)
         }
       })
-
+    
       const saleData = getSaleTasksData && getSaleTasksData.countStatus.map(item => {
         if (item.status === 'delayed') {
+          countNotifications += item.count
+
           return(<Dropdown.Item as='a' key={item.status}>
             <Label color="red">{item.count} DELAYED</Label> 
             Sales
           </Dropdown.Item>)              
         }
         if (item.status === 'new') {
+          countNotifications += item.count
+
           return(<Dropdown.Item as='a' key={item.status}>
             <Label color="blue">{item.count} NEW</Label> 
             Sales
@@ -105,18 +117,24 @@ class HeaderNav extends Component {
 
       const invoiceData = getInvoiceTasksData && getInvoiceTasksData.countStatus.map(item => {
         if (item.status === 'delayed') {
+          countNotifications += item.count
+
           return(<Dropdown.Item as='a' key={item.status}>
             <Label color="red">{item.count} DELAYED</Label> 
             Invoices
           </Dropdown.Item>)              
         }
         if (item.status === 'pending') {
+          countNotifications += item.count
+
           return(<Dropdown.Item as='a' key={item.status}>
             <Label color="orange">{item.count} PENDING</Label> 
             Invoices
           </Dropdown.Item>)
         }
       })
+
+      const notifications = (T.translate("internal_navigation.notifications", {notifications_number: countNotifications}))
 
       return [
         <nav key="nav" className="ui fixed menu">
@@ -133,6 +151,9 @@ class HeaderNav extends Component {
             <Dropdown pointing='top right' className='ui dropdown item' 
               trigger={(<Icon name="alarm" className="mr-0" />)} icon={null} > 
               <Dropdown.Menu>
+                <Dropdown.Item disabled>
+                  {notifications}
+                </Dropdown.Item>)
                 {projectData}
                 {saleData}
                 {invoiceData}
@@ -169,7 +190,7 @@ class HeaderNav extends Component {
                 <Dropdown.Item>
                   <Icon name="tasks"/>
                   {T.translate("internal_navigation.tasks")}
-                  <div className="ui right floated blue label">1</div>
+                  <div className="ui right floated blue label">{countNotifications}</div>
                 </Dropdown.Item>
                 <Dropdown.Item>
                   <Link to='/settings'>

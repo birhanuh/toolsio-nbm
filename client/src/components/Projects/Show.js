@@ -319,7 +319,6 @@ class Show extends Component {
           </div>    
         </div>
       </div>,      
-
       <Modal 
         key="modal" 
         className="ui small modal project"

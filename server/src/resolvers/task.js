@@ -42,8 +42,7 @@ export default {
 
     deleteTask: requiresAuth.createResolver((parent, args, { models }) =>
       models.Task.destroy({ where: {id: args.id}, force: true })
-        .then(res => {
-          
+        .then(res => {          
           return {
             success: (res === 1)
           }

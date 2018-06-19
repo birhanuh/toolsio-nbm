@@ -157,9 +157,8 @@ class AccountForm extends Component {
       if (subdomain) {
         this.props.updateAccountMutation({variables: { name, subdomain, phoneNumber, email, logoUrl, street, postalCode: parseInt(postalCode), region, country } })
           .then(res => {
-
-            const { success, errors } = res.data.updateAccount
-           
+            const { success, errors } = res.data.updateAccount     
+                  
             if (success) {
               this.props.addFlashMessage({
                 type: 'success',
@@ -179,8 +178,7 @@ class AccountForm extends Component {
                 }
               })
               this.setState({ errors: errorsList, isLoading: false })
-            }
-           
+            }           
           })
           .catch(err => this.setState({ errors: err, isLoading: false }))
       }   
