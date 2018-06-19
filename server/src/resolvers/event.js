@@ -2,9 +2,7 @@ import requiresAuth from '../middlewares/authentication'
 import { formatErrors } from '../utils/formatErrors'
 
 export default {
-  Query: {
-    getEvent: requiresAuth.createResolver((parent, {id}, { models }) => models.Event.findOne({ where: {id} })),
-    
+  Query: {    
     getEvents: requiresAuth.createResolver((parent, args, { models }) => models.Event.findAll()),
 
     getProjectEvents: requiresAuth.createResolver((parent, args, { models }) => 

@@ -311,11 +311,11 @@ class Form extends Component {
               }
              })
           // Add our Task from the mutation to the end.
-          let updatedTasks = data.getProject.tasks.map(task2 => {
-            if (task2.id === task.id) {
+          let updatedTasks = data.getProject.tasks.map(item => {
+            if (item.id === task.id) {
               return {...task, __typename: 'Task'}
             }
-            return task2
+            return item
           })
           data.getProject.tasks = updatedTasks      
           // Write our data back to the cache.
@@ -373,7 +373,7 @@ class Form extends Component {
       event.preventDefault() 
     }
 
-    this.setState(state => ({ openConfirmationModal: !this.state.openConfirmationModal, taskToBeDeleated: task }))
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal, taskToBeDeleated: task }))
   }
 
   handleDelete(task, event) {

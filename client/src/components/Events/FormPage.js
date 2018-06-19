@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 import { graphql, compose } from 'react-apollo'
-import { GET_EVENTS_QUERY, GET_EVENT_QUERY, CREATE_EVENT_MUTATION, UPDATE_EVENT_MUTATION } from '../../graphql/events'
+import { GET_EVENTS_QUERY, CREATE_EVENT_MUTATION, UPDATE_EVENT_MUTATION } from '../../graphql/events'
 
 // Semantic UI JS
 import { Form, Input, TextArea, Modal } from 'semantic-ui-react'
@@ -95,11 +95,11 @@ class FormPage extends Component {
           const data = store.readQuery({ query: GET_EVENTS_QUERY })
 
           // Add our event from the mutation to the end.
-          let updatedEvents = data.getEvents.map(event => {
-            if (event.id === event.id) {
+          let updatedEvents = data.getEvents.map(item => {
+            if (item.id === event.id) {
               return {...event, __typename: 'Event'}
             }
-            return event
+            return item
           })
 
           data.getEvents = updatedEvents

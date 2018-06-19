@@ -31,8 +31,6 @@ export default `
 
   type Query {
     getEvent(id: Int!): Event!
-    
-    getEvents: [Event!]!
 
     getProjectEvents: [ProjectSaleEvent!]!
 

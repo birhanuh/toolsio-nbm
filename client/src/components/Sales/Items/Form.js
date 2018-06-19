@@ -360,7 +360,7 @@ class Form extends Component {
       event.preventDefault() 
     }
 
-    this.setState(state => ({ openConfirmationModal: !this.state.openConfirmationModal, itemToBeDeleated: item }))
+    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal, itemToBeDeleated: item }))
   }
 
   handleDelete(item, event) {

@@ -81,7 +81,7 @@ class Page extends Component {
   }
 
   toggleConfirmationModal = () => {    
-    this.setState(state => ({ openConfirmationModal: !state.openConfirmationModal }))
+    this.setState(state =>({ openConfirmationModal: !state.openConfirmationModal }))
   }
 
   render() {
