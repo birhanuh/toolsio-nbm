@@ -104,15 +104,7 @@ const Queries =  compose(
   graphql(DELETE_EVENT_MUTATION, {
     name: 'deleteProjectMutation'
   }),
-  graphql(GET_EVENTS_QUERY),
-  graphql(GET_EVENT_QUERY, {
-    name: 'getEventQuery',
-    options: (props) => ({
-      variables: {
-        id: props.match.params.id ? parseInt(props.match.params.id) : 0
-      }
-    })
-  })
+  graphql(GET_EVENTS_QUERY)
 )(Page)
 
 export default Queries
