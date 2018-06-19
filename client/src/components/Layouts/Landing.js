@@ -1,11 +1,109 @@
 import React, { Component } from 'react'
+import { Validation } from '../../utils'
+// Semantic UI JS
+import { Input, TextArea, Form } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
 
+/* jQuery */
+import $ from 'jquery'
+$.animate = require('jquery.easing')
+
 class Landing extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      name: '',
+      email: '',
+      messageBody: '',
+      errors: {},
+      isLoading: false
+    }
+  }
+
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[name]
+      
+      this.setState({
+        [name]: value,
+        errors
+      })     
+    } else {
+
+      this.setState({
+        [name]: value
+      })
+    }   
+  }
+
+  isValid() {
+    const { errors, isValid } = Validation.validateContactMessageInput(this.state)
+
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors = errors
+
+    if (!isValid) {
+      this.setState({ errors: updatedErrors })
+    }
+
+    return isValid
+  }
+
+  componentDidMount = () => {
+    // Scroll to top
+    $(window).scroll(function() {
+      if ($(this).scrollTop() > 100) {
+        $('.back-to-top').fadeIn()
+      } else {
+        $('.back-to-top').fadeOut()
+      }
+    })
+
+    $('.back-to-top').click(function() {
+      $("html, body").animate({ scrollTop: 0 }, 1000)
+      return false
+    }) 
+  }
+
+  handleSubmit = async (event) => {
+    event.preventDefault()
+
+    // Validation
+    if (this.isValid()) { 
+      this.setState({ isLoading: true })
+      const { name, email, message } = this.state
+        
+        this.props.createContactMessageMutation({ 
+          variables: { name, email, message, },
+          })
+          .then(res => {   
+            const { success, errors } = res.data.createContactMessage
+
+            if (success) {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: T.translate("landing.contacts.flash.success_create_contact_message")
+              })  
+              this.setState({ isLoading: false })
+            } else {
+              let errorsList = {}
+              errors.map(error => errorsList[error.path] = error.message)
+
+              this.setState({ errors: errorsList, isLoading: false })
+            }
+          })
+          .catch(err => this.setState({ errors: err, isLoading: false }))
+    }
+  }    
+  
+
   render() {
+    const { name, email, messageBody, errors, isLoading } = this.state
+
     return (
       <div>
         <div id="features" className="ui vertical stripe background-white">
@@ -160,7 +258,7 @@ class Landing extends Component {
           <div className="ui middle aligned container">  
             <div className="ui two column stackable centered grid">
               <div className="column centered row">
-                <a href="/signup" className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
+                <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
               </div>  
             </div>
           </div>
@@ -176,21 +274,46 @@ class Landing extends Component {
                   <div className="column">
                     <p>{T.translate("landing.contacts.description")}</p>
                     
-                    <form className="ui form">
-                      <div className="field">
+                    <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+
+                      { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+                      
+                      <Form.Field error={!!errors.name}>
                         <label>{T.translate("landing.contacts.name")}</label>
-                        <input type="text" name="name" placeholder={T.translate("landing.contacts.name")} />
-                      </div>
-                      <div className="field">
+                        <Input
+                          placeholder={T.translate("landing.contacts.name")}
+                          name="name" 
+                          value={name} 
+                          onChange={(e, {value}) => this.handleChange('name', value)} 
+                          error={!!errors.name}
+                        />
+                        <span className="red">{errors.name}</span>
+                      </Form.Field>
+                      
+                      <Form.Field error={!!errors.email}>
                         <label>{T.translate("landing.contacts.email")}</label>
-                        <input type="text" name="email" placeholder={T.translate("landing.contacts.email")} />
-                      </div>
-                      <div className="field">
-                        <label>{T.translate("landing.contacts.message")}</label>
-                        <textarea placeholder={T.translate("landing.contacts.message")+'...'}></textarea>
-                      </div>
-                      <button className="ui primary button" type="submit">{T.translate("landing.contacts.send")}</button>
-                    </form> 
+                        <Input
+                          placeholder={T.translate("landing.contacts.email")}
+                          email="email" 
+                          value={email} 
+                          onChange={(e, {value}) => this.handleChange('email', value)} 
+                          error={!!errors.email}
+                        />
+                        <span className="red">{errors.email}</span>
+                      </Form.Field>
+
+                      <Form.Field error={!!errors.messageBody}>  
+                        <label>{T.translate("landing.contacts.message_body")}</label>
+                        <TextArea
+                          placeholder={T.translate("landing.contacts.message_body")}
+                          name="messageBody" 
+                          value={messageBody} 
+                          onChange={(e, {value}) => this.handleChange('messageBody', value)} 
+                        />
+                        <span className="red">{errors.messageBody}</span>
+                      </Form.Field>
+                      <button disabled={isLoading} className="ui primary button" type="submit">{T.translate("landing.contacts.send")}</button>
+                    </Form>  
                   </div>
                 </div>  
               </div> 

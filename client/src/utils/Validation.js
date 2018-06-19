@@ -308,4 +308,24 @@ export default {
     }
   },
 
+  validateContactMessageInput: (data) => {
+    let errors = {}
+
+    if (!data.name) {
+      errors['name'] = T.translate("landing.contacts.name_required")
+    }
+    
+    if (!data.email) {
+      errors['email'] = T.translate("landing.contacts.email_required")
+    }
+
+    if (!data.messageBody) {
+      errors['messageBody'] = T.translate("landing.contacts.message_body_required")
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  }
 }  

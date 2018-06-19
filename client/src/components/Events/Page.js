@@ -1,7 +1,7 @@
 // import React...
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
-import { GET_EVENTS_QUERY, GET_EVENT_QUERY, DELETE_EVENT_MUTATION } from '../../graphql/events'
+import { GET_EVENTS_QUERY, DELETE_EVENT_MUTATION } from '../../graphql/events'
 
 import 'fullcalendar'
 

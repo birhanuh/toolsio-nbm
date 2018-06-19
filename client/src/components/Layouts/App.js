@@ -44,45 +44,11 @@ import '../../css/app.scss'
 // Images
 import logo from '../../images/logo-square.png' 
 
-/* Third party libraries */
-import $ from 'jquery'
-$.animate = require('jquery.easing')
-$.fn.transition = require('semantic-ui-transition')
-$.fn.visibility = require('semantic-ui-visibility')
-
 class App extends Component {
   
   state = { 
     visibleInnerSidebar: false,
     visibleOuterSidebar: false  
-  }
-
-  componentDidMount = () => {
-    // fix menu when passed
-    $('.masthead .ui.text.container')
-    .visibility({
-      once: false,
-      onBottomPassed: function()  {
-        $('.fixed.menu').transition('fade in')
-      },
-      onBottomPassedReverse: function()  {
-        $('.fixed.menu').transition('fade out')
-      }
-    })
-
-    // Scroll to top
-    $(window).scroll(function() {
-      if ($(this).scrollTop() > 100) {
-        $('.back-to-top').fadeIn()
-      } else {
-        $('.back-to-top').fadeOut()
-      }
-    })
-
-    $('.back-to-top').click(function() {
-      $("html, body").animate({ scrollTop: 0 }, 1000)
-      return false
-    }) 
   }
 
   toggleInnerSidebarVisibility = () => 

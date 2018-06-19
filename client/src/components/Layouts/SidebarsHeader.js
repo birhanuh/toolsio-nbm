@@ -57,7 +57,7 @@ export function OuterSidebarScrollableHeaderNav({ visibleOuterSidebar }) {
               <Link className="ui primary outline button"  to="/login">{T.translate("log_in.log_in")}</Link>     
             </div>
             <div className="item">   
-              <Link className="ui primary outline button" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+              <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui primary outline button">{T.translate("sign_up.sign_up")}</a>    
             </div>
           </div>  
         </div>
