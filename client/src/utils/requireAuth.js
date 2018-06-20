@@ -4,8 +4,7 @@ import { Route } from 'react-router-dom'
 import { BrowserRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { addFlashMessage } from '../actions/flashMessageActions'
-import { Authorization } from './'
-import decode from 'jwt-decode'
+
 
 // export default function(ComposedComponent) {
 
@@ -58,39 +57,7 @@ import decode from 'jwt-decode'
 //   return connect(mapStateToProps, {addFlashMessage})(Authenticate)  
 // }
 
-const isAuthenticated = () => {
-  const authToken = localStorage.getItem('authToken')
-  const refreshAuthToken = localStorage.getItem('refreshAuthToken')
-  
-  try {
-    decode(authToken)
-    const { exp } = decode(refreshAuthToken)
 
-    if (Date.now() / 1000 > exp) {
-      return false
-    }
-  } catch(err) {
-    return false 
-  }
 
-  return true
-}
 
-// Authenticated routes
-export const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={props => (
-
-    isAuthenticated() ? (<Component {...props}/>) : (<Redirect to={{ pathname: '/login', 
-      state: {from: props.location}}}/>))  
-    }/>
-)
-
-// Login route
-export const SubdomainRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={props => (
-
-    Authorization.getSubdomain() ? (<Component {...props}/>) : (<Redirect to={{ pathname: '/', 
-      state: {from: props.location}}}/>))  
-    }/>
-)
 

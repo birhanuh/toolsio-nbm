@@ -1,4 +1,5 @@
 import axios from 'axios'
+import decode from 'jwt-decode'
 
 export default {
   setInvitationToken: (token) => {
@@ -26,5 +27,24 @@ export default {
     } else {
       return false
     } 
+  },
+
+  isAuthenticated: () => {
+    const authToken = localStorage.getItem('authToken')
+    const refreshAuthToken = localStorage.getItem('refreshAuthToken')
+    
+    try {
+      decode(authToken)
+      const { exp } = decode(refreshAuthToken)
+
+      if (Date.now() / 1000 > exp) {
+        return false
+      }
+    } catch(err) {
+      return false 
+    }
+
+    return true
   }
 }
+

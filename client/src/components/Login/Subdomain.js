@@ -94,7 +94,7 @@ class Subdomain extends Component {
             })
 
             // Redirect to login page with subdoamin set 
-            window.location = ''+process.env.HTTP+subdomain+'.'+process.env.SERVER_URL+'/login'
+             window.location = ''+process.env.SERVER_PROTOCOL+subdomain+'.'+process.env.SERVER_HOST+'/login'
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -109,43 +109,43 @@ class Subdomain extends Component {
     const { errors, isLoading } = this.state
    
     return (  
-      <div className="ui text container">
-        <h2 className="ui teal image header">
-          <Link className="" to="/">
-            <img src={logo} className="image" alt="logo-square" />
-          </Link>
-          <div className="content">
-            {T.translate("log_in.subdomain.header")}
+      <section className="ui stackable grid auth-pages">  
+        <div className="ui text container">
+          <h2 className="ui teal image header">
+            <Link className="" to="/">
+              <img src={logo} className="image" alt="logo-square" />
+            </Link>
+            <div className="content">
+              {T.translate("log_in.subdomain.header")}
+            </div>
+          </h2>
+          <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
+            <div className="ui stacked segment">
+
+              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+
+              <div className={classnames("field", { error: errors.subdomain })}>
+                <div className="ui right labeled input">
+                  <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
+                    value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
+                  <div className="ui label">toolsio.com</div>  
+                </div>
+                <span className="red">{errors.subdomain}</span>
+              </div>  
+
+              <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>
+                
+            </div>
+          </form>  
+          <div className="ui message">
+            {T.translate("log_in.new_to_us")}&nbsp;<Link to="/signup">{T.translate("sign_up.sign_up")}</Link>
           </div>
-        </h2>
-        <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
-          <div className="ui stacked segment">
-
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
-
-            <div className={classnames("field", { error: errors.subdomain })}>
-              <div className="ui right labeled input">
-                <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
-                  value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
-                <div className="ui label">toolsio.com</div>  
-              </div>
-              <span className="red">{errors.subdomain}</span>
-            </div>  
-
-            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>
-              
+          <div className="ui center aligned vertical segment">
+            <small className="d-block">{T.translate("landing.footer.copyright")}</small>
+            <small className="d-block">{T.translate("landing.footer.address")}</small>
           </div>
-        </form>  
-        <div className="ui message">
-          {T.translate("log_in.new_to_us")}&nbsp;<Link to="/signup">{T.translate("sign_up.sign_up")}</Link>
-        </div>
-        <div className="ui center aligned vertical segment">
-          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
-          <small className="d-block">{T.translate("landing.footer.address")}</small>
-        </div>
-      </div>       
-      
-    )
+        </div>          
+      </section>)
   }
 }
 

@@ -215,7 +215,7 @@ nav.ui.menu {
 
 // Internal page
 .ui.basic.segment.internal-page {
-  margin-top: 98px;
+  margin-top: 70px;
 }
 
 .ui.vertical.inverted.sidebar {
@@ -831,13 +831,25 @@ nav.ui.menu .item>a {
 .sprite.logo-one {
   height: 100px;
   width: 100px;
-  background-position: -191px top;  
+  background-position: -192px top;  
+}
+
+.sprite.logo-one:hover {
+  height: 100px;
+  width: 100px;
+  background-position: left -85px;  
 }
 
 .sprite.logo-two {
   height: 100px;
   width: 100px;
-  background-position: -291px top;  
+  background-position: -292px -1px;  
+}
+
+.sprite.logo-two:hover {
+  height: 100px;
+  width: 100px;
+  background-position: -100px -86px;  
 }
 
 // company logo
@@ -904,7 +916,7 @@ nav.ui.menu .item>a {
   .dot {
     height: 15px;
     width: 15px;
-    margin: 0 2px;
+    margin: 0 5px;
     background-color: $medium-grey;
     border-radius: 50%;
     display: inline-block;

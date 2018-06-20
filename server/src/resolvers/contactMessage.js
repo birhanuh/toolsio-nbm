@@ -11,13 +11,13 @@ const transporter = nodemailer.createTransport({
 export default {
 
   Mutation: {    
-    createContactMessage: async (parent, args, { models }) => {
-
+    
+    createContactMessage: async (parent, args) => {
       const { name, email, messageBody } = args
-      console.log('args ', args)
+   
       try {
         transporter.sendMail({
-          to: 'k204510@nwytg.com',
+          to: email,
           subject: `Contact message from (${name})`,
           html: messageBody
         })

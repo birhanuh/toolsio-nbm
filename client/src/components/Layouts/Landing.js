@@ -1,19 +1,34 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Route, Link } from 'react-router-dom'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Validation } from '../../utils'
 // Semantic UI JS
-import { Input, TextArea, Form } from 'semantic-ui-react'
+import { Input, TextArea, Form, Sidebar, Menu } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { CREATE_CONTACT_MESSAGE_MUTATION } from '../../graphql/contactMessage'
 
 // Localization 
 import T from 'i18n-react'
 
+// Logo
+import logo from '../../images/logo-square.png' 
+
 /* jQuery */
 import $ from 'jquery'
 $.animate = require('jquery.easing')
+$.fn.transition = require('semantic-ui-transition')
+$.fn.visibility = require('semantic-ui-visibility')
+
+const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
+  <Route path={to} exact={activeOnlyWhenExact} children={({ match }) => (
+    <Link className={match ? 'active item' : 'item' } to={to}>
+      <i className={icon}></i>
+      <span>{label}</span>
+    </Link>
+  )} />
+)
 
 class Landing extends Component {
 
@@ -24,7 +39,8 @@ class Landing extends Component {
       email: '',
       messageBody: '',
       errors: {},
-      isLoading: false
+      isLoading: false,
+      visibleSidebar: false  
     }
   }
 
@@ -45,6 +61,18 @@ class Landing extends Component {
     }   
   }
 
+  toggleSidebarVisibility = () => 
+    this.setState({ visibleSidebar: !this.state.visibleSidebar })
+
+    // Hide Sidebar when click outside Sidebar area
+  hideSidebarVisibility = () => {
+    const { visibleSidebar } = this.state
+
+    if (visibleSidebar) {
+      this.setState({ visibleSidebar: false })
+    }
+  }  
+
   isValid() {
     const { errors, isValid } = Validation.validateContactMessageInput(this.state)
 
@@ -59,6 +87,28 @@ class Landing extends Component {
   }
 
   componentDidMount = () => {
+    // fix menu when passed
+    $('.masthead .ui.text.container')
+    .visibility({
+      once: false,
+      onBottomPassed: function()  {
+        $('.fixed.menu').transition('fade in')
+      },
+      onBottomPassedReverse: function()  {
+        $('.fixed.menu').transition('fade out')
+      }
+    })
+
+    // jQuery for page scrolling feature - requires jQuery Easing plugin
+    $('.ui.large.menu .left.menu a').bind('click', function() {
+      var $anchor = $(this)
+      $('html, body').stop().animate({
+          scrollTop: $($anchor.attr('href')).offset().top - 50
+      }, 1500, 'easeInOutExpo')
+      event.preventDefault()
+    })
+    console.log('lodaded!')
+
     // Scroll to top
     $(window).scroll(function() {
       if ($(this).scrollTop() > 100) {
@@ -139,10 +189,42 @@ class Landing extends Component {
   
 
   render() {
-    const { name, email, messageBody, errors, isLoading } = this.state
+    const { name, email, messageBody, errors, isLoading, visibleSidebar } = this.state
 
-    return (
-      <div>
+    return [
+      <div key="main-page" onClick={this.hideSidebarVisibility}>
+        <div id="home" className="ui inverted vertical masthead center aligned segment">
+          <div className="ui container">
+            <div className="ui large secondary inverted pointing menu">
+              <a className="toc item" onClick={this.toggleSidebarVisibility}>
+                <i className="sidebar icon"></i>
+              </a> 
+
+              <div className="left menu">
+                <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
+                <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
+                <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
+                <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+                <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
+                <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
+              </div>
+
+              <div className="right item">                                                   
+                <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
+                <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui inverted button">{T.translate("sign_up.sign_up")}</a>     
+              </div>  
+            </div>
+          </div>
+
+          <div className="ui text container">
+            <h1 className="ui inverted header">
+              {T.translate("landing.home.welcome")}&nbsp;
+              <div className="turquoise d-inline">{T.translate("internal_navigation.toolsio")}</div>
+            </h1>
+            <h3>{T.translate("landing.home.slogan")}</h3>
+            <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
+          </div>
+        </div>
         <div id="features" className="ui vertical stripe background-white">
           <div className="ui middle aligned container">
             <div className="ui two column stackable centered grid">
@@ -364,8 +446,88 @@ class Landing extends Component {
           </div>         
         </div>
 
-      </div>
-    )
+        <footer className="ui inverted vertical footer segment">
+          <div className="ui center aligned container">
+            <div className="ui stackable inverted divided grid">
+              <div className="three wide column">
+                <h4 className="ui inverted header">Group 1</h4>
+                <div className="ui inverted link list">
+                  <a href="#" className="item">Link One</a>
+                  <a href="#" className="item">Link Two</a>
+                  <a href="#" className="item">Link Three</a>
+                  <a href="#" className="item">Link Four</a>
+                </div>
+              </div>
+              <div className="three wide column">
+                <h4 className="ui inverted header">Group 2</h4>
+                <div className="ui inverted link list">
+                  <a href="#" className="item">Link One</a>
+                  <a href="#" className="item">Link Two</a>
+                  <a href="#" className="item">Link Three</a>
+                  <a href="#" className="item">Link Four</a>
+                </div>
+              </div>
+              <div className="three wide column">
+                <h4 className="ui inverted header">Group 3</h4>
+                <div className="ui inverted link list">
+                  <a href="#" className="item">Link One</a>
+                  <a href="#" className="item">Link Two</a>
+                  <a href="#" className="item">Link Three</a>
+                  <a href="#" className="item">Link Four</a>
+                </div>
+              </div>
+              <div className="seven wide column">
+                <h4 className="ui inverted header">Footer Header</h4>
+                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+              </div>
+            </div>
+            <div className="ui inverted section divider"></div>
+            <img src={logo} className="ui centered mini image" alt="logo-square"/>
+            <div className="ui horizontal inverted small divided link list">
+              <a className="item" href="#">{T.translate("landing.footer.site_map")}</a>
+              <a className="item" href="#">{T.translate("landing.footer.contact_us")}</a>
+              <a className="item" href="#">{T.translate("landing.footer.terms_and_conditions")}</a>
+              <a className="item" href="#">{T.translate("landing.footer.privacy_policy")}</a>
+            </div>
+          </div>
+
+          <a href="#" className="back-to-top">
+            <i className="chevron up icon"></i>  
+          </a>
+        </footer>
+      </div>,
+      <div key="scroll-header-nav" className="ui large top fixed pointing menu hidden">
+        <div className="ui container">
+          <div className="left menu">
+            <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
+            <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
+            <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
+            <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+            <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
+            <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
+          </div>
+       
+          <div className="right menu">
+            <div className="item">                     
+              <Link className="ui primary outline button"  to="/login">{T.translate("log_in.log_in")}</Link>     
+            </div>
+            <div className="item">   
+              <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui primary outline button">{T.translate("sign_up.sign_up")}</a>    
+            </div>
+          </div>  
+        </div>
+      </div>,
+      <Sidebar key="sidebar" as={Menu} animation='overlay' width='thin' visible={visibleSidebar} vertical inverted>
+        <ActiveLink activeOnlyWhenExact className="active item" to="#home" label={T.translate("landing.home.header")} />
+        <ActiveLink activeOnlyWhenExact className="item" to="#features" label={T.translate("landing.features.header")} />
+        <ActiveLink activeOnlyWhenExact className="item" to="#clients" label={T.translate("landing.clients.header")} />
+        <ActiveLink activeOnlyWhenExact className="item" to="#testimonials" label={T.translate("landing.testmonial.header")} />
+        <ActiveLink activeOnlyWhenExact className="item" to="#pricing" label={T.translate("landing.pricing.header")} />
+        <ActiveLink activeOnlyWhenExact className="item" to="#contacts" label={T.translate("landing.contacts.header")} />
+        <Link className="item" to="/subdomain">{T.translate("log_in.log_in")}</Link>    
+        <Link className="item" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+      </Sidebar>
+    ]
   }  
 }
 

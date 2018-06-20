@@ -317,7 +317,10 @@ export default {
     
     if (!data.email) {
       errors['email'] = T.translate("landing.contacts.email_required")
+    } else if (!/\S+@\S+/.test(data.email)) {
+      errors['email'] = T.translate("landing.contacts.wrong_email_format")
     }
+
 
     if (!data.messageBody) {
       errors['messageBody'] = T.translate("landing.contacts.message_body_required")

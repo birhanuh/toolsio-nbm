@@ -29,26 +29,28 @@ class Page extends Component {
     }
 
     return (          
-      <div className="ui text container">
-        <h2 className="ui teal image header">
-          <Link className="" to="/">
-            <img src={logo} className="image" alt="logo-square" />
-          </Link>
-          <div className="content">{T.translate("sign_up.header")}</div>
-        </h2>
-        
-        <FlashMessage />
-        
-        {form}
+      <section className="ui stackable grid auth-pages">
+        <div className="ui text container">
+          <h2 className="ui teal image header">
+            <Link className="" to="/">
+              <img src={logo} className="image" alt="logo-square" />
+            </Link>
+            <div className="content">{T.translate("sign_up.header")}</div>
+          </h2>
+          
+          <FlashMessage />
+          
+          {form}
 
-        <div className="ui message"> 
-          {T.translate("sign_up.already_a_user")}&nbsp;<Link to="/subdomain">{T.translate("sign_up.log_in_here")}</Link>
-        </div>
-        <div className="ui center aligned vertical segment">
-          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
-          <small className="d-block">{T.translate("landing.footer.address")}</small>
-        </div>
-      </div>  
+          <div className="ui message"> 
+            {T.translate("sign_up.already_a_user")}&nbsp;<Link to="/subdomain">{T.translate("sign_up.log_in_here")}</Link>
+          </div>
+          <div className="ui center aligned vertical segment">
+            <small className="d-block">{T.translate("landing.footer.copyright")}</small>
+            <small className="d-block">{T.translate("landing.footer.address")}</small>
+          </div>
+        </div>  
+      </section>
     )
   }
 }
