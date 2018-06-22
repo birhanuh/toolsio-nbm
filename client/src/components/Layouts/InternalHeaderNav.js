@@ -178,7 +178,7 @@ class InternalHeaderNav extends Component {
                 <Dropdown.Item>
                   <Icon name="tasks"/>
                   {T.translate("internal_navigation.tasks")}
-                  <div className="ui right floated blue label">{countNotifications}</div>
+                  <div className="ui right floated blue small label">{countNotifications}</div>
                 </Dropdown.Item>
                 <Dropdown.Item>
                   <Link to='/settings'>
@@ -198,11 +198,6 @@ class InternalHeaderNav extends Component {
         <Breadcrumb key="breadcrumb" />
       </header>)
   }
-}
-
-InternalHeaderNav.propTypes = {
-  // authentication: PropTypes.object.isRequired,
-  // logout: PropTypes.func.isRequired,
 }
 
 InternalHeaderNav.contextTypes = {
