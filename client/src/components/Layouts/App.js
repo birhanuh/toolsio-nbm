@@ -3,13 +3,13 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import { Sidebar } from 'semantic-ui-react'
 
 import Dashboard from '../Dashboard/Page'
-import Landing from './Landing'
+import LandingPage from './LandingPage'
 import Signup from '../Signup/Page'
 import Invitation from '../Signup/Invitation'
 import Login from '../Login/Page'
 import Subdomain from '../Login/Subdomain'
-// Authorization helper functions 
-import { Authorization } from '../../utils/'
+// helper functions 
+import { isAuthenticated, getSubdomain } from '../../utils/'
 import Settings from '../Settings/Page'
 import ProjectsPage from '../Projects/Page'
 import ProjectsForm from '../Projects/FormPage'
@@ -27,7 +27,7 @@ import ConversationsPage from '../Conversations/Page'
 import UsersPage from '../Users/Page'
 import EventsPage from '../Events/Page'
 
-import HeaderNav from './HeaderNav'
+import InternalHeaderNav from './InternalHeaderNav'
 import { InnerSidebar } from './InnerSidebar'
 import FlashMessage from '../../flash/FlashMessage'
 
@@ -58,16 +58,15 @@ class App extends Component {
   render() {
     const { visibleInnerSidebar } = this.state
 
-        // Authenticated routes
+    // Authenticated routes
     const PrivateRoute = ({ component: Component, ...rest }) => (
       <Route {...rest} render={props => (
-
-        Authorization.isAuthenticated() ? (
-
+        
+        isAuthenticated() ? (
           <Sidebar.Pushable>  
             <InnerSidebar visibleInnerSidebar={visibleInnerSidebar} />               
             <Sidebar.Pusher onClick={this.hideSidebarVisibility}>
-              <HeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} />
+              <InternalHeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} />
               <section className="ui stackable grid basic segment internal-page">     
                 <FlashMessage /> 
 
@@ -83,18 +82,14 @@ class App extends Component {
                 </div>
               </footer>                
             </Sidebar.Pusher>
-          </Sidebar.Pushable>  
-
-          ) : (<Redirect to={{ pathname: '/login', 
-          state: {from: props.location}}}/>))  
-        }/>
-      )
+          </Sidebar.Pushable>) : (<Redirect to={{ pathname: '/login', state: {from: props.location}}}/>))  
+        }/>)
 
     // Login route
     const SubdomainRoute = ({ component: Component, ...rest }) => (
       <Route {...rest} render={props => (
 
-        Authorization.getSubdomain() ? (
+        getSubdomain() ? (
           <section className="ui stackable grid auth-pages">
 
             {/* Passed Component*/}
@@ -105,11 +100,34 @@ class App extends Component {
         }/>
       )
 
-    return (        
-            
+    // Root path Dashboard
+    const RootPathDashboard = ({ ...props }) => (      
+      isAuthenticated() ? (
+        <Sidebar.Pushable>  
+          <InnerSidebar visibleInnerSidebar={visibleInnerSidebar} />               
+          <Sidebar.Pusher onClick={this.hideSidebarVisibility}>
+            <InternalHeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} />
+            <section className="ui stackable grid basic segment internal-page">     
+              <FlashMessage /> 
+
+              {/* Passed Component*/}
+              <Dashboard {...props} />
+            </section>                  
+            <footer className="ui vertical footer segment internal-footer">
+              <div className="ui stackable inverted grid">      
+                <div className="ten wide column">
+                  <h4 className="ui inverted header">Footer Header</h4>
+                  <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+                </div>
+              </div>
+            </footer>                
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>) : (<Redirect to={{ pathname: '/login', state: {from: props.location}}}/>))  
+
+    return (                   
       <Switch>
         {/* Publick laningpage */}
-        <Route exact path="/" component={Landing} />        
+        <Route exact path="/" render={props => isAuthenticated() ? <RootPathDashboard {...props} /> : <LandingPage {...props} />} />        
        
         {/* Publick Signup pages */}
         <Route exact path="/signup" component={Signup} />
@@ -145,7 +163,7 @@ class App extends Component {
         <PrivateRoute exact path="/conversations/receiver/:receiverId" component={ConversationsPage} />
         <PrivateRoute exact path="/users" component={UsersPage} /> 
         <PrivateRoute exact path="/events" component={EventsPage} /> 
-    </Switch>)
+      </Switch>)
   }
 }
 

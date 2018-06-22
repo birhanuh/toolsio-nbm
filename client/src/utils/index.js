@@ -1,9 +1,16 @@
 import Validation from './Validation'
-import Authorization from './Authorization'
+import { isAuthenticated, setInvitationToken, getSubdomain, setSubdomain, isAuthPages } from './Authorization'
+import { PrivateRoute, SubdomainRoute} from './customizedRoutes'
 import Pagination from './Pagination'
 
 export {
   Validation,
-  Authorization,
+  isAuthenticated, 
+  setInvitationToken, 
+  getSubdomain, 
+  setSubdomain,
+  PrivateRoute,
+  SubdomainRoute,
+  isAuthPages,
   Pagination
 }

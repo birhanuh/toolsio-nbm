@@ -86,7 +86,7 @@ const InvoiceTasksCard = () => (
       </div>)
 
     return (      
-      <div className={classnames("dashboard", { loading: loading })}>
+      <div id="invoiceTask" className={classnames("dashboard", { loading: loading })}>
         <h4 className="ui header">{T.translate("dashboard.invoice_tasks.header")}</h4>
         <div className="ui card">
           

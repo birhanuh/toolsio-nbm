@@ -7,7 +7,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { IS_SUBDOMAIN_EXIST_MUTATION } from '../../graphql/authentications'
 
-import { Validation, Authorization } from '../../utils'
+import { Validation, getSubdomain } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -26,7 +26,7 @@ class Subdomain extends Component {
 
   componentDidMount = () => {
     // Fetch Sale when id is present in params
-    const subdomain = Authorization.getSubdomain()
+    const subdomain = getSubdomain()
     
     if (subdomain) {
       this.setState({ errros: {}, isLoading: true })

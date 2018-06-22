@@ -30,7 +30,7 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
   )} />
 )
 
-class Landing extends Component {
+class LandingPage extends Component {
 
   constructor(props) {
     super(props)
@@ -64,7 +64,7 @@ class Landing extends Component {
   toggleSidebarVisibility = () => 
     this.setState({ visibleSidebar: !this.state.visibleSidebar })
 
-    // Hide Sidebar when click outside Sidebar area
+  // Hide Sidebar when click outside Sidebar area
   hideSidebarVisibility = () => {
     const { visibleSidebar } = this.state
 
@@ -100,14 +100,13 @@ class Landing extends Component {
     })
 
     // jQuery for page scrolling feature - requires jQuery Easing plugin
-    $('.ui.large.menu .left.menu a').bind('click', function() {
+    $('.ui.large.menu .left.menu a').on('click', function(event) {
+      event.preventDefault()
       var $anchor = $(this)
       $('html, body').stop().animate({
           scrollTop: $($anchor.attr('href')).offset().top - 50
       }, 1500, 'easeInOutExpo')
-      event.preventDefault()
     })
-    console.log('lodaded!')
 
     // Scroll to top
     $(window).scroll(function() {
@@ -531,7 +530,7 @@ class Landing extends Component {
   }  
 }
 
-Landing.propTypes = {
+LandingPage.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
@@ -539,6 +538,6 @@ const MutationsQuery =  compose(
   graphql(CREATE_CONTACT_MESSAGE_MUTATION, {
     name : 'createContactMessageMutation'
   })
-)(Landing)
+)(LandingPage)
 
 export default connect(null, { addFlashMessage } ) (MutationsQuery)

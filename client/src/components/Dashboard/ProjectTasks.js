@@ -63,7 +63,7 @@ const ProjectTasksCard = () => (
 
     return (
       
-      <div className={classnames("dashboard", { loading: loading })}>
+      <div id="projectTask" className={classnames("dashboard", { loading: loading })}>
         <h4 className="ui header">{T.translate("dashboard.project_tasks.header")}</h4>
         <div className="ui card">
           
