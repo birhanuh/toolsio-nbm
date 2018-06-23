@@ -694,6 +694,14 @@ nav.ui.menu .item>a {
   display: flex !important;
 }
 
+.dimmed.dimmable > .ui.animating.dimmer, .dimmed.dimmable > .ui.visible.dimmer, .ui.active.dimmer {
+  display: flex !important;
+}
+
+.ui.dimmer img {
+  @include transform-rotate(180deg);
+}
+
 // Custome fieldset and legend
 .custom-fieldset {
   border: 1px solid $light-grey !important;

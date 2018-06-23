@@ -165,6 +165,7 @@ export default {
       }
 
     },
+
     sendInvitation: requiresAuth.createResolver((parent, args, { subdomain }) => {
       
       let emailToken
@@ -230,6 +231,22 @@ export default {
           }]
         }
       }
-    })    
+    }),
+
+    updateUser: requiresAuth.createResolver((parent, args, { models }) => 
+       models.User.update(args, { where: {email: args.email}, returning: true, plain: true })
+        .then(result => {  
+          return {
+            success: true,
+            user: result[1].dataValues
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })),    
   }    
 }

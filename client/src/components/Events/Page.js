@@ -96,7 +96,7 @@ class Page extends Component {
 
 const Queries =  compose(
   graphql(DELETE_EVENT_MUTATION, {
-    name: 'deleteProjectMutation'
+    name: 'deleteEventMutation'
   }),
   graphql(GET_EVENTS_QUERY)
 )(Page)

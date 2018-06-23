@@ -5,14 +5,14 @@ import { getSubdomain, isAuthenticated } from './'
 // Authenticated routes
 export const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (    
-    isAuthenticated() ? (<section className="ui stackable grid basic segment internal-page"><Component {...props} /></section>) : 
+    isAuthenticated() ? (<Component {...props} />) : 
       (<Redirect to={{ pathname: '/login', state: {from: props.location}}}/>))  
     }/>)
 
 // Login route
 export const SubdomainRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
-    getSubdomain() ? (<section className="ui stackable grid auth-pages"><Component {...props} /></section>) : (<Redirect to={{ pathname: '/', 
+    getSubdomain() ? (<Component {...props} />) : (<Redirect to={{ pathname: '/', 
       state: {from: props.location}}}/>))  
     }/>
   )

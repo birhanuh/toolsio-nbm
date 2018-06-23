@@ -154,7 +154,8 @@
       "edit": "Edit",
       "cancel": "Cancel",
       "flash": {
-        "success_update": "Account information updated!"
+        "success_update": "Account information updated!",
+        "upload_first": "You need to upload and your company logo first!"
       }
     },
     "user": {
@@ -169,7 +170,8 @@
       "select_avatar": "Select avatar",
       "upload": "Upload",
       "flash": {
-        "success_update": "User information updated!"
+        "success_update": "User information updated!",
+        "upload_first": "You need to upload and your profile picture first!"
       }
     }
   },

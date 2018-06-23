@@ -38,7 +38,10 @@ export const S3_SIGN_LOGO_MUTATION = gql`
     s3SignLogo(fileName: $fileName, fileType: $fileType) {
       signedRequest
       url
-      errors
+      errors {
+        path
+        message
+      }
     }
   }
 `
@@ -57,7 +60,7 @@ export const GET_USER_BY_EMAIL_QUERY = gql`
 `
 
 export const UPDATE_USER_MUTATION = gql`
-  mutation updateUser($firstName: String!, $lastName: String, $email: String!, $avatarUrl: String) {
+  mutation updateUser($firstName: String, $lastName: String, $email: String!, $avatarUrl: String) {
     updateUser(firstName: $firstName, lastName: $lastName, email: $email, avatarUrl: $avatarUrl) {
       success
       user {
@@ -77,7 +80,10 @@ export const S3_SIGN_AVATAR_MUTATION = gql`
     s3SignAvatar(fileName: $fileName, fileType: $fileType) {
       signedRequest
       url
-      errors
+      errors {
+        path
+        message
+      }
     }
   }
 `

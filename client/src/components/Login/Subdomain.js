@@ -108,44 +108,42 @@ class Subdomain extends Component {
   render() {
     const { errors, isLoading } = this.state
    
-    return (  
-      <section className="ui stackable grid auth-pages">  
-        <div className="ui text container">
-          <h2 className="ui teal image header">
-            <Link className="" to="/">
-              <img src={logo} className="image" alt="logo-square" />
-            </Link>
-            <div className="content">
-              {T.translate("log_in.subdomain.header")}
-            </div>
-          </h2>
-          <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
-            <div className="ui stacked segment">
-
-              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
-
-              <div className={classnames("field", { error: errors.subdomain })}>
-                <div className="ui right labeled input">
-                  <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
-                    value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
-                  <div className="ui label">toolsio.com</div>  
-                </div>
-                <span className="red">{errors.subdomain}</span>
-              </div>  
-
-              <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>
-                
-            </div>
-          </form>  
-          <div className="ui message">
-            {T.translate("log_in.new_to_us")}&nbsp;<Link to="/signup">{T.translate("sign_up.sign_up")}</Link>
+    return (   
+      <div className="ui text container">
+        <h2 className="ui teal image header">
+          <Link className="" to="/">
+            <img src={logo} className="image" alt="logo-square" />
+          </Link>
+          <div className="content">
+            {T.translate("log_in.subdomain.header")}
           </div>
-          <div className="ui center aligned vertical segment">
-            <small className="d-block">{T.translate("landing.footer.copyright")}</small>
-            <small className="d-block">{T.translate("landing.footer.address")}</small>
+        </h2>
+        <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
+          <div className="ui stacked segment">
+
+            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+
+            <div className={classnames("field", { error: errors.subdomain })}>
+              <div className="ui right labeled input">
+                <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
+                  value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
+                <div className="ui label">toolsio.com</div>  
+              </div>
+              <span className="red">{errors.subdomain}</span>
+            </div>  
+
+            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>
+              
           </div>
-        </div>          
-      </section>)
+        </form>  
+        <div className="ui message">
+          {T.translate("log_in.new_to_us")}&nbsp;<Link to="/signup">{T.translate("sign_up.sign_up")}</Link>
+        </div>
+        <div className="ui center aligned vertical segment">
+          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="d-block">{T.translate("landing.footer.address")}</small>
+        </div>
+      </div>)
   }
 }
 

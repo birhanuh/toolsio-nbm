@@ -155,6 +155,7 @@ class Invitation extends Component {
               name="password" 
               value={password} 
               onChange={(e, {value}) => this.handleChange('password', value)} 
+              type='password'
               error={!!errors.password}
             />
             <span className="red">{errors.password}</span>
@@ -168,6 +169,7 @@ class Invitation extends Component {
               name="confirmPassword" 
               value={confirmPassword} 
               onChange={(e, {value}) => this.handleChange('confirmPassword', value)} 
+              type='password'
               error={!!errors.confirmPassword}
             />
             <span className="red">{errors.confirmPassword}</span>

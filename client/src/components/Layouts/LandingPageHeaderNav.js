@@ -42,9 +42,7 @@ class LandingPageHeaderNav extends Component {
           scrollTop: $($anchor.attr('href')).offset().top - 50
       }, 1500, 'easeInOutExpo')
     })
-
-  }   
-  
+  }     
 
   render() {
 

@@ -41,6 +41,10 @@ class InternalHeaderNav extends Component {
     this.context.router.history.push('/login')
   }
 
+  dashboardOrRoot = () => {
+    return (window.location.pathname.indexOf('/') === 0 && window.location.pathname.indexOf('/dashboard') === 0)
+  }
+
   render() {    
     let currentUser = null
 
@@ -68,7 +72,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'delayed') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as='a' key={item.status} href="#projectTask">
+        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#projectTask" : "/dashboard/#projectTask"}>
           <Label color="red">{item.count} DELAYED</Label> 
           Projects
         </Dropdown.Item>)              
@@ -76,7 +80,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'new') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as='a' key={item.status} href="#projectTask">
+        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#projectTask" : "/dashboard/#projectTask"}>
           <Label color="blue">{item.count} NEW</Label> 
           Projects
         </Dropdown.Item>)
@@ -87,7 +91,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'delayed') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as='a' key={item.status} href="#saleTask">
+        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#saleTask" : "/dashboard/#saleTask"}>
           <Label color="red">{item.count} DELAYED</Label> 
           Sales
         </Dropdown.Item>)              
@@ -95,7 +99,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'new') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as='a' key={item.status} href="#saleTask">
+        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#saleTask" : "/dashboard/#saleTask"}>
           <Label color="blue">{item.count} NEW</Label> 
           Sales
         </Dropdown.Item>)
@@ -106,7 +110,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'delayed') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as='a' key={item.status} href="#invoiceTask">
+        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#invoiceTask" : "/dashboard/#invoiceTask"}>
           <Label color="red">{item.count} DELAYED</Label> 
           Invoices
         </Dropdown.Item>)              
@@ -114,7 +118,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'pending') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as='a' key={item.status} href="#invoiceTask">
+        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#invoiceTask" : "/dashboard/#invoiceTask"}>
           <Label color="orange">{item.count} PENDING</Label> 
           Invoices
         </Dropdown.Item>)
@@ -175,10 +179,12 @@ class InternalHeaderNav extends Component {
                     {currentUser && currentUser.firstName}
                 </span>)} >
               <Dropdown.Menu>
-                <Dropdown.Item>
-                  <Icon name="tasks"/>
-                  {T.translate("internal_navigation.tasks")}
-                  <div className="ui right floated blue small label">{countNotifications}</div>
+                <Dropdown.Item as="a" className="ui clearing segment">     
+                  <div className="left floated">                 
+                    <Icon name="tasks"/>              
+                    {T.translate("internal_navigation.tasks")}
+                  </div>
+                  <Label color="blue" size="small" className="right floated">{countNotifications}</Label>
                 </Dropdown.Item>
                 <Dropdown.Item>
                   <Link to='/settings'>

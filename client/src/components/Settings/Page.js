@@ -19,7 +19,7 @@ class Page extends Component {
       const { user } = decode(authToken)
 
       currentUser = user
-      console.log('user ', currentUser.email)
+      console.log('user ', currentUser)
     } catch(err) {
       console.log('err: ', err)
     }
@@ -30,7 +30,7 @@ class Page extends Component {
 
           <AccountForm subdomain={subdomain} /> 
              
-          { currentUser.user && <UserForm email={currentUser.email} /> }
+          { currentUser.email && <UserForm email={currentUser.email} /> }
         </div>  
       </div>  
     )

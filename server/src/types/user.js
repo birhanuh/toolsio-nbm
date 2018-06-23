@@ -26,6 +26,12 @@ export default `
     errors: [Error!]
   }
 
+  type UpdateResponse {
+    success: Boolean!
+    user: User
+    errors: [Error!]
+  }
+
   type LoginResponse {
     success: Boolean!
     authToken: String
@@ -56,6 +62,9 @@ export default `
   type Mutation {
     registerUser(firstName: String, lastName: String, email: String!, password: String!, 
       subdomain: String!, industry: String!): RegisterResponse!
+
+    updateUser(firstName: String, lastName: String, email: String!, password: String, 
+      avatarUrl: String): UpdateResponse!
 
     loginUser(email: String!, password: String!): LoginResponse!
 
