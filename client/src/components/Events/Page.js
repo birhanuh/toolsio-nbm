@@ -1,7 +1,7 @@
 // import React...
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
-import { GET_EVENTS_QUERY, GET_EVENT_QUERY, DELETE_EVENT_MUTATION } from '../../graphql/events'
+import { GET_EVENTS_QUERY, DELETE_EVENT_MUTATION } from '../../graphql/events'
 
 import 'fullcalendar'
 
@@ -58,24 +58,18 @@ class Page extends Component {
       // dayClick: function(date, jsEvent, view) {
       //   console.log('clicked on ' + date.format())
       // },
-      select: ( start, end, jsEvent, view) => {
-        this.setState(state => ({ start, end, id: null, title: "", description: "", url: "" }))
+      select: ( start, end ) => {
+        this.setState(({ start, end, id: null, title: "", description: "", url: "" }))
         this.toggleConfirmationModal() 
+        console.log('jsEvent ', jsEvent)
+        console.log('view ', view)
       },
-      eventClick: (event, element) => {
-        this.setState(state => ({ start: event.start, end: event.end, id: event.id, title: event.title, description: event.description, url: event.url }))
+      eventClick: (event) => {
+        this.setState(({ start: event.start, end: event.end, id: event.id, title: event.title, description: event.description, url: event.url }))
         this.toggleConfirmationModal()
-        console.log('title ' +this.state.title)
+     
         // event.title = "CLICKED!"
         // $('#calendar').fullCalendar('updateEvent', event)
-      },
-      eventDragStart: (event, jsEvent, ui, view) => {
-        console.log('eventDragStart date ' + event)
-        console.log('eventDragStart envet' + jsEvent)
-      },
-      eventDragStop: (event, jsEvent, ui, view) => {
-        console.log('eventDragStop date ' + event)
-        console.log('eventDragStop envet' + jsEvent)
       }
     })
   }
@@ -102,7 +96,7 @@ class Page extends Component {
 
 const Queries =  compose(
   graphql(DELETE_EVENT_MUTATION, {
-    name: 'deleteProjectMutation'
+    name: 'deleteEventMutation'
   }),
   graphql(GET_EVENTS_QUERY)
 )(Page)

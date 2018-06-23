@@ -9,7 +9,7 @@ import { Modal } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_INVOICES_QUERY, GET_INVOICE_QUERY, DELETE_INVOICE_MUTATION, GET_ACCOUNT_QUERY } from '../../../graphql/invoices'
 
-import { Authorization } from '../../../utils'
+import { getSubdomain } from '../../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -311,7 +311,7 @@ const MutationQuery =  compose(
     name : 'getAccountQuery', 
     options: () => ({
       variables: {
-        subdomain: Authorization.getSubdomain()
+        subdomain: getSubdomain()
       }
     })
   })

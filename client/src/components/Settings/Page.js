@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import decode from 'jwt-decode'
-import { Authorization } from '../../utils'
+import { getSubdomain } from '../../utils'
 
 import AccountForm from './AccountForm'
 import UserForm from './UserForm'
@@ -10,7 +10,7 @@ class Page extends Component {
   render() {
     
     // Parse subdomain 
-    let subdomain =  Authorization.getSubdomain()
+    let subdomain =  getSubdomain()
 
     let currentUser
     
@@ -19,7 +19,7 @@ class Page extends Component {
       const { user } = decode(authToken)
 
       currentUser = user
-      console.log('user ', currentUser.email)
+      console.log('user ', currentUser)
     } catch(err) {
       console.log('err: ', err)
     }
@@ -30,7 +30,7 @@ class Page extends Component {
 
           <AccountForm subdomain={subdomain} /> 
              
-          { currentUser.user && <UserForm email={currentUser.email} /> }
+          { currentUser.email && <UserForm email={currentUser.email} /> }
         </div>  
       </div>  
     )

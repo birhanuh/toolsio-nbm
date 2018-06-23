@@ -7,7 +7,7 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
 // Authorization utils
-import { Authorization } from './utils'
+import { getSubdomain } from './utils'
 
 const httpLink = createUploadLink({
   uri: 'http://localhost:8080/graphql'
@@ -16,7 +16,7 @@ const httpLink = createUploadLink({
 // middleWares and afterwares
 const middlewareLink = setContext(() => ({
   headers: {
-    'subdomain': Authorization.getSubdomain(), // Parse subdomain 
+    'subdomain': getSubdomain(), // Parse subdomain 
     'x-auth-token': localStorage.getItem('authToken'),
     'x-refresh-auth-token': localStorage.getItem('refreshAuthToken')
   }

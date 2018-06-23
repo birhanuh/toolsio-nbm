@@ -9,23 +9,17 @@ import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
-import { Input, Select, Form } from 'semantic-ui-react'
+import { Input, Select, Form, Dimmer, Image } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_ACCOUNT_QUERY, UPDATE_ACCOUNT_MUTATION, S3_SIGN_LOGO_MUTATION } from '../../graphql/settings'
 
 // Localization 
 import T from 'i18n-react'
 
-import $ from 'jquery'
-
 import moment from 'moment'
-
-// Modal
-$.fn.dimmer = require('semantic-ui-dimmer')
 
 // Country region selector 
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
-
 
 // Images
 import logoPlaceholderMedium from '../../images/logo-placeholder.svg'
@@ -49,6 +43,7 @@ class AccountForm extends Component {
       },
       file: null,
       errors: {},
+      active: false,
       isLoadingLogo: false,
       isLoadingForm: false
     }
@@ -72,13 +67,6 @@ class AccountForm extends Component {
         }
       })
     }
-  }
-  
-  componentDidMount() {
-
-    $('.ui.card .image').dimmer({
-      on: 'hover'
-    })
   }
 
   handleChange = (name, value) => {
@@ -150,7 +138,7 @@ class AccountForm extends Component {
 
     // Validation
     if (this.isValid()) { 
-      this.setState({ isLoading: true })
+      this.setState({ isLoadingForm: true })
 
      const { name, subdomain, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
       
@@ -164,7 +152,7 @@ class AccountForm extends Component {
                 type: 'success',
                 text: T.translate("settings.account.flash.success_update")
               })
-              this.setState({ isLoading: false })
+              this.setState({ isLoadingForm: false })
             } else {
               let errorsList = {}
               errors.map(error => {
@@ -177,10 +165,10 @@ class AccountForm extends Component {
                   errorsList[error.path] = error.message
                 }
               })
-              this.setState({ errors: errorsList, isLoading: false })
+              this.setState({ errors: errorsList, isLoadingForm: false })
             }           
           })
-          .catch(err => this.setState({ errors: err, isLoading: false }))
+          .catch(err => this.setState({ errors: err, isLoadingForm: false }))
       }   
     }
   }
@@ -269,37 +257,49 @@ class AccountForm extends Component {
 
   handleSubmitImage = async () => {
     const { file } = this.state
-    const response = await this.props.s3SignLogoMutation({
-      variables: {
-        fileName: this.formatFileName(file.name),
-        fileType: file.type
-      }
-    })
-
-    const { signedRequest, url } = response.data.s3SignLogo
-    await this.uploadToS3(url, file, signedRequest)
+    let response
+    if (file) {
+      response = await this.props.s3SignLogoMutation({
+        variables: {
+          fileName: this.formatFileName(file.name),
+          fileType: file.type
+        }
+      })
+      const { signedRequest, url } = response.data.s3SignLogo
+      await this.uploadToS3(url, file, signedRequest)
+    } else {
+      this.props.addFlashMessage({
+        type: 'error',
+        text: T.translate("settings.account.flash.upload_first")
+      })
+    }
   }
 
+  toggleShow = () => this.setState(state => ({ active: !state.active }))
+
   render() {
-    const { subdomain, industry, logoUrl, contact, address, errors, isLoadingLogo, isLoadingForm } = this.state
+    const { subdomain, industry, logoUrl, contact, address, errors, active, isLoadingLogo, isLoadingForm } = this.state
+
+     const content = (
+      <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
+        {T.translate("settings.account.select_logo")}
+      </Dropzone>
+    )
 
     return ( 
       <div className="ui items segment account">
         <div className="ui item">    
           <div className="image">
             <div className={classnames("ui card form", { loading: isLoadingLogo })}>
-              <div className="blurring dimmable image">
-                <div className="ui dimmer">
-                  <div className="content">
-                    <div className="center">
-                      <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
-                        {T.translate("settings.account.select_logo")}
-                      </Dropzone>
-                    </div>
-                  </div>
-                </div>
-                <img className="ui rounded image" src={logoUrl ? logoUrl : logoPlaceholderMedium} alt="logo" />
-              </div>
+              <Dimmer.Dimmable 
+                as={Image}
+                dimmer={{ active, content }}
+                onMouseEnter={this.toggleShow}
+                onMouseLeave={this.toggleShow}
+                size='medium'
+                blurring
+                src={logoUrl ? logoUrl : logoPlaceholderMedium}
+              />
             </div>
 
             <button disabled={isLoadingLogo} className="fluid ui primary button" onClick={this.handleSubmitImage.bind(this)}><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.account.upload")}</button>

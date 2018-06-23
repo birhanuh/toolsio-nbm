@@ -7,7 +7,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { IS_SUBDOMAIN_EXIST_MUTATION } from '../../graphql/authentications'
 
-import { Validation, Authorization } from '../../utils'
+import { Validation, getSubdomain } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -26,7 +26,7 @@ class Subdomain extends Component {
 
   componentDidMount = () => {
     // Fetch Sale when id is present in params
-    const subdomain = Authorization.getSubdomain()
+    const subdomain = getSubdomain()
     
     if (subdomain) {
       this.setState({ errros: {}, isLoading: true })
@@ -94,7 +94,7 @@ class Subdomain extends Component {
             })
 
             // Redirect to login page with subdoamin set 
-            window.location = ''+process.env.HTTP+subdomain+'.'+process.env.SERVER_URL+'/login'
+             window.location = ''+process.env.SERVER_PROTOCOL+subdomain+'.'+process.env.SERVER_HOST+'/login'
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -108,7 +108,7 @@ class Subdomain extends Component {
   render() {
     const { errors, isLoading } = this.state
    
-    return (  
+    return (   
       <div className="ui text container">
         <h2 className="ui teal image header">
           <Link className="" to="/">
@@ -143,9 +143,7 @@ class Subdomain extends Component {
           <small className="d-block">{T.translate("landing.footer.copyright")}</small>
           <small className="d-block">{T.translate("landing.footer.address")}</small>
         </div>
-      </div>       
-      
-    )
+      </div>)
   }
 }
 

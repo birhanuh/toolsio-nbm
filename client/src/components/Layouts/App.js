@@ -1,15 +1,17 @@
 import React, { Component } from 'react' 
 import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
+// Semantic UI React
 import { Sidebar } from 'semantic-ui-react'
 
 import Dashboard from '../Dashboard/Page'
-import Landing from './Landing'
+import LandingPage from './LandingPage'
 import Signup from '../Signup/Page'
 import Invitation from '../Signup/Invitation'
 import Login from '../Login/Page'
 import Subdomain from '../Login/Subdomain'
-import { PrivateRoute, SubdomainRoute } from '../../utils/requireAuth'
+// Utils 
+import { isAuthenticated, isAuthPages, SubdomainRoute, PrivateRoute } from '../../utils/'
 import Settings from '../Settings/Page'
 import ProjectsPage from '../Projects/Page'
 import ProjectsForm from '../Projects/FormPage'
@@ -27,13 +29,10 @@ import ConversationsPage from '../Conversations/Page'
 import UsersPage from '../Users/Page'
 import EventsPage from '../Events/Page'
 
-import HeaderNav from './HeaderNav'
+import InternalHeaderNav from './InternalHeaderNav'
+import LandingPageHeaderNav from './LandingPageHeaderNav'
+import { OuterSidebar, InnerSidebar } from './Sidebars'
 import FlashMessage from '../../flash/FlashMessage'
-
-import { OuterSidebarScrollableHeaderNav, InnerSidebar } from './SidebarsHeader'
-
-// Localization 
-import T from 'i18n-react'
 
 // Semantic CSS
 import 'semantic-ui-css/semantic.min.css'
@@ -41,97 +40,64 @@ import 'semantic-ui-css/semantic.min.css'
 // CSS entry
 import '../../css/app.scss'
 
-// Images
-import logo from '../../images/logo-square.png' 
-
-/* Third party libraries */
-import $ from 'jquery'
-$.animate = require('jquery.easing')
-$.fn.transition = require('semantic-ui-transition')
-$.fn.visibility = require('semantic-ui-visibility')
-
 class App extends Component {
   
   state = { 
     visibleInnerSidebar: false,
-    visibleOuterSidebar: false  
-  }
-
-  componentDidMount = () => {
-    // fix menu when passed
-    $('.masthead .ui.text.container')
-    .visibility({
-      once: false,
-      onBottomPassed: function()  {
-        $('.fixed.menu').transition('fade in')
-      },
-      onBottomPassedReverse: function()  {
-        $('.fixed.menu').transition('fade out')
-      }
-    })
-
-    // Scroll to top
-    $(window).scroll(function() {
-      if ($(this).scrollTop() > 100) {
-        $('.back-to-top').fadeIn()
-      } else {
-        $('.back-to-top').fadeOut()
-      }
-    })
-
-    $('.back-to-top').click(function() {
-      $("html, body").animate({ scrollTop: 0 }, 1000)
-      return false
-    }) 
+    visibleOuterSidebar: false
   }
 
   toggleInnerSidebarVisibility = () => 
-    this.setState({ visibleInnerSidebar: !this.state.visibleInnerSidebar })
+    this.setState(state => ({ visibleInnerSidebar: !state.visibleInnerSidebar }))
 
   toggleOuterSidebarVisibility = () => 
-    this.setState({ visibleOuterSidebar: !this.state.visibleOuterSidebar })
+    this.setState(state => ({ visibleOuterSidebar: !state.visibleOuterSidebar }))
 
-  // Hide Sidebar when click outside Sidebar area
+  // Hide OuterPageSidebar when click outside Sidebar area
   hideSidebarVisibility = () => {
-    const { visibleInnerSidebar, visibleOuterSidebar } = this.state
+    const { visibleOuterSidebar, visibleInnerSidebar } = this.state
 
-    if (visibleInnerSidebar || visibleOuterSidebar) {
-      this.setState({ visibleInnerSidebar: false, visibleOuterSidebar: false })
+    if (visibleOuterSidebar) {
+      this.setState({ visibleOuterSidebar: false })
+    }
+
+    if (visibleInnerSidebar) {
+      this.setState({ visibleInnerSidebar: false })
     }
   }
-    
+
   render() {
-    const { visibleInnerSidebar, visibleOuterSidebar } = this.state
+    const { visibleOuterSidebar, visibleInnerSidebar } = this.state
 
-    let landingPage = window.location.pathname === '/' ? true : false
-    let authPages = window.location.pathname.indexOf('/login') === 0 || window.location.pathname.indexOf('/signup') === 0
-      || window.location.pathname.indexOf('/subdomain') === 0 ? true : false
-
-    let internalPages = (landingPage || authPages) ? false : true 
-
-    return (
-      <Sidebar.Pushable>
-        {landingPage &&
-          <OuterSidebarScrollableHeaderNav visibleOuterSidebar={visibleOuterSidebar} />
-        }
-
-        { internalPages &&
-          <InnerSidebar visibleInnerSidebar={visibleInnerSidebar} />
-        }
+    return [      
+      <Sidebar.Pushable key="Sidebar">  
+        { isAuthenticated() && !isAuthPages() && <InnerSidebar key="InnerSidebar" visibleInnerSidebar={visibleInnerSidebar} /> }
         <Sidebar.Pusher onClick={this.hideSidebarVisibility}>
-          { !authPages && <HeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
+          {/* Display either internal or external header nav */}
+          { (isAuthenticated() && !isAuthPages()) && <InternalHeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} /> }
 
-          <section className={classnames({'ui stackable grid basic segment internal-page': internalPages, 'ui stackable grid auth-pages': authPages})}>                    
+          {/* Display either internal or external header nav */}
+          { (!isAuthenticated() && !isAuthPages()) && <LandingPageHeaderNav toggleInnerSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
 
-            { !authPages && <FlashMessage /> }          
+          <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated() && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
+            {/* Falsh messages */}  
+            <FlashMessage />             
             
             <Switch>
-              <Route exact path="/" component={Landing} />
+              {/* Render Laning-page or Dashboard */}
+              <Route exact path="/" render={props => isAuthenticated() ? 
+                (<section className="ui stackable grid basic segment internal-page"><Dashboard {...props} /></section>) : <LandingPage {...props} />} />        
+             
+              {/* Publick Signup pages */}
               <Route exact path="/signup" component={Signup} />
               <Route exact path="/signup/invitation" component={Invitation} />
-              <Route path="/subdomain" component={Subdomain} />
+              <Route path="/subdomain" component={Subdomain} />    
+
+              {/* Subdomain required Login pages */}
               <SubdomainRoute exact path="/login" component={Login} />
               <SubdomainRoute exact path="/login/confirmation/:token" component={Login} />
+              
+              {/* Authenticated internal pages */}      
               <PrivateRoute path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/settings" component={Settings} />
               <PrivateRoute exact path="/projects" component={ProjectsPage} />
@@ -158,72 +124,18 @@ class App extends Component {
               <PrivateRoute exact path="/events" component={EventsPage} /> 
             </Switch>
           </section>
-          
-          { internalPages &&
-            <footer className="ui vertical footer segment internal-footer">
-              <div className="ui stackable inverted grid">      
-                <div className="ten wide column">
-                  <h4 className="ui inverted header">Footer Header</h4>
-                  <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-                </div>
-              </div>
-            </footer>
-          }
-            
-          { landingPage &&
-            <footer className="ui inverted vertical footer segment">
-              <div className="ui center aligned container">
-                <div className="ui stackable inverted divided grid">
-                  <div className="three wide column">
-                    <h4 className="ui inverted header">Group 1</h4>
-                    <div className="ui inverted link list">
-                      <a href="#" className="item">Link One</a>
-                      <a href="#" className="item">Link Two</a>
-                      <a href="#" className="item">Link Three</a>
-                      <a href="#" className="item">Link Four</a>
-                    </div>
-                  </div>
-                  <div className="three wide column">
-                    <h4 className="ui inverted header">Group 2</h4>
-                    <div className="ui inverted link list">
-                      <a href="#" className="item">Link One</a>
-                      <a href="#" className="item">Link Two</a>
-                      <a href="#" className="item">Link Three</a>
-                      <a href="#" className="item">Link Four</a>
-                    </div>
-                  </div>
-                  <div className="three wide column">
-                    <h4 className="ui inverted header">Group 3</h4>
-                    <div className="ui inverted link list">
-                      <a href="#" className="item">Link One</a>
-                      <a href="#" className="item">Link Two</a>
-                      <a href="#" className="item">Link Three</a>
-                      <a href="#" className="item">Link Four</a>
-                    </div>
-                  </div>
-                  <div className="seven wide column">
-                    <h4 className="ui inverted header">Footer Header</h4>
-                    <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-                  </div>
-                </div>
-                <div className="ui inverted section divider"></div>
-                <img src={logo} className="ui centered mini image" alt="logo-square"/>
-                <div className="ui horizontal inverted small divided link list">
-                  <a className="item" href="#">{T.translate("landing.footer.site_map")}</a>
-                  <a className="item" href="#">{T.translate("landing.footer.contact_us")}</a>
-                  <a className="item" href="#">{T.translate("landing.footer.terms_and_conditions")}</a>
-                  <a className="item" href="#">{T.translate("landing.footer.privacy_policy")}</a>
-                </div>
-              </div>
 
-              <a href="#" className="back-to-top">
-                <i className="chevron up icon"></i>  
-              </a>
-            </footer>
-          }
+          { (isAuthenticated() && !isAuthPages()) && <footer className="ui vertical footer segment internal-footer">
+            <div className="ui stackable inverted grid">      
+              <div className="ten wide column">
+                <h4 className="ui inverted header">Footer Header</h4>
+                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+              </div>
+            </div>
+          </footer> }              
         </Sidebar.Pusher>
-      </Sidebar.Pushable>
-    )
+      </Sidebar.Pushable>,
+      <OuterSidebar key="OuterSidebar" visibleInnerSidebar={visibleOuterSidebar} />]
   }
 }
 

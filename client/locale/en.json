@@ -38,14 +38,18 @@
     },
     "contacts": {
       "header": "Contacts",
-      "description": "You can contact us freely by sending a message. For example, fo inquires related with how to upgrade your free tier and have access to more feature. For reporting softwares bugs. Or generally, how to use the serivces ans so on...",
+      "description": "You can contact us freely by sending a message. For example, fo inquires related with how to upgrade your free tier and have access to more feature. For reporting softwares bugs. Or generally, how to use the serivces, and so on...",
       "name": "Name",
       "email": "Email",
-      "message": "Message",
+      "message_body": "Message",
       "send": "Send",
-      "create": {
-        "notice": "Thank you for your message. We will contact you soon!",
-        "error": "Can not send message."
+      "name_required": "Name is required",
+      "email_required": "Email is required",
+      "message_body_required": "Message is required",
+      "wrong_email_format": "Wrong email format",
+      "flash": {
+        "success_create_contact_message": "Thank you for your message. We will contact you back soon!",
+        "error_create_contact_message": "Something went wrong when sending your message. Try sending us again."
       }
     },
     "footer": {
@@ -150,7 +154,8 @@
       "edit": "Edit",
       "cancel": "Cancel",
       "flash": {
-        "success_update": "Account information updated!"
+        "success_update": "Account information updated!",
+        "upload_first": "You need to upload and your company logo first!"
       }
     },
     "user": {
@@ -165,7 +170,8 @@
       "select_avatar": "Select avatar",
       "upload": "Upload",
       "flash": {
-        "success_update": "User information updated!"
+        "success_update": "User information updated!",
+        "upload_first": "You need to upload and your profile picture first!"
       }
     }
   },

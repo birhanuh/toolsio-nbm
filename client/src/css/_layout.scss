@@ -215,7 +215,7 @@ nav.ui.menu {
 
 // Internal page
 .ui.basic.segment.internal-page {
-  margin-top: 98px;
+  margin-top: 90px;
 }
 
 .ui.vertical.inverted.sidebar {
@@ -694,6 +694,14 @@ nav.ui.menu .item>a {
   display: flex !important;
 }
 
+.dimmed.dimmable > .ui.animating.dimmer, .dimmed.dimmable > .ui.visible.dimmer, .ui.active.dimmer {
+  display: flex !important;
+}
+
+.ui.dimmer img {
+  @include transform-rotate(180deg);
+}
+
 // Custome fieldset and legend
 .custom-fieldset {
   border: 1px solid $light-grey !important;
@@ -831,13 +839,25 @@ nav.ui.menu .item>a {
 .sprite.logo-one {
   height: 100px;
   width: 100px;
-  background-position: -191px top;  
+  background-position: -192px top;  
+}
+
+.sprite.logo-one:hover {
+  height: 100px;
+  width: 100px;
+  background-position: left -85px;  
 }
 
 .sprite.logo-two {
   height: 100px;
   width: 100px;
-  background-position: -291px top;  
+  background-position: -292px -1px;  
+}
+
+.sprite.logo-two:hover {
+  height: 100px;
+  width: 100px;
+  background-position: -100px -86px;  
 }
 
 // company logo
@@ -890,11 +910,47 @@ nav.ui.menu .item>a {
   }
   .slide-item h5 {
     font-weight: 400;
-    color: $medium-grey;
+    color: $light-grey;
   }
   .quote.icon {
     color: $turquoise;
     font-size: 30px;
+  }
+  .slid-item {
+    opacity: 0;
+  }
+
+  /* The dots/bullets/indicators */
+  .dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 5px;
+    background-color: $medium-grey;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+  }
+
+  .active {
+    background-color: $turquoise;
+  }
+
+  /* Fading animation */
+  .fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+
+  @-webkit-keyframes fade {
+    from {opacity: .2} 
+    to {opacity: 1}
+  }
+
+  @keyframes fade {
+    from {opacity: .2} 
+    to {opacity: 1}
   }
 }
 

@@ -48,8 +48,7 @@ class Page extends Component {
           <small className="d-block">{T.translate("landing.footer.copyright")}</small>
           <small className="d-block">{T.translate("landing.footer.address")}</small>
         </div>
-      </div>  
-    )
+      </div>)
   }
 }
 

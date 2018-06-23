@@ -28,8 +28,8 @@ const store = createStore(
 
 /*
 // Parse subdomain 
-let subdomain =  Authorization.getSubdomain()
-subdomain && Authorization.setSubdomain(subdomain)
+let subdomain =  getSubdomain()
+subdomain && setSubdomain(subdomain)
 
 if (localStorage.currentAccount) {
   // Retrieve the object from storage

@@ -43,7 +43,7 @@ export default {
         })
     ,
 
-    updateAccount: requiresAuth.createResolver((parent, args, { models, user }) =>
+    updateAccount: requiresAuth.createResolver((parent, args, { models }) =>
       models.Account.update(args, { where: {subdomain: args.subdomain}, returning: true, plain: true })
         .then(result => {
           console.log('retur: ', result)
