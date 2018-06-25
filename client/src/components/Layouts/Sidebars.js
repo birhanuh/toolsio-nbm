@@ -37,7 +37,7 @@ export function InnerSidebar({ visibleInnerSidebar }) {
 }
 
 
-export function OuterSidebar({ visibleOuterSidebar }) {
+export function OuterSidebarScrollableHeader({ visibleOuterSidebar }) {
   return [
     <Sidebar key="sidebar" as={Menu} animation='overlay' width='thin' visible={visibleOuterSidebar} vertical inverted>
       <ActiveLink activeOnlyWhenExact className="active item" to="#home" label={T.translate("landing.home.header")} />

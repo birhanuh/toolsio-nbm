@@ -104,14 +104,14 @@ app.use(
     context: {
       models,
       subdomain: req.headers.subdomain,
-      user: req.user,
-      //user: { id: 1 },
+      //user: req.user,
+      user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2,
       userLoader: new DataLoader(userId => userBatcher(userId, models)),
-      customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models)),
-      projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models)),
-      saleLoader: new DataLoader(saleIds => saleBatcher(saleIds, models))
+      customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models, req.headers.subdomain)),
+      projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models, req.headers.subdomain)),
+      saleLoader: new DataLoader(saleIds => saleBatcher(saleIds, models, req.headers.subdomain))
     }
   }))
 )

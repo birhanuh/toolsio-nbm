@@ -1,5 +1,5 @@
-export const customerBatcher = async (customerIds, models) => {
-  const results = await models.Customer.findAll({ where: {id: {[models.sequelize.Op.in]: customerIds} } }, { raw: true })
+export const customerBatcher = async (customerIds, models, subdomain) => {
+  const results = await models.Customer.findAll({ where: {id: {[models.sequelize.Op.in]: customerIds} }, searchPath: subdomain }, { raw: true })
 
   const data = {}
 
@@ -11,8 +11,8 @@ export const customerBatcher = async (customerIds, models) => {
   return customerIds.map(id => data[id])
 }
 
-export const projectBatcher = async (projectIds, models) => {
-  const results = await models.Project.findAll({ where: {id: {[models.sequelize.Op.in]: projectIds} } }, { raw: true })
+export const projectBatcher = async (projectIds, models, subdomain) => {
+  const results = await models.Project.findAll({ where: {id: {[models.sequelize.Op.in]: projectIds} }, searchPath: subdomain }, { raw: true })
 
   const data = {}
 
@@ -24,8 +24,8 @@ export const projectBatcher = async (projectIds, models) => {
   return projectIds.map(id => data[id])
 }
 
-export const saleBatcher = async (saleIds, models) => {
-  const results = await models.Sale.findAll({ where: {id: {[models.sequelize.Op.in]: saleIds} } }, { raw: true })
+export const saleBatcher = async (saleIds, models, subdomain) => {
+  const results = await models.Sale.findAll({ where: {id: {[models.sequelize.Op.in]: saleIds} }, searchPath: subdomain }, { raw: true })
 
   const data = {}
 
@@ -37,18 +37,19 @@ export const saleBatcher = async (saleIds, models) => {
   return saleIds.map(id => data[id])
 }
 
-export const userBatcher = async (userId, models) => {
-  const result = await models.User.findOne({ where: {id: userId} }, { raw: true })
+export const userBatcher = async (userId, models, subdomain) => {
+  const result = await models.User.findOne({ where: {id: userId}, searchPath: subdomain }, { raw: true })
 
   return [result]
 }
 
-export const usersCountLoaderBatcher = async (ids, models) => {
+export const usersCountLoaderBatcher = async (ids, models, subdomain) => {
   const results = await models.User.findAll({ 
     include: [
       {
         model: models.Channel,
-        where: { id: {[models.sequelize.Op.in]: ids} }
+        where: { id: {[models.sequelize.Op.in]: ids} }, 
+        searchPath: subdomain
       }
     ]}, { raw: true })
 
@@ -65,5 +66,4 @@ export const usersCountLoaderBatcher = async (ids, models) => {
   console.log('data ', data)
   // [[{name: 'general'}], [], []]
   return results
-
 }

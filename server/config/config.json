@@ -6,6 +6,9 @@
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
     "define": {
       "underscored": true
     }
@@ -17,6 +20,9 @@
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
     "define": {
       "underscored": true
     }
@@ -28,6 +34,9 @@
     "host": "db",
     "dialect": "postgres",
     "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
     "define": {
       "underscored": true
     }

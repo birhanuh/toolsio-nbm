@@ -26,7 +26,7 @@ export const createAuthTokens = async (user, secret, secret2) => {
   return [createAuthToken, createRefreshAuthToken];
 };
 
-export const refreshAuthTokens = async (authToken, refreshAuthToken, models, SECRET, SECRET2) => {
+export const refreshAuthTokens = async (authToken, refreshAuthToken, models, subdomain, SECRET, SECRET2) => {
   let userId = 0
 
   try {
@@ -40,7 +40,7 @@ export const refreshAuthTokens = async (authToken, refreshAuthToken, models, SEC
     return {}
   }
 
-  const user = await models.User.findOne({ where: { id: userId }, raw: true })
+  const user = await models.User.findOne({ where: { id: userId }, raw: true }, { searchPath: subdomain })
 
   if (!user) {
     // user not found
@@ -64,8 +64,8 @@ export const refreshAuthTokens = async (authToken, refreshAuthToken, models, SEC
   } 
 }
 
-export const loginUserWithToken = async (email, password, models, SECRET, SECRET2) => {
-  const user = await models.User.findOne({ where: { email }, raw: true })
+export const loginUserWithToken = async (email, password, models, subdomain, SECRET, SECRET2) => {
+  const user = await models.User.findOne({ where: { email }, raw: true }, { searchPath: subdomain })
 
   if (!user) {
     // user not found

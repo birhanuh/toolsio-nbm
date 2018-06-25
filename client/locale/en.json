@@ -773,7 +773,7 @@
   "events": {
     "page": {
       "header": "Events",
-      "description": "Organize your schedules and appointements here."
+      "description": "Organize and plan your events. Follow deadlines and appointements here."
     },
     "form": {
       "new_event": "New Event",

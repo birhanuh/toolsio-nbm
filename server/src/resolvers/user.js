@@ -2,6 +2,9 @@ import { formatErrors } from '../utils/formatErrors'
 import { loginUserWithToken } from '../utils/authentication'
 import requiresAuth from '../middlewares/authentication'
 
+// Loadash
+import map from 'lodash/map'
+
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
@@ -29,11 +32,11 @@ const s3Bucket = new AWS.S3({
 
 export default {
   Query: {
-    getUser: requiresAuth.createResolver((parent, { id }, { models }) => models.User.findOne({ where: { id } }, { raw: true })),
+    getUser: requiresAuth.createResolver((parent, { id }, { models }) => models.User.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
 
-    getUserByEmail: requiresAuth.createResolver((parent, { email }, { models }) => models.User.findOne({ where: { email } }, { raw: true })),
+    getUserByEmail: requiresAuth.createResolver((parent, { email }, { models }) => models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })),
 
-    getUsers: requiresAuth.createResolver((parent, args, { models }) => models.User.findAll())
+    getUsers: requiresAuth.createResolver((parent, args, { models }) => models.User.findAll({ searchPath: subdomain }))
   },
 
   Mutation: {
@@ -60,8 +63,22 @@ export default {
           }
         } else {
           const response = await models.sequelize.transaction(async (transaction) => {
+            
+            // Creates a schema
+            await models.sequelize.createSchema(subdomain)
 
-            const user = await  models.User.create({ firstName, lastName, email, password }, { transaction })
+            // Sync migrate tables
+            await models.User.sync({schema: subdomain})
+            
+            // Sync the reset schemas asynchronously
+            Promise.all(
+              map(Object.keys(models), (key) => {
+                if (['sequelize', 'Sequelize', 'Account', 'User'].includes(key)) return
+                models[key].sync({schema: subdomain})
+              })
+            )
+
+            const user = await  models.User.create({ firstName, lastName, email, password }, { searchPath: subdomain, transaction })
             const account = await models.Account.create({ subdomain, industry, owner: user.id }, { transaction })
 
             return { user, account } 
@@ -110,11 +127,9 @@ export default {
         const accountLocal = await models.Account.findOne( { where: { subdomain: account } }, { raw: true })
 
         if (accountLocal) {
-          // Switch to account schema
-          //sequelize.Switch(account.subdomain)
 
           try {
-            const user = await  models.User.create({ firstName, lastName, email, password })
+            const user = await  models.User.schema(accountLocal.subdomain).create({ firstName, lastName, email, password })
 
             // Create emailToken
             jwt.sign({
@@ -233,8 +248,8 @@ export default {
       }
     }),
 
-    updateUser: requiresAuth.createResolver((parent, args, { models }) => 
-       models.User.update(args, { where: {email: args.email}, returning: true, plain: true })
+    updateUser: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.User.schema(subdomain).update(args, { where: {email: args.email}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {  
           return {
             success: true,

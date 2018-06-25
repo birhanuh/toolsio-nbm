@@ -31,7 +31,7 @@ import EventsPage from '../Events/Page'
 
 import InternalHeaderNav from './InternalHeaderNav'
 import LandingPageHeaderNav from './LandingPageHeaderNav'
-import { OuterSidebar, InnerSidebar } from './Sidebars'
+import { OuterSidebarScrollableHeader, InnerSidebar } from './Sidebars'
 import FlashMessage from '../../flash/FlashMessage'
 
 // Semantic CSS
@@ -85,8 +85,7 @@ class App extends Component {
             
             <Switch>
               {/* Render Laning-page or Dashboard */}
-              <Route exact path="/" render={props => isAuthenticated() ? 
-                (<section className="ui stackable grid basic segment internal-page"><Dashboard {...props} /></section>) : <LandingPage {...props} />} />        
+              <Route exact path="/" render={props => isAuthenticated() ? <Dashboard {...props} /> : <LandingPage {...props} />} />        
              
               {/* Publick Signup pages */}
               <Route exact path="/signup" component={Signup} />
@@ -135,7 +134,7 @@ class App extends Component {
           </footer> }              
         </Sidebar.Pusher>
       </Sidebar.Pushable>,
-      <OuterSidebar key="OuterSidebar" visibleInnerSidebar={visibleOuterSidebar} />]
+      <OuterSidebarScrollableHeader key="OuterSidebarScrollableHeader" visibleInnerSidebar={visibleOuterSidebar} />]
   }
 }
 

@@ -3,13 +3,14 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getItem: requiresAuth.createResolver((parent, {id}, { models }) => models.Item.findOne({ where: {id} })),
-    getItems: requiresAuth.createResolver((parent, args, { models }) => models.Item.findAll())
+    getItem: requiresAuth.createResolver((parent, {id}, { models, subdomain }) => models.Item.findOne({ where: {id}, searchPath: subdomain })),
+    
+    getItems: requiresAuth.createResolver((parent, args, { models, subdomain }) => models.Item.findAll({ searchPath: subdomain }))
   },
 
   Mutation: {
-    createItem: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Item.create(args)
+    createItem: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Item.create(args, {  searchPath: subdomain })
         .then(item => {
           return {
             success: true,
@@ -24,8 +25,8 @@ export default {
           }
         })),
 
-    updateItem: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Item.update(args, { where: {id: args.id}, returning: true, plain: true })
+    updateItem: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Item.update(args, { where: {id: args.id}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {  
           return {
             success: true,
@@ -40,8 +41,8 @@ export default {
           }
         })),
 
-    deleteItem: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Item.destroy({ where: {id: args.id}, force: true })
+    deleteItem: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Item.destroy({ where: {id: args.id}, force: true, searchPath: subdomain })
         .then(res => {          
           return {
             success: (res === 1)

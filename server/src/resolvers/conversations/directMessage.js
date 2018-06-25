@@ -23,15 +23,15 @@ export default {
   },
 
   Query: {
-    getDirectMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.DirectMessage.findOne({ where: { id } }, { raw: true })),
+    getDirectMessage: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.DirectMessage.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
 
-    getDirectMessages: requiresAuth.createResolver((parent, { receiverId, cursor }, { models, user }) => {
+    getDirectMessages: requiresAuth.createResolver((parent, { receiverId, cursor }, { models, subdomain, user }) => {
       const options = { 
         where: { [models.sequelize.Op.or]: [
           {[models.sequelize.Op.and]: [{ receiverId: receiverId, senderId: user.id }]},
           {[models.sequelize.Op.and]: [{ senderId: receiverId, receiverId: user.id }]} ]
         },
-        order: [['created_at', 'DESC']], limit: 10 }
+        order: [['created_at', 'DESC']], limit: 10, searchPath: subdomain }
    
       if (cursor) {
         options.where.created_at = {
@@ -46,15 +46,16 @@ export default {
       models.sequelize.query('select distinct on (u.id) u.id, u.first_name, u.email from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id)', {
           model: models.User,
           raw: true,
+          searchPath: subdomain
         })),
 
-    getSentDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => 
+    getSentDirectMessages: requiresAuth.createResolver((parent, args, { models, subdomain, user }) => 
       models.DirectMessage.findAll({ 
           where: { senderId: user.id },
-          order: [['created_at', 'ASC']] }, { raw: true })
+          order: [['created_at', 'ASC']], searchPath: subdomain }, { raw: true })
         ),
 
-    getInboxDirectMessages: requiresAuth.createResolver((parent, args, { models, user }) => 
+    getInboxDirectMessages: requiresAuth.createResolver((parent, args, { models, subdomain, user }) => 
       models.DirectMessage.findAll({ 
         include: [
           {
@@ -62,11 +63,11 @@ export default {
             where: { receiverId: user.id }
           }
         ],
-        order: [['created_at', 'ASC']] }, { raw: true })),
+        order: [['created_at', 'ASC']], searchPath: subdomain }, { raw: true })),
 
-    getUnreadDirectMessagesCount: requiresAuth.createResolver((parent, args, { models, user }) => 
+    getUnreadDirectMessagesCount: requiresAuth.createResolver((parent, args, { models, subdomain, user }) => 
       models.DirectMessage.count({ 
-          where: { receiverId: user.id, senderId: { [models.sequelize.Op.ne]: user.id }, isRead: false }
+          where: { receiverId: user.id, senderId: { [models.sequelize.Op.ne]: user.id }, isRead: false }, searchPath: subdomain
         }, { raw: true })
         .then(count => {
           return {
@@ -77,10 +78,11 @@ export default {
           console.log('err: ', err)
         })),
 
-    getUnreadDirectMessagesCountSender: requiresAuth.createResolver((parent, args, { models, user }) => 
+    getUnreadDirectMessagesCountSender: requiresAuth.createResolver((parent, args, { models, subdomain, user }) => 
       models.sequelize.query('SELECT count(*), sender_id FROM direct_messages WHERE receiver_id = '+user.id+' AND sender_id<>'+user.id+' AND is_read=false GROUP BY sender_id', {
           model: models.DirectMessage,
-          raw: true
+          raw: true,
+          searchPath: subdomain
         }) 
         .then(result => {
           return {
@@ -99,7 +101,7 @@ export default {
   },
 
   Mutation: {
-    createDirectMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, user }) => {
+    createDirectMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, subdomain, user }) => {
       try {
 
         const messageData = args
@@ -110,7 +112,7 @@ export default {
           messageData.mimetype = uploadFile.mimetype
         }
          
-        const message = await models.DirectMessage.create({ ...messageData, senderId: user.id })
+        const message = await models.DirectMessage.create({ ...messageData, senderId: user.id }, { searchPath: subdomain })
 
         // Do both asynchronously
         const asyncFunc = async () => {
@@ -139,7 +141,7 @@ export default {
     }),
 
     markDirectMessagesAsRead: requiresAuth.createResolver((parent, args, { models, user }) => 
-      models.DirectMessage.update({isRead: true}, { where: {receiverId: user.id, senderId: args.senderId} })
+      models.DirectMessage.update({isRead: true}, { where: {receiverId: user.id, senderId: args.senderId}, searchPath: subdomain })
         .then(() => {  
           return {
             success: true
@@ -162,7 +164,7 @@ export default {
       if (user) {
         return user
       }
-      return models.User.findOne({ where: {id: senderId} }, { raw: true })            
+      return models.User.findOne({ where: {id: senderId}, searchPath: subdomain }, { raw: true })            
     } 
   }
 

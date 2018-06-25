@@ -99,7 +99,7 @@ class LandingPage extends Component {
     // Custome carousel
     let slideIndex = 0
     // Run showSlides only on root path 
-    if (window.location.pathname.indexOf('/')) {
+    if (window.location.pathname.indexOf('/') === 0) {
       showSlides()
     }
 

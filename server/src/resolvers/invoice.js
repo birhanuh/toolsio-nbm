@@ -4,11 +4,11 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
   
   Query: {
-    getInvoice: requiresAuth.createResolver((parent, {id}, { models }) => models.Invoice.findOne({ where: {id} }, { raw: true })),
+    getInvoice: requiresAuth.createResolver((parent, {id}, { models, subdomain }) => models.Invoice.findOne({ where: {id}, searchPath: subdomain }, { raw: true })),
     
-    getInvoices: requiresAuth.createResolver((parent, { offset, limit, order, search }, { models }) => {
+    getInvoices: requiresAuth.createResolver((parent, { offset, limit, order, search }, { models, subdomain }) => {
 
-      const options = {include: [], where: {}, offset, limit, order: [['updated_at', ''+order+'']] }
+      const options = {include: [], where: {}, offset, limit, order: [['updated_at', ''+order+'']], searchPath: subdomain }
 
       if (/^\d/.test(search)) {
         options.where = {
@@ -46,7 +46,7 @@ export default {
   },
 
   Mutation: {
-    createInvoice: requiresAuth.createResolver(async (parent, args, { models, user }) => {
+    createInvoice: requiresAuth.createResolver(async (parent, args, { models, subdomain, user }) => {
       try {
         
         let date = new Date(args.deadline)
@@ -55,14 +55,14 @@ export default {
         let referenceNumber = dataFormated+ '-' +(args.projectId || args.saleId).toString()
        
         const response = await models.sequelize.transaction(async (transaction) => {
-          const invoice = await models.Invoice.create({...args, referenceNumber, userId: user.id}, { transaction })
+          const invoice = await models.Invoice.create({...args, referenceNumber, userId: user.id}, { searchPath: subdomain, transaction })
           
           if (args.projectId) {
-            models.Project.update({isInvoiced: true}, { where: {id: args.projectId} }, { transaction })
+            models.Project.update({isInvoiced: true}, { where: {id: args.projectId} }, { searchPath: subdomain, transaction })
           }
 
           if (args.saleId) {
-            models.Sale.update({isInvoiced: true}, { where: {id: args.saleId} }, { transaction })
+            models.Sale.update({isInvoiced: true}, { where: {id: args.saleId} }, { searchPath: subdomain, transaction })
           }
 
           return { invoice }
@@ -81,8 +81,8 @@ export default {
       }
     }),
 
-    updateInvoice: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Invoice.update(args, { where: {id: args.id}, returning: true, plain: true })
+    updateInvoice: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Invoice.update(args, { where: {id: args.id}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {  
           return {
             success: true,
@@ -98,8 +98,8 @@ export default {
         })
     ),
 
-    deleteInvoice: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Invoice.destroy({ where: {id: args.id}, force: true })
+    deleteInvoice: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Invoice.destroy({ where: {id: args.id}, force: true, searchPath: subdomain })
         .then(res => {          
           return {
             success: (res === 1)
@@ -122,34 +122,34 @@ export default {
 
     sale: ({ saleId }, args, { saleLoader }) => saleId && saleLoader.load(saleId),
 
-    total: async ({ projectId, saleId }, args, { models }) => {
+    total: async ({ projectId, saleId }, args, { models, subdomain }) => {
       if (projectId) {    
         const totalSum = await models.Task.sum('total', {
-            where: { projectId }
+            where: { projectId }, searchPath: subdomain
           }) 
        
         return totalSum ? totalSum : 0      
       }
       if (saleId) {
         return models.Item.sum('total',
-          { where: {saleId} }, { raw: true })  
+          { where: {saleId}, searchPath: subdomain }, { raw: true})  
       }
       return null
     },
   },
 
   Invoice: {
-    customer: ({ customerId }, args, { models }) => 
-      models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
+    customer: ({ customerId }, args, { models, subdomain }) => 
+      models.Customer.findOne({ where: {id: customerId}, searchPath: subdomain }),
 
-    project: ({ projectId }, args, { models }) => 
-      models.Project.findOne({ where: {id: projectId} }, { raw: true }),
+    project: ({ projectId }, args, { models, subdomain }) => 
+      models.Project.findOne({ where: {id: projectId}, searchPath: subdomain }),
 
-    sale: ({ saleId }, args, { models }) => 
-      models.Sale.findOne({ where: {id: saleId} }, { raw: true }),
+    sale: ({ saleId }, args, { models, subdomain }) => 
+      models.Sale.findOne({ where: {id: saleId}, searchPath: subdomain }),
 
-    user: ({ userId }, args, { models }) => 
-      models.User.findOne({ where: {id: userId} }, { raw: true })
+    user: ({ userId }, args, { models, subdomain }) => 
+      models.User.findOne({ where: {id: userId}, searchPath: subdomain })
   
   }
 
