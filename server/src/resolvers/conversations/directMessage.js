@@ -42,7 +42,7 @@ export default {
       return models.DirectMessage.findAll(options, { raw: true })
     }),
 
-    getDirectMessageUsers: requiresAuth.createResolver((parent, args, { models }) => 
+    getDirectMessageUsers: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
       models.sequelize.query('select distinct on (u.id) u.id, u.first_name, u.email from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id)', {
           model: models.User,
           raw: true,

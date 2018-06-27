@@ -10,10 +10,9 @@ export default {
         include: [
           {
             model: models.User,
-            where: { id: user.id }, 
-            searchPath: subdomain
+            where: { id: user.id }
           }
-        ]
+        ], searchPath: subdomain
       }, { raw: true }))
 
   },

@@ -95,8 +95,8 @@ const InvoiceTasksCard = () => (
               { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
               <div className="ui info message">
                 <div className="description">
-                  {T.translate("dashboard.invoice_tasks.no_pending_invoices")}
-                  {T.translate("dashboard.invoice_tasks.no_overdue_invoices")}
+                  <p>{T.translate("dashboard.invoice_tasks.no_pending_invoices")}</p>
+                  <p>{T.translate("dashboard.invoice_tasks.no_overdue_invoices")}</p>
                 </div>
               </div> 
             </div> : list }

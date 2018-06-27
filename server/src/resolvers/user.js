@@ -32,11 +32,11 @@ const s3Bucket = new AWS.S3({
 
 export default {
   Query: {
-    getUser: requiresAuth.createResolver((parent, { id }, { models }) => models.User.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
+    getUser: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.User.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
 
-    getUserByEmail: requiresAuth.createResolver((parent, { email }, { models }) => models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })),
+    getUserByEmail: requiresAuth.createResolver((parent, { email }, { models, subdomain }) => models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })),
 
-    getUsers: requiresAuth.createResolver((parent, args, { models }) => models.User.findAll({ searchPath: subdomain }))
+    getUsers: requiresAuth.createResolver((parent, args, { models, subdomain }) => models.User.findAll({ searchPath: subdomain }))
   },
 
   Mutation: {
@@ -67,7 +67,7 @@ export default {
             // Creates a schema
             await models.sequelize.createSchema(subdomain)
 
-            // Sync migrate tables
+            // Migrate users model 
             await models.User.sync({schema: subdomain})
             
             // Sync the reset schemas asynchronously
@@ -129,7 +129,7 @@ export default {
         if (accountLocal) {
 
           try {
-            const user = await  models.User.schema(accountLocal.subdomain).create({ firstName, lastName, email, password })
+            const user = await  models.User.schema(accountLocal.subdomain).create({ firstName, lastName, email, password }, { searchPath: accountLocal.subdomain })
 
             // Create emailToken
             jwt.sign({

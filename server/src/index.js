@@ -103,9 +103,9 @@ app.use(
     schema,
     context: {
       models,
-      subdomain: req.headers.subdomain,
-      //user: req.user,
-      user: { id: 1 },
+      subdomain: req.headers.subdomain ? req.headers.subdomain : 'public',
+      user: req.user,
+      //user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2,
       userLoader: new DataLoader(userId => userBatcher(userId, models)),

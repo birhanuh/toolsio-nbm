@@ -249,7 +249,7 @@
       "no_invoices": "You have no Invoices",
       "no_pending_invoices": "You have no pending Invoices",
       "pending_invoices": "You have *{count}* pending Invoices.",
-      "no_overuded_invoices": "You have no overuded Invoices",
+      "no_overdue_invoices": "You have no overdue Invoices",
       "overdue_invoices": "You have *{count}* overdue Invoices."
     },   
     "last_month": "Last month",

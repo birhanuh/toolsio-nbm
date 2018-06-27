@@ -23,6 +23,14 @@ body {
           text-size-adjust: 100%;
 }
 
+#app {
+  height: 100%;
+}
+
+.pushable {
+  overflow-x: initial;
+}
+
 .pushable > .pusher {
   background: $body-background-color;
 }
