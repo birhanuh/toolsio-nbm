@@ -33,7 +33,7 @@
       "header": "Pricing",
       "learn_more": "Learn more"
     },
-    "testmonial": {
+    "testimonial": {
       "header": "Testmonial"
     },
     "contacts": {
@@ -53,11 +53,9 @@
       }
     },
     "footer": {
-      "copyright": "Copyright &copy; Toolsio, Ltd. 2017",
-      "address": "Pyyntitie 2 C 50, 02230, Espoo, Finland",
       "toolsio": "Toolsio",
-      "site_map": "Site Map",
-      "contact_us": "Contact us",
+      "copy_right": "Copyright © Toolsio, Ltd. 2018",
+      "address": "Pyyntitie 2 C 50, 02230, Espoo, Finland",
       "terms_and_conditions": "Terms and Conditions",
       "privacy_policy": "Privacy Policy"
     }

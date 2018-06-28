@@ -40,8 +40,8 @@ export default {
   },
 
   Mutation: {
-    loginUser: (parent, { email, password }, { models, SECRET, SECRET2 }) => 
-      loginUserWithToken(email, password, models, SECRET, SECRET2),
+    loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
+      loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
     
     registerUser: async (parent, args, { models }) => {
 

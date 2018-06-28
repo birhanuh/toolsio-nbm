@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
-import { IS_SUBDOMAIN_EXIST_MUTATION } from '../../graphql/authentications'
+import { GET_ACCOUNT_QUERY } from '../../graphql/authentications'
 
 import { Validation, getSubdomain } from '../../utils'
 
@@ -24,35 +24,29 @@ class Subdomain extends Component {
     }
   }
 
-  componentDidMount = () => {
-    // Fetch Sale when id is present in params
-    const subdomain = getSubdomain()
+  componentWillReceiveProps = (nextProps) => {
+    // Fetch account if subdomain is present in params
+    if (nextProps) {
+      const { subdomain } = nextProps.data.getAccount
     
-    if (subdomain) {
-      this.setState({ errros: {}, isLoading: true })
+      if (subdomain) {  
+        // Redirect to login page with subdoamin set 
+        window.location = ''+process.env.SERVER_PROTOCOL+subdomain+'.'+process.env.SERVER_HOST+'/login'
 
-      this.props.mutate({ variables: { subdomain } })
-        .then(res => {
-         
-          const { success, subdomain } = res.data.isSubdomainExist
-      
-          if (success) {
-            
-            this.props.addFlashMessage({
-              type: 'success',
-              text: T.translate("log_in.subdomain.on_your_account_page")
-            })
+        // this.props.addFlashMessage({
+        //   type: 'success',
+        //   text: T.translate("log_in.subdomain.on_your_account_page")
+        // })
+      } else {  
+        // Redirect to login page with subdoamin set 
+        window.location = process.env.SERVER_PROTOCOL+process.env.SERVER_HOST
 
-            // Redirect to login page with subdoamin set 
-            window.location = ''+process.env.SERVER_PROTOCOL+subdomain+'.'+process.env.SERVER_HOST+'/login'
-          } else {
-            let errorsList = {}
-            errors.map(error => errorsList[error.path] = error.message)
-            this.setState({ errors: errorsList, isLoading: false })
-          }
+        this.props.addFlashMessage({
+          type: 'success',
+          text: T.translate("log_in.subdomain.on_account")
         })
-        .catch(err => this.setState({ errors: err, isLoading: false }))    
-    } 
+      }      
+    }
   }
   
   handleChange(e) {
@@ -155,5 +149,11 @@ Subdomain.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(null, { addFlashMessage }) (graphql(IS_SUBDOMAIN_EXIST_MUTATION)(Subdomain))
+export default connect(null, { addFlashMessage }) (graphql(GET_ACCOUNT_QUERY, {
+    options: () => ({
+      variables: {
+        subdomain: getSubdomain(),
+      }
+    })
+  })(Subdomain))
 

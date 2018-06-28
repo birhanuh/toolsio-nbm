@@ -74,6 +74,11 @@ a {
   display: none;
 }
 
+.ui.items > .item > .content > .header, .ui.menu .item, .ui.form .field > label, 
+.ui.table, .ui.table thead th {
+  color: inherit;
+}
+
 .ui.menu .item a i.sidebar.icon  {
   color: $white !important;
   &:hover {
@@ -338,6 +343,10 @@ nav.ui.menu {
   background-color: $x-dark-mid-night-blue;
   color: $dark-medium-grey;
   padding: 5em 1em;
+
+  .inverted.divided.grid > div {
+    padding-top: 30px;
+  }
 }
 
 .ui.footer.segment.internal-footer {
@@ -901,7 +910,7 @@ nav.ui.menu .item>a {
   box-shadow: 0 -1px 0 rgba(rgb(228,229,231),1);
 }
 
-#testimonials {
+#testimonial {
   background: url("../images/pattern.png"),url("../images/testimonials.jpg");
   .carousel-indicators {
     margin-bottom: -40px;

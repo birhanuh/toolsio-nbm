@@ -2,9 +2,10 @@ import bcrypt from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 import _ from 'lodash'
 
-export const createAuthTokens = async (user, secret, secret2) => {
+export const createAuthTokens = async (subdomain, user, secret, secret2) => {
   const createAuthToken = jwt.sign(
     {
+      account: subdomain,
       user: _.pick(user, ['id', 'firstName', 'email', 'isAdmin']),
     },
     secret,
@@ -48,14 +49,14 @@ export const refreshAuthTokens = async (authToken, refreshAuthToken, models, sub
   }
 
   const refreshSecret = user.password + SECRET2
-  
+   
   try {
     jwt.verify(refreshAuthToken, refreshSecret)
   } catch (err) {
     return {}
   }  
   
-  const [newAuthToken, newRefreshAuthToken] = await createAuthTokens(user, SECRET, refreshSecret)
+  const [newAuthToken, newRefreshAuthToken] = await createAuthTokens(subdomain, user, SECRET, refreshSecret)
   
   return {    
     authToken: newAuthToken,
@@ -93,7 +94,7 @@ export const loginUserWithToken = async (email, password, models, subdomain, SEC
 
   const refreshAuthTokenSecret = user.password + SECRET2
 
-  const [authToken, refreshAuthToken] = await createAuthTokens(user, SECRET, refreshAuthTokenSecret)
+  const [authToken, refreshAuthToken] = await createAuthTokens(subdomain, user, SECRET, refreshAuthTokenSecret)
   // user found
   return {
     success: true,    

@@ -62,27 +62,30 @@ class Page extends Component {
                       
                 { getSales && <List sales={getSales} loading={loading} /> }             
 
-                <div className="ui center aligned basic segment">           
-                  <Button 
-                    primary
-                    size="large"
-                    onClick={() =>
-                      fetchMore({
-                        variables: {
-                          offset: data.getSales.length
-                        },
-                        updateQuery: (prev, { fetchMoreResult }) => {
-                          if (!fetchMoreResult) return prev
-                          return Object.assign({}, prev, {
-                            getSales: [...prev.getSales, ...fetchMoreResult.getSales]
-                          })
-                        }
-                      })
-                    }
-                  >    
-                    <Icon name='refresh' />&nbsp;
-                    {T.translate("sales.page.load_more")}
-                  </Button>
+                <div className="ui center aligned basic segment">  
+                  
+                  { getSales && getSales.length >= 5 &&              
+                    <Button 
+                      primary
+                      size="large"
+                      onClick={() =>
+                        fetchMore({
+                          variables: {
+                            offset: data.getSales.length
+                          },
+                          updateQuery: (prev, { fetchMoreResult }) => {
+                            if (!fetchMoreResult) return prev
+                            return Object.assign({}, prev, {
+                              getSales: [...prev.getSales, ...fetchMoreResult.getSales]
+                            })
+                          }
+                        })
+                      }
+                    >    
+                      <Icon name='refresh' />&nbsp;
+                      {T.translate("sales.page.load_more")}
+                    </Button>
+                  }
                 </div>  
               </div>
             </div>  

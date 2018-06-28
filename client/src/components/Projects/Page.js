@@ -62,27 +62,30 @@ class Page extends Component {
 
                 { getProjects && <List projects={getProjects} loading={loading} /> }             
 
-                <div className="ui center aligned basic segment">           
-                  <Button 
-                    primary
-                    size="large"
-                     onClick={() =>
-                      fetchMore({
-                        variables: {
-                          offset: data.getProjects.length
-                        },
-                        updateQuery: (prev, { fetchMoreResult }) => {
-                          if (!fetchMoreResult) return prev
-                          return Object.assign({}, prev, {
-                            getProjects: [...prev.getProjects, ...fetchMoreResult.getProjects]
-                          })
-                        }
-                      })
-                    }
-                  >    
-                    <Icon name='refresh' />&nbsp;
-                    {T.translate("projects.page.load_more")}
-                  </Button>
+                <div className="ui center aligned basic segment">   
+
+                  { getProjects && getProjects.length >= 5 &&        
+                    <Button 
+                      primary
+                      size="large"
+                       onClick={() =>
+                        fetchMore({
+                          variables: {
+                            offset: data.getProjects.length
+                          },
+                          updateQuery: (prev, { fetchMoreResult }) => {
+                            if (!fetchMoreResult) return prev
+                            return Object.assign({}, prev, {
+                              getProjects: [...prev.getProjects, ...fetchMoreResult.getProjects]
+                            })
+                          }
+                        })
+                      }
+                    >    
+                      <Icon name='refresh' />&nbsp;
+                      {T.translate("projects.page.load_more")}
+                    </Button>
+                  }
                 </div>  
               </div>
             </div>  

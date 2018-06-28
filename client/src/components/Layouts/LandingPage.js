@@ -73,14 +73,14 @@ class LandingPage extends Component {
     //   }
     // })
 
-    // // jQuery for page scrolling feature - requires jQuery Easing plugin
-    // $('.ui.large.menu .left.menu a').on('click', function(event) {
-    //   event.preventDefault()
-    //   var $anchor = $(this)
-    //   $('html, body').stop().animate({
-    //       scrollTop: $($anchor.attr('href')).offset().top - 50
-    //   }, 1500, 'easeInOutExpo')
-    // })
+    // jQuery for page scrolling feature - requires jQuery Easing plugin
+    $('.ui.footer .ui.inverted.link.list a').on('click', function(event) {
+      event.preventDefault()
+      var $anchor = $(this)
+      $('html, body').stop().animate({
+          scrollTop: $($anchor.attr('href')).offset().top - 50
+      }, 1500, 'easeInOutExpo')
+    })
 
     // Scroll to top
     $(window).scroll(function() {
@@ -241,7 +241,7 @@ class LandingPage extends Component {
           </div>
         </div>  
 
-        <div id="testimonials" className="ui vertical stripe">
+        <div id="testimonial" className="ui vertical stripe">
           <div className="ui text container">
             <div className="ui center aligned grid">
               <div className="column row">
@@ -396,42 +396,32 @@ class LandingPage extends Component {
               <div className="three wide column">
                 <h4 className="ui inverted header">Group 1</h4>
                 <div className="ui inverted link list">
-                  <a href="#" className="item">Link One</a>
-                  <a href="#" className="item">Link Two</a>
-                  <a href="#" className="item">Link Three</a>
-                  <a href="#" className="item">Link Four</a>
+                  <a href="#features" className="item">{T.translate("landing.features.header")}</a>
                 </div>
               </div>
               <div className="three wide column">
                 <h4 className="ui inverted header">Group 2</h4>
                 <div className="ui inverted link list">
-                  <a href="#" className="item">Link One</a>
-                  <a href="#" className="item">Link Two</a>
-                  <a href="#" className="item">Link Three</a>
-                  <a href="#" className="item">Link Four</a>
+                  <a href="#pricing" className="item">{T.translate("landing.pricing.header")}</a>
                 </div>
               </div>
               <div className="three wide column">
                 <h4 className="ui inverted header">Group 3</h4>
                 <div className="ui inverted link list">
-                  <a href="#" className="item">Link One</a>
-                  <a href="#" className="item">Link Two</a>
-                  <a href="#" className="item">Link Three</a>
-                  <a href="#" className="item">Link Four</a>
+                  <a href="#testimonial" className="item">{T.translate("landing.testimonial.header")}</a>
                 </div>
               </div>
               <div className="seven wide column">
-                <h4 className="ui inverted header">Footer Header</h4>
-                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+                <h4 className="ui inverted header">{T.translate("landing.footer.toolsio")}</h4>
+                <p>{T.translate("landing.footer.address")}</p>
+                <small>{T.translate("landing.footer.copy_right")}</small>
               </div>
             </div>
             <div className="ui inverted section divider"></div>
             <img src={logo} className="ui centered mini image" alt="logo-square"/>
             <div className="ui horizontal inverted small divided link list">
-              <a className="item" href="#">{T.translate("landing.footer.site_map")}</a>
-              <a className="item" href="#">{T.translate("landing.footer.contact_us")}</a>
-              <a className="item" href="#">{T.translate("landing.footer.terms_and_conditions")}</a>
-              <a className="item" href="#">{T.translate("landing.footer.privacy_policy")}</a>
+              <a className="item" href="/terms-and-conditions">{T.translate("landing.footer.terms_and_conditions")}</a>
+              <a className="item" href="/privacy-policy">{T.translate("landing.footer.privacy_policy")}</a>
             </div>
           </div>
 

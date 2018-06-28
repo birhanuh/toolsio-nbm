@@ -43,16 +43,13 @@ export const LOGIN_USER_MUTATION = gql`
     }
   }
 `
-
-export const IS_SUBDOMAIN_EXIST_MUTATION = gql`
-  mutation($subdomain: String!) {
-    isSubdomainExist(subdomain: $subdomain) {
-      success
+export const GET_ACCOUNT_QUERY = gql`
+  query getAccount($subdomain: String!) {
+    getAccount(subdomain: $subdomain) {
+      id
       subdomain
-      errors {
-        path
-        message
-      }
     }
   }
 `
+
+

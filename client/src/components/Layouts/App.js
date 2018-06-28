@@ -40,6 +40,9 @@ import 'semantic-ui-css/semantic.min.css'
 // CSS entry
 import '../../css/app.scss'
 
+// Localization 
+import T from 'i18n-react'
+
 class App extends Component {
   
   state = { 
@@ -127,8 +130,8 @@ class App extends Component {
           { (isAuthenticated() && !isAuthPages()) && <footer className="ui vertical footer segment internal-footer">
             <div className="ui stackable inverted grid">      
               <div className="ten wide column">
-                <h4 className="ui inverted header">Footer Header</h4>
-                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+                <h4 className="ui inverted header">{T.translate("landing.footer.toolsio")}</h4>
+                <small>{T.translate("landing.footer.copy_right")}</small>
               </div>
             </div>
           </footer> }              

@@ -14,12 +14,6 @@ export default `
     logoUrl: String
   }
 
-  type IsSubdomainExistResponse {
-    success: Boolean!
-    subdomain: String
-    errors: [Error!]
-  }
-
   type UpdateAccountResponse {
     success: Boolean!
     account: Account
@@ -44,8 +38,6 @@ export default `
   }
 
   type Mutation {
-    isSubdomainExist(subdomain: String!): IsSubdomainExistResponse!
-
     updateAccount(subdomain: String! industry: String, phoneNumber: String, email: String, street: String, postalCode: 
     String, region: String, country: String, logoUrl: String): UpdateAccountResponse!
 
