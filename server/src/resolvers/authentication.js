@@ -100,6 +100,30 @@ export default {
 
     },
 
+    isSubdomainExist: (parent, { subdomain }, { models }) => 
+      models.Account.findOne({ where: { subdomain } }, { raw: true })
+        .then(account => {
+          if (account) {
+            return {
+              success: true,
+              subdomain: account.dataValues.subdomain
+            }
+          } else {
+            return {
+              success: false,
+              errors: [{ path: 'subdomain', message: 'There is no account with such subdomain! Go to Sign up page to sign for free!'}]
+            }
+          }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models) 
+          }
+        })
+    ,
+
     registerInvitedUser: async (parent, args, { models }) => {
 
       const { firstName, lastName, email, password, token } = args

@@ -101,7 +101,7 @@ class FormPage extends Component {
             })
             
             // Redirect to login
-            window.location = `${process.env.SERVER_PROTOCOL}${account.subdomain}.${process.env.SERVER_HOST}/login`
+            window.location = `${process.env.CLIENT_PROTOCOL}${account.subdomain}.${process.env.CLIENT_URL}/login`
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)

@@ -328,7 +328,7 @@ class LandingPage extends Component {
           <div className="ui middle aligned container">  
             <div className="ui two column stackable centered grid">
               <div className="column centered row">
-                <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
+                <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
               </div>  
             </div>
           </div>
