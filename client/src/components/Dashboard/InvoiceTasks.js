@@ -28,14 +28,6 @@ const InvoiceTasksCard = () => (
             {T.translate("dashboard.invoice_tasks.pending_invoices", {count: item.count})}
           </div>
         </div>)
-
-        // pendingNotification = (<div key={"no-new"} className="ui info message">
-        //     <div className="description">
-        //       {T.translate("dashboard.invoice_tasks.no_pending_invoices")}
-        //     </div>
-        //   </div>
-        //   )
-
       } 
 
       if (item.status === 'overdue') {
@@ -44,13 +36,6 @@ const InvoiceTasksCard = () => (
             {T.translate("dashboard.invoice_tasks.overdue_invoices", {count: item.count})}
           </div>
         </div>)
-
-        // overdueNotification = (<div key={task._id} className="ui negative message">
-        //     <div className="description">
-        //       {T.translate("dashboard.invoice_tasks.overdued_invoices", {count: task.count})}
-        //     </div>
-        //   </div>
-        //   )
       }  
     })
 

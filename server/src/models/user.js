@@ -59,10 +59,6 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      beforeValidate: (user) => {
-        user.isAdmin = user.length === 0
-        user.isConfirmed = user.length === 0
-      },
       beforeCreate: (user) => {
         return new Promise(function(resolve, reject) {
 

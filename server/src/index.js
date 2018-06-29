@@ -103,7 +103,7 @@ app.use(
     schema,
     context: {
       models,
-      subdomain: req.headers.subdomain ? req.headers.subdomain : 'public',
+      subdomain: (req.headers.subdomain && process.env.NODE_ENV !== 'test')  ? req.headers.subdomain : 'public',
       user: req.user,
       //user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
