@@ -104,11 +104,12 @@ app.use(
     context: {
       models,
       subdomain: (req.headers.subdomain && process.env.NODE_ENV !== 'test')  ? req.headers.subdomain : 'public',
+      //subdomain: 'testa',
       user: req.user,
       //user: { id: 1 },
       SECRET: jwtConfig.jwtSecret1,
       SECRET2: jwtConfig.jwtSecret2,
-      userLoader: new DataLoader(userId => userBatcher(userId, models)),
+      userLoader: new DataLoader(userId => userBatcher(userId, models, req.headers.subdomain)),
       customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models, req.headers.subdomain)),
       projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models, req.headers.subdomain)),
       saleLoader: new DataLoader(saleIds => saleBatcher(saleIds, models, req.headers.subdomain))

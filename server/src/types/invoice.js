@@ -4,7 +4,7 @@ export default `
     id: Int!
     deadline: Date
     paymentTerm: Int
-    interestInArrears: Int!
+    interestInArrears: Int
     status: String!
     referenceNumber: String!
     description: String
@@ -20,7 +20,8 @@ export default `
 
   type GetInvoicesResponseRows {
     id: Int!
-    deadline: Date!
+    deadline: Date
+    interestInArrears: Int
     referenceNumber: String!
     status: String!
     tax: Float!

@@ -27,7 +27,6 @@ export function InnerSidebar({ visibleInnerSidebar }) {
     const { account, user } = decode(authToken)
 
     currentUser = { account, user } 
-    console.log('user ', currentUser)
   } catch(err) {
     console.log('err: ', err)
   }

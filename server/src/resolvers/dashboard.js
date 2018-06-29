@@ -51,11 +51,13 @@ export default {
       const paidTasksSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'MM/YYYY') AS month, SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
         model: models.Task,
         raw: true,
+        searchPath: subdomain
       })
 
       const paidItemsSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'MM/YYYY') AS month, SUM(it.total) FROM items it JOIN invoices invoice ON it.sale_id = invoice.sale_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
         model: models.Item,
         raw: true,
+        searchPath: subdomain
       })
 
       const [paidTasksSumMonth, paidItemsSumMonth] = await Promise.all([paidTasksSumMonthPromise, paidItemsSumMonthPromise])

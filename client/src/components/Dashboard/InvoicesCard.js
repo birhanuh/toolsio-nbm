@@ -106,21 +106,21 @@ const InvoicesCard = () => (
           </div>
           
           <Card.Content extra>
-            { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
-            <div className="right floated">
-              <div className="meta">{countMonth && countMonth.length !== 0 ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
-              <div className="header">
-                {countMonth && countMonth.length !== 0 ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
-                {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow down red icon"></i> : 
-                  <i className="long arrow up green icon"></i>)}
-                </div>
-            </div>     
+            { !!error && <div className="ui negative message"><p>{error.message}</p></div> }                 
             <div className="left floated">
+              <div className="meta">{countMonth && countMonth[0] ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
+              <div className="header">
+                {countMonth && countMonth[0] ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
+              </div>
+            </div>  
+            <div className="right floated">
               <div className="meta">{countMonth && countMonth[1] ? (countMonth[1].month ? countMonth[1].month : '-') : '-'}</div>
               <div className="header">
                 {countMonth && countMonth[1] ? (countMonth[1].count ? countMonth[1].count : '-') : '-'}
-              </div>
-            </div>    
+                {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow up green icon"/ > : 
+                  <i className="long arrow down red icon" />)}
+                </div>
+            </div>   
           </Card.Content> 
 
           {(countStatusMonth && countStatusMonth.length === 0 || countMonth && countMonth.length === 0) && 

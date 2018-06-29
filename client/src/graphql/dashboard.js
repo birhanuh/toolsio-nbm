@@ -78,8 +78,8 @@ export const GET_INVOICES_DATA = gql`
         month
         count
       }
+    }
   }
-}
 `
 
 export const GET_PROJECT_TASKS_DATA = gql`

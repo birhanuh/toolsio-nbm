@@ -130,7 +130,7 @@ class App extends Component {
           { (isAuthenticated() && !isAuthPages()) && <footer className="ui vertical footer segment internal-footer">
             <div className="ui stackable inverted grid">      
               <div className="ten wide column">
-                <h4 className="ui inverted header">{T.translate("landing.footer.toolsio")}</h4>
+                <h4 className="ui inverted header mb-0">{T.translate("landing.footer.toolsio")}</h4>
                 <small>{T.translate("landing.footer.copy_right")}</small>
               </div>
             </div>
