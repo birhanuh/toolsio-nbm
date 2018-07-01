@@ -13,12 +13,21 @@ cache:
   directories:
     - client/node_modules
     - server/node_modules
-env:
-  - TEST_DIR=client
-  - TEST_DIR=server
-script:
-  - cd $TEST_DIR && npm install && npm test -- --runInBand
+#env:
+#  - TEST_DIR_CLIENT=client
+#  - TEST_DIR_SERVER=server
+#script:
+  #- cd $TEST_DIR_CLIENT && npm install && npm test
   #- npm run build
+jobs:
+  include:
+    - stage: server
+      script: 
+        - cd server && npm install && npm run tstart
+    - stage: test
+      script: 
+        - cd server && npm test -- --runInBand
+      
 deploy:
   provider: pages
   skip_cleanup: true

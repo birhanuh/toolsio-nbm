@@ -8,9 +8,6 @@ import { CREATE_CONTACT_MESSAGE_MUTATION } from '../../graphql/contactMessage'
 // Localization 
 import T from 'i18n-react'
 
-// Logo
-import logo from '../../images/logo-square.png' 
-
 /* jQuery */
 import $ from 'jquery'
 $.animate = require('jquery.easing')
@@ -389,46 +386,6 @@ class LandingPage extends Component {
               </div> 
           </div>         
         </div>
-
-        <footer className="ui inverted vertical footer segment">
-          <div className="ui center aligned container">
-            <div className="ui stackable inverted divided grid">
-              <div className="three wide column">
-                <h4 className="ui inverted header">Group 1</h4>
-                <div className="ui inverted link list">
-                  <a href="#features" className="item">{T.translate("landing.features.header")}</a>
-                </div>
-              </div>
-              <div className="three wide column">
-                <h4 className="ui inverted header">Group 2</h4>
-                <div className="ui inverted link list">
-                  <a href="#pricing" className="item">{T.translate("landing.pricing.header")}</a>
-                </div>
-              </div>
-              <div className="three wide column">
-                <h4 className="ui inverted header">Group 3</h4>
-                <div className="ui inverted link list">
-                  <a href="#testimonial" className="item">{T.translate("landing.testimonial.header")}</a>
-                </div>
-              </div>
-              <div className="seven wide column">
-                <h4 className="ui inverted header">{T.translate("landing.footer.toolsio")}</h4>
-                <p>{T.translate("landing.footer.address")}</p>
-                <small>{T.translate("landing.footer.copy_right")}</small>
-              </div>
-            </div>
-            <div className="ui inverted section divider"></div>
-            <img src={logo} className="ui centered mini image" alt="logo-square"/>
-            <div className="ui horizontal inverted small divided link list">
-              <a className="item" href="/terms-and-conditions">{T.translate("landing.footer.terms_and_conditions")}</a>
-              <a className="item" href="/privacy-policy">{T.translate("landing.footer.privacy_policy")}</a>
-            </div>
-          </div>
-
-          <a href="#" className="back-to-top">
-            <i className="chevron up icon"></i>  
-          </a>
-        </footer>
       </div>)
   }  
 }
