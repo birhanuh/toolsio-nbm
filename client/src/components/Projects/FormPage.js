@@ -26,10 +26,10 @@ class FormPage extends Component {
       id: this.props.data.getProject ? this.props.data.getProject.id : null,
       name: this.props.data.getProject ? this.props.data.getProject.name : '',
       deadline: this.props.data.getProject ? moment(this.props.data.getProject.deadline) : moment(),
-      customerId: this.props.data.getProject ? this.props.data.getProject.customerId : '',
+      customerId: this.props.data.getProject ? this.props.data.getProject.customer.id : '',
       status: this.props.data.getProject ? this.props.data.getProject.status : 'new',
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
-      description: this.props.data.getProject ? this.props.data.getProject.description : '',
+      description: this.props.data.getProject ? (!this.props.data.getProject.description ? '' : this.props.data.getProject.description) : '',
       errors: {},
       isLoading: false
     }
@@ -41,10 +41,10 @@ class FormPage extends Component {
         id: nextProps.data.getProject.id,
         name: nextProps.data.getProject.name,
         deadline: moment(nextProps.data.getProject.deadline),
-        customerId: nextProps.data.getProject.customerId,
+        customerId: nextProps.data.getProject.customer.id,
         status: nextProps.data.getProject.status,
         progress: nextProps.data.getProject.progress,
-        description: nextProps.data.getProject.description
+        description: !nextProps.data.getProject.description ? '' : nextProps.data.getProject.description
       })
     }
   }
@@ -231,7 +231,7 @@ class FormPage extends Component {
     const customersOptions = getCustomers && getCustomers.customers.map(customer => 
       ({ key: customer.id, value: customer.id, text: customer.name })
     )
-  
+
     return (
       <div className="row column">
         <div className="ui text container segment">  

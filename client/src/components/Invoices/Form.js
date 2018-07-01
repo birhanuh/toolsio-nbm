@@ -34,7 +34,7 @@ class Form extends Component {
         paymentTerm: this.props.data.getInvoice ? this.props.data.getInvoice.paymentTerm : '',
         interestInArrears: this.props.data.getInvoice ? this.props.data.getInvoice.interestInArrears : '',
         status: this.props.data.getInvoice ? this.props.data.getInvoice.status : 'new',
-        description: this.props.data.getInvoice ? this.props.data.getInvoice.description : '',
+        description: this.props.data.getInvoice ? (!this.props.data.getInvoice.description ? '' : this.props.data.getInvoice.description) : '',
         tax: this.props.data.getInvoice ? this.props.data.getInvoice.tax : '',
       },
       currentStep: 'step1',
@@ -56,7 +56,7 @@ class Form extends Component {
           paymentTerm: nextProps.data.getInvoice.paymentTerm,
           interestInArrears: nextProps.data.getInvoice.interestInArrears,
           status: nextProps.data.getInvoice.status,
-          description: nextProps.data.getInvoice.description,
+          description: !nextProps.data.getInvoice.description ? '' : nextProps.data.getInvoice.description,
           tax: nextProps.data.getInvoice.tax,
           customer: nextProps.data.getInvoice.customer
         },
@@ -207,7 +207,8 @@ class Form extends Component {
             variables: {
               order: 'DESC',
               offset: 0,
-              limit: 10
+              limit: 10,
+              search: ""
             } 
           })
           // Add our Invoice from the mutation to the end.          
@@ -217,9 +218,15 @@ class Form extends Component {
             }
             return item
           })
-          data.getInvoices = updatedInvoices
+          data.getInvoices.invoices = updatedInvoices
           // Write our data back to the cache.
-          store.writeQuery({ query: GET_INVOICES_QUERY, data })
+          store.writeQuery({ query: GET_INVOICES_QUERY, 
+            variables: {
+              order: 'DESC',
+              offset: 0,
+              limit: 10,
+              search: ""
+            }, data })
         }})
         .then(res => {         
           const { success, errors } = res.data.updateInvoice
@@ -256,13 +263,20 @@ class Form extends Component {
               variables: {
                 order: 'DESC',
                 offset: 0,
-                limit: 10
+                limit: 10,
+                search: ""
               } 
             })
             // Add our Invoice from the mutation to the end.
             data.getInvoices.invoices.push(invoice)
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_INVOICES_QUERY, data })
+            store.writeQuery({ query: GET_INVOICES_QUERY, 
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10,
+                search: ""
+              }, data })
           }})
           .then(res => {            
             const { success, errors } = res.data.createInvoice

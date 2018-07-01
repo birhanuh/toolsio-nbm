@@ -167,9 +167,11 @@ class FormPage extends Component {
               variables: {
                 order: 'DESC',
                 offset: 0,
-                limit: 10
+                limit: 10,
+                name: ""
               } 
-           })
+            })
+           
             // Add our Customer from the mutation to the end.            
             let updatedCustomers = data.getCustomers.customers.map(item => {
               if (item.id === customer.id) {
@@ -177,9 +179,15 @@ class FormPage extends Component {
               }
               return item
             })
-            data.getCustomers = updatedCustomers
+            data.getCustomers.customers = updatedCustomers 
+
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
+            store.writeQuery({ query: GET_CUSTOMERS_QUERY, variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10,
+                name: ""
+              }, data })
           }})
           .then(res => {
             const { success, errors } = res.data.updateCustomer
@@ -224,13 +232,19 @@ class FormPage extends Component {
               variables: {
                 order: 'DESC',
                 offset: 0,
-                limit: 10
+                limit: 10,
+                name: ""
               }  
             })
             // Add our Customer from the mutation to the end.
             data.getCustomers.customers.push(customer)
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
+            store.writeQuery({ query: GET_CUSTOMERS_QUERY, variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10,
+                name: ""
+              }, data })
           }})
           .then(res => {
 

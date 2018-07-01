@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { List } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_SALE_TASKS_DATA } from '../../graphql/dashboard'
 
@@ -47,18 +48,19 @@ const SaleTasksCard = () => (
     })
   
     const list = (<div className="content">
-      {newNotification}
-      <div className="ui ordered list">
-        {newSales && newSales.map(sale => <Link key={sale.id} to={`/sales/show/${sale.id}`} className="item blue">{sale.name}</Link>)}
-      </div>
+        {newNotification}
+         <List ordered>
+          {newSales && newSales.map(sale => 
+            <List.Item key={sale.id} content={<Link to={`/sales/show/${sale.id}`} className="item blue">{sale.name}</Link>} /> )}
+          </List>
 
-      <div className="ui divider"></div>
+        <div className="ui divider"></div>
 
-      {delayedNotification}
-      <div className="ui ordered list">
-        {delayedSales && delayedSales.map(sale => <Link key={sale.id} to={`/sales/show/${sale.id}`} className="item red">{sale.name}</Link>)}
-      </div>
-
+        {delayedNotification}
+        <List ordered>
+          {delayedSales && delayedSales.map(sale => 
+             <List.Item key={sale.id} content={<Link to={`/sales/show/${sale.id}`} className="item red">{sale.name}</Link>} /> )}
+        </List>
       </div>)
 
     return (

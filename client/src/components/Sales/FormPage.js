@@ -25,9 +25,9 @@ class FormPage extends Component {
       id: this.props.data.getSale ? this.props.data.getSale.id : null,
       name: this.props.data.getSale ? this.props.data.getSale.name : '',
       deadline: this.props.data.getSale ? moment(this.props.data.getSale.deadline) : moment(),
-      customerId: this.props.data.getSale ? this.props.data.getSale.customerId : '',
+      customerId: this.props.data.getSale ? this.props.data.getSale.customer.id : '',
       status: this.props.data.getSale ? this.props.data.getSale.status : 'new',
-      description: this.props.data.getSale ? this.props.data.getSale.description : '',
+      description: this.props.data.getSale ? (!this.props.data.getSale.description ? '' : this.props.data.getSale.description) : '',
       errors: {},
       isLoading: false
     }
@@ -41,7 +41,7 @@ class FormPage extends Component {
         deadline: moment(nextProps.data.getSale.deadline),
         customerId: nextProps.data.getSale.customer.id,
         status: nextProps.data.getSale.status,
-        description: nextProps.data.getSale.description,
+        description: !nextProps.data.getSale.description ? '' : nextProps.data.getSale.description
       })
     }
   }
@@ -100,7 +100,8 @@ class FormPage extends Component {
             variables: {
               order: 'DESC',
               offset: 0,
-              limit: 10
+              limit: 10,
+              name: ""
             } 
           })
           // Add our comment from the mutation to the end.
@@ -118,7 +119,6 @@ class FormPage extends Component {
           store.writeQuery({ query: GET_SALES_QUERY, data })
         }})
         .then(res => {
-
           const { success, sale, errors } = res.data.updateSale
 
           if (success) {            
@@ -151,16 +151,22 @@ class FormPage extends Component {
               variables: {
                 order: 'DESC',
                 offset: 0,
-                limit: 10
+                limit: 10,
+                name: ""
               } 
             })
             // Add our Sale from the mutation to the end.
             data.getSales.push(sale);
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_SALES_QUERY, data });
+            store.writeQuery({ query: GET_SALES_QUERY,
+              variables: {
+                order: 'DESC',
+                offset: 0,
+                limit: 10,
+                name: ""
+              }, data })
           }})
-          .then(res => {          
-
+          .then(res => {         
             const { success, sale, errors } = res.data.createSale
 
             if (success) {

@@ -5,7 +5,7 @@ export default `
     name: String!
     deadline: Date!
     status:  String!
-    description:  String!
+    description:  String
     tax: Float!
     items: [Item!]
     isInvoiced: Boolean!

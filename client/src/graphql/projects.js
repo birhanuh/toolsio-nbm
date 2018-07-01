@@ -77,10 +77,14 @@ export const CREATE_PROJECT_MUTATION = gql`
         status
         progress
         description
+        isInvoiced
         customer {
           id
           name
         } 
+        user {
+          firstName
+        }
       }
       errors {
         path
@@ -101,10 +105,14 @@ export const UPDATE_PROJECT_MUTATION = gql`
         status
         progress
         description
+        isInvoiced
         customer {
           id
           name
         } 
+        user {
+          firstName
+        }
       }
       errors {
         path

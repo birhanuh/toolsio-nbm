@@ -57,8 +57,12 @@ export const CREATE_SALE_MUTATION = gql`
         deadline
         status
         description
+        isInvoiced
         customer {
           name
+        }
+        user {
+          firstName
         }
       }
       errors {
@@ -79,9 +83,13 @@ export const UPDATE_SALE_MUTATION = gql`
         deadline
         status
         description
+        isInvoiced
         customer {
           id
           name
+        }
+        user {
+          firstName
         }
       }
       errors {

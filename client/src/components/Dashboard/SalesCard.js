@@ -6,6 +6,7 @@ import { Query } from 'react-apollo'
 import { GET_SALES_DATA } from '../../graphql/dashboard'
 
 import pick from 'lodash/pick'
+import Moment from 'moment'
 
 import { Doughnut } from 'react-chartjs-2'
 
@@ -17,7 +18,13 @@ const SalesCard = () => (
     {({ loading, error, data }) => {
     
       const countStatus = data.getSalesData && data.getSalesData.countStatus
-      const countMonth = data.getSalesData && data.getSalesData.countMonth
+      const countMonth = data.getSalesData && data.getSalesData.countMonth.map(item => pick(item, ['month', 'count']))
+
+      let countMonthSorted = countMonth && countMonth.sort(function(a, b) {
+          let x = new Date(Moment(a.month, 'MM/YYYY')) 
+          let y = new Date(Moment(b.month, 'MM/YYYY')) 
+          return ((x < y) ? -1 : ((x > y) ? 1 : 0))
+        })
 
       let statusPick = countStatus && countStatus.map(item => pick(item, ['status']).status)
       let countPick = countStatus && countStatus.map(item => pick(item, ['count']).count)
@@ -68,17 +75,17 @@ const SalesCard = () => (
           <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
             <div className="left floated">
-              <div className="meta">{countMonth && countMonth[0] ? (countMonth[0].month ? countMonth[0].month : '-') : '-'}</div>
+              <div className="meta">{countMonthSorted && countMonthSorted[0] ? (countMonthSorted[0].month ? countMonthSorted[0].month : '-') : '-'}</div>
               <div className="header">
-                {countMonth && countMonth[0] ? (countMonth[0].count ? countMonth[0].count : '-') : '-'}
+                {countMonthSorted && countMonthSorted[0] ? (countMonthSorted[0].count ? countMonthSorted[0].count : '-') : '-'}
               </div>
             </div> 
             <div className="right floated">
-              <div className="meta">{countMonth && countMonth[1] ? (countMonth[1].month ? countMonth[1].month : '-') : '-'}</div>
+              <div className="meta">{countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].month ? countMonthSorted[1].month : '-') : '-'}</div>
               <div className="header">
-                {countMonth && countMonth[1] ? (countMonth[1].count ? countMonth[1].count : '-') : '-'}
-                {countMonth && countMonth[1] && ((countMonth[1].count > countMonth[0].count) ? <i className="long arrow up green icon" /> : 
-                  <i className="long arrow down red icon" />)}
+                {countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].count ? countMonthSorted[1].count : '-') : '-'}
+                {countMonthSorted && countMonthSorted[0] && ((countMonthSorted[0].count > countMonthSorted[1].count) ? <i className="long arrow down red icon" /> : 
+                  <i className="long arrow up green icon" />)}
                 </div>
             </div>        
           </Card.Content> 

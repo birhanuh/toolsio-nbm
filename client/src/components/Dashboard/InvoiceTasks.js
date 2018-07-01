@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { List } from 'semantic-ui-react'
 import { Query } from "react-apollo"
 import { GET_INVOICE_TASKS_DATA } from '../../graphql/dashboard'
 
@@ -56,18 +57,19 @@ const InvoiceTasksCard = () => (
     })
 
     const list = (<div className="content">
-      {newNotification}
-      <div className="ui ordered list">
-        {newInvoices && newInvoices.map(invoice => <Link key={invoice.id} to={`/invoices/show/${invoice.id}`} className="item orange">{'Invoice of '+invoice.name}</Link>)}
-      </div>
+        {newNotification}
+        <List ordered>
+          {newInvoices && newInvoices.map(invoice => 
+          <List.Item key={invoice.id} content={<Link to={`/invoices/show/${invoice.id}`} className="item orange">{'Invoice of '+invoice.name}</Link>} /> )}
+        </List>
 
-      <div className="ui divider"></div>
+        <div className="ui divider"></div>
 
-      {overdueNotification}
-      <div className="ui ordered list">
-        {overdueInvoices && overdueInvoices.map(invoice => <Link key={invoice.id} to={`/invoices/show/${invoice.id}`} className="item red">{'Invoice of '+invoice.name}</Link>)}
-      </div>
-
+        {overdueNotification}
+        <List ordered>
+          {overdueInvoices && overdueInvoices.map(invoice => 
+          <List.Item key={invoice.id} content={<Link to={`/invoices/show/${invoice.id}`} className="item red">{'Invoice of '+invoice.name}</Link>} /> )}
+        </List>
       </div>)
 
     return (      

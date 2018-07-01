@@ -80,7 +80,7 @@ export default {
   Customer: {
     projects: ({ id }, args, { models, subdomain } ) => models.Project.findAll({ where: { customerId: id}, searchPath: subdomain }),
 
-    sales: ({ id }, args, { models, subdomain } ) => models.Sale.findAll({ where: { customerId: id, searchPath: subdomain} }),
+    sales: ({ id }, args, { models, subdomain } ) => models.Sale.findAll({ where: { customerId: id}, searchPath: subdomain }),
 
     invoices: ({ id }, args, { models, subdomain } ) => models.Invoice.findAll({ where: { customerId: id}, searchPath: subdomain }),
 

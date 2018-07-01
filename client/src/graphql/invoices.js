@@ -135,6 +135,7 @@ export const CREATE_INVOICE_MUTATION = gql`
         referenceNumber
         status
         tax
+        total
         project {
           id
           name
@@ -171,6 +172,7 @@ export const UPDATE_INVOICE_MUTATION = gql`
         referenceNumber
         status
         tax
+        total
         project {
           id
           name

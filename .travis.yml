@@ -17,7 +17,7 @@ env:
   - TEST_DIR=client
   - TEST_DIR=server
 script:
-  - cd $TEST_DIR && npm install && npm run tstart && npm test -- --runInBand
+  - cd $TEST_DIR && npm install && npm test -- --runInBand
   #- npm run build
 deploy:
   provider: pages
