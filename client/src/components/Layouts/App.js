@@ -87,7 +87,7 @@ class App extends Component {
 
           <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated() && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
             {/* Falsh messages */}  
-            <FlashMessage />             
+            {!isAuthPages && <FlashMessage /> }    
             
             <Switch>
               {/* Render Laning-page or Dashboard */}

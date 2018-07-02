@@ -575,7 +575,7 @@ nav.ui.menu .item>a {
 
 .ui.card.dashboard, .dashboard .ui.card {
   width: 100%;
-  min-height: 315px;
+  height: 100%;
 }
 
 .ui.card.dashboard > .image {
@@ -586,7 +586,6 @@ nav.ui.menu .item>a {
   @extend .vertical-center-align-container;
   position: absolute;
   top: 0;
-  height: 315px;
   background: #ffffff;
   opacity: 0.85;
   z-index: 1;
@@ -595,14 +594,6 @@ nav.ui.menu .item>a {
     text-align: center;
     z-index: 2;
   }
-}
-
-.ui.card.dashboard.customer > .content-btn-outer-container {
-  height: 395px;
-}
-
-.ui.card.dashboard.invoice > .content-btn-outer-container {
-  height: 580px;
 }
 
 .sub-header {

@@ -45,7 +45,7 @@ export default {
         } else {
           const response = await models.sequelize.transaction(async (transaction) => {
             
-            // Creates a schema
+            // Create a schema
             await models.sequelize.createSchema(subdomain)
 
             // Migrate users model 
@@ -54,7 +54,7 @@ export default {
             // Count users
             const count = await models.User.count({ searchPath: subdomain, transaction })
        
-            const user = await  models.User.create({ firstName, lastName, email, password, isAdmin: !count }, { searchPath: process.env.NODE_ENV !== 'test' ? subdomain : 'public', transaction })
+            const user = await  models.User.create({ firstName, lastName, email, password, isAdmin: !count }, { searchPath: subdomain, transaction })
         
             const account = await models.Account.create({ subdomain, industry, owner: user.dataValues.id }, { transaction })
 
@@ -92,6 +92,10 @@ export default {
         }
       } catch(err) {
         console.log('err: ', err)
+        
+        // Drop a schema
+        models.sequelize.dropSchema(subdomain)
+
         return {
           success: false,
           errors: formatErrors(err, models)

@@ -13,7 +13,7 @@ const s3Bucket = new AWS.S3({
 
 export default {
   Query: {
-    getAccount: (parent, { subdomain }, { models }) => models.Account.findOne({ where: { subdomain } }, { raw: true }),
+    getAccount: requiresAuth.createResolver((parent, { subdomain }, { models }) => models.Account.findOne({ where: { subdomain } }, { raw: true })),
     
     getAccounts: requiresAuth.createResolver((parent, args, { models }) => models.Account.findAll())
   },

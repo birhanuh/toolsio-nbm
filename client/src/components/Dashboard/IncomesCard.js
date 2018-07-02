@@ -94,9 +94,9 @@ const IncomesCard = () => (
               </div>
             </div>  
             <div className="right floated">
-              <div className="meta">{monthSumSorted && monthSumSorted.length !== 1 ? (monthSumSorted[1].month ? monthSumSorted[1].month : '-') : '-'}</div>
+              <div className="meta">{monthSumSorted && monthSumSorted.length !== 0 ? (monthSumSorted[1].month ? monthSumSorted[1].month : '-') : '-'}</div>
               <div className="header">
-                {monthSumSorted && monthSumSorted.length !== 1 ? (monthSumSorted[1].sum ? monthSumSorted[1].sum : '-') : '-'}
+                {monthSumSorted && monthSumSorted.length !== 0 ? (monthSumSorted[1].sum ? monthSumSorted[1].sum : '-') : '-'}
                 {monthSumSorted && monthSumSorted[0] && ((monthSumSorted[0].sum > monthSumSorted[1].sum) ? <i className="long arrow down red icon" /> : 
                    <i className="long arrow up green icon" />)}
                 </div>

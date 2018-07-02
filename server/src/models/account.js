@@ -92,7 +92,8 @@ export default (sequelize, DataTypes) => {
   Account.associate = function(models) {
     // 1:1
     Account.belongsTo(models.User, {
-      foreignKey: 'owner'
+      foreignKey: 'owner',
+      constraints: false
     })
   }
 

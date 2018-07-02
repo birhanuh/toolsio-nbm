@@ -106,6 +106,9 @@
       "subdomain_required": "Subdomain is required",
       "no__account": "There is no account with such subdomain! Go to Sign up page to sign for free!",
       "on_your_account_page": "You are now on your account page, continue by login with your credentials!"
+    },
+    "flash": {
+      "logout_success": "You are logged out from your account!"
     }
   },
   "internal_navigation": {

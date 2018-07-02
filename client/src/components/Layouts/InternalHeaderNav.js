@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import decode from 'jwt-decode'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Image, Dropdown, Menu, Label, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_PROJECT_TASKS_DATA_QUERY, GET_SALE_TASKS_DATA_QUERY, GET_INVOICE_TASKS_DATA_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY } from '../../graphql/headerNav'
@@ -37,6 +39,11 @@ class InternalHeaderNav extends Component {
     
     localStorage.removeItem('authToken')
     localStorage.removeItem('refreshAuthToken')
+
+    this.props.addFlashMessage({
+      type: 'success',
+      text: T.translate("log_in.flash.logout_success")
+    })  
 
     // Redirect to login page
     this.context.router.history.push('/login')
@@ -207,6 +214,11 @@ class InternalHeaderNav extends Component {
   }
 }
 
+InternalHeaderNav.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+}
+
+
 InternalHeaderNav.contextTypes = {
   router: PropTypes.object.isRequired
 }
@@ -224,4 +236,4 @@ const Queries =  compose(
   })
 )(InternalHeaderNav)
 
-export default (Queries)
+export default connect(null, { addFlashMessage } ) (Queries)
