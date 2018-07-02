@@ -29,7 +29,7 @@ export default {
 
   Mutation: {
     createCustomer: requiresAuth.createResolver((parent, args, { models, subdomain, user }) => 
-      models.Customer.schema(subdomain).create({...args, userId: user.id}, { searchPath: subdomain })
+      models.Customer.create({...args, userId: user.id}, { searchPath: subdomain })
         .then(customer => {
           return {
             success: true,
@@ -45,7 +45,7 @@ export default {
         })),
 
     updateCustomer: requiresAuth.createResolver((parent, args, { models, subdomain }) =>
-      models.Customer.schema(subdomain).update(args, { where: {id: args.id}, returning: true, plain: true, searchPath: subdomain })
+      models.Customer.update(args, { where: {id: args.id}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {
           return {
             success: true,
@@ -61,7 +61,7 @@ export default {
         })),
 
     deleteCustomer: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
-      models.Customer.schema(subdomain).destroy({ where: {id: args.id}, force: true, searchPath: subdomain })
+      models.Customer.destroy({ where: {id: args.id}, force: true, searchPath: subdomain })
         .then(res => {          
           return {
             success: (res === 1)

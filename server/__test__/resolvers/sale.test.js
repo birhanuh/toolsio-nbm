@@ -6,19 +6,22 @@ import { resetDb } from '../helpers/macros'
 // Load factories 
 import saleFactory from '../factories/sale'
 
-// Tokens
-let tokens 
-
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
 import { createCustomer } from '../helpers/parents'
+
+// Tokens
+let tokens 
+let subdomainLocal
 
 describe("Sale",  () => { 
 
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal = subdomain
 
     if (success) {
       tokens = await loginUser(email, password)
@@ -69,7 +72,7 @@ describe("Sale",  () => {
   it('createSale', async () => {   
 
     let saleFactoryLocal = await saleFactory()
-      // Create customer 
+    // Create customer 
     let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
 
     const response = await axios.post('http://localhost:8080/graphql', {
@@ -98,6 +101,7 @@ describe("Sale",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -133,6 +137,7 @@ describe("Sale",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -161,6 +166,7 @@ describe("Sale",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 

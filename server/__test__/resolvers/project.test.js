@@ -6,22 +6,25 @@ import { resetDb } from '../helpers/macros'
 // Load factories 
 import projectFactory from '../factories/project'
 
-// Tokens
-let tokens 
-
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
 import { createCustomer } from '../helpers/parents'
+
+// Tokens
+let tokens 
+let subdomainLocal
 
 describe("Project",  () => { 
 
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -58,6 +61,7 @@ describe("Project",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -69,7 +73,7 @@ describe("Project",  () => {
   it('createProject', async () => {   
 
     let projectFactoryLocal = await projectFactory()
-      // Create customer 
+    // Create customer 
     let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
 
     const response = await axios.post('http://localhost:8080/graphql', {
@@ -98,6 +102,7 @@ describe("Project",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -132,6 +137,7 @@ describe("Project",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -160,6 +166,7 @@ describe("Project",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 

@@ -81,6 +81,11 @@ describe("Authenticate User", () => {
         email: userFactoryLocal.email,
         password: userFactoryLocal.password
       }
+    },
+     {
+      headers: {
+        'subdomain': accountFactoryLocal.subdomain
+      }
     }) 
 
     const { data: { loginUser: {success, authToken } } } = response.data
