@@ -11,7 +11,7 @@ module.exports = merge(common, {
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
-      'process.env.CLIENT_URL': JSON.stringify('*.toolsio.com'),
+      'process.env.CLIENT_URL': JSON.stringify('toolsio.com'),
       'process.env.CLIENT_PROTOCOL': JSON.stringify('https://'),
       'process.env.SERVER_URL': JSON.stringify('localhost:8080')
     })

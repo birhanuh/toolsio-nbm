@@ -13,7 +13,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : false,
       validate: {     
-        is: /^[A-Za-z \/ ]+$/       // will only allow letters and slashes with RegExp
+        is: /^[A-Za-z / ]+$/       // will only allow letters and slashes with RegExp
       } 
     },
     phoneNumber: {

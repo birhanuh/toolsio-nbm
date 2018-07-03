@@ -24,7 +24,7 @@ describe("Invoice",  () => {
     subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -65,7 +65,7 @@ describe("Invoice",  () => {
     {
       headers: {
         'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken
+        'x-refresh-auth-token': tokens.refreshAuthToken,
         'subdomain': subdomainLocal
       }
     })
@@ -114,7 +114,7 @@ describe("Invoice",  () => {
     {
       headers: {
         'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken
+        'x-refresh-auth-token': tokens.refreshAuthToken,
         'subdomain': subdomainLocal
       }
     })
@@ -151,7 +151,7 @@ describe("Invoice",  () => {
     {
       headers: {
         'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken
+        'x-refresh-auth-token': tokens.refreshAuthToken,
         'subdomain': subdomainLocal
       }
     })
@@ -180,7 +180,7 @@ describe("Invoice",  () => {
     {
       headers: {
         'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken
+        'x-refresh-auth-token': tokens.refreshAuthToken,
         'subdomain': subdomainLocal
       }
     }) 

@@ -6,22 +6,25 @@ import { resetDb } from '../helpers/macros'
 // Load factories 
 import itemFactory from '../factories/item'
 
-// Tokens
-let tokens 
-
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
 import { createCustomer, createSale } from '../helpers/parents'
+
+// Tokens
+let tokens 
+let subdomainLocal
 
 describe("Item",  () => { 
 
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -54,6 +57,7 @@ describe("Item",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -97,6 +101,7 @@ describe("Item",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -131,6 +136,7 @@ describe("Item",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -159,6 +165,7 @@ describe("Item",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 

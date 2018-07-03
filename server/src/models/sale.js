@@ -44,7 +44,8 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'customerId',
         field: 'customer_id'
-      }
+      },
+      constraints: false
     })
 
     // 1:M
@@ -52,7 +53,8 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'userId',
         field: 'user_id'
-      }
+      },
+      constraints: false
     })
   }
 

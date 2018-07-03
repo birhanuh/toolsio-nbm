@@ -69,7 +69,7 @@ export default `
   }
 
   type Mutation {
-    createSale(name: String!, deadline: Date!, status: String!, description: String,
+    createSale(name: String!, deadline: Date!, status: String, description: String,
       customerId: Int!): CreateUpdateSaleResponse!
     
     updateSale(id: Int!, name: String, deadline: Date, status: String, description: String, 

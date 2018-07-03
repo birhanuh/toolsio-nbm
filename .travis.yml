@@ -26,10 +26,10 @@ cache:
    directories:
      - node_modules
 before_script:
-  - cd $TEST_DIR_CLIENT && npm install
-  - cd $TEST_DIR_SERVER && npm install
-  - cd $TEST_DIR_SERVER && docker-compose build
-  - cd $TEST_DIR_SERVER && docker-compose up -d
+#  - cd $TEST_DIR_CLIENT && npm install
+#  - cd $TEST_DIR_SERVER && npm install
+  - cd server && docker-compose build
+  - cd server && docker-compose up -d
   - sleep 3
 script:
   - cd $TEST_DIR_SERVER && npm test
@@ -38,20 +38,19 @@ after_script:
 
 #jobs:
 #  include:
-#    - stage: server
-#      script: 
-#        - cd server && npm install && npm run tstart
 #    - stage: test
 #      script: 
 #        - cd server && npm test -- --runInBand
+#    - stage: deploy
+#      deploy:
+#        provider: pages
+#        skip_cleanup: true
+#        github_token: $github_token
+#        local_dir: build
+#        on:
+#          branch: develop
       
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $github_token
-  local_dir: build
-  on:
-    branch: develop
+
 
 
 

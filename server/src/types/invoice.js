@@ -56,7 +56,7 @@ export default `
   }
 
   type Mutation {
-    createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String!, 
+    createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String, 
       , description: String, tax: Float!, projectId: Int, saleId: Int, 
       customerId: Int!): CreateUpdateInvoiceResponse!
     

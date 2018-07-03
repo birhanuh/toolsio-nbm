@@ -160,9 +160,6 @@ app.use((req, res) => {
   })
 })
 
-// Migrate Account model 
-models.Account.sync()
-
 // Set port
 app.set('port', process.env.SERVER_PORT || 8080)
 

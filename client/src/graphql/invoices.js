@@ -124,7 +124,7 @@ export const GET_INVOICE_FORM_QUERY = gql`
 `
 
 export const CREATE_INVOICE_MUTATION = gql`
-  mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
+  mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String, 
     $description: String, $tax: Float!, $projectId: Int, $saleId: Int, $customerId: Int!) {
     createInvoice(deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
       description: $description, tax: $tax, projectId: $projectId, saleId: $saleId, customerId: $customerId) {

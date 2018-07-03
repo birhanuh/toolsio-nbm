@@ -9,7 +9,7 @@ export const GET_USERS_QUERY = gql`
       email
       avatarUrl
     }
-}
+  }
 `
 
 export const SEND_INVITATION_MUTATION = gql`
@@ -31,5 +31,5 @@ export const GET_USER_QUERY = gql`
       firstName
       email
     }
-}
+  }
 `

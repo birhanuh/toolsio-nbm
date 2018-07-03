@@ -16,11 +16,13 @@ describe("Account", () => {
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, subdomain, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal
 
     if (success) {
       subdomainLocal = subdomain
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -44,6 +46,7 @@ describe("Account", () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 
@@ -88,6 +91,7 @@ describe("Account", () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 
@@ -124,6 +128,7 @@ describe("Account", () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 

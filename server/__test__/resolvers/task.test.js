@@ -24,7 +24,7 @@ describe("Task",  () => {
     subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 

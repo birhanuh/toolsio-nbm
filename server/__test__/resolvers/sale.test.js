@@ -24,7 +24,7 @@ describe("Sale",  () => {
     subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -61,6 +61,7 @@ describe("Sale",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
