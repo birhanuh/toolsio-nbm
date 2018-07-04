@@ -15,7 +15,7 @@ const TotalIncomeCard = () => (
       const tasksItemTotalSum = getTotalIncomeData && getTotalIncomeData.tasksTotalSum + getTotalIncomeData && getTotalIncomeData.itemsTotalSum
 
       return (
-        <Card className={classnames("dashboard form", { loading })}>
+        <Card id="total-income" className={classnames("dashboard form", { loading })}>
           <Card.Content>
             <Card.Header>
               <Header as='h4'>

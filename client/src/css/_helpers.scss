@@ -125,6 +125,22 @@
   background-color: $orange !important;
 }
 
+.ui.blue.dividing.header {
+  border-bottom: 2px solid $blue;
+}
+
+.ui.orange.dividing.header {
+  border-bottom: 2px solid $orange;
+}
+
+.ui.green.dividing.header {
+  border-bottom: 2px solid $green;
+}
+
+.ui.red.dividing.header {
+  border-bottom: 2px solid $red;
+}
+
 i.green.icon {
   color: $green !important;
 }

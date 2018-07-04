@@ -27,14 +27,16 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'receiverId',
         field: 'receiver_id'
-      }
+      },
+      constraints: false
     })
 
     directMessage.belongsTo(models.User, {
       foreignKey: {
         name: 'senderId',
         field: 'sender_id'
-      }
+      },
+      constraints: false
     })
   }
 

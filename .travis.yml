@@ -26,15 +26,17 @@ cache:
    directories:
      - node_modules
 before_script:
-#  - cd $TEST_DIR_CLIENT && npm install
-#  - cd $TEST_DIR_SERVER && npm install
-  - cd server && docker-compose build
-  - cd server && docker-compose up -d
+  - cd $TEST_DIR_SERVER 
+  - npm install
+  - npm run build
+  - sleep 3
+  - docker-compose build
+  - docker-compose up -d
   - sleep 3
 script:
-  - cd $TEST_DIR_SERVER && npm test
+  - npm test
 after_script:
-  - cd $TEST_DIR_SERVER && docker-compose kill
+  - docker-compose kill
 
 #jobs:
 #  include:

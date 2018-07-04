@@ -12,7 +12,7 @@ import moment from 'moment'
 
 export default function Sale({ sale, status, tax }) {
 
-  let itemsTotal = sumBy(sale.tasks, 'unitPrice')
+  let itemsTotal = sumBy(sale.tasks, 'total')
   let invoiceTotal = itemsTotal+((tax/100)*itemsTotal)
 
   return(

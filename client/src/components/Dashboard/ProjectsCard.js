@@ -57,7 +57,7 @@ const ProjectsCard = () => (
       }
 
       return (
-        <Card className={classnames("dashboard form", { loading: loading })}>
+        <Card id="projects" className={classnames("dashboard form", { loading: loading })}>
           <Card.Content>
             <Card.Header>
               <Header as='h4' floated='left'>
@@ -84,7 +84,7 @@ const ProjectsCard = () => (
               <div className="meta">{countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].month ? countMonthSorted[1].month : '-') : '-'}</div>
               <div className="header">
                 {countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].count ? countMonthSorted[1].count : '-') : '-'}
-                {countMonthSorted && countMonthSorted[0] && ((countMonthSorted[0].count > countMonthSorted[1].count) ? <i className="long arrow down red icon" /> : 
+                {countMonthSorted && countMonthSorted.count && countMonthSorted.count.length !== 0 && ((countMonthSorted[0].count > countMonthSorted[1].count) ? <i className="long arrow down red icon" /> : 
                   <i className="long arrow up green icon" />)}
                 </div>
             </div>      

@@ -100,7 +100,6 @@ export default {
           errors: formatErrors(err, models)
         }       
       }
-
     },
 
     isSubdomainExist: (parent, { subdomain }, { models }) => 
@@ -124,8 +123,7 @@ export default {
             success: false,
             errors: formatErrors(err, models) 
           }
-        })
-    ,
+        }),
 
     registerInvitedUser: async (parent, args, { models }) => {
 
@@ -188,7 +186,6 @@ export default {
           errors: formatErrors(err, models)
         }       
       }
-
     }
 
   }    

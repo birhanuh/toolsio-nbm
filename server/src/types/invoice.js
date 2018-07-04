@@ -15,7 +15,6 @@ export default `
     sale: Sale
     customer: Customer!
     user: User!
-    total: Float!
   }
 
   type GetInvoicesResponseRows {

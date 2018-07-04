@@ -102,8 +102,8 @@ export default {
   GetProjectsWithoutInvoiceResponse: {
     total: async ({ id }, args, { models, subdomain }) => {     
       const totalSum = await models.Task.sum('total', {
-          where: { projectId: id }
-        }, { searchPath: subdomain }) 
+          where: { projectId: id }, searchPath: subdomain
+        }) 
      
       return totalSum ? totalSum : 0      
     }
@@ -114,8 +114,8 @@ export default {
 
     total: async ({ id }, args, { models, subdomain }) => {     
       const totalSum = await models.Task.sum('total', {
-          where: { projectId: id }
-        }, { searchPath: subdomain }) 
+          where: { projectId: id }, searchPath: subdomain
+        }) 
      
       return totalSum ? totalSum : 0      
     }

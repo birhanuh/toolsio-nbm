@@ -19,12 +19,14 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'channelId',
         field: 'channel_id'
-      }
+      },
+      constraints: false
     })
 
     // 1:N
     Channel.belongsTo(models.User, {
-      foreignKey: 'owner'
+      foreignKey: 'owner',
+      constraints: false
     })
   }
 

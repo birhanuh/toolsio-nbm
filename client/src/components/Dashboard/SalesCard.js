@@ -57,7 +57,7 @@ const SalesCard = () => (
       }
 
       return (
-        <Card className={classnames("dashboard form", { loading: loading })}>
+        <Card id="sales" className={classnames("dashboard form", { loading: loading })}>
           <Card.Content>
             <Card.Header>
               <Header as='h4' floated='left'>
@@ -84,7 +84,7 @@ const SalesCard = () => (
               <div className="meta">{countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].month ? countMonthSorted[1].month : '-') : '-'}</div>
               <div className="header">
                 {countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].count ? countMonthSorted[1].count : '-') : '-'}
-                {countMonthSorted && countMonthSorted[0] && ((countMonthSorted[0].count > countMonthSorted[1].count) ? <i className="long arrow down red icon" /> : 
+                {countMonthSorted && countMonthSorted.count && countMonthSorted.count.length !== 0 && ((countMonthSorted[0].count > countMonthSorted[1].count) ? <i className="long arrow down red icon" /> : 
                   <i className="long arrow up green icon" />)}
                 </div>
             </div>        
@@ -93,7 +93,7 @@ const SalesCard = () => (
           {(countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0) && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
-                <Link to="/invoices" className="ui primary outline button small">
+                <Link to="/sales" className="ui primary outline button small">
                   <i className="check circle outline icon"></i>{T.translate("dashboard.sales.create_first_sale")}
                 </Link>
               </div>

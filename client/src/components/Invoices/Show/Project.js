@@ -12,7 +12,7 @@ import moment from 'moment'
 
 export default function Project({ project, status ,tax }) {
 
-  let tasksTotal = sumBy(project.tasks, 'unitPrice')
+  let tasksTotal = sumBy(project.tasks, 'total')
   let invoiceTotal = tasksTotal+((tax/100)*tasksTotal)
 
   return(
