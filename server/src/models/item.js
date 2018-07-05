@@ -52,7 +52,8 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'saleId',
         field: 'sale_id'
-      }
+      },
+      constraints: false
     })
 
     // 1:M

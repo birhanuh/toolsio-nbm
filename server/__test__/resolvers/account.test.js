@@ -96,11 +96,12 @@ describe("Account", () => {
     }) 
 
     const { data: { updateAccount } } = response.data
-    
-    expect(updateAccount).toMatchObject({
+    let updateAccountUpdated = updateAccount
+    delete updateAccountUpdated['id'] // Delete id because it increments corresponding to test suites
+
+    expect(updateAccountUpdated).toMatchObject({
         "success": true,
         "account": {
-          "id": 1,
           "subdomain": subdomainLocal,
           "industry": accountFactoryLocal.industry
         }, 
