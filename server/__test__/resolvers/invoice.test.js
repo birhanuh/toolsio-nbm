@@ -8,7 +8,7 @@ import invoiceFactory from '../factories/invoice'
 
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
-import { createCustomer, createProject } from '../helpers/parents'
+import { createCustomer, createProject } from '../helpers/related_objects'
 
 // Tokens
 let tokens 
@@ -35,7 +35,7 @@ describe("Invoice",  () => {
   it('should fail with validation errors for each required field', async () => {
 
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
+      query: `mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String, 
         $description: String, $tax: Float!, $projectId: Int, $saleId: Int, $customerId: Int!) {
         createInvoice(deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
           description: $description, tax: $tax, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
@@ -78,13 +78,14 @@ describe("Invoice",  () => {
   it('createInvoice', async () => {   
 
     let invoiceFactoryLocal = await invoiceFactory()
-      // Create customer 
-    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
-     // Create project 
-    let project = await createProject(tokens.authToken, tokens.refreshAuthToken, customer.id)
+    // Create customer 
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken, subdomainLocal)
+    // Create project 
+    console.log('customerId', customer)
+    let project = await createProject(tokens.authToken, tokens.refreshAuthToken, customer.id, subdomainLocal)
 
     const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String!, 
+      query: `mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String, 
         $description: String, $tax: Float!, $projectId: Int, $saleId: Int, $customerId: Int!) {
         createInvoice(deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
           description: $description, tax: $tax, projectId: $projectId, saleId: $saleId, customerId: $customerId) {

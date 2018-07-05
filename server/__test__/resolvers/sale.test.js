@@ -8,7 +8,7 @@ import saleFactory from '../factories/sale'
 
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
-import { createCustomer } from '../helpers/parents'
+import { createCustomer } from '../helpers/related_objects'
 
 // Tokens
 let tokens 
@@ -74,7 +74,7 @@ describe("Sale",  () => {
 
     let saleFactoryLocal = await saleFactory()
     // Create customer 
-    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken, subdomainLocal)
 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {

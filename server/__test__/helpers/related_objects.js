@@ -6,7 +6,7 @@ import customerFactory from '../factories/customer'
 import projectFactory from '../factories/project'
 import saleFactory from '../factories/sale'
 
-export async function createCustomer(authToken, refreshAuthToken) {
+export async function createCustomer(authToken, refreshAuthToken, subdomain) {
 
   let customerFactoryLocal = await customerFactory()
 
@@ -41,6 +41,7 @@ export async function createCustomer(authToken, refreshAuthToken) {
     headers: {
       'x-auth-token': authToken,
       'x-refresh-auth-token': refreshAuthToken,
+      'subdomain': subdomain
     }
   }) 
 
@@ -49,7 +50,7 @@ export async function createCustomer(authToken, refreshAuthToken) {
   return customer
 }
 
-export async function createProject(authToken, refreshAuthToken, customerId) {
+export async function createProject(authToken, refreshAuthToken, customerId, subdomain) {
 
   let projectFactoryLocal = await projectFactory()
 
@@ -79,16 +80,17 @@ export async function createProject(authToken, refreshAuthToken, customerId) {
     headers: {
       'x-auth-token': authToken,
       'x-refresh-auth-token': refreshAuthToken,
+      'subdomain': subdomain
     }
   })
 
-  const { data: { createProject: { success, project } } }  = response.data
+  const { data: { createProject: { project } } }  = response.data
 
   return project
 }
 
 
-export async function createSale(authToken, refreshAuthToken, customerId) {
+export async function createSale(authToken, refreshAuthToken, customerId, subdomain) {
 
   let saleFactoryLocal = await saleFactory()
 
@@ -118,10 +120,11 @@ export async function createSale(authToken, refreshAuthToken, customerId) {
     headers: {
       'x-auth-token': authToken,
       'x-refresh-auth-token': refreshAuthToken,
+      'subdomain': subdomain
     }
   })
 
-  const { data: { createSale: { success, sale } } }  = response.data
+  const { data: { createSale: { sale } } }  = response.data
 
   return sale
 }

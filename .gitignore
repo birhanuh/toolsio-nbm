@@ -2,7 +2,7 @@
 
 # Misc
 .DS_Store
-#.env
+.env
 
 # Dependencies
 node_modules

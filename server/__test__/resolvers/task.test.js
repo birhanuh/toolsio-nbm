@@ -8,7 +8,7 @@ import taskFactory from '../factories/task'
 
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
-import { createCustomer, createProject } from '../helpers/parents'
+import { createCustomer, createProject } from '../helpers/related_objects'
 
 // Tokens
 let tokens 
@@ -70,9 +70,9 @@ describe("Task",  () => {
 
     let taskFactoryLocal = await taskFactory()
     // Create customer 
-    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken, subdomainLocal)
     // Create project 
-    let project = await createProject(tokens.authToken, tokens.refreshAuthToken, customer.id)
+    let project = await createProject(tokens.authToken, tokens.refreshAuthToken, customer.id, subdomainLocal)
 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: `mutation createTask($name: String!, $hours: String!, $paymentType: String!, $unitPrice: Float!, $total: Float!, $projectId: Int!) {

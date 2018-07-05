@@ -8,7 +8,7 @@ import itemFactory from '../factories/item'
 
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
-import { createCustomer, createSale } from '../helpers/parents'
+import { createCustomer, createSale } from '../helpers/related_objects'
 
 // Tokens
 let tokens 
@@ -29,7 +29,7 @@ describe("Item",  () => {
   })
 
   afterAll(async () => { 
-    //await resetDb()       
+    await resetDb()       
   })
 
   it('should fail with validation errors for each required field', async () => {
@@ -70,9 +70,9 @@ describe("Item",  () => {
 
     let itemFactoryLocal = await itemFactory()
     // Create customer 
-    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken, subdomainLocal)
     // Create sale 
-    let sale = await createSale(tokens.authToken, tokens.refreshAuthToken, customer.id)
+    let sale = await createSale(tokens.authToken, tokens.refreshAuthToken, customer.id, subdomainLocal)
 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: `mutation createItem($name: String!, $unit: String!, $quantity: Int!, $unitPrice: Float!, $total: Float!, $saleId: Int!) {

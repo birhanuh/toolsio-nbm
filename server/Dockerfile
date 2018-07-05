@@ -1,6 +1,5 @@
 FROM node:9
 WORKDIR /app
-#COPY package-lock.json .
 COPY package.json .
 COPY migrations ./migrations
 RUN npm install --production
