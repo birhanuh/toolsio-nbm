@@ -25,16 +25,22 @@ env:
 cache:
    directories:
      - node_modules
+#before_script:
+#  - cd $TEST_DIR_SERVER 
+#  - npm install
+#  - npm run build
+#  - sleep 3
+#  - docker-compose build
+#  - docker-compose up -d
+#  - sleep 3
 before_script:
   - cd $TEST_DIR_SERVER 
   - npm install
-  - npm run build
-  - sleep 3
-  - docker-compose build
-  - docker-compose up -d
+  - npm run tstart
   - sleep 3
 script:
-  - npm test
+  #- npm test
+  - npm test -- --runInBand
 after_script:
   - docker-compose kill
 
