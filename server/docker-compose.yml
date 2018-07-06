@@ -29,6 +29,8 @@ services:
       REDIS_HOST: redis
       #SERVER_URL: https://toolsio.com
       #DB_HOST: db # We would need this if we use env variables in Sequelize constructor instead of json
+      JWTSECRET1: somesecretkeyforjsonwebtoken
+      JWTSECRET2: somesecretkeyforjsonwebtokentwo
     volumes:
     #  - .:/app  
       - ./uploads:/app/uploads
