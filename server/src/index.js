@@ -28,9 +28,6 @@ const app = express()
 // env
 require('dotenv').config()
 
-// Config
-import jwtConfig from '../config/jwt.json'
-
 // Models
 import models from './models'
 import { refreshAuthTokens } from './utils/authentication'
@@ -75,12 +72,12 @@ app.use(async (req, res, next) => {
 
   if (authToken && authToken !== 'null') {
     try {
-      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)     
+      const { user } = jwt.verify(authToken, process.env.JWTSECRET1)     
       req.user = user
        
     } catch (err) { 
       let refreshAuthToken = req.headers['x-refresh-auth-token']
-      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
+      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, process.env.JWTSECRET1, process.env.JWTSECRET2)
       
       if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
         res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
@@ -107,8 +104,8 @@ app.use(
       //subdomain: 'testa',
       user: req.user,
       //user: { id: 1 },
-      SECRET: jwtConfig.jwtSecret1,
-      SECRET2: jwtConfig.jwtSecret2,
+      SECRET: process.env.JWTSECRET1,
+      SECRET2: process.env.JWTSECRET2,
       userLoader: new DataLoader(userId => userBatcher(userId, models, req.headers.subdomain)),
       customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models, req.headers.subdomain)),
       projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models, req.headers.subdomain)),
@@ -177,10 +174,10 @@ server.listen(app.get('port'), () => {
       
       if (authToken && refreshAuthToken) {      
         try {
-          const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)
+          const { user } = jwt.verify(authToken, process.env.JWTSECRET1)
           return { models, user }           
         } catch (err) {
-          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
+          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, process.env.JWTSECRET1, process.env.JWTSECRET2)
           return { models, user: newAuthTokens.user }
         }
       }

@@ -7,9 +7,6 @@ import nodemailer from 'nodemailer'
 // AWS
 import AWS from 'aws-sdk'
 
-// jwt config
-import jwtConfig from '../../config/jwt.json'
-
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -45,7 +42,7 @@ export default {
         emailToken = jwt.sign({
           email: args.email,
           account: subdomain
-        }, jwtConfig.jwtSecret1, { expiresIn: '60d' })
+        }, process.env.JWTSECRET1, { expiresIn: '60d' })
       } catch(err) {
         console.log('err', err)
       }

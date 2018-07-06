@@ -1,5 +1,0 @@
-{
-  "jwtSecret1": "somesecretkeyforjsonwebtoken",
-  "jwtSecret2": "somesecretkeyforjsonwebtokentwo"
-
-}

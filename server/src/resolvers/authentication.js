@@ -7,9 +7,6 @@ import map from 'lodash/map'
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
-// jwt config
-import jwtConfig from '../../config/jwt.json'
-
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -70,7 +67,7 @@ export default {
           jwt.sign({
             id: response.user.dataValues.id,
             email: response.user.dataValues.email
-          }, jwtConfig.jwtSecret1, { expiresIn: '60d' }, (err, emailToken) => {
+          }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, emailToken) => {
             if (err) {
               console.log('err token: ', err)
             }
@@ -129,7 +126,7 @@ export default {
 
       const { firstName, lastName, email, password, token } = args
 
-      const { account } = jwt.verify(token, jwtConfig.jwtSecret1)
+      const { account } = jwt.verify(token, process.env.JWTSECRET1)
 
       try {
         const accountLocal = await models.Account.findOne( { where: { subdomain: account } }, { raw: true })
@@ -143,7 +140,7 @@ export default {
             jwt.sign({
               id: user.dataValues.id,
               email: user.dataValues.email
-            }, jwtConfig.jwtSecret1, { expiresIn: '60d' }, (err, emailToken) => {
+            }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, emailToken) => {
               if (err) {
                 console.log('err token: ', err)
               }
