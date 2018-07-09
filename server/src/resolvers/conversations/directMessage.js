@@ -116,7 +116,7 @@ export default {
 
         // Do both asynchronously
         const asyncFunc = async () => {
-          const author = await models.User.findOne({ where: {id: user.id} }, { raw: true })
+          const author = await models.User.findOne({ where: {id: user.id}, searchPath: subdomain }, { raw: true })
 
           pubsub.publish(NEW_DIRECT_MESSAGE, { 
             receiverId: args.receiverId, 
@@ -140,7 +140,7 @@ export default {
       }
     }),
 
-    markDirectMessagesAsRead: requiresAuth.createResolver((parent, args, { models, user }) => 
+    markDirectMessagesAsRead: requiresAuth.createResolver((parent, args, { models, subdomain, user }) => 
       models.DirectMessage.update({isRead: true}, { where: {receiverId: user.id, senderId: args.senderId}, searchPath: subdomain })
         .then(() => {  
           return {
@@ -160,7 +160,6 @@ export default {
     uploadPath: parent => parent.uploadPath && `${process.env.SERVER_URL || 'http://localhost:8080/'}${parent.uploadPath}`,
     
     user: ({ user, senderId }, args, { models, subdomain }) => {
-
       if (user) {
         return user
       }

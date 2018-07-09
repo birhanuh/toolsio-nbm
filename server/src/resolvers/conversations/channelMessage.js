@@ -19,7 +19,7 @@ export default {
   },
 
   Query: {
-    getMessage: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.ChannelMessage.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
+    getChannelMessage: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.ChannelMessage.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
 
     getChannelMessages: requiresAuth.createResolver((parent, { channelId, cursor }, { models, subdomain }) => {
       const options = { 
@@ -77,7 +77,7 @@ export default {
     })  
   },
 
-  Message: {
+  ChannelMessage: {
     uploadPath: parent => parent.uploadPath && process.env.SERVER_URL+parent.uploadPath,
 
     user: ({ user, userId }, args, { models, subdomain }) => {

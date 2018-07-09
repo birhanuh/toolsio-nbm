@@ -12,9 +12,6 @@ import { REGISTER_INVITED_USER_MUTATION } from '../../graphql/authentications'
 // Localization 
 import T from 'i18n-react'
 
-// Config
-import jwtConfig from '../../../config/jwt.json'
-
 class Invitation extends Component {
   constructor(props) {
     super(props)
@@ -34,7 +31,7 @@ class Invitation extends Component {
     const url = new URL(window.location.href)
     let token = url.searchParams.get("token")
   
-    const { email } = jwt.verify(token, jwtConfig.jwtSecret1)
+    const { email } = jwt.verify(token, process.env.JWTSECRET1)
 
     this.setState({ email, token })
   }

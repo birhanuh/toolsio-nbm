@@ -2,7 +2,7 @@ export default `
   
   scalar Upload
 
-  type Message {
+  type ChannelMessage {
     id: Int!
     body: String
     isRead: Boolean!
@@ -14,23 +14,23 @@ export default `
     mimetype: String
   }
 
-  type CreateMessageResponse {
+  type CreateChannelMessageResponse {
     success: Boolean!
-    message: Message
+    message: ChannelMessage
     errors: [Error!]
   }
 
   type Query {
-    getMessage(id: Int!): Message
+    getChannelMessage(id: Int!): ChannelMessage
 
-    getChannelMessages(cursor: String, channelId: Int!): [Message!]!
+    getChannelMessages(cursor: String, channelId: Int!): [ChannelMessage!]!
   }
 
   type Mutation {
-    createChannelMessage(body: String, file: Upload, channelId: Int! ): CreateMessageResponse!
+    createChannelMessage(body: String, file: Upload, channelId: Int! ): CreateChannelMessageResponse!
   }
 
   type Subscription {
-    getNewChannelMessage(channelId: Int!): Message!
+    getNewChannelMessage(channelId: Int!): ChannelMessage!
   }
 `

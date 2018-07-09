@@ -61,12 +61,16 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(cookieParser())
 
+// Subdomain
+let subdomain
+
 // Add authToken exist checker middleware
 app.use(async (req, res, next) => {
   
-  // Parse subdomain 
-  let subdomain = req.headers.subdomain
+  // Parse assign subdomain globally
+  subdomain = req.headers.subdomain
   console.log('subdomain: ', subdomain)
+
   // Parse authToken 
   const authToken = req.headers['x-auth-token']
 
@@ -77,7 +81,7 @@ app.use(async (req, res, next) => {
        
     } catch (err) { 
       let refreshAuthToken = req.headers['x-refresh-auth-token']
-      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, process.env.JWTSECRET1, process.env.JWTSECRET2)
+      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, subdomain, process.env.JWTSECRET1, process.env.JWTSECRET2)
       
       if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
         res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
@@ -175,10 +179,10 @@ server.listen(app.get('port'), () => {
       if (authToken && refreshAuthToken) {      
         try {
           const { user } = jwt.verify(authToken, process.env.JWTSECRET1)
-          return { models, user }           
+          return { models, subdomain, user }           
         } catch (err) {
-          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, process.env.JWTSECRET1, process.env.JWTSECRET2)
-          return { models, user: newAuthTokens.user }
+          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, subdomain, process.env.JWTSECRET1, process.env.JWTSECRET2)
+          return { models, subdomain, user: newAuthTokens.user }
         }
       }
       return { models }

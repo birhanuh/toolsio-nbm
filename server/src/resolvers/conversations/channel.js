@@ -51,14 +51,14 @@ export default {
       }
     }),
 
-    addMember: requiresAuth.createResolver(async (parent, { channelId }, { models, subdomain }) => {
+    addMember: requiresAuth.createResolver(async (parent, {members, channelId }, { models, subdomain }) => {
 
       try {
-        const members = await models.Member.bulkCreate(members.map(member => ({ userId: member, channelId: channelId })), { searchPath: subdomain })
-        console.log('memberAdded', members)
+        const membersCreated = await models.Member.bulkCreate(members.map(member => ({ userId: member, channelId: channelId })), { searchPath: subdomain })
+        
         return {
           success: true,
-          members
+          members: membersCreated.map(member => member.dataValues.userId)
         }
       } catch (err) {
         console.log('err: ', err)
@@ -72,16 +72,24 @@ export default {
   },
 
   Channel: {
-    users: ({ id }, args, { models, subdomain }) => {
+    usersInChannel: ({ id }, args, { models, subdomain }) => {
       return models.User.findAll({ 
         include: [
           {
             model: models.Channel,
-            where: { id: id }, 
-            searchPath: subdomain
+            where: { id: id }
           }
-        ]
+        ], searchPath: subdomain
       }, { raw: true })
+    },
+
+    usersNotInChannel: ({ id }, args, { models, subdomain }) => {
+      return models.sequelize.query("SELECT u.id, u.email FROM users u LEFT JOIN (SELECT u.id, u.email FROM users u INNER JOIN members m ON m.channel_id=:channelId AND u.id = m.user_id) m ON u.id = m.id WHERE m.id IS NULL",
+        { replacements: { channelId: id },
+        model: models.Channel,
+        raw: true,
+        searchPath: subdomain
+      })
     }
 
   },
@@ -92,10 +100,10 @@ export default {
         include: [
           {
             model: models.Channel,
-            where: { id: id }, 
-            searchPath: subdomain
+            where: { id: id }
           }
-        ]}, { raw: true })
+        ], searchPath: subdomain
+      }, { raw: true })
     }
 
   }       

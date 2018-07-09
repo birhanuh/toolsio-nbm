@@ -4,11 +4,7 @@ export const ADD_MEMBER_MUTATION = gql`
   mutation addMember($members: [Int!], $channelId: Int!) {
     addMember(members: $members, channelId: $channelId ) {
       success
-      member {
-        id
-        firstName
-        email
-      } 
+      members
       errors {
         path
         message
@@ -22,16 +18,14 @@ export const GET_CHANNEL_USERS_QUERY = gql`
     getChannel(id: $id) {
       id
       name
-      users {
+      usersInChannel {
         id
         email
       }
-    }
-    getUsers {
-      id
-      firstName
-      lastName
-      email
+      usersNotInChannel {
+        id
+        email
+      }
     }
   }
 `

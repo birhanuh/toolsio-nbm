@@ -1,10 +1,10 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
-import classnames from 'classnames'
 import { Validation } from '../../../../utils'
-import { Dropdown } from 'semantic-ui-react'
+import { Form, Dropdown } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_CHANNEL_USERS_QUERY, ADD_MEMBER_MUTATION } from '../../../../graphql/conversations/channels'
+// eslint-disable-next-line no-unused-vars
+import { GET_CHANNELS_USERS_COUNT_QUERY, GET_CHANNEL_USERS_QUERY, ADD_MEMBER_MUTATION } from '../../../../graphql/conversations/channels'
 
 // Localization 
 import T from 'i18n-react'
@@ -56,36 +56,55 @@ class Users extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    
+
     // Validation
     if (this.isValid()) { 
       const { members } = this.state
       const { channelId } = this.props
-
+       console.log('me')
       this.setState({ isLoading: true })
 
       this.props.addMemberMutation({ 
         variables: { members, channelId },
         update: (proxy, { data: { addMember } }) => {
-          const { success, member } = addMember
+          const { success, members } = addMember
 
           if (!success) {
             return
           }
+         
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({ query: getChannelUsersQuery })
-          // Add our comment from the mutation to the end.
-          console.log('data ', data)
-          data.getChannel.users.push(member)
+          const data = proxy.readQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY })          
+          let updatedGetChannelsUsersCount = data.getChannelsUsersCount.map(channelUserCount => {
+            if(channelUserCount.id === parseInt(channelId)) {
+              return {...channelUserCount, usersCount: parseInt(channelUserCount.usersCount)+members.length}
+            }
+            
+            return channelUserCount
+          })   
+          data.getChannelsUsersCount = updatedGetChannelsUsersCount
+
+          // Read the dataChannelUsers from our cache for this query.
+          //const dataChannelUsers = proxy.readQuery({ query: GET_CHANNEL_USERS_QUERY })
+          //console.log('updatedDataChannelUsers: ', dataChannelUsers)
+          // let updatedDataChannelUsers = dataChannelUsers.getChannel.usersNotInChannel.map(user => {
+          //   members.map(item => {
+          //     if (user.id !== item) {
+          //       return user
+          //     }
+          //   })
+          // })
+          // dataChannelUsers.getChannel.usersNotInChannel = updatedDataChannelUsers
+         
           // Write our data back to the cache.
-          proxy.writeQuery({ query: getChannelUsersQuery, data })
+          proxy.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data })
+          //proxy.writeQuery({ query: GET_CHANNEL_USERS_QUERY, dataChannelUsers })
         }})
         .then(res => {
           // this.props.addFlashMessage({
           //   type: 'success',
           //   text: T.translate("conversations.form.flash.success_compose")
-          // })  
-          // this.context.router.history.push('/conversations')          
+          // })          
 
           const { success, errors } = res.data.addMember
 
@@ -108,57 +127,52 @@ class Users extends Component {
   render() {
     const { members, errors, isLoading } = this.state
 
-    const { getUsers } = this.props.data
+    const { usersNotInChannel } = this.props
 
-    const usersOptions = getUsers && getUsers.map(user => 
-      ({ key: user.id, value: user.id, text: user.firstName })
+    const usersOptions = usersNotInChannel.map(user => 
+      ({ key: user.id, value: user.id, text: user.email })
     )
 
     return (   
-      <form className={classnames("ui form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
-
+      <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+      
         { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
 
-        { usersOptions &&
-          <Dropdown
-            name="members"
-            value={members} 
-            placeholder={T.translate("conversations.form.select_users")} 
-            fluid 
-            multiple 
-            search 
-            selection
-            className="field"
-            options={usersOptions} 
-            error={errors.members}
-            onChange={(e, {value}) => this.handleChange('members', value)} 
-          />
-        }
-
+        <Form.Field>
+          { usersOptions &&
+            <Dropdown
+              name="members"
+              value={members} 
+              placeholder={T.translate("conversations.form.select_users")} 
+              fluid 
+              multiple 
+              search 
+              selection
+              options={usersOptions} 
+              error={!!errors.members}
+              onChange={(e, {value}) => this.handleChange('members', value)} 
+            />
+          }
+          <span className="red">{errors.members}</span>
+        </Form.Field>
+        
         <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" 
           aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.add")}</button>
         
-      </form> 
+      </Form> 
     )
   }
 }
 
 Users.propTypes = {
-  channelId: PropTypes.string.isRequired
+  usersNotInChannel: PropTypes.array.isRequired
 }
 
-const MutationsAndQuery =  compose(
+const Mutation =  compose(
   graphql(ADD_MEMBER_MUTATION, {
     name : 'addMemberMutation'
-  }),
-  graphql(GET_CHANNEL_USERS_QUERY, {
-    options: (props) => ({
-      variables: {
-        id: parseInt(props.channelId)
-      }
-    })
   })
 )(Users)
 
-export default MutationsAndQuery
+export default Mutation
 

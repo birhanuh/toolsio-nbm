@@ -18,10 +18,8 @@ import T from 'i18n-react'
 // Country region selector 
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 
-import $ from 'jquery'
-$.fn.checkbox = require('semantic-ui-checkbox')
-
 class FormPage extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
@@ -247,7 +245,6 @@ class FormPage extends Component {
               }, data })
           }})
           .then(res => {
-
             const { success, errors } = res.data.createCustomer
            
             if (success) {
@@ -256,7 +253,9 @@ class FormPage extends Component {
                 text: T.translate("customers.form.flash.success_create", { name: name})
               }) 
 
-              this.context.router.history.push('/customers')
+              const referrer = document.referrer.replace(/^[^:]+:\/\/[^/]+/, '').replace(/#.*/, '')
+
+              referrer === 'projects' ? this.context.router.history.push('/projects/new') : this.context.router.history.push('/customers')
             } else {
               let errorsList = {}
               errors.map(error => {
@@ -270,8 +269,7 @@ class FormPage extends Component {
                 }
               })
               this.setState({ errors: errorsList, isLoading: false })
-            }
-           
+            }           
           })
           .catch(err => this.setState({ errors: err, isLoading: false }))
         }

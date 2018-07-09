@@ -204,7 +204,7 @@
     "description": "Summary of your business activties are shown infographically.",
     "total_income": {
       "header": "Total income",
-      "description": "Cumulative of all PAID invoices with out including taxes, (i.e Net income)."
+      "description": "Cumulative value of PAID invoices excluding taxes, (i.e Net income)."
     },
     "incomes": {
       "header": "Incomes"
