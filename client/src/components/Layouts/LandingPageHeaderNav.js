@@ -58,14 +58,14 @@ class LandingPageHeaderNav extends Component {
               <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
               <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
               <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
-              <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+              <ActiveLink activeOnlyWhenExact to="#testimonial" label={T.translate("landing.testimonial.header")} />
               <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
               <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
             </div>
 
             <div className="right item">                                                   
               <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
-              <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui inverted button">{T.translate("sign_up.sign_up")}</a>     
+              <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui inverted button">{T.translate("sign_up.sign_up")}</a>     
             </div>  
           </div>
         </div>
@@ -76,7 +76,7 @@ class LandingPageHeaderNav extends Component {
             <div className="turquoise d-inline">{T.translate("internal_navigation.toolsio")}</div>
           </h1>
           <h3>{T.translate("landing.home.slogan")}</h3>
-          <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
+          <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
         </div>
       </div>)
   }  

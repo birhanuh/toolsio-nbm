@@ -1,5 +1,4 @@
 import { formatErrors } from '../utils/formatErrors'
-import { loginUserWithToken } from '../utils/authentication'
 import requiresAuth from '../middlewares/authentication'
 
 import jwt from 'jsonwebtoken'
@@ -7,9 +6,6 @@ import nodemailer from 'nodemailer'
 
 // AWS
 import AWS from 'aws-sdk'
-
-// jwt config
-import jwtConfig from '../../config/jwt.json'
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -29,143 +25,14 @@ const s3Bucket = new AWS.S3({
 
 export default {
   Query: {
-    getUser: requiresAuth.createResolver((parent, { id }, { models }) => models.User.findOne({ where: { id } }, { raw: true })),
+    getUser: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.User.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
 
-    getUserByEmail: requiresAuth.createResolver((parent, { email }, { models }) => models.User.findOne({ where: { email } }, { raw: true })),
+    getUserByEmail: requiresAuth.createResolver((parent, { email }, { models, subdomain }) => models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })),
 
-    getUsers: requiresAuth.createResolver((parent, args, { models }) => models.User.findAll())
+    getUsers: requiresAuth.createResolver((parent, args, { models, subdomain }) => models.User.findAll({ searchPath: subdomain }))
   },
 
   Mutation: {
-    loginUser: (parent, { email, password }, { models, SECRET, SECRET2 }) => 
-      loginUserWithToken(email, password, models, SECRET, SECRET2),
-    
-    registerUser: async (parent, args, { models }) => {
-
-      const { firstName, lastName, email, password } = args
-      const { subdomain, industry } = args
-
-      try {
-        const account = await models.Account.findOne( { where: { subdomain } }, { raw: true })
-
-        if (account) {
-          return {
-            success: false,
-            errors: [
-              {
-                path: 'subdomain',
-                message: 'Subdomain is already taken'
-              }
-            ]
-          }
-        } else {
-          const response = await models.sequelize.transaction(async (transaction) => {
-
-            const user = await  models.User.create({ firstName, lastName, email, password }, { transaction })
-            const account = await models.Account.create({ subdomain, industry, owner: user.id }, { transaction })
-
-            return { user, account } 
-          })
-
-          // Create emailToken
-          jwt.sign({
-            id: response.user.dataValues.id,
-            email: response.user.dataValues.email
-          }, jwtConfig.jwtSecret1, { expiresIn: '60d' }, (err, emailToken) => {
-            if (err) {
-              console.log('err token: ', err)
-            }
-            
-            const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/${emailToken}`
-
-            transporter.sendMail({
-              to: userCreated.get('email'),
-              subject: 'Confirm Email (Toolsio)',
-              html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
-            })
-          })
-      
-          return {
-            success: true,
-            account: response.account
-          }
-        }
-      } catch(err) {
-        console.log('err: ', err)
-        return {
-          success: false,
-          errors: formatErrors(err, models)
-        }       
-      }
-
-    },
-
-    registerInvitedUser: async (parent, args, { models }) => {
-
-      const { firstName, lastName, email, password, token } = args
-
-      const { account } = jwt.verify(token, jwtConfig.jwtSecret1)
-
-      try {
-        const accountLocal = await models.Account.findOne( { where: { subdomain: account } }, { raw: true })
-
-        if (accountLocal) {
-          // Switch to account schema
-          //sequelize.Switch(account.subdomain)
-
-          try {
-            const user = await  models.User.create({ firstName, lastName, email, password })
-
-            // Create emailToken
-            jwt.sign({
-              id: user.dataValues.id,
-              email: user.dataValues.email
-            }, jwtConfig.jwtSecret1, { expiresIn: '60d' }, (err, emailToken) => {
-              if (err) {
-                console.log('err token: ', err)
-              }
-              
-              const url = `http://${accountLocal.dataValues.subdomain}.lvh.me:3000/login/confirmation/${emailToken}`
-
-              transporter.sendMail({
-                to: userCreated.get('email'),
-                subject: 'Confirm Email (Toolsio)',
-                html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
-              })
-            })
-        
-            return {
-              success: true,
-              account: accountLocal
-            }
-          } catch(err) {
-            console.log('err: ', err)
-            return {
-              success: false,
-              errors: formatErrors(err, models)
-            }       
-          }
-        } else {
-          return {
-            success: false,
-            errors: [
-              {
-                path: 'subdomain',
-                message: `Account *${account}* to which you are invited doesn't exist. You can create it as your own new account by going to sign up page`
-              }
-            ]
-          }
-        }
-      } catch(err) {
-        console.log('err: ', err)
-        return {
-          success: false,
-          errors: formatErrors(err, models)
-        }       
-      }
-
-    },
-
     sendInvitation: requiresAuth.createResolver((parent, args, { subdomain }) => {
       
       let emailToken
@@ -175,7 +42,7 @@ export default {
         emailToken = jwt.sign({
           email: args.email,
           account: subdomain
-        }, jwtConfig.jwtSecret1, { expiresIn: '60d' })
+        }, process.env.JWTSECRET1, { expiresIn: '60d' })
       } catch(err) {
         console.log('err', err)
       }
@@ -233,8 +100,8 @@ export default {
       }
     }),
 
-    updateUser: requiresAuth.createResolver((parent, args, { models }) => 
-       models.User.update(args, { where: {email: args.email}, returning: true, plain: true })
+    updateUser: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.User.schema(subdomain).update(args, { where: {email: args.email}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {  
           return {
             success: true,

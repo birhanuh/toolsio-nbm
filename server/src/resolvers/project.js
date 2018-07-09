@@ -4,32 +4,34 @@ import { formatErrors } from '../utils/formatErrors'
 export default {
 
   Query: {
-    getProject: requiresAuth.createResolver((parent, { id }, { models }) =>  models.Project.findOne({ where: { id } })),
+    getProject: requiresAuth.createResolver((parent, { id }, { models, subdomain }) =>  models.Project.findOne({ where: { id }, searchPath: subdomain })),
     
-    getProjects: requiresAuth.createResolver((parent, { offset, limit, order, name }, { models }) => 
+    getProjects: requiresAuth.createResolver((parent, { offset, limit, order, name }, { models, subdomain }) => 
       models.Project.findAll({ where: {
         name: {
           [models.sequelize.Op.iLike]: '%'+name+'%'
         }
-      }, offset, limit, order: [['updated_at', ''+order+'']] }, { raw: true })),
+      }, offset, limit, order: [['updated_at', ''+order+'']], searchPath: subdomain }, { raw: true })),
 
-    getProjectsWithoutInvoice: requiresAuth.createResolver((parent, { name }, { models }) => 
+    getProjectsWithoutInvoice: requiresAuth.createResolver((parent, { name }, { models, subdomain }) => 
       models.sequelize.query("SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id, c.id AS customer_id, c.name AS customer_name FROM projects p LEFT JOIN invoices i ON p.id=i.project_id JOIN customers c ON p.customer_id = c.id WHERE i.project_id IS NULL AND p.name ILIKE :projectName", 
         { replacements: { projectName: '%'+name+'%' },
           model: models.Project,
-          raw: true
+          raw: true,
+          searchPath: subdomain
         })),
 
-    getProjectsWithInvoice: requiresAuth.createResolver((parent, args, { models }) => 
+    getProjectsWithInvoice: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
       models.sequelize.query('SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p INNER JOIN invoices i ON p.id = i.project_id', { 
         model: models.Project,
         raw: true,
+        searchPath: subdomain
       }))
   },
 
   Mutation: {
-    createProject: requiresAuth.createResolver((parent, args, { models, user }) => 
-      models.Project.create({...args, userId: user.id})
+    createProject: requiresAuth.createResolver((parent, args, { models, subdomain, user }) => 
+      models.Project.create({...args, userId: user.id}, { searchPath: subdomain })
         .then(project => {
           return {
             success: true,
@@ -44,8 +46,8 @@ export default {
           }
         })),
 
-    updateProject: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Project.update(args, { where: {id: args.id}, returning: true, plain: true })
+    updateProject: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Project.update(args, { where: {id: args.id}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {  
           return {
             success: true,
@@ -60,8 +62,8 @@ export default {
           }
         })),
 
-    deleteProject: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Project.destroy({ where: {id: args.id}, force: true })
+    deleteProject: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Project.destroy({ where: {id: args.id}, force: true, searchPath: subdomain })
         .then(res => {          
           return {
             success: (res === 1)
@@ -77,16 +79,15 @@ export default {
   },
 
   Project: {
-    tasks: ({ id }, args, { models } ) => models.Task.findAll({ where: { projectId: id} }),
+    tasks: ({ id }, args, { models, subdomain } ) => models.Task.findAll({ where: { projectId: id}, searchPath: subdomain }),
 
-    customer: ({ customerId }, args, { models }) => models.Customer.findOne({ where: {id: customerId} }, { raw: true }),
+    customer: ({ customerId }, args, { models, subdomain }) => models.Customer.findOne({ where: {id: customerId}, searchPath: subdomain }, { raw: true}),
 
-    user: ({ userId }, args, { models }) => models.User.findOne({ where: {id: userId} }, { raw: true }),
+    user: ({ userId }, args, { models, subdomain }) => models.User.findOne({ where: {id: userId}, searchPath: subdomain }, { raw: true}),
 
-    total: async ({ id }, args, { models }) => {     
+    total: async ({ id }, args, { models, subdomain }) => {     
       const totalSum = await models.Task.sum('total', {
-          where: { projectId: id }
-        }) 
+          where: { projectId: id }, searchPath: subdomain }) 
      
       return totalSum ? totalSum : 0      
     }
@@ -99,9 +100,9 @@ export default {
   },
 
   GetProjectsWithoutInvoiceResponse: {
-    total: async ({ id }, args, { models }) => {     
+    total: async ({ id }, args, { models, subdomain }) => {     
       const totalSum = await models.Task.sum('total', {
-          where: { projectId: id }
+          where: { projectId: id }, searchPath: subdomain
         }) 
      
       return totalSum ? totalSum : 0      
@@ -109,11 +110,11 @@ export default {
   },
 
   GetProjectsWithInvoiceResponse: {
-    customer: ({ customer_id }, args, { models }) => models.Customer.findOne({ where: {id: customer_id} }, { raw: true }),
+    customer: ({ customer_id }, args, { models, subdomain }) => models.Customer.findOne({ where: {id: customer_id}, searchPath: subdomain }, { raw: true }),
 
-    total: async ({ id }, args, { models }) => {     
+    total: async ({ id }, args, { models, subdomain }) => {     
       const totalSum = await models.Task.sum('total', {
-          where: { projectId: id }
+          where: { projectId: id }, searchPath: subdomain
         }) 
      
       return totalSum ? totalSum : 0      

@@ -44,6 +44,10 @@ export default function Breadcrumb(props, context) {
       currentPageTitle = "users.header"
       currentPageDescription = "users.description"
       break
+    case currentPage.includes('/events'): 
+      currentPageTitle = "events.page.header"
+      currentPageDescription = "events.page.description"
+      break
     default:
       currentPageTitle = "No page title"
       currentPageDescription = "No page description"

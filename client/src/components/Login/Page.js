@@ -27,7 +27,7 @@ class Page extends Component {
         <Form />
 
         <div className="ui message">
-          {T.translate("log_in.new_to_us")}&nbsp;<a href={process.env.SERVER_PROTOCOL+process.env.SERVER_HOST+"/signup"}>{T.translate("sign_up.sign_up")}</a>
+          {T.translate("log_in.new_to_us")}&nbsp;<a href={process.env.CLIENT_PROTOCOL+process.env.CLIENT_URL+"/signup"}>{T.translate("sign_up.sign_up")}</a>
         </div>
         <div className="ui center aligned vertical segment">
           <small className="d-block">{T.translate("landing.footer.copyright")}</small>

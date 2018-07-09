@@ -27,20 +27,20 @@ export default createResolver((parent, args, context ) => {
   }
 })
 
-export const requiresChannelAccess = createResolver(async (parent, { channelId }, { user, models} ) => {
+export const requiresChannelAccess = createResolver(async (parent, { channelId }, { models, subdomain, user } ) => {
   if (!user || !user.id) {
     throw new Error('Not authenticated')
   }
 
   // Check if part of the member
-  const member = await models.Member.findOne({ where: { channelId, userId: user.id } })
+  const member = await models.Member.findOne({ where: { channelId, userId: user.id }, searchPath: subdomain })
 
   if (!member) {
     throw new Error("You have to be a member of the channel to subscribe for it's messages")
   }  
 })
 
-export const requiresDirectMessageAccess = createResolver(async (parent, { receiverId }, { models, user }) => {
+export const requiresDirectMessageAccess = createResolver(async (parent, { receiverId }, { models, subdomain, user }) => {
   if (!user || !user.id) {
     throw new Error('Not authenticated')
   }
@@ -48,7 +48,7 @@ export const requiresDirectMessageAccess = createResolver(async (parent, { recei
   const users = await models.User.findAll({
     where: {
       [models.sequelize.Op.or]: [{ id: receiverId }, { id: user.id }],
-    }
+    }, searchPath: subdomain
   })
 
   if (!users) {

@@ -19,12 +19,12 @@ export default {
   },
 
   Query: {
-    getMessage: requiresAuth.createResolver((parent, { id }, { models }) => models.ChannelMessage.findOne({ where: { id } }, { raw: true })),
+    getChannelMessage: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.ChannelMessage.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
 
-    getChannelMessages: requiresAuth.createResolver((parent, { channelId, cursor }, { models }) => {
+    getChannelMessages: requiresAuth.createResolver((parent, { channelId, cursor }, { models, subdomain }) => {
       const options = { 
         where: { channelId: channelId },
-        order: [['created_at', 'DESC']], limit: 5 }
+        order: [['created_at', 'DESC']], limit: 5, searchPath: subdomain }
    
       if (cursor) {
         options.where.created_at = {
@@ -38,7 +38,7 @@ export default {
   },
 
   Mutation: {
-    createChannelMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, user }) => {
+    createChannelMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, subdomain, user }) => {
       try {
         
         const messageData = args
@@ -49,11 +49,11 @@ export default {
           messageData.mimetype = uploadFile.mimetype
         }
 
-        const message = await models.ChannelMessage.create({ ...messageData, userId: user.id })
+        const message = await models.ChannelMessage.create({ ...messageData, userId: user.id }, { searchPath: subdomain })
 
         // Do both asynchronously
         const asyncFunc = async () => {
-          const author = await models.User.findOne({ where: {id: user.id} }, { raw: true })
+          const author = await models.User.findOne({ where: {id: user.id}, searchPath: subdomain }, { raw: true })
 
           pubsub.publish(NEW_CHANNEL_MESSAGE, { 
             channelId: args.channelId, 
@@ -77,15 +77,15 @@ export default {
     })  
   },
 
-  Message: {
+  ChannelMessage: {
     uploadPath: parent => parent.uploadPath && process.env.SERVER_URL+parent.uploadPath,
 
-    user: ({ user, userId }, args, { models }) => {
+    user: ({ user, userId }, args, { models, subdomain }) => {
 
       if (user) {
         return user
       }
-      return models.User.findOne({ where: {id: userId} }, { raw: true })            
+      return models.User.findOne({ where: {id: userId}, searchPath: subdomain }, { raw: true })            
     } 
   }        
 }

@@ -4,7 +4,7 @@ export default `
     id: Int!
     deadline: Date
     paymentTerm: Int
-    interestInArrears: Int!
+    interestInArrears: Int
     status: String!
     referenceNumber: String!
     description: String
@@ -15,12 +15,12 @@ export default `
     sale: Sale
     customer: Customer!
     user: User!
-    total: Float!
   }
 
   type GetInvoicesResponseRows {
     id: Int!
-    deadline: Date!
+    deadline: Date
+    interestInArrears: Int
     referenceNumber: String!
     status: String!
     tax: Float!
@@ -55,7 +55,7 @@ export default `
   }
 
   type Mutation {
-    createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String!, 
+    createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String, 
       , description: String, tax: Float!, projectId: Int, saleId: Int, 
       customerId: Int!): CreateUpdateInvoiceResponse!
     

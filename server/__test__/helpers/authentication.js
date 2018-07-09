@@ -49,7 +49,7 @@ export async function registerUser() {
 }
 
 
-export async function loginUser(email, password) {
+export async function loginUser(email, password, subdomain) {
 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: `mutation($email: String!, $password: String!) {
@@ -67,7 +67,12 @@ export async function loginUser(email, password) {
         email: email,
         password: password
       }
-    }) 
+    },
+    {
+      headers: {
+        'subdomain': subdomain
+      }
+    })  
 
     const { data: { loginUser: { success, authToken, refreshAuthToken } } } = response.data    
  

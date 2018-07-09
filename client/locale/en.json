@@ -33,7 +33,7 @@
       "header": "Pricing",
       "learn_more": "Learn more"
     },
-    "testmonial": {
+    "testimonial": {
       "header": "Testmonial"
     },
     "contacts": {
@@ -53,11 +53,9 @@
       }
     },
     "footer": {
-      "copyright": "Copyright &copy; Toolsio, Ltd. 2017",
-      "address": "Pyyntitie 2 C 50, 02230, Espoo, Finland",
       "toolsio": "Toolsio",
-      "site_map": "Site Map",
-      "contact_us": "Contact us",
+      "copy_right": "Copyright © Toolsio, Ltd. 2018",
+      "address": "Pyyntitie 2 C 50, 02230, Espoo, Finland",
       "terms_and_conditions": "Terms and Conditions",
       "privacy_policy": "Privacy Policy"
     }
@@ -108,6 +106,9 @@
       "subdomain_required": "Subdomain is required",
       "no__account": "There is no account with such subdomain! Go to Sign up page to sign for free!",
       "on_your_account_page": "You are now on your account page, continue by login with your credentials!"
+    },
+    "flash": {
+      "logout_success": "You are logged out from your account!"
     }
   },
   "internal_navigation": {
@@ -203,7 +204,7 @@
     "description": "Summary of your business activties are shown infographically.",
     "total_income": {
       "header": "Total income",
-      "description": "Cumulative of all PAID invoices with out including taxes, (i.e Net income)."
+      "description": "Cumulative value of PAID invoices excluding taxes, (i.e Net income)."
     },
     "incomes": {
       "header": "Incomes"
@@ -218,7 +219,8 @@
     },
     "customers": {
       "header": "Customers",
-      "create_first_customer": "Create you first Customer"
+      "create_first_customer": "Create you first Customer",
+      "customer_project_sale_relationship": "Customers relatioship to Projects and Sales"
     },
     "invoices": {
       "header": "Invoices",
@@ -249,7 +251,7 @@
       "no_invoices": "You have no Invoices",
       "no_pending_invoices": "You have no pending Invoices",
       "pending_invoices": "You have *{count}* pending Invoices.",
-      "no_overuded_invoices": "You have no overuded Invoices",
+      "no_overdue_invoices": "You have no overdue Invoices",
       "overdue_invoices": "You have *{count}* overdue Invoices."
     },   
     "last_month": "Last month",
@@ -773,7 +775,7 @@
   "events": {
     "page": {
       "header": "Events",
-      "description": "Organize your schedules and appointements here."
+      "description": "Organize and plan your events. Follow deadlines and appointements here."
     },
     "form": {
       "new_event": "New Event",

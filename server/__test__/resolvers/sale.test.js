@@ -6,22 +6,25 @@ import { resetDb } from '../helpers/macros'
 // Load factories 
 import saleFactory from '../factories/sale'
 
-// Tokens
-let tokens 
-
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
-import { createCustomer } from '../helpers/parents'
+import { createCustomer } from '../helpers/related_objects'
+
+// Tokens
+let tokens 
+let subdomainLocal
 
 describe("Sale",  () => { 
 
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -58,6 +61,7 @@ describe("Sale",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -69,8 +73,8 @@ describe("Sale",  () => {
   it('createSale', async () => {   
 
     let saleFactoryLocal = await saleFactory()
-      // Create customer 
-    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
+    // Create customer 
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken, subdomainLocal)
 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
@@ -98,6 +102,7 @@ describe("Sale",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -133,6 +138,7 @@ describe("Sale",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -161,6 +167,7 @@ describe("Sale",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 

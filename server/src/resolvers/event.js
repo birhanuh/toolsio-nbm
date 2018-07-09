@@ -3,13 +3,13 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {    
-    getEvents: requiresAuth.createResolver((parent, args, { models }) => models.Event.findAll()),
+    getEvents: requiresAuth.createResolver((parent, args, { models, subdomain }) => models.Event.findAll({ searchPath: subdomain })),
 
-    getProjectEvents: requiresAuth.createResolver((parent, args, { models }) => 
+    getProjectEvents: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
       models.Project.findAll({ 
         where: { deadline: {
           [models.sequelize.Op.gt]: new Date()
-        }}})
+        }}, searchPath: subdomain})
         .then(project => {
             return {
               id: project.id,
@@ -24,17 +24,17 @@ export default {
           })
       ),
 
-    getSaleEvents: requiresAuth.createResolver((parent, args, { models }) => 
+    getSaleEvents: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
       models.Sale.findAll({ 
         where: { deadline: {
           [models.sequelize.Op.gt]: new Date()
-        }}})
+        }}, searchPath: subdomain})
       )
   },
 
   Mutation: {
-    createEvent: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Event.create(args)
+    createEvent: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Event.create(args, { searchPath: subdomain })
         .then(event => {
             return {
               success: true,
@@ -49,8 +49,8 @@ export default {
             }
           })),
 
-    updateEvent: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Event.update(args, { where: {id: args.id}, returning: true, plain: true })
+    updateEvent: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Event.update(args, { where: {id: args.id}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {  
           return {
             success: true,
@@ -65,8 +65,8 @@ export default {
           }
         })),
 
-    deleteEvent: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Event.destroy({ where: {id: args.id}, force: true })
+    deleteEvent: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Event.destroy({ where: {id: args.id}, force: true, searchPath: subdomain })
         .then(res => {          
           return {
             success: (res === 1)

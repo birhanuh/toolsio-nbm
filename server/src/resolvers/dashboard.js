@@ -4,15 +4,17 @@ import _ from 'lodash'
 
 export default {
   Query: {
-    getTotalIncomeData: requiresAuth.createResolver(async (parent, args, { models }) =>  {
+    getTotalIncomeData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) =>  {
       const paidTasksSumPromise = models.sequelize.query("SELECT SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid'", {
         model: models.Task,
         raw: true,
+        searchPath: subdomain
       })
 
       const paidItemsSumPromise = models.sequelize.query("SELECT SUM(it.total) FROM items it JOIN invoices invoice ON it.sale_id = invoice.sale_id WHERE invoice.status='paid'", {
         model: models.Item,
         raw: true,
+        searchPath: subdomain
       })
 
       const [paidTasksSum, paidItemsSum] = await Promise.all([paidTasksSumPromise, paidItemsSumPromise])
@@ -23,15 +25,17 @@ export default {
       } 
     }),
     
-    getIncomesData: requiresAuth.createResolver(async (parent, args, { models }) =>  {
+    getIncomesData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) =>  {
       const paidTasksSumDayPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'DD/MM/YYYY') AS day, SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1", {
         model: models.Task,
         raw: true,
+        searchPath: subdomain
       })
 
       const paidItemsSumDayPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'DD/MM/YYYY') AS day, SUM(it.total) FROM items it JOIN invoices invoice ON it.sale_id = invoice.sale_id WHERE invoice.status='paid' GROUP BY 1", {
         model: models.Item,
         raw: true,
+        searchPath: subdomain
       })
 
       const [paidTasksSumDay, paidItemsSumDay] = await Promise.all([paidTasksSumDayPromise, paidItemsSumDayPromise])
@@ -47,11 +51,13 @@ export default {
       const paidTasksSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'MM/YYYY') AS month, SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
         model: models.Task,
         raw: true,
+        searchPath: subdomain
       })
 
       const paidItemsSumMonthPromise = models.sequelize.query("SELECT to_char(invoice.updated_at, 'MM/YYYY') AS month, SUM(it.total) FROM items it JOIN invoices invoice ON it.sale_id = invoice.sale_id WHERE invoice.status='paid' GROUP BY 1 LIMIT 2", {
         model: models.Item,
         raw: true,
+        searchPath: subdomain
       })
 
       const [paidTasksSumMonth, paidItemsSumMonth] = await Promise.all([paidTasksSumMonthPromise, paidItemsSumMonthPromise])
@@ -69,7 +75,7 @@ export default {
       } 
     }),
 
-    getProjectsData: requiresAuth.createResolver(async (parent, args, { models }) => {
+    getProjectsData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) => {
       // const data = await models.Project.findAll({
       //   group: ['status'],
       //   attributes: ['status', [models.sequelize.fn('COUNT', 'status'), 'count']],
@@ -77,12 +83,14 @@ export default {
 
       const countStatusPromise = models.sequelize.query('SELECT count(*), status FROM projects GROUP BY status', {
         model: models.Project,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const countMonthPromise = models.sequelize.query("SELECT to_char(created_at, 'MM/YYYY') AS month, count(*) FROM projects GROUP BY 1 LIMIT 2", {
         model: models.Project,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const [countStatus, countMonth] = await Promise.all([countStatusPromise, countMonthPromise])
@@ -93,16 +101,18 @@ export default {
       }
     }),
 
-    getSalesData: requiresAuth.createResolver(async (parent, args, { models }) => {
+    getSalesData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) => {
 
       const countStatusPromise = models.sequelize.query('SELECT count(*), status FROM sales GROUP BY status', {
         model: models.Sale,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const countMonthPromise = models.sequelize.query("SELECT to_char(created_at, 'MM/YYYY') AS month, count(*) FROM sales GROUP BY 1 LIMIT 2", {
         model: models.Sale,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const [countStatus, countMonth] = await Promise.all([countStatusPromise, countMonthPromise])
@@ -113,14 +123,16 @@ export default {
       }
     }),
 
-    getCustomersData: requiresAuth.createResolver(async (parent, args, { models }) => {
+    getCustomersData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) => {
       const countProjectPromise = models.sequelize.query('SELECT c.name, count(p) FROM projects p JOIN customers c ON p.customer_id = c.id GROUP BY c.name', {
         model: models.Project,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
       const countSalePromise = models.sequelize.query('SELECT c.name, count(s) FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.name', {
         model: models.Sale,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const [countProject, countSale] = await Promise.all([countProjectPromise, countSalePromise]) 
@@ -139,15 +151,17 @@ export default {
       }
     }),
 
-    getInvoicesData: requiresAuth.createResolver(async (parent, args, { models }) => {
+    getInvoicesData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) => {
       const countStatusPromise = models.sequelize.query("SELECT to_char(created_at, 'Mon/YYYY') AS month, count(*) FROM invoices GROUP BY 1 LIMIT 2", {
         model: models.Invoice,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const countMonthPromise = models.sequelize.query("SELECT to_char(created_at, 'Mon/YYYY') AS month, status, count(*) FROM invoices GROUP BY 1,2 LIMIT 4", {
         model: models.Invoice,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const [countMonth, countStatusMonth] = await Promise.all([countStatusPromise, countMonthPromise])
@@ -158,15 +172,17 @@ export default {
       }
     }),
 
-    getProjectTasksData: requiresAuth.createResolver(async (parent, args, { models }) => {
+    getProjectTasksData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) => {
       const countStatusPromise = await models.sequelize.query("SELECT count(*), status FROM projects WHERE status='new' OR status='delayed' GROUP BY status", {
         model: models.Project,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const idNameStatusPromise = await models.sequelize.query("SELECT status, id, name FROM projects WHERE status='new' OR status='delayed' GROUP BY 1,id", {
         model: models.Project,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const [countStatus, idNameStatus] = await Promise.all([countStatusPromise, idNameStatusPromise])
@@ -177,15 +193,17 @@ export default {
       }
     }),
 
-    getSaleTasksData: requiresAuth.createResolver(async (parent, args, { models }) => {
+    getSaleTasksData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) => {
       const countStatusPromise = await models.sequelize.query("SELECT count(*), status FROM sales WHERE status='new' OR status='delayed' GROUP BY status", {
         model: models.Sale,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const idNameStatusPromise = await models.sequelize.query("SELECT status, id, name FROM sales WHERE status='new' OR status='delayed' GROUP BY 1,id", {
         model: models.Sale,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const [countStatus, idNameStatus] = await Promise.all([countStatusPromise, idNameStatusPromise])
@@ -196,20 +214,23 @@ export default {
       }
     }),
 
-    getInvoiceTasksData: requiresAuth.createResolver(async (parent, args, { models }) => {
+    getInvoiceTasksData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) => {
       const countStatusPromise = await models.sequelize.query("SELECT count(*), status FROM invoices WHERE status='pending' OR status='overdue' GROUP BY status", {
         model: models.Invoice,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const idProjectStatusPromise = await models.sequelize.query("SELECT p.name, invoice.id, invoice.status FROM projects p JOIN invoices invoice ON p.id = invoice.project_id WHERE invoice.status='pending' OR invoice.status='overdue' GROUP BY 1,2", {
         model: models.Project,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
 
       const idSaleStatusPromise = await models.sequelize.query("SELECT s.name, invoice.id, invoice.status FROM sales s JOIN invoices invoice ON s.id = invoice.sale_id WHERE invoice.status='pending' OR invoice.status='overdue' GROUP BY 1,2", {
         model: models.Sale,
-        raw: true
+        raw: true, 
+        searchPath: subdomain
       })
       
       const [countStatus,  idProjectStatus, idSaleStatus] = await Promise.all([countStatusPromise, idProjectStatusPromise, idSaleStatusPromise])

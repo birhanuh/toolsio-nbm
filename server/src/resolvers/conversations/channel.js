@@ -3,25 +3,25 @@ import { formatErrors } from '../../utils/formatErrors'
 
 export default {
   Query: {
-    getChannel: requiresAuth.createResolver((parent, { id }, { models }) => models.Channel.findOne({ where: { id } })),
+    getChannel: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.Channel.findOne({ where: { id }, searchPath: subdomain })),
 
-    getChannelsUsersCount:  requiresAuth.createResolver((parent, args, { models, user }) => 
+    getChannelsUsersCount:  requiresAuth.createResolver((parent, args, { models, subdomain, user }) => 
       models.Channel.findAll({
         include: [
           {
             model: models.User,
             where: { id: user.id }
           }
-        ]
+        ], searchPath: subdomain
       }, { raw: true }))
 
   },
 
   Mutation: {
-    createChannel: requiresAuth.createResolver(async (parent, { name, isPublic }, { models }) => {
+    createChannel: requiresAuth.createResolver(async (parent, { name, isPublic }, { models, subdomain }) => {
       try {
       
-        const channel = await models.Channel.findOne({ where: { name } }, { raw: true })
+        const channel = await models.Channel.findOne({ where: { name }, searchPath: subdomain }, { raw: true })
     
         if (channel) {
           return {
@@ -34,8 +34,8 @@ export default {
             ]
           }    
         } else {
-          const channel = await models.Channel.create({ name, isPublic, owner: 1 })
-          await models.Member.create({ userId: 1, channelId: channel.dataValues.id })
+          const channel = await models.Channel.create({ name, isPublic, owner: 1 }, { searchPath: subdomain })
+          await models.Member.create({ userId: 1, channelId: channel.dataValues.id }, { searchPath: subdomain })
 
           return {
             success: true,
@@ -51,14 +51,14 @@ export default {
       }
     }),
 
-    addMember: requiresAuth.createResolver(async (parent, { channelId }, { models }) => {
+    addMember: requiresAuth.createResolver(async (parent, {members, channelId }, { models, subdomain }) => {
 
       try {
-        const members = await models.Member.bulkCreate(members.map(member => ({ userId: member, channelId: channelId })))
-        console.log('memberAdded', members)
+        const membersCreated = await models.Member.bulkCreate(members.map(member => ({ userId: member, channelId: channelId })), { searchPath: subdomain })
+        
         return {
           success: true,
-          members
+          members: membersCreated.map(member => member.dataValues.userId)
         }
       } catch (err) {
         console.log('err: ', err)
@@ -72,28 +72,38 @@ export default {
   },
 
   Channel: {
-    users: ({ id }, args, { models }) => {
+    usersInChannel: ({ id }, args, { models, subdomain }) => {
       return models.User.findAll({ 
         include: [
           {
             model: models.Channel,
             where: { id: id }
           }
-        ]
+        ], searchPath: subdomain
       }, { raw: true })
+    },
+
+    usersNotInChannel: ({ id }, args, { models, subdomain }) => {
+      return models.sequelize.query("SELECT u.id, u.email FROM users u LEFT JOIN (SELECT u.id, u.email FROM users u INNER JOIN members m ON m.channel_id=:channelId AND u.id = m.user_id) m ON u.id = m.id WHERE m.id IS NULL",
+        { replacements: { channelId: id },
+        model: models.Channel,
+        raw: true,
+        searchPath: subdomain
+      })
     }
 
   },
 
   GetChannelsUsersCountResponse: {
-    usersCount: ({ id }, args, { models }) => {
+    usersCount: ({ id }, args, { models, subdomain }) => {
       return models.User.count({ 
         include: [
           {
             model: models.Channel,
             where: { id: id }
           }
-        ]}, { raw: true })
+        ], searchPath: subdomain
+      }, { raw: true })
     }
 
   }       

@@ -39,6 +39,10 @@ const CustomersCard = () => (
         legend: {
           position: 'right',
         },
+        title: {
+          display: true,
+          text: T.translate("dashboard.customers.customer_project_sale_relationship")
+        },
         scale: {
           ticks: {
             beginAtZero: true
@@ -52,7 +56,7 @@ const CustomersCard = () => (
       }
 
       return (
-        <Card className={classnames("dashboard customer form", { loading: loading })}>
+        <Card id="customers" className={classnames("dashboard customer form", { loading: loading })}>
           <Card.Content>
             <Card.Header>
               <Header as='h4' floated='left'>
@@ -66,9 +70,9 @@ const CustomersCard = () => (
           <div className="image">
             <Polar data={chartData} options={chartOptions} />
           </div>
-          <Card.Content extra className="p-5 mt-2">
+          <Card.Header className="p-5">
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
-          </Card.Content>        
+          </Card.Header>        
 
           {nameCountProjectsSales && nameCountProjectsSales.length === 0 && 
             <div className="content-btn-outer-container">

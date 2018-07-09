@@ -226,8 +226,8 @@ class Show extends Component {
     const { id, name, deadline, customer, status, description, progress, tasks, user, openConfirmationModal } = this.state
     
     let tasksTotal = 0
-    //tasks.map(task => tasksTotal += task.total)
-    console.log('tasks ', tasks)
+    tasks.map(task => tasksTotal += task.total)
+ 
     return [
       <div key="segment" className="column row">
         <div className="twelve wide column">

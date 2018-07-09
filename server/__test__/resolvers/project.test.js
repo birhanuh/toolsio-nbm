@@ -6,22 +6,25 @@ import { resetDb } from '../helpers/macros'
 // Load factories 
 import projectFactory from '../factories/project'
 
-// Tokens
-let tokens 
-
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
-import { createCustomer } from '../helpers/parents'
+import { createCustomer } from '../helpers/related_objects'
+
+// Tokens
+let tokens 
+let subdomainLocal
 
 describe("Project",  () => { 
 
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -58,6 +61,7 @@ describe("Project",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -69,8 +73,8 @@ describe("Project",  () => {
   it('createProject', async () => {   
 
     let projectFactoryLocal = await projectFactory()
-      // Create customer 
-    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
+    // Create customer 
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken, subdomainLocal)
 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: `mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $customerId: Int!) {
@@ -98,6 +102,7 @@ describe("Project",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -132,6 +137,7 @@ describe("Project",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -160,6 +166,7 @@ describe("Project",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 

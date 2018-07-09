@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import decode from 'jwt-decode'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Image, Dropdown, Menu, Label, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_PROJECT_TASKS_DATA_QUERY, GET_SALE_TASKS_DATA_QUERY, GET_INVOICE_TASKS_DATA_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY } from '../../graphql/headerNav'
@@ -21,14 +23,15 @@ $.animate = require('jquery.easing')
 
 class InternalHeaderNav extends Component {
 
-  componentDidMount = () => { 
-    // jQuery for page scrolling feature - requires jQuery Easing plugin
-    $('.menu.transition.visible a').on('click', function() {
-      var $anchor = $(this)
-      $('html, body').stop().animate({
-          scrollTop: $($anchor.attr('href')).offset().top - 50
-      }, 1500, 'easeInOutExpo')
-    })
+  clickHandler = (e) => { 
+    if (this.dashboardOrRoot()) {
+      e.preventDefault()
+    }
+
+    var $anchor = $(e.target)
+    $('html, body').stop().animate({
+        scrollTop: $($anchor.attr('href')).offset().top - 50
+    }, 1500, 'easeInOutExpo')    
   }
 
   logout(e) {
@@ -36,6 +39,11 @@ class InternalHeaderNav extends Component {
     
     localStorage.removeItem('authToken')
     localStorage.removeItem('refreshAuthToken')
+
+    this.props.addFlashMessage({
+      type: 'success',
+      text: T.translate("log_in.flash.logout_success")
+    })  
 
     // Redirect to login page
     this.context.router.history.push('/login')
@@ -72,7 +80,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'delayed') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#projectTask" : "/dashboard/#projectTask"}>
+        return(<Dropdown.Item as={Link} key={item.status} onClick={this.clickHandler} to={this.dashboardOrRoot() ? "#projectTask" : "/dashboard/#projectTask"}>
           <Label color="red">{item.count} DELAYED</Label> 
           Projects
         </Dropdown.Item>)              
@@ -80,7 +88,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'new') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#projectTask" : "/dashboard/#projectTask"}>
+        return(<Dropdown.Item as={Link} key={item.status} onClick={this.clickHandler} to={this.dashboardOrRoot() ? "#projectTask" : "/dashboard/#projectTask"}>
           <Label color="blue">{item.count} NEW</Label> 
           Projects
         </Dropdown.Item>)
@@ -91,7 +99,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'delayed') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#saleTask" : "/dashboard/#saleTask"}>
+        return(<Dropdown.Item as={Link} key={item.status} onClick={this.clickHandler} to={this.dashboardOrRoot() ? "#saleTask" : "/dashboard/#saleTask"}>
           <Label color="red">{item.count} DELAYED</Label> 
           Sales
         </Dropdown.Item>)              
@@ -99,7 +107,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'new') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#saleTask" : "/dashboard/#saleTask"}>
+        return(<Dropdown.Item as={Link} key={item.status} onClick={this.clickHandler} to={this.dashboardOrRoot() ? "#saleTask" : "/dashboard/#saleTask"}>
           <Label color="blue">{item.count} NEW</Label> 
           Sales
         </Dropdown.Item>)
@@ -110,7 +118,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'delayed') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#invoiceTask" : "/dashboard/#invoiceTask"}>
+        return(<Dropdown.Item as={Link} key={item.status} onClick={this.clickHandler} to={this.dashboardOrRoot() ? "#invoiceTask" : "/dashboard/#invoiceTask"}>
           <Label color="red">{item.count} DELAYED</Label> 
           Invoices
         </Dropdown.Item>)              
@@ -118,7 +126,7 @@ class InternalHeaderNav extends Component {
       if (item.status === 'pending') {
         countNotifications += item.count
 
-        return(<Dropdown.Item as={Link} key={item.status} to={this.dashboardOrRoot() ? "#invoiceTask" : "/dashboard/#invoiceTask"}>
+        return(<Dropdown.Item as={Link} key={item.status} onClick={this.clickHandler} to={this.dashboardOrRoot() ? "#invoiceTask" : "/dashboard/#invoiceTask"}>
           <Label color="orange">{item.count} PENDING</Label> 
           Invoices
         </Dropdown.Item>)
@@ -140,7 +148,7 @@ class InternalHeaderNav extends Component {
           </div>
 
           <Menu.Menu position='right'>
-            <Dropdown pointing='top right' className='ui dropdown item' 
+            <Dropdown item pointing='top right' className='notifications' 
               trigger={(<Icon name="alarm" className="mr-0" />)} icon={null} > 
               <Dropdown.Menu>
                 <Dropdown.Item disabled>
@@ -152,7 +160,7 @@ class InternalHeaderNav extends Component {
               </Dropdown.Menu>
             </Dropdown>  
            
-            <Dropdown pointing='top right' className='ui dropdown item'
+            <Dropdown item pointing='top right' className='emails'
               trigger={(<div>
                 <Icon name='mail' className="mr-0" />
                 {count !== 0 && <Label size="tiny" color="red" floating>{count !== 0 && count}</Label>}
@@ -172,7 +180,7 @@ class InternalHeaderNav extends Component {
               </Dropdown.Menu>
             </Dropdown>
             
-            <Dropdown pointing='top right' className='ui dropdown item'
+            <Dropdown item pointing='top right' className='settings'
               trigger={(
                 <span>
                   <Image avatar src={avatarPlaceholderSmall} alt="avatar-placeholder-small" /> 
@@ -206,6 +214,11 @@ class InternalHeaderNav extends Component {
   }
 }
 
+InternalHeaderNav.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+}
+
+
 InternalHeaderNav.contextTypes = {
   router: PropTypes.object.isRequired
 }
@@ -223,4 +236,4 @@ const Queries =  compose(
   })
 )(InternalHeaderNav)
 
-export default (Queries)
+export default connect(null, { addFlashMessage } ) (Queries)

@@ -6,6 +6,7 @@ import { Query } from 'react-apollo'
 import { GET_INCOMES_DATA } from '../../graphql/dashboard'
 
 import pick from 'lodash/pick'
+import Moment from 'moment'
 
 import { Line } from 'react-chartjs-2'
 
@@ -17,7 +18,13 @@ const IncomesCard = () => (
     {({ loading, error, data }) => {
      
       const daySum = data.getIncomesData && data.getIncomesData.daySum
-      const monthSum = data.getIncomesData && data.getIncomesData.monthSum
+      const monthSum = data.getIncomesData && data.getIncomesData.monthSum.map(item => pick(item, ['month', 'sum']))
+
+      let monthSumSorted = monthSum && monthSum.sort(function(a, b) {
+          let x = new Date(Moment(a.month, 'MM/YYYY')) 
+          let y = new Date(Moment(b.month, 'MM/YYYY')) 
+          return ((x < y) ? -1 : ((x > y) ? 1 : 0))
+        })
 
       let dayPick = daySum && daySum.map(item => pick(item, ['day']).day.substring(0, 5))
       let sumPick = daySum && daySum.map(item => pick(item, ['sum']).sum)
@@ -63,7 +70,7 @@ const IncomesCard = () => (
       }
 
       return (
-        <Card className={classnames("dashboard form", { loading: loading })}>
+        <Card id="incomes" className={classnames("dashboard form", { loading: loading })}>
           <Card.Content>
             <Card.Header>
               <Header as='h4' floated='left'>
@@ -80,20 +87,20 @@ const IncomesCard = () => (
           
           <Card.Content extra>
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
-            <div className="right floated">
-              <div className="meta">{monthSum && monthSum.length !== 0 ? (monthSum[0].month ? monthSum[0].month : '-') : '-'}</div>
-              <div className="header">
-                {monthSum && monthSum.length !== 0 ? (monthSum[0].sum ? monthSum[0].sum : '-') : '-'}
-                {monthSum && monthSum[1] && ((monthSum[1].sum > monthSum[0].sum) ? <i className="long arrow down red icon"></i> : 
-                  <i className="long arrow up green icon"></i>)}
-                </div>
-            </div>     
             <div className="left floated">
-              <div className="meta">{monthSum && monthSum[1] ? (monthSum[1].month ? monthSum[1].month : '-') : '-'}</div>
+              <div className="meta">{monthSumSorted && monthSumSorted[0] ? (monthSumSorted[0].month ? monthSumSorted[0].month : '-') : '-'}</div>
               <div className="header">
-                {monthSum && monthSum[1] ? (monthSum[1].sum ? monthSum[1].sum : '-') : '-'}
+                {monthSumSorted && monthSumSorted[0] ? (monthSumSorted[0].sum ? monthSumSorted[0].sum : '-') : '-'}
               </div>
-            </div>    
+            </div>  
+            <div className="right floated">
+              <div className="meta">{monthSumSorted && monthSumSorted.length !== 0 ? (monthSumSorted[1].month ? monthSumSorted[1].month : '-') : '-'}</div>
+              <div className="header">
+                {monthSumSorted && monthSumSorted.length !== 0 ? (monthSumSorted[1].sum ? monthSumSorted[1].sum : '-') : '-'}
+                {monthSumSorted && monthSumSorted[0] && ((monthSumSorted[0].sum > monthSumSorted[1].sum) ? <i className="long arrow down red icon" /> : 
+                   <i className="long arrow up green icon" />)}
+                </div>
+            </div>       
           </Card.Content> 
 
           {(daySum && daySum.length === 0 || monthSum && monthSum.length === 0) && 

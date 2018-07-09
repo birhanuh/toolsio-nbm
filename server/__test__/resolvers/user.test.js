@@ -5,16 +5,19 @@ import axios from 'axios'
 import { registerUser, loginUser } from '../helpers/authentication'
 
 let tokens 
+let subdomainLocal
 
 describe("User", () => { 
 
   beforeAll(async () => {
     //await truncate()
     let response = await registerUser()
-    const { success, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -36,7 +39,8 @@ describe("User", () => {
     },{
       headers: {
         'x-auth-token': tokens.authToken,
-        'x-auth-refresh-token': tokens.refreshAuthToken
+        'x-auth-refresh-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
    

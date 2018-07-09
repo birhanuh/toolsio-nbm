@@ -16,11 +16,13 @@ describe("Account", () => {
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, subdomain, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal
 
     if (success) {
       subdomainLocal = subdomain
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -44,6 +46,7 @@ describe("Account", () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 
@@ -88,15 +91,17 @@ describe("Account", () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 
     const { data: { updateAccount } } = response.data
-    
-    expect(updateAccount).toMatchObject({
+    let updateAccountUpdated = updateAccount
+    delete updateAccountUpdated['id'] // Delete id because it increments corresponding to test suites
+
+    expect(updateAccountUpdated).toMatchObject({
         "success": true,
         "account": {
-          "id": 1,
           "subdomain": subdomainLocal,
           "industry": accountFactoryLocal.industry
         }, 
@@ -124,6 +129,7 @@ describe("Account", () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 

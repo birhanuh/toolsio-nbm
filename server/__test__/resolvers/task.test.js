@@ -6,22 +6,25 @@ import { resetDb } from '../helpers/macros'
 // Load factories 
 import taskFactory from '../factories/task'
 
-// Tokens
-let tokens 
-
 // Authentication
 import { registerUser, loginUser } from '../helpers/authentication'
-import { createCustomer, createProject } from '../helpers/parents'
+import { createCustomer, createProject } from '../helpers/related_objects'
+
+// Tokens
+let tokens 
+let subdomainLocal
 
 describe("Task",  () => { 
 
   beforeAll(async () => {
     await resetDb()
     let response = await registerUser()
-    const { success, email, password } = response
+    const { success, email, password, subdomain } = response
+    // Assign subdomain
+    subdomainLocal = subdomain
 
     if (success) {
-      tokens = await loginUser(email, password)
+      tokens = await loginUser(email, password, subdomain)
     }
   })
 
@@ -54,6 +57,7 @@ describe("Task",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -66,9 +70,9 @@ describe("Task",  () => {
 
     let taskFactoryLocal = await taskFactory()
     // Create customer 
-    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken)
+    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken, subdomainLocal)
     // Create project 
-    let project = await createProject(tokens.authToken, tokens.refreshAuthToken, customer.id)
+    let project = await createProject(tokens.authToken, tokens.refreshAuthToken, customer.id, subdomainLocal)
 
     const response = await axios.post('http://localhost:8080/graphql', {
       query: `mutation createTask($name: String!, $hours: String!, $paymentType: String!, $unitPrice: Float!, $total: Float!, $projectId: Int!) {
@@ -97,6 +101,7 @@ describe("Task",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -131,6 +136,7 @@ describe("Task",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     })
 
@@ -159,6 +165,7 @@ describe("Task",  () => {
       headers: {
         'x-auth-token': tokens.authToken,
         'x-refresh-auth-token': tokens.refreshAuthToken,
+        'subdomain': subdomainLocal
       }
     }) 
 

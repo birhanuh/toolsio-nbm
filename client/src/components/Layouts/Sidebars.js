@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom'
+import decode from 'jwt-decode'
 import { Sidebar, Menu } from 'semantic-ui-react'
 
 // Localization 
@@ -18,13 +19,26 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
 )
 
 export function InnerSidebar({ visibleInnerSidebar }) {
+
+  let currentUser
+
+  try {
+    const authToken = localStorage.getItem('authToken')
+    const { account, user } = decode(authToken)
+
+    currentUser = { account, user } 
+  } catch(err) {
+    console.log('err: ', err)
+  }
+
   return (
     <Sidebar as={Menu} animation='slide along' visible={visibleInnerSidebar} vertical inverted>
         <div className="ui center aligned vertical segment account">
         <Link to="/settings">
           <img className="ui centered tiny rounded image mt-3" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
         </Link>
-        <p className="mt-3 mb-2">Birhanu (Admin)</p>
+        <h4 className="capitalize mt-3 mb-0">{currentUser.account}</h4>
+        <p className="capitalize mb-2">{currentUser.user.firstName} {currentUser.user.isAdmin ? '(Admin)' : ''}</p>
       </div>
       <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboard.header")} />
       <ActiveLink activeOnlyWhenExact to="/projects" icon="suitcase icon" label={T.translate("projects.page.header")} />
@@ -37,13 +51,13 @@ export function InnerSidebar({ visibleInnerSidebar }) {
 }
 
 
-export function OuterSidebar({ visibleOuterSidebar }) {
+export function OuterSidebarScrollableHeader({ visibleOuterSidebar }) {
   return [
     <Sidebar key="sidebar" as={Menu} animation='overlay' width='thin' visible={visibleOuterSidebar} vertical inverted>
       <ActiveLink activeOnlyWhenExact className="active item" to="#home" label={T.translate("landing.home.header")} />
       <ActiveLink activeOnlyWhenExact className="item" to="#features" label={T.translate("landing.features.header")} />
       <ActiveLink activeOnlyWhenExact className="item" to="#clients" label={T.translate("landing.clients.header")} />
-      <ActiveLink activeOnlyWhenExact className="item" to="#testimonials" label={T.translate("landing.testmonial.header")} />
+      <ActiveLink activeOnlyWhenExact className="item" to="#testimonial" label={T.translate("landing.testimonial.header")} />
       <ActiveLink activeOnlyWhenExact className="item" to="#pricing" label={T.translate("landing.pricing.header")} />
       <ActiveLink activeOnlyWhenExact className="item" to="#contacts" label={T.translate("landing.contacts.header")} />
       <Link className="item" to="/subdomain">{T.translate("log_in.log_in")}</Link>    
@@ -55,7 +69,7 @@ export function OuterSidebar({ visibleOuterSidebar }) {
           <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
           <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
           <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
-          <ActiveLink activeOnlyWhenExact to="#testimonials" label={T.translate("landing.testmonial.header")} />
+          <ActiveLink activeOnlyWhenExact to="#testimonial" label={T.translate("landing.testimonial.header")} />
           <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
           <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
         </div>
@@ -65,7 +79,7 @@ export function OuterSidebar({ visibleOuterSidebar }) {
             <Link className="ui primary outline button"  to="/subdomain">{T.translate("log_in.log_in")}</Link>     
           </div>
           <div className="item">   
-            <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui primary outline button">{T.translate("sign_up.sign_up")}</a>    
+            <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui primary outline button">{T.translate("sign_up.sign_up")}</a>    
           </div>
         </div>  
       </div>

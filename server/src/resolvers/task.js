@@ -3,13 +3,14 @@ import { formatErrors } from '../utils/formatErrors'
 
 export default {
   Query: {
-    getTask: requiresAuth.createResolver((parent, { id }, { models }) => models.Task.findOne({ where: { id } })),
-    getTasks: requiresAuth.createResolver((parent, args, { models }) => models.Task.findAll())
+    getTask: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.Task.findOne({ where: { id }, searchPath: subdomain })),
+    
+    getTasks: requiresAuth.createResolver((parent, args, { models, subdomain }) => models.Task.findAll({ searchPath: subdomain }))
   },
 
   Mutation: {
-    createTask: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Task.create(args)
+    createTask: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Task.create(args, { searchPath: subdomain })
         .then(task => {  
           return {
             success: true,
@@ -24,8 +25,8 @@ export default {
           }
         })),
 
-    updateTask: requiresAuth.createResolver((parent, args, { models }) => 
-      models.Task.update(args, { where: {id: args.id}, returning: true, plain: true })
+    updateTask: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
+      models.Task.update(args, { where: {id: args.id}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {  
           return {
             success: true,
@@ -40,8 +41,8 @@ export default {
           }
         })),
 
-    deleteTask: requiresAuth.createResolver((parent, args, { models }) =>
-      models.Task.destroy({ where: {id: args.id}, force: true })
+    deleteTask: requiresAuth.createResolver((parent, args, { models, subdomain }) =>
+      models.Task.destroy({ where: {id: args.id}, force: true, searchPath: subdomain })
         .then(res => {          
           return {
             success: (res === 1)

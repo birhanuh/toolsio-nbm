@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { List } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_PROJECT_TASKS_DATA } from '../../graphql/dashboard'
 
@@ -47,18 +48,19 @@ const ProjectTasksCard = () => (
     })
 
     const list = (<div className="content">
-      {newNotification}
-      <div className="ui ordered list">
-        {newProjects && newProjects.map(project => <Link key={project.id} to={`/projects/show/${project.id}`} className="item blue">{project.name}</Link>)}
-      </div>
+        {newNotification}
+        <List ordered>
+          {newProjects && newProjects.map(project => 
+            <List.Item key={project.id} content={<Link to={`/projects/show/${project.id}`} className="item blue">{project.name}</Link>} /> )}
+        </List>
 
-      <div className="ui divider"></div>
+        <div className="ui divider"></div>
 
-      {delayedNotification}
-      <div className="ui ordered list">
-        {delayedProjects && delayedProjects.map(project => <Link key={project.id} to={`/projects/show/${project.id}`} className="item red">{project.name}</Link>)}
-      </div>
-
+        {delayedNotification}
+        <List ordered>
+          {delayedProjects && delayedProjects.map(project => 
+             <List.Item key={project.id} content={<Link to={`/projects/show/${project.id}`} className="item red">{project.name}</Link>} /> )}
+        </List>
       </div>)
 
     return (

@@ -75,7 +75,7 @@ export default `
   }
 
   type Mutation {
-    createProject(name: String!, deadline: Date!, status: String!, progress: Int, description: String, customerId: Int!): CreateUpdateProjectResponse!
+    createProject(name: String!, deadline: Date!, status: String, progress: Int, description: String, customerId: Int!): CreateUpdateProjectResponse!
     
     updateProject(id: Int!, name: String, deadline: Date, status: String, progress: Int, description: String, 
       ,customerId: Int): CreateUpdateProjectResponse!

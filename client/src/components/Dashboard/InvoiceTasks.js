@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import { List } from 'semantic-ui-react'
 import { Query } from "react-apollo"
 import { GET_INVOICE_TASKS_DATA } from '../../graphql/dashboard'
 
@@ -28,14 +29,6 @@ const InvoiceTasksCard = () => (
             {T.translate("dashboard.invoice_tasks.pending_invoices", {count: item.count})}
           </div>
         </div>)
-
-        // pendingNotification = (<div key={"no-new"} className="ui info message">
-        //     <div className="description">
-        //       {T.translate("dashboard.invoice_tasks.no_pending_invoices")}
-        //     </div>
-        //   </div>
-        //   )
-
       } 
 
       if (item.status === 'overdue') {
@@ -44,13 +37,6 @@ const InvoiceTasksCard = () => (
             {T.translate("dashboard.invoice_tasks.overdue_invoices", {count: item.count})}
           </div>
         </div>)
-
-        // overdueNotification = (<div key={task._id} className="ui negative message">
-        //     <div className="description">
-        //       {T.translate("dashboard.invoice_tasks.overdued_invoices", {count: task.count})}
-        //     </div>
-        //   </div>
-        //   )
       }  
     })
 
@@ -71,18 +57,19 @@ const InvoiceTasksCard = () => (
     })
 
     const list = (<div className="content">
-      {newNotification}
-      <div className="ui ordered list">
-        {newInvoices && newInvoices.map(invoice => <Link key={invoice.id} to={`/invoices/show/${invoice.id}`} className="item orange">{'Invoice of '+invoice.name}</Link>)}
-      </div>
+        {newNotification}
+        <List ordered>
+          {newInvoices && newInvoices.map(invoice => 
+          <List.Item key={invoice.id} content={<Link to={`/invoices/show/${invoice.id}`} className="item orange">{'Invoice of '+invoice.name}</Link>} /> )}
+        </List>
 
-      <div className="ui divider"></div>
+        <div className="ui divider"></div>
 
-      {overdueNotification}
-      <div className="ui ordered list">
-        {overdueInvoices && overdueInvoices.map(invoice => <Link key={invoice.id} to={`/invoices/show/${invoice.id}`} className="item red">{'Invoice of '+invoice.name}</Link>)}
-      </div>
-
+        {overdueNotification}
+        <List ordered>
+          {overdueInvoices && overdueInvoices.map(invoice => 
+          <List.Item key={invoice.id} content={<Link to={`/invoices/show/${invoice.id}`} className="item red">{'Invoice of '+invoice.name}</Link>} /> )}
+        </List>
       </div>)
 
     return (      
@@ -95,8 +82,8 @@ const InvoiceTasksCard = () => (
               { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
               <div className="ui info message">
                 <div className="description">
-                  {T.translate("dashboard.invoice_tasks.no_pending_invoices")}
-                  {T.translate("dashboard.invoice_tasks.no_overdue_invoices")}
+                  <p>{T.translate("dashboard.invoice_tasks.no_pending_invoices")}</p>
+                  <p>{T.translate("dashboard.invoice_tasks.no_overdue_invoices")}</p>
                 </div>
               </div> 
             </div> : list }

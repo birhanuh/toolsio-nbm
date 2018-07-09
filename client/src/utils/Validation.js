@@ -272,8 +272,8 @@ export default {
   validateAddUserInput: (data) => {
     let errors = {}
 
-    if (!data.userId) {
-      errors['userId'] = T.translate("conversations.form.user_required")
+    if (data.members.length === 0) {
+      errors['members'] = T.translate("conversations.form.user_required")
     }
     
     return {

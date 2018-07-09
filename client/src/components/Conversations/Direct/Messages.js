@@ -123,7 +123,7 @@ class Messages extends Component {
           store.writeQuery({ query: GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY, data })
         }
       })
-      .then(res => console.log('res: ', res.data.markDirectMessagesAsRead))
+      //.then(res => console.log('res: ', res.data.markDirectMessagesAsRead)) // Redundant for this usecase 
       .catch(err => console.log('err: ', err))
   }
 
@@ -149,6 +149,7 @@ class Messages extends Component {
         receiverId: parseInt(receiverId)
       },
       updateQuery: (prev, { subscriptionData }) => {
+            console.log('getDirectMessages', subscriptionData)
         if (!subscriptionData.data) return prev
 
         return {

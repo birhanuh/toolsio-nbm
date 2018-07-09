@@ -6,7 +6,8 @@ import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
-import { GET_CHANNEL_QUERY, GET_CHANNEL_MESSAGE_QUERY } from '../../../graphql/conversations/channelMessages'
+import { GET_CHANNEL_USERS_QUERY } from '../../../graphql/conversations/channels'
+import { GET_CHANNEL_MESSAGE_QUERY } from '../../../graphql/conversations/channelMessages'
 
 // Localization 
 import T from 'i18n-react'
@@ -36,7 +37,7 @@ const NEW_CHANNEL_MESSAGE_SUBSCRIPTION = gql`
   }
 `
 
-const AddChannelModal = ({ open, onClose, channelId }) => (
+const AddUsersToChannelModal = ({ open, onClose, channelId, usersNotInChannel }) => (
   <Modal
     className="ui small modal add-member"
     open={open}
@@ -46,7 +47,7 @@ const AddChannelModal = ({ open, onClose, channelId }) => (
   >
     <Modal.Header>{T.translate("conversations.messages.add_member")}</Modal.Header>
     <Modal.Content>
-      <UsersForm channelId={channelId} onClose={onClose} />
+      <UsersForm channelId={channelId} usersNotInChannel={usersNotInChannel} onClose={onClose} />
     </Modal.Content>
     <Modal.Actions>
       <Button
@@ -126,7 +127,7 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
 class Messages extends Component {
 
   state = {
-    openAddChannelModal: false,
+    openAddUsersToChannelModal: false,
     hasMoreItems: true
   }
 
@@ -160,7 +161,7 @@ class Messages extends Component {
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
-      
+            
         return {
           ...prev,
           getChannelMessages: [ subscriptionData.data.getNewChannelMessage, ...prev.getChannelMessages],
@@ -169,34 +170,34 @@ class Messages extends Component {
     })
   
 
-  toggleAddChannelModal = (e) => {
+  toggleAddUsersToChannelModal = (e) => {
     if (e) {
       e.preventDefault()  
     }
     
-    this.setState(state => ({ openAddChannelModal: !state.openAddChannelModal }))
+    this.setState(state => ({ openAddUsersToChannelModal: !state.openAddUsersToChannelModal }))
   }
 
   handleScroll = () => {
-    const { data: { getDirectMessages, fetchMore }, receiverId } = this.props
+    const { data: { getChannelMessages, fetchMore }, receiverId } = this.props
 
     if (this.scroller && this.scroller.scrollTop === 0 && 
-      (this.state.hasMoreItems) && (getDirectMessages && getDirectMessages.length >= 10)) {
+      (this.state.hasMoreItems) && (getChannelMessages && getChannelMessages.length >= 10)) {
       
       fetchMore({
         variables: {
           receiverId: parseInt(receiverId),
-          cursor: getDirectMessages[getDirectMessages.length - 1].createdAt
+          cursor: getChannelMessages[getChannelMessages.length - 1].createdAt
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev
 
-          if (fetchMoreResult.getDirectMessages.length < 10) {
+          if (fetchMoreResult.getChannelMessages.length < 10) {
             this.setState({ hasMoreItems: false })
           }
           
           return Object.assign({}, prev, {
-            getDirectMessages: [...prev.getDirectMessages, ...fetchMoreResult.getDirectMessages]
+            getChannelMessages: [...prev.getChannelMessages, ...fetchMoreResult.getChannelMessages]
           })
         }
       })
@@ -204,7 +205,7 @@ class Messages extends Component {
   }
 
   render() {
-    const { openAddChannelModal } = this.state
+    const { openAddUsersToChannelModal } = this.state
     
     const { getChannelQuery: { getChannel }, data: { getChannelMessages } } = this.props
 
@@ -238,7 +239,7 @@ class Messages extends Component {
           <h3 className="ui left floated header capitalize mt-2">
             {getChannel && getChannel.name}           
           </h3> 
-          <button id="add-member" className="ui right floated primary outline small button" onClick={this.toggleAddChannelModal.bind(this)}>
+          <button id="add-member" className="ui right floated primary outline small button" onClick={this.toggleAddUsersToChannelModal.bind(this)}>
             <i className="add circle icon"></i>
             {T.translate("conversations.messages.add_member")}
           </button> 
@@ -257,18 +258,19 @@ class Messages extends Component {
         
         <MessageForm channelId={this.props.channelId} />
       </div>,
-      <AddChannelModal
-        onClose={this.toggleAddChannelModal.bind(this)}
-        open={openAddChannelModal}
+      <AddUsersToChannelModal
+        onClose={this.toggleAddUsersToChannelModal.bind(this)}
+        open={openAddUsersToChannelModal}
         key="add-channel-modal"
         channelId={this.props.channelId}
+        usersNotInChannel={getChannel && getChannel.usersNotInChannel}
       />
     ] 
   }
 }
 
 const Queries =  compose(
-  graphql(GET_CHANNEL_QUERY, {
+  graphql(GET_CHANNEL_USERS_QUERY, {
     "name": "getChannelQuery",
     options: (props) => ({
       variables: {

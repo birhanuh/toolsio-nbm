@@ -28,9 +28,6 @@ const app = express()
 // env
 require('dotenv').config()
 
-// Config
-import jwtConfig from '../config/jwt.json'
-
 // Models
 import models from './models'
 import { refreshAuthTokens } from './utils/authentication'
@@ -64,23 +61,27 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(cookieParser())
 
+// Subdomain
+let subdomain
+
 // Add authToken exist checker middleware
 app.use(async (req, res, next) => {
   
-  // Parse subdomain 
-  let subdomain = req.headers.subdomain
+  // Parse assign subdomain globally
+  subdomain = req.headers.subdomain
   console.log('subdomain: ', subdomain)
+
   // Parse authToken 
   const authToken = req.headers['x-auth-token']
 
   if (authToken && authToken !== 'null') {
     try {
-      const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)     
+      const { user } = jwt.verify(authToken, process.env.JWTSECRET1)     
       req.user = user
        
     } catch (err) { 
       let refreshAuthToken = req.headers['x-refresh-auth-token']
-      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
+      const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, subdomain, process.env.JWTSECRET1, process.env.JWTSECRET2)
       
       if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
         res.set('Access-Control-Expose-Headers', 'x-auth-token', 'x-refresh-auth-token')
@@ -103,15 +104,16 @@ app.use(
     schema,
     context: {
       models,
-      subdomain: req.headers.subdomain,
+      subdomain: req.headers.subdomain ? req.headers.subdomain : 'public',
+      //subdomain: 'testa',
       user: req.user,
       //user: { id: 1 },
-      SECRET: jwtConfig.jwtSecret1,
-      SECRET2: jwtConfig.jwtSecret2,
-      userLoader: new DataLoader(userId => userBatcher(userId, models)),
-      customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models)),
-      projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models)),
-      saleLoader: new DataLoader(saleIds => saleBatcher(saleIds, models))
+      SECRET: process.env.JWTSECRET1,
+      SECRET2: process.env.JWTSECRET2,
+      userLoader: new DataLoader(userId => userBatcher(userId, models, req.headers.subdomain)),
+      customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models, req.headers.subdomain)),
+      projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models, req.headers.subdomain)),
+      saleLoader: new DataLoader(saleIds => saleBatcher(saleIds, models, req.headers.subdomain))
     }
   }))
 )
@@ -176,11 +178,11 @@ server.listen(app.get('port'), () => {
       
       if (authToken && refreshAuthToken) {      
         try {
-          const { user } = jwt.verify(authToken, jwtConfig.jwtSecret1)
-          return { models, user }           
+          const { user } = jwt.verify(authToken, process.env.JWTSECRET1)
+          return { models, subdomain, user }           
         } catch (err) {
-          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, jwtConfig.jwtSecret1, jwtConfig.jwtSecret2)
-          return { models, user: newAuthTokens.user }
+          const newAuthTokens = await refreshAuthTokens(authToken, refreshAuthToken, models, subdomain, process.env.JWTSECRET1, process.env.JWTSECRET2)
+          return { models, subdomain, user: newAuthTokens.user }
         }
       }
       return { models }

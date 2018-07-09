@@ -31,7 +31,7 @@ import EventsPage from '../Events/Page'
 
 import InternalHeaderNav from './InternalHeaderNav'
 import LandingPageHeaderNav from './LandingPageHeaderNav'
-import { OuterSidebar, InnerSidebar } from './Sidebars'
+import { OuterSidebarScrollableHeader, InnerSidebar } from './Sidebars'
 import FlashMessage from '../../flash/FlashMessage'
 
 // Semantic CSS
@@ -39,6 +39,12 @@ import 'semantic-ui-css/semantic.min.css'
 
 // CSS entry
 import '../../css/app.scss'
+
+// Localization 
+import T from 'i18n-react'
+
+// Logo
+import logo from '../../images/logo-square.png' 
 
 class App extends Component {
   
@@ -81,12 +87,11 @@ class App extends Component {
 
           <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated() && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
             {/* Falsh messages */}  
-            <FlashMessage />             
+            {!isAuthPages && <FlashMessage /> }    
             
             <Switch>
               {/* Render Laning-page or Dashboard */}
-              <Route exact path="/" render={props => isAuthenticated() ? 
-                (<section className="ui stackable grid basic segment internal-page"><Dashboard {...props} /></section>) : <LandingPage {...props} />} />        
+              <Route exact path="/" render={props => isAuthenticated() ? <Dashboard {...props} /> : <LandingPage {...props} />} />        
              
               {/* Publick Signup pages */}
               <Route exact path="/signup" component={Signup} />
@@ -125,17 +130,60 @@ class App extends Component {
             </Switch>
           </section>
 
+          {/* Internal page footer */}
           { (isAuthenticated() && !isAuthPages()) && <footer className="ui vertical footer segment internal-footer">
             <div className="ui stackable inverted grid">      
               <div className="ten wide column">
-                <h4 className="ui inverted header">Footer Header</h4>
-                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+                <h4 className="ui inverted header mb-0">{T.translate("landing.footer.toolsio")}</h4>
+                <small>{T.translate("landing.footer.copy_right")}</small>
               </div>
             </div>
-          </footer> }              
+          </footer> }    
+
+          {/* Landing page footer */}
+          { (!isAuthenticated() && !isAuthPages()) && <footer className="ui inverted vertical footer segment">
+            <div className="ui center aligned container">
+              <div className="ui stackable inverted divided grid">
+                <div className="three wide column">
+                  <h4 className="ui inverted header">Group 1</h4>
+                  <div className="ui inverted link list">
+                    <a href="#features" className="item">{T.translate("landing.features.header")}</a>
+                  </div>
+                </div>
+                <div className="three wide column">
+                  <h4 className="ui inverted header">Group 2</h4>
+                  <div className="ui inverted link list">
+                    <a href="#pricing" className="item">{T.translate("landing.pricing.header")}</a>
+                  </div>
+                </div>
+                <div className="three wide column">
+                  <h4 className="ui inverted header">Group 3</h4>
+                  <div className="ui inverted link list">
+                    <a href="#testimonial" className="item">{T.translate("landing.testimonial.header")}</a>
+                  </div>
+                </div>
+                <div className="seven wide column">
+                  <h4 className="ui inverted header">{T.translate("landing.footer.toolsio")}</h4>
+                  <p>{T.translate("landing.footer.address")}</p>
+                  <small>{T.translate("landing.footer.copy_right")}</small>
+                </div>
+              </div>
+              <div className="ui inverted section divider"></div>
+              <img src={logo} className="ui centered mini image" alt="logo-square"/>
+              <div className="ui horizontal inverted small divided link list">
+                <a className="item" href="/terms-and-conditions">{T.translate("landing.footer.terms_and_conditions")}</a>
+                <a className="item" href="/privacy-policy">{T.translate("landing.footer.privacy_policy")}</a>
+              </div>
+            </div>
+
+            <a href="#" className="back-to-top">
+              <i className="chevron up icon"></i>  
+            </a>
+          </footer>
+        }  
         </Sidebar.Pusher>
       </Sidebar.Pushable>,
-      <OuterSidebar key="OuterSidebar" visibleInnerSidebar={visibleOuterSidebar} />]
+      <OuterSidebarScrollableHeader key="OuterSidebarScrollableHeader" visibleInnerSidebar={visibleOuterSidebar} />]
   }
 }
 

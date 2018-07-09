@@ -1,6 +1,9 @@
 language: node_js
 node_js:
-  - "9.2.0"
+  - "10.2.1"
+services:
+  - redis-server
+  - docker
 notifications:
   email:
     on_success: change # only if status change from fail to success
@@ -12,18 +15,44 @@ cache:
     - client/node_modules
     - server/node_modules
 env:
-  - TEST_DIR=client
-  - TEST_DIR=server
-script:
-  - cd $TEST_DIR && npm install && npm test
+  - TEST_DIR_CLIENT=client
+  - TEST_DIR_SERVER=server
+#before_script:
+#  - cd $TEST_DIR && npm install
+#script:
+#  - cd $TEST_DIR && npm install && npm test
   #- npm run build
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $github_token
-  local_dir: build
-  on:
-    branch: develop
+cache:
+   directories:
+     - node_modules
+before_script:
+  - cd $TEST_DIR_SERVER 
+  - npm install
+  - npm run build
+  - sleep 3
+  - docker-compose build
+  - docker-compose up -d
+  - sleep 3
+script:
+  - npm test -- --runInBand 
+after_script:
+  - docker-compose kill
+
+#jobs:
+#  include:
+#    - stage: test
+#      script: 
+#        - cd server && npm test -- --runInBand
+#    - stage: deploy
+#      deploy:
+#        provider: pages
+#        skip_cleanup: true
+#        github_token: $github_token
+#        local_dir: build
+#        on:
+#          branch: develop
+      
+
 
 
 

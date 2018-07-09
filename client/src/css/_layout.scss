@@ -23,6 +23,14 @@ body {
           text-size-adjust: 100%;
 }
 
+#app {
+  height: 100%;
+}
+
+.pushable {
+  overflow-x: initial;
+}
+
 .pushable > .pusher {
   background: $body-background-color;
 }
@@ -64,6 +72,11 @@ a {
 
 .secondary.pointing.menu .toc.item {
   display: none;
+}
+
+.ui.items > .item > .content > .header, .ui.menu .item, .ui.form .field > label, 
+.ui.table, .ui.table thead th {
+  color: inherit;
 }
 
 .ui.menu .item a i.sidebar.icon  {
@@ -330,6 +343,10 @@ nav.ui.menu {
   background-color: $x-dark-mid-night-blue;
   color: $dark-medium-grey;
   padding: 5em 1em;
+
+  .inverted.divided.grid > div {
+    padding-top: 30px;
+  }
 }
 
 .ui.footer.segment.internal-footer {
@@ -558,7 +575,7 @@ nav.ui.menu .item>a {
 
 .ui.card.dashboard, .dashboard .ui.card {
   width: 100%;
-  min-height: 315px;
+  height: 100%;
 }
 
 .ui.card.dashboard > .image {
@@ -569,7 +586,6 @@ nav.ui.menu .item>a {
   @extend .vertical-center-align-container;
   position: absolute;
   top: 0;
-  height: 315px;
   background: #ffffff;
   opacity: 0.85;
   z-index: 1;
@@ -578,14 +594,6 @@ nav.ui.menu .item>a {
     text-align: center;
     z-index: 2;
   }
-}
-
-.ui.card.dashboard.customer > .content-btn-outer-container {
-  height: 395px;
-}
-
-.ui.card.dashboard.invoice > .content-btn-outer-container {
-  height: 580px;
 }
 
 .sub-header {
@@ -893,7 +901,7 @@ nav.ui.menu .item>a {
   box-shadow: 0 -1px 0 rgba(rgb(228,229,231),1);
 }
 
-#testimonials {
+#testimonial {
   background: url("../images/pattern.png"),url("../images/testimonials.jpg");
   .carousel-indicators {
     margin-bottom: -40px;

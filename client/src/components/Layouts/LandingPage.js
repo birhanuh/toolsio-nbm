@@ -8,9 +8,6 @@ import { CREATE_CONTACT_MESSAGE_MUTATION } from '../../graphql/contactMessage'
 // Localization 
 import T from 'i18n-react'
 
-// Logo
-import logo from '../../images/logo-square.png' 
-
 /* jQuery */
 import $ from 'jquery'
 $.animate = require('jquery.easing')
@@ -73,14 +70,14 @@ class LandingPage extends Component {
     //   }
     // })
 
-    // // jQuery for page scrolling feature - requires jQuery Easing plugin
-    // $('.ui.large.menu .left.menu a').on('click', function(event) {
-    //   event.preventDefault()
-    //   var $anchor = $(this)
-    //   $('html, body').stop().animate({
-    //       scrollTop: $($anchor.attr('href')).offset().top - 50
-    //   }, 1500, 'easeInOutExpo')
-    // })
+    // jQuery for page scrolling feature - requires jQuery Easing plugin
+    $('.ui.footer .ui.inverted.link.list a').on('click', function(event) {
+      event.preventDefault()
+      var $anchor = $(this)
+      $('html, body').stop().animate({
+          scrollTop: $($anchor.attr('href')).offset().top - 50
+      }, 1500, 'easeInOutExpo')
+    })
 
     // Scroll to top
     $(window).scroll(function() {
@@ -99,7 +96,7 @@ class LandingPage extends Component {
     // Custome carousel
     let slideIndex = 0
     // Run showSlides only on root path 
-    if (window.location.pathname.indexOf('/')) {
+    if (window.location.pathname.indexOf('/') === 0) {
       showSlides()
     }
 
@@ -241,7 +238,7 @@ class LandingPage extends Component {
           </div>
         </div>  
 
-        <div id="testimonials" className="ui vertical stripe">
+        <div id="testimonial" className="ui vertical stripe">
           <div className="ui text container">
             <div className="ui center aligned grid">
               <div className="column row">
@@ -328,7 +325,7 @@ class LandingPage extends Component {
           <div className="ui middle aligned container">  
             <div className="ui two column stackable centered grid">
               <div className="column centered row">
-                <a href={`${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
+                <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
               </div>  
             </div>
           </div>
@@ -389,56 +386,6 @@ class LandingPage extends Component {
               </div> 
           </div>         
         </div>
-
-        <footer className="ui inverted vertical footer segment">
-          <div className="ui center aligned container">
-            <div className="ui stackable inverted divided grid">
-              <div className="three wide column">
-                <h4 className="ui inverted header">Group 1</h4>
-                <div className="ui inverted link list">
-                  <a href="#" className="item">Link One</a>
-                  <a href="#" className="item">Link Two</a>
-                  <a href="#" className="item">Link Three</a>
-                  <a href="#" className="item">Link Four</a>
-                </div>
-              </div>
-              <div className="three wide column">
-                <h4 className="ui inverted header">Group 2</h4>
-                <div className="ui inverted link list">
-                  <a href="#" className="item">Link One</a>
-                  <a href="#" className="item">Link Two</a>
-                  <a href="#" className="item">Link Three</a>
-                  <a href="#" className="item">Link Four</a>
-                </div>
-              </div>
-              <div className="three wide column">
-                <h4 className="ui inverted header">Group 3</h4>
-                <div className="ui inverted link list">
-                  <a href="#" className="item">Link One</a>
-                  <a href="#" className="item">Link Two</a>
-                  <a href="#" className="item">Link Three</a>
-                  <a href="#" className="item">Link Four</a>
-                </div>
-              </div>
-              <div className="seven wide column">
-                <h4 className="ui inverted header">Footer Header</h4>
-                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-              </div>
-            </div>
-            <div className="ui inverted section divider"></div>
-            <img src={logo} className="ui centered mini image" alt="logo-square"/>
-            <div className="ui horizontal inverted small divided link list">
-              <a className="item" href="#">{T.translate("landing.footer.site_map")}</a>
-              <a className="item" href="#">{T.translate("landing.footer.contact_us")}</a>
-              <a className="item" href="#">{T.translate("landing.footer.terms_and_conditions")}</a>
-              <a className="item" href="#">{T.translate("landing.footer.privacy_policy")}</a>
-            </div>
-          </div>
-
-          <a href="#" className="back-to-top">
-            <i className="chevron up icon"></i>  
-          </a>
-        </footer>
       </div>)
   }  
 }

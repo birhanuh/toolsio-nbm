@@ -4,7 +4,8 @@ export default `
     id: Int!
     name: String!
     isPublic: Boolean
-    users: [User!]!
+    usersInChannel: [User!]!
+    usersNotInChannel: [User!]!
   }
 
   type GetChannelsUsersCountResponse {

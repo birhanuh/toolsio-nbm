@@ -108,7 +108,8 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'userId',
         field: 'user_id'
-      }
+      },
+      constraints: false
     })
   }
 

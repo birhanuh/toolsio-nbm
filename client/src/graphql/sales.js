@@ -48,7 +48,7 @@ export const GET_SALE_QUERY = gql`
 `
 
 export const CREATE_SALE_MUTATION = gql`
-  mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
+  mutation createSale($name: String!, $deadline: Date!, $status: String, $description: String, $customerId: Int!) {
     createSale(name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
       success
       sale {
@@ -57,8 +57,12 @@ export const CREATE_SALE_MUTATION = gql`
         deadline
         status
         description
+        isInvoiced
         customer {
           name
+        }
+        user {
+          firstName
         }
       }
       errors {
@@ -79,9 +83,13 @@ export const UPDATE_SALE_MUTATION = gql`
         deadline
         status
         description
+        isInvoiced
         customer {
           id
           name
+        }
+        user {
+          firstName
         }
       }
       errors {

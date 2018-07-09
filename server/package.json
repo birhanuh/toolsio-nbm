@@ -12,8 +12,11 @@
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
     "tstart": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate && NODE_ENV=test babel-node -- src/index.js",
     "db:reset": "./__test__/helpers/reset_db.sh",
+    "migration:create": "./node_modules/.bin/sequelize migration:create --name",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
-    "db:seed": "./node_modules/.bin/sequelize db:seed:all",
+    "seed:generate": "./node_modules/.bin/sequelize seed:generate --name",
+    "db:seed": "./node_modules/.bin/sequelize db:seed --seed",
+    "db:seed:all": "./node_modules/.bin/sequelize db:seed:all",
     "pretest": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate",
     "test": "NODE_ENV=test jest './__test__'"
   },

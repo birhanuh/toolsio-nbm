@@ -52,7 +52,18 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'saleId',
         field: 'sale_id'
-      }
+      },
+      constraints: false
+    })
+
+    // 1:M
+    Item.belongsTo(models.Invoice, {
+      through: models.Sale,
+      foreignKey: {
+        name: 'saleId',
+        field: 'sale_id'
+      },
+      constraints: false
     })
   }
 

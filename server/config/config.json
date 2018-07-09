@@ -6,17 +6,21 @@
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
     "define": {
       "underscored": true
     }
   },
   "test": {
-    "username": "birhanu",
-    "password": null,
     "database": "toolsio_test",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
     "define": {
       "underscored": true
     }
@@ -28,6 +32,9 @@
     "host": "db",
     "dialect": "postgres",
     "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
     "define": {
       "underscored": true
     }
