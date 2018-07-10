@@ -21,8 +21,10 @@ module.exports = merge(common, {
       'process.env.SERVER_URL': JSON.stringify('localhost:8080'),
       'process.env.JWTSECRET1': JSON.stringify(process.env.JWTSECRET1),
       'process.env.JWTSECRET2': JSON.stringify(process.env.JWTSECRET2),
-      'process.env.CLOUDINARY_API_URL': JSON.stringify(process.env.CLOUDINARY_API_URL),
-      'process.env.CLOUDINARY_PRESET': JSON.stringify(process.env.CLOUDINARY_PRESET)
+      'process.env.CLOUDINARY_API_URL_IMAGE': JSON.stringify(process.env.CLOUDINARY_API_URL_IMAGE),
+      'process.env.CLOUDINARY_API_URL_SPRITE': JSON.stringify(process.env.CLOUDINARY_API_URL_SPRITE),
+      'process.env.CLOUDINARY_PRESET_AVATARS': JSON.stringify(process.env.CLOUDINARY_PRESET_AVATARS),
+      'process.env.CLOUDINARY_PRESET_LOGOS': JSON.stringify(process.env.CLOUDINARY_PRESET_LOGOS)
     })
   ]
 
