@@ -203,7 +203,7 @@ class AccountForm extends Component {
             type: 'success',
             text: T.translate("settings.account.flash.success_update")
           })
-          this.setState({ isLoadingLogo: false })
+          this.setState({ isLoadingLogo: false, file: null, active: false })
         } else {
           let errorsList = {}
           errors.map(error => {
@@ -272,13 +272,15 @@ class AccountForm extends Component {
       <div className="ui items segment account">
         <div className="ui item">    
           <div className="image">
-            <div className={classnames("ui card form", { loading: isLoadingLogo })} style={{height: "175px"}}>
+            <div className={classnames("ui card form", { loading: isLoadingLogo })} style={{height: "170px"}}>
               <Dimmer.Dimmable 
                 onMouseEnter={this.toggleShow}
                 onMouseLeave={this.toggleShow}
+                style={{padding: '2px'}}
               >
-                {logoUrl ? <CloudinaryImage cloudName="toolsio" publicId={logoUrl} width="175" crop="fill" /> : 
-                  <Image src={logoPlaceholderMedium} alt="logoPlaceholderMedium" /> }
+                {logoUrl ? <CloudinaryImage width="165" height="165" background="white" crop="pad"
+                  cloudName="toolsio" publicId={logoUrl} /> : 
+                    <Image src={logoPlaceholderMedium} alt="logoPlaceholderMedium" /> }
                 <Dimmer
                   active={file ? true : active}
                 >

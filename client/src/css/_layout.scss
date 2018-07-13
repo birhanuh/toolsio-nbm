@@ -263,28 +263,10 @@ nav.ui.menu {
   }    
 } 
 
-// Account page
-.ui.user {
+// Setting page
+.ui.account, .ui.user {
   .ui.card {
     box-shadow: none;
-  }
-  .ui.card > .image {
-    background: transparent;
-  }
-  .ui.card.image {
-    border: 1px solid $light-grey;
-  }
-}
-
-.ui.account {
-  .ui.card {
-    box-shadow: none;
-  }
-  .ui.card > .image {
-    background: transparent;
-  }
-  .ui.card .ui.image {
-    border: 1px solid $light-grey;
   }
 }
 

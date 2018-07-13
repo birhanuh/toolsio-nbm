@@ -20,7 +20,7 @@ import T from 'i18n-react'
 import moment from 'moment'
 
 // Avatar placeholder
-import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
+import avatarPlaceholderLarge from '../../images/avatar-placeholder-large.png'
 
 class UserForm extends Component {
   
@@ -128,7 +128,7 @@ class UserForm extends Component {
             type: 'success',
             text: T.translate("settings.user.flash.success_update")
           })
-          this.setState({ isLoadingAvatar: false })
+          this.setState({ isLoadingAvatar: false, file: null, active: false })
         } else {
           let errorsList = {}
           errors.map(error => errorsList[error.path] = error.message)
@@ -194,7 +194,7 @@ class UserForm extends Component {
                 blurring
               >
                 {avatarUrl ? <CloudinaryImage cloudName="toolsio" publicId={avatarUrl} width="175" height="175" crop="thumb" /> : 
-                  <Image src={avatarPlaceholderSmall} alt="avatarPlaceholderSmall" /> }
+                  <Image size="medium" src={avatarPlaceholderLarge} alt="avatarPlaceholderLarge" /> }
                 <Dimmer
                   active={file ? true : active}
                 >

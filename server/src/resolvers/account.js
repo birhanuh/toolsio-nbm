@@ -11,6 +11,15 @@ const s3Bucket = new AWS.S3({
   region: 'eu-central-1'
 })
 
+// Cloudinary
+import cloudinary from 'cloudinary'
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET_KEY,
+})
+
 export default {
   Query: {
     getAccount: requiresAuth.createResolver((parent, { subdomain }, { models }) => models.Account.findOne({ where: { subdomain } }, { raw: true })),
@@ -19,8 +28,24 @@ export default {
   },
 
   Mutation: {
-    updateAccount: requiresAuth.createResolver((parent, args, { models }) =>
-      models.Account.update(args, { where: {subdomain: args.subdomain}, returning: true, plain: true })
+    updateAccount: requiresAuth.createResolver((parent, args, { models }) => {
+      // Do both asynchronously
+      const asyncFunc = async () => {
+        var account = await models.Account.findOne({ where: { subdomain: args.subdomain } }, { raw: true })
+    
+        if(args.logoUrl !== account.logoUrl) {
+          cloudinary.v2.uploader.destroy(account.dataValues.logoUrl, function(error, result){
+            if (error) {
+              console.log('cloudinary remove file error:', result)
+            }
+            console.log('cloudinary remove file result: ', result)
+          })
+        }
+      }
+
+      asyncFunc()
+
+      return models.Account.update(args, { where: {subdomain: args.subdomain}, returning: true, plain: true })
         .then(result => {
           console.log('retur: ', result)
           // Delete previous logoUrl from S3
@@ -50,7 +75,8 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })),
+        })
+    }),
 
     deleteAccount: requiresAuth.createResolver((parent, args, { models }) => 
       models.Account.destroy({ where: {subdomain: args.subdomain}, force: true })
