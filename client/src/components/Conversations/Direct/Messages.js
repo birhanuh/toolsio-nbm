@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+// Semantic UI Form elements
 import { Comment, Message, Modal, Image, Button } from 'semantic-ui-react'
+import { Image as CloudinaryImage } from 'cloudinary-react'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
 import { GET_DIRECT_MESSAGES_QUERY, MARK_DIRECT_MESSAGES_AS_READ_MUTATION, GET_USER_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/conversations/directMessages'
@@ -82,7 +84,7 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
         </video></div>} 
         src={uploadPath} 
         mimetype={mimetype} />)
-    } else if (mimetype) { // For all rest file types (E.g. text, pdf, doc...()
+    } else if (mimetype.startsWith('text/')) {
       return (<div className="ui small message pre">
           <RenderText uploadPath={uploadPath} />
           <div className="buttons">
@@ -90,6 +92,14 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
             <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
           </div>
         </div>)
+    } else { // For all rest file types (E.g. text, pdf, doc...()
+       return (<div className="ui small message pre">
+          <pre>{uploadPath}</pre>
+          <div className="buttons">
+            <Button basic size="small" icon='download' />
+            <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
+          </div>
+        </div>) 
     }
   }
   return (body)            
@@ -149,7 +159,7 @@ class Messages extends Component {
         receiverId: parseInt(receiverId)
       },
       updateQuery: (prev, { subscriptionData }) => {
-            console.log('getDirectMessages', subscriptionData)
+        console.log('getDirectMessages', subscriptionData)
         if (!subscriptionData.data) return prev
 
         return {
@@ -198,8 +208,10 @@ class Messages extends Component {
 
     const messagesList = getDirectMessages && getDirectMessages.map(message => 
       <Comment key={message.id}>
-        <Comment.Avatar src={message.user.avatarUrl ? message.user.avatarUrl : avatarPlaceholderSmall}
-          alt="avatar" />
+        <div className="avatar">
+            {message.user.avatarUrl ? <CloudinaryImage cloudName="toolsio" publicId={message.user.avatarUrl} gravity="face" width="50" height="50" crop="thumb" /> : 
+              <Image src={avatarPlaceholderSmall} alt="avatarPlaceholderSmall" /> }
+        </div>
         <Comment.Content>
           <Comment.Author as="a">{message.user.email}</Comment.Author>
           <Comment.Metadata>

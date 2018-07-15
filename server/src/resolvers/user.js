@@ -29,7 +29,7 @@ const s3Bucket = new AWS.S3({
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET_KEY
 })
 
 
@@ -119,7 +119,7 @@ export default {
         if(args.avatarUrl !== user.avatarUrl) {
           cloudinary.v2.uploader.destroy(user.dataValues.avatarUrl, function(error, result){
             if (error) {
-              console.log('cloudinary remove file error:', result)
+              console.log('cloudinary remove file error:', error)
             }
             console.log('cloudinary remove file result: ', result)
           })

@@ -111,7 +111,7 @@ export default {
           messageData.uploadPath = uploadFile.path
           messageData.mimetype = uploadFile.mimetype
         }
-         
+
         const message = await models.DirectMessage.create({ ...messageData, senderId: user.id }, { searchPath: subdomain })
 
         // Do both asynchronously
