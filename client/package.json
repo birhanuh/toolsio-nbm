@@ -117,10 +117,13 @@
     "webpack-merge": "^4.1.2"
   },
   "scripts": {
-    "start": "webpack-dev-server --open --config ./config/webpack.dev.js --mode development",
-    "build": "webpack --config ./config/webpack.prod.js --mode production",
-    "prebuild": "rm -rf ./dist",
-    "postbuild": "mv ./config/dist ./ && cp ./public/favicon.ico ./dist && cp -r ./public/error_pages ./dist",
+    "start": "webpack-dev-server --open --config ./config/webpack.dev.js",
+    "build": "webpack --config ./config/webpack.prod.js",
+    "//": [
+        "prebuild rm -rf ./dist",
+        "postbuild mv ./config/dist ./ && cp ./public/favicon.ico ./dist && cp -r ./public/error_pages ./dist"
+    ],
+    "postbuild": "cp ./public/favicon.ico ./config/dist && cp -r ./public/error_pages ./config/dist && mv ./config/dist/index.html ./config/dist/200.html && cp ./config/CNAME ./config/dist",
     "test": "jest './__test__'",
     "test:watch": "npm test -- --watch"
   }

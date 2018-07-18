@@ -140,7 +140,7 @@ class Subdomain extends Component {
           {T.translate("log_in.new_to_us")}&nbsp;<Link to="/signup">{T.translate("sign_up.sign_up")}</Link>
         </div>
         <div className="ui center aligned vertical segment">
-          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="d-block">{T.translate("landing.footer.copy_right")}</small>
           <small className="d-block">{T.translate("landing.footer.address")}</small>
         </div>
       </div>)

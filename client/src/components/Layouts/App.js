@@ -31,6 +31,7 @@ import EventsPage from '../Events/Page'
 
 import InternalHeaderNav from './InternalHeaderNav'
 import LandingPageHeaderNav from './LandingPageHeaderNav'
+import Breadcrumb from './Breadcrumb'
 import { OuterSidebarScrollableHeader, InnerSidebar } from './Sidebars'
 import FlashMessage from '../../flash/FlashMessage'
 
@@ -86,6 +87,9 @@ class App extends Component {
           { (!isAuthenticated() && !isAuthPages()) && <LandingPageHeaderNav toggleInnerSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
 
           <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated() && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
+            {/* Display breadcrumb */}
+            { isAuthenticated() && <Breadcrumb key="breadcrumb" /> }
+
             {/* Falsh messages */}  
             {!isAuthPages() && <FlashMessage /> }    
             
@@ -175,15 +179,14 @@ class App extends Component {
                 <a className="item" href="/privacy-policy">{T.translate("landing.footer.privacy_policy")}</a>
               </div>
             </div>
-
-            <a href="#" className="back-to-top">
-              <i className="chevron up icon"></i>  
-            </a>
           </footer>
         }  
         </Sidebar.Pusher>
       </Sidebar.Pushable>,
-      <OuterSidebarScrollableHeader key="OuterSidebarScrollableHeader" visibleInnerSidebar={visibleOuterSidebar} />]
+      <OuterSidebarScrollableHeader key="OuterSidebarScrollableHeader" visibleInnerSidebar={visibleOuterSidebar} />,
+      <a key="back-to-top" href="#" className="back-to-top">
+        <i className="chevron up icon"></i>  
+      </a>]
   }
 }
 
