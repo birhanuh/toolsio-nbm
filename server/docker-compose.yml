@@ -43,6 +43,7 @@ services:
   migration:
     build: .
     image: toolsio-server
+    #image: birham/toolsio-server:latest
     networks:
       - webnet 
     environment: 

@@ -18,7 +18,7 @@
     "db:seed": "./node_modules/.bin/sequelize db:seed --seed",
     "db:seed:all": "./node_modules/.bin/sequelize db:seed:all",
     "pretest": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate",
-    "test": "NODE_ENV=test jest './__test__'"
+    "test": "NODE_ENV=test jest --runInBand './__test__' "
   },
   "repository": {
     "type": "git",

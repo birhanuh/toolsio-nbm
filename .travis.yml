@@ -34,7 +34,7 @@ before_script:
   - docker-compose up -d
   - sleep 3
 script:
-  - npm test -- --runInBand 
+  - npm test
 after_script:
   - docker-compose kill
 
