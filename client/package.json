@@ -120,8 +120,8 @@
     "start": "webpack-dev-server --open --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
     "//": [
-        "prebuild rm -rf ./dist",
-        "postbuild mv ./config/dist ./ && cp ./public/favicon.ico ./dist && cp -r ./public/error_pages ./dist"
+      "prebuild rm -rf ./dist",
+      "postbuild mv ./config/dist ./ && cp ./public/favicon.ico ./dist && cp -r ./public/error_pages ./dist"
     ],
     "postbuild": "cp ./public/favicon.ico ./config/dist && cp -r ./public/error_pages ./config/dist",
     "test": "jest './__test__'",
