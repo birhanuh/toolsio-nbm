@@ -1,7 +1,7 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { Label } from 'semantic-ui-react'
+import { Button, Label, Modal } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import { GET_CHANNELS_USERS_COUNT_QUERY } from '../../../graphql/conversations/channels'
 
@@ -11,7 +11,38 @@ import T from 'i18n-react'
 // jQuery
 import $ from 'jquery'
 
+// Downshift
+import FormChannel from './Form/Channel'
+
+const AddChannelModal = ({ open, onClose, toggleCreateChannelModal }) => (
+  <Modal
+    className="ui small modal add-channel"
+    open={open}
+    onClose={(e) => {
+      onClose(e)
+    }}
+  >
+    <Modal.Header>{T.translate("conversations.messages.add_user")}</Modal.Header>
+    <Modal.Content>
+      <FormChannel onClose={onClose} toggleCreateChannelModal={toggleCreateChannelModal} />
+    </Modal.Content>
+    <Modal.Actions>
+      <Button
+        onClick={(e) => {
+          onClose(e)
+        }}
+      >
+        {T.translate("conversations.form.cancel")}
+      </Button>
+     </Modal.Actions>
+  </Modal>
+)
+
 class List extends Component {
+
+  state = {
+    openCreateChannelModal: false
+  }
 
   componentDidMount() {
 
@@ -22,7 +53,16 @@ class List extends Component {
 
   }
 
+  toggleCreateChannelModal = (e) => {
+    if (e) {
+      e.preventDefault()  
+    }
+    
+    this.setState(state => ({ openCreateChannelModal: !state.openCreateChannelModal }))
+  }
+
   render() {    
+    const { openCreateChannelModal } = this.state
     const { data: { getChannelsUsersCount }, channelId } = this.props
 
     const channelList = getChannelsUsersCount && getChannelsUsersCount.map(channel => 
@@ -43,13 +83,20 @@ class List extends Component {
 
     return [
       <div key="create-channel" className="ui center aligned vertical segment">
-        <Link className="ui primary small button" to="/conversations">
+        <button className="ui primary small button" onClick={this.toggleCreateChannelModal.bind(this)}>
           <i className="add circle icon"></i>
           {T.translate("conversations.page.create_channel")}
-        </Link>
+        </button>
       </div>,
 
-      channelList
+      channelList,
+
+      <AddChannelModal
+        onClose={this.toggleCreateChannelModal.bind(this)}
+        open={openCreateChannelModal}
+        toggleCreateChannelModal={this.toggleCreateChannelModal}
+        key="add-channel-modal"
+      />
     ]
   }
 }

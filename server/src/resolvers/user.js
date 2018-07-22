@@ -7,6 +7,9 @@ import nodemailer from 'nodemailer'
 // AWS
 import AWS from 'aws-sdk'
 
+// Cloudinary
+import cloudinary from 'cloudinary'
+
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -22,6 +25,13 @@ const s3Bucket = new AWS.S3({
   Bucket: process.env.S3_BUCKET,
   region: 'eu-central-1'
 })
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET_KEY
+})
+
 
 export default {
   Query: {
@@ -100,8 +110,25 @@ export default {
       }
     }),
 
-    updateUser: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
-      models.User.schema(subdomain).update(args, { where: {email: args.email}, returning: true, plain: true, searchPath: subdomain })
+    updateUser: requiresAuth.createResolver((parent, args, { models, subdomain }) => {
+      // Do both asynchronously
+      const asyncFunc = async () => {
+        var user = await models.User.findOne({ where: { email: args.email }, searchPath: subdomain }, { raw: true })
+         console.log('argsz: ', args)
+         console.log('userz: ', user)
+        if(args.avatarUrl !== user.avatarUrl) {
+          cloudinary.v2.uploader.destroy(user.dataValues.avatarUrl, function(error, result){
+            if (error) {
+              console.log('cloudinary remove file error:', error)
+            }
+            console.log('cloudinary remove file result: ', result)
+          })
+        }
+      }
+
+      asyncFunc()
+
+      return models.User.update(args, { where: {email: args.email}, returning: true, plain: true, searchPath: subdomain })
         .then(result => {  
           return {
             success: true,
@@ -114,6 +141,8 @@ export default {
             success: false,
             errors: formatErrors(err, models)
           }
-        })),    
+        })
+    })    
+    
   }    
 }

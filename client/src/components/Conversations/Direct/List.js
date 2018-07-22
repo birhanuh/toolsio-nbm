@@ -11,7 +11,6 @@ import T from 'i18n-react'
 // jQuery
 import $ from 'jquery'
 
-// Downshift
 import UserDropdownSearchSelection from './Form/UserDropdownSearchSelection'
 
 const AddUserModal = ({ open, onClose }) => (

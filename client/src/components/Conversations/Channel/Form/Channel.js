@@ -94,7 +94,8 @@ class Channel extends Component {
               text: T.translate("conversations.form.flash.success_create_channel", { name: channel.name})
             })  
             this.setState({ isLoading: false })
-            this.context.router.history.push('/conversations')
+            this.props.toggleCreateChannelModal()
+            this.context.router.history.push(`/conversations/channel/${channel.id}`)
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -140,6 +141,7 @@ class Channel extends Component {
 
 Channel.propTypes = {
   addFlashMessage: PropTypes.func.isRequired,
+  toggleCreateChannelModal: PropTypes.func.isRequired
 }
 
 Channel.contextTypes = {

@@ -78,19 +78,17 @@ class Message extends Component {
   handleOnDrop = async ([file]) => {
     const { channelId } = this.state
     this.setState({ isLoading: true })
-    
-    console.log('file: ', file)    
+       
     await this.props.mutate({ 
       variables: { file, channelId: parseInt(channelId) },
       })
       .then(res => {       
 
-        const { success, message, errors } = res.data.createChannelMessage
+        const { success, errors } = res.data.createChannelMessage
 
         if (success) {
           // Reset reload
           this.setState({ isLoading: false })
-          console.log('Message sent', message)
         } else {
           let errorsList = {}
           errors.map(error => errorsList[error.path] = error.message)

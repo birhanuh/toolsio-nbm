@@ -10,6 +10,7 @@ import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Input, Select, Form, Dimmer, Image } from 'semantic-ui-react'
+import { Image as CloudinaryImage } from 'cloudinary-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_ACCOUNT_QUERY, UPDATE_ACCOUNT_MUTATION, S3_SIGN_LOGO_MUTATION } from '../../graphql/settings'
 
@@ -185,31 +186,16 @@ class AccountForm extends Component {
     this.setState({ address: updatedAddress })
   }
 
-  // Save File to S3
-  uploadLogo = (signedRequest, file, options) => {
-    return axios.put(signedRequest, file, options)
-  }
+  uploadToServer = async (public_id) => {
 
-  uploadToS3 = async (url, file, signedRequest) => {
+    this.setState({
+      logoUrl: public_id
+    })
 
-    const options = {
-      headers: {
-        "Content-Type": file.type
-      }
-    }
-    
-    const uploadLogoResponse = await this.uploadLogo(signedRequest, file, options)
+    const { subdomain, logoUrl } = this.state
 
-    if (uploadLogoResponse.status === 200) {
-      this.setState({
-        logoUrl: url
-      })
-
-      const { subdomain, logoUrl } = this.state
-      
-     this.props.updateAccountMutation({variables: { subdomain, logoUrl } })
+    this.props.updateAccountMutation({variables: { subdomain, logoUrl } })
       .then(res => {
-
         const { success, errors } = res.data.updateAccount
        
         if (success) {
@@ -217,7 +203,7 @@ class AccountForm extends Component {
             type: 'success',
             text: T.translate("settings.account.flash.success_update")
           })
-          this.setState({ isLoadingLogo: false })
+          this.setState({ isLoadingLogo: false, file: null, active: false })
         } else {
           let errorsList = {}
           errors.map(error => {
@@ -235,7 +221,7 @@ class AccountForm extends Component {
        
       })
       .catch(err => this.setState({ errors: err, isLoadingLogo: false }))
-    }
+    
   }
 
   formatFileName = filename => {
@@ -251,7 +237,8 @@ class AccountForm extends Component {
   handleOnDrop = async files => {
 
     this.setState({
-      'file': files[0]
+      'file': files[0],
+      'active': true
     })
   }
 
@@ -259,14 +246,15 @@ class AccountForm extends Component {
     const { file } = this.state
     let response
     if (file) {
-      response = await this.props.s3SignLogoMutation({
-        variables: {
-          fileName: this.formatFileName(file.name),
-          fileType: file.type
-        }
-      })
-      const { signedRequest, url } = response.data.s3SignLogo
-      await this.uploadToS3(url, file, signedRequest)
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('upload_preset', process.env.CLOUDINARY_PRESET_LOGOS)
+
+      this.setState({ isLoadingLogo: true })
+
+      response = await axios.post(process.env.CLOUDINARY_API_URL_IMAGE, formData)
+      const { public_id } = response.data
+      await this.uploadToServer(public_id)
     } else {
       this.props.addFlashMessage({
         type: 'error',
@@ -278,28 +266,30 @@ class AccountForm extends Component {
   toggleShow = () => this.setState(state => ({ active: !state.active }))
 
   render() {
-    const { subdomain, industry, logoUrl, contact, address, errors, active, isLoadingLogo, isLoadingForm } = this.state
-
-     const content = (
-      <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
-        {T.translate("settings.account.select_logo")}
-      </Dropzone>
-    )
-
+    const { subdomain, industry, logoUrl, contact, address, errors, active, file, isLoadingLogo, isLoadingForm } = this.state
+    
     return ( 
       <div className="ui items segment account">
         <div className="ui item">    
           <div className="image">
-            <div className={classnames("ui card form", { loading: isLoadingLogo })}>
+            <div className={classnames("ui card form", { loading: isLoadingLogo })} style={{height: "170px"}}>
               <Dimmer.Dimmable 
-                as={Image}
-                dimmer={{ active, content }}
                 onMouseEnter={this.toggleShow}
                 onMouseLeave={this.toggleShow}
-                size='medium'
-                blurring
-                src={logoUrl ? logoUrl : logoPlaceholderMedium}
-              />
+                style={{padding: '2px'}}
+              >
+                {logoUrl ? <CloudinaryImage width="165" height="165" background="white" crop="pad"
+                  cloudName="toolsio" publicId={logoUrl} /> : 
+                    <Image src={logoPlaceholderMedium} alt="logoPlaceholderMedium" /> }
+                <Dimmer
+                  active={file ? true : active}
+                >
+                  {file ? <small className="ui inverted">{file.name}</small> : 
+                    <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button" >
+                      {T.translate("settings.account.select_logo")}
+                    </Dropzone>}
+                </Dimmer> 
+              </Dimmer.Dimmable>
             </div>
 
             <button disabled={isLoadingLogo} className="fluid ui primary button" onClick={this.handleSubmitImage.bind(this)}><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.account.upload")}</button>

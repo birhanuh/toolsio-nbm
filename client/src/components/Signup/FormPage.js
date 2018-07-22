@@ -210,6 +210,7 @@ class FormPage extends Component {
             <label>{T.translate("sign_up.account.subdomain")}</label>
             <Input
               label="toolsio.com"
+              labelPosition='right'
               placeholder={T.translate("sign_up.account.subdomain")}
               name="subdomain" 
               value={user.subdomain} 

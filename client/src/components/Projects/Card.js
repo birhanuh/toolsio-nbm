@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
+// Semantic UI JS
+import { Progress } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -41,11 +43,7 @@ export default function Card({project}) {
               <td>{moment(project.deadline).format('ll') }</td>
               <td>{project.customer ? project.customer.name: <p className="blue">{T.translate("projects.page.no_customer")}</p>}</td>
               <td>
-                <div className="ui progress success small mb-0" data-percent={project.progress}>
-                  <div className="bar" style={{width: `${project.progress}%`}}>
-                    <div className="progress"></div>
-                  </div>
-                </div>
+                <Progress progress percent={project.progress} success size="small" className="mt-4" />
               </td>
               <td>
                 { project.isInvoiced === true && 

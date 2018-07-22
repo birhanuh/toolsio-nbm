@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { Comment } from 'semantic-ui-react'
-import { Modal, Message, Image, Button } from 'semantic-ui-react'
 import MessageForm from './Form/Message'
 import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
+// Semantic UI Form elements
+import { Modal, Message, Image, Button } from 'semantic-ui-react'
+import { Image as CloudinaryImage } from 'cloudinary-react'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
 import { GET_CHANNEL_USERS_QUERY } from '../../../graphql/conversations/channels'
@@ -111,7 +113,7 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
         </video></div>} 
         src={uploadPath} 
         mimetype={mimetype} />)
-    } else if (mimetype) { // For all rest file types (E.g. text, pdf, doc...()
+    } else if (mimetype.startsWith('text/')) {
       return (<div className="ui small message pre">
           <RenderText uploadPath={uploadPath} />
           <div className="buttons">
@@ -119,6 +121,14 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
             <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
           </div>
         </div>)
+    } else { // For all rest file types (E.g. text, pdf, doc...()
+      return (<div className="ui small message pre">
+          <pre>{uploadPath}</pre>
+          <div className="buttons">
+            <Button basic size="small" icon='download' />
+            <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
+          </div>
+        </div>) 
     }
   }
   return (body)            
@@ -218,8 +228,11 @@ class Messages extends Component {
 
     const messagesList = getChannelMessages && getChannelMessages.map(message => 
       <Comment key={message.id}>
-        <Comment.Avatar src={message.user.avatarUrl ? message.user.avatarUrl : avatarPlaceholderSmall}
-          alt="avatar" />
+        <div className="avatar">
+          {message.user.avatarUrl ? <CloudinaryImage cloudName="toolsio" publicId={message.user.avatarUrl} gravity="face" width="50" height="50" crop="thumb" /> : 
+              <Image src={avatarPlaceholderSmall} alt="avatarPlaceholderSmall" /> }
+        </div>
+
         <Comment.Content>
           <Comment.Author as="a">{message.user.email}</Comment.Author>
           <Comment.Metadata>

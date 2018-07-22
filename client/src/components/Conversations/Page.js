@@ -1,12 +1,14 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { Menu } from 'semantic-ui-react'
+import { Menu, List, Header } from 'semantic-ui-react'
 
 import ChannelMessages from './Channel/Messages'
 import ChannelsList from './Channel/List'
-import ChannelForm from './Channel/Form/Channel'
 import DirectMessages from './Direct/Messages'
 import UsersList from './Direct/List'
+
+// Localization 
+import T from 'i18n-react'
 
 const Page = ({ match }) => {    
     
@@ -27,7 +29,23 @@ const Page = ({ match }) => {
 
           <Switch>
 
-            <Route exact path="/conversations" component={ChannelForm} /> 
+            <Route exact path="/conversations" render={() => <div>
+              <Header as='h3'>{T.translate(`conversations.page.landing_header`)}</Header>
+              <List>
+                <List.Item>
+                  <List.Icon name='users' />
+                  <List.Content><p>{T.translate(`conversations.page.landing_colleagues_description`)}</p></List.Content>
+                </List.Item>
+                <List.Item>
+                  <List.Icon name='mail' />
+                  <List.Content><p>{T.translate(`conversations.page.landing_messages_description`)}</p></List.Content>
+                </List.Item>
+                <List.Item>
+                  <List.Icon name='linkify' />
+                  <List.Content><p>{T.translate(`conversations.page.landing_attachments_description`)}</p></List.Content>
+                </List.Item>
+              </List>
+            </div>} /> 
 
             <Route exact path="/conversations/channel/:channelId?" children={() =>
               <ChannelMessages channelId={match.params.channelId} />

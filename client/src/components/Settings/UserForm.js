@@ -9,6 +9,7 @@ import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Input, Form, Dimmer, Image } from 'semantic-ui-react'
+import { Image as CloudinaryImage } from 'cloudinary-react'
 import classnames from 'classnames'
 import { graphql, compose } from 'react-apollo'
 import { GET_USER_BY_EMAIL_QUERY, UPDATE_USER_MUTATION, S3_SIGN_AVATAR_MUTATION } from '../../graphql/settings'
@@ -19,7 +20,7 @@ import T from 'i18n-react'
 import moment from 'moment'
 
 // Avatar placeholder
-import avatarPlaceholderSmall from '../../images/avatar-placeholder-small.png'
+import avatarPlaceholderLarge from '../../images/avatar-placeholder-large.png'
 
 class UserForm extends Component {
   
@@ -110,47 +111,32 @@ class UserForm extends Component {
     }  
   }
 
-  // Save File to S3
-  uploadAvatar = (signedRequest, file, options) => {
-    return axios.put(signedRequest, file, options)
-  }
+  uploadToServer = async (public_id) => {
 
-  uploadToS3 = async (url, file, signedRequest) => {
+    this.setState({
+      avatarUrl: public_id
+    })
 
-    const options = {
-      headers: {
-        "Content-Type": file.type
-      }
-    }
-    
-    const uploadAvatarResponse = await this.uploadAvatar(signedRequest, file, options)
+    const { email, avatarUrl } = this.state
 
-    if (uploadAvatarResponse.status === 200) {
-      this.setState({
-        avatarUrl: url
+    this.props.updateUserMutation({ variables: { email, avatarUrl } })
+      .then((res) => {
+        const { success, errors } = res.data.updateUser     
+              
+        if (success) {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: T.translate("settings.user.flash.success_update")
+          })
+          this.setState({ isLoadingAvatar: false, file: null, active: false })
+        } else {
+          let errorsList = {}
+          errors.map(error => errorsList[error.path] = error.message)
+          this.setState({ errors: errorsList, isLoadingAvatar: false })
+        }
       })
-
-      const { email, avatarUrl } = this.state
-
-      this.setState({ isLoadingAvatar: true })
-      this.props.updateUserMutation({ variables: { email, avatarUrl } })
-        .then((res) => {
-          const { success, errors } = res.data.updateUser     
-                
-          if (success) {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: T.translate("settings.user.flash.success_update")
-            })
-            this.setState({ isLoadingAvatar: false })
-          } else {
-            let errorsList = {}
-            errors.map(error => errorsList[error.path] = error.message)
-            this.setState({ errors: errorsList, isLoadingAvatar: false })
-          }
-        })
-        .catch(err => this.setState({ errors: err, isLoadingAvatar: false }))
-    }
+      .catch(err => this.setState({ errors: err, isLoadingAvatar: false }))
+    
   }
 
   formatFileName = filename => {
@@ -166,7 +152,8 @@ class UserForm extends Component {
   handleOnDrop = async files => {
 
     this.setState({
-      'file': files[0]
+      'file': files[0],
+      'active': true
     })
   }
 
@@ -174,14 +161,15 @@ class UserForm extends Component {
     const { file } = this.state
     let response
     if (file) {
-      response = await this.props.s3SignAvatarMutation({
-        variables: {
-          fileName: this.formatFileName(file.name),
-          fileType: file.type
-        }
-      })
-      const { signedRequest, url } = response.data.s3SignAvatar
-      await this.uploadToS3(url, file, signedRequest)
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('upload_preset', process.env.CLOUDINARY_PRESET_AVATARS)
+
+      this.setState({ isLoadingAvatar: true })
+
+      response = await axios.post(process.env.CLOUDINARY_API_URL_IMAGE, formData)
+      const { public_id } = response.data
+      await this.uploadToServer(public_id)
     } else {
       this.props.addFlashMessage({
         type: 'error',
@@ -193,28 +181,30 @@ class UserForm extends Component {
   toggleShow = () => this.setState(state => ({ active: !state.active }))
 
   render() {
-    const { firstName, lastName, avatarUrl, password, confirmPassword, errors, active, isLoadingAvatar, isLoadingForm } = this.state
+    const { firstName, lastName, avatarUrl, password, confirmPassword, errors, active, file, isLoadingAvatar, isLoadingForm } = this.state
     
-    const content = (
-      <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button">
-        {T.translate("settings.user.select_avatar")}
-      </Dropzone>
-    )
-
     return (            
       <div className="ui items segment user">
         <div className="ui item">    
           <div className="image">
             <div className={classnames("ui card circular image form", { loading: isLoadingAvatar })} style={{height: "175px"}}>
               <Dimmer.Dimmable 
-                as={Image}
-                dimmer={{ active, content }}
                 onMouseEnter={this.toggleShow}
                 onMouseLeave={this.toggleShow}
-                size='medium'
                 blurring
-                src={avatarUrl ? avatarUrl : avatarPlaceholderSmall}
-              />
+              >
+                {avatarUrl ? <CloudinaryImage cloudName="toolsio" publicId={avatarUrl} width="175" height="175" crop="thumb" /> : 
+                  <Image size="medium" src={avatarPlaceholderLarge} alt="avatarPlaceholderLarge" /> }
+                <Dimmer
+                  active={file ? true : active}
+                >
+                  {file ? <small className="ui inverted">{file.name}</small> : 
+                    <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button" >
+                      {T.translate("settings.user.select_avatar")}
+                    </Dropzone>
+                  }
+                </Dimmer>  
+              </Dimmer.Dimmable>
             </div>
 
             <button disabled={isLoadingAvatar} onClick={this.handleSubmitImage.bind(this)} className="fluid ui primary button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.upload")}</button>

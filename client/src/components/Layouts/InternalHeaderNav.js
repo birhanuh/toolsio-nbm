@@ -8,8 +8,6 @@ import { Image, Dropdown, Menu, Label, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_PROJECT_TASKS_DATA_QUERY, GET_SALE_TASKS_DATA_QUERY, GET_INVOICE_TASKS_DATA_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY } from '../../graphql/headerNav'
 
-import Breadcrumb from './Breadcrumb'
-
 // Localization 
 import T from 'i18n-react'
 
@@ -209,7 +207,6 @@ class InternalHeaderNav extends Component {
             </Dropdown>             
           </Menu.Menu>
         </nav>
-        <Breadcrumb key="breadcrumb" />
       </header>)
   }
 }

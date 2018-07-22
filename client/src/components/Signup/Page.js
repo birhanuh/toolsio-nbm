@@ -45,7 +45,7 @@ class Page extends Component {
           {T.translate("sign_up.already_a_user")}&nbsp;<Link to="/subdomain">{T.translate("sign_up.log_in_here")}</Link>
         </div>
         <div className="ui center aligned vertical segment">
-          <small className="d-block">{T.translate("landing.footer.copyright")}</small>
+          <small className="d-block">{T.translate("landing.footer.copy_right")}</small>
           <small className="d-block">{T.translate("landing.footer.address")}</small>
         </div>
       </div>)
