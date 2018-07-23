@@ -6,6 +6,7 @@ import map from 'lodash/map'
 
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
+import Email from 'email-templates'
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -74,11 +75,32 @@ export default {
             
             const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/${emailToken}`
 
-            transporter.sendMail({
-              to: userCreated.get('email'),
-              subject: 'Confirm Email (Toolsio)',
-              html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
+            const email = new Email({
+              message: {
+                from: 'no-replay@toolsio.com'
+              },
+              // uncomment below to send emails in development/test env:
+              send: true,
+              // transport: {
+              //   jsonTransport: true
+              // }
+              transport: transporter
             })
+
+            email
+              .send({
+                template: 'email_confirmation',
+                message: {
+                  to: response.user.dataValues.email,
+                  subject: 'Confirm your Email (Toolsio)'
+                },
+                locals: {
+                  firstName: response.user.dataValues.firstName,
+                  confirmationLink: url,
+                }
+              })
+              .then('Email confirmation success': console.log)
+              .catch('Email confirmation error', console.error)
           })
       
           return {
