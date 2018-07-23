@@ -105,7 +105,7 @@ class Invitation extends Component {
       <div className="ui text container">
         <h2 className="ui teal image header">
           <img src={logo} className="image" alt="logo-square" />
-          <div className="content">{T.translate("sign_up.invitation_registration_header")}</div>
+          <div className="content">{T.translate("sign_up.header")}</div>
         </h2>       
         <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">

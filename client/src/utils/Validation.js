@@ -68,6 +68,19 @@ export default {
     }
   },
 
+  validateForgotPasswordResetRequestInput: (data) => {
+    let errors = {}
+
+    if (!data.email) {
+      errors['email'] = T.translate("log_in.email_required")
+    }
+    
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
   validateAccountInput: (data) => {
     let errors = {}
 

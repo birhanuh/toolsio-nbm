@@ -85,21 +85,19 @@
     "email_format_required": "Wrong Email format",
     "password_required": "Password is required",
     "password_confirmation_required": "Password confirmation is required",
-    "password_match_required": "Password doesn't match",
-    "invitation_registration_header": "Invitation Registration"
+    "password_match_required": "Password doesn't match"
   },  
   "log_in": {
     "header": "Log-in to your account",
     "email": "E-mail address",
     "password": "Password",
     "log_in": "Sign in",
-    "new_to_us": "New to us?",
     "email_required": "Email is required",
     "password_required": "Password is required",
-    "confirma_email": {
-      "info": "Your token has expired. Request a new token by clicking here <a href=\"/reqest-taken/\">Request token</a>",
-      "success": "You have confirmed your email in successfully!"
-    },
+    "new_to_us": "New to us?",
+    "forgot_your_password": "Forgot your password",
+    "request_password_reset": "Request password reset",
+    "send_request": "Send request",
     "subdomain": {
       "header": "Enter your subdomain",
       "subdomain": "Your subdomain is most likely your company name",
@@ -109,7 +107,10 @@
       "on_your_account_page": "You are now on your account page, continue by login with your credentials!"
     },
     "flash": {
-      "logout_success": "You are logged out from your account!"
+      "log_in_success": "You have signed in successfully!",
+      "logout_success": "You are logged out from your account!",
+      "password_reset_success": "Your password has been reseted successfully!",
+      "forgot_password_request_email_sent": "We have sent you an email how to proceed reseting your password. Check out your email!"
     }
   },
   "internal_navigation": {

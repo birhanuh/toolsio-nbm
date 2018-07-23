@@ -10,6 +10,7 @@ import Signup from '../Signup/Page'
 import Invitation from '../Signup/Invitation'
 import Login from '../Login/Page'
 import Subdomain from '../Login/Subdomain'
+import ForgotPasswordRequest from '../Login/ForgotPasswordRequest'
 // Utils 
 import { isAuthenticated, isAuthPages, SubdomainRoute, PrivateRoute } from '../../utils/'
 import Settings from '../Settings/Page'
@@ -105,6 +106,8 @@ class App extends Component {
               {/* Subdomain required Login pages */}
               <SubdomainRoute exact path="/login" component={Login} />
               <SubdomainRoute exact path="/login/confirmation/:token" component={Login} />
+              <SubdomainRoute exact path="/login/forgot-password-request/" component={ForgotPasswordRequest} />
+              {/* <SubdomainRoute exact path="/login/password-reset/:token" component={PasswordReset} /> */}
               
               {/* Authenticated internal pages */}      
               <PrivateRoute path="/dashboard" component={Dashboard} />

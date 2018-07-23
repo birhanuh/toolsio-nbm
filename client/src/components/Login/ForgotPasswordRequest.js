@@ -3,49 +3,26 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
+import FlashMessage from '../../flash/FlashMessage'
 import { graphql } from 'react-apollo'
-import { LOGIN_USER_MUTATION } from '../../graphql/authentications'
+import { FORGOT_PASSWORD_REQUEST_MUTATION } from '../../graphql/authentications'
 
 import { Validation } from '../../utils'
 
-import { wsLink } from '../../apollo'
+import logo from '../../images/logo-square.png'
 
 // Localization 
 import T from 'i18n-react'
 
-class Form extends Component {
+class ForgotPasswordRequest extends Component {
   constructor(props) {
     super(props)
     this.state = {
       email: '',
-      password: '',
       errors: {},
       isLoading: false
     }
   }
-  /*
-  componentDidMount = () => {
-    const { match } = this.props
-
-    if (match && match.params.token) {
-      this.props.confirmEmail(match.params.token)
-        .then(res => {
-        
-          if (res.data.confirmed) {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: T.translate("log_in.confirm_email.success")
-            })
-          } else {
-            this.props.addFlashMessage({
-              type: 'info',
-              text: T.translate("log_in.confirm_email.info")
-            })
-          }
-
-        })
-    }
-  }*/
 
   handleChange = (e) => {
     if (this.state.errors[e.target.name]) {
@@ -65,8 +42,8 @@ class Form extends Component {
   }
 
   isValid() {
-    const { email, password } = this.state
-    const { errors, isValid } = Validation.validateLoginInput({email, password})
+    const { email } = this.state
+    const { errors, isValid } = Validation.validateForgotPasswordResetRequestInput({email})
 
     let updatedErrors = Object.assign({}, this.state.errors)
     updatedErrors = errors
@@ -81,29 +58,22 @@ class Form extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     
-    const { email, password } = this.state
+    const { email } = this.state
   
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true })
 
-      this.props.mutate({variables: { email, password }})
+      this.props.mutate({variables: { email }})
         .then(res => {
-          const { success, authToken, refreshAuthToken, errors } = res.data.loginUser
+          const { success, errors } = res.data.forgotPasswordResetRequest
       
-          if (success) {
-            localStorage.setItem('authToken', authToken)
-            localStorage.setItem('refreshAuthToken', refreshAuthToken)
-            
-            // Re-connect to wsLink
-            wsLink.subscriptionClient.tryReconnect()
-            
+          if (success) {            
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("log_in.flash.log_in_success")
+              text: T.translate("log_in.flash.forgot_password_request_email_sent")
             })
 
-            // Redirect to dashboard
-            this.context.router.history.push('/dashboard')
+            this.setState({ isLoading: false })
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -115,9 +85,17 @@ class Form extends Component {
   }
 
   render() {
-    const { email, password, errors, isLoading } = this.state
+    const { email, errors, isLoading } = this.state
   
     return (  
+      <div className="ui text container">
+        <h2 className="ui teal image header">
+          <img src={logo} className="image" alt="logo-square" />
+          <div className="content">{T.translate("log_in.request_password_reset")}</div>
+        </h2>     
+
+        <FlashMessage />
+
         <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
@@ -131,32 +109,24 @@ class Form extends Component {
               </div>
               <span className="red">{errors.email}</span>
             </div>  
-            <div className={classnames("field", { error: errors.password })}>
-              <div className="ui right icon input">
-                <i className="lock icon"></i>
-                <input type="password" name="password" placeholder={T.translate("log_in.password")}
-                  value={password} onChange={this.handleChange} />                
-              </div>
-              <span className="red">{errors.password}</span>
-            </div>
                   
-            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.log_in")}</button>
+            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.send_request")}</button>
               
           </div>
         </form>         
-      
+      </div>
     )
   }
 }
 
 // Proptypes definition
-Form.propTypes = {
+ForgotPasswordRequest.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-Form.contextTypes = {
+ForgotPasswordRequest.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(null, { addFlashMessage }) (graphql(LOGIN_USER_MUTATION)(Form))
+export default connect(null, { addFlashMessage }) (graphql(FORGOT_PASSWORD_REQUEST_MUTATION)(ForgotPasswordRequest))
 
