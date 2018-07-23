@@ -10,6 +10,8 @@ import AWS from 'aws-sdk'
 // Cloudinary
 import cloudinary from 'cloudinary'
 
+import Email from 'email-templates'
+
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -43,8 +45,8 @@ export default {
   },
 
   Mutation: {
-    sendInvitation: requiresAuth.createResolver((parent, args, { subdomain }) => {
-      
+    sendInvitation: requiresAuth.createResolver(async (parent, args, { user, subdomain }) => {
+     
       let emailToken
 
       try {
@@ -58,26 +60,47 @@ export default {
       }
 
       const url = `http://${subdomain}.lvh.me:3000/signup/invitation/?token=${emailToken}`
-      console.log('url: ', url)
-      return transporter.sendMail({
-        to: args.email,
-        subject: 'Invitation Email (Toolsio)',
-        html: `You are invited to join ${subdomain}. Please click this link to accept you invitation and sign up: <a href="${url}">${url}</a>`
-      }).then(res => {
-        console.log('yea: ', res)
-        // Retrun success true to client on success
-        return {
-          success: true
-        }
-      })
-      .catch(err => {
-        console.log('err: ', err)
-        return {
-          success: false, 
-          errors: err
-        }
-      })    
       
+      const email = new Email({
+        message: {
+          from: 'no-replay@toolsio.com'
+        },
+        // uncomment below to send emails in development/test env:
+        send: true,
+        // transport: {
+        //   jsonTransport: true
+        // }
+        transport: transporter
+      })
+
+      return email
+        .send({
+          template: 'user_invitation',
+          message: {
+            to: args.email,
+            subject: 'Complete your Registration (Toolsio)'
+          },
+          locals: {
+            account: subdomain,
+            email: args.email,
+            inviter: user.firstName,
+            invitationLink: url,
+          }
+        })
+        .then(res => {
+          console.log('User invitationn success: ', res)
+          // Retrun success true to client on success
+          return {
+            success: true
+          }
+        })
+        .catch(err => {
+          console.log('User invitationn success: ', err)
+          return {
+            success: false, 
+            errors: err
+          }
+        })          
     }),
 
     s3SignAvatar: requiresAuth.createResolver(async (parent, args) => {

@@ -6,6 +6,7 @@ import map from 'lodash/map'
 
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
+
 import Email from 'email-templates'
 
 const transporter = nodemailer.createTransport({
@@ -99,8 +100,8 @@ export default {
                   confirmationLink: url,
                 }
               })
-              .then('Email confirmation success': console.log)
-              .catch('Email confirmation error', console.error)
+              .then(res => console.log('Email confirmation success: ', res))
+              .catch(err => console.error('Email confirmation error: ', err))
           })
       
           return {
@@ -144,10 +145,7 @@ export default {
           }
         }),
 
-    registerInvitedUser: async (parent, args, { models }) => {
-
-      const { firstName, lastName, email, password, token } = args
-
+    registerInvitedUser: async (parent, { firstName, lastName, email, password, token }, { models }) => {
       const { account } = jwt.verify(token, process.env.JWTSECRET1)
 
       try {
@@ -156,26 +154,11 @@ export default {
         if (accountLocal) {
 
           try {
-            const user = await  models.User.schema(accountLocal.subdomain).create({ firstName, lastName, email, password }, { searchPath: accountLocal.subdomain })
-
-            // Create emailToken
-            jwt.sign({
-              id: user.dataValues.id,
-              email: user.dataValues.email
-            }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, emailToken) => {
-              if (err) {
-                console.log('err token: ', err)
-              }
-              
-              const url = `http://${accountLocal.dataValues.subdomain}.lvh.me:3000/login/confirmation/${emailToken}`
-
-              transporter.sendMail({
-                to: userCreated.get('email'),
-                subject: 'Confirm Email (Toolsio)',
-                html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
+            models.User.schema(accountLocal.subdomain).create({ firstName, lastName, email, password, isConfirmed: true }, { searchPath: accountLocal.subdomain })
+              .catch(err => {
+                console.log('Invited user registration: ', err)
               })
-            })
-        
+
             return {
               success: true,
               account: accountLocal
