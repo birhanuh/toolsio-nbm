@@ -85,7 +85,8 @@
     "email_format_required": "Wrong Email format",
     "password_required": "Password is required",
     "password_confirmation_required": "Password confirmation is required",
-    "password_match_required": "Password doesn't match"
+    "password_match_required": "Password doesn't match",
+    "invitation_registration_header": "Invitation Registration"
   },  
   "log_in": {
     "header": "Log-in to your account",

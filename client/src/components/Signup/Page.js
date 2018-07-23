@@ -8,7 +8,7 @@ import FlashMessage from '../../flash/FlashMessage'
 // Localization 
 import T from 'i18n-react'
 
-import logo from '../../images/logo-square.png'; 
+import logo from '../../images/logo-square.png'
 
 class Page extends Component {
   
