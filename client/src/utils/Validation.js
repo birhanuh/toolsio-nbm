@@ -58,6 +58,7 @@ export default {
     }
     if (data.password && data.confirmPassword) {
       if (!Validator.equals(data.password, data.confirmPassword)) {
+        errors["password"] = T.translate("sign_up.password_match_required") 
         errors["confirmPassword"] = T.translate("sign_up.password_match_required") 
       }
     } 
@@ -75,6 +76,28 @@ export default {
       errors['email'] = T.translate("log_in.email_required")
     }
     
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
+  validatePasswordResetInput: (data) => {
+    let errors = {}
+    
+    if (!data.password) {
+      errors["password"] = T.translate("sign_up.password_required") 
+    }
+    if (!data.confirmPassword) {
+      errors["confirmPassword"] = T.translate("sign_up.password_confirmation_required")
+    }
+    if (data.password && data.confirmPassword) {
+      if (!Validator.equals(data.password, data.confirmPassword)) {
+        errors["password"] = T.translate("sign_up.password_match_required") 
+        errors["confirmPassword"] = T.translate("sign_up.password_match_required") 
+      }
+    } 
+
     return {
       errors,
       isValid: isEmpty(errors)

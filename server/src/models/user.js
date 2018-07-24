@@ -61,10 +61,7 @@ export default (sequelize, DataTypes) => {
     hooks: {
       beforeCreate: (user) => {
         return new Promise(function(resolve, reject) {
-
-          // only hash the password if it has been modified (or is new)
-          if (!user.changed('password')) return 
-      
+       
           bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
             if (err) return reject(err)
 
@@ -78,7 +75,33 @@ export default (sequelize, DataTypes) => {
             })
           })
         })
+      },
+      beforeBulkUpdate: async (user) => {
+        if (!user.attributes.password) return
+
+        return new Promise(function(resolve, reject) {
+      
+          bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+            if (err) return reject(err)
+
+            // hash the password using our new salt
+            return bcrypt.hash(user.attributes.password, salt, null, (err, hash) => {
+              if (err) return reject(err)
+             
+              // override the cleartext password with the hashed one
+              user.attributes.password = hash
+              resolve(hash)
+            })
+          })
+        })
       }
+    },
+
+    comparePassword: (candidatePassword, hash, callback) => {
+      bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
+        if (err) throw err
+        callback(null, isMatch)
+      })
     }
   }, { underscored: true })
 
@@ -91,13 +114,6 @@ export default (sequelize, DataTypes) => {
         field: 'user_id'
       },
       constraints: false
-    })
-  }
-
-  User.comparePassword = (candidatePassword, hash, callback) => {
-    bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
-      if (err) throw err
-      callback(null, isMatch)
     })
   }
 

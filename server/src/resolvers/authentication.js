@@ -74,7 +74,7 @@ export default {
                 console.log('err token: ', err)
               }
               
-              const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/${emailToken}`
+              const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/?token=${emailToken}`
 
               const email = new Email({
                 message: {
@@ -200,7 +200,7 @@ export default {
             errors: [
               {
                 path: 'subdomain',
-                message: `Account ${subdomain} desn't exist`
+                message: `Account ${subdomain} doesn't exist`
               }
             ]
           }
@@ -212,13 +212,14 @@ export default {
             // Create forgotPasswordResetRequestToken
             jwt.sign({
                 id: user.dataValues.id,
-                email: user.dataValues.email
+                email: user.dataValues.email,
+                subdomain: account.dataValues.subdomain
               }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, forgotPasswordResetRequestToken) => {
                 if (err) {
                   console.log('err token: ', err)
                 }
                 
-                const url = `http://${account.subdomain}.lvh.me:3000/login/password-reset/${forgotPasswordResetRequestToken}`
+                const url = `http://${account.subdomain}.lvh.me:3000/login/password-reset/?token=${forgotPasswordResetRequestToken}`
 
                 const email = new Email({
                   message: {
@@ -272,8 +273,51 @@ export default {
           errors: formatErrors(err, models)
         }       
       }
-    }
+    },
 
+    passwordReset: async (parent, { password, token }, { models }) => {
+      try {
+        const { email, subdomain } = jwt.verify(token, process.env.JWTSECRET1)
+        console.log('email', email)
+         console.log('emailz', subdomain)
+        const account = await models.Account.findOne({ where: { subdomain: subdomain } }, { raw: true })
+
+        if (!account) {
+          return {
+            success: false,
+            errors: [
+              {
+                path: 'subdomain',
+                message: `Account ${subdomain} doesn't exist`
+              }
+            ]
+          }
+        } else {
+          
+          return models.User.update({ password }, { where: {email: email}, returning: true, plain: true, searchPath: account.subdomain })
+            .then(() => {  
+              return {
+                success: true
+              }
+            })
+            .catch(err => {
+              console.log('err: ', err)
+              return {
+                success: false,
+                errors: formatErrors(err, models)
+              }
+            })
+     
+        }
+      } catch(err) {
+        console.log('err: ', err)
+
+        return {
+          success: false,
+          errors: formatErrors(err, models)
+        }       
+      }
+    }
 
   }    
 }

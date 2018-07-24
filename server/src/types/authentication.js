@@ -19,7 +19,7 @@ export default `
     errors: [Error!]
   }
 
-  type ForgotPasswordResetRequestResponse {
+  type ForgotPasswordResetRequestPasswordResetResponse {
     success: Boolean!
     errors: [Error!]
   }
@@ -32,7 +32,9 @@ export default `
 
     isSubdomainExist(subdomain: String!): IsSubdomainExistResponse!
 
-    forgotPasswordResetRequest(email: String!): ForgotPasswordResetRequestResponse!
+    forgotPasswordResetRequest(email: String!): ForgotPasswordResetRequestPasswordResetResponse!
+
+    passwordReset(password: String! token: String!): ForgotPasswordResetRequestPasswordResetResponse!
     
     registerInvitedUser(firstName: String, lastName: String, email: String!, password: String!, token: String!): RegisterResponse!
   }

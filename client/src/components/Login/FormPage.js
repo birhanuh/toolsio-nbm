@@ -1,7 +1,7 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
+import { Input, Icon, Form, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { LOGIN_USER_MUTATION } from '../../graphql/authentications'
@@ -13,7 +13,7 @@ import { wsLink } from '../../apollo'
 // Localization 
 import T from 'i18n-react'
 
-class Form extends Component {
+class FormPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -47,19 +47,19 @@ class Form extends Component {
     }
   }*/
 
-  handleChange = (e) => {
-    if (this.state.errors[e.target.name]) {
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       this.setState({
-        [e.target.name]: e.target.value,
+        [name]: value,
         errors
       })
     } else {
       this.setState({
-        [e.target.name]: e.target.value
+        [name]: value
       })
     }
   }
@@ -118,45 +118,54 @@ class Form extends Component {
     const { email, password, errors, isLoading } = this.state
   
     return (  
-        <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+        <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <Message error><p>{errors.message}</p></Message> } 
 
-            <div className={classnames("field", { error: errors.email })}>
-              <div className="ui right icon input">
-                <i className="user icon"></i>
-                <input type="text" name="email" placeholder={T.translate("log_in.email")} 
-                  value={email} onChange={this.handleChange} />
-              </div>
-              <span className="red">{errors.email}</span>
-            </div>  
-            <div className={classnames("field", { error: errors.password })}>
-              <div className="ui right icon input">
-                <i className="lock icon"></i>
-                <input type="password" name="password" placeholder={T.translate("log_in.password")}
-                  value={password} onChange={this.handleChange} />                
-              </div>
-              <span className="red">{errors.password}</span>
-            </div>
+            <Form.Field> 
+              <label>{T.translate("log_in.email")}</label>
+              <Input
+                  placeholder={T.translate("log_in.email")}
+                  value={email} 
+                  type='email'
+                  onChange={(e, {value}) => this.handleChange('email', value)} 
+                  error={!!errors.email}
+                  icon={<Icon name='user' />}
+                />
+                <span className="red">{errors.email}</span>
+            </Form.Field>
+              <Form.Field> 
+              <label>{T.translate("log_in.password")}</label>
+              <Input
+                  placeholder={T.translate("log_in.password")}
+                  name="password" 
+                  value={password} 
+                  type='password'
+                  onChange={(e, {value}) => this.handleChange('password', value)} 
+                  error={!!errors.password}
+                  icon={<Icon name='lock' />}
+                />
+                <span className="red">{errors.password}</span>
+            </Form.Field>
                   
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.log_in")}</button>
               
           </div>
-        </form>         
+        </Form>         
       
     )
   }
 }
 
 // Proptypes definition
-Form.propTypes = {
+FormPage.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-Form.contextTypes = {
+FormPage.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(null, { addFlashMessage }) (graphql(LOGIN_USER_MUTATION)(Form))
+export default connect(null, { addFlashMessage }) (graphql(LOGIN_USER_MUTATION)(FormPage))
 

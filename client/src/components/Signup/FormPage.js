@@ -193,12 +193,26 @@ class FormPage extends Component {
               value={account.industry} 
               onChange={(e, {value}) => this.handleChange('industry', value)} 
               error={!!errors.industry}
-              options={[
-                { key: "human resource", value: "human resource", text: 'Human resource' },
+              options={[                
+                { key: "beauty-salon", value: "beauty-salon", text: 'Beauty salon' },
+                { key: "construction", value: "construction", text: 'Construction' },                
+                { key: "design", value: "design", text: 'Design' },
+                { key: "education", value: "education", text: 'Education' },
+                { key: "entertainment", value: "entertainment", text: 'Enterntainment' },
                 { key: "fashion", value: "fashion", text: 'Fashion' },
+                { key: "health-care", value: "health-care", text: 'Health care' },
+                { key: "housing", value: "housing", text: 'Housing' },
+                { key: "hotel", value: "hotel", text: 'Hotel' },
+                { key: "human resource", value: "human resource", text: 'Human resource' },
                 { key: "import/export", value: "import/export", text: 'Import/Export' },
-                { key: "store", value: "store", text: 'Store' },
-                { key: "technology", value: "technology", text: 'Technology' }
+                { key: "sport", value: "sport", text: 'Sport' },
+                { key: "stationary", value: "stationary", text: 'Stationary' },
+                { key: "resturant", value: "resturant", text: 'Resturant' },
+                { key: "store", value: "store", text: 'Store' },                
+                { key: "supermarket", value: "supermarket", text: 'Supermarket' },
+                { key: "energy", value: "energy", text: 'Technology' },
+                { key: "travel", value: "travel", text: 'Travel' },              
+                { key: "other", value: "other", text: 'Other' }
               ]}
               selection
               fluid

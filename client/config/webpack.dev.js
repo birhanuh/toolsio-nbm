@@ -7,7 +7,7 @@ const common = require('./webpack.common.js')
 const env = require('../env')
 
 module.exports = merge(common, {
-  mode: 'none',
+  mode: 'development',
   devtool: 'cheap-module-source-map',
   devServer: {
     contentBase: path.join(__dirname, "dist"),

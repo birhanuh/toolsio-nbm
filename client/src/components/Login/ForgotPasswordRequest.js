@@ -1,8 +1,8 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
+import { Input, Icon, Form, Message } from 'semantic-ui-react'
 import FlashMessage from '../../flash/FlashMessage'
 import { graphql } from 'react-apollo'
 import { FORGOT_PASSWORD_REQUEST_MUTATION } from '../../graphql/authentications'
@@ -24,19 +24,19 @@ class ForgotPasswordRequest extends Component {
     }
   }
 
-  handleChange = (e) => {
-    if (this.state.errors[e.target.name]) {
+  handleChange = (name, value) => {
+    if (this.state.errors[name]) {
       // Clone errors form state to local variable
       let errors = Object.assign({}, this.state.errors)
-      delete errors[e.target.name]
+      delete errors[name]
 
       this.setState({
-        [e.target.name]: e.target.value,
+        [name]: value,
         errors
       })
     } else {
       this.setState({
-        [e.target.name]: e.target.value
+        [name]: value
       })
     }
   }
@@ -96,24 +96,28 @@ class ForgotPasswordRequest extends Component {
 
         <FlashMessage />
 
-        <form className={classnames("ui large form", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+        <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <Message error><p>{errors.message}</p></Message> } 
 
-            <div className={classnames("field", { error: errors.email })}>
-              <div className="ui right icon input">
-                <i className="user icon"></i>
-                <input type="text" name="email" placeholder={T.translate("log_in.email")} 
-                  value={email} onChange={this.handleChange} />
-              </div>
-              <span className="red">{errors.email}</span>
-            </div>  
+             <Form.Field> 
+              <label>{T.translate("log_in.email")}</label>
+              <Input
+                  placeholder={T.translate("log_in.email")}
+                  value={email} 
+                  type='email'
+                  onChange={(e, {value}) => this.handleChange('email', value)} 
+                  error={!!errors.email}
+                  icon={<Icon name='user' />}
+                />
+                <span className="red">{errors.email}</span>
+            </Form.Field>
                   
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.send_request")}</button>
               
           </div>
-        </form>         
+        </Form>         
       </div>
     )
   }

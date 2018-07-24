@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
-import Form from './Form'
+import FormPage from './FormPage'
 import FlashMessage from '../../flash/FlashMessage'
 
 // Localization 
@@ -24,7 +24,7 @@ class Page extends Component {
         
         <FlashMessage />
 
-        <Form />
+        <FormPage />
 
         <div className="ui message">
           <span>
