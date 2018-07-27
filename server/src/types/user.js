@@ -26,12 +26,6 @@ export default `
     errors: [Error!]
   }
 
-  type SendInvitationResponse {
-    success: Boolean!
-    account: Account
-    errors: [Error!]
-  }
-
   type S3SignAvatarResponse {
     signedRequest: String!
     url: String!
@@ -49,8 +43,6 @@ export default `
   type Mutation {
     updateUser(firstName: String, lastName: String, email: String!, password: String, 
       avatarUrl: String): UpdateResponse!
-
-    sendInvitation(email: String!): SendInvitationResponse!
 
     s3SignAvatar(fileName: String!, fileType: String!): S3SignAvatarResponse!
   }

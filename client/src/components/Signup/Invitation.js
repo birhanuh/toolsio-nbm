@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import jwt from 'jsonwebtoken'
 // Semantic UI Form elements
-import { Input, Form } from 'semantic-ui-react'
+import { Input, Form, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { REGISTER_INVITED_USER_MUTATION } from '../../graphql/authentications'
@@ -107,10 +107,14 @@ class Invitation extends Component {
           <img src={logo} className="image" alt="logo-square" />
           <div className="content">{T.translate("sign_up.header")}</div>
         </h2>       
+       
         <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
-             
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            <Message info>
+              <p>{T.translate("sign_up.complete_invitation_sign_up")}</p>
+            </Message>
+
+            { !!errors.message && <Message message><p>{errors.message}</p></Message> } 
             
             <Form.Field>
               <label>{T.translate("sign_up.first_name")}</label>
@@ -177,7 +181,9 @@ class Invitation extends Component {
 
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
           </div>
-        </Form>         
+        </Form> 
+        <br />        
+        <br />   
       </div>  
     )
   }

@@ -154,9 +154,20 @@ export default {
         if (accountLocal) {
 
           try {
-            models.User.schema(accountLocal.subdomain).create({ firstName, lastName, email, password, isConfirmed: true }, { searchPath: accountLocal.subdomain })
+            models.User.create({ firstName, lastName, email, password, isConfirmed: true }, { searchPath: accountLocal.subdomain })
               .catch(err => {
                 console.log('Invited user registration: ', err)
+              })
+
+            // Set isInvitaitonAccepted to true
+            models.Invitation.update({isInvitationAccepted: true}, { where: { email }, returning: true, plain: true, searchPath: accountLocal.subdomain })
+              .then(() => console.log('Invitation update success'))
+              .catch(err => {
+                console.log('Invitation create err: ', err)
+                return {
+                  success: false,
+                  errors: formatErrors(err, models)
+                }
               })
 
             return {

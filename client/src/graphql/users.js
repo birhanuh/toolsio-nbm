@@ -33,3 +33,13 @@ export const GET_USER_QUERY = gql`
     }
   }
 `
+
+export const GET_INVITED_USERS_QUERY = gql`
+   {
+    getInvitedUsers {
+      id
+      email
+      isInvitationAccepted
+    }
+  }
+`

@@ -10,7 +10,7 @@ import { getMainDefinition } from 'apollo-utilities'
 import { getSubdomain } from './utils'
 
 const httpLink = createUploadLink({
-  uri: `http://${process.env.SERVER_URL}/graphql`
+  uri: `${process.env.SERVER_PROTOCOL}${process.env.SERVER_URL}/graphql`
 })
 
 // middleWares and afterwares

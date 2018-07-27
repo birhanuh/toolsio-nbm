@@ -17,6 +17,7 @@ module.exports = merge(common, {
       'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
       'process.env.CLIENT_URL': JSON.stringify(env.CLIENT_URL),
       'process.env.CLIENT_PROTOCOL': JSON.stringify(env.CLIENT_PROTOCOL),
+      'process.env.SERVER_PROTOCOL': JSON.stringify(env.SERVER_PROTOCOL),
       'process.env.SERVER_URL': JSON.stringify(env.SERVER_URL),
       'process.env.JWTSECRET1': JSON.stringify(env.JWTSECRET1),
       'process.env.JWTSECRET2': JSON.stringify(env.JWTSECRET2),

@@ -30,10 +30,8 @@ export default function List({ users }) {
     <table className="ui very compact striped center aligned table">
        <thead>
           <tr>
-            <th>{T.translate("users.list.first_name")}</th>
-            <th>{T.translate("users.list.last_name")}</th>
             <th>{T.translate("users.list.email")}</th>
-            <th>{T.translate("users.list.accepted")}</th>
+            <th>{T.translate("users.list.invitation_accepted")}</th>
           </tr>
         </thead>
         

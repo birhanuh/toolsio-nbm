@@ -3,7 +3,7 @@
     "home": {
       "header": "Home",
       "welcome": "Welcome to",
-      "slogan": "Automate manage and track your Sales and Projects more efficently online!",
+      "slogan": "Track and manage your Projects and Sales more efficently online! Create Invoices of Projects ans Sales to your client on the fly!",
       "get_started": "Get started for free",
       "learn_more": "Learn more"
     },
@@ -71,6 +71,7 @@
     "already_a_user": "Already a user?",
     "log_in_here": "Sign in here",
     "sign_up": "Sign up",   
+    "complete_invitation_sign_up": "Complete your signing up by filling this form",  
     "account": {
       "industry": "Industry (*)",
       "select_industry": "-Select Industry-",
@@ -198,9 +199,9 @@
       "first_name": "First name",
       "last_name": "Last name",
       "email": "Email",    
-      "accepted": "Accepted",
-      "empty_users_header": "There are no Users",
-      "empty_users_message": "Enter email and click Send button above to send your first invitation."
+      "invitation_accepted": "Invitation ccepted",
+      "empty_users_header": "There are no invited Users",
+      "empty_users_message": "Enter email and click Send button above to send your first invitation to your colleagues/collaboraters."
     },
     "flash": {
       "invitation_success": "Your invitation is sent to *{email}*"

@@ -103,13 +103,14 @@ class PasswordReset extends Component {
           <img src={logo} className="image" alt="logo-square" />
           <div className="content">{T.translate("log_in.reset_password")}</div>
         </h2>    
-        <Message info>
-          <p>{T.translate("log_in.reset_password_description")}</p>
-        </Message> 
 
         <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
           <div className="ui stacked segment">
 
+            <Message info>
+              <p>{T.translate("log_in.reset_password_description")}</p>
+            </Message> 
+            
             { !!errors.message && <Message error><p>{errors.message}</p></Message> } 
  
             <Form.Field> 
@@ -143,7 +144,9 @@ class PasswordReset extends Component {
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.reset_password")}</button>
               
           </div>
-        </Form>         
+        </Form>   
+        <br />        
+        <br />         
       </div>
     )
   }

@@ -117,7 +117,9 @@ class ForgotPasswordRequest extends Component {
             <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.send_request")}</button>
               
           </div>
-        </Form>         
+        </Form>   
+        <br />        
+        <br />         
       </div>
     )
   }
