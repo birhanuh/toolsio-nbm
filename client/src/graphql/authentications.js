@@ -56,3 +56,27 @@ export const IS_SUBDOMAIN_EXIST_MUTATION = gql`
     }
   }
 `
+
+export const FORGOT_PASSWORD_REQUEST_MUTATION = gql`
+  mutation($email: String!) {
+    forgotPasswordResetRequest(email: $email) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`
+
+export const PASSWORD_RESET_MUTATION = gql`
+  mutation($password: String!, $token: String!) {
+    passwordReset(password: $password, token: $token) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`

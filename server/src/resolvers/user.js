@@ -10,6 +10,8 @@ import AWS from 'aws-sdk'
 // Cloudinary
 import cloudinary from 'cloudinary'
 
+import Email from 'email-templates'
+
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -43,43 +45,6 @@ export default {
   },
 
   Mutation: {
-    sendInvitation: requiresAuth.createResolver((parent, args, { subdomain }) => {
-      
-      let emailToken
-
-      try {
-        // Create emailToken
-        emailToken = jwt.sign({
-          email: args.email,
-          account: subdomain
-        }, process.env.JWTSECRET1, { expiresIn: '60d' })
-      } catch(err) {
-        console.log('err', err)
-      }
-
-      const url = `http://${subdomain}.lvh.me:3000/signup/invitation/?token=${emailToken}`
-      console.log('url: ', url)
-      return transporter.sendMail({
-        to: args.email,
-        subject: 'Invitation Email (Toolsio)',
-        html: `You are invited to join ${subdomain}. Please click this link to accept you invitation and sign up: <a href="${url}">${url}</a>`
-      }).then(res => {
-        console.log('yea: ', res)
-        // Retrun success true to client on success
-        return {
-          success: true
-        }
-      })
-      .catch(err => {
-        console.log('err: ', err)
-        return {
-          success: false, 
-          errors: err
-        }
-      })    
-      
-    }),
-
     s3SignAvatar: requiresAuth.createResolver(async (parent, args) => {
 
       const s3Params = {
@@ -114,8 +79,7 @@ export default {
       // Do both asynchronously
       const asyncFunc = async () => {
         var user = await models.User.findOne({ where: { email: args.email }, searchPath: subdomain }, { raw: true })
-         console.log('argsz: ', args)
-         console.log('userz: ', user)
+  
         if(args.avatarUrl !== user.avatarUrl) {
           cloudinary.v2.uploader.destroy(user.dataValues.avatarUrl, function(error, result){
             if (error) {

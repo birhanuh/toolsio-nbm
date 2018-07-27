@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
-import Form from './Form'
+import FormPage from './FormPage'
 import FlashMessage from '../../flash/FlashMessage'
 
 // Localization 
@@ -24,10 +24,15 @@ class Page extends Component {
         
         <FlashMessage />
 
-        <Form />
+        <FormPage />
 
         <div className="ui message">
-          {T.translate("log_in.new_to_us")}&nbsp;<a href={process.env.CLIENT_PROTOCOL+process.env.CLIENT_URL+"/signup"}>{T.translate("sign_up.sign_up")}</a>
+          <span>
+            {T.translate("log_in.new_to_us")}&nbsp;<a href={process.env.CLIENT_PROTOCOL+process.env.CLIENT_URL+"/signup"}>{T.translate("sign_up.sign_up")}</a>
+          </span>
+          <span style={{float: "right"}}>
+            <Link to="/login/forgot-password-request">{T.translate("log_in.forgot_your_password")}</Link>
+          </span>
         </div>
         <div className="ui center aligned vertical segment">
           <small className="d-block">{T.translate("landing.footer.copy_right")}</small>

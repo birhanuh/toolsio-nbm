@@ -1,0 +1,35 @@
+export default (sequelize, DataTypes) => {
+  const Invitation = sequelize.define('invitations', {
+    email: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      unique: true,
+      validate: {     
+        isEmail: {                    // checks for email format (foo@bar.com) 
+          arg: true,
+          msg: 'Invalid email format'
+        }
+      } 
+    },
+    isInvitationAccepted: {
+      type: DataTypes.BOOLEAN,
+      allowNull : false,
+      defaultValue : false,
+      field: 'is_invitation_accepted'
+    }
+  }, { underscored: true })
+
+  Invitation.associate = (models) => {
+    // N:M
+    Invitation.belongsToMany(models.Channel, {
+      through: models.Member,
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id'
+      },
+      constraints: false
+    })
+  }
+
+  return Invitation
+}

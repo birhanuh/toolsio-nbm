@@ -7,6 +7,8 @@ import map from 'lodash/map'
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
+import Email from 'email-templates'
+
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -26,7 +28,7 @@ export default {
       const { subdomain, industry } = args
 
       try {
-        const account = await models.Account.findOne( { where: { subdomain } }, { raw: true })
+        const account = await models.Account.findOne({ where: { subdomain } }, { raw: true })
 
         if (account) {
           return {
@@ -65,21 +67,42 @@ export default {
 
           // Create emailToken
           jwt.sign({
-            id: response.user.dataValues.id,
-            email: response.user.dataValues.email
-          }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, emailToken) => {
-            if (err) {
-              console.log('err token: ', err)
-            }
-            
-            const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/${emailToken}`
+              id: response.user.dataValues.id,
+              email: response.user.dataValues.email
+            }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, emailToken) => {
+              if (err) {
+                console.log('err token: ', err)
+              }
+              
+              const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/?token=${emailToken}`
 
-            transporter.sendMail({
-              to: userCreated.get('email'),
-              subject: 'Confirm Email (Toolsio)',
-              html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
+              const email = new Email({
+                message: {
+                  from: 'no-replay@toolsio.com'
+                },
+                // uncomment below to send emails in development/test env:
+                send: true,
+                // transport: {
+                //   jsonTransport: true
+                // }
+                transport: transporter
+              })
+
+              email
+                .send({
+                  template: 'email_confirmation',
+                  message: {
+                    to: response.user.dataValues.email,
+                    subject: 'Confirm your Email (Toolsio)'
+                  },
+                  locals: {
+                    firstName: response.user.dataValues.firstName,
+                    confirmationLink: url,
+                  }
+                })
+                .then(res => console.log('Email confirmation success: ', res))
+                .catch(err => console.error('Email confirmation error: ', err))
             })
-          })
       
           return {
             success: true,
@@ -122,38 +145,31 @@ export default {
           }
         }),
 
-    registerInvitedUser: async (parent, args, { models }) => {
-
-      const { firstName, lastName, email, password, token } = args
-
+    registerInvitedUser: async (parent, { firstName, lastName, email, password, token }, { models }) => {
       const { account } = jwt.verify(token, process.env.JWTSECRET1)
 
       try {
-        const accountLocal = await models.Account.findOne( { where: { subdomain: account } }, { raw: true })
+        const accountLocal = await models.Account.findOne({ where: { subdomain: account } }, { raw: true })
 
         if (accountLocal) {
 
           try {
-            const user = await  models.User.schema(accountLocal.subdomain).create({ firstName, lastName, email, password }, { searchPath: accountLocal.subdomain })
-
-            // Create emailToken
-            jwt.sign({
-              id: user.dataValues.id,
-              email: user.dataValues.email
-            }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, emailToken) => {
-              if (err) {
-                console.log('err token: ', err)
-              }
-              
-              const url = `http://${accountLocal.dataValues.subdomain}.lvh.me:3000/login/confirmation/${emailToken}`
-
-              transporter.sendMail({
-                to: userCreated.get('email'),
-                subject: 'Confirm Email (Toolsio)',
-                html: `Please click this link to confirm your email: <a href="${url}">${url}</a>`
+            models.User.create({ firstName, lastName, email, password, isConfirmed: true }, { searchPath: accountLocal.subdomain })
+              .catch(err => {
+                console.log('Invited user registration: ', err)
               })
-            })
-        
+
+            // Set isInvitaitonAccepted to true
+            models.Invitation.update({isInvitationAccepted: true}, { where: { email }, returning: true, plain: true, searchPath: accountLocal.subdomain })
+              .then(() => console.log('Invitation update success'))
+              .catch(err => {
+                console.log('Invitation create err: ', err)
+                return {
+                  success: false,
+                  errors: formatErrors(err, models)
+                }
+              })
+
             return {
               success: true,
               account: accountLocal
@@ -178,6 +194,135 @@ export default {
         }
       } catch(err) {
         console.log('err: ', err)
+        return {
+          success: false,
+          errors: formatErrors(err, models)
+        }       
+      }
+    },
+
+    forgotPasswordResetRequest: async (parent, { email }, { models, subdomain }) => {
+      try {
+        const account = await models.Account.findOne({ where: { subdomain } }, { raw: true })
+
+        if (!account) {
+          return {
+            success: false,
+            errors: [
+              {
+                path: 'subdomain',
+                message: `Account ${subdomain} doesn't exist`
+              }
+            ]
+          }
+        } else {
+         
+          const user = await  models.User.findOne({ where: { email }, searchPath: subdomain })        
+   
+          if (user) {
+            // Create forgotPasswordResetRequestToken
+            jwt.sign({
+                id: user.dataValues.id,
+                email: user.dataValues.email,
+                subdomain: account.dataValues.subdomain
+              }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, forgotPasswordResetRequestToken) => {
+                if (err) {
+                  console.log('err token: ', err)
+                }
+                
+                const url = `http://${account.subdomain}.lvh.me:3000/login/password-reset/?token=${forgotPasswordResetRequestToken}`
+
+                const email = new Email({
+                  message: {
+                    from: 'no-replay@toolsio.com'
+                  },
+                  // uncomment below to send emails in development/test env:
+                  send: true,
+                  // transport: {
+                  //   jsonTransport: true
+                  // }
+                  transport: transporter
+                })
+
+                email
+                  .send({
+                    template: 'reset_password',
+                    message: {
+                      to: user.dataValues.email,
+                      subject: 'Password reset (Toolsio)'
+                    },
+                    locals: {
+                      firstName: user.dataValues.firstName,
+                      passwordResetLink: url,
+                    }
+                  })
+                  .then(res => console.log('Password confirmation success: ', res))
+                  .catch(err => console.error('Password confirmation error: ', err))
+              })
+            
+            return {
+              success: true
+            }
+          } else {
+ 
+            return {
+              success: false,
+              errors: [
+                {
+                  path: 'subdomain',
+                  message: `You don't have credentials on (${subdomain}) account`
+                }
+              ]
+            }
+          }
+        }
+      } catch(err) {
+        console.log('err: ', err)
+
+        return {
+          success: false,
+          errors: formatErrors(err, models)
+        }       
+      }
+    },
+
+    passwordReset: async (parent, { password, token }, { models }) => {
+      try {
+        const { email, subdomain } = jwt.verify(token, process.env.JWTSECRET1)
+        console.log('email', email)
+         console.log('emailz', subdomain)
+        const account = await models.Account.findOne({ where: { subdomain: subdomain } }, { raw: true })
+
+        if (!account) {
+          return {
+            success: false,
+            errors: [
+              {
+                path: 'subdomain',
+                message: `Account ${subdomain} doesn't exist`
+              }
+            ]
+          }
+        } else {
+          
+          return models.User.update({ password }, { where: {email: email}, returning: true, plain: true, searchPath: account.subdomain })
+            .then(() => {  
+              return {
+                success: true
+              }
+            })
+            .catch(err => {
+              console.log('err: ', err)
+              return {
+                success: false,
+                errors: formatErrors(err, models)
+              }
+            })
+     
+        }
+      } catch(err) {
+        console.log('err: ', err)
+
         return {
           success: false,
           errors: formatErrors(err, models)

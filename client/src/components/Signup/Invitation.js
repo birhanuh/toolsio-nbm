@@ -4,13 +4,15 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import jwt from 'jsonwebtoken'
 // Semantic UI Form elements
-import { Input, Form } from 'semantic-ui-react'
+import { Input, Form, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { REGISTER_INVITED_USER_MUTATION } from '../../graphql/authentications'
 
 // Localization 
 import T from 'i18n-react'
+
+import logo from '../../images/logo-square.png'
 
 class Invitation extends Component {
   constructor(props) {
@@ -99,83 +101,90 @@ class Invitation extends Component {
   render() {
     const { firstName, email, lastName, password, confirmPassword, errors, isLoading } = this.state
 
-    return (            
-      <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
-        <div className="ui stacked segment">
-           
-          { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
-          
-          <Form.Field>
-            <label>{T.translate("sign_up.first_name")}</label>
-            <Input
-              placeholder={T.translate("sign_up.first_name")}
-              control={Input}
-              name="firstName" 
-              value={firstName} 
-              onChange={(e, {value}) => this.handleChange('firstName', value)} 
-              error={!!errors.firstName}
-            />
-            <span className="red">{errors.firstName}</span>
-          </Form.Field>
+    return (     
+      <div className="ui text container">
+        <h2 className="ui teal image header">
+          <img src={logo} className="image" alt="logo-square" />
+          <div className="content">{T.translate("sign_up.header")}</div>
+        </h2>       
+       
+        <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+          <div className="ui stacked segment">
+            <Message info>
+              <p>{T.translate("sign_up.complete_invitation_sign_up")}</p>
+            </Message>
 
-          <Form.Field>
-            <label>{T.translate("sign_up.last_name")}</label>
-            <Input
-              placeholder={T.translate("sign_up.last_name")}
-              control={Input}
-              name="lastName" 
-              value={lastName} 
-              onChange={(e, {value}) => this.handleChange('lastName', value)} 
-              error={!!errors.lastName}
-            />
-            <span className="red">{errors.lastName}</span>
-          </Form.Field>
+            { !!errors.message && <Message message><p>{errors.message}</p></Message> } 
+            
+            <Form.Field>
+              <label>{T.translate("sign_up.first_name")}</label>
+              <Input
+                placeholder={T.translate("sign_up.first_name")}
+                name="firstName" 
+                value={firstName} 
+                onChange={(e, {value}) => this.handleChange('firstName', value)} 
+                error={!!errors.firstName}
+              />
+              <span className="red">{errors.firstName}</span>
+            </Form.Field>
 
-          <Form.Field  error={!!errors.email}>
-            <label>{T.translate("sign_up.email")}</label>
-            <Input
-              placeholder={T.translate("sign_up.email")}
-              control={Input}
-              name="email" 
-              value={email} 
-              onChange={(e, {value}) => this.handleChange('email', value)} 
-              error={!!errors.email}
-            />
-            <span className="red">{errors.email}</span>
-          </Form.Field>
+            <Form.Field>
+              <label>{T.translate("sign_up.last_name")}</label>
+              <Input
+                placeholder={T.translate("sign_up.last_name")}
+                name="lastName" 
+                value={lastName} 
+                onChange={(e, {value}) => this.handleChange('lastName', value)} 
+                error={!!errors.lastName}
+              />
+              <span className="red">{errors.lastName}</span>
+            </Form.Field>
 
-          <Form.Field error={!!errors.password}>
-            <label>{T.translate("sign_up.password")}</label>
-            <Input
-              placeholder={T.translate("sign_up.password")}
-              control={Input}
-              name="password" 
-              value={password} 
-              onChange={(e, {value}) => this.handleChange('password', value)} 
-              type='password'
-              error={!!errors.password}
-            />
-            <span className="red">{errors.password}</span>
-          </Form.Field>
+            <Form.Field  error={!!errors.email}>
+              <label>{T.translate("sign_up.email")}</label>
+              <Input
+                placeholder={T.translate("sign_up.email")}
+                name="email" 
+                value={email} 
+                disabled
+                onChange={(e, {value}) => this.handleChange('email', value)} 
+                error={!!errors.email}
+              />
+              <span className="red">{errors.email}</span>
+            </Form.Field>
 
-          <Form.Field error={!!errors.confirmPassword}>
-            <label>{T.translate("sign_up.confirm_password")}</label>
-            <Input
-              placeholder={T.translate("sign_up.confirm_password")}
-              control={Input}
-              name="confirmPassword" 
-              value={confirmPassword} 
-              onChange={(e, {value}) => this.handleChange('confirmPassword', value)} 
-              type='password'
-              error={!!errors.confirmPassword}
-            />
-            <span className="red">{errors.confirmPassword}</span>
-          </Form.Field>
+            <Form.Field error={!!errors.password}>
+              <label>{T.translate("sign_up.password")}</label>
+              <Input
+                placeholder={T.translate("sign_up.password")}
+                name="password" 
+                value={password} 
+                onChange={(e, {value}) => this.handleChange('password', value)} 
+                type='password'
+                error={!!errors.password}
+              />
+              <span className="red">{errors.password}</span>
+            </Form.Field>
 
-          <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
-        </div>
-      </Form>         
+            <Form.Field error={!!errors.confirmPassword}>
+              <label>{T.translate("sign_up.confirm_password")}</label>
+              <Input
+                placeholder={T.translate("sign_up.confirm_password")}
+                name="confirmPassword" 
+                value={confirmPassword} 
+                onChange={(e, {value}) => this.handleChange('confirmPassword', value)} 
+                type='password'
+                error={!!errors.confirmPassword}
+              />
+              <span className="red">{errors.confirmPassword}</span>
+            </Form.Field>
 
+            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
+          </div>
+        </Form> 
+        <br />        
+        <br />   
+      </div>  
     )
   }
 }

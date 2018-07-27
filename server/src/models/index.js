@@ -18,7 +18,8 @@ const models = {
   DirectMessage: sequelize.import('./conversation/directMessage'),
   Channel: sequelize.import('./conversation/channel'),
   Member: sequelize.import('./conversation/member'),
-  Event: sequelize.import('./event')
+  Event: sequelize.import('./event'),
+  Invitation: sequelize.import('./invitation')
 }
 
 Object.keys(models).forEach(modelName => {

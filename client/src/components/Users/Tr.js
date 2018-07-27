@@ -3,12 +3,10 @@ import PropTypes from 'prop-types'
 
 export default function Tr({user}) {
   
-  const accepted = user.accepted ? <i className="check green icon"></i> : <i className="close red icon"></i>
+  const accepted = user.isInvitationAccepted ? <i className="check green icon"></i> : <i className="close red icon"></i>
   
   return (
     <tr key={user.id}>
-      <td>{user.firstName}</td>
-      <td>{user.lastName}</td>
       <td>{user.email}</td>
       <td><span>{accepted}</span></td>
     </tr>

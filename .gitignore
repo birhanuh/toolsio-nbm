@@ -3,6 +3,7 @@
 # Misc
 .DS_Store
 .env
+env.js
 
 # Dependencies
 node_modules

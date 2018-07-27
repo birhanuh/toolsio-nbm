@@ -19,6 +19,11 @@ export default `
     errors: [Error!]
   }
 
+  type ForgotPasswordResetRequestPasswordResetResponse {
+    success: Boolean!
+    errors: [Error!]
+  }
+
   type Mutation {
     registerUser(firstName: String, lastName: String, email: String!, password: String!,
       subdomain: String!, industry: String!): RegisterResponse!
@@ -26,6 +31,10 @@ export default `
     loginUser(email: String!, password: String!): LoginResponse!
 
     isSubdomainExist(subdomain: String!): IsSubdomainExistResponse!
+
+    forgotPasswordResetRequest(email: String!): ForgotPasswordResetRequestPasswordResetResponse!
+
+    passwordReset(password: String! token: String!): ForgotPasswordResetRequestPasswordResetResponse!
     
     registerInvitedUser(firstName: String, lastName: String, email: String!, password: String!, token: String!): RegisterResponse!
   }
