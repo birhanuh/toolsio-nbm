@@ -1,6 +1,7 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+// Semantic UI Form elements
 import { Button, Label, Modal } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import { GET_CHANNELS_USERS_COUNT_QUERY } from '../../../graphql/conversations/channels'
@@ -16,13 +17,14 @@ import FormChannel from './Form/Channel'
 
 const AddChannelModal = ({ open, onClose, toggleCreateChannelModal }) => (
   <Modal
-    className="ui small modal add-channel"
+    size='small'
+    className="add-channel"
     open={open}
     onClose={(e) => {
       onClose(e)
     }}
   >
-    <Modal.Header>{T.translate("conversations.messages.add_user")}</Modal.Header>
+    <Modal.Header>{T.translate("conversations.form.create_channel")}</Modal.Header>
     <Modal.Content>
       <FormChannel onClose={onClose} toggleCreateChannelModal={toggleCreateChannelModal} />
     </Modal.Content>

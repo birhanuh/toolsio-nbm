@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 // Semantic UI Form elements
-import { Dropdown, Form } from 'semantic-ui-react'
+import { Dropdown, Form, Header, Icon, Button } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -9,12 +9,12 @@ import T from 'i18n-react'
 export default function SaleProject({ id, step1, salesOption, projectsOption, handleChange, handleSearchChangeProject, handleSearchChangeSale, handleNext, errors }) {
 
   return (
-    <div className="ui form"> 
+    <Form> 
       <div className="inline field"> 
         {id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
-          <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-            <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.sale_or_project")}</div>
-          </h1>
+          <Header as='h1'>{T.translate("invoices.form.new_invoice")}
+            <Header.Subheader className="d-inline-block pl-1">{T.translate("invoices.form.sale_or_project")}</Header.Subheader>
+          </Header>
         }
       </div>
       
@@ -60,12 +60,12 @@ export default function SaleProject({ id, step1, salesOption, projectsOption, ha
 
       <div className="inline field mt-5"> 
         <Link to="/invoices" className="ui primary outline button"> 
-          <i className="minus circle icon"></i>
+          <Icon name="minus circle" />
           {T.translate("invoices.form.cancel")}
         </Link>
-        <button className="ui primary button" onClick={handleNext}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
+        <Button primary onClick={handleNext}>{T.translate("invoices.form.next")}<Icon name="chevron right" /></Button>
       </div>  
-    </div> 
+    </Form>
     )    
 }
 

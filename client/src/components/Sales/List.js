@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+// Semantic React UI
+import { Card as CardElement, Message, Header } from 'semantic-ui-react'
 import classnames from 'classnames'
 import Card from './Card'
 
@@ -8,18 +10,18 @@ import T from 'i18n-react'
 
 export default function List({ sales, loading }) {
   const emptyMessage = (
-    <div className="ui info message">
-      <div className="header">
+    <Message info>
+      <Header>
         {T.translate("sales.page.empty_sales_header")}
-      </div>
+      </Header>
       <p>{T.translate("sales.page.empty_sales_message")}</p>
-    </div>
+    </Message>
   )
 
   const salesList = (
-    <div className={classnames("ui two cards sales", { loading: loading })}>
+   <CardElement.Group itemsPerRow={2} className={classnames("ui from projects", { loading: loading })}>
       { sales.map(sale => <Card sale={sale} key={sale.id} />) }
-    </div>
+    </CardElement.Group>
   )
 
   return (

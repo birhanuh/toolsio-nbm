@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { Header, Card, Icon } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Segment, Header, Card, Icon, Image, Message } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_SALES_DATA } from '../../graphql/dashboard'
 
@@ -68,33 +69,33 @@ const SalesCard = () => (
               </Header>
             </Card.Header>
           </Card.Content>        
-          <div className="image">
+          <Image>
             <Doughnut data={chartData} options={chartOptions} />
-          </div>
+          </Image>
           
           <Card.Content extra>
-            { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
-            <div className="left floated">
-              <div className="meta">{countMonthSorted && countMonthSorted[0] ? (countMonthSorted[0].month ? countMonthSorted[0].month : '-') : '-'}</div>
-              <div className="header">
+            { !!error && <Message negative><p>{error.message}</p></Message> } 
+            <Segment vertical floated='left' className="p-0"> 
+              <Card.Meta>{countMonthSorted && countMonthSorted[0] ? (countMonthSorted[0].month ? countMonthSorted[0].month : '-') : '-'}</Card.Meta>
+              <Card.Header>
                 {countMonthSorted && countMonthSorted[0] ? (countMonthSorted[0].count ? countMonthSorted[0].count : '-') : '-'}
-              </div>
-            </div> 
-            <div className="right floated">
-              <div className="meta">{countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].month ? countMonthSorted[1].month : '-') : '-'}</div>
-              <div className="header">
+              </Card.Header>
+            </Segment> 
+            <Segment vertical floated='right' className="p-0"> 
+              <Card.Meta>{countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].month ? countMonthSorted[1].month : '-') : '-'}</Card.Meta>
+              <Card.Header>
                 {countMonthSorted && countMonthSorted[1] ? (countMonthSorted[1].count ? countMonthSorted[1].count : '-') : '-'}
                 {countMonthSorted && countMonthSorted.count && countMonthSorted.count.length !== 0 && ((countMonthSorted[0].count > countMonthSorted[1].count) ? <i className="long arrow down red icon" /> : 
-                  <i className="long arrow up green icon" />)}
-                </div>
-            </div>        
+                  <Icon name="long arrow up" className="green" />)}
+                </Card.Header>
+            </Segment>        
           </Card.Content> 
 
           {(countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0) && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/sales" className="ui primary outline button small">
-                  <i className="check circle outline icon"></i>{T.translate("dashboard.sales.create_first_sale")}
+                  <Icon name="check circle outline" />{T.translate("dashboard.sales.create_first_sale")}
                 </Link>
               </div>
             </div>

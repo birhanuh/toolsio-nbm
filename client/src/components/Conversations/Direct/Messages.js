@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // Semantic UI Form elements
-import { Comment, Message, Modal, Image, Button } from 'semantic-ui-react'
+import { Segment, Comment, Message, Header, Modal, Image, Button } from 'semantic-ui-react'
 import { Image as CloudinaryImage } from 'cloudinary-react'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
@@ -227,9 +227,9 @@ class Messages extends Component {
 
     return (
       <div className="messages">
-        <div className="ui clearing vertical segment">
-          <h3 className="ui dividing header capitalize">{getUser && getUser.firstName}</h3>
-        </div>        
+        <Segment vertical clearing>
+          <Header as='h3' dividing className="capitalize">{getUser && getUser.firstName}</Header>
+        </Segment>        
         {/*
         { (this.state.hasMoreItems) && (getDirectMessages && getDirectMessages.length >= 10) &&
           <div className="ui center aligned basic segment pt-0">       
@@ -264,15 +264,15 @@ class Messages extends Component {
           </div>
         }
         */}
-        <div className="ui comments"
-          onScroll={this.handleScroll}
+         <div onScroll={this.handleScroll}
           ref={(scroller) => {
             this.scroller = scroller
-          }}
-        >
-          { getDirectMessages && getDirectMessages.length === 0 ? emptyMessage : messagesList }
-        </div>           
-
+          }}>
+          <Comment.Group>
+            { getDirectMessages && getDirectMessages.length === 0 ? emptyMessage : messagesList }
+          </Comment.Group>           
+        </div>
+          
         <MessageForm receiverId={receiverId} />
       </div>
     ) 

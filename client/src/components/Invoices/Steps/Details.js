@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 // Semantic UI Form elements
-import { Input, Select, TextArea, Form } from 'semantic-ui-react'
+import { Input, Select, TextArea, Form, Divider, Icon, Header, Button } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -18,12 +18,12 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
     )
   
   return (
-    <div className="ui form"> 
+    <Form> 
       <div className="inline field"> 
-        {id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
-          <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-            <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.invoice_details")}</div>
-          </h1>
+        {id ? <Header>{T.translate("invoices.form.edit_invoice")}</Header> : 
+          <Header as='h1'>{T.translate("invoices.form.new_invoice")}
+            <Header.Subheader className="d-inline-block pl-1">{T.translate("invoices.form.invoice_details")}</Header.Subheader>
+          </Header>
         }
       </div>
       <fieldset className="custom-fieldset">
@@ -39,7 +39,7 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
           <span className="red">{errors.deadline}</span>
         </Form.Field>
         
-        <div className="ui horizontal divider">Or</div>
+        <Divider horizontal>Or</Divider>
 
         <Form.Field inline error={!!errors.paymentTerm}>
           <label>{T.translate("invoices.form.payment_term")}</label>
@@ -146,15 +146,15 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
       </Form.Field>
 
       <div className="inline field mt-5"> 
-        <button className="ui button" onClick={handlePrevious}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
-        <button className="ui primary button" onClick={handleNext}>{T.translate("invoices.form.next")}<i className="chevron right icon"></i></button>
+        <Button onClick={handlePrevious}><Icon name="chevron left" />{T.translate("invoices.form.previous")}</Button>
+        <Button primary onClick={handleNext}>{T.translate("invoices.form.next")}<Icon name="chevron right" /></Button>
 
         <Link to="/invoices" className="ui primary outline button mt-3"> 
-          <i className="minus circle icon"></i>
+          <Icon name="minus circle" />
           {T.translate("invoices.form.cancel")}
         </Link>
       </div>  
-    </div> 
+    </Form> 
     )
 }
 

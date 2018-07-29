@@ -10,51 +10,54 @@ import ProjectTasks from './ProjectTasks'
 import SaleTasks from './SaleTasks' 
 import InvoiceTasks from './InvoiceTasks' 
 
+// Semantic React UI
+import { Grid } from 'semantic-ui-react'
+
 const Page = () => {
   return ( 
-    <div className="row column">
-      <div className="sixteen wide column">          
-        <div className="ui four column grid">
-          <div className="column">
+    <Grid.Row columns={1} only='computer'>
+      <Grid.Column width={16}>            
+        <Grid columns={4}>
+          <Grid.Column>
             <TotalIncomeCard />
-          </div>
-          <div className="column">
+          </Grid.Column>
+          <Grid.Column>
             <IncomesCard />
-          </div>
+          </Grid.Column>
 
-          <div className="column">
+          <Grid.Column>
             <ProjectsCard />
-          </div>
+          </Grid.Column>
 
-          <div className="column">  
+          <Grid.Column>  
             <SalesCard />
-          </div>
-        </div>
+          </Grid.Column>
+        </Grid>
         
-        <div className="ui two column grid">
-          <div className="six wide column">
+        <Grid columns={2}>
+          <Grid.Column width={6}>
             <CustomersCard />
-          </div>
-          <div className="ten wide column">
+          </Grid.Column>
+          <Grid.Column width={10}>
             <InvoicesCard /> 
-          </div>
-        </div>
+          </Grid.Column>
+        </Grid>
        
-        <div className="ui three column grid">
-          <div className="column">
+        <Grid columns={3}>
+          <Grid.Column>
             <ProjectTasks />
-          </div>
+          </Grid.Column>
            
-          <div className="column">
+          <Grid.Column>
             <SaleTasks />
-          </div>
+          </Grid.Column>
           
-          <div className="column">
+          <Grid.Column>
             <InvoiceTasks />
-          </div>
-        </div>
-      </div>
-    </div>)   
+          </Grid.Column>
+        </Grid>
+      </Grid.Column>
+    </Grid.Row>)   
 }
 
 export default Page

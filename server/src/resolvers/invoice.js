@@ -149,7 +149,22 @@ export default {
       models.Sale.findOne({ where: {id: saleId}, searchPath: subdomain }),
 
     user: ({ userId }, args, { models, subdomain }) => 
-      models.User.findOne({ where: {id: userId}, searchPath: subdomain })
+      models.User.findOne({ where: {id: userId}, searchPath: subdomain }),
+
+    total: async ({ projectId, saleId }, args, { models, subdomain }) => {
+      if (projectId) {    
+        const totalSum = await models.Task.sum('total', {
+            where: { projectId }, searchPath: subdomain
+          }) 
+       
+        return totalSum ? totalSum : 0      
+      }
+      if (saleId) {
+        return models.Item.sum('total',
+          { where: {saleId}, searchPath: subdomain }, { raw: true})  
+      }
+      return null
+    }
   
   }
 

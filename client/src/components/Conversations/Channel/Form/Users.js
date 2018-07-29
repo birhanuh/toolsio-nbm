@@ -1,7 +1,8 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { Validation } from '../../../../utils'
-import { Form, Dropdown } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Form, Dropdown, Message, Icon, Button } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 // eslint-disable-next-line no-unused-vars
 import { GET_CHANNELS_USERS_COUNT_QUERY, GET_CHANNEL_USERS_QUERY, ADD_MEMBER_MUTATION } from '../../../../graphql/conversations/channels'
@@ -136,7 +137,7 @@ class Users extends Component {
     return (   
       <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
       
-        { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+        { !!errors.message && <Message negative><p>{errors.message}</p></Message> }
 
         <Form.Field>
           { usersOptions &&
@@ -156,8 +157,7 @@ class Users extends Component {
           <span className="red">{errors.members}</span>
         </Form.Field>
         
-        <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" 
-          aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.add")}</button>
+        <Button disabled={isLoading} className="ui primary button"><Icon name="check circle outline" />&nbsp;{T.translate("conversations.form.add")}</Button>
         
       </Form> 
     )

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
+// Semantic UI Form elements
+import { Container, Segment, Header, Input, Form, Button, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { IS_SUBDOMAIN_EXIST_MUTATION } from '../../graphql/authentications'
@@ -54,9 +55,9 @@ class Subdomain extends Component {
     } 
   }
   
-  handleChange(e) {
+  handleChange(name, value) {
     this.setState({
-      [e.target.name]: e.target.value
+      [name]: value
     })
   }
 
@@ -105,44 +106,47 @@ class Subdomain extends Component {
   }
 
   render() {
-    const { errors, isLoading } = this.state
+    const { subdomain, errors, isLoading } = this.state
    
     return (   
-      <div className="ui text container">
-        <h2 className="ui teal image header">
-          <Link className="" to="/">
-            <img src={logo} className="image" alt="logo-square" />
-          </Link>
-          <div className="content">
-            {T.translate("log_in.subdomain.header")}
-          </div>
-        </h2>
-        <form className="ui large form" onSubmit={this.handleSubmit.bind(this)}>
-          <div className="ui stacked segment">
+      <Container text>
+        <Header as="h2" image className="turquoise">
+          <img src={logo} className="image" alt="logo-square" />
+          <Header.Content>{T.translate("log_in.subdomain.header")}</Header.Content>
+        </Header>    
 
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+        <Segment>
+          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
-            <div className={classnames("field", { error: errors.subdomain })}>
-              <div className="ui right labeled input">
-                <input type="text" name="subdomain" placeholder={T.translate("log_in.subdomain.subdomain")} 
-                  value={this.state.subdomain} onChange={this.handleChange.bind(this)} />
-                <div className="ui label">toolsio.com</div>  
-              </div>
+            { !!errors.message && <Message negative><p>{errors.message}</p></Message> } 
+
+            <Form.Field error={!!errors.subdomain}>
+              <label>{T.translate("log_in.subdomain.subdomain")}</label>
+              <Input
+                label="toolsio.com"
+                labelPosition='right'
+                placeholder={T.translate("log_in.subdomain.subdomain")}
+                name="subdomain" 
+                value={subdomain} 
+                onChange={(e, {value}) => this.handleChange('subdomain', value)} 
+                error={!!errors.subdomain}
+                fluid
+              />
               <span className="red">{errors.subdomain}</span>
-            </div>  
+            </Form.Field> 
 
-            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.subdomain.continue_button")}</button>
+            <Button disabled={isLoading} primary fluid>{T.translate("log_in.subdomain.continue_button")}</Button>
               
-          </div>
-        </form>  
-        <div className="ui message">
+          </Form>
+        </Segment>  
+        <Segment>
           {T.translate("log_in.new_to_us")}&nbsp;<Link to="/signup">{T.translate("sign_up.sign_up")}</Link>
-        </div>
-        <div className="ui center aligned vertical segment">
+        </Segment>
+        <Segment vertical align="center">
           <small className="d-block">{T.translate("landing.footer.copy_right")}</small>
           <small className="d-block">{T.translate("landing.footer.address")}</small>
-        </div>
-      </div>)
+        </Segment>
+      </Container>)
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 // Semantic UI JS
-import { Input, Select, Form } from 'semantic-ui-react'
+import { Input, Select, Form, Button, Icon } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -13,11 +13,11 @@ export default function ShowEditTaskTr({task, editTask, handleEdit, handleCancel
       <td className="show-task">{task.hours}</td>
       <td className="show-task">{task.unitPrice}</td>
       <td className="show-task">{task.total}</td>
-      <td className="show-task" width="120px">
-        <div className="show-task ui fluid small buttons">
-          <button className="ui negative icon basic button" onClick={toggleConfirmationModal}><i className="delete icon"></i></button>
-          <button className="ui positive icon basic button" onClick={handleEdit}><i className="edit icon"></i></button>
-        </div>
+      <td className="show-task" width="125px">
+        <Button.Group fluid size="small" className="show-task">
+          <Button basic negative onClick={toggleConfirmationModal}><Icon name="delete" /></Button>
+          <Button basic positive onClick={handleEdit}><Icon name="edit" /></Button>
+        </Button.Group>
       </td>
       <td className="edit-task">
         <Form.Field>
@@ -84,10 +84,10 @@ export default function ShowEditTaskTr({task, editTask, handleEdit, handleCancel
         </div>
       </td>
       <td className="edit-task" width="120px">  
-        <div className="edit-item ui fluid small buttons">
-          <button className="ui basic icon button" onClick={handleCancelEdit}><i className="remove icon"></i></button>
-          <button className="ui positive icon basic button" onClick={handleUpdate}><i className="check circle outline icon"></i></button>
-        </div>
+        <Button.Group size="small" fluid className="edit-task">
+          <Button basic onClick={handleCancelEdit}><Icon name="remove" /></Button>
+          <Button basic positive onClick={handleUpdate}><Icon name="check circle outline" /></Button>
+        </Button.Group>
       </td>
     </tr>
   )  

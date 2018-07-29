@@ -1,5 +1,5 @@
 import React  from 'react'
-import { Header, Card } from 'semantic-ui-react'
+import { Header, Card, Message } from 'semantic-ui-react'
 import classnames from 'classnames'
 import { Query } from 'react-apollo'
 import { GET_TOTAL_INCOME_DATA } from '../../graphql/dashboard'
@@ -28,7 +28,7 @@ const TotalIncomeCard = () => (
             <Card.Description className="center aligned">{T.translate("dashboard.total_income.description")}</Card.Description>
           </Card.Content>
           <Card.Content style={{borderTop: 'none'}}>
-            { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
+            { !!error && <Message negative><p>{error.message}</p></Message> } 
           </Card.Content>
         </Card>
       )

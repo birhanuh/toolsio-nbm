@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import decode from 'jwt-decode'
+import { Grid, Container} from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import { GET_INVITED_USERS_QUERY } from '../../graphql/users'
 
 import List from './List' 
-import FormPage from './FormPage'
+import Form from './Form'
 
 class Page extends Component {
 
@@ -24,15 +25,15 @@ class Page extends Component {
     const { data: { getInvitedUsers } } = this.props
 
     return (
-      <div className="row column">  
-        <div className="ui text container"> 
+      <Grid.Row columns={1}>
+        <Container text>
         
-          <FormPage />  
+          <Form />  
 
           { getInvitedUsers && <List users={getInvitedUsers} /> }
 
-        </div>
-      </div>  
+        </Container>
+      </Grid.Row>  
     )
   }
 }

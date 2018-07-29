@@ -1,6 +1,6 @@
 import React from 'react'
 // Semantic UI JS
-import { Input, Select, Form } from 'semantic-ui-react'
+import { Input, Select, Form, Button, Icon } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -72,8 +72,8 @@ export default function AddTaskTr({task, handleNewTaskChange, handleNewTaskBlur,
           {task.total}
         </div>
       </td>
-      <td className="add-task" width="120px">     
-        <button disabled={task.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("projects.tasks.form.add_task")}</button> 
+      <td className="add-task" width="125px">     
+        <Button basic size="small" fluid disabled={task.isLoading} className="turquoise" onClick={handleCreate}><Icon name="add circle" />&nbsp;{T.translate("projects.tasks.form.add_task")}</Button> 
       </td>
     </tr>
   )  

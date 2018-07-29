@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+// Semantic UI JS
+import { Table as TableElement, Message, Header } from 'semantic-ui-react'
 import Tr from './Tr'
 import { Pagination } from '../../utils'
 
@@ -11,10 +13,10 @@ export default function Table({ customers, count, offset, limit }) {
     <tbody>
       <tr>
         <td colSpan="6">
-          <div className="ui info message m-3">
-            <div className="header">{T.translate("customers.page.empty_customers_header")}</div>
+          <Message info className="m-3">
+            <Header>{T.translate("customers.page.empty_customers_header")}</Header>
             <p>{T.translate("customers.page.empty_customers_message")}</p>
-          </div>  
+          </Message>  
         </td>   
       </tr>
     </tbody> 
@@ -27,7 +29,7 @@ export default function Table({ customers, count, offset, limit }) {
   )
 
   return (
-    <table id="customersTable" className="ui small striped table">
+    <TableElement id="customersTable" size="small" striped>
       <thead>
         <tr>
           <th>{T.translate("customers.page.name")}</th>
@@ -48,7 +50,7 @@ export default function Table({ customers, count, offset, limit }) {
           </th>
         </tr>
       </tfoot>
-    </table>
+    </TableElement>
   )
 }
 

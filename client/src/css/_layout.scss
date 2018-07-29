@@ -70,10 +70,6 @@ a {
   display: none;
 }
 
-.secondary.pointing.menu .toc.item {
-  display: none;
-}
-
 .ui.items > .item > .content > .header, .ui.menu .item, .ui.form .field > label, 
 .ui.table, .ui.table thead th {
   color: inherit;
@@ -100,13 +96,13 @@ a {
 }
 
 // Menu
-nav.ui.menu .item, nav.ui.menu .active.item,
-nav.ui.menu .active.item:hover, nav.ui.vertical.menu .active.item:hover,
-nav.ui.link.menu .item:hover, nav.ui.menu .dropdown.item:hover, nav.ui.menu .link.item:hover, nav.ui.menu a.item:hover {
+header .ui.fixed.top.menu .item, header .ui.fixed.top.menu .active.item,
+header .ui.fixed.top.menu .active.item:hover, .ui.fixed.top.vertical.menu .active.item:hover,
+.ui.fixed.top.link.menu .item:hover, header .ui.fixed.top.menu .dropdown.item:hover, header .ui.fixed.top.menu .link.item:hover, header .ui.fixed.top.menu a.item:hover {
   color: $white;
 }
 
-nav.ui.menu {
+header .ui.fixed.top.menu {
   background: $turquoise;
   border: 1px solid rgba(22,91,97,.15);
   box-shadow: 0 1px 2px 0 rgba(22,91,97,.15);
@@ -134,36 +130,7 @@ nav.ui.menu {
 }
 
 // Masthead
-.masthead.segment {
-  min-height: 700px;
-  padding: 1em 0em;
-}
-
-.masthead .logo.item img {
-  margin-right: 1em;
-}
-
-.masthead .ui.menu .ui.button {
-  margin-left: 0.5em;
-}
-
-.masthead h1.ui.header {
-  margin-top: 3em;
-  margin-bottom: 0em;
-  font-size: 4em;
-  font-weight: normal;
-}
-
-.masthead h2 {
-  font-size: 1.7em;
-  font-weight: normal;
-}
-
-.masthead.segment {
-  min-height: 600px;
-}    
-
-.masthead {
+#home {
   background: url("../images/pattern.png"), url("../images/jumbotron.jpg") !important;
   overflow: hidden;
   background-size: cover;
@@ -180,6 +147,10 @@ nav.ui.menu {
     margin-top: 0;
     margin-bottom: 60px;
   }
+}
+
+.secondary.pointing.menu .toc.item {
+  display: none;
 }
 
 // Stripe
@@ -437,6 +408,23 @@ nav.ui.menu {
     border-bottom-right-radius: 0!important;
     border-right-color: transparent!important;
   }
+  ui.fluid.input {
+    display: flex;
+  }
+  .ui.fluid.input .field {
+    max-width: 100%;
+    flex: 1 0 auto;
+  }
+  .ui.action.input > .button {
+    padding-top: .78571429em;
+    padding-bottom: .78571429em;
+    margin: 0;
+  }
+  .ui.action.input > .button {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+  }
   .ui.small.message.pre, .ui.small.message.img {
     max-width: 100%;
     max-height: 100px;
@@ -492,6 +480,9 @@ nav.ui.menu {
   .labeled.input .ui.label {
     line-height: inherit;
   }
+  .ui.text.container {
+    margin-bottom: 40px;
+  }
 }
 
 // Logo
@@ -500,16 +491,16 @@ nav.ui.menu {
   height: 28px;
 }
 
-nav.ui.menu .item>a>img:not(.ui) {
+header .ui.fixed.top.menu .item>a>img:not(.ui) {
   width: 8em;
 }
 
-nav.ui.menu .logo.item {
+header .ui.fixed.top.menu .logo.item {
   width: 190px;
   padding: 5px;
 }
 
-nav.ui.menu .item>a {
+header .ui.fixed.top.menu .item>a {
   margin: 0 auto;
 }
 
@@ -521,10 +512,6 @@ nav.ui.menu .item>a {
 // Segment
 .ui.segment {
   padding: 2em 2em;
-}
-
-.ui.vertical.segment, .ui.basic.segment {
-  padding: 1em 1em;
 }
 
 .ui.segments > .segment, .ui.segment, .ui.message, .ui.card, .ui.cards>.card {
@@ -1021,10 +1008,10 @@ nav.ui.menu .item>a {
   .ui.header a {
     width: auto;
   }
-  .ui.sizer.vertical p {
+  .ui.profile.vertical p {
     color: $xx-light-dark-grey;
   }
-  .ui.sizer.vertical p > strong {
+  .ui.profile.vertical p > strong {
     display: block;
     margin-top: 5px;
     color: $body-color;
@@ -1062,15 +1049,15 @@ nav.ui.menu .item>a {
 
 // Customers
 .customer.show {
-  .ui.sizer.vertical p {
+  .ui.profile.vertical p {
     color: $xx-light-dark-grey;
   }
-  .ui.sizer.vertical p > strong {
+  .ui.profile.vertical p > strong {
     display: block;
     margin-top: 5px;
     color: $body-color;
   } 
-  .ui.sizer.vertical p > i {
+  .ui.profile.vertical p > i {
     display: block;
     margin-top: 5px;
   } 
@@ -1101,14 +1088,14 @@ nav.ui.menu .item>a {
   .secondary.pointing.menu .toc.item {
     display: block;
   }
-  .masthead.segment {
+  #home.segment {
     min-height: 350px;
   }
-  .masthead h1.ui.header {
+  #home h1.ui.header {
     font-size: 2em;
     margin-top: 1.5em;
   }
-  .masthead h2 {
+  #home h2 {
     margin-top: 0.5em;
     font-size: 1.5em;
   }

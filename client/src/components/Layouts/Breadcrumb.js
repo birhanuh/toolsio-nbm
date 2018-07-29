@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+// Semantic UI Form elements
+import { Menu, Header, Breadcrumb as BreadcrumbElement } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -61,31 +63,30 @@ export default function Breadcrumb(props, context) {
   const breadcrumbSections = filterdTokens.map((token, index) => {
     return (
     
-      index+1 === filterdTokens.length ? <div key={index} className="section">{token}</div> : <div key={index}>
-        <Link to={`/${token}`} className="active section">{token}</Link>
-        <div className="divider"> / </div></div>
-      )
-    })
+      index+1 === filterdTokens.length ? <BreadcrumbElement.Section key={index}>{token}</BreadcrumbElement.Section> : <BreadcrumbElement.Section key={index} active>
+        <Link to={`/${token}`}>{token}</Link>
+        <BreadcrumbElement.Divider /></BreadcrumbElement.Section>
+      )})
 
   return (
-    <div className="ui fixed menu header-breadcrumb">          
-      <div className="left menu">
-        <div className="item">
-          <h2 className="ui header">{T.translate(""+currentPageTitle+"")}
-            <div className="sub header">{T.translate(""+currentPageDescription+"")}</div>
-          </h2>
-        </div>              
-      </div>
-      <div className="right menu">
-        <div className="item">
-          
-          <div className="ui breadcrumb">
+    <Menu fixed='top' className="header-breadcrumb">          
+      <Menu.Menu position='left'>
+        <Menu.Item>
+          <header as='h2'>{T.translate(""+currentPageTitle+"")}
+            <Header.Subheader>{T.translate(""+currentPageDescription+"")}</Header.Subheader>
+          </header>
+        </Menu.Item>              
+      </Menu.Menu>
+      <Menu.Menu position='right'>
+        <Menu.Item>
+      
+          <BreadcrumbElement>
             { breadcrumbSections }  
-          </div>
+          </BreadcrumbElement>
 
-        </div>
-      </div>
-    </div>
+        </Menu.Item>
+      </Menu.Menu>
+    </Menu>
     ) 
 }
 

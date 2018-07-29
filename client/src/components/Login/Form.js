@@ -1,7 +1,8 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Input, Icon, Form, Message } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Segment, Input, Icon, Form as FormElement, Button, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { LOGIN_USER_MUTATION } from '../../graphql/authentications'
@@ -13,7 +14,7 @@ import { wsLink } from '../../apollo'
 // Localization 
 import T from 'i18n-react'
 
-class FormPage extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -118,12 +119,12 @@ class FormPage extends Component {
     const { email, password, errors, isLoading } = this.state
   
     return (  
-        <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
-          <div className="ui stacked segment">
+      <Segment>
+        <FormElement size="small" loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
-            { !!errors.message && <Message error><p>{errors.message}</p></Message> } 
+            { !!errors.message && <Message negative><p>{errors.message}</p></Message> } 
 
-            <Form.Field> 
+            <FormElement.Field> 
               <label>{T.translate("log_in.email")}</label>
               <Input
                   placeholder={T.translate("log_in.email")}
@@ -134,8 +135,8 @@ class FormPage extends Component {
                   icon={<Icon name='user' />}
                 />
                 <span className="red">{errors.email}</span>
-            </Form.Field>
-              <Form.Field> 
+            </FormElement.Field>
+              <FormElement.Field> 
               <label>{T.translate("log_in.password")}</label>
               <Input
                   placeholder={T.translate("log_in.password")}
@@ -147,25 +148,23 @@ class FormPage extends Component {
                   icon={<Icon name='lock' />}
                 />
                 <span className="red">{errors.password}</span>
-            </Form.Field>
+            </FormElement.Field>
                   
-            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.log_in")}</button>
-              
-          </div>
-        </Form>         
-      
+            <Button primary size="large" fluid disabled={isLoading}>{T.translate("log_in.log_in")}</Button>
+        </FormElement>         
+      </Segment>
     )
   }
 }
 
 // Proptypes definition
-FormPage.propTypes = {
+Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-FormPage.contextTypes = {
+Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(null, { addFlashMessage }) (graphql(LOGIN_USER_MUTATION)(FormPage))
+export default connect(null, { addFlashMessage }) (graphql(LOGIN_USER_MUTATION)(Form))
 

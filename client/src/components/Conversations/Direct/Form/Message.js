@@ -1,8 +1,7 @@
 import React, { Component } from 'react' 
-import classnames from 'classnames'
 import Dropzone from 'react-dropzone'
 // Semantic UI Form elements
-import { Form } from 'semantic-ui-react'
+import { Form, Message as MessageElement } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_USER_QUERY } from '../../../../graphql/users'
 import { GET_DIRECT_MESSAGE_USERS_QUERY, CREATE_DIRECT_MESSAGE_MUTATION } from '../../../../graphql/conversations/directMessages'
@@ -156,9 +155,9 @@ class Message extends Component {
     const { body, errors, isLoading } = this.state
 
     return (  
-      <div className={classnames("ui form", { loading: isLoading })} >
+      <Form loading={isLoading} >
 
-        { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+        { !!errors.message && <MessageElement negative><p>{errors.message}</p></MessageElement> }
         
         <div className="ui fluid action input">
           <Dropzone onDrop={this.handleOnDrop.bind(this)} className="ignore ui primary button">
@@ -174,7 +173,7 @@ class Message extends Component {
             rows="2"
           />
         </div> 
-      </div> 
+      </Form> 
     )
   }
 }

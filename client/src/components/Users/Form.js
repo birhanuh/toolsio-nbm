@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 // Semantic UI Form elements
-import { Input, Form } from 'semantic-ui-react'
+import { Container, Segment, Input, Button, Icon, Form as FormElement, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { SEND_INVITATION_MUTATION } from '../../graphql/users'
@@ -11,7 +11,7 @@ import { SEND_INVITATION_MUTATION } from '../../graphql/users'
 // Localization 
 import T from 'i18n-react'
 
-class FormPage extends Component {
+class Form extends Component {
 
   constructor(props) {
     super(props)
@@ -92,42 +92,43 @@ class FormPage extends Component {
     const { email, errors, isLoading } = this.state
 
     return(
-        <div className="ui text segment">  
+        <Container text>  
+          <Segment>
+            <fieldset className="custom-fieldset">
+              <legend className="custom-legend">{T.translate("users.form.invite_user_label")}</legend>
 
-          <fieldset className="custom-fieldset">
-            <legend className="custom-legend">{T.translate("users.form.invite_user_label")}</legend>
+              <FormElement loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>          
+                
+                { !!errors.message && <Message><p>{errors.message}</p></Message> } 
 
-            <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>          
-              
-              { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+                <FormElement.Field error={!!errors.email}>
+                  <label>{T.translate("users.form.email")}</label>
+                  <Input 
+                    placeholder={T.translate("users.form.email")}
+                    name="email" 
+                    value={email} 
+                    onChange={(e, {value}) => this.handleChange('email', value)} 
+                    fluid
+                  />
+                  <span className="red">{errors.email}</span>
+                </FormElement.Field>
 
-              <Form.Field error={!!errors.email}>
-                <label>{T.translate("users.form.email")}</label>
-                <Input 
-                  placeholder={T.translate("users.form.email")}
-                  name="email" 
-                  value={email} 
-                  onChange={(e, {value}) => this.handleChange('email', value)} 
-                  fluid
-                />
-                <span className="red">{errors.email}</span>
-              </Form.Field>
+                <Button primary disabled={isLoading}>
+                  <Icon name="check circle outline" />&nbsp;{T.translate("users.form.invite_user")}
+                </Button> 
 
-              <button disabled={isLoading} className="ui primary button">
-                <i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("users.form.invite_user")}
-              </button> 
-
-            </Form>
-          </fieldset>  
-        </div>
+              </FormElement>
+            </fieldset>  
+          </Segment>
+        </Container>
       )
   }
 }
 
-FormPage.propTypes = {
+Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-export default connect(null, { addFlashMessage }) (graphql(SEND_INVITATION_MUTATION)(FormPage))
+export default connect(null, { addFlashMessage }) (graphql(SEND_INVITATION_MUTATION)(Form))
 
 

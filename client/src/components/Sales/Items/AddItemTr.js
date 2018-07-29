@@ -1,6 +1,6 @@
 import React from 'react'
 // Semantic UI JS
-import { Input, Select, Form } from 'semantic-ui-react'
+import { Input, Select, Form, Button, Icon } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -74,8 +74,8 @@ export default function AddItemTr({item, handleNewItemChange, handleNewItemBlur,
           {item.total}
         </div>
       </td>
-      <td className="add-item" width="120px">     
-        <button disabled={item.isLoading} className="ui fluid small icon basic turquoise button" onClick={handleCreate}><i className="add circle icon icon" aria-hidden="true"></i>&nbsp;{T.translate("sales.items.form.add_item")}</button> 
+      <td className="add-item" width="125px">     
+        <Button basic size="small" fluid disabled={item.isLoading} className="turquoise" onClick={handleCreate}><Icon name="add circle" />&nbsp;{T.translate("sales.items.form.add_item")}</Button> 
       </td>
     </tr>
   )  

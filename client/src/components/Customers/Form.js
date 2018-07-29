@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-// Semantic UI Form elements
-import { Input, Checkbox, Form } from 'semantic-ui-react'
+// Semantic UI JS
+import { Grid, Container, Segment, Message, Header, Input, Form as FormElement, Checkbox, Button, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, CREATE_CUSTOMER_MUTATION, UPDATE_CUSTOMER_MUTATION } from '../../graphql/customers'
 
@@ -18,7 +18,7 @@ import T from 'i18n-react'
 // Country region selector 
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 
-class FormPage extends Component {
+class Form extends Component {
 
   constructor(props) {
     super(props)
@@ -292,136 +292,138 @@ class FormPage extends Component {
     const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, errors, isLoading } = this.state
 
     return (  
-      <div className="row column">
-        <div className="ui text container segment">  
+      <Grid.Row columns={1}>
+        <Container text>
+          <Segment>  
 
-          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+            <FormElement loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
-            <div className="inline field">  
-              {id ? <h1 className="ui header">{T.translate("customers.form.edit_customer")}</h1> : <h1 className="ui header">{T.translate("customers.form.new_customer")}</h1>}        
-            </div>
-
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
-            
-            <Form.Field inline error={!!errors.name}>
-              <label>{T.translate("customers.form.name")}</label>
-              <Input
-                placeholder={T.translate("customers.form.name")}
-                name="name" 
-                value={name} 
-                onChange={(e, {value}) => this.handleChange('name', value)}
-              />
-              <span className="red">{errors.name}</span>
-            </Form.Field>
-
-            <Form.Field inline error={!!errors.vatNumber}>
-              <label>{T.translate("customers.form.vat_number")}</label>
-              <Input
-                placeholder={T.translate("customers.form.vat_number")}
-                name="vatNumber" 
-                value={vatNumber} 
-                onChange={(e, {value}) => this.handleChange('vatNumber', value)} 
-              />
-              <span className="red">{errors.vatNumber}</span>
-            </Form.Field>
-             <fieldset className="custom-fieldset">
-              <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
-              <Form.Field inline error={!!errors.phoneNumber}>
-                <label>{T.translate("customers.form.contact.phone_number")}</label>
-                <Input
-                  placeholder={T.translate("customers.form.contact.phone_number")}
-                  name="phoneNumber" 
-                  value={contact.phoneNumber} 
-                  onChange={(e, {value}) => this.handleChange('phoneNumber', value)} 
-                />
-                <span className="red">{errors.phoneNumber}</span>
-              </Form.Field>
-              <Form.Field inline error={!!errors.email}>
-                <label>{T.translate("customers.form.contact.email")}</label>
-                <Input
-                  placeholder={T.translate("customers.form.contact.email")}
-                  name="email" 
-                  value={contact.email} 
-                  onChange={(e, {value}) => this.handleChange('email', value)} 
-                />
-                <span className="red">{errors.email}</span>
-              </Form.Field>
-            </fieldset>
-             <Form.Field inline>
-              <label>{T.translate("customers.form.include_contact_in_invoice")}</label>
-              <Checkbox
-                toggle
-                name="isContactIncludedInInvoice" 
-                checked={isContactIncludedInInvoice} 
-                onChange={(e, {checked}) => this.handleChangeToggle('isContactIncludedInInvoice', checked)}
-              />
-            </Form.Field>
-
-            <fieldset className="custom-fieldset">
-              <legend className="custom-legend">{T.translate("customers.show.address.header")}</legend>
-              <Form.Field inline error={!!errors.street}>
-                <label>{T.translate("customers.form.address.street")}</label>
-                <Input
-                  placeholder={T.translate("customers.form.address.street")}
-                  name="street" 
-                  value={address.street} 
-                  onChange={(e, {value}) => this.handleChange('street', value)} 
-                />
-                <span className="red">{errors.street}</span>
-              </Form.Field>
-              <Form.Field inline error={!!errors.postalCode}>
-                <label>{T.translate("customers.form.address.postal_code")}</label>
-                <Input
-                  placeholder={T.translate("customers.form.address.postal_code")}
-                  name="postalCode" 
-                  value={address.postalCode} 
-                  onChange={(e, {value}) => this.handleChange('postalCode', value)} 
-                />
-                <span className="red">{errors.postalCode}</span>
-              </Form.Field>
-              <div className={classnames("inline field", {error: !!errors.country})}>              
-                <label>{T.translate("customers.form.address.country")}</label>
-                <CountryDropdown
-                  defaultOptionLabel={T.translate("customers.form.address.select_country")}
-                  value={address.country}
-                  onChange={(val) => this.selectCountry(val)} 
-                  error={!!errors.country} />
-                
-                <span className="red">{errors.country}</span>  
-              </div> 
-              <div className={classnames("inline field", {error: errors.region})}>              
-                <label>{T.translate("customers.show.address.region")}</label> 
-                <RegionDropdown
-                  defaultOptionLabel={T.translate("customers.form.address.select_region")}
-                  disabled={address.country === ''}
-                  country={address.country}
-                  value={address.region}
-                  onChange={(val) => this.selectRegion(val)} />
-                
-                <span className="red">{errors.region}</span>  
+              <div className="inline field">  
+                {id ? <Header as="h1">{T.translate("customers.form.edit_customer")}</Header> : <Header as="h1">{T.translate("customers.form.new_customer")}</Header>}        
               </div>
-              
-            </fieldset>
 
-            <div className="inline field">  
-              <Link className="ui primary outline button" to="/customers">
-                <i className="minus circle icon"></i>
-                {T.translate("customers.form.cancel")}
-              </Link>  
-              <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("customers.form.save")}</button>
-            </div>  
-          </Form> 
-        </div>  
-      </div>
+              { !!errors.message && <Message negative><p>{errors.message}</p></Message> } 
+              
+              <FormElement.Field inline error={!!errors.name}>
+                <label>{T.translate("customers.form.name")}</label>
+                <Input
+                  placeholder={T.translate("customers.form.name")}
+                  name="name" 
+                  value={name} 
+                  onChange={(e, {value}) => this.handleChange('name', value)}
+                />
+                <span className="red">{errors.name}</span>
+              </FormElement.Field>
+
+              <FormElement.Field inline error={!!errors.vatNumber}>
+                <label>{T.translate("customers.form.vat_number")}</label>
+                <Input
+                  placeholder={T.translate("customers.form.vat_number")}
+                  name="vatNumber" 
+                  value={vatNumber} 
+                  onChange={(e, {value}) => this.handleChange('vatNumber', value)} 
+                />
+                <span className="red">{errors.vatNumber}</span>
+              </FormElement.Field>
+               <fieldset className="custom-fieldset">
+                <legend className="custom-legend">{T.translate("customers.show.contact.header")}</legend>
+                <FormElement.Field inline error={!!errors.phoneNumber}>
+                  <label>{T.translate("customers.form.contact.phone_number")}</label>
+                  <Input
+                    placeholder={T.translate("customers.form.contact.phone_number")}
+                    name="phoneNumber" 
+                    value={contact.phoneNumber} 
+                    onChange={(e, {value}) => this.handleChange('phoneNumber', value)} 
+                  />
+                  <span className="red">{errors.phoneNumber}</span>
+                </FormElement.Field>
+                <FormElement.Field inline error={!!errors.email}>
+                  <label>{T.translate("customers.form.contact.email")}</label>
+                  <Input
+                    placeholder={T.translate("customers.form.contact.email")}
+                    name="email" 
+                    value={contact.email} 
+                    onChange={(e, {value}) => this.handleChange('email', value)} 
+                  />
+                  <span className="red">{errors.email}</span>
+                </FormElement.Field>
+              </fieldset>
+               <FormElement.Field inline>
+                <label>{T.translate("customers.form.include_contact_in_invoice")}</label>
+                <Checkbox
+                  toggle
+                  name="isContactIncludedInInvoice" 
+                  checked={isContactIncludedInInvoice} 
+                  onChange={(e, {checked}) => this.handleChangeToggle('isContactIncludedInInvoice', checked)}
+                />
+              </FormElement.Field>
+
+              <fieldset className="custom-fieldset">
+                <legend className="custom-legend">{T.translate("customers.show.address.header")}</legend>
+                <FormElement.Field inline error={!!errors.street}>
+                  <label>{T.translate("customers.form.address.street")}</label>
+                  <Input
+                    placeholder={T.translate("customers.form.address.street")}
+                    name="street" 
+                    value={address.street} 
+                    onChange={(e, {value}) => this.handleChange('street', value)} 
+                  />
+                  <span className="red">{errors.street}</span>
+                </FormElement.Field>
+                <FormElement.Field inline error={!!errors.postalCode}>
+                  <label>{T.translate("customers.form.address.postal_code")}</label>
+                  <Input
+                    placeholder={T.translate("customers.form.address.postal_code")}
+                    name="postalCode" 
+                    value={address.postalCode} 
+                    onChange={(e, {value}) => this.handleChange('postalCode', value)} 
+                  />
+                  <span className="red">{errors.postalCode}</span>
+                </FormElement.Field>
+                <div className={classnames("inline field", {error: !!errors.country})}>              
+                  <label>{T.translate("customers.form.address.country")}</label>
+                  <CountryDropdown
+                    defaultOptionLabel={T.translate("customers.form.address.select_country")}
+                    value={address.country}
+                    onChange={(val) => this.selectCountry(val)} 
+                    error={!!errors.country} />
+                  
+                  <span className="red">{errors.country}</span>  
+                </div> 
+                <div className={classnames("inline field", {error: errors.region})}>              
+                  <label>{T.translate("customers.show.address.region")}</label> 
+                  <RegionDropdown
+                    defaultOptionLabel={T.translate("customers.form.address.select_region")}
+                    disabled={address.country === ''}
+                    country={address.country}
+                    value={address.region}
+                    onChange={(val) => this.selectRegion(val)} />
+                  
+                  <span className="red">{errors.region}</span>  
+                </div>
+                
+              </fieldset>
+
+              <div className="inline field">  
+                <Link className="ui primary outline button" to="/customers">
+                  <i className="minus circle icon"></i>
+                  {T.translate("customers.form.cancel")}
+                </Link>  
+                <Button primary disabled={isLoading}><Icon name="check circle outline" />&nbsp;{T.translate("customers.form.save")}</Button>
+              </div>  
+            </FormElement> 
+          </Segment>
+        </Container>
+      </Grid.Row>  
     )
   }
 }
 
-FormPage.propTypes = {
+Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired,
 }
 
-FormPage.contextTypes = {
+Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
@@ -449,6 +451,6 @@ const MutationsQueries =  compose(
       }
     })
   })
-)(FormPage)
+)(Form)
 
 export default connect(null, { addFlashMessage } ) (MutationsQueries)

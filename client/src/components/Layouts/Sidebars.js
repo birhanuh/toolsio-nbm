@@ -1,7 +1,8 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom'
 import decode from 'jwt-decode'
-import { Sidebar, Menu } from 'semantic-ui-react'
+// Semantic UI JS
+import { Segment, Container, Header, Image, Sidebar, Menu, Item } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -33,13 +34,13 @@ export function InnerSidebar({ visibleInnerSidebar }) {
 
   return (
     <Sidebar as={Menu} animation='slide along' visible={visibleInnerSidebar} vertical inverted>
-        <div className="ui center aligned vertical segment account">
+      <Segment vertical textAlign='center' className="account">
         <Link to="/settings">
-          <img className="ui centered tiny rounded image mt-3" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
+          <Image centered rounded size='tiny' className="mt-3" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
         </Link>
-        <h4 className="capitalize mt-3 mb-0">{currentUser.account}</h4>
+        <Header as='h4' className="capitalize mt-3 mb-0" style={{color: 'inherit'}}>{currentUser.account}</Header>
         <p className="capitalize mb-2">{currentUser.user.firstName} {currentUser.user.isAdmin ? '(Admin)' : ''}</p>
-      </div>
+      </Segment>
       <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboard.header")} />
       <ActiveLink activeOnlyWhenExact to="/projects" icon="suitcase icon" label={T.translate("projects.page.header")} />
       <ActiveLink activeOnlyWhenExact to="/sales" icon="cart icon" label={T.translate("sales.page.header")} />
@@ -63,25 +64,25 @@ export function OuterSidebarScrollableHeader({ visibleOuterSidebar }) {
       <Link className="item" to="/subdomain">{T.translate("log_in.log_in")}</Link>    
       <Link className="item" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
     </Sidebar>,
-    <div key="scroll-header-nav" className="ui large top fixed pointing menu hidden">
-      <div className="ui container">
-        <div className="left menu">
+    <Menu key="scroll-header-nav" fixed='top' pointing size='large' style={{display: 'none'}}> 
+      <Container>
+        <Menu.Menu position='left'>
           <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
           <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
           <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
           <ActiveLink activeOnlyWhenExact to="#testimonial" label={T.translate("landing.testimonial.header")} />
           <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
           <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
-        </div>
+        </Menu.Menu>
      
-        <div className="right menu">
-          <div className="item">                     
+        <Menu.Menu position='right'>
+          <Item>                     
             <Link className="ui primary outline button"  to="/subdomain">{T.translate("log_in.log_in")}</Link>     
-          </div>
-          <div className="item">   
+          </Item>
+          <Item>   
             <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui primary outline button">{T.translate("sign_up.sign_up")}</a>    
-          </div>
-        </div>  
-      </div>
-    </div>]
+          </Item>
+        </Menu.Menu>  
+      </Container>
+    </Menu>]
 }

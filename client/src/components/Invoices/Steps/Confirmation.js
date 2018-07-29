@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+// Semantic UI Form elements
+import { Form, Table, Message, Header, Icon, Label, Button } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -10,23 +12,23 @@ import moment from 'moment'
 export default function Confirmation ({ id, step2, sale, project, handlePrevious, handleSubmit, isLoading, errors }) {
 
   return (
-    <form className={classnames("ui form text container", { loading: isLoading })}>
-      { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+    <Form loading={isLoading}>
+      { !!errors.message && <Message negative><p>{errors.message}</p></Message> } 
 
       <div className="inline field"> 
-        {id ? <h1 className="ui header">{T.translate("invoices.form.edit_invoice")}</h1> : 
-          <h1 className="ui header">{T.translate("invoices.form.new_invoice")}
-            <div className="sub header d-inline-block pl-1">{T.translate("invoices.form.confirmation")}</div>
-          </h1>
+        {id ? <Header as='h1'>{T.translate("invoices.form.edit_invoice")}</Header> : 
+          <Header as='h1'>{T.translate("invoices.form.new_invoice")}
+            <Header.Subheader className="d-inline-block pl-1">{T.translate("invoices.form.confirmation")}</Header.Subheader>
+          </Header>
         }
       </div> 
       
       <div className="inline field"> 
-        <table className="ui column very basic collapsing celled table">
+        <Table very='basic' collapsing celled stackable>
           <tbody>
             <tr>
               <td>
-                <i className="ui tiny header">{T.translate("invoices.show.deadline")}</i>
+                <i><Header size='tiny'>{T.translate("invoices.show.deadline")}</Header></i>
               </td>
               <td>
                 {step2.deadline ? moment(step2.deadline).format('ll')  : '-'}
@@ -34,15 +36,15 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
             </tr>
             <tr>
               <td>
-                <i className="ui tiny header">{T.translate("invoices.show.status")}</i>
+                <i><Header size='tiny'>{T.translate("invoices.show.status")}</Header></i>
               </td>
               <td>
-                <div className={classnames("ui tiny uppercase label", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</div>
+                <Label size='tiny' className={classnames("uppercase", {blue: step2.status === 'new' || step2.status === '', orange: step2.status === 'pending', green: step2.status === 'paid', red: step2.status === 'overdue'})}>{step2.status ? step2.status : 'new' }</Label>
               </td>
             </tr>
             <tr>
               <td>
-                <i className="ui tiny header">{T.translate("invoices.show.payment_term")}</i>
+                <i><Header size='tiny'>{T.translate("invoices.show.payment_term")}</Header></i>
               </td>
               <td>
                 {step2.paymentTerm ? step2.paymentTerm : '-'}
@@ -50,7 +52,7 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
             </tr>
             <tr>
               <td>
-                <i className="ui tiny header">{T.translate("invoices.show.interest_in_arrears")}</i>
+                <i><Header size='tiny'>{T.translate("invoices.show.interest_in_arrears")}</Header></i>
               </td>
               <td>
                 {step2.interestInArrears}
@@ -58,7 +60,7 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
             </tr>
             <tr>
               <td>
-                <i className="ui tiny header"><strong>{T.translate("invoices.show.total")}</strong></i>
+                <i><Header size='tiny'><strong>{T.translate("invoices.show.total")}</strong></Header></i>
               </td>
               <td>
                 {project && project.total} {sale && sale.total}
@@ -66,7 +68,7 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
             </tr>
             <tr>
               <td>
-                <i className="ui tiny header">{T.translate("invoices.show.tax")}</i>
+                <i><Header size='tiny'>{T.translate("invoices.show.tax")}</Header></i>
               </td>
               <td>
                 {step2.tax}
@@ -74,25 +76,25 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
             </tr>
             <tr>
               <td>
-                <i className="ui tiny header">{T.translate("invoices.show.description")}</i>
+                <i><Header size='tiny'>{T.translate("invoices.show.description")}</Header></i>
               </td>
               <td>
                 {step2.description ? step2.description : '-'}
               </td>
             </tr>
           </tbody>
-        </table>
+        </Table>
       </div>
       
       {sale &&
         <div className="inline field"> 
-          <h2 className="ui header">{T.translate("invoices.form.sale.header")}</h2>
+          <Header as='h2'>{T.translate("invoices.form.sale.header")}</Header>
          
-          <table className="ui very basic collapsing celled table">
+          <Table very='basic' collapsing celled>
             <tbody>
               <tr>
                 <td>
-                  <i className="ui tiny header">{T.translate("invoices.form.sale.name")}</i>
+                  <i><Header size='tiny'>{T.translate("invoices.form.sale.name")}</Header></i>
                 </td>
                 <td>
                   {sale.name}
@@ -100,7 +102,7 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
               </tr>
               <tr>
                 <td>
-                  <i className="ui tiny header">{T.translate("invoices.form.sale.status")}</i>
+                  <i><Header size='tiny'>{T.translate("invoices.form.sale.status")}</Header></i>
                 </td>
                 <td>
                   <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
@@ -110,25 +112,25 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
               </tr>
               <tr>
                 <td>
-                  <i className="ui tiny header">{T.translate("invoices.form.sale.customer")}</i>
+                  <i><Header size='tiny'>{T.translate("invoices.form.sale.customer")}</Header></i>
                 </td>
                 <td>
                   {id ? step2.customer.name : sale.customer_name }
                 </td>
               </tr>
             </tbody>
-          </table>
+          </Table>
         </div>
       }
       
       {project &&
         <div className="inline field"> 
-          <h2 className="ui header">{T.translate("invoices.form.project.header")}</h2>
-          <table className="ui very basic collapsing celled table">
+          <Header as='h2'>{T.translate("invoices.form.project.header")}</Header>
+          <Table very='basic' collapsing celled>
             <tbody>
               <tr>
                 <td>
-                  <i className="ui tiny header">{T.translate("invoices.form.project.name")}</i>
+                  <i><Header size='tiny'>{T.translate("invoices.form.project.name")}</Header></i>
                 </td>
                 <td>
                   {project.name}
@@ -136,7 +138,7 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
               </tr>
               <tr>
                 <td>
-                  <i className="ui tiny header">{T.translate("invoices.form.project.status")}</i>
+                  <i><Header size='tiny'>{T.translate("invoices.form.project.status")}</Header></i>
                 </td>
                 <td>
                   <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
@@ -146,28 +148,28 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
               </tr>
               <tr>
                 <td>
-                  <i className="ui tiny header">{T.translate("invoices.form.project.customer")}</i>
+                  <i><Header size='tiny'>{T.translate("invoices.form.project.customer")}</Header></i>
                 </td>
                 <td>
                   {id ? step2.customer.name : project.customer_name }
                 </td>
               </tr>
             </tbody>
-          </table>
+          </Table>
         </div>
       }
       <br/>
 
       <div className="inline field">    
-        <button className="ui button" onClick={handlePrevious}><i className="chevron left icon"></i>{T.translate("invoices.form.previous")}</button>
-        <button disabled={isLoading} className="ui primary button" onClick={handleSubmit}><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("invoices.form.save")}</button>
+        <Button onClick={handlePrevious}><Icon className="chevron left icon" />{T.translate("invoices.form.previous")}</Button>
+        <Button primary disabled={isLoading} onClick={handleSubmit}><Icon name="check circle outline" />&nbsp;{T.translate("invoices.form.save")}</Button>
         
         <Link to="/invoices" className="ui primary outline button mt-3"> 
-          <i className="minus circle icon"></i>
+          <Icon name="minus circle" />
           {T.translate("invoices.form.cancel")}
         </Link>
       </div>  
-    </form>
+    </Form>
     )
 }
 

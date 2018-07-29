@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { List } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Card, Header, List, Message, Divider } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_SALE_TASKS_DATA } from '../../graphql/dashboard'
 
@@ -23,19 +24,19 @@ const SaleTasksCard = () => (
 
     countStatus && countStatus.map(item => {
       if (item.status === 'new') {
-        newNotification = (<div className="ui info message">
-          <div className="description">
+        newNotification = (<Message info>
+          <Message.Content>
             {T.translate("dashboard.sale_tasks.new_sales", {count: item.count})}
-          </div>
-        </div>)
+          </Message.Content>
+        </Message>)
       } 
 
       if (item.status === 'delayed') {
-        delayedNotification = (<div className="ui negative message">
-          <div className="description">
+        delayedNotification = (<Message negative>
+          <Message.Content>
             {T.translate("dashboard.sale_tasks.delayed_sales", {count: item.count})}
-          </div>
-        </div>)
+          </Message.Content>
+        </Message>)
       }  
     })
 
@@ -47,40 +48,40 @@ const SaleTasksCard = () => (
       }
     })
   
-    const list = (<div className="content">
+    const list = (<Card.Content>
         {newNotification}
          <List ordered>
           {newSales && newSales.map(sale => 
             <List.Item key={sale.id} content={<Link to={`/sales/show/${sale.id}`} className="item blue">{sale.name}</Link>} /> )}
           </List>
 
-        <div className="ui divider"></div>
+        <Divider />
 
         {delayedNotification}
         <List ordered>
           {delayedSales && delayedSales.map(sale => 
              <List.Item key={sale.id} content={<Link to={`/sales/show/${sale.id}`} className="item red">{sale.name}</Link>} /> )}
         </List>
-      </div>)
+      </Card.Content>)
 
     return (
       
-      <div id="saleTask" className={classnames("dashboard", { loading: loading })}>
-        <h4 className="ui header">{T.translate("dashboard.sale_tasks.header")}</h4>
-        <div className="ui card">
+      <div id="saleTask" className={classnames("dashboard form", { loading: loading })}>
+        <Header as='h4'>{T.translate("dashboard.sale_tasks.header")}</Header>
+        <Card>
           
           {(countStatus && countStatus.length === 0) ?
-            <div className="content">
-              { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
-              <div className="ui info message">
-                <div className="description">
+            <Card.Content>
+              { !!error && <Message negative><p>{error.message}</p></Message> } 
+              <Message info>
+                <Message.Content>
                   {T.translate("dashboard.sale_tasks.no_new_sales")}
                   {T.translate("dashboard.sale_tasks.no_delayed_sales")}
-                </div>
-              </div> 
-            </div> : list }
+                </Message.Content>
+              </Message> 
+            </Card.Content> : list }
           
-        </div>
+        </Card>
       </div>  
       )
     }}

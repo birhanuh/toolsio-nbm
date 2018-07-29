@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
-import { Select, Form, Modal } from 'semantic-ui-react'
+import { Grid, Segment, Table, Header, Select, Form, Icon, Button, Modal } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_SALES_QUERY, GET_SALE_QUERY, UPDATE_SALE_MUTATION, DELETE_SALE_MUTATION } from '../../graphql/sales'
 
@@ -154,15 +154,15 @@ class Show extends Component {
     items.map(item => (itemsTotal+=item.unitPrice))
 
     return [
-      <div key="segment" className="column row">
-        <div className="twelve wide column">
-          <div className="ui segment">    
-            <h1 className={classnames("ui dividing header", {blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
-            <table className="ui very basic collapsing celled fluid table">
+      <Grid.Row columns={1} key='segment'>
+        <Grid.Column width={14}>
+          <Segment>    
+            <Header as="h1" dividing  className={classnames({blue: status === 'new', orange: status === 'in progress', green: status === 'ready', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</Header> 
+            <Table basic="very" collapsing celled>
               <tbody>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("sales.show.customer")}</i>
+                    <i><Header size="tiny">{T.translate("sales.show.customer")}</Header></i>
                   </td>
                   <td>
                     {customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}
@@ -170,7 +170,7 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("sales.show.user")}</i>
+                    <i><Header size="tiny">{T.translate("sales.show.user")}</Header></i>
                   </td>
                   <td>
                     {user && user.firstName}
@@ -178,7 +178,7 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("sales.show.deadline")}</i>
+                    <i><Header size="tiny">{T.translate("sales.show.deadline")}</Header></i>
                   </td>
                   <td>
                     {Moment(deadline).format('ll') }
@@ -186,7 +186,7 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("sales.show.status")}</i>
+                    <i><Header size="tiny">{T.translate("sales.show.status")}</Header></i>
                   </td>
                   <td>
                     <Form.Field 
@@ -209,39 +209,40 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("sales.show.description")}</i>
+                    <i><Header size="tiny">{T.translate("sales.show.description")}</Header></i>
                   </td>
                   <td>
                     {description ? description : '-'}
                   </td>
                 </tr>
               </tbody>
-            </table> 
+            </Table> 
 
-            <h4 className="ui top attached block header">{T.translate("sales.items.header")}</h4>
-            <div className="ui bottom attached segment p-3">
+            <Header as='h4' attached='top' block>{T.translate("sales.items.header")}</Header>
+            <Segment attached='bottom' className="p-3">
               { (items && id) && <ItemsForm saleId={id} itemsTotal={itemsTotal} items={items} /> }
-            </div>
+            </Segment>
             
             <div className="pt-3">
-              <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("sales.show.delete")}</button>
-              <Link to={`/sales/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("sales.show.edit")}</Link>
+              <Button negative onClick={this.toggleConfirmationModal}><Icon className="trash" />{T.translate("sales.show.delete")}</Button>
+              <Link to={`/sales/edit/${id}`} className="ui primary button"><Icon className="edit" />{T.translate("sales.show.edit")}</Link>
             </div>
-          </div>    
-        </div>
-      </div>,
+          </Segment>    
+        </Grid.Column>
+      </Grid.Row>,
 
       <Modal 
         key="modal" 
-        className="ui small modal sale"
+        size="small"
+        className="sale"
         open={openConfirmationModal}>
         <Modal.Header>{T.translate("sales.show.confirmation_header")}</Modal.Header>
         <Modal.Content>
          <p className="red">{T.translate("sales.show.confirmation_msg")}</p>
         </Modal.Content>
         <Modal.Actions>
-          <button className="ui button" onClick={this.toggleConfirmationModal}>{T.translate("sales.show.cancel")}</button>
-          <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("sales.show.delete")}</button>
+          <Button onClick={this.toggleConfirmationModal}>{T.translate("sales.show.cancel")}</Button>
+          <Button negative onClick={this.handleDelete.bind(this, id)}>{T.translate("sales.show.delete")}</Button>
         </Modal.Actions>
       </Modal>
     ]

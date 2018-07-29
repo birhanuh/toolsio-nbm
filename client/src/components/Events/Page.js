@@ -1,5 +1,7 @@
 // import React...
 import React, { Component } from 'react'
+// Semantic React UI
+import { Grid, Segment } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_EVENTS_QUERY, DELETE_EVENT_MUTATION } from '../../graphql/events'
 
@@ -9,7 +11,7 @@ import $ from 'jquery'
 
 import 'fullcalendar/dist/fullcalendar.min.css'
 
-import FromPage from './FormPage'
+import From from './Form'
 
 class Page extends Component {
   constructor(props) {
@@ -82,14 +84,14 @@ class Page extends Component {
     const { start, end, id, title, description, url, openConfirmationModal } = this.state
 
     return [
-        <div key="segment" className="row column"> 
-          <div className="twelve wide column centered grid">
-            <div className="ui segment">
+        <Grid.Row columns={1} centered only='computer' key="segment">
+          <Grid.Column width={12}>
+            <Segment>
               <div id="calendar"></div>
-            </div>
-          </div>
-        </div>,      
-        <FromPage key="form-page" start={start} end={end} id={id} title={title} description={description} url={url} openConfirmationModal={openConfirmationModal}  toggleConfirmationModal={this.toggleConfirmationModal} /> 
+            </Segment>
+           </Grid.Column>
+        </Grid.Row>,      
+        <From key="form-page" start={start} end={end} id={id} title={title} description={description} url={url} openConfirmationModal={openConfirmationModal}  toggleConfirmationModal={this.toggleConfirmationModal} /> 
       ]
   }
 }

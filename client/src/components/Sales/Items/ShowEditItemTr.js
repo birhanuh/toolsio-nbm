@@ -1,6 +1,6 @@
 import React from 'react'
 // Semantic UI JS
-import { Input, Select, Form } from 'semantic-ui-react'
+import { Input, Select, Form, Button, Icon } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -13,11 +13,11 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
       <td className="show-item">{item.quantity}</td>
       <td className="show-item">{item.unitPrice}</td>
       <td className="show-item">{item.total}</td>
-      <td className="show-item" width="120px">
-        <div className="show-item ui fluid small buttons">
-          <button className="ui negative icon basic button" onClick={toggleConfirmationModal}><i className="delete icon"></i></button>
-          <button className="ui positive icon basic button" onClick={handleEdit}><i className="edit icon"></i></button>
-        </div>
+      <td className="show-item" width="125px">
+        <Button.Group fluid size="small" className="show-item">
+          <Button basic negative onClick={toggleConfirmationModal}><Icon name="delete" /></Button>
+          <Button basic positive onClick={handleEdit}><Icon name="edit" /></Button>
+        </Button.Group>
       </td>
       <td className="edit-item">
         <Form.Field>
@@ -85,11 +85,11 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
           {editItem.total}
         </div>
       </td>
-      <td className="edit-item" width="120px">  
-        <div className="edit-item ui fluid small buttons">
-          <button className="ui basic icon button" onClick={handleCancelEdit}><i className="remove icon"></i></button>
-          <button className="ui positive icon basic button" onClick={handleUpdate}><i className="check circle outline icon"></i></button>
-        </div>
+      <td className="edit-item" width="125px">  
+        <Button.Group size="small" fluid className="edit-item">
+          <Button basic onClick={handleCancelEdit}><Icon name="remove" /></Button>
+          <Button basic positive onClick={handleUpdate}><Icon name="check circle outline" /></Button>
+        </Button.Group>
       </td>
     </tr>
   )  

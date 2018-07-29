@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import decode from 'jwt-decode'
 import { addFlashMessage } from '../../actions/flashMessageActions'
+// Semantic UI Form elements
 import { Image, Dropdown, Menu, Label, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_PROJECT_TASKS_DATA_QUERY, GET_SALE_TASKS_DATA_QUERY, GET_INVOICE_TASKS_DATA_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY } from '../../graphql/headerNav'
@@ -135,15 +136,15 @@ class InternalHeaderNav extends Component {
 
     return (
       <header> 
-        <nav key="headerNav" className="ui fixed menu">
-          <div className="left menu">
-            <a className="item anchor" onClick={this.props.toggleInnerSidebarVisibility}><i className="sidebar icon"></i></a>
+        <Menu fixed='top' key="headerNav">
+          <Menu.Menu position='left'>
+            <Menu.Item as="a" onClick={this.props.toggleInnerSidebarVisibility}><Icon name="sidebar" /></Menu.Item>
             <div className="logo item">
               <Link to="/dashboard">
                 <img src={logoInverted} alt="logo-inverted" />
               </Link>
             </div>
-          </div>
+          </Menu.Menu>
 
           <Menu.Menu position='right'>
             <Dropdown item pointing='top right' className='notifications' 
@@ -206,7 +207,7 @@ class InternalHeaderNav extends Component {
               </Dropdown.Menu>
             </Dropdown>             
           </Menu.Menu>
-        </nav>
+        </Menu>
       </header>)
   }
 }

@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { Header, Card, Icon } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Header, Card, Icon, Image } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_CUSTOMERS_DATA } from '../../graphql/dashboard'
 
@@ -67,9 +68,9 @@ const CustomersCard = () => (
               </Header>
             </Card.Header>
           </Card.Content>        
-          <div className="image">
+          <Image>
             <Polar data={chartData} options={chartOptions} />
-          </div>
+          </Image>
           <Card.Header className="p-5">
             { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
           </Card.Header>        
@@ -78,7 +79,7 @@ const CustomersCard = () => (
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/customers" className="ui primary outline button small">
-                  <i className="check circle outline icon"></i>{T.translate("dashboard.customers.create_first_customer")}
+                  <Icon name="check circle outline" />{T.translate("dashboard.customers.create_first_customer")}
                 </Link>
               </div>
             </div>

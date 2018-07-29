@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Validation } from '../../utils'
 import jwt from 'jsonwebtoken'
 // Semantic UI Form elements
-import { Input, Form, Message } from 'semantic-ui-react'
+import { Container, Segment, Input, Form, Button, Header, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql } from 'react-apollo'
 import { REGISTER_INVITED_USER_MUTATION } from '../../graphql/authentications'
@@ -101,15 +101,15 @@ class Invitation extends Component {
   render() {
     const { firstName, email, lastName, password, confirmPassword, errors, isLoading } = this.state
 
-    return (     
-      <div className="ui text container">
-        <h2 className="ui teal image header">
+    return (    
+      <Container text>
+        <Header as="h2" image className="turquoise">
           <img src={logo} className="image" alt="logo-square" />
-          <div className="content">{T.translate("sign_up.header")}</div>
-        </h2>       
+          <Header.Content>{T.translate("sign_up.header")}</Header.Content>
+        </Header>       
        
-        <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
-          <div className="ui stacked segment">
+        <Segment> 
+          <Form size="small" loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>           
             <Message info>
               <p>{T.translate("sign_up.complete_invitation_sign_up")}</p>
             </Message>
@@ -179,13 +179,16 @@ class Invitation extends Component {
               <span className="red">{errors.confirmPassword}</span>
             </Form.Field>
 
-            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("sign_up.sign_up")}</button>
-          </div>
-        </Form> 
-        <br />        
-        <br />   
-      </div>  
-    )
+            <Button primary fluid disabled={isLoading}>{T.translate("sign_up.sign_up")}</Button>
+          </Form>  
+        </Segment>
+          
+        <Segment vertical align="center">
+          <small className="d-block">{T.translate("landing.footer.copy_right")}</small>
+          <small className="d-block">{T.translate("landing.footer.address")}</small>
+        </Segment>
+      </Container>
+      )
   }
 }
 
