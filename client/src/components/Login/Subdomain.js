@@ -32,9 +32,8 @@ class Subdomain extends Component {
       this.setState({ errros: {}, isLoading: true })
 
       this.props.mutate({ variables: { subdomain } })
-        .then(res => {
-         
-          const { success, subdomain } = res.data.isSubdomainExist
+        .then(res => {         
+          const { success, errors, subdomain } = res.data.isSubdomainExist
       
           if (success) {
             
@@ -111,7 +110,9 @@ class Subdomain extends Component {
     return (   
       <Container text>
         <Header as="h2" image className="turquoise">
-          <img src={logo} className="image" alt="logo-square" />
+          <Link className="" to="/">
+            <img src={logo} className="image" alt="logo-square" />
+          </Link>
           <Header.Content>{T.translate("log_in.subdomain.header")}</Header.Content>
         </Header>    
 

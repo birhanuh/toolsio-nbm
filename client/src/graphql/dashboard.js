@@ -19,7 +19,8 @@ export const GET_INCOMES_DATA = gql`
       monthSum {
         month
         sum
-      }
+      },
+      countInvoices
     }
   }
 `

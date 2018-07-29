@@ -38,7 +38,9 @@ export default {
         searchPath: subdomain
       })
 
-      const [paidTasksSumDay, paidItemsSumDay] = await Promise.all([paidTasksSumDayPromise, paidItemsSumDayPromise])
+      const countInvoicesPromise = models.Invoice.count({ searchPath: subdomain })
+
+      const [paidTasksSumDay, paidItemsSumDay, countInvoices] = await Promise.all([paidTasksSumDayPromise, paidItemsSumDayPromise, countInvoicesPromise])
 
       let paidTasksItemsSumDay = [...paidTasksSumDay, ...paidItemsSumDay]
       console.log('paidTasksItemsSumDay', paidTasksItemsSumDay)
@@ -71,7 +73,8 @@ export default {
       console.log('paidItemsSumMonth', paidItemsSumMonth)
       return {
         daySum: groupByDaySum,
-        monthSum: groupByMonthSum
+        monthSum: groupByMonthSum,
+        countInvoices
       } 
     }),
 

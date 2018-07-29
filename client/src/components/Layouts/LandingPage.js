@@ -154,7 +154,7 @@ class LandingPage extends Component {
       <div onClick={this.hideSidebarVisibility}>
         <Segment style={{ padding: '4em 0em' }} vertical id="features" className=" background-white">
           <Grid container stackable verticalAlign='middle'>
-            <Grid columns={2} centered stackable> 
+            <Grid columns={2} centered> 
               <Header as='h2' aligned='center'>{T.translate("landing.features.header")}</Header>
               
                 <Grid.Column>     
@@ -192,7 +192,7 @@ class LandingPage extends Component {
 
         <Segment style={{ padding: '4em 0em' }} vertical id="clients" className=" background-xx-light-grey">          
           <Grid container stackable verticalAlign='middle'>
-            <Grid columns={2} centered stackable>
+            <Grid columns={2} centered>
               <Header as='h2' aligned='center'>{T.translate("landing.clients.header")}</Header>
               
               <Grid columns={3}>
@@ -254,9 +254,9 @@ class LandingPage extends Component {
 
         <Segment style={{ padding: '4em 0em' }} vertical id="pricing" className="background-xx-light-grey">          
           <Grid container stackable verticalAlign='middle'>
-            <Grid columns={1} centered stackable>
-              <Header as='h2' aligned='center'>{T.translate("landing.pricing.header")}</Header>
-              <Grid columns={3}>
+            <Grid.Row columns={1} centered>
+              <Header as='h2'>{T.translate("landing.pricing.header")}</Header>
+              <Grid columns={3} stackable>
                 <Grid.Column>
                   <ul className="pricing-plan">
                     <li className="pricing-title">Basic</li>
@@ -294,13 +294,13 @@ class LandingPage extends Component {
                   </ul>
                 </Grid.Column>
               </Grid>  
-            </Grid>
+            </Grid.Row>
           </Grid>      
         </Segment>
 
         <Segment style={{ padding: '4em 0em' }} vertical id="bottom-cta" className="background-white">
           <Grid container stackable verticalAlign='middle'>  
-            <Grid columns={2} centered stackable> 
+            <Grid columns={2} centered> 
               <div className="column centered row">
                 <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
               </div>  
@@ -310,54 +310,52 @@ class LandingPage extends Component {
 
         <Segment style={{ padding: '4em 0em' }} vertical id="contacts" className="background-xx-light-grey">  
           <Grid container stackable verticalAlign='middle'> 
-            <Grid columns={2} centered stackable> 
-              <Header as='h2' aligned='center'>{T.translate("landing.contacts.header")}</Header>
-              <div className="column row">
-                <Grid.Column>
-                  <p>{T.translate("landing.contacts.description")}</p>
+            <Grid columns={2} centered> 
+              <Header as='h2' aligned='center'>{T.translate("landing.contacts.header")}</Header>             
+              <Grid.Column>
+                <p>{T.translate("landing.contacts.description")}</p>
+                
+                <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+
+                  { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
                   
-                  <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+                  <Form.Field error={!!errors.name}>
+                    <label>{T.translate("landing.contacts.name")}</label>
+                    <Input
+                      placeholder={T.translate("landing.contacts.name")}
+                      name="name" 
+                      value={name} 
+                      onChange={(e, {value}) => this.handleChange('name', value)} 
+                      error={!!errors.name}
+                    />
+                    <span className="red">{errors.name}</span>
+                  </Form.Field>
+                  
+                  <Form.Field error={!!errors.email}>
+                    <label>{T.translate("landing.contacts.email")}</label>
+                    <Input
+                      placeholder={T.translate("landing.contacts.email")}
+                      email="email" 
+                      value={email} 
+                      onChange={(e, {value}) => this.handleChange('email', value)} 
+                      error={!!errors.email}
+                    />
+                    <span className="red">{errors.email}</span>
+                  </Form.Field>
 
-                    { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
-                    
-                    <Form.Field error={!!errors.name}>
-                      <label>{T.translate("landing.contacts.name")}</label>
-                      <Input
-                        placeholder={T.translate("landing.contacts.name")}
-                        name="name" 
-                        value={name} 
-                        onChange={(e, {value}) => this.handleChange('name', value)} 
-                        error={!!errors.name}
-                      />
-                      <span className="red">{errors.name}</span>
-                    </Form.Field>
-                    
-                    <Form.Field error={!!errors.email}>
-                      <label>{T.translate("landing.contacts.email")}</label>
-                      <Input
-                        placeholder={T.translate("landing.contacts.email")}
-                        email="email" 
-                        value={email} 
-                        onChange={(e, {value}) => this.handleChange('email', value)} 
-                        error={!!errors.email}
-                      />
-                      <span className="red">{errors.email}</span>
-                    </Form.Field>
-
-                    <Form.Field error={!!errors.messageBody}>  
-                      <label>{T.translate("landing.contacts.message_body")}</label>
-                      <TextArea
-                        placeholder={T.translate("landing.contacts.message_body")}
-                        name="messageBody" 
-                        value={messageBody} 
-                        onChange={(e, {value}) => this.handleChange('messageBody', value)} 
-                      />
-                      <span className="red">{errors.messageBody}</span>
-                    </Form.Field>
-                    <Button disabled={isLoading} primary type="submit">{T.translate("landing.contacts.send")}</Button>
-                  </Form>  
-                </Grid.Column>
-              </div>  
+                  <Form.Field error={!!errors.messageBody}>  
+                    <label>{T.translate("landing.contacts.message_body")}</label>
+                    <TextArea
+                      placeholder={T.translate("landing.contacts.message_body")}
+                      name="messageBody" 
+                      value={messageBody} 
+                      onChange={(e, {value}) => this.handleChange('messageBody', value)} 
+                    />
+                    <span className="red">{errors.messageBody}</span>
+                  </Form.Field>
+                  <Button disabled={isLoading} primary type="submit">{T.translate("landing.contacts.send")}</Button>
+                </Form>  
+              </Grid.Column> 
             </Grid> 
           </Grid>         
         </Segment>

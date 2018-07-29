@@ -10,6 +10,7 @@ import Form from './Form'
 class Page extends Component {
 
   render() {
+    /* eslint-disable no-unused-vars */
     let currentUser
     
     try {

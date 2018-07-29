@@ -38,7 +38,7 @@ class LandingPageHeaderNav extends Component {
     })
 
     // jQuery for page scrolling feature - requires jQuery Easing plugin
-    $('.ui.large.menu .left.item a').on('click', function(event) {
+    $('.ui.menu .nav-link a').on('click', function(event) {
       event.preventDefault()
       var $anchor = $(this)
       $('html, body').stop().animate({
@@ -63,7 +63,7 @@ class LandingPageHeaderNav extends Component {
               <Icon name='sidebar' />
             </Menu.Item>
 
-            <Menu.Item position='left'>
+            <Menu.Item position='left' className="nav-link">
               <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
               <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
               <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
@@ -86,7 +86,7 @@ class LandingPageHeaderNav extends Component {
               fontSize: '4em',
               fontWeight: 'normal',
               marginBottom: 0,
-              marginTop: '3em',
+              marginTop: '2.5em',
             }}>
             {T.translate("landing.home.welcome")}&nbsp;
             <div className="turquoise d-inline">{T.translate("internal_navigation.toolsio")}</div>

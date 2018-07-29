@@ -72,9 +72,9 @@ export default function Breadcrumb(props, context) {
     <Menu fixed='top' className="header-breadcrumb">          
       <Menu.Menu position='left'>
         <Menu.Item>
-          <header as='h2'>{T.translate(""+currentPageTitle+"")}
+          <Header as='h2'>{T.translate(""+currentPageTitle+"")}
             <Header.Subheader>{T.translate(""+currentPageDescription+"")}</Header.Subheader>
-          </header>
+          </Header>
         </Menu.Item>              
       </Menu.Menu>
       <Menu.Menu position='right'>

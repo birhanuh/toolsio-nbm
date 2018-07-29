@@ -54,19 +54,17 @@ export function InnerSidebar({ visibleInnerSidebar }) {
 
 export function OuterSidebarScrollableHeader({ visibleOuterSidebar }) {
   return [
-    <Sidebar key="sidebar" as={Menu} animation='overlay' width='thin' visible={visibleOuterSidebar} vertical inverted>
-      <ActiveLink activeOnlyWhenExact className="active item" to="#home" label={T.translate("landing.home.header")} />
-      <ActiveLink activeOnlyWhenExact className="item" to="#features" label={T.translate("landing.features.header")} />
-      <ActiveLink activeOnlyWhenExact className="item" to="#clients" label={T.translate("landing.clients.header")} />
-      <ActiveLink activeOnlyWhenExact className="item" to="#testimonial" label={T.translate("landing.testimonial.header")} />
-      <ActiveLink activeOnlyWhenExact className="item" to="#pricing" label={T.translate("landing.pricing.header")} />
-      <ActiveLink activeOnlyWhenExact className="item" to="#contacts" label={T.translate("landing.contacts.header")} />
-      <Link className="item" to="/subdomain">{T.translate("log_in.log_in")}</Link>    
-      <Link className="item" to="/signup">{T.translate("sign_up.sign_up")}</Link>    
+    <Sidebar key="sidebar" as={Menu} animation='overlay' width='thin' visible={visibleOuterSidebar} vertical inverted className="nav-link">
+      <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
+      <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
+      <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
+      <ActiveLink activeOnlyWhenExact to="#testimonial" label={T.translate("landing.testimonial.header")} />
+      <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
+      <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />  
     </Sidebar>,
     <Menu key="scroll-header-nav" fixed='top' pointing size='large' style={{display: 'none'}}> 
       <Container>
-        <Menu.Menu position='left'>
+        <Menu.Menu position='left' className="nav-link">
           <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
           <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
           <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
