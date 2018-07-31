@@ -1,7 +1,8 @@
 import React  from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { Header, Card, Icon } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Segment, Header, Card, Icon, Image, Message } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_INCOMES_DATA } from '../../graphql/dashboard'
 
@@ -19,7 +20,8 @@ const IncomesCard = () => (
      
       const daySum = data.getIncomesData && data.getIncomesData.daySum
       const monthSum = data.getIncomesData && data.getIncomesData.monthSum.map(item => pick(item, ['month', 'sum']))
-
+      const countInvoices = data.getIncomesData && data.getIncomesData.countInvoices
+      console.log('countInvoices', countInvoices === 0)
       let monthSumSorted = monthSum && monthSum.sort(function(a, b) {
           let x = new Date(Moment(a.month, 'MM/YYYY')) 
           let y = new Date(Moment(b.month, 'MM/YYYY')) 
@@ -81,33 +83,33 @@ const IncomesCard = () => (
               </Header>
             </Card.Header>
           </Card.Content>        
-          <div className="image">
+          <Image>
             <Line data={chartData} options={chartOptions} />
-          </div>
+          </Image>
           
           <Card.Content extra>
-            { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
-            <div className="left floated">
-              <div className="meta">{monthSumSorted && monthSumSorted[0] ? (monthSumSorted[0].month ? monthSumSorted[0].month : '-') : '-'}</div>
-              <div className="header">
+            { !!error && <Message negative><p>{error.message}</p></Message> } 
+            <Segment vertical floated='left' className="p-0">
+              <Card.Meta>{monthSumSorted && monthSumSorted[0] ? (monthSumSorted[0].month ? monthSumSorted[0].month : '-') : '-'}</Card.Meta>
+              <Card.Header>
                 {monthSumSorted && monthSumSorted[0] ? (monthSumSorted[0].sum ? monthSumSorted[0].sum : '-') : '-'}
-              </div>
-            </div>  
-            <div className="right floated">
-              <div className="meta">{monthSumSorted && monthSumSorted.length !== 0 ? (monthSumSorted[1].month ? monthSumSorted[1].month : '-') : '-'}</div>
-              <div className="header">
+              </Card.Header>
+            </Segment>  
+            <Segment vertical floated='right' className="p-0">
+              <Card.Meta>{monthSumSorted && monthSumSorted.length !== 0 ? (monthSumSorted[1].month ? monthSumSorted[1].month : '-') : '-'}</Card.Meta>
+              <Card.Header>
                 {monthSumSorted && monthSumSorted.length !== 0 ? (monthSumSorted[1].sum ? monthSumSorted[1].sum : '-') : '-'}
-                {monthSumSorted && monthSumSorted[0] && ((monthSumSorted[0].sum > monthSumSorted[1].sum) ? <i className="long arrow down red icon" /> : 
-                   <i className="long arrow up green icon" />)}
-                </div>
-            </div>       
+                {monthSumSorted && monthSumSorted[0] && ((monthSumSorted[0].sum > monthSumSorted[1].sum) ? <Icon name="long arrow down" className="red" /> : 
+                  <Icon name="long arrow up" className="green" />)}
+                </Card.Header>
+            </Segment>       
           </Card.Content> 
 
-          {(daySum && daySum.length === 0 || monthSum && monthSum.length === 0) && 
+          {countInvoices === 0 && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/invoices" className="ui primary outline button small">
-                  <i className="check circle outline icon"></i>{T.translate("dashboard.invoices.create_first_invoice")}
+                  <Icon name="check circle outline" />{T.translate("dashboard.invoices.create_first_invoice")}
                 </Link>
               </div>
             </div>

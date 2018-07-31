@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { Menu, List, Header } from 'semantic-ui-react'
+// Semantic React UI
+import { Grid, Segment, Menu, List, Header, Divider } from 'semantic-ui-react'
 
 import ChannelMessages from './Channel/Messages'
 import ChannelsList from './Channel/List'
@@ -13,22 +14,20 @@ import T from 'i18n-react'
 const Page = ({ match }) => {    
     
   return (
-    <div className="column row">
-      <div className="four wide column">
+    <Grid.Row columns={1}>
+      <Grid.Column width={4}>
         <Menu vertical fluid>
           <ChannelsList  channelId={match.params.channelId} />
 
-          <div className="ui horizontal divider">Or</div>
+          <Divider horizontal>Or</Divider>
 
           <UsersList receiverId={match.params.receiverId} />
         </Menu>
-      </div>
+      </Grid.Column>
 
-      <div className="twelve wide stretched column">
-        <div className="ui segment">
-
+      <Grid.Column width={12}>
+        <Segment>
           <Switch>
-
             <Route exact path="/conversations" render={() => <div>
               <Header as='h3'>{T.translate(`conversations.page.landing_header`)}</Header>
               <List>
@@ -57,9 +56,9 @@ const Page = ({ match }) => {
 
           </Switch>
 
-        </div>
-      </div>
-    </div> 
+        </Segment>
+      </Grid.Column>
+    </Grid.Row> 
   )
 }
 

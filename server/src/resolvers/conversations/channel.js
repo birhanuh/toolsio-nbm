@@ -18,7 +18,7 @@ export default {
   },
 
   Mutation: {
-    createChannel: requiresAuth.createResolver(async (parent, { name, isPublic }, { models, subdomain }) => {
+    createChannel: requiresAuth.createResolver(async (parent, { name, isPublic }, { models, user, subdomain }) => {
       try {
       
         const channel = await models.Channel.findOne({ where: { name }, searchPath: subdomain }, { raw: true })
@@ -34,12 +34,13 @@ export default {
             ]
           }    
         } else {
-          const channel = await models.Channel.create({ name, isPublic, owner: 1 }, { searchPath: subdomain })
-          await models.Member.create({ userId: 1, channelId: channel.dataValues.id }, { searchPath: subdomain })
+          const channelCreated = await models.Channel.create({ name, isPublic, owner: user.id }, { searchPath: subdomain })
+ 
+          await models.Member.create({ userId: user.id, channel_id: channelCreated.dataValues.id }, { searchPath: subdomain })
 
           return {
             success: true,
-            channel
+            channel: channelCreated
           }
         }
       } catch (err) {

@@ -4,7 +4,7 @@ import MessageForm from './Form/Message'
 import UsersForm from './Form/Users'
 import RenderText from '../RenderText'
 // Semantic UI Form elements
-import { Modal, Message, Image, Button } from 'semantic-ui-react'
+import { Segment, Modal, Message, Image, Header, Button, Icon, Divider } from 'semantic-ui-react'
 import { Image as CloudinaryImage } from 'cloudinary-react'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
@@ -248,27 +248,27 @@ class Messages extends Component {
 
     return [
       <div key="channel-messages" className="messages"> 
-        <div className="ui clearing vertical segment p-0">
-          <h3 className="ui left floated header capitalize mt-2">
+        <Segment clearing vertical className="p-0">
+          <Header as='h3' floated="left" className="capitalize mt-2">
             {getChannel && getChannel.name}           
-          </h3> 
-          <button id="add-member" className="ui right floated primary outline small button" onClick={this.toggleAddUsersToChannelModal.bind(this)}>
-            <i className="add circle icon"></i>
+          </Header> 
+          <Button id="add-member" primary className='outline' size='small' floated='right' onClick={this.toggleAddUsersToChannelModal.bind(this)}>
+            <Icon name="add circle" />
             {T.translate("conversations.messages.add_member")}
-          </button> 
-        </div>
+          </Button> 
+        </Segment>
 
-        <div className="ui divider"></div> 
+        <Divider /> 
 
-        <div className="ui comments"
-          onScroll={this.handleScroll}
+        <div onScroll={this.handleScroll}
           ref={(scroller) => {
             this.scroller = scroller
-          }}
-        >
-          { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
-        </div>   
-        
+          }}>
+          <Comment.Group>
+            { getChannelMessages && getChannelMessages.length === 0 ? emptyMessage : messagesList }
+          </Comment.Group>   
+        </div>
+
         <MessageForm channelId={this.props.channelId} />
       </div>,
       <AddUsersToChannelModal
@@ -282,7 +282,7 @@ class Messages extends Component {
   }
 }
 
-const Queries =  compose(
+const Queries = compose(
   graphql(GET_CHANNEL_USERS_QUERY, {
     "name": "getChannelQuery",
     options: (props) => ({

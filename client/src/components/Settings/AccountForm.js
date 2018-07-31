@@ -9,7 +9,7 @@ import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
-import { Input, Select, Form, Dimmer, Image } from 'semantic-ui-react'
+import { Item, Header, Card, Message, Input, Select, Form, Button, Icon, Dimmer, Image } from 'semantic-ui-react'
 import { Image as CloudinaryImage } from 'cloudinary-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_ACCOUNT_QUERY, UPDATE_ACCOUNT_MUTATION, S3_SIGN_LOGO_MUTATION } from '../../graphql/settings'
@@ -269,145 +269,143 @@ class AccountForm extends Component {
     const { subdomain, industry, logoUrl, contact, address, errors, active, file, isLoadingLogo, isLoadingForm } = this.state
     
     return ( 
-      <div className="ui items segment account">
-        <div className="ui item">    
-          <div className="image">
-            <div className={classnames("ui card form", { loading: isLoadingLogo })} style={{height: "170px"}}>
-              <Dimmer.Dimmable 
-                onMouseEnter={this.toggleShow}
-                onMouseLeave={this.toggleShow}
-                style={{padding: '2px'}}
+      <Item className="mb-5">    
+        <Item.Image>
+          <Card className={classnames("ui form", { loading: isLoadingLogo })} style={{height: "170px"}}>
+            <Dimmer.Dimmable 
+              onMouseEnter={this.toggleShow}
+              onMouseLeave={this.toggleShow}
+              style={{padding: '2px'}}
+            >
+              {logoUrl ? <CloudinaryImage width="165" height="165" background="white" crop="pad"
+                cloudName="toolsio" publicId={logoUrl} /> : 
+                  <Image src={logoPlaceholderMedium} alt="logoPlaceholderMedium" /> }
+              <Dimmer
+                active={file ? true : active}
               >
-                {logoUrl ? <CloudinaryImage width="165" height="165" background="white" crop="pad"
-                  cloudName="toolsio" publicId={logoUrl} /> : 
-                    <Image src={logoPlaceholderMedium} alt="logoPlaceholderMedium" /> }
-                <Dimmer
-                  active={file ? true : active}
-                >
-                  {file ? <small className="ui inverted">{file.name}</small> : 
-                    <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button" >
-                      {T.translate("settings.account.select_logo")}
-                    </Dropzone>}
-                </Dimmer> 
-              </Dimmer.Dimmable>
-            </div>
+                {file ? <small className="ui inverted">{file.name}</small> : 
+                  <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button" >
+                    {T.translate("settings.account.select_logo")}
+                  </Dropzone>}
+              </Dimmer> 
+            </Dimmer.Dimmable>
+          </Card>
 
-            <button disabled={isLoadingLogo} className="fluid ui primary button" onClick={this.handleSubmitImage.bind(this)}><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.account.upload")}</button>
-          </div>
-          <div className="content">
-            <h1 className="ui header mt-2 mb-3">{T.translate("settings.account.header")}</h1>
-            
-            <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)}>
+          <Button disabled={isLoadingLogo} primary fluid onClick={this.handleSubmitImage.bind(this)}><Icon name="upload" />&nbsp;{T.translate("settings.account.upload")}</Button>
+        </Item.Image>
+        <Item.Content>
+          <Header as='h1' className="mt-2 mb-3">{T.translate("settings.account.header")}</Header>
+          
+          <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)}>
 
-              { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> }
+            { !!errors.message && (typeof errors.message === "string") && <Message negative><p>{errors.message}</p></Message> }
 
-              <Form.Field  error={!!errors.subdomain}>
-                <label>{T.translate("settings.account.subdomain")}</label>
+            <Form.Field  error={!!errors.subdomain}>
+              <label>{T.translate("settings.account.subdomain")}</label>
+              <Input 
+                placeholder={T.translate("settings.account.subdomain")}
+                name="subdomain" 
+                value={subdomain} 
+                onChange={(e, {value}) => this.handleChange('subdomain', value)} 
+                error={errors.subdomain}
+              />
+              <span className="red">{errors.name}</span>
+            </Form.Field>
+
+            <Form.Field error={!!errors.industry}>
+              <label>{T.translate("settings.account.industry")}</label>
+              <Select 
+                placeholder={T.translate("settings.account.select_industry")}
+                name="industry"
+                value={industry ? industry : '-'} 
+                onChange={(e, {value}) => this.handleChange('industry', value)} 
+                error={!!errors.industry}
+                options={[
+                  { key: "human resource", value: "human resource", text: 'Human resource' },
+                  { key: "fashion", value: "fashion", text: 'Fashion' },
+                  { key: "import/export", value: "import/export", text: 'Import/Export' },
+                  { key: "store", value: "store", text: 'Store' },
+                  { key: "technology", value: "technology", text: 'Technology' }
+                ]}
+                selection
+              />
+              <span className="red">{errors.industry}</span>
+            </Form.Field>
+
+            <fieldset className="custom-fieldset">
+              <legend className="custom-legend">{T.translate("settings.account.contact.header")}</legend>
+              <Form.Field>
+                <label>{T.translate("settings.account.contact.phone_number")}</label>
                 <Input 
-                  placeholder={T.translate("settings.account.subdomain")}
-                  name="subdomain" 
-                  value={subdomain} 
-                  onChange={(e, {value}) => this.handleChange('subdomain', value)} 
-                  error={errors.subdomain}
+                  placeholder={T.translate("settings.account.contact.phone_number")}
+                  name="phoneNumber" 
+                  value={contact.phoneNumber} 
+                  onChange={(e, {value}) => this.handleChange('phoneNumber', value)}
                 />
-                <span className="red">{errors.name}</span>
               </Form.Field>
-
-              <Form.Field error={!!errors.industry}>
-                <label>{T.translate("settings.account.industry")}</label>
-                <Select 
-                  placeholder={T.translate("settings.account.select_industry")}
-                  name="industry"
-                  value={industry ? industry : '-'} 
-                  onChange={(e, {value}) => this.handleChange('industry', value)} 
-                  error={!!errors.industry}
-                  options={[
-                    { key: "human resource", value: "human resource", text: 'Human resource' },
-                    { key: "fashion", value: "fashion", text: 'Fashion' },
-                    { key: "import/export", value: "import/export", text: 'Import/Export' },
-                    { key: "store", value: "store", text: 'Store' },
-                    { key: "technology", value: "technology", text: 'Technology' }
-                  ]}
-                  selection
+              <Form.Field>
+                <label>{T.translate("settings.account.contact.email")}</label>
+                <Input 
+                  placeholder={T.translate("settings.account.contact.email")}
+                  name="email" 
+                  value={contact.email} 
+                  onChange={(e, {value}) => this.handleChange('email', value)} 
                 />
-                <span className="red">{errors.industry}</span>
               </Form.Field>
-
-              <fieldset className="custom-fieldset">
-                <legend className="custom-legend">{T.translate("settings.account.contact.header")}</legend>
-                <Form.Field>
-                  <label>{T.translate("settings.account.contact.phone_number")}</label>
-                  <Input 
-                    placeholder={T.translate("settings.account.contact.phone_number")}
-                    name="phoneNumber" 
-                    value={contact.phoneNumber} 
-                    onChange={(e, {value}) => this.handleChange('phoneNumber', value)}
+            </fieldset>
+            <fieldset className="custom-fieldset">
+              <legend className="custom-legend">{T.translate("settings.account.address.header")}</legend>
+              <Form.Field>
+                <label>{T.translate("settings.account.address.street")}</label>
+                <Input 
+                  placeholder={T.translate("settings.account.address.street")}
+                  name="street" 
+                  value={address.street} 
+                  onChange={(e, {value}) => this.handleChange('street', value)} 
+                  fluid
                   />
-                </Form.Field>
-                <Form.Field>
-                  <label>{T.translate("settings.account.contact.email")}</label>
-                  <Input 
-                    placeholder={T.translate("settings.account.contact.email")}
-                    name="email" 
-                    value={contact.email} 
-                    onChange={(e, {value}) => this.handleChange('email', value)} 
+              </Form.Field>
+              <Form.Field>
+                <label>{T.translate("settings.account.address.postal_code")}</label>
+                <Input 
+                  placeholder={T.translate("settings.account.address.postal_code")}
+                  name="postalCode" 
+                  value={address.postalCode} 
+                  onChange={(e, {value}) => this.handleChange('postalCode', value)} 
                   />
-                </Form.Field>
-              </fieldset>
-              <fieldset className="custom-fieldset">
-                <legend className="custom-legend">{T.translate("settings.account.address.header")}</legend>
-                <Form.Field>
-                  <label>{T.translate("settings.account.address.street")}</label>
-                  <Input 
-                    placeholder={T.translate("settings.account.address.street")}
-                    name="street" 
-                    value={address.street} 
-                    onChange={(e, {value}) => this.handleChange('street', value)} 
-                    fluid
-                    />
-                </Form.Field>
-                <Form.Field>
-                  <label>{T.translate("settings.account.address.postal_code")}</label>
-                  <Input 
-                    placeholder={T.translate("settings.account.address.postal_code")}
-                    name="postalCode" 
-                    value={address.postalCode} 
-                    onChange={(e, {value}) => this.handleChange('postalCode', value)} 
-                    />
-                </Form.Field>
-                <div>              
-                  <label>{T.translate("settings.account.address.country")}</label>
-                  <CountryDropdown
-                    defaultOptionLabel={T.translate("settings.account.address.select_country")}
-                    value={address.country}
-                    onChange={(val) => this.selectCountry(val)} 
-                    />
-                </div> 
-                <div className={classnames("field", {error: address.country !== '' && errors['address.region']})}>              
-                  <label>{T.translate("settings.account.address.region")}</label> 
-                  <RegionDropdown
-                    defaultOptionLabel={T.translate("settings.account.address.select_region")}
-                    disabled={address.country === ''}
-                    country={address.country}
-                    value={address.region}
-                    onChange={(val) => this.selectRegion(val)} 
-                    />
-                </div>
-              
-              </fieldset>
+              </Form.Field>
+              <div>              
+                <label>{T.translate("settings.account.address.country")}</label>
+                <CountryDropdown
+                  defaultOptionLabel={T.translate("settings.account.address.select_country")}
+                  value={address.country}
+                  onChange={(val) => this.selectCountry(val)} 
+                  />
+              </div> 
+              <div className={classnames("field", {error: address.country !== '' && errors['address.region']})}>              
+                <label>{T.translate("settings.account.address.region")}</label> 
+                <RegionDropdown
+                  defaultOptionLabel={T.translate("settings.account.address.select_region")}
+                  disabled={address.country === ''}
+                  country={address.country}
+                  value={address.region}
+                  onChange={(val) => this.selectRegion(val)} 
+                  />
+              </div>
+            
+            </fieldset>
 
-              <div className="field">  
-                <Link className="ui primary outline button" to="/dashboard">
-                  <i className="minus circle icon"></i>
-                  {T.translate("settings.account.cancel")}
-                </Link>  
-                <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.account.edit")}</button>
-              </div>  
-            </Form>   
-          </div>
+            <div className="field">  
+              <Link className="ui primary outline button" to="/dashboard">
+                <Icon name="minus circle" />
+                {T.translate("settings.account.cancel")}
+              </Link>   
+              <Button primary disabled={isLoadingForm}><Icon name="check circle outline" />&nbsp;{T.translate("settings.account.edit")}</Button>
+            </div>  
+          </Form>   
+        </Item.Content>
 
-        </div> 
-      </div>  
+      </Item>  
     )
   }
 }

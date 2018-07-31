@@ -19,7 +19,7 @@ export default `
     errors: [Error!]
   }
 
-  type ForgotPasswordResetRequestPasswordResetResponse {
+  type ForgotPasswordResetRequestPasswordResetResponseVerifyUserEmail {
     success: Boolean!
     errors: [Error!]
   }
@@ -32,11 +32,13 @@ export default `
 
     isSubdomainExist(subdomain: String!): IsSubdomainExistResponse!
 
-    forgotPasswordResetRequest(email: String!): ForgotPasswordResetRequestPasswordResetResponse!
+    forgotPasswordResetRequest(email: String!): ForgotPasswordResetRequestPasswordResetResponseVerifyUserEmail!
 
-    passwordReset(password: String! token: String!): ForgotPasswordResetRequestPasswordResetResponse!
+    passwordReset(password: String! token: String!): ForgotPasswordResetRequestPasswordResetResponseVerifyUserEmail!
     
     registerInvitedUser(firstName: String, lastName: String, email: String!, password: String!, token: String!): RegisterResponse!
+
+    confirmUserEmail(token: String!): ForgotPasswordResetRequestPasswordResetResponseVerifyUserEmail!
   }
 
 `

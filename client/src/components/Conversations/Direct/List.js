@@ -1,7 +1,8 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { Label, Button, Modal } from 'semantic-ui-react'
+// Semantic React UI
+import { Segment, Label, Button, Modal } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_DIRECT_MESSAGE_USERS_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/conversations/directMessages'
 
@@ -15,7 +16,8 @@ import UserDropdownSearchSelection from './Form/UserDropdownSearchSelection'
 
 const AddUserModal = ({ open, onClose }) => (
   <Modal
-    className="ui small modal add-user"
+    size='small'
+    className="add-user"
     open={open}
     onClose={(e) => {
       onClose(e)
@@ -82,12 +84,12 @@ class List extends Component {
 
     return [
       <div key="user-list">
-        <div className="ui center aligned vertical segment">
+        <Segment vertical textAlign='center'>
           <button id="add-user" className="ui primary button" onClick={this.toggleAddUserModal.bind(this)}>
             <i className="add circle icon"></i>
             {T.translate("conversations.messages.add_user")}
           </button>  
-        </div>
+        </Segment>
 
         { userList }
 

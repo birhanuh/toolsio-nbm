@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+// Semantic React UI
+import { Icon } from 'semantic-ui-react'
 
 export default function Tr({user}) {
   
-  const accepted = user.isInvitationAccepted ? <i className="check green icon"></i> : <i className="close red icon"></i>
+  const accepted = user.isInvitationAccepted ? <Icon name="check" className="green" /> : <Icon name="close" className="red" />
   
   return (
     <tr key={user.id}>

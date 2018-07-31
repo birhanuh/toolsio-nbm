@@ -8,7 +8,7 @@ import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
-import { Input, Form, Dimmer, Image } from 'semantic-ui-react'
+import { Item, Card, Input, Form, Dimmer, Image, Message, Header, Button, Icon } from 'semantic-ui-react'
 import { Image as CloudinaryImage } from 'cloudinary-react'
 import classnames from 'classnames'
 import { graphql, compose } from 'react-apollo'
@@ -184,104 +184,102 @@ class UserForm extends Component {
     const { firstName, lastName, avatarUrl, password, confirmPassword, errors, active, file, isLoadingAvatar, isLoadingForm } = this.state
     
     return (            
-      <div className="ui items segment user">
-        <div className="ui item">    
-          <div className="image">
-            <div className={classnames("ui card circular image form", { loading: isLoadingAvatar })} style={{height: "175px"}}>
-              <Dimmer.Dimmable 
-                onMouseEnter={this.toggleShow}
-                onMouseLeave={this.toggleShow}
-                blurring
+      <Item className="mt-5">    
+        <Item.Image>
+          <Card className={classnames("ui circular image form", { loading: isLoadingAvatar })} style={{height: "175px"}}>
+            <Dimmer.Dimmable 
+              onMouseEnter={this.toggleShow}
+              onMouseLeave={this.toggleShow}
+              blurring
+            >
+              {avatarUrl ? <CloudinaryImage cloudName="toolsio" publicId={avatarUrl} width="175" height="175" crop="thumb" /> : 
+                <Image size="medium" src={avatarPlaceholderLarge} alt="avatarPlaceholderLarge" /> }
+              <Dimmer
+                active={file ? true : active}
               >
-                {avatarUrl ? <CloudinaryImage cloudName="toolsio" publicId={avatarUrl} width="175" height="175" crop="thumb" /> : 
-                  <Image size="medium" src={avatarPlaceholderLarge} alt="avatarPlaceholderLarge" /> }
-                <Dimmer
-                  active={file ? true : active}
-                >
-                  {file ? <small className="ui inverted">{file.name}</small> : 
-                    <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button" >
-                      {T.translate("settings.user.select_avatar")}
-                    </Dropzone>
-                  }
-                </Dimmer>  
-              </Dimmer.Dimmable>
-            </div>
+                {file ? <small className="ui inverted">{file.name}</small> : 
+                  <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui inverted button" >
+                    {T.translate("settings.user.select_avatar")}
+                  </Dropzone>
+                }
+              </Dimmer>  
+            </Dimmer.Dimmable>
+          </Card>
 
-            <button disabled={isLoadingAvatar} onClick={this.handleSubmitImage.bind(this)} className="fluid ui primary button"><i className="upload icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.upload")}</button>
-           
-          </div>
-          <div className="content">                
-            <h1 className="ui header mt-2 mb-3">{T.translate("settings.user.header")}</h1> 
+          <Button disabled={isLoadingAvatar} onClick={this.handleSubmitImage.bind(this)} fluid primary><Icon className="upload" />&nbsp;{T.translate("settings.user.upload")}</Button>
+         
+        </Item.Image>
+        <Item.Content>                
+          <Header as='h1' className="mt-2 mb-3">{T.translate("settings.user.header")}</Header> 
 
-            <input type="hidden" value="prayer" />
-            <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)} autoComplete="off">
-           
-              { !!errors.message && (typeof errors.message === "string") && <div className="ui negative message"><p>{errors.message}</p></div> } 
-              
-              <Form.Field>
-                <label>{T.translate("settings.user.first_name")}</label>
-                <Input
-                  placeholder={T.translate("settings.user.first_name")}
-                  name="firstName" 
-                  value={firstName} 
-                  onChange={(e, {value}) => this.handleChange('firstName', value)}
-                  autoComplete="off"  
-                />
-                <span className="red">{errors.firstName}</span>
-              </Form.Field>
+          <input type="hidden" value="prayer" />
+          <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)} autoComplete="off">
+         
+            { !!errors.message && (typeof errors.message === "string") && <Message negative><p>{errors.message}</p></Message> } 
+            
+            <Form.Field>
+              <label>{T.translate("settings.user.first_name")}</label>
+              <Input
+                placeholder={T.translate("settings.user.first_name")}
+                name="firstName" 
+                value={firstName} 
+                onChange={(e, {value}) => this.handleChange('firstName', value)}
+                autoComplete="off"  
+              />
+              <span className="red">{errors.firstName}</span>
+            </Form.Field>
 
-              <Form.Field>
-                <label>{T.translate("settings.user.last_name")}</label>
-                <Input
-                  placeholder={T.translate("settings.user.last_name")}
-                  name="lasttName" 
-                  value={lastName} 
-                  onChange={(e, {value}) => this.handleChange('lasttName', value)}
-                  autoComplete="off"  
-                />
-                <span className="red">{errors.lasttName}</span>
-              </Form.Field>
+            <Form.Field>
+              <label>{T.translate("settings.user.last_name")}</label>
+              <Input
+                placeholder={T.translate("settings.user.last_name")}
+                name="lasttName" 
+                value={lastName} 
+                onChange={(e, {value}) => this.handleChange('lasttName', value)}
+                autoComplete="off"  
+              />
+              <span className="red">{errors.lasttName}</span>
+            </Form.Field>
 
-              <Form.Field error={!!errors.password}>
-                <label>{T.translate("settings.user.password")}</label>
-                <Input
-                  placeholder={T.translate("settings.user.password")}
-                  name="password" 
-                  value={password} 
-                  onChange={(e, {value}) => this.handleChange('password', value)}
-                  autoComplete="new-password"
-                  type='password'
-                  error={!!errors.password}
-                />
-                <span className="red">{errors.password}</span>
-              </Form.Field>
+            <Form.Field error={!!errors.password}>
+              <label>{T.translate("settings.user.password")}</label>
+              <Input
+                placeholder={T.translate("settings.user.password")}
+                name="password" 
+                value={password} 
+                onChange={(e, {value}) => this.handleChange('password', value)}
+                autoComplete="new-password"
+                type='password'
+                error={!!errors.password}
+              />
+              <span className="red">{errors.password}</span>
+            </Form.Field>
 
-              <Form.Field error={!!errors.confirmPassword}>
-                <label>{T.translate("settings.user.confirm_password")}</label>
-                <Input
-                  placeholder={T.translate("settings.user.confirm_password")}
-                  name="confirmPassword" 
-                  value={confirmPassword} 
-                  onChange={(e, {value}) => this.handleChange('confirmPassword', value)}
-                  autoComplete="new-password"
-                  type='password'
-                  error={!!errors.confirmPassword}
-                />
-                <span className="red">{errors.confirmPassword}</span>
-              </Form.Field>
+            <Form.Field error={!!errors.confirmPassword}>
+              <label>{T.translate("settings.user.confirm_password")}</label>
+              <Input
+                placeholder={T.translate("settings.user.confirm_password")}
+                name="confirmPassword" 
+                value={confirmPassword} 
+                onChange={(e, {value}) => this.handleChange('confirmPassword', value)}
+                autoComplete="new-password"
+                type='password'
+                error={!!errors.confirmPassword}
+              />
+              <span className="red">{errors.confirmPassword}</span>
+            </Form.Field>
 
-              <div className="field">  
-                <Link className="ui primary outline button" to="/dashboard">
-                  <i className="minus circle icon"></i>
-                  {T.translate("settings.user.cancel")}
-                </Link>  
-                <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.edit")}</button>
-              </div>  
-            </Form>      
+            <div className="field">  
+              <Link className="ui primary outline button" to="/dashboard">
+                <i className="minus circle icon"></i>
+                {T.translate("settings.user.cancel")}
+              </Link>  
+              <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.edit")}</button>
+            </div>  
+          </Form>  
+       </Item.Content>
 
-          </div>  
-        </div> 
-      </div>  
+      </Item>  
     )
   }
 }

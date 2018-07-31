@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+// Semantic React UI
+import { Table, Message, Header } from 'semantic-ui-react'
 import Tr from './Tr'
 
 // Localization 
@@ -10,10 +12,10 @@ export default function List({ users }) {
     <tbody>
       <tr>
         <td colSpan="4" className="p-3">
-          <div className="ui info message">
-            <div className="header">{T.translate("users.list.empty_users_header")}</div>
+          <Message info>
+            <Header as="h1">{T.translate("users.list.empty_users_header")}</Header>
             <p>{T.translate("users.list.empty_users_message")}</p>
-          </div>
+          </Message>
         </td>
       </tr>
     </tbody>
@@ -27,7 +29,7 @@ export default function List({ users }) {
   )
 
   return (
-    <table className="ui very compact striped center aligned table">
+    <Table compact="very" striped>
        <thead>
           <tr>
             <th>{T.translate("users.list.email")}</th>
@@ -37,7 +39,7 @@ export default function List({ users }) {
         
         { users.length === 0 ? emptyMessage : usersList }
       
-    </table>
+    </Table>
   )
 }
 

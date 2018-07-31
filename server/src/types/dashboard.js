@@ -52,6 +52,7 @@ export default `
   type IncomesData {
     daySum: [DaySum!]!
     monthSum: [MonthSum!]!
+    countInvoices: Float!
   }
 
   type ProjectsSalesData {

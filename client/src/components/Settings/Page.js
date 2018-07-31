@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import decode from 'jwt-decode'
 import { getSubdomain } from '../../utils'
-
+// Semantic UI Form elements
+import { Grid, Segment, Item, Divider } from 'semantic-ui-react'
 import AccountForm from './AccountForm'
 import UserForm from './UserForm'
 
@@ -25,14 +26,20 @@ class Page extends Component {
     }
     
     return (
-      <div className="row column"> 
-        <div className="twelve wide column">
+      <Grid.Row columns={1}>
+        <Grid.Column width={12}>
 
-          <AccountForm subdomain={subdomain} /> 
-             
-          { currentUser.user.email && <UserForm email={currentUser.user.email} /> }
-        </div>  
-      </div>  
+          <Segment className="account">
+            <Item.Group>
+              <AccountForm subdomain={subdomain} /> 
+
+              <Divider />
+
+              { currentUser.user.email && <UserForm email={currentUser.user.email} /> }
+            </Item.Group>
+          </Segment>
+         </Grid.Column>
+      </Grid.Row>  
     )
   }
 }

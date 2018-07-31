@@ -31,7 +31,33 @@
     },
     "pricing": {
       "header": "Pricing",
-      "learn_more": "Learn more"
+      "basic": {
+        "title": "Basic",
+        "description": "Basic plan includes: Visualization report of day to day, limited users/colleauges invitation, messaging and integrated calendar systems.",
+        "analytics": "Analytics",
+        "invitation": "Invitation",
+        "messaging": "Messaging",
+        "calendar": "Calendar",
+        "learn_more": "Learn more"
+      },
+      "standard": {
+        "title": "Standard",
+        "description": "Standard plan includes: Visualization report of day to day, limited users/colleauges invitation, messaging and integrated calendar systems.",
+        "analytics": "Analytics",
+        "invitation": "Invitation",
+        "messaging": "Messaging",
+        "calendar": "Calendar",
+        "learn_more": "Learn more"
+      },
+      "premium": {
+        "title": "Premium",
+        "description": "Premium plan includes: Visualization report of day to day, limited users/colleauges invitation, messaging and integrated calendar systems.",
+        "analytics": "Analytics",
+        "invitation": "Invitation",
+        "messaging": "Messaging",
+        "calendar": "Calendar",
+        "learn_more": "Learn more"
+      }
     },
     "testimonial": {
       "header": "Testmonial"
@@ -115,6 +141,7 @@
     "flash": {
       "log_in_success": "You have signed in successfully!",
       "logout_success": "You are logged out from your account!",
+      "confirm_email_success": "Your email is confirmed!",
       "password_reset_success": "Your password has been reseted successfully! You can now login with new password!",
       "forgot_password_request_email_sent": "We have sent you an email how to proceed reseting your password. Check out your email!"
     }
@@ -124,7 +151,7 @@
     "see_all_messages": "See all messages",
     "admin_options": "Admin options",
     "settings": "Settings",
-    "calender": "Calender",
+    "calendar": "Calendar",
     "inbox": "Inbox",
     "tasks": "Tasks",
     "unread_messages": "You have *{unread_messages_number}* new messages",
@@ -724,7 +751,7 @@
       "no_channel": "No Channels",
       "empty_message": "Message is empty",
       "description": "Internal conversation interface.", 
-      "landing_header": "Channel or private messages?",
+      "landing_header": "Channel or Private messages?",
       "landing_colleagues_description": "Comminucate with your colleagues by creating channels or adding users through as a private messaging.",
       "landing_messages_description": "Write, read messages by directly writing in the message box.",
       "landing_attachments_description": "Send Images, Videos, PDF, ... and other attachments simply by selecting from your computer."

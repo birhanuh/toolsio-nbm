@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import classnames from 'classnames'
 // Semantic UI React
-import { Sidebar } from 'semantic-ui-react'
+import { Segment, Grid, Container, Sidebar, Header, List, Divider } from 'semantic-ui-react'
 
 import Dashboard from '../Dashboard/Page'
 import LandingPage from './LandingPage'
@@ -16,13 +16,13 @@ import PasswordReset from '../Login/PasswordReset'
 import { isAuthenticated, isAuthPages, SubdomainRoute, PrivateRoute } from '../../utils/'
 import Settings from '../Settings/Page'
 import ProjectsPage from '../Projects/Page'
-import ProjectsForm from '../Projects/FormPage'
+import ProjectsForm from '../Projects/Form'
 import ProjectsShow from '../Projects/Show'
 import SalesPage from '../Sales/Page'
-import SalesForm from '../Sales/FormPage'
+import SalesForm from '../Sales/Form'
 import SalesShow from '../Sales/Show'
 import CustomersPage from '../Customers/Page'
-import CustomersForm from '../Customers/FormPage'
+import CustomersForm from '../Customers/Form'
 import CustomersShow from '../Customers/Show'
 import InvoicesPage from '../Invoices/Page'
 import InvoicesForm from '../Invoices/Form'
@@ -86,11 +86,11 @@ class App extends Component {
           { (isAuthenticated() && !isAuthPages()) && <InternalHeaderNav toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} /> }
 
           {/* Display either internal or external header nav */}
-          { (!isAuthenticated() && !isAuthPages()) && <LandingPageHeaderNav toggleInnerSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
+          { (!isAuthenticated() && !isAuthPages()) && <LandingPageHeaderNav toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
 
           <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated() && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
             {/* Display breadcrumb */}
-            { isAuthenticated() && <Breadcrumb key="breadcrumb" /> }
+            { isAuthenticated() && !isAuthPages() && <Breadcrumb key="breadcrumb" /> }
 
             {/* Falsh messages */}  
             {!isAuthPages() && <FlashMessage /> }    
@@ -139,55 +139,67 @@ class App extends Component {
           </section>
 
           {/* Internal page footer */}
-          { (isAuthenticated() && !isAuthPages()) && <footer className="ui vertical footer segment internal-footer">
-            <div className="ui stackable inverted grid">      
-              <div className="ten wide column">
-                <h4 className="ui inverted header mb-0">{T.translate("landing.footer.toolsio")}</h4>
-                <small>{T.translate("landing.footer.copy_right")}</small>
-              </div>
-            </div>
-          </footer> }    
+          { (isAuthenticated() && !isAuthPages()) && 
+            <Segment inverted vertical className="footer internal-footer">
+                <Grid inverted stackable>
+                  <Grid.Row>
+                    <Grid.Column width={10}>
+                      <Header inverted as='h4'  className="mb-0">{T.translate("landing.footer.toolsio")}</Header>
+                      <small>{T.translate("landing.footer.copy_right")}</small>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Segment>
+           }    
 
           {/* Landing page footer */}
-          { (!isAuthenticated() && !isAuthPages()) && <footer className="ui inverted vertical footer segment">
-            <div className="ui center aligned container">
-              <div className="ui stackable inverted divided grid">
-                <div className="three wide column">
-                  <h4 className="ui inverted header">Group 1</h4>
-                  <div className="ui inverted link list">
-                    <a href="#features" className="item">{T.translate("landing.features.header")}</a>
-                  </div>
-                </div>
-                <div className="three wide column">
-                  <h4 className="ui inverted header">Group 2</h4>
-                  <div className="ui inverted link list">
-                    <a href="#pricing" className="item">{T.translate("landing.pricing.header")}</a>
-                  </div>
-                </div>
-                <div className="three wide column">
-                  <h4 className="ui inverted header">Group 3</h4>
-                  <div className="ui inverted link list">
-                    <a href="#testimonial" className="item">{T.translate("landing.testimonial.header")}</a>
-                  </div>
-                </div>
-                <div className="seven wide column">
-                  <h4 className="ui inverted header">{T.translate("landing.footer.toolsio")}</h4>
-                  <p>{T.translate("landing.footer.address")}</p>
-                  <small>{T.translate("landing.footer.copy_right")}</small>
-                </div>
-              </div>
-              <div className="ui inverted section divider"></div>
-              <img src={logo} className="ui centered mini image" alt="logo-square"/>
-              <div className="ui horizontal inverted small divided link list">
-                <a className="item" href="/terms-and-conditions">{T.translate("landing.footer.terms_and_conditions")}</a>
-                <a className="item" href="/privacy-policy">{T.translate("landing.footer.privacy_policy")}</a>
-              </div>
-            </div>
-          </footer>
+          { (!isAuthenticated() && !isAuthPages()) && 
+            <Segment inverted vertical style={{ padding: '5em 0em' }} className="footer">
+              <Container textAlign='center'>
+                <Grid divided inverted stackable>
+                  <Grid.Row>
+                    <Grid.Column width={3}>
+                      <Header inverted as='h3'>Group 1</Header>
+                      <List link inverted>
+                        <List.Item as='a' to='#features'>{T.translate("landing.features.header")}</List.Item>
+                      </List>
+                    </Grid.Column>
+                    <Grid.Column width={3}>
+                      <Header inverted as='h3'>Group 2</Header>
+                      <List link inverted>
+                        <List.Item as='a' to='#features'>{T.translate("landing.features.header")}</List.Item>
+                      </List>
+                    </Grid.Column>
+                    <Grid.Column width={3}>
+                      <Header inverted as='h3'>Group 2</Header>
+                      <List link inverted>
+                        <List.Item as='a' to='#features'>{T.translate("landing.features.header")}</List.Item>
+                      </List>
+                    </Grid.Column>
+                    <Grid.Column width={7}>
+                      <Header inverted as='h3'>{T.translate("landing.footer.toolsio")}</Header>
+                      <p>{T.translate("landing.footer.address")}</p>
+                      <small>{T.translate("landing.footer.copy_right")}</small>
+                    </Grid.Column>
+                  </Grid.Row>                  
+             
+                  <Divider inverted section />
+                  <Grid.Row>
+                    <Grid.Column>
+                      <img src={logo} className="ui centered mini image" alt="logo-square"/>
+                      <div className="ui horizontal inverted small divided link list">
+                        <a className="item" href="/terms-and-conditions">{T.translate("landing.footer.terms_and_conditions")}</a>
+                        <a className="item" href="/privacy-policy">{T.translate("landing.footer.privacy_policy")}</a>
+                      </div>
+                    </Grid.Column> 
+                  </Grid.Row> 
+              </Grid>
+            </Container>
+          </Segment>
         }  
         </Sidebar.Pusher>
       </Sidebar.Pushable>,
-      <OuterSidebarScrollableHeader key="OuterSidebarScrollableHeader" visibleInnerSidebar={visibleOuterSidebar} />,
+      <OuterSidebarScrollableHeader key="OuterSidebarScrollableHeader" visibleOuterSidebar={visibleOuterSidebar} />,
       <a key="back-to-top" href="#" className="back-to-top">
         <i className="chevron up icon"></i>  
       </a>]

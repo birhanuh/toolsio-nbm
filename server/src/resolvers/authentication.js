@@ -5,8 +5,8 @@ import { loginUserWithToken } from '../utils/authentication'
 import map from 'lodash/map'
 
 import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
 
+import nodemailer from 'nodemailer'
 import Email from 'email-templates'
 
 const transporter = nodemailer.createTransport({
@@ -289,8 +289,7 @@ export default {
     passwordReset: async (parent, { password, token }, { models }) => {
       try {
         const { email, subdomain } = jwt.verify(token, process.env.JWTSECRET1)
-        console.log('email', email)
-         console.log('emailz', subdomain)
+
         const account = await models.Account.findOne({ where: { subdomain: subdomain } }, { raw: true })
 
         if (!account) {
@@ -323,6 +322,48 @@ export default {
       } catch(err) {
         console.log('err: ', err)
 
+        return {
+          success: false,
+          errors: formatErrors(err, models)
+        }       
+      }
+    },
+
+    confirmUserEmail: async (parent, { token }, { models, subdomain }) => {
+      try {
+        const { email } = jwt.verify(token, process.env.JWTSECRET1)
+
+        const user = await models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })
+
+        if (user.isConfirmed) {
+          return {
+            success: false,
+            errors: [
+              {
+                path: 'message',
+                message: `Your email is already confirmed`
+              }
+            ]
+          }
+        } else {
+          
+          return models.User.update({ isConfirmed: true }, { where: {email: email}, returning: true, plain: true, searchPath: subdomain })
+            .then(() => {  
+              return {
+                success: true
+              }
+            })
+            .catch(err => {
+              console.log('err: ', err)
+              return {
+                success: false,
+                errors: formatErrors(err, models)
+              }
+            })
+     
+        }
+      } catch(err) {
+        console.log('err: ', err)
         return {
           success: false,
           errors: formatErrors(err, models)

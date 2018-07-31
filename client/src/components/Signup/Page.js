@@ -1,6 +1,8 @@
 import React, { Component } from 'react' 
 import { Link } from 'react-router-dom'
-import FormPage from './FormPage'
+import Form from './Form'
+// Semantic React UI
+import { Container, Segment, Header } from 'semantic-ui-react'
 import Invitation from './Invitation'
 import { Authorization } from '../../utils'
 import FlashMessage from '../../flash/FlashMessage'
@@ -24,31 +26,31 @@ class Page extends Component {
       // Set Invitation token to Req header
       Authorization.setInvitationToken(match.params.token)
     } else {
-      form = <FormPage signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
+      form = <Form signupRequest={signupRequest} isSubdomainExist={isSubdomainExist} 
         isUserExist={isUserExist} /> 
     }
 
     return (          
-      <div className="ui text container">
-        <h2 className="ui teal image header">
+      <Container text>
+        <Header as="h2" image className="turquoise">
           <Link className="" to="/">
             <img src={logo} className="image" alt="logo-square" />
           </Link>
-          <div className="content">{T.translate("sign_up.header")}</div>
-        </h2>
+          <Header.Content>{T.translate("sign_up.header")}</Header.Content>
+        </Header>
         
         <FlashMessage />
         
         {form}
 
-        <div className="ui message"> 
+        <Segment> 
           {T.translate("sign_up.already_a_user")}&nbsp;<Link to="/subdomain">{T.translate("sign_up.log_in_here")}</Link>
-        </div>
-        <div className="ui center aligned vertical segment">
+        </Segment>
+        <Segment vertical align="center">
           <small className="d-block">{T.translate("landing.footer.copy_right")}</small>
           <small className="d-block">{T.translate("landing.footer.address")}</small>
-        </div>
-      </div>)
+        </Segment>
+      </Container>)
   }
 }
 

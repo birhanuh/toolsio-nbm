@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Input, Button, Icon } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Grid, Segment, Input, Button, Icon } from 'semantic-ui-react'
 import List from './List' 
 import { Query } from 'react-apollo'
 import { GET_SALES_QUERY } from '../../graphql/sales'
@@ -34,8 +35,8 @@ class Page extends Component {
           const { getSales } = data
 
           return ( 
-            <div className="row column"> 
-              <div className="sixteen wide column">
+            <Grid.Row columns={1}>
+              <Grid.Column width={16}>
                 <div className="ui clearing basic segment pl-0 pr-0">
                   <div className="ui right floated icon input">
                     <Input name="name" value={this.state.name} onChange={(e, {value}) => this.handleChange('name', value)} 
@@ -55,14 +56,14 @@ class Page extends Component {
                   </div>
 
                   <Link className="ui left floated primary button" to="/sales/new">
-                    <i className="add circle icon"></i>
+                    <Icon name="add circle" />
                     {T.translate("sales.page.create_new_sale")}
                   </Link>   
                 </div> 
                       
                 { getSales && <List sales={getSales} loading={loading} /> }             
 
-                <div className="ui center aligned basic segment">  
+                <Segment basic textAlign='center'>    
                   
                   { getSales && getSales.length >= 5 &&              
                     <Button 
@@ -86,9 +87,9 @@ class Page extends Component {
                       {T.translate("sales.page.load_more")}
                     </Button>
                   }
-                </div>  
-              </div>
-            </div>  
+                </Segment>  
+              </Grid.Column>
+            </Grid.Row>  
           )
         }}
       </Query>)

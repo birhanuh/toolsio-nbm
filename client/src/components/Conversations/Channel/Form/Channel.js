@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import { Validation } from '../../../../utils'
 import { addFlashMessage } from '../../../../actions/flashMessageActions'
 // Semantic UI Form elements
-import { Input, Form } from 'semantic-ui-react'
+import { Input, Form, Message, Button, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_CHANNELS_USERS_COUNT_QUERY, CREATE_CHANNEL_MUTATION } from '../../../../graphql/conversations/channels'
 
@@ -111,13 +111,9 @@ class Channel extends Component {
     const { name, errors, isLoading } = this.state
 
     return (   
-      <form className={classnames("ui form p-3", { loading: isLoading })} onSubmit={this.handleSubmit.bind(this)}>
+      <Form loading={isLoading} className="p-3" onSubmit={this.handleSubmit.bind(this)}>
 
-        <div className="field">  
-           <h1 className="ui header">{T.translate("conversations.form.create_channel")}</h1>
-        </div>
-
-        { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+        { !!errors.message && <Message negative><p>{errors.message}</p></Message> }
 
         <Form.Field>
           <label className={classnames({red: !!errors.name})}>{T.translate("conversations.form.name")}</label>
@@ -132,9 +128,9 @@ class Channel extends Component {
           <span className="red">{errors.name}</span>
         </Form.Field>
   
-        <button disabled={isLoading} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("conversations.form.create")}</button>
+        <Button primary disabled={isLoading}><Icon name="check circle outline" />&nbsp;{T.translate("conversations.form.create")}</Button>
         
-      </form> 
+      </Form> 
     )
   }
 }

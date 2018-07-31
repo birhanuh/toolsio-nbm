@@ -6,18 +6,12 @@ import map from 'lodash/map'
 import classnames from 'classnames'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
-import { Modal } from 'semantic-ui-react'
+import { Grid, Segment, Button, Icon, Card, Modal, Message, Header, Divider } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, DELETE_CUSTOMER_MUTATION } from '../../graphql/customers'
 
 // Localization 
 import T from 'i18n-react'
-
-import $ from 'jquery'
-
-// Modal
-$.fn.modal = require('semantic-ui-modal')
-$.fn.dimmer = require('semantic-ui-dimmer')
 
 class Show extends Component {
   
@@ -147,91 +141,91 @@ class Show extends Component {
     const { id, name, vatNumber, contact, isContactIncludedInInvoice, address, projects, sales, invoices, user, openConfirmationModal } = this.state
     
     const emptyProjectsMessage = (
-      <div className="ui mini info message">
-        <div className="ui header">
+      <Message info size='small'>
+        <Header>
           {T.translate("projects.page.empty_projects_header")}
-        </div>
-      </div>
+        </Header>
+      </Message>
     )
 
     const projectsList = map(projects, (project) =>      
-      <div key={project.id} className="card">
-        <div className="content">
+      <Card key={project.id}>
+        <Card.Content>
           <div className={classnames("ui right floated uppercase tiny label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}> 
             {project.status}
           </div>
-          <div className="header">
+          <Card.Header>
             <Link to={`/projects/show/${project.id}`} className={classnames({blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}>
               {project.name}
             </Link>
-          </div>
-          <div className="meta">
+          </Card.Header>
+          <Card.Meta>
             {project.deadline}
-          </div>
-        </div>
-      </div>
+          </Card.Meta>
+        </Card.Content>
+      </Card>
     )
          
     const emptySalesMessage = (
-      <div className="ui mini info message">
-        <div className="ui header">
+      <Message info size='small'>
+        <Header>
           {T.translate("sales.page.empty_sales_header")}
-        </div>
-      </div>
+        </Header>
+      </Message>
     )
 
     const salesList = map(sales, (sale) => 
-      <div key={sale.id} className="card">
-        <div className="content">
+      <Card key={sale.id}>
+        <Card.Content>
           <div className={classnames("ui right floated uppercase tiny label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}> 
             {sale.status}
           </div>
-          <div className="header">  
+          <Card.Header>  
             <Link to={`/sales/show/${sale.id}`} className={classnames({blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'ready', turquoise: sale.status === 'delivered', red: sale.status === 'delayed'})}>
               {sale.name}
             </Link>
-          </div>
-          <div className="meta">
+          </Card.Header>
+          <Card.Meta>
             {sale.deadline}
-          </div>
-        </div>
-      </div>
+          </Card.Meta>
+        </Card.Content>
+      </Card>
     )
       
     const emptyInvoicesMessage = (
-      <div className="ui mini info message">
-        <div className="ui header">
+      <Message info size='small'>
+        <Header>
           {T.translate("invoices.page.empty_invoices_header")}
-        </div>
-      </div>
+        </Header>
+      </Message>
     )
 
     const invoicesList = map(invoices, (invoice) => 
-      <div key={invoice.id} className="card">
-        <div className="content">
+      <Card key={invoice.id}>
+        <Card.Content>
           <div className={classnames("ui right floated uppercase tiny label", {blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
             {invoice.status}
           </div>
-          <div className="header">
+          <Card.Header>
             <Link to={`/invoices/show/${invoice.id}`} className={classnames({blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>
               {invoice.referenceNumber}
             </Link>
-          </div>
-          <div className="meta">
+          </Card.Header>
+          <Card.Meta>
             {invoice.deadline || invoice.paymentTerm}
-          </div>
-        </div>
-      </div>
+          </Card.Meta>
+        </Card.Content>
+      </Card>
     )
 
     return [
-      <div key="segment" className="column row">
-        <div className="twelve wide column customer show">
-          <div className="ui segment">    
-            <h1 className="ui dividing header">{name}</h1> 
-            <div className="ui three column stackable grid">
-              <div className="six wide column">
-                <div className="ui sizer vertical segment">
+      <Grid.Row columns={1} key='segment'>
+        <Grid.Column width={12} className="customer show">
+          <Segment>    
+            <Header as='h1' dividing>{name}</Header> 
+            <Grid columns={3}>
+              <Grid.Column width={6}>
+                <Segment vertical className="profile">
                   <p>
                     {T.translate("customers.show.vat_number")}
                     <strong>{vatNumber}</strong>
@@ -246,10 +240,10 @@ class Show extends Component {
                       <i className="minus circle icon red"></i>
                     }
                   </p>
-                </div> 
-              </div>
-              <div className="four wide column">
-                <div className="ui sizer vertical segment">
+                </Segment>
+              </Grid.Column>
+              <Grid.Column width={4}>
+                <Segment vertical className="profile">
                   <h3 className="ui header">{T.translate("customers.show.contact.header")}</h3>
                   <p>
                     {T.translate("customers.show.contact.phone_number")}
@@ -259,11 +253,11 @@ class Show extends Component {
                     {T.translate("customers.show.contact.email")}
                     <strong>{contact.email ? contact.email : '-'}</strong>
                   </p>
-                </div> 
-              </div>
+                </Segment> 
+              </Grid.Column>
 
-              <div className="six wide column">
-                <div className="ui sizer vertical segment">
+              <Grid.Column width={6}>
+                <Segment vertical className="profile">
                   <p>
                     {T.translate("customers.show.address.street")}
                     <strong>{address && address.street}</strong>
@@ -280,44 +274,42 @@ class Show extends Component {
                     {T.translate("customers.show.address.country")}
                     <strong>{address && address.country}</strong>
                   </p>
-                </div> 
-              </div>
-            </div>
+                </Segment> 
+              </Grid.Column>
+            </Grid>
             
-            <div className="ui divider"></div>
+            <Divider />
 
-            <h4 className="ui top attached block header">{T.translate("projects.page.header")}</h4>
-            <div className="ui bottom attached segment">
-              <div  className="ui three cards">
-                { projects && (projects.length === 0 ? emptyProjectsMessage : projectsList) }
-              </div>
-            </div>
+            <Header as='h4' attached='top' block>{T.translate("projects.page.header")}</Header>
+            <Segment attached='bottom'>
+              { projects && projects.length !== 0 ? (<Card.Group itemsPerRow={3}>{projectsList}
+                </Card.Group>) : emptyProjectsMessage }
+            </Segment>
             
-            <h4 className="ui top attached block header">{T.translate("sales.page.header")}</h4>
-            <div className="ui bottom attached segment">
-              <div  className="ui three cards">
-                { sales && sales.length === 0 ? emptySalesMessage : salesList }
-              </div>
-            </div>
+           <Header as='h4' attached='top' block>{T.translate("sales.page.header")}</Header>
+            <Segment attached='bottom'>
+              { sales && sales.length !== 0 ? (<Card.Group itemsPerRow={3}>{salesList}
+                </Card.Group>) : emptySalesMessage }
+            </Segment>
             
-            <h4 className="ui top attached block header">{T.translate("invoices.page.header")}</h4>
-            <div className="ui bottom attached segment">
-              <div  className="ui three cards">
-                { invoices && invoices.length === 0 ? emptyInvoicesMessage : invoicesList }
-              </div>
-            </div>
+            <Header as='h4' attached='top' block>{T.translate("invoices.page.header")}</Header>
+            <Segment attached='bottom'>
+              { invoices && invoices.length !== 0 ? (<Card.Group itemsPerRow={3}>{invoicesList}
+              </Card.Group>) : emptyInvoicesMessage }
+            </Segment>
 
             <div className="pt-3">
-              <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("customers.show.delete")}</button>
-              <Link to={`/customers/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("customers.show.edit")}</Link>
+              <Button negative onClick={this.toggleConfirmationModal}><Icon name="trash" />{T.translate("customers.show.delete")}</Button>
+              <Link to={`/customers/edit/${id}`} className="ui primary button"><Icon name="edit" />{T.translate("customers.show.edit")}</Link>
             </div>
-          </div>    
-        </div>
-      </div>,
+          </Segment>    
+        </Grid.Column>
+      </Grid.Row>,
       
       <Modal 
-        key="modal" 
-        className="ui small modal customer"
+        key="modal"
+        size="small" 
+        className="customer"
         open={openConfirmationModal}>
         <Modal.Header>{T.translate("customers.show.confirmation_header")}</Modal.Header>
         <Modal.Content>

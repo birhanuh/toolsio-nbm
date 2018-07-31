@@ -80,3 +80,15 @@ export const PASSWORD_RESET_MUTATION = gql`
     }
   }
 `
+
+export const VERIFY_USER_EMIAIL_MUTATION = gql`
+  mutation($token: String!) {
+    confirmUserEmail(token: $token) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`

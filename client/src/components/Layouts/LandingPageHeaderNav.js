@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Route, Link } from 'react-router-dom'
 
+// Semantic UI React
+import { Segment, Container, Menu, Header, Icon } from 'semantic-ui-react'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -23,7 +26,7 @@ class LandingPageHeaderNav extends Component {
 
   componentDidMount = () => {
     // fix menu when passed
-    $('.masthead .ui.text.container')
+    $('#home .ui.text.container')
     .visibility({
       once: false,
       onBottomPassed: function()  {
@@ -35,7 +38,7 @@ class LandingPageHeaderNav extends Component {
     })
 
     // jQuery for page scrolling feature - requires jQuery Easing plugin
-    $('.ui.large.menu .left.menu a').on('click', function(event) {
+    $('.ui.menu .nav-link a').on('click', function(event) {
       event.preventDefault()
       var $anchor = $(this)
       $('html, body').stop().animate({
@@ -46,39 +49,66 @@ class LandingPageHeaderNav extends Component {
 
   render() {
 
-    return (
-      <div id="home" className="ui inverted vertical masthead center aligned segment">
-        <div className="ui container">
-          <div className="ui large secondary inverted pointing menu">
-            <a className="toc item" onClick={this.props.toggleSidebarVisibility}>
-              <i className="sidebar icon"></i>
-            </a> 
+    const InlineStyle = () => (
+      <style>{`
+        .sixteen.wide.column.flash-message {
+          position: absolute;
+          top: 100px;
+          left: 15%;
+          width: 70%;
+      }
+      `}</style>
+    )
 
-            <div className="left menu">
+    return (
+      <Segment
+        id="home"
+        inverted
+        textAlign='center'
+        style={{ minHeight: 600, padding: '1em 0em' }}
+        vertical
+        >
+        <Container>
+          {/* Inline style */}
+          <InlineStyle />
+
+          <Menu inverted pointing secondary size='large'>
+            <Menu.Item className="toc" onClick={this.props.toggleOuterSidebarVisibility}>
+              <Icon name='sidebar' />
+            </Menu.Item>
+
+            <Menu.Item position='left' className="nav-link">
               <ActiveLink activeOnlyWhenExact to="#home" label={T.translate("landing.home.header")} />
               <ActiveLink activeOnlyWhenExact to="#features" label={T.translate("landing.features.header")} />
               <ActiveLink activeOnlyWhenExact to="#clients" label={T.translate("landing.clients.header")} />
               <ActiveLink activeOnlyWhenExact to="#testimonial" label={T.translate("landing.testimonial.header")} />
               <ActiveLink activeOnlyWhenExact to="#pricing" label={T.translate("landing.pricing.header")} />
               <ActiveLink activeOnlyWhenExact to="#contacts" label={T.translate("landing.contacts.header")} />
-            </div>
+            </Menu.Item>
 
-            <div className="right item">                                                   
+            <Menu.Item position='right' style={{alignSelf: 'inherit'}}>                                                  
               <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
-              <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui inverted button">{T.translate("sign_up.sign_up")}</a>     
-            </div>  
-          </div>
-        </div>
+              <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui inverted button" style={{marginLeft: '0.5em'}}>
+                {T.translate("sign_up.sign_up")}
+              </a>     
+            </Menu.Item>  
+          </Menu>
+        </Container>
 
-        <div className="ui text container">
-          <h1 className="ui inverted header">
+        <Container text>
+          <Header inverted style={{
+              fontSize: '4em',
+              fontWeight: 'normal',
+              marginBottom: 0,
+              marginTop: '2.5em',
+            }}>
             {T.translate("landing.home.welcome")}&nbsp;
             <div className="turquoise d-inline">{T.translate("internal_navigation.toolsio")}</div>
-          </h1>
+          </Header>
           <h3>{T.translate("landing.home.slogan")}</h3>
           <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
-        </div>
-      </div>)
+        </Container>
+      </Segment>)
   }  
 }
 

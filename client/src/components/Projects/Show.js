@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import Moment from 'moment'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
-import { Select, Form, Modal, Progress, Button, Icon } from 'semantic-ui-react'
+import { Grid, Segment, Table, Header, Select, Form, Modal, Progress, Button, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, UPDATE_PROJECT_MUTATION, DELETE_PROJECT_MUTATION } from '../../graphql/projects'
 
@@ -229,15 +229,15 @@ class Show extends Component {
     tasks.map(task => tasksTotal += task.total)
  
     return [
-      <div key="segment" className="column row">
-        <div className="twelve wide column">
-          <div className="ui segment">    
-            <h1 className={classnames("ui dividing header", {blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</h1> 
-            <table className="ui very basic collapsing celled fluid table">
+      <Grid.Row columns={1} key='segment'>
+        <Grid.Column width={14}>
+          <Segment>    
+            <Header as="h1" dividing className={classnames({blue: status === 'new', orange: status === 'in progress', green: status === 'finished', turquoise: status === 'delivered', red: status === 'delayed'})}>{name}</Header> 
+            <Table basic="very" collapsing celled>
               <tbody>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("projects.show.customer")}</i>
+                    <i><Header size="tiny">{T.translate("projects.show.customer")}</Header></i>
                   </td>
                   <td>
                     {customer ? <Link to={`/customers/show/${customer.id}`}>{customer.name}</Link> : '-'}
@@ -245,7 +245,7 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("projects.show.user")}</i>
+                    <i><Header size="tiny">{T.translate("projects.show.user")}</Header></i>
                   </td>
                   <td>
                     {user && user.firstName}
@@ -253,7 +253,7 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("projects.show.deadline")}</i>
+                    <i><Header size="tiny">{T.translate("projects.show.deadline")}</Header></i>
                   </td>
                   <td>
                     {Moment(deadline).format('ll') }
@@ -261,7 +261,7 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("projects.show.status")}</i>
+                    <i><Header size="tiny">{T.translate("projects.show.status")}</Header></i>
                   </td>
                   <td>
                     <Form.Field 
@@ -284,7 +284,7 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("projects.show.progress")}</i>
+                    <i><Header size="tiny">{T.translate("projects.show.progress")}</Header></i>
                   </td>
                   <td>
                     <div>
@@ -298,38 +298,39 @@ class Show extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <i className="ui tiny header">{T.translate("projects.show.description")}</i>
+                    <i><Header size="tiny">{T.translate("projects.show.description")}</Header></i>
                   </td>
                   <td>
                     {description ? description : '-'}
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </Table>
 
-            <h4 className="ui top attached block header">{T.translate("projects.tasks.header")}</h4>
-            <div className="ui bottom attached segment p-3">
+            <Header as='h4' attached='top' block>{T.translate("projects.tasks.header")}</Header>
+            <Segment attached='bottom' className="p-3">
               { (tasks && id) && <TasksForm projectId={id} tasksTotal={tasksTotal} tasks={tasks} /> }
-            </div>
+            </Segment>
             
             <div className="pt-3">
-              <button className="ui negative button" onClick={this.toggleConfirmationModal}><i className="trash icon"></i>{T.translate("projects.show.delete")}</button>
-              <Link to={`/projects/edit/${id}`} className="ui primary button"><i className="edit icon"></i>{T.translate("projects.show.edit")}</Link>
+              <Button negative onClick={this.toggleConfirmationModal}><Icon className="trash" />{T.translate("projects.show.delete")}</Button>
+              <Link to={`/projects/edit/${id}`} className="ui primary button"><Icon className="edit" />{T.translate("projects.show.edit")}</Link>
             </div>
-          </div>    
-        </div>
-      </div>,      
+          </Segment>    
+        </Grid.Column>
+      </Grid.Row>,      
       <Modal 
         key="modal" 
-        className="ui small modal project"
+        size="small"
+        className="project"
         open={openConfirmationModal}>
         <Modal.Header>{T.translate("projects.show.confirmation_header")}</Modal.Header>
         <Modal.Content>
          <p className="red">{T.translate("projects.show.confirmation_msg")}</p>
         </Modal.Content>
         <Modal.Actions>
-          <button className="ui button" onClick={this.toggleConfirmationModal}>{T.translate("projects.show.cancel")}</button>
-          <button className="ui negative button" onClick={this.handleDelete.bind(this, id)}>{T.translate("projects.show.delete")}</button>
+          <Button onClick={this.toggleConfirmationModal}>{T.translate("projects.show.cancel")}</Button>
+          <Button negative onClick={this.handleDelete.bind(this, id)}>{T.translate("projects.show.delete")}</Button>
         </Modal.Actions>
       </Modal>
     ]

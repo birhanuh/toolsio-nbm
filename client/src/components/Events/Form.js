@@ -8,12 +8,12 @@ import { graphql, compose } from 'react-apollo'
 import { GET_EVENTS_QUERY, CREATE_EVENT_MUTATION, UPDATE_EVENT_MUTATION } from '../../graphql/events'
 
 // Semantic UI JS
-import { Form, Input, TextArea, Modal } from 'semantic-ui-react'
+import { Form as FormElement, Input, TextArea, Modal, Message } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
 
-class FormPage extends Component {
+class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -181,11 +181,11 @@ class FormPage extends Component {
            { id ? T.translate("events.form.edit_event") : T.translate("events.form.new_event") }
         </Modal.Header>
         <Modal.Content>
-          <Form loading={isLoading}>
+          <FormElement loading={isLoading}>
 
-            { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> } 
+            { !!errors.message && <Message negative><p>{errors.message}</p></Message> } 
             
-            <Form.Field error={!!errors.title}>
+            <FormElement.Field error={!!errors.title}>
               <label>{T.translate("events.form.title")}</label>
               <Input
                 placeholder={T.translate("events.form.title")}
@@ -195,9 +195,9 @@ class FormPage extends Component {
                 error={!!errors.title}
               />
               <span className="red">{errors.title}</span>
-            </Form.Field>
+            </FormElement.Field>
 
-            <Form.Field error={!!errors.url}>
+            <FormElement.Field error={!!errors.url}>
               <label>{T.translate("events.form.url")}</label>
               <Input
                 placeholder={T.translate("events.form.url")}
@@ -207,9 +207,9 @@ class FormPage extends Component {
                 error={!!errors.url}
               />
               <span className="red">{errors.url}</span>
-            </Form.Field>
+            </FormElement.Field>
             
-            <Form.Field>  
+            <FormElement.Field>  
               <label>{T.translate("events.form.description")}</label>
               <TextArea
                 placeholder={T.translate("events.form.description")}
@@ -217,9 +217,9 @@ class FormPage extends Component {
                 value={description} 
                 onChange={(e, {value}) => this.handleChange('description', value)} 
               />
-            </Form.Field>
+            </FormElement.Field>
 
-          </Form>
+          </FormElement>
         </Modal.Content>
         <Modal.Actions>
           <button className="ui button" onClick={toggleConfirmationModal}>{T.translate("events.form.cancel")}</button>
@@ -232,7 +232,7 @@ class FormPage extends Component {
 
 }
 
-FormPage.propTypes = {
+Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired,
   start: PropTypes.object,
   end: PropTypes.object,
@@ -249,7 +249,7 @@ const Mutations =  compose(
   graphql(UPDATE_EVENT_MUTATION, {
     name: 'updateEventMutation'
   })
-)(FormPage)
+)(Form)
 
 export default connect(null, { addFlashMessage } ) (Mutations)
 

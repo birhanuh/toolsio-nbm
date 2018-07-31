@@ -1,8 +1,7 @@
 import React, { Component } from 'react' 
-import classnames from 'classnames'
 import Dropzone from 'react-dropzone'
 // Semantic UI Form elements
-import { Form } from 'semantic-ui-react'
+import { Form, Icon } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import { CREATE_CHANNEL_MESSAGE_MUTATION } from '../../../../graphql/conversations/channelMessages'
 
@@ -103,13 +102,12 @@ class Message extends Component {
     const { body, errors, isLoading } = this.state
 
     return (  
-      <div className={classnames("ui form", { loading: isLoading })} >
-
-        { !!errors.message && <div className="ui negative message"><p>{errors.message}</p></div> }
+      <Form loading={isLoading} className='pt-5'>
+        { !!errors.message && <Message><p>{errors.message}</p></Message> }
         
-        <div className="ui fluid action input">
+        <div className="ui fluid action input" style={{marginRight: '10px'}}>
           <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui primary button">
-            <i className="plus icon" aria-hidden="true" />  
+            <Icon name="plus" />  
           </Dropzone>        
           
           <Form.TextArea
@@ -121,7 +119,7 @@ class Message extends Component {
             rows="2"
           />                 
         </div>   
-      </div> 
+      </Form> 
     )
   }
 }

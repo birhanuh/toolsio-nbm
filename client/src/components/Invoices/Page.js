@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 // Semantic UI JS
-import { Select, Input, Icon } from 'semantic-ui-react'
+import { Grid, Select, Input, Icon, Segment } from 'semantic-ui-react'
 import { graphql} from 'react-apollo'
 import { GET_INVOICES_QUERY } from '../../graphql/invoices'
 
@@ -58,17 +58,17 @@ class Page extends Component {
     const { getInvoices } = this.props.data
 
     return (
-      <div className="row column">    
-        <div className="sixteen wide column">      
-          <div className="ui vertical segment pl-0 pr-0">
+      <Grid.Row columns={1}>
+        <Grid.Column width={16}>      
+          <Segment vertical className="pl-0 pr-0">
             <Link className="ui primary button" to="/invoices/new">
-              <i className="add circle icon"></i>
+              <Icon name="add circle" />
               {T.translate("invoices.page.create_new_invoice")}
             </Link>
-          </div>  
+          </Segment>  
 
-          <div className="ui segment">
-            <div className="ui clearing segment basic segment pl-0 pr-0">
+          <Segment>
+            <Segment clearing basic className="pl-0 pr-0">
               <div className="ui right floated input">
                 <div className="ui icon input">
                   <Input name="search" value={this.state.search} onChange={(e, {value}) => this.handleChange('search', value)} 
@@ -90,13 +90,13 @@ class Page extends Component {
                   compact
                 />
               </div>
-            </div>
+            </Segment>
 
             { getInvoices && <Table invoices={getInvoices.invoices} count={getInvoices.count} offset={offset} limit={limit} /> } 
 
-          </div>
-        </div>
-      </div>  
+          </Segment>
+        </Grid.Column>
+      </Grid.Row>  
     )
   }
 }

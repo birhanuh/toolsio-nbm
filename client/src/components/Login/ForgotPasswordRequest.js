@@ -1,8 +1,10 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { Input, Icon, Form, Message } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Container, Segment, Header, Input, Icon, Form, Button, Message } from 'semantic-ui-react'
 import FlashMessage from '../../flash/FlashMessage'
 import { graphql } from 'react-apollo'
 import { FORGOT_PASSWORD_REQUEST_MUTATION } from '../../graphql/authentications'
@@ -87,21 +89,24 @@ class ForgotPasswordRequest extends Component {
   render() {
     const { email, errors, isLoading } = this.state
   
-    return (  
-      <div className="ui text container">
-        <h2 className="ui teal image header">
-          <img src={logo} className="image" alt="logo-square" />
-          <div className="content">{T.translate("log_in.request_password_reset")}</div>
-        </h2>     
+    return (    
+      <Container text>
+        <Header as="h2" image className="turquoise">
+          <Link className="" to="/">
+            <img src={logo} className="image" alt="logo-square" />
+          </Link>
+          <Header.Content>{T.translate("log_in.request_password_reset")}</Header.Content>
+        </Header>    
 
-        <FlashMessage />
+        <Segment>
 
-        <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
-          <div className="ui stacked segment">
+          <FlashMessage />
 
-            { !!errors.message && <Message error><p>{errors.message}</p></Message> } 
+          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
-             <Form.Field> 
+            { !!errors.message && <Message negative><p>{errors.message}</p></Message> } 
+
+             <Form.Field error={!!errors.email}> 
               <label>{T.translate("log_in.email")}</label>
               <Input
                   placeholder={T.translate("log_in.email")}
@@ -114,13 +119,15 @@ class ForgotPasswordRequest extends Component {
                 <span className="red">{errors.email}</span>
             </Form.Field>
                   
-            <button disabled={isLoading} className="ui fluid large teal submit button">{T.translate("log_in.send_request")}</button>
-              
-          </div>
-        </Form>   
-        <br />        
-        <br />         
-      </div>
+            <Button disabled={isLoading} primary fluid>{T.translate("log_in.send_request")}</Button>
+          </Form>   
+        </Segment> 
+
+        <Segment vertical align="center">
+          <small className="d-block">{T.translate("landing.footer.copy_right")}</small>
+          <small className="d-block">{T.translate("landing.footer.address")}</small>
+        </Segment>          
+      </Container>
     )
   }
 }

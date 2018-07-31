@@ -10,6 +10,7 @@ export default `
     description: String
     createdAt: Date!
     tax: Float!
+    total: Float!
     customerId: Int!
     project: Project
     sale: Sale

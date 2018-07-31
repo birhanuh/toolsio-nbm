@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import map from 'lodash/map'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
+// Semantic UI JS
+import { Grid, Container, Segment } from 'semantic-ui-react'
 import Steps from './Steps'
 import { graphql, compose } from 'react-apollo'
 import { GET_INVOICES_QUERY, GET_INVOICE_FORM_QUERY, GET_PROJECTS_WITHOUT_INVOICE_QUERY, GET_SALES_WITHOUT_INVOICE_QUERY, CREATE_INVOICE_MUTATION, UPDATE_INVOICE_MUTATION } from '../../graphql/invoices'
@@ -358,12 +360,12 @@ class Form extends Component {
     )
 
     return (        
-      <div className="row columun">
-        <div className="ui text container">
+      <Grid.Row columns={1}>
+        <Container text>
           {/* Steps component */}
           <Steps currentStep={this.state.currentStep}/> 
 
-          <div className="ui segment invoices">
+          <Segment className="invoices">
             {currentStep === 'step1' && <SaleProject id={id} salesOption={salesOption}  projectsOption={projectsOption} 
               handleChange={this.handleChange} step1={step1} handleSearchChangeProject={this.handleSearchChangeProject} 
               handleSearchChangeSale={this.handleSearchChangeSale} handleNext={this.handleNext.bind(this)} errors={errors} />}
@@ -376,9 +378,9 @@ class Form extends Component {
               handlePrevious={this.handlePrevious.bind(this)} 
               handleSubmit={this.handleSubmit.bind(this)} isLoading={isLoading} errors={errors} /> }
 
-          </div>
-        </div> 
-      </div>
+          </Segment>
+       </Container>
+      </Grid.Row>  
     )
   }
 }

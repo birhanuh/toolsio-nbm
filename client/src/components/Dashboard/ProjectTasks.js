@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { List } from 'semantic-ui-react'
+// Semantic UI Form elements
+import { Card, Header, List, Message, Divider } from 'semantic-ui-react'
 import { Query } from 'react-apollo'
 import { GET_PROJECT_TASKS_DATA } from '../../graphql/dashboard'
 
@@ -23,19 +24,19 @@ const ProjectTasksCard = () => (
 
     countStatus && countStatus.map(item => {
       if (item.status === 'new') {
-        newNotification = (<div className="ui info message">
-          <div className="description">
+        newNotification = (<Message info>
+          <Message.Content>
             {T.translate("dashboard.project_tasks.new_projects", {count: item.count})}
-          </div>
-        </div>)
+          </Message.Content>
+        </Message>)
       } 
 
       if (item.status === 'delayed') {
-        delayedNotification = (<div className="ui negative message">
-          <div className="description">
+        delayedNotification = (<Message negative>
+          <Message.Content>
             {T.translate("dashboard.project_tasks.delayed_projects", {count: item.count})}
-          </div>
-        </div>)
+          </Message.Content>
+        </Message>)
       }  
     })
 
@@ -47,40 +48,40 @@ const ProjectTasksCard = () => (
       }
     })
 
-    const list = (<div className="content">
+    const list = (<Card.Content>
         {newNotification}
         <List ordered>
           {newProjects && newProjects.map(project => 
             <List.Item key={project.id} content={<Link to={`/projects/show/${project.id}`} className="item blue">{project.name}</Link>} /> )}
         </List>
 
-        <div className="ui divider"></div>
+        <Divider />
 
         {delayedNotification}
         <List ordered>
           {delayedProjects && delayedProjects.map(project => 
              <List.Item key={project.id} content={<Link to={`/projects/show/${project.id}`} className="item red">{project.name}</Link>} /> )}
         </List>
-      </div>)
+      </Card.Content>)
 
     return (
       
-      <div id="projectTask" className={classnames("dashboard", { loading: loading })}>
-        <h4 className="ui header">{T.translate("dashboard.project_tasks.header")}</h4>
-        <div className="ui card">
+      <div id="projectTask" className={classnames("dashboard form", { loading: loading })}>
+        <Header as='h4'>{T.translate("dashboard.project_tasks.header")}</Header>
+        <Card>
           
           {(countStatus && countStatus.length === 0) ?
-            <div className="content">
-              { !!error && <div className="ui negative message"><p>{error.message}</p></div> } 
-              <div className="ui info message">
-                <div className="description">
+            <Card.Content>
+              { !!error && <Message negative><p>{error.message}</p></Message> } 
+              <Message info>
+                <Message.Content>
                   {T.translate("dashboard.project_tasks.no_new_projects")}
                   {T.translate("dashboard.project_tasks.no_delayed_projects")}
-                </div>
-              </div> 
-            </div> : list }
+                </Message.Content>
+              </Message> 
+            </Card.Content> : list }
           
-        </div>
+        </Card>
       </div>  
       )
     }}

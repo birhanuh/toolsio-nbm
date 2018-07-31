@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
 import { Validation } from '../../../utils'
 import { addFlashMessage } from '../../../actions/flashMessageActions'
 // Semantic UI JS
-import { Modal } from 'semantic-ui-react'
+import { Form as FormElement, Table, Modal } from 'semantic-ui-react'
 import AddItemTr from './AddItemTr'
 import ShowEditItemTr from './ShowEditItemTr'
 import { graphql, compose } from 'react-apollo'
@@ -439,8 +438,8 @@ class Form extends Component {
     )
 
     return [
-      <form key="form" className={classnames("ui small form", { loading: newItem.isLoading || editItem.isRequired })}>
-        <table className="ui very basic table items">
+      <FormElement size="small" key="form" loading={newItem.isLoading || editItem.isRequired}>
+        <Table basic="very" className="tasks">
           <thead>
             <tr>
               <th>{T.translate("sales.items.form.name")}</th>
@@ -468,11 +467,12 @@ class Form extends Component {
               <td></td>
             </tr>
           </tbody>
-        </table>
-      </form>,
+        </Table>
+      </FormElement>,
       <Modal 
-        key="modal" 
-        className="ui small modal items"
+        key="modal"
+        size="small" 
+        className="items"
         open={openConfirmationModal}>
         <Modal.Header>{T.translate("sales.items.form.confirmation_header")}</Modal.Header>
         <Modal.Content>
