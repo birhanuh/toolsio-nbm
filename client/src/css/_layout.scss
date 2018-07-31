@@ -861,6 +861,15 @@ header .ui.fixed.top.menu .item>a {
   box-shadow: 0 -1px 0 rgba(3,139,152,1);
 }
 
+#pricing {
+  .ui.grid > .column:not(:nth-child(1)) .pricing-plan {
+    background: rgba(0,0,0,0.3);
+  }
+  .ui.grid > .column:not(:nth-child(1)) .pricing-title {
+    color: rgba(255,255,255,0.5);
+  }
+}  
+
 #clients {
   margin-bottom: 1px;
   border-bottom: solid 1px rgba(3,139,152,1);

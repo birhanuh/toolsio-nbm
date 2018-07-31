@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Validation } from '../../utils'
+import { Link } from 'react-router-dom'
+import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
 import { Grid, Container, Segment, Input, TextArea, Form, Header, Button } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
@@ -127,7 +130,8 @@ class LandingPage extends Component {
                 type: 'success',
                 text: T.translate("landing.contacts.flash.success_create_contact_message")
               })  
-              this.setState({ isLoading: false })
+              // Reset state
+              this.setState({ name: '', email: '', messageBody: '', isLoading: false })
             } else {
               let errorsList = {}
               errors.map(error => errorsList[error.path] = error.message)
@@ -259,38 +263,38 @@ class LandingPage extends Component {
               <Grid columns={3} stackable>
                 <Grid.Column>
                   <ul className="pricing-plan">
-                    <li className="pricing-title">Basic</li>
-                    <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
-                    <li className="pricing-price">$16</li>
-                    <li>Dashboards</li>
-                    <li>Projects view</li>
-                    <li>Contacts</li>
-                    <li>Calendar</li>
-                    <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                    <li className="pricing-title">{T.translate("landing.pricing.basic.title")}</li>
+                    <li className="pricing-desc">{T.translate("landing.pricing.basic.description")}</li>
+                    <li className="pricing-price">$0</li>
+                    <li>{T.translate("landing.pricing.basic.analytics")}</li>
+                    <li>{T.translate("landing.pricing.basic.invitation")}</li>
+                    <li>{T.translate("landing.pricing.basic.messaging")}</li>
+                    <li>{T.translate("landing.pricing.basic.calendar")}</li>
+                    <li><Link to="" className="ui button">{T.translate("landing.pricing.basic.learn_more")}</Link></li>
                   </ul>
                 </Grid.Column>
                 <Grid.Column>
                   <ul className="pricing-plan">
-                    <li className="pricing-title">Standard</li>
-                    <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
-                    <li className="pricing-price">$22</li>
-                    <li>Dashboards</li>
-                    <li>Projects view</li>
-                    <li>Contacts</li>
-                    <li>Calendar</li>
-                    <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                    <li className="pricing-title">{T.translate("landing.pricing.standard.title")}</li>
+                    <li className="pricing-desc">{T.translate("landing.pricing.standard.description")}</li>
+                    <li className="pricing-price">$0</li>
+                    <li>{T.translate("landing.pricing.standard.analytics")}</li>
+                    <li>{T.translate("landing.pricing.standard.invitation")}</li>
+                    <li>{T.translate("landing.pricing.standard.messaging")}</li>
+                    <li>{T.translate("landing.pricing.standard.calendar")}</li>
+                    <li><Link to="" className="ui button disabled">{T.translate("landing.pricing.standard.learn_more")}</Link></li>
                   </ul>
                 </Grid.Column>
                 <Grid.Column>
                   <ul className="pricing-plan">
-                    <li className="pricing-title">Premium</li>
-                    <li className="pricing-desc">Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</li>
-                    <li className="pricing-price">$200</li>
-                    <li>Dashboards</li>
-                    <li>Projects view</li>
-                    <li>Contacts</li>
-                    <li>Calendar</li>
-                    <li><a href="#" className="ui button">{T.translate("landing.pricing.learn_more")}</a></li>
+                    <li className="pricing-title">{T.translate("landing.pricing.premium.title")}</li>
+                    <li className="pricing-desc">{T.translate("landing.pricing.premium.description")}</li>
+                    <li className="pricing-price">$0</li>
+                    <li>{T.translate("landing.pricing.premium.analytics")}</li>
+                    <li>{T.translate("landing.pricing.premium.invitation")}</li>
+                    <li>{T.translate("landing.pricing.premium.messaging")}</li>
+                    <li>{T.translate("landing.pricing.premium.calendar")}</li>
+                    <li><Link to="" className="ui button disabled">{T.translate("landing.pricing.premium.learn_more")}</Link></li>
                   </ul>
                 </Grid.Column>
               </Grid>  
@@ -363,10 +367,10 @@ class LandingPage extends Component {
   }  
 }
 
-const MutationsQuery =  compose(
+const Mutation =  compose(
   graphql(CREATE_CONTACT_MESSAGE_MUTATION, {
     name : 'createContactMessageMutation'
   })
 )(LandingPage)
 
-export default (MutationsQuery)
+export default connect(null, { addFlashMessage }) (Mutation)

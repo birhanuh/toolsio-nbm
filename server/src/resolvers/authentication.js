@@ -5,8 +5,8 @@ import { loginUserWithToken } from '../utils/authentication'
 import map from 'lodash/map'
 
 import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
 
+import nodemailer from 'nodemailer'
 import Email from 'email-templates'
 
 const transporter = nodemailer.createTransport({

@@ -49,6 +49,17 @@ class LandingPageHeaderNav extends Component {
 
   render() {
 
+    const InlineStyle = () => (
+      <style>{`
+        .sixteen.wide.column.flash-message {
+          position: absolute;
+          top: 100px;
+          left: 15%;
+          width: 70%;
+      }
+      `}</style>
+    )
+
     return (
       <Segment
         id="home"
@@ -58,6 +69,9 @@ class LandingPageHeaderNav extends Component {
         vertical
         >
         <Container>
+          {/* Inline style */}
+          <InlineStyle />
+
           <Menu inverted pointing secondary size='large'>
             <Menu.Item className="toc" onClick={this.props.toggleOuterSidebarVisibility}>
               <Icon name='sidebar' />
