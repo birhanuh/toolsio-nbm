@@ -15,7 +15,7 @@ import { Grid } from 'semantic-ui-react'
 
 const Page = () => {
   return ( 
-    <Grid.Row columns={1} only='computer'>
+    <Grid.Row columns={1}>
       <Grid.Column width={16}>            
         <Grid columns={4}>
           <Grid.Column>

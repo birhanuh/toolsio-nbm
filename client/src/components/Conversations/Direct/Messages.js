@@ -279,7 +279,7 @@ class Messages extends Component {
   }
 }
 
-const QueriesMutation =  compose(
+const QueriesMutation = compose(
   graphql(MARK_DIRECT_MESSAGES_AS_READ_MUTATION, {
     name: 'markDirectMessagesAsReadMutation'
   }),

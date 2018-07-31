@@ -21,7 +21,7 @@ const IncomesCard = () => (
       const daySum = data.getIncomesData && data.getIncomesData.daySum
       const monthSum = data.getIncomesData && data.getIncomesData.monthSum.map(item => pick(item, ['month', 'sum']))
       const countInvoices = data.getIncomesData && data.getIncomesData.countInvoices
-
+      console.log('countInvoices', countInvoices === 0)
       let monthSumSorted = monthSum && monthSum.sort(function(a, b) {
           let x = new Date(Moment(a.month, 'MM/YYYY')) 
           let y = new Date(Moment(b.month, 'MM/YYYY')) 
@@ -105,7 +105,7 @@ const IncomesCard = () => (
             </Segment>       
           </Card.Content> 
 
-          {countInvoices && countInvoices.length === 0 && 
+          {countInvoices === 0 && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
                 <Link to="/invoices" className="ui primary outline button small">

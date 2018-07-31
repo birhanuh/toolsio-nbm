@@ -1,6 +1,7 @@
 import React, { Component } from 'react' 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Container, Segment, Header, Input, Icon, Form, Button, Message } from 'semantic-ui-react'
@@ -101,7 +102,9 @@ class PasswordReset extends Component {
     return (  
       <Container text>
         <Header as="h2" image className="turquoise">
-          <img src={logo} className="image" alt="logo-square" />
+          <Link className="" to="/">
+            <img src={logo} className="image" alt="logo-square" />
+          </Link>
           <Header.Content>{T.translate("log_in.reset_password")}</Header.Content>
         </Header>    
 

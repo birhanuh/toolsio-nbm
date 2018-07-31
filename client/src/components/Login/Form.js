@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 // Semantic UI Form elements
 import { Segment, Input, Icon, Form as FormElement, Button, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { graphql } from 'react-apollo'
-import { LOGIN_USER_MUTATION } from '../../graphql/authentications'
+import { graphql, compose } from 'react-apollo'
+import { LOGIN_USER_MUTATION, VERIFY_USER_EMIAIL_MUTATION } from '../../graphql/authentications'
 
 import { Validation } from '../../utils'
 
@@ -24,29 +24,39 @@ class Form extends Component {
       isLoading: false
     }
   }
-  /*
+  
   componentDidMount = () => {
-    const { match } = this.props
+    // Retrieve token
+    const url = new URL(window.location.href)
+    let token = url.searchParams.get("token")
 
-    if (match && match.params.token) {
-      this.props.confirmEmail(match.params.token)
+    if (token) {
+      this.props.confirmUserEmailMutation({variables: { token }})
         .then(res => {
-        
-          if (res.data.confirmed) {
+          
+          const { success, errors } = res.data.confirmUserEmail
+      
+          if (success) {            
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("log_in.confirm_email.success")
+              text: T.translate("log_in.flash.confirm_email_success")
             })
-          } else {
-            this.props.addFlashMessage({
-              type: 'info',
-              text: T.translate("log_in.confirm_email.info")
-            })
-          }
 
+            let authToken = localStorage.getItem('authToken', authToken)
+            let refreshAuthToken = localStorage.getItem('refreshAuthToken', refreshAuthToken)
+
+            // Redirect to dashboard
+            if (authToken && refreshAuthToken) {
+              this.context.router.history.push('/dashboard')  
+            }
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+            this.setState({ errors: errorsList, isLoading: false })
+          }
         })
     }
-  }*/
+  }
 
   handleChange = (name, value) => {
     if (this.state.errors[name]) {
@@ -121,36 +131,35 @@ class Form extends Component {
     return (  
       <Segment>
         <FormElement size="small" loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+          { !!errors.message && <Message negative><p>{errors.message}</p></Message> } 
 
-            { !!errors.message && <Message negative><p>{errors.message}</p></Message> } 
-
-            <FormElement.Field> 
-              <label>{T.translate("log_in.email")}</label>
-              <Input
-                  placeholder={T.translate("log_in.email")}
-                  value={email} 
-                  type='email'
-                  onChange={(e, {value}) => this.handleChange('email', value)} 
-                  error={!!errors.email}
-                  icon={<Icon name='user' />}
-                />
-                <span className="red">{errors.email}</span>
-            </FormElement.Field>
-              <FormElement.Field> 
-              <label>{T.translate("log_in.password")}</label>
-              <Input
-                  placeholder={T.translate("log_in.password")}
-                  name="password" 
-                  value={password} 
-                  type='password'
-                  onChange={(e, {value}) => this.handleChange('password', value)} 
-                  error={!!errors.password}
-                  icon={<Icon name='lock' />}
-                />
-                <span className="red">{errors.password}</span>
-            </FormElement.Field>
-                  
-            <Button primary size="large" fluid disabled={isLoading}>{T.translate("log_in.log_in")}</Button>
+          <FormElement.Field error={!!errors.email}> 
+            <label>{T.translate("log_in.email")}</label>
+            <Input
+                placeholder={T.translate("log_in.email")}
+                value={email} 
+                type='email'
+                onChange={(e, {value}) => this.handleChange('email', value)} 
+                error={!!errors.email}
+                icon={<Icon name='user' />}
+              />
+              <span className="red">{errors.email}</span>
+          </FormElement.Field>
+          <FormElement.Field error={!!errors.password}> 
+            <label>{T.translate("log_in.password")}</label>
+            <Input
+                placeholder={T.translate("log_in.password")}
+                name="password" 
+                value={password} 
+                type='password'
+                onChange={(e, {value}) => this.handleChange('password', value)} 
+                error={!!errors.password}
+                icon={<Icon name='lock' />}
+              />
+              <span className="red">{errors.password}</span>
+          </FormElement.Field>
+                
+          <Button primary size="large" fluid disabled={isLoading}>{T.translate("log_in.log_in")}</Button>
         </FormElement>         
       </Segment>
     )
@@ -166,5 +175,12 @@ Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default connect(null, { addFlashMessage }) (graphql(LOGIN_USER_MUTATION)(Form))
+const Mutations =  compose(
+  graphql(LOGIN_USER_MUTATION),
+  graphql(VERIFY_USER_EMIAIL_MUTATION, {
+    name: 'confirmUserEmailMutation'
+  })
+)(Form)
+
+export default connect(null, { addFlashMessage }) (Mutations)
 

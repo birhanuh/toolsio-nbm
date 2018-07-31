@@ -282,7 +282,7 @@ class Messages extends Component {
   }
 }
 
-const Queries =  compose(
+const Queries = compose(
   graphql(GET_CHANNEL_USERS_QUERY, {
     "name": "getChannelQuery",
     options: (props) => ({

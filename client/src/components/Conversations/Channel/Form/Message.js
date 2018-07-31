@@ -102,11 +102,10 @@ class Message extends Component {
     const { body, errors, isLoading } = this.state
 
     return (  
-      <Form loading={isLoading} >
-
+      <Form loading={isLoading} className='pt-5'>
         { !!errors.message && <Message><p>{errors.message}</p></Message> }
         
-        <div className="ui fluid action input">
+        <div className="ui fluid action input" style={{marginRight: '10px'}}>
           <Dropzone onDrop={this.handleOnDrop.bind(this)} multiple={false} className="ignore ui primary button">
             <Icon name="plus" />  
           </Dropzone>        

@@ -73,6 +73,9 @@ export const loginUserWithToken = async (email, password, models, subdomain, SEC
     return {
       success: false,     
       errors: [{ 
+        path: 'email',
+        message: 'Incorrect email or password.'
+      }, { 
         path: 'password',
         message: 'Incorrect email or password.'
       }]
@@ -86,6 +89,9 @@ export const loginUserWithToken = async (email, password, models, subdomain, SEC
     return {
       success: false,     
       errors: [{ 
+        path: 'email',
+        message: 'Incorrect email or password.'
+      }, { 
         path: 'password',
         message: 'Incorrect email or password.'
       }]

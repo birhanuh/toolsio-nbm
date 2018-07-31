@@ -58,7 +58,7 @@ class Page extends Component {
     const { getInvoices } = this.props.data
 
     return (
-      <Grid.Row columns={1} only='computer'>
+      <Grid.Row columns={1}>
         <Grid.Column width={16}>      
           <Segment vertical className="pl-0 pr-0">
             <Link className="ui primary button" to="/invoices/new">

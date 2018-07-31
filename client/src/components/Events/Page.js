@@ -84,7 +84,7 @@ class Page extends Component {
     const { start, end, id, title, description, url, openConfirmationModal } = this.state
 
     return [
-        <Grid.Row columns={1} centered only='computer' key="segment">
+        <Grid.Row columns={1} centered key="segment">
           <Grid.Column width={12}>
             <Segment>
               <div id="calendar"></div>

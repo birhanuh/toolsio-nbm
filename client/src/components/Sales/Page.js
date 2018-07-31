@@ -35,7 +35,7 @@ class Page extends Component {
           const { getSales } = data
 
           return ( 
-            <Grid.Row columns={1} only='computer'>
+            <Grid.Row columns={1}>
               <Grid.Column width={16}>
                 <div className="ui clearing basic segment pl-0 pr-0">
                   <div className="ui right floated icon input">

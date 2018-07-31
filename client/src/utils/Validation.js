@@ -120,6 +120,22 @@ export default {
     }
   },
 
+  validateUserInput: (data) => {
+    let errors = {}
+    
+    if (data.password && data.confirmPassword) {
+      if (!Validator.equals(data.password, data.confirmPassword)) {
+        errors["password"] = T.translate("sign_up.password_match_required") 
+        errors["confirmPassword"] = T.translate("sign_up.password_match_required") 
+      }
+    } 
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
   validateLoginInput: (data) => {
     let errors = {}
 

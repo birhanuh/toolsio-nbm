@@ -97,7 +97,7 @@ class Form extends Component {
           if (success) {
             this.props.addFlashMessage({
               type: 'success',
-              text: T.translate("sign_up.success_create")
+              text: T.translate("sign_up.flash.success_create")
             })
             
             // Redirect to login

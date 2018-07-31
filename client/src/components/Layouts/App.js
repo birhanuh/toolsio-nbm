@@ -90,7 +90,7 @@ class App extends Component {
 
           <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated() && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
             {/* Display breadcrumb */}
-            { isAuthenticated() && <Breadcrumb key="breadcrumb" /> }
+            { isAuthenticated() && !isAuthPages() && <Breadcrumb key="breadcrumb" /> }
 
             {/* Falsh messages */}  
             {!isAuthPages() && <FlashMessage /> }    
