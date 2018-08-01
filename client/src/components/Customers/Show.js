@@ -225,7 +225,7 @@ class Show extends Component {
             <Header as='h1' dividing>{name}</Header> 
             <Grid columns={3}>
               <Grid.Column width={6}>
-                <Segment vertical className="profile">
+                <Segment vertical>
                   <p>
                     {T.translate("customers.show.vat_number")}
                     <strong>{vatNumber}</strong>

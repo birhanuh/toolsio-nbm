@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import map from 'lodash/map'
 import sumBy from 'lodash/sumBy'
 import classnames from 'classnames'
+// Semantic UI JS
+import { Card, Table, Header, Label } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -16,12 +18,12 @@ export default function Sale({ sale, status, tax }) {
   let invoiceTotal = itemsTotal+((tax/100)*itemsTotal)
 
   return(
-    <div className="ui fluid card">
-      <div className="content p-4">
-        <h3 className="ui header">{<Link to={`/sales/show/${sale.id}`}>{sale.name}</Link>}</h3>
-      </div>
-      <div className="content">
-        <table className="ui very basic collapsing celled table">
+    <Card fluid>
+      <Card.Content className="p-4">
+        <Header as='h3'><Link to={`/sales/show/${sale.id}`}>{sale.name}</Link></Header>
+      </Card.Content>
+      <Card.Content>
+        <Table basic='very' collapsing celled>
           <tbody>
             <tr>
               <td>
@@ -36,11 +38,9 @@ export default function Sale({ sale, status, tax }) {
                 <i className="ui tiny header">{T.translate("invoices.show.sale.status")}</i>
               </td>
               <td>
-                { 
-                  <div className={classnames("ui tiny uppercase label", {blue: sale.status === 'new', orange: sale.status === 'in progress', green: sale.status === 'finished' || sale.status === 'delivered', red: sale.status === 'delayed'})}> 
-                    {sale.status}
-                  </div>
-                }
+                <Label size='tiny' className="uppercase" color={sale.status === 'new' && 'blue' || sale.status === 'in progress' && 'orange' || (sale.status === 'finished' || sale.status === 'delivered') && sale.status === 'delayed' && 'red'}> 
+                  {sale.status}
+                </Label>
               </td>
             </tr>
             <tr>
@@ -52,10 +52,10 @@ export default function Sale({ sale, status, tax }) {
               </td>
             </tr>
           </tbody>
-        </table>
+        </Table>
 
-        <h4 className="ui dividing header">{T.translate("invoices.show.sale.items.header")}</h4>
-        <table className="ui very basic table invoice sale">
+        <Header as='h4'>{T.translate("invoices.show.sale.items.header")}</Header>
+        <Table basic='very' className="invoice sale">
           <thead>
             <tr>
               <th>{T.translate("invoices.show.sale.items.name")}</th>
@@ -99,15 +99,15 @@ export default function Sale({ sale, status, tax }) {
                 <strong>{T.translate("invoices.show.invoice_total")}</strong>
               </td>
               <td>
-                <h1 className={classnames("ui header m-0", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid'})}>
+                <Header as='h1' textAlign='right' className={classnames("m-0", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid'})}>
                   {invoiceTotal}
-                </h1>
+                </Header>
               </td>
             </tr>
           </tbody>  
-        </table>
-      </div>
-    </div>
+        </Table>
+      </Card.Content>
+    </Card>
   )
 }
 

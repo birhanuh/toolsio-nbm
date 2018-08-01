@@ -651,6 +651,7 @@
       "invoice_for": "Invoice for",
       "date_of_an_invoice": "Date of an invoice",
       "from": "From",
+      "pdf_download": "PDF download",
       "customer": {
         "billed_to": "Billed to",
         "name": "Name",
