@@ -12,7 +12,7 @@ import { addFlashMessage } from '../../actions/flashMessageActions'
 import { Item, Header, Card, Message, Input, Select, Form, Button, Icon, Dimmer, Image } from 'semantic-ui-react'
 import { Image as CloudinaryImage } from 'cloudinary-react'
 import { graphql, compose } from 'react-apollo'
-import { GET_ACCOUNT_QUERY, UPDATE_ACCOUNT_MUTATION, S3_SIGN_LOGO_MUTATION } from '../../graphql/settings'
+import { GET_ACCOUNT_QUERY, UPDATE_ACCOUNT_MUTATION, S3_SIGN_LOGO_MUTATION } from '../../graphql/accounts'
 
 // Localization 
 import T from 'i18n-react'

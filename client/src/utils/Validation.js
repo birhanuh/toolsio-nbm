@@ -10,10 +10,10 @@ export default {
     let errors = {}
 
     if (!data.user.email) {
-      errors["email"] = T.translate("log_in.email_required")
+      errors["email"] = T.translate("sign_up.email_required")
     } else {
       if (!Validator.isEmail(data.user.email)) {
-        errors["email"] = T.translate("sign_un.email_format_required")  
+        errors["email"] = T.translate("sign_up.wrong_email_format")  
       }
     }  
     if (!data.user.password) {
@@ -44,10 +44,10 @@ export default {
     let errors = {}
 
     if (!data.email) {
-      errors["email"] = T.translate("log_in.email_required")
+      errors["email"] = T.translate("sign_up.email_required")
     } else {
       if (!Validator.isEmail(data.email)) {
-        errors["email"] = T.translate("sign_un.email_format_required")  
+        errors["email"] = T.translate("sign_up.wrong_email_format")  
       }
     }  
     if (!data.password) {
@@ -123,10 +123,31 @@ export default {
   validateUserInput: (data) => {
     let errors = {}
     
-    if (data.password && data.confirmPassword) {
-      if (!Validator.equals(data.password, data.confirmPassword)) {
-        errors["password"] = T.translate("sign_up.password_match_required") 
-        errors["confirmPassword"] = T.translate("sign_up.password_match_required") 
+    if (!data.email) {
+      errors["email"] = T.translate("log_in.email_required")
+    } else {
+      if (!Validator.isEmail(data.email)) {
+        errors["email"] = T.translate("sign_up.wrong_email_format")  
+      }
+    }  
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    }
+  },
+
+  validateUserPasswordInput: (data) => {
+    let errors = {}
+    
+    if (!data.currentPassword) {
+      errors["currentPassword"] = T.translate("settings.user.current_password_required") 
+    }
+
+    if (data.newPassword && data.confirmNewPassword) {
+      if (!Validator.equals(data.newPassword, data.confirmNewPassword)) {
+        errors["newPassword"] = T.translate("sign_up.password_match_required") 
+        errors["confirmNewPassword"] = T.translate("sign_up.password_match_required") 
       }
     } 
 

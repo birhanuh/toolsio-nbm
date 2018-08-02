@@ -8,11 +8,11 @@ import Dropzone from 'react-dropzone'
 import { Validation } from '../../utils'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
-import { Item, Card, Input, Form, Dimmer, Image, Message, Header, Button, Icon } from 'semantic-ui-react'
+import { Item, Card, Input, Form, Dimmer, Image, Message, Header, Button, Icon, Divider } from 'semantic-ui-react'
 import { Image as CloudinaryImage } from 'cloudinary-react'
 import classnames from 'classnames'
 import { graphql, compose } from 'react-apollo'
-import { GET_USER_BY_EMAIL_QUERY, UPDATE_USER_MUTATION, S3_SIGN_AVATAR_MUTATION } from '../../graphql/settings'
+import { GET_USER_BY_EMAIL_QUERY, UPDATE_USER_MUTATION, UPDATE_USER_PASSWORD_MUTATION } from '../../graphql/users'
 
 // Localization 
 import T from 'i18n-react'
@@ -30,14 +30,16 @@ class UserForm extends Component {
       firstName: this.props.data.getUserByEmail ? this.props.data.getUserByEmail.firstName : '',
       lastName: this.props.data.getUserByEmail ? this.props.data.getUserByEmail.lastName : '',
       email: this.props.data.getUserByEmail ? this.props.data.getUserByEmail.email : '',
-      password: '',
-      confirmPassword: '',
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
       avatarUrl: this.props.data.getUserByEmail ? this.props.data.getUserByEmail.avatarUrl : '',
       file: null,
       errors: {},
       active: false,
       isLoadingAvatar: false,
-      isLoadingForm: false
+      isLoadingForm: false,
+      isLoadingPasswordForm: false,
     }
   }
 
@@ -82,6 +84,19 @@ class UserForm extends Component {
     return isValid;
   }
 
+  isPasswordValid() {
+    const { errors, isValid } = Validation.validateUserPasswordInput(this.state)
+
+    let updatedErrors = Object.assign({}, this.state.errors)
+    updatedErrors = errors
+
+    if (!isValid) {
+      this.setState({ errors: updatedErrors })
+    }
+
+    return isValid;
+  }
+
   handleSubmit(e) {
     e.preventDefault()
 
@@ -89,9 +104,9 @@ class UserForm extends Component {
       // Empty errros state for each submit
       this.setState({ errros: {}, isLoadingForm: true })
       
-      const { firstName, lastName, email, password, confirmPassword, avatarUrl } = this.state
+      const { firstName, lastName, email, avatarUrl } = this.state
       // Make submit
-      this.props.updateUserMutation({ variables: { firstName, lastName, email, password, confirmPassword, avatarUrl } })
+      this.props.updateUserMutation({ variables: { firstName, lastName, email, avatarUrl } })
         .then((res) => {
           const { success, errors } = res.data.updateUser     
                 
@@ -108,6 +123,35 @@ class UserForm extends Component {
           }
         })
         .catch(err => this.setState({ errors: err, isLoadingForm: false }))
+    }  
+  }
+
+  handlePasswordChangeSubmit(e) {
+    e.preventDefault()
+
+    if (this.isPasswordValid()) { 
+      // Empty errros state for each submit
+      this.setState({ errros: {}, isLoadingPasswordForm: true })
+      
+      const { currentPassword, newPassword, } = this.state
+      // Make submit
+      this.props.updateUserPasswordMutation({ variables: { currentPassword, newPassword } })
+        .then((res) => {
+          const { success, errors } = res.data.updateUserPassword     
+                
+          if (success) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: T.translate("settings.user.flash.success_password_update")
+            })
+            this.setState({ isLoadingPasswordForm: false, currentPassword: '', newPassword: '', confirmNewPassword: '' })
+          } else {
+            let errorsList = {}
+            errors.map(error => errorsList[error.path] = error.message)
+            this.setState({ errors: errorsList, isLoadingPasswordForm: false })
+          }
+        })
+        .catch(err => this.setState({ errors: err, isLoadingPasswordForm: false }))
     }  
   }
 
@@ -181,7 +225,8 @@ class UserForm extends Component {
   toggleShow = () => this.setState(state => ({ active: !state.active }))
 
   render() {
-    const { firstName, lastName, avatarUrl, password, confirmPassword, errors, active, file, isLoadingAvatar, isLoadingForm } = this.state
+    const { firstName, lastName, avatarUrl, email, currentPassword, newPassword, confirmNewPassword, errors, active, file, 
+      isLoadingAvatar, isLoadingForm, isLoadingPasswordForm } = this.state
     
     return (            
       <Item className="mt-5">    
@@ -233,40 +278,25 @@ class UserForm extends Component {
               <label>{T.translate("settings.user.last_name")}</label>
               <Input
                 placeholder={T.translate("settings.user.last_name")}
-                name="lasttName" 
+                name="lastName" 
                 value={lastName} 
-                onChange={(e, {value}) => this.handleChange('lasttName', value)}
+                onChange={(e, {value}) => this.handleChange('lastName', value)}
                 autoComplete="off"  
               />
-              <span className="red">{errors.lasttName}</span>
+              <span className="red">{errors.lastName}</span>
             </Form.Field>
 
-            <Form.Field error={!!errors.password}>
-              <label>{T.translate("settings.user.password")}</label>
+            <Form.Field error={!!errors.email}> 
+              <label>{T.translate("settings.user.email")}</label>
               <Input
-                placeholder={T.translate("settings.user.password")}
-                name="password" 
-                value={password} 
-                onChange={(e, {value}) => this.handleChange('password', value)}
-                autoComplete="new-password"
-                type='password'
-                error={!!errors.password}
-              />
-              <span className="red">{errors.password}</span>
-            </Form.Field>
-
-            <Form.Field error={!!errors.confirmPassword}>
-              <label>{T.translate("settings.user.confirm_password")}</label>
-              <Input
-                placeholder={T.translate("settings.user.confirm_password")}
-                name="confirmPassword" 
-                value={confirmPassword} 
-                onChange={(e, {value}) => this.handleChange('confirmPassword', value)}
-                autoComplete="new-password"
-                type='password'
-                error={!!errors.confirmPassword}
-              />
-              <span className="red">{errors.confirmPassword}</span>
+                  placeholder={T.translate("settings.user.email")}
+                  value={email} 
+                  type='email'
+                  onChange={(e, {value}) => this.handleChange('email', value)} 
+                  error={!!errors.email}
+                  autoComplete="off"  
+                />
+                <span className="red">{errors.email}</span>
             </Form.Field>
 
             <div className="field">  
@@ -277,7 +307,67 @@ class UserForm extends Component {
               <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.edit")}</button>
             </div>  
           </Form>  
-       </Item.Content>
+
+          <Divider />
+
+          <Form loading={isLoadingPasswordForm} onSubmit={this.handlePasswordChangeSubmit.bind(this)} autoComplete="off">
+         
+            { !!errors.message && (typeof errors.message === "string") && <Message negative><p>{errors.message}</p></Message> } 
+        
+            <fieldset className="custom-fieldset">
+              <legend className="custom-legend">{T.translate("settings.user.password_change")}</legend>        
+              <Form.Field error={!!errors.currentPassword}>
+                <label>{T.translate("settings.user.current_password")}</label>
+                <Input
+                  placeholder={T.translate("settings.user.current_password")}
+                  name="currentPassword" 
+                  value={currentPassword} 
+                  onChange={(e, {value}) => this.handleChange('currentPassword', value)}
+                  autoComplete="off"
+                  type='password'
+                  error={!!errors.currentPassword}
+                />
+                <span className="red">{errors.currentPassword}</span>
+              </Form.Field>
+
+              <Form.Field error={!!errors.newPassword}>
+                <label>{T.translate("settings.user.new_password")}</label>
+                <Input
+                  placeholder={T.translate("settings.user.new_password")}
+                  name="newPassword" 
+                  value={newPassword} 
+                  onChange={(e, {value}) => this.handleChange('newPassword', value)}
+                  autoComplete="off"
+                  type='password'
+                  error={!!errors.newPassword}
+                />
+                <span className="red">{errors.newPassword}</span>
+              </Form.Field>
+
+              <Form.Field error={!!errors.confirmNewPassword}>
+                <label>{T.translate("settings.user.confirm_new_password")}</label>
+                <Input
+                  placeholder={T.translate("settings.user.confirm_new_password")}
+                  name="confirmNewPassword" 
+                  value={confirmNewPassword} 
+                  onChange={(e, {value}) => this.handleChange('confirmNewPassword', value)}
+                  autoComplete="off"
+                  type='password'
+                  error={!!errors.confirmNewPassword}
+                />
+                <span className="red">{errors.confirmNewPassword}</span>
+              </Form.Field>
+            </fieldset>
+              
+            <div className="field">  
+              <Link className="ui primary outline button" to="/dashboard">
+                <i className="minus circle icon"></i>
+                {T.translate("settings.user.cancel")}
+              </Link>  
+              <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.edit")}</button>
+            </div>  
+          </Form>  
+        </Item.Content>
 
       </Item>  
     )
@@ -290,15 +380,10 @@ UserForm.propTypes = {
 
 const MutationQuery =  compose(
   graphql(UPDATE_USER_MUTATION, {
-    name : 'updateUserMutation',
-    options: (props) => ({
-      variables: {
-        subdomain: props.subdomain
-      },
-    })
+    name : 'updateUserMutation'
   }),
-  graphql(S3_SIGN_AVATAR_MUTATION, {
-    name : 's3SignAvatarMutation'
+  graphql(UPDATE_USER_PASSWORD_MUTATION, {
+    name : 'updateUserPasswordMutation'
   }),
   graphql(GET_USER_BY_EMAIL_QUERY, {
     options: (props) => ({

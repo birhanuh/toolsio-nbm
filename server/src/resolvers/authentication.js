@@ -66,7 +66,7 @@ export default {
           })
 
           // Create emailToken
-          jwt.sign({
+          process.env.NODE_ENV !== 'test' && jwt.sign({
               id: response.user.dataValues.id,
               email: response.user.dataValues.email
             }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, emailToken) => {
