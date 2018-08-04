@@ -35,9 +35,9 @@ class Page extends Component {
           const { getProjects } = data
 
           return ( 
-            <Grid.Row columns={1}>
+            <Grid.Row>
               <Grid.Column width={16}>
-                <div className="ui clearing basic segment pl-0 pr-0">
+                <Segment clearing basic className="p-0 mb-5">
                   <div className="ui right floated icon input">
                     <Input name="name" value={this.state.name} onChange={(e, {value}) => this.handleChange('name', value)} 
                       icon={<Icon name='search' inverted circular link onClick={() => {
@@ -59,7 +59,7 @@ class Page extends Component {
                     <Icon name="add circle" />
                     {T.translate("projects.page.create_new_project")}
                   </Link>   
-                </div> 
+                </Segment> 
 
                 { getProjects && <List projects={getProjects} loading={loading} /> }             
 

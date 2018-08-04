@@ -20,14 +20,12 @@ export default (sequelize, DataTypes) => {
   }, { underscored: true })
 
   Invitation.associate = (models) => {
-    // N:M
-    Invitation.belongsToMany(models.Channel, {
-      through: models.Member,
+    // 1:M
+    Invitation.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
         field: 'user_id'
-      },
-      constraints: false
+      }
     })
   }
 

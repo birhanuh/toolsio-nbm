@@ -26,7 +26,7 @@ class Page extends Component {
     }
     
     return (
-      <Grid.Row columns={1}>
+      <Grid.Row>
         <Grid.Column width={12}>         
           <Segment className="account">
             <Item.Group>

@@ -36,7 +36,7 @@ export default {
         } else {
           const channelCreated = await models.Channel.create({ name, isPublic, owner: user.id }, { searchPath: subdomain })
  
-          await models.Member.create({ userId: user.id, channel_id: channelCreated.dataValues.id }, { searchPath: subdomain })
+          await models.Member.create({ userId: user.id, channelId: channelCreated.dataValues.id }, { searchPath: subdomain })
 
           return {
             success: true,

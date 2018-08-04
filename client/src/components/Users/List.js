@@ -33,7 +33,7 @@ export default function List({ users }) {
        <thead>
           <tr>
             <th>{T.translate("users.list.email")}</th>
-            <th>{T.translate("users.list.invitation_accepted")}</th>
+            <th style={{textAlign: 'center'}}>{T.translate("users.list.invitation_accepted")}</th>
           </tr>
         </thead>
         

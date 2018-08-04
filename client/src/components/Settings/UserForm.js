@@ -361,10 +361,10 @@ class UserForm extends Component {
               
             <div className="field">  
               <Link className="ui primary outline button" to="/dashboard">
-                <i className="minus circle icon"></i>
+                <Icon name='minus circle' />
                 {T.translate("settings.user.cancel")}
               </Link>  
-              <button disabled={isLoadingForm} className="ui primary button"><i className="check circle outline icon" aria-hidden="true"></i>&nbsp;{T.translate("settings.user.edit")}</button>
+              <Button disabled={isLoadingForm} primary><Icon name="check circle outline" />&nbsp;{T.translate("settings.user.edit")}</Button>
             </div>  
           </Form>  
         </Item.Content>

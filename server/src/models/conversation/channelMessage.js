@@ -27,8 +27,7 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'channelId',
         field: 'channel_id'
-      },
-      constraints: false
+      }
     })
 
     channelMessage.belongsTo(models.User, {

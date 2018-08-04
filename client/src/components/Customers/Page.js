@@ -59,9 +59,9 @@ class Page extends Component {
     const { getCustomers } = this.props.data
     
     return (
-      <Grid.Row columns={1}>
+      <Grid.Row>
         <Grid.Column width={16}>
-          <Segment vertical className="pl-0 pr-0">
+          <Segment vertical className="p-0 mb-5">
             <Link className="ui primary button" to="/customers/new">
               <Icon name="add circle" />
               {T.translate("customers.page.add_new_customer")}

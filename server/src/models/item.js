@@ -36,14 +36,6 @@ export default (sequelize, DataTypes) => {
         isDecimal: true           //  checks for any numbers
       } 
     }
-  }, {
-    hooks: {
-      beforeValidate: (item) => {
-        if (item.vat === "") {
-          item.vat = null
-        }
-      }
-    }
   })
 
   Item.associate = (models) => {
@@ -52,8 +44,7 @@ export default (sequelize, DataTypes) => {
       foreignKey: {
         name: 'saleId',
         field: 'sale_id'
-      },
-      constraints: false
+      }
     })
 
     // 1:M

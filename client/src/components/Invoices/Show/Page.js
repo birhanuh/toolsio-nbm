@@ -334,8 +334,9 @@ class Page extends Component {
       </Grid.Row>,
 
       <Modal 
-        key="modal" 
-        className="ui small modal invoice"
+        key='modal'
+        size='small' 
+        className='invoice'
         open={openConfirmationModal}>
         <Modal.Header>{T.translate("invoices.show.confirmation_header")}</Modal.Header>
         <Modal.Content>

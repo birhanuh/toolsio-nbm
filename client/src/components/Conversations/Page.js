@@ -14,7 +14,7 @@ import T from 'i18n-react'
 const Page = ({ match }) => {    
     
   return (
-    <Grid.Row columns={1}>
+    <Grid.Row>
       <Grid.Column width={4}>
         <Menu vertical fluid>
           <ChannelsList  channelId={match.params.channelId} />

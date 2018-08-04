@@ -13,7 +13,7 @@ import thunk from 'redux-thunk'
 configure({ adapter: new Adapter() })
 
 // Components 
-import Subdomain from '../../components/Login/Subdomain'
+import Subdomain from '../../src/components/Login/Subdomain'
 
 // Setups
 const middlewares = [thunk] // add your middlewares like `redux-thunk`

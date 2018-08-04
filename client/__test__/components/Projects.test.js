@@ -22,7 +22,7 @@ import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, CREATE_PROJECT_MUTATION, UPDATE_
 configure({ adapter: new Adapter() })
 
 // Components 
-import FormPage from '../../src/components/Projects/FormPage'
+import Form from '../../src/components/Projects/Form'
 import Page from '../../src/components/Projects/Page'
 import Show from '../../src/components/Projects/Show'
 
@@ -35,7 +35,7 @@ let GET_PROJECTS_GQL, CREATE_PROJECT_GQL, GET_PROJECT_GQL
 
 describe("components", () => { 
    
-  describe("<FormPage />", () => {  
+  describe("<Form />", () => {  
 
     beforeEach(() => {
       const storeStateMock = {}
@@ -45,22 +45,22 @@ describe("components", () => {
 
     it('renders connected component', () => { 
       
-      const props = {
-        match: {
-          params: {
-            id: 1
-          }
-        },
-        data: {
-          getProject: {
-            id: 1,
-            name: "Project 1",
-            deadline: 1523439822435,
-            status: "new",
-            description: "Desciption 1..."
-          }
-        }
-      }
+      // const props = {
+      //   match: {
+      //     params: {
+      //       id: 1
+      //     }
+      //   },
+      //   data: {
+      //     getProject: {
+      //       id: 1,
+      //       name: "Project 1",
+      //       deadline: 1523439822435,
+      //       status: "new",
+      //       description: "Desciption 1..."
+      //     }
+      //   }
+      // }
 
       const wrapper = mount(<BrowserRouter>
         <Provider store={store}>
@@ -86,13 +86,13 @@ describe("components", () => {
             }
           }]} > 
             
-            <FormPage {...props} />
+            <Form {...props} />
 
           </MockedProvider>
         </Provider>
       </BrowserRouter>)
-      console.log('FormPage ', wrapper.find(FormPage).props('data'))
-      expect(wrapper.find(FormPage).length).toEqual(1)
+      console.log('Form ', wrapper.find(Form))
+      expect(wrapper.find(Form).length).toEqual(1)
     })
 
   })

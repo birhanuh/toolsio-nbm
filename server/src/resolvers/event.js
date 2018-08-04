@@ -33,8 +33,8 @@ export default {
   },
 
   Mutation: {
-    createEvent: requiresAuth.createResolver((parent, args, { models, subdomain }) => 
-      models.Event.create(args, { searchPath: subdomain })
+    createEvent: requiresAuth.createResolver((parent, args, { models, user, subdomain }) => 
+      models.Event.create({...args, userId: user.id}, { searchPath: subdomain })
         .then(event => {
             return {
               success: true,

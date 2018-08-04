@@ -37,17 +37,6 @@ export default (sequelize, DataTypes) => {
         isDecimal: true               //  checks for any numbers
       } 
     }
-  }, {
-    hooks: {
-      beforeValidate: (task) => {
-        if (task.vat === "") {
-          task.vat = null
-        }
-      },
-      beforeUpdate: (task) => {
-        console.log('task sd', task)
-      }
-    }
   })
 
   Task.associate = (models) => {

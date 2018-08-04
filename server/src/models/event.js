@@ -19,6 +19,16 @@ export default (sequelize, DataTypes) => {
     }
   })
 
+  Event.associate = (models) => {
+    // 1:M
+    Event.belongsTo(models.User, {
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id'
+      },
+      constraints: false
+    })
+  }
   return Event
 }
 

@@ -254,6 +254,7 @@ class Form extends Component {
               }) 
 
               const referrer = document.referrer.replace(/^[^:]+:\/\/[^/]+/, '').replace(/#.*/, '')
+              console.log('referrer: ', referrer)
 
               referrer === 'projects' ? this.context.router.history.push('/projects/new') : this.context.router.history.push('/customers')
             } else {
