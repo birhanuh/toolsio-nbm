@@ -44,19 +44,21 @@ export default (sequelize, DataTypes) => {
     Task.belongsTo(models.Project, {
       foreignKey: {
         name: 'projectId',
-        field: 'project_id'
+        field: 'project_id',
+        allowNull: false
       },
-      constraints: false
+      onDelete: 'cascade'
     })
 
-      // 1:M
+    // 1:M
     Task.belongsTo(models.Invoice, {
       through: models.Project,
       foreignKey: {
         name: 'projectId',
-        field: 'project_id'
+        field: 'project_id',
+        allowNull: false
       },
-      constraints: false
+      onDelete: 'cascade'
     })
   }
 

@@ -51,18 +51,19 @@ export default (sequelize, DataTypes) => {
     Project.belongsTo(models.Customer, {
       foreignKey: {
         name: 'customerId',
-        field: 'customer_id'
+        field: 'customer_id',
+        allowNull: false
       },
-      constraints: false
+      onDelete: 'cascade'
     })
 
     // 1:M
     Project.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
-        field: 'user_id'
-      },
-      constraints: false
+        field: 'user_id',
+        allowNull: false
+      }
     })
   }
 

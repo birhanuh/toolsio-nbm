@@ -50,14 +50,14 @@ handlers:
 error_handlers:
   #- file: dist/error_pages//default_error.html
 
-  - error_code: dist/error_pages/over_quota
-    file: dist/error_pages/over_quota.html
+  # - error_code: dist/error_pages/over_quota
+  #   file: dist/error_pages/over_quota.html
 
-  - error_code: dist/error_pages/dos_api_denial
-    file: dist/error_pages/dos_api_denial.html
+  # - error_code: dist/error_pages/dos_api_denial
+  #   file: dist/error_pages/dos_api_denial.html
 
-  - error_code: dist/error_pages/timeout
-    file: dist/error_pages/timeout.html
+  # - error_code: dist/error_pages/timeout
+  #   file: dist/error_pages/timeout.html
 
 #- url: /
 #  static_files: dist/index.html

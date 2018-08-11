@@ -73,9 +73,10 @@ export default (sequelize, DataTypes) => {
     Invoice.belongsTo(models.Customer, {
       foreignKey: {
         name: 'customerId',
-        field: 'customer_id'
+        field: 'customer_id',
+         allowNull: false
       },
-      constraints: false
+      onDelete: 'cascade'
     })
 
     // 1:1
@@ -84,7 +85,7 @@ export default (sequelize, DataTypes) => {
         name: 'projectId',
         field: 'project_id'
       },
-      constraints: false
+      onDelete: 'cascade'
     })
 
     // 1:1
@@ -93,16 +94,16 @@ export default (sequelize, DataTypes) => {
         name: 'saleId',
         field: 'sale_id'
       },
-      constraints: false
+      onDelete: 'cascade'
     })
 
     // 1:M
     Invoice.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
-        field: 'user_id'
+        field: 'user_id',
+        allowNull: false
       },
-      constraints: false
     })
   }
 

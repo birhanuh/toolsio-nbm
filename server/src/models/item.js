@@ -43,8 +43,10 @@ export default (sequelize, DataTypes) => {
     Item.belongsTo(models.Sale, {
       foreignKey: {
         name: 'saleId',
-        field: 'sale_id'
-      }
+        field: 'sale_id',
+        allowNull: false
+      },
+      onDelete: 'cascade'
     })
 
     // 1:M
@@ -52,9 +54,10 @@ export default (sequelize, DataTypes) => {
       through: models.Sale,
       foreignKey: {
         name: 'saleId',
-        field: 'sale_id'
+        field: 'sale_id',
+        allowNull: false
       },
-      constraints: false
+      onDelete: 'cascade'
     })
   }
 

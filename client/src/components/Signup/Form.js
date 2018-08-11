@@ -194,13 +194,13 @@ class Form extends Component {
                 onChange={(e, {value}) => this.handleChange('industry', value)} 
                 error={!!errors.industry}
                 options={[                
-                  { key: "beauty-salon", value: "beauty-salon", text: 'Beauty salon' },
+                  { key: "beauty salon", value: "beauty salon", text: 'Beauty salon' },
                   { key: "construction", value: "construction", text: 'Construction' },                
                   { key: "design", value: "design", text: 'Design' },
                   { key: "education", value: "education", text: 'Education' },
                   { key: "entertainment", value: "entertainment", text: 'Enterntainment' },
                   { key: "fashion", value: "fashion", text: 'Fashion' },
-                  { key: "health-care", value: "health-care", text: 'Health care' },
+                  { key: "health care", value: "health care", text: 'Health care' },
                   { key: "housing", value: "housing", text: 'Housing' },
                   { key: "hotel", value: "hotel", text: 'Hotel' },
                   { key: "human resource", value: "human resource", text: 'Human resource' },

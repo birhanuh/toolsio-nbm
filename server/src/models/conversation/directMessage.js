@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  var directMessage = sequelize.define('direct_messages', {
+  var DirectMessage = sequelize.define('direct_messages', {
     body: DataTypes.TEXT,
     uploadPath: {
       type: DataTypes.STRING,
@@ -21,24 +21,24 @@ export default (sequelize, DataTypes) => {
     ]
   })
 
-  directMessage.associate = function(models) {
+  DirectMessage.associate = function(models) {
      // 1:M
-    directMessage.belongsTo(models.User, {
+    DirectMessage.belongsTo(models.User, {
       foreignKey: {
         name: 'receiverId',
-        field: 'receiver_id'
-      },
-      constraints: false
+        field: 'receiver_id',
+        allowNull: false
+      }
     })
 
-    directMessage.belongsTo(models.User, {
+    DirectMessage.belongsTo(models.User, {
       foreignKey: {
         name: 'senderId',
-        field: 'sender_id'
-      },
-      constraints: false
+        field: 'sender_id',
+        allowNull: false
+      }
     })
   }
 
-  return directMessage
+  return DirectMessage
 };

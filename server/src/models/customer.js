@@ -107,9 +107,9 @@ export default (sequelize, DataTypes) => {
     Customer.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
-        field: 'user_id'
-      },
-      constraints: false
+        field: 'user_id',
+        allowNull: false
+      }
     })
   }
 

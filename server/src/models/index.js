@@ -14,9 +14,9 @@ const models = {
   Sale: sequelize.import('./sale'),
   Item: sequelize.import('./item'),
   Invoice: sequelize.import('./invoice'),
+  Channel: sequelize.import('./conversation/channel'),
   ChannelMessage: sequelize.import('./conversation/channelMessage'),
   DirectMessage: sequelize.import('./conversation/directMessage'),
-  Channel: sequelize.import('./conversation/channel'),
   Member: sequelize.import('./conversation/member'),
   Event: sequelize.import('./event'),
   Invitation: sequelize.import('./invitation')

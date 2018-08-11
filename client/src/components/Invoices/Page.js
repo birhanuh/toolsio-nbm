@@ -68,7 +68,7 @@ class Page extends Component {
           </Segment>  
 
           <Segment>
-            <Segment clearing basic className="pl-0 pr-0">
+            <Segment clearing basic className="p-0">
               <div className="ui right floated input">
                 <div className="ui icon input">
                   <Input name="search" value={this.state.search} onChange={(e, {value}) => this.handleChange('search', value)} 

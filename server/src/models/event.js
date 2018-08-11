@@ -24,9 +24,10 @@ export default (sequelize, DataTypes) => {
     Event.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
-        field: 'user_id'
+        field: 'user_id',
+        allowNull: false
       },
-      constraints: false
+      onDelete: 'cascade'
     })
   }
   return Event

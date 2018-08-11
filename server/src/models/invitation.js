@@ -24,8 +24,10 @@ export default (sequelize, DataTypes) => {
     Invitation.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
-        field: 'user_id'
-      }
+        field: 'user_id',
+        allowNull: false
+      },
+      onDelete: 'cascade'
     })
   }
 

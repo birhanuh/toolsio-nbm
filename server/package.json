@@ -89,7 +89,6 @@
     "gulp-nodemon": "^2.2.1",
     "jest": "^23.4.2",
     "nodemon": "^1.17.5",
-    "phantomjs": "^2.1.7",
-    "umzug": "^2.1.0"
+    "phantomjs": "^2.1.7"
   }
 }

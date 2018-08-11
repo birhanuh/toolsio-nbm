@@ -17,16 +17,17 @@ export default (sequelize, DataTypes) => {
     Channel.belongsToMany(models.User, {
       through: models.Member,
       foreignKey: {
-        name: 'channel_Id',
-        field: 'channel_id'
-      },
-      constraints: false
+        name: 'channelId',
+        field: 'channel_id',
+        allowNull: false
+      }
     })
 
     // 1:N
     Channel.belongsTo(models.User, {
       foreignKey: 'owner',
-      constraints: false
+      allowNull: false,
+      onDelete: 'cascade'
     })
   }
 

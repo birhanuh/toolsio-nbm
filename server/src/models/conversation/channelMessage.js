@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const channelMessage = sequelize.define('channel_messages', {
+  const ChannelMessage = sequelize.define('channel_messages', {
     body: DataTypes.TEXT,
     uploadPath: {
       type: DataTypes.STRING,
@@ -21,25 +21,27 @@ export default (sequelize, DataTypes) => {
     ]
   })
 
-  channelMessage.associate = (models) => {
+  ChannelMessage.associate = (models) => {
     // 1:M
-    channelMessage.belongsTo(models.Channel, {
+    ChannelMessage.belongsTo(models.Channel, {
       foreignKey: {
         name: 'channelId',
-        field: 'channel_id'
-      }
+        field: 'channel_id',
+        allowNull: false
+      },
+      onDelete: 'cascade'
     })
 
-    channelMessage.belongsTo(models.User, {
+    ChannelMessage.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
-        field: 'user_id'
-      },
-      constraints: false
+        field: 'user_id',
+        allowNull: false
+      }
     })
   }
 
-  return channelMessage
+  return ChannelMessage
 }
 
 
