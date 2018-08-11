@@ -274,7 +274,7 @@ export default {
     if (!data.name) {
       errors['name'] = T.translate("customers.form.name_required")
     }
-    if (!data.contact.phoneNumber && !data.contact.email) {
+    if (!data.vatNumber) {
       errors['vatNumber'] = T.translate("customers.form.vat_number_required")
     }
     if (!data.contact.phoneNumber && !data.contact.email) {

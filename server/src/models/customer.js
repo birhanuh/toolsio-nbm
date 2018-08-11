@@ -5,7 +5,7 @@ export default (sequelize, DataTypes) => {
       allowNull : false,
       validate: {    
         notEmpty: true,      
-        is: /^([^0-9]*)$/           // will not allow numbers
+        is: /[A-Za-z\u00C0-\u00FF ]+/           // Unicode regx, will only allow letters, spaces
       } 
     },
     vatNumber: {
@@ -57,14 +57,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        is: /^[A-z ]+$/,             // will only allow letters, spaces
+        is: /[A-Za-z\u00C0-\u00FF ]+/           // Unicode regx, will only allow letters, spaces
       } 
     },
     country: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {     
-        is: /^[A-z ]+$/,             // will only allow letters, spaces
+        is: /[A-Za-z\u00C0-\u00FF ]+/           // Unicode regx, will only allow letters, spaces
       } 
     }
   }, {
