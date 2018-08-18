@@ -3,7 +3,7 @@
     "home": {
       "header": "Home",
       "welcome": "Welcome to",
-      "slogan": "Track and manage your Projects and Sales more efficently online! Create Invoices of Projects ans Sales to your client on the fly!",
+      "slogan": "Manage your Projects and Sales online more efficently! Create Invoices, track Projects' progress and Sales' status by intercating with your colleauges and clients seamlessly!",
       "get_started": "Get started for free",
       "learn_more": "Learn more"
     },
@@ -11,19 +11,19 @@
       "header": "Features",
       "invoice": {
         "header": "Invoicing",
-        "text": "Create Invoces for the sold items or delivered projects. Optionally, import/export Invoices to/from exernal excel or CSV files. View and print Invoices in PDF format."
+        "text": "Create Invoces for the finished Projects and delivered Sales. Print PDF format of invoices and send to your clients. Optionally, import/export Invoices to/from exernal sources (i.e excel, CSV)."
       },
       "sale": {
         "header": "Sale managment",
-        "text": "Track and record each sales you have been seling. Create an Invocie for the successful sales."
+        "text": "Create Sales by adding respective items individually. Create an Invocie for delivered Sales."
       },
       "project": {
         "header": "Project managment",
-        "text": "Track and record hours of projects you have been working on. Generate Invocie for the delivered projects. Invite participant or colleauges collaborate on a project."
+        "text": "Record hours and caclulate prices for each tasks of the  Project you've been working on. Invite collaboraters and genrate invoices for delivered Projects."
       },
       "analysis": {
         "header": "Business analysis",
-        "text": "Reports of collected and aggregated metrics presented in a coherent set of visualizations of the key business activity data, such as active average sales per week or record paid invoice month. Forcast milestone by analysed exsiting activity data."
+        "text": "Analyzed reporting of your day-to-day business activites. Data metrics presented in coherent set of visualizations giving you an immresed prespective of your business performance (total income, average Projects/Sales per week, Customers Vs Projects/Sales aspect ratio, and so on...)."
       }
     },
     "clients": {

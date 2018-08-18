@@ -156,7 +156,7 @@ class LandingPage extends Component {
 
     return (
       <div onClick={this.hideSidebarVisibility}>
-        <Segment style={{ padding: '4em 0em' }} vertical id="features" className=" background-white">
+        <Segment style={{ padding: '4em 0em' }} vertical id="features" className="stripe background-white">
           <Grid container stackable verticalAlign='middle'>
             <Grid columns={2} centered> 
               <Header as='h2' aligned='center'>{T.translate("landing.features.header")}</Header>
@@ -194,7 +194,7 @@ class LandingPage extends Component {
           </Grid>
         </Segment>
 
-        <Segment style={{ padding: '4em 0em' }} vertical id="clients" className=" background-xx-light-grey">          
+        <Segment style={{ padding: '4em 0em' }} vertical id="clients" className="stripe background-xx-light-grey">          
           <Grid container stackable verticalAlign='middle'>
             <Grid columns={2} centered>
               <Header as='h2' aligned='center'>{T.translate("landing.clients.header")}</Header>
@@ -223,7 +223,7 @@ class LandingPage extends Component {
           </Grid>
         </Segment>  
 
-        <div id="testimonial" className="">
+        <div id="testimonial" className="stripe">
           <Container text>
             <Segment vertical textAlign='center'>
               <div className="slider slider1"> 
@@ -256,7 +256,7 @@ class LandingPage extends Component {
           </Container>  
         </div>
 
-        <Segment style={{ padding: '4em 0em' }} vertical id="pricing" className="background-xx-light-grey">          
+        <Segment style={{ padding: '4em 0em' }} vertical id="pricing" className="stripe background-xx-light-grey">          
           <Grid container stackable verticalAlign='middle'>
             <Grid.Row columns={1} centered>
               <Header as='h2'>{T.translate("landing.pricing.header")}</Header>
@@ -302,17 +302,17 @@ class LandingPage extends Component {
           </Grid>      
         </Segment>
 
-        <Segment style={{ padding: '4em 0em' }} vertical id="bottom-cta" className="background-white">
+        <Segment style={{ padding: '4em 0em' }} vertical id="bottom-cta" className="stripe background-white">
           <Grid container stackable verticalAlign='middle'>  
             <Grid columns={2} centered> 
               <div className="column centered row">
-                <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
+                <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
               </div>  
             </Grid>
           </Grid>
         </Segment>  
 
-        <Segment style={{ padding: '4em 0em' }} vertical id="contacts" className="background-xx-light-grey">  
+        <Segment style={{ padding: '4em 0em' }} vertical id="contacts" className="stripe background-xx-light-grey">  
           <Grid container stackable verticalAlign='middle'> 
             <Grid columns={2} centered> 
               <Header as='h2' aligned='center'>{T.translate("landing.contacts.header")}</Header>             

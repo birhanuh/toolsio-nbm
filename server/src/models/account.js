@@ -6,7 +6,7 @@ export default (sequelize, DataTypes) => {
       unique: true,
       validate: {    
         is: ["^[a-z]+$",'i'],       // will only allow letters
-        notContains: ['www', 'http', 'https']          // don't allow www substrings
+        notIn: [['www', 'http', 'https', 'api']],          // don't allow www, http, https substrings
       } 
     },
     industry: {

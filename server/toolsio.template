@@ -23,8 +23,8 @@ server {
     # certs sent to the client in SERVER HELLO are concatenated in ssl_certificate
     #ssl_certificate /etc/letsencrypt/live/toolsio.com/fullchain.pem;
     #ssl_certificate_key /etc/letsencrypt/live/toolsio.com/privkey.pem;
-    ssl_certificate /etc/nginx/csr/toolsio.crt;
-    ssl_certificate_key /etc/nginx/csr/toolsio.key;
+    ssl_certificate /etc/nginx/certs/api.toolsio.com.crt;
+    ssl_certificate_key /etc/nginx/certs/api.toolsio.com.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:SSL:50m;
     ssl_session_tickets off;

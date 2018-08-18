@@ -43,7 +43,7 @@ class Subdomain extends Component {
             })
 
             // Redirect to login page with subdoamin set 
-            window.location = process.env.CLIENT_PROTOCOL+subdomain+'.'+process.env.CLIENT_URL+'/login'
+            window.location = process.env.CLIENT_PROTOCOL+subdomain+'.'+process.env.CLIENT_HOST+'/login'
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -93,7 +93,7 @@ class Subdomain extends Component {
             })
 
             // Redirect to login page with subdoamin set 
-             window.location = ''+process.env.CLIENT_PROTOCOL+subdomain+'.'+process.env.CLIENT_URL+'/login'
+             window.location = ''+process.env.CLIENT_PROTOCOL+subdomain+'.'+process.env.CLIENT_HOST+'/login'
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -141,7 +141,7 @@ class Subdomain extends Component {
           </Form>
         </Segment>  
         <Segment>
-          {T.translate("log_in.new_to_us")}&nbsp;<Link to="/signup">{T.translate("sign_up.sign_up")}</Link>
+          {T.translate("log_in.new_to_us")}&nbsp;<a href={process.env.CLIENT_PROTOCOL+process.env.CLIENT_HOST+"/signup"}>{T.translate("sign_up.sign_up")}</a>
         </Segment>
         <Segment vertical align="center">
           <small className="d-block">{T.translate("landing.footer.copy_right")}</small>

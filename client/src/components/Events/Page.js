@@ -63,8 +63,6 @@ class Page extends Component {
       select: ( start, end ) => {
         this.setState(({ start, end, id: null, title: "", description: "", url: "" }))
         this.toggleConfirmationModal() 
-        console.log('jsEvent ', jsEvent)
-        console.log('view ', view)
       },
       eventClick: (event) => {
         this.setState(({ start: event.start, end: event.end, id: event.id, title: event.title, description: event.description, url: event.url }))

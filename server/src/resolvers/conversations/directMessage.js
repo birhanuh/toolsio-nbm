@@ -157,7 +157,7 @@ export default {
   },
   
   DirectMessage: {
-    uploadPath: parent => parent.uploadPath && `${process.env.SERVER_URL || 'http://localhost:8080/'}${parent.uploadPath}`,
+    uploadPath: parent => parent.uploadPath && `${process.env.SERVER_URL}${parent.uploadPath}`,
     
     user: ({ user, senderId }, args, { models, subdomain }) => {
       if (user) {

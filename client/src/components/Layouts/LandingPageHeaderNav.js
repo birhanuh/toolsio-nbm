@@ -88,7 +88,7 @@ class LandingPageHeaderNav extends Component {
 
             <Menu.Item position='right' style={{alignSelf: 'inherit'}}>                                                  
               <Link className="ui inverted button"  to="/subdomain">{T.translate("log_in.log_in")}</Link> 
-              <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui inverted button" style={{marginLeft: '0.5em'}}>
+              <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}/signup`} className="ui inverted button" style={{marginLeft: '0.5em'}}>
                 {T.translate("sign_up.sign_up")}
               </a>     
             </Menu.Item>  
@@ -106,7 +106,7 @@ class LandingPageHeaderNav extends Component {
             <div className="turquoise d-inline">{T.translate("internal_navigation.toolsio")}</div>
           </Header>
           <h3>{T.translate("landing.home.slogan")}</h3>
-          <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_URL}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
+          <a href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}/signup`} className="ui huge primary button">{T.translate("landing.home.get_started")}<i className="right arrow icon"></i></a>
         </Container>
       </Segment>)
   }  

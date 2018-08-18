@@ -10,7 +10,7 @@ import { getMainDefinition } from 'apollo-utilities'
 import { getSubdomain } from './utils'
 
 const httpLink = createUploadLink({
-  uri: `${process.env.SERVER_PROTOCOL}${process.env.SERVER_URL}/graphql`
+  uri: `${process.env.SERVER_HTTP_PROTOCOL}${process.env.SERVER_HOST}/graphql`
 })
 
 // middleWares and afterwares
@@ -48,7 +48,7 @@ const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLi
 
 // Create a WebSocket link:
 export const wsLink = new WebSocketLink({
-  uri: `ws://${process.env.SERVER_URL}/subscriptions`,
+  uri: `${process.env.SERVER_WS_PROTOCOL}${process.env.SERVER_HOST}/subscriptions`,
   options: {
     reconnect: true,
     lazy: true,
