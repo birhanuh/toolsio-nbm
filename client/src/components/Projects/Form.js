@@ -289,7 +289,7 @@ class Form extends Component {
                     <Message info size="small" className="mb-1">
                       <p>{T.translate("projects.form.empty_customers_message")}</p>
 
-                      <Link className="ui primary outline tiny button" to="/customers/new">
+                      <Link className="ui primary outline tiny button" to={{pathname: '/customers/new', state: { prevPath: location.pathname } }}>
                         <Icon name="add circle" />
                         {T.translate("projects.form.add_new_customer")}
                       </Link>

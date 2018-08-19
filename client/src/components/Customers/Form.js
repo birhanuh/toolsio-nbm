@@ -253,10 +253,12 @@ class Form extends Component {
                 text: T.translate("customers.form.flash.success_create", { name: name})
               }) 
 
-              const referrer = document.referrer.replace(/^[^:]+:\/\/[^/]+/, '').replace(/#.*/, '')
-              console.log('referrer: ', referrer)
+              // Redirect to projects/new based on previous path
+              if (this.props.location.state && this.props.location.state.prevPath && this.props.location.state.prevPath === '/projects/new') {
+                this.context.router.history.push('/projects/new')
+              }
 
-              referrer === 'projects' ? this.context.router.history.push('/projects/new') : this.context.router.history.push('/customers')
+              this.context.router.history.push('/customers')
             } else {
               let errorsList = {}
               errors.map(error => {

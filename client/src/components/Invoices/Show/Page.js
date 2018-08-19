@@ -100,16 +100,21 @@ class Page extends Component {
           variables: {
             order: 'DESC',
             offset: 0,
-            limit: 10
+            limit: 10,
+            name: "",
           } 
         })
-        // Add our comment from the mutation to the end.
-        
-        let updatedData = data.getInvoices.filter(invoice => invoice.id !== id) 
-        data.getInvoices = updatedData
+        // Filter out deleted invoice from store.     
+        let updatedInvoices = data.getInvoices.invoices.filter(invoice => invoice.id !== id) 
+        data.getInvoices.invoices = updatedInvoices
 
         // Write our data back to the cache.
-        proxy.writeQuery({ query: GET_INVOICES_QUERY, data })
+        proxy.writeQuery({ query: GET_INVOICES_QUERY, variables: {
+            order: 'DESC',
+            offset: 0,
+            limit: 10,
+            name: ""
+          }, data })
       }})
       .then(res => {          
 
