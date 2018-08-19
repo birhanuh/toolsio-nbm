@@ -47,7 +47,7 @@ export default {
             await models.sequelize.createSchema(subdomain)
 
             // Migrate users model 
-            await models.User.sync({schema: subdomain})
+            await models.User.sync({schema: subdomain, searchPath: subdomain})
             
             // Count users
             const count = await models.User.count({ searchPath: subdomain, transaction })
@@ -57,16 +57,33 @@ export default {
             const account = await models.Account.create({ subdomain, industry, owner: user.dataValues.id }, { transaction })
 
             // Sync the reset schemas asynchronously
-            map(Object.keys(models), (key) => {
-                if (['sequelize', 'Sequelize', 'Account', 'User'].includes(key)) return
-                models[key].sync({schema: subdomain})
-              })
+            // map(Object.keys(models), (key) => {
+            //     if (['sequelize', 'Sequelize', 'Account', 'User'].includes(key)) return
+            //     models[key].sync({schema: subdomain, searchPath: subdomain})
+            //   })
+
+            const asyncCreateTableFunc = async () => {
+              await models.Customer.sync({schema: subdomain, searchPath: subdomain})
+              await models.Project.sync({schema: subdomain, searchPath: subdomain})
+              await models.Sale.sync({schema: subdomain, searchPath: subdomain})
+              await models.Task.sync({schema: subdomain, searchPath: subdomain})
+              await models.Item.sync({schema: subdomain, searchPath: subdomain})
+              await models.Invoice.sync({schema: subdomain, searchPath: subdomain})
+              await models.Invitation.sync({schema: subdomain, searchPath: subdomain})
+              await models.Event.sync({schema: subdomain, searchPath: subdomain})
+              await models.Channel.sync({schema: subdomain, searchPath: subdomain})
+              await models.ChannelMessage.sync({schema: subdomain, searchPath: subdomain})
+              await models.DirectMessage.sync({schema: subdomain, searchPath: subdomain})
+              await models.Member.sync({schema: subdomain, searchPath: subdomain})
+            }
+
+            asyncCreateTableFunc()
 
             return { user, account } 
           })
 
           // Create emailToken
-          jwt.sign({
+          process.env.NODE_ENV !== 'test' && jwt.sign({
               id: response.user.dataValues.id,
               email: response.user.dataValues.email
             }, process.env.JWTSECRET1, { expiresIn: '60d' }, (err, emailToken) => {

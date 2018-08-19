@@ -1,24 +1,13 @@
 import { formatErrors } from '../utils/formatErrors'
 import requiresAuth from '../middlewares/authentication'
 
-import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
+import bcrypt from 'bcrypt-nodejs'
 
 // AWS
 import AWS from 'aws-sdk'
 
 // Cloudinary
 import cloudinary from 'cloudinary'
-
-import Email from 'email-templates'
-
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-})
 
 const s3Bucket = new AWS.S3({
   signatureVersion: 'v4',
@@ -106,7 +95,42 @@ export default {
             errors: formatErrors(err, models)
           }
         })
-    })    
+    }),
+
+    updateUserPassword: requiresAuth.createResolver(async (parent, args, { models, user, subdomain }) => {
+      // Do both asynchronously
+      var userFound = await models.User.findOne({ where: { email: user.email }, searchPath: subdomain }, { raw: true })
+  
+      const valid = bcrypt.compareSync(args.currentPassword, userFound.password)
+
+      if (valid) {
+        return models.User.update({password: args.newPassword}, { where: {email: user.email}, returning: true, plain: true, searchPath: subdomain })
+          .then(result => {  
+            return {
+              success: true,
+              user: result[1].dataValues
+            }
+          })
+          .catch(err => {
+            console.log('err: ', err)
+            return {
+              success: false,
+              errors: formatErrors(err, models)
+            }
+          })  
+      } else {
+        return {
+          success: false,
+          errors: [
+            {
+              path: 'currentPassword',
+              message: "Current password doesn't match"
+            }
+          ]
+        }
+      }
+      
+    })        
     
   }    
 }

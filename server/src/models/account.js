@@ -6,7 +6,7 @@ export default (sequelize, DataTypes) => {
       unique: true,
       validate: {    
         is: ["^[a-z]+$",'i'],       // will only allow letters
-        notContains: 'www'          // don't allow www substrings
+        notIn: [['www', 'http', 'https', 'api']],          // don't allow www, http, https substrings
       } 
     },
     industry: {
@@ -42,7 +42,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: /^[0-9\-()]+$/,         // will only allow letters, spaces
+        is: /^[0-9\-()]+$/         // will only allow letters, spaces
       },
       field: 'postal_code' 
     },
@@ -50,14 +50,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {     
-        is: /^[A-z ]+$/,            // will only allow letters, spaces
+        is: /[A-Za-z\u00C0-\u00FF ]+/           // Unicode regx, will only allow letters, spaces
       } 
     },
     country: {
       type: DataTypes.STRING,
       allowNull : true,
       validate: {       
-        is: /^[A-z ]+$/,             // will only allow letters, spaces
+        is: /[A-Za-z\u00C0-\u00FF ]+/            // Unicode regx, will only allow letters, spaces
       } 
     },
     logoUrl: {
@@ -93,7 +93,7 @@ export default (sequelize, DataTypes) => {
     // 1:1
     Account.belongsTo(models.User, {
       foreignKey: 'owner',
-      constraints: false
+      allowNull: false
     })
   }
 

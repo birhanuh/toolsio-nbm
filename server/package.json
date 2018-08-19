@@ -18,7 +18,7 @@
     "db:seed": "./node_modules/.bin/sequelize db:seed --seed",
     "db:seed:all": "./node_modules/.bin/sequelize db:seed:all",
     "pretest": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate",
-    "test": "NODE_ENV=test jest --runInBand './__test__' "
+    "test": "NODE_ENV=test jest --runInBand --forceExit './__test__' "
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,9 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/birhanuh/toolsio-react/issues"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "homepage": "https://github.com/birhanuh/toolsio-node#readme",
   "dependencies": {
@@ -84,9 +87,8 @@
     "gulp": "^4.0.0",
     "gulp-babel": "^7.0.1",
     "gulp-nodemon": "^2.2.1",
-    "jest": "^22.4.3",
+    "jest": "^23.4.2",
     "nodemon": "^1.17.5",
-    "phantomjs": "^2.1.7",
-    "umzug": "^2.1.0"
+    "phantomjs": "^2.1.7"
   }
 }

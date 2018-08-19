@@ -99,16 +99,21 @@ class Show extends Component {
           variables: {
             order: 'DESC',
             offset: 0,
-            limit: 10
+            limit: 10,
+            name: ""
           } 
         })
-        // Add our comment from the mutation to the end.
-        
-        let updatedData = data.getCustomers.filter(customer => customer.id !== id) 
-        data.getInvoices = updatedData
+        // Filter out deleted customer from store.     
+        let updatedCustomers = data.getCustomers.customers.filter(customer => customer.id !== id) 
+        data.getCustomers.customers = updatedCustomers
 
         // Write our data back to the cache.
-        proxy.writeQuery({ query: GET_CUSTOMERS_QUERY, data })
+        proxy.writeQuery({ query: GET_CUSTOMERS_QUERY, variables: {
+            order: 'DESC',
+            offset: 0,
+            limit: 10,
+            name: ""
+          }, data })
       }})
       .then(res => {          
 
@@ -225,7 +230,7 @@ class Show extends Component {
             <Header as='h1' dividing>{name}</Header> 
             <Grid columns={3}>
               <Grid.Column width={6}>
-                <Segment vertical className="profile">
+                <Segment vertical>
                   <p>
                     {T.translate("customers.show.vat_number")}
                     <strong>{vatNumber}</strong>
@@ -335,15 +340,6 @@ Show.contextTypes = {
 const MutationQuery =  compose(
   graphql(DELETE_CUSTOMER_MUTATION, {
     name : 'deleteCustomerMutation'
-  }),
-  graphql(GET_CUSTOMERS_QUERY, {
-    options: () => ({
-      variables: {
-        order: 'DESC',
-        offset: 0,
-        limit: 10
-      }
-    })
   }),
   graphql(GET_CUSTOMER_QUERY, {
     options: (props) => ({

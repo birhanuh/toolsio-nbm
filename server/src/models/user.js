@@ -111,9 +111,9 @@ export default (sequelize, DataTypes) => {
       through: models.Member,
       foreignKey: {
         name: 'userId',
-        field: 'user_id'
+        field: 'user_id',
+        allowNull: false
       },
-      constraints: false
     })
   }
 

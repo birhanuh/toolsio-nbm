@@ -13,8 +13,8 @@ import thunk from 'redux-thunk'
 configure({ adapter: new Adapter() })
 
 // Components 
-import Form from '../../components/Login/Form'
-import Page from '../../components/Login/Page'
+import Form from '../../src/components/Login/Form'
+import Page from '../../src/components/Login/Page'
 
 // Factories
 import { Account } from '../factories'

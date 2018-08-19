@@ -44,6 +44,8 @@ export default `
     updateUser(firstName: String, lastName: String, email: String!, password: String, 
       avatarUrl: String): UpdateResponse!
 
+    updateUserPassword(currentPassword: String, newPassword: String): UpdateResponse!
+
     s3SignAvatar(fileName: String!, fileType: String!): S3SignAvatarResponse!
   }
 

@@ -13,7 +13,7 @@ import thunk from 'redux-thunk'
 configure({ adapter: new Adapter() })
 
 // Components 
-import Invitation from '../../components/Signup/Invitation'
+import Invitation from '../../src/components/Signup/Invitation'
 
 // Factories
 import { Account } from '../factories'

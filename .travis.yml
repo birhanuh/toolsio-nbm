@@ -2,8 +2,8 @@ language: node_js
 node_js:
   - "10.2.1"
 services:
-  - redis-server
-  - docker
+  - if [ "$TEST_DIR" = "server" ]; then redis-server; fi
+  - if [ "$TEST_DIR" = "server" ]; then docker; fi
 notifications:
   email:
     on_success: change # only if status change from fail to success
@@ -15,8 +15,8 @@ cache:
     - client/node_modules
     - server/node_modules
 env:
-  - TEST_DIR_CLIENT=client
-  - TEST_DIR_SERVER=server
+  - TEST_DIR=client
+  - TEST_DIR=server
 #before_script:
 #  - cd $TEST_DIR && npm install
 #script:
@@ -26,17 +26,17 @@ cache:
    directories:
      - node_modules
 before_script:
-  - cd $TEST_DIR_SERVER 
+  - cd $TEST_DIR 
   - npm install
-  - npm run build
-  - sleep 3
-  - docker-compose build
-  - docker-compose up -d
-  - sleep 3
+  - if [ "$TEST_DIR" = "server" ]; then npm run build; fi
+  - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
+  - if [ "$TEST_DIR" = "server" ]; then docker-compose build; fi
+  - if [ "$TEST_DIR" = "server" ]; then docker-compose up -d; fi
+  - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
 script:
   - npm test
 after_script:
-  - docker-compose kill
+  - if [ "$TEST_DIR" = "server" ]; then docker-compose kill; fi
 
 #jobs:
 #  include:

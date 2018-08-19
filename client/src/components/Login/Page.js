@@ -30,7 +30,7 @@ class Page extends Component {
 
         <Segment>
           <span>
-            {T.translate("log_in.new_to_us")}&nbsp;<a href={process.env.CLIENT_PROTOCOL+process.env.CLIENT_URL+"/signup"}>{T.translate("sign_up.sign_up")}</a>
+            {T.translate("log_in.new_to_us")}&nbsp;<a href={process.env.CLIENT_PROTOCOL+process.env.CLIENT_HOST+"/signup"}>{T.translate("sign_up.sign_up")}</a>
           </span>
           <span style={{float: "right"}}>
             <Link to="/login/forgot-password-request">{T.translate("log_in.forgot_your_password")}</Link>

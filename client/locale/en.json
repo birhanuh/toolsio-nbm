@@ -3,7 +3,7 @@
     "home": {
       "header": "Home",
       "welcome": "Welcome to",
-      "slogan": "Track and manage your Projects and Sales more efficently online! Create Invoices of Projects ans Sales to your client on the fly!",
+      "slogan": "Manage your Projects and Sales online more efficently! Create Invoices, track Projects' progress and Sales' status by intercating with your colleauges and clients seamlessly!",
       "get_started": "Get started for free",
       "learn_more": "Learn more"
     },
@@ -11,19 +11,19 @@
       "header": "Features",
       "invoice": {
         "header": "Invoicing",
-        "text": "Create Invoces for the sold items or delivered projects. Optionally, import/export Invoices to/from exernal excel or CSV files. View and print Invoices in PDF format."
+        "text": "Create Invoces for the finished Projects and delivered Sales. Print PDF format of invoices and send to your clients. Optionally, import/export Invoices to/from exernal sources (i.e excel, CSV)."
       },
       "sale": {
         "header": "Sale managment",
-        "text": "Track and record each sales you have been seling. Create an Invocie for the successful sales."
+        "text": "Create Sales by adding respective items individually. Create an Invocie for delivered Sales."
       },
       "project": {
         "header": "Project managment",
-        "text": "Track and record hours of projects you have been working on. Generate Invocie for the delivered projects. Invite participant or colleauges collaborate on a project."
+        "text": "Record hours and caclulate prices for each tasks of the  Project you've been working on. Invite collaboraters and genrate invoices for delivered Projects."
       },
       "analysis": {
         "header": "Business analysis",
-        "text": "Reports of collected and aggregated metrics presented in a coherent set of visualizations of the key business activity data, such as active average sales per week or record paid invoice month. Forcast milestone by analysed exsiting activity data."
+        "text": "Analyzed reporting of your day-to-day business activites. Data metrics presented in coherent set of visualizations giving you an immresed prespective of your business performance (total income, average Projects/Sales per week, Customers Vs Projects/Sales aspect ratio, and so on...)."
       }
     },
     "clients": {
@@ -108,7 +108,7 @@
       "dont_have_an_account": "Don't have an account? Sign up for free now!"
     },
     "email_required": "Email is required",
-    "email_format_required": "Wrong Email format",
+    "wrong_email_format": "Wrong Email format",
     "password_required": "Password is required",
     "password_confirmation_required": "Password confirmation is required",
     "password_match_required": "Password doesn't match",
@@ -201,12 +201,18 @@
       "email": "Email",
       "password": "Password",
       "confirm_password": "Confirm password",
+      "current_password": "Current password",
+      "new_password": "New password",
+      "confirm_new_password": "Confirm new password",
+      "password_change": "Password change",
+      "current_password_required": "Current password is required",
       "edit": "Edit",
       "cancel": "Cancel",
       "select_avatar": "Select avatar",
       "upload": "Upload",
       "flash": {
-        "success_update": "User information updated!",
+        "success_update": "Profile is updated!",
+        "success_password_update": "Password is updated!",
         "upload_first": "You need to upload and your profile picture first!"
       }
     }
@@ -651,6 +657,7 @@
       "invoice_for": "Invoice for",
       "date_of_an_invoice": "Date of an invoice",
       "from": "From",
+      "pdf_download": "PDF download",
       "customer": {
         "billed_to": "Billed to",
         "name": "Name",

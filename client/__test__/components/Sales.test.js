@@ -13,9 +13,9 @@ import thunk from 'redux-thunk'
 configure({ adapter: new Adapter() })
 
 // Components 
-import Form from '../../components/Sales/Form'
-import Page from '../../components/Sales/Page'
-import Show from '../../components/Sales/Show'
+import Form from '../../src/components/Sales/Form'
+import Page from '../../src/components/Sales/Page'
+import Show from '../../src/components/Sales/Show'
 
 // Factories
 import { Sale, Sales, Customer, Customers } from '../factories'

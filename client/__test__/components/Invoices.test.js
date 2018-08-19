@@ -13,10 +13,9 @@ import thunk from 'redux-thunk'
 configure({ adapter: new Adapter() })
 
 // Components 
-import FormPage from '../../components/Invoices/FormPage'
-import Form from '../../components/Invoices/Form'
-import Page from '../../components/Invoices/Page'
-import Show from '../../components/Invoices/Show/Page'
+import Form from '../../src/components/Invoices/Form'
+import Page from '../../src/components/Invoices/Page'
+import Show from '../../src/components/Invoices/Show/Page'
 
 // Factories
 import { Invoices, Projects, Sales, Account } from '../factories'
@@ -48,7 +47,7 @@ describe("components", function() {
     })
   })
    
-  describe("<FormPage />", function() {  
+  describe("<Form />", function() {  
 
     beforeEach(() => {
       const storeStateMock = {
@@ -72,21 +71,21 @@ describe("components", function() {
         }
       }
 
-      wrapper = mount(<BrowserRouter><Provider store={store}><FormPage {...props} /></Provider></BrowserRouter>)
+      wrapper = mount(<BrowserRouter><Provider store={store}><Form {...props} /></Provider></BrowserRouter>)
     })
 
     it('renders connected component', function() { 
       
-      expect(wrapper.find(FormPage).length).toEqual(1)
+      expect(wrapper.find(Form).length).toEqual(1)
     })
 
     it('check props matchs', function() { 
 
-      expect(wrapper.find(FormPage).prop('createInvoice')).toEqual(props.createInvoice)
-      expect(wrapper.find(FormPage).prop('fetchInvoice')).toEqual(props.fetchInvoice)
-      expect(wrapper.find(FormPage).prop('updateInvoice')).toEqual(props.updateInvoice)
-      expect(wrapper.find(FormPage).prop('fetchProjects')).toEqual(props.fetchProjects)
-      expect(wrapper.find(FormPage).prop('fetchSales')).toEqual(props.fetchSales)
+      expect(wrapper.find(Form).prop('createInvoice')).toEqual(props.createInvoice)
+      expect(wrapper.find(Form).prop('fetchInvoice')).toEqual(props.fetchInvoice)
+      expect(wrapper.find(Form).prop('updateInvoice')).toEqual(props.updateInvoice)
+      expect(wrapper.find(Form).prop('fetchProjects')).toEqual(props.fetchProjects)
+      expect(wrapper.find(Form).prop('fetchSales')).toEqual(props.fetchSales)
     })
 
   })

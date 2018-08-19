@@ -268,7 +268,7 @@ class Form extends Component {
               {
                 customersOptions && customersOptions.length === 0 &&
                   <div className="inline field">
-                    <Message info size="mini" className="mb-1">
+                    <Message info size="small" className="mb-1">
                       <p>{T.translate("sales.form.empty_customers_message")}</p>
 
                       <Link className="ui primary outline tiny button" to="/customers/new">

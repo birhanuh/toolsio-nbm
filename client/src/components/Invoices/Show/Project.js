@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import map from 'lodash/map'
 import sumBy from 'lodash/sumBy'
 import classnames from 'classnames'
+// Semantic UI JS
+import { Card, Table, Header, Label } from 'semantic-ui-react'
 
 // Localization 
 import T from 'i18n-react'
@@ -16,12 +18,12 @@ export default function Project({ project, status ,tax }) {
   let invoiceTotal = tasksTotal+((tax/100)*tasksTotal)
 
   return(
-    <div className="ui fluid card">
-      <div className="content p-4">
-        <h3 className="ui header">{<Link to={`/projects/show/${project.id}`}>{project.name}</Link>}</h3>
-      </div>
-      <div className="content">
-        <table className="ui very basic collapsing celled table">
+    <Card fluid>
+      <Card.Content className="p-4">
+        <Header as='h3'>{<Link to={`/projects/show/${project.id}`}>{project.name}</Link>}</Header>
+      </Card.Content>
+      <Card.Content>
+        <Table basic='very' collapsing celled>
           <tbody>
             <tr>
               <td>
@@ -36,11 +38,9 @@ export default function Project({ project, status ,tax }) {
                 <i className="ui tiny header">{T.translate("invoices.show.project.status")}</i>
               </td>
               <td>
-                { 
-                  <div className={classnames("ui tiny uppercase label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished' || project.status === 'delivered', red: project.status === 'delayed'})}> 
-                    {project.status}
-                  </div>
-                }
+                <Label size='tiny' className="uppercase" color={project.status === 'new' && 'blue' || project.status === 'in progress' && 'orange' || (project.status === 'finished' || project.status === 'delivered') && project.status === 'delayed' && 'red'}> 
+                  {project.status}
+                </Label>
               </td>
             </tr>
             <tr>
@@ -52,10 +52,10 @@ export default function Project({ project, status ,tax }) {
               </td>
             </tr>
           </tbody>
-        </table>
+        </Table>
 
-        <h4 className="ui dividing header">{T.translate("invoices.show.project.tasks.header")}</h4>
-        <table className="ui very basic table invoice project">
+        <Header as='h4' dividing>{T.translate("invoices.show.project.tasks.header")}</Header>
+        <Table basic='very' className="invoice project">
           <thead>
             <tr>
               <th>{T.translate("invoices.show.project.tasks.name")}</th>
@@ -99,15 +99,15 @@ export default function Project({ project, status ,tax }) {
                 <strong>{T.translate("invoices.show.invoice_total")}</strong>
               </td>
               <td>
-                <h1 className={classnames("ui right aligned header m-0", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid'})}>
+                <Header as='h1' textAlign='right' className={classnames("m-0", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid'})}>
                   {invoiceTotal}
-                </h1>
+                </Header>
               </td>
             </tr>
           </tbody>
-        </table>
-      </div>
-    </div>
+        </Table>
+      </Card.Content>
+    </Card>
   )
 }
 

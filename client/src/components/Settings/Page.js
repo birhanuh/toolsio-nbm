@@ -26,19 +26,22 @@ class Page extends Component {
     }
     
     return (
-      <Grid.Row columns={1}>
-        <Grid.Column width={12}>
-
+      <Grid.Row>
+        <Grid.Column width={12}>         
           <Segment className="account">
             <Item.Group>
               <AccountForm subdomain={subdomain} /> 
+            </Item.Group>
+          </Segment>
 
-              <Divider />
-
+          <Divider />
+          
+          <Segment className="user">
+            <Item.Group>
               { currentUser.user.email && <UserForm email={currentUser.user.email} /> }
             </Item.Group>
           </Segment>
-         </Grid.Column>
+        </Grid.Column>
       </Grid.Row>  
     )
   }

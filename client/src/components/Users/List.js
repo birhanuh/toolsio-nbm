@@ -13,7 +13,7 @@ export default function List({ users }) {
       <tr>
         <td colSpan="4" className="p-3">
           <Message info>
-            <Header as="h1">{T.translate("users.list.empty_users_header")}</Header>
+            <Header as="h3">{T.translate("users.list.empty_users_header")}</Header>
             <p>{T.translate("users.list.empty_users_message")}</p>
           </Message>
         </td>
@@ -29,11 +29,11 @@ export default function List({ users }) {
   )
 
   return (
-    <Table compact="very" striped>
+    <Table compact="very" striped size="small">
        <thead>
           <tr>
             <th>{T.translate("users.list.email")}</th>
-            <th>{T.translate("users.list.invitation_accepted")}</th>
+            <th style={{textAlign: 'center'}}>{T.translate("users.list.invitation_accepted")}</th>
           </tr>
         </thead>
         

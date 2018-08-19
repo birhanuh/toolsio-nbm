@@ -58,9 +58,9 @@ class Page extends Component {
     const { getInvoices } = this.props.data
 
     return (
-      <Grid.Row columns={1}>
+      <Grid.Row>
         <Grid.Column width={16}>      
-          <Segment vertical className="pl-0 pr-0">
+          <Segment vertical className="p-0 mb-5">
             <Link className="ui primary button" to="/invoices/new">
               <Icon name="add circle" />
               {T.translate("invoices.page.create_new_invoice")}
@@ -68,7 +68,7 @@ class Page extends Component {
           </Segment>  
 
           <Segment>
-            <Segment clearing basic className="pl-0 pr-0">
+            <Segment clearing basic className="p-0">
               <div className="ui right floated input">
                 <div className="ui icon input">
                   <Input name="search" value={this.state.search} onChange={(e, {value}) => this.handleChange('search', value)} 

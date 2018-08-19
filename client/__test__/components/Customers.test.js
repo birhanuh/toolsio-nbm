@@ -16,10 +16,9 @@ import thunk from 'redux-thunk'
 configure({ adapter: new Adapter() })
 
 // Components 
-import FormPage from '../../components/Customers/FormPage'
-import Form from '../../components/Customers/Form'
-import Page from '../../components/Customers/Page'
-import Show from '../../components/Customers/Show'
+import Form from '../../src/components/Customers/Form'
+import Page from '../../src/components/Customers/Page'
+import Show from '../../src/components/Customers/Show'
 
 // Factories
 import { Customer, Customers } from '../factories'
@@ -54,7 +53,7 @@ describe("components", function() {
     })
   })
    
-  describe("<FormPage />", function() {  
+  describe("<Form />", function() {  
 
     beforeEach(() => {
       const storeStateMock = {
@@ -77,19 +76,19 @@ describe("components", function() {
         }
       }
 
-      wrapper = mount(<BrowserRouter><Provider store={store}><FormPage {...props} /></Provider></BrowserRouter>)
+      wrapper = mount(<BrowserRouter><Provider store={store}><Form {...props} /></Provider></BrowserRouter>)
     })
 
     it('renders connected component', function() { 
       
-      expect(wrapper.find(FormPage).length).toEqual(1)
+      expect(wrapper.find(Form).length).toEqual(1)
     })
 
     it('check props matchs', function() { 
 
-      expect(wrapper.find(FormPage).prop('createCustomer')).toEqual(props.createCustomer)
-      expect(wrapper.find(FormPage).prop('fetchCustomer')).toEqual(props.fetchCustomer)
-      expect(wrapper.find(FormPage).prop('updateCustomer')).toEqual(props.updateCustomer)
+      expect(wrapper.find(Form).prop('createCustomer')).toEqual(props.createCustomer)
+      expect(wrapper.find(Form).prop('fetchCustomer')).toEqual(props.fetchCustomer)
+      expect(wrapper.find(Form).prop('updateCustomer')).toEqual(props.updateCustomer)
     })
 
   })
