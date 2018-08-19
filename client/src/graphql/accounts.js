@@ -6,6 +6,8 @@ export const GET_ACCOUNT_QUERY = gql`
       id
       subdomain
       industry
+      currencyCode
+      compnayId
       email
       phoneNumber
       street

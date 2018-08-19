@@ -5,6 +5,8 @@ export default `
     owner: User!
     subdomain: String!
     industry: String!
+    currencyCode: String!
+    compnayId: String
     phoneNumber: String
     email: String
     street: String

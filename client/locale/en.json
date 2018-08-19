@@ -170,6 +170,8 @@
       "logoUrl": "Logo URL",
       "subdomain": "Subdomain",
       "industry": "Industry",
+      "currency_code": "Currency code",
+      "company_id": "Company Id",
       "select_logo": "Select logo",
       "select_industry": "-Select Industry-",
       "contact": {
