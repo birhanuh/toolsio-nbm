@@ -151,7 +151,7 @@ class Show extends Component {
     const { id, name, deadline, customer, status, description, items, user, openConfirmationModal } = this.state
     
     let itemsTotal = 0
-    items.map(item => (itemsTotal+=item.unitPrice))
+    items.map(item => itemsTotal += item.total)
 
     return [
       <Grid.Row columns={1} key='segment'>

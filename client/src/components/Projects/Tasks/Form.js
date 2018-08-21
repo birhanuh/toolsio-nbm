@@ -11,6 +11,8 @@ import { graphql, compose } from 'react-apollo'
 import { GET_PROJECT_QUERY } from '../../../graphql/projects'
 import { CREATE_TASK_MUTATION, UPDATE_TASK_MUTATION, DELETE_TASK_MUTATION } from '../../../graphql/tasks'
 
+import GetCurrencySymbol from '../../../utils/currency'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -476,7 +478,7 @@ class Form extends Component {
             <tr>
               <td colSpan="3"></td>
               <td><strong>{T.translate("projects.tasks.form.total")}</strong></td>
-              <td><strong>{tasksTotal}</strong></td>
+              <td><strong><GetCurrencySymbol />{tasksTotal}</strong></td>
               <td></td>
             </tr>
           </tbody>

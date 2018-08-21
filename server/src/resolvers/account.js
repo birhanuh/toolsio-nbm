@@ -47,7 +47,6 @@ export default {
 
       return models.Account.update(args, { where: {subdomain: args.subdomain}, returning: true, plain: true })
         .then(result => {
-          console.log('retur: ', result)
           // Delete previous logoUrl from S3
           if (args.logoUrl !== result[1]._previousDataValues.logoUrl) {
             const s3Params = {

@@ -1,9 +1,6 @@
 import { formatErrors } from '../utils/formatErrors'
 import { loginUserWithToken } from '../utils/authentication'
 
-// Loadash
-import map from 'lodash/map'
-
 import jwt from 'jsonwebtoken'
 
 import nodemailer from 'nodemailer'

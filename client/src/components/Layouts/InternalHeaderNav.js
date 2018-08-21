@@ -194,7 +194,7 @@ class InternalHeaderNav extends Component {
                   <Label color="blue" size="small" className="right floated">{countNotifications}</Label>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <Link to='/settings'>
+                  <Link to='/settings' className='d-block'>
                     <Icon name="settings" />
                     {T.translate("internal_navigation.settings")}
                   </Link>

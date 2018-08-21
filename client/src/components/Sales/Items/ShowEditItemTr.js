@@ -2,6 +2,8 @@ import React from 'react'
 // Semantic UI JS
 import { Input, Select, Form, Button, Icon } from 'semantic-ui-react'
 
+import GetCurrencySymbol from '../../../utils/currency'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -12,7 +14,7 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
       <td className="show-item">{item.unit}</td>
       <td className="show-item">{item.quantity}</td>
       <td className="show-item">{item.unitPrice}</td>
-      <td className="show-item">{item.total}</td>
+      <td className="show-item"><GetCurrencySymbol />{item.total}</td>
       <td className="show-item" width="125px">
         <Button.Group fluid size="small" className="show-item">
           <Button basic negative onClick={toggleConfirmationModal}><Icon name="delete" /></Button>
@@ -82,7 +84,7 @@ export default function ShowEditItemTr({item, editItem, handleEdit, handleCancel
       </td>
       <td className="edit-item">
         <div className="p-2">
-          {editItem.total}
+          <GetCurrencySymbol />{editItem.total}
         </div>
       </td>
       <td className="edit-item" width="125px">  

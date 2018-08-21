@@ -6,7 +6,7 @@ export default `
     subdomain: String!
     industry: String!
     currencyCode: String!
-    compnayId: String
+    companyId: String
     phoneNumber: String
     email: String
     street: String
@@ -40,7 +40,7 @@ export default `
   }
 
   type Mutation {
-    updateAccount(subdomain: String! industry: String, phoneNumber: String, email: String, street: String, postalCode: 
+    updateAccount(subdomain: String! industry: String, currencyCode: String, companyId: String, phoneNumber: String, email: String, street: String, postalCode: 
     String, region: String, country: String, logoUrl: String): UpdateAccountResponse!
 
     deleteAccount(subdomain: String!): DeleteAccountResponse!

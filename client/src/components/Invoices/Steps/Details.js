@@ -16,7 +16,7 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
   const paymentTermOptions = Array(99).fill().map((key, value) => 
     ({ key: value, value: value, text: value })
     )
-  
+  const paymentTermOptionsWithDefault = [{ key: 'default', value: '', text: T.translate("invoices.form.select_days") }, ...paymentTermOptions]
   return (
     <Form> 
       <div className="inline field"> 
@@ -36,7 +36,7 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
             selected={step2.deadline}
             onChange={handleChangeDate}
           />
-          <span className="red">{errors.deadline}</span>
+          <span className="red d-inline-block">{errors.deadline}</span>
         </Form.Field>
         
         <Divider horizontal>Or</Divider>
@@ -46,10 +46,10 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
           <Select 
             placeholder={T.translate("invoices.form.select_days")}
             name="paymentTerm" 
-            value={step2.paymentTerm ? step2.paymentTerm.toString() : ''} 
+            value={step2.paymentTerm ? step2.paymentTerm : ''} 
             onChange={(e, {value}) => handleChange('paymentTerm', value)} 
             error={!!errors.paymentTerm}
-            options={paymentTermOptions}
+            options={paymentTermOptionsWithDefault}
             search
             searchInput={{ type: 'number' }}
             selection

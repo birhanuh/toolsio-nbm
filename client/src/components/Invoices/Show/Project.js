@@ -7,6 +7,8 @@ import classnames from 'classnames'
 // Semantic UI JS
 import { Card, Table, Header, Label } from 'semantic-ui-react'
 
+import GetCurrencySymbol from '../../../utils/currency'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -100,7 +102,7 @@ export default function Project({ project, status ,tax }) {
               </td>
               <td>
                 <Header as='h1' textAlign='right' className={classnames("m-0", {blue: status === 'new', orange: status === 'pending', red: status === 'overdue', green: status === 'paid'})}>
-                  {invoiceTotal}
+                  <GetCurrencySymbol />{invoiceTotal}
                 </Header>
               </td>
             </tr>
