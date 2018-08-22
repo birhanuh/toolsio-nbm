@@ -159,11 +159,11 @@ export default {
   DirectMessage: {
     uploadPath: parent => parent.uploadPath && `${process.env.SERVER_URL}${parent.uploadPath}`,
     
-    user: ({ user, senderId }, args, { models, subdomain }) => {
+    user: ({ user, senderId }, args, { userLoader }) => {
       if (user) {
         return user
       }
-      return models.User.findOne({ where: {id: senderId}, searchPath: subdomain }, { raw: true })            
+      return userLoader.load(senderId)            
     } 
   }
 

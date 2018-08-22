@@ -97,7 +97,7 @@
     "already_a_user": "Already a user?",
     "log_in_here": "Sign in here",
     "sign_up": "Sign up",   
-    "complete_invitation_sign_up": "Complete your signing up by filling this form",  
+    "complete_invitation_sign_up": "Complete your signing to {account} account by filling this form",  
     "account": {
       "industry": "Industry (*)",
       "select_industry": "-Select Industry-",

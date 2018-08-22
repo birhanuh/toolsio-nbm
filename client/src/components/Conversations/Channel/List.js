@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 // Semantic UI Form elements
-import { Button, Label, Modal } from 'semantic-ui-react'
+import { Segment, Button, Icon, Label, Modal } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import { GET_CHANNELS_USERS_COUNT_QUERY } from '../../../graphql/conversations/channels'
 
@@ -84,12 +84,12 @@ class List extends Component {
     )
 
     return [
-      <div key="create-channel" className="ui center aligned vertical segment">
-        <button className="ui primary small button" onClick={this.toggleCreateChannelModal.bind(this)}>
-          <i className="add circle icon"></i>
+      <Segment key="create-channel" vertical textAlign='center'>
+        <Button primary size='small' onClick={this.toggleCreateChannelModal.bind(this)}>
+          <Icon name='add circle' />
           {T.translate("conversations.page.create_channel")}
-        </button>
-      </div>,
+        </Button>
+      </Segment>,
 
       channelList,
 

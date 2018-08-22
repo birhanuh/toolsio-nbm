@@ -80,12 +80,12 @@ export default {
   ChannelMessage: {
     uploadPath: parent => parent.uploadPath && process.env.SERVER_URL+parent.uploadPath,
 
-    user: ({ user, userId }, args, { models, subdomain }) => {
+    user: ({ user, userId }, args, { userLoader }) => {
 
       if (user) {
         return user
       }
-      return models.User.findOne({ where: {id: userId}, searchPath: subdomain }, { raw: true })            
+      return userLoader.load(userId)             
     } 
   }        
 }
