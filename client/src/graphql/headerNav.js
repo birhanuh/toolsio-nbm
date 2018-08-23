@@ -1,4 +1,4 @@
-import gql from "graphql-tag"
+import gql from 'graphql-tag'
 
 export const GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY = gql`
   {

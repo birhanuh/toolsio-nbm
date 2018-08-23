@@ -110,7 +110,6 @@ class Form extends Component {
          
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
-
     }  
   }
 

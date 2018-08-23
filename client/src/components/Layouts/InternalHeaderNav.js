@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import decode from 'jwt-decode'
-import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI Form elements
 import { Image, Dropdown, Menu, Label, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
@@ -31,21 +28,6 @@ class InternalHeaderNav extends Component {
     $('html, body').stop().animate({
         scrollTop: $($anchor.attr('href')).offset().top - 50
     }, 1500, 'easeInOutExpo')    
-  }
-
-  logout(e) {
-    e.preventDefault()
-    
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('refreshAuthToken')
-
-    this.props.addFlashMessage({
-      type: 'success',
-      text: T.translate("log_in.flash.logout_success")
-    })  
-
-    // Redirect to login page
-    this.context.router.history.push('/login')
   }
 
   dashboardOrRoot = () => {
@@ -200,9 +182,11 @@ class InternalHeaderNav extends Component {
                   </Link>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item as='a' onClick={this.logout.bind(this)}>
-                  <Icon name="sign out" />
-                  {T.translate("internal_navigation.sign_out")}
+                <Dropdown.Item>
+                  <Link to='/logout' className='d-block'>
+                    <Icon name="sign out" />
+                    {T.translate("internal_navigation.sign_out")}
+                  </Link>
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>             
@@ -210,15 +194,6 @@ class InternalHeaderNav extends Component {
         </Menu>
       </header>)
   }
-}
-
-InternalHeaderNav.propTypes = {
-  addFlashMessage: PropTypes.func.isRequired
-}
-
-
-InternalHeaderNav.contextTypes = {
-  router: PropTypes.object.isRequired
 }
 
 const Queries =  compose(
@@ -234,4 +209,4 @@ const Queries =  compose(
   })
 )(InternalHeaderNav)
 
-export default connect(null, { addFlashMessage } ) (Queries)
+export default (Queries)
