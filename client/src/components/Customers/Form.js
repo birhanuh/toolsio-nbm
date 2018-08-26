@@ -256,6 +256,7 @@ class Form extends Component {
               // Redirect to projects/new based on previous path
               if (this.props.location.state && this.props.location.state.prevPath && this.props.location.state.prevPath === '/projects/new') {
                 this.context.router.history.push('/projects/new')
+                return
               }
 
               this.context.router.history.push('/customers')
@@ -443,7 +444,8 @@ const MutationsQueries =  compose(
       variables: {
         order: 'DESC',
         offset: 0,
-        limit: 10
+        limit: 10,
+        name: ''
       }
     })
   }),

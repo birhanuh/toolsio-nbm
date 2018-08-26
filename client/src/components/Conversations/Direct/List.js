@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 // Semantic React UI
-import { Segment, Label, Button, Modal } from 'semantic-ui-react'
+import { Segment, Label, Button, Icon, Modal } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { GET_DIRECT_MESSAGE_USERS_QUERY, GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY } from '../../../graphql/conversations/directMessages'
 
@@ -85,10 +85,10 @@ class List extends Component {
     return [
       <div key="user-list">
         <Segment vertical textAlign='center'>
-          <button id="add-user" className="ui primary button" onClick={this.toggleAddUserModal.bind(this)}>
-            <i className="add circle icon"></i>
+          <Button id="add-user" primary size='small' onClick={this.toggleAddUserModal.bind(this)}>
+            <Icon name="add circle" />
             {T.translate("conversations.messages.add_user")}
-          </button>  
+          </Button>  
         </Segment>
 
         { userList }

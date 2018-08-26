@@ -16,6 +16,23 @@ export default (sequelize, DataTypes) => {
         is: /^[A-Za-z / ]+$/       // will only allow letters and slashes with RegExp
       } 
     },
+    currencyCode: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      defaultValue : "USD",
+      validate: {     
+        notEmpty: true  // don't allow empty strings
+      },
+      field: 'currency_code' 
+    },
+    companyId: {
+      type: DataTypes.STRING,
+      allowNull : true,
+      validate: {       
+        is: /^[0-9a-zA-Z#+\-()]+$/      // will only allow numbers, letters and special characters
+      },
+      field: 'company_id'
+    },
     phoneNumber: {
       type: DataTypes.STRING,
       allowNull : true,
@@ -67,6 +84,9 @@ export default (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeValidate: (account) => {
+        if (account.companyId === "") {
+          account.companyId = null
+        }
         if (account.phoneNumber === "") {
           account.phoneNumber = null
         }

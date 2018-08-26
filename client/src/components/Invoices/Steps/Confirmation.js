@@ -24,7 +24,7 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
       </div> 
       
       <div className="inline field"> 
-        <Table very='basic' collapsing celled stackable>
+        <Table width="73%" very='basic' collapsing celled stackable>
           <tbody>
             <tr>
               <td>
@@ -90,7 +90,7 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
         <div className="inline field"> 
           <Header as='h2'>{T.translate("invoices.form.sale.header")}</Header>
          
-          <Table very='basic' collapsing celled>
+          <Table width="73%" very='basic' collapsing celled>
             <tbody>
               <tr>
                 <td>
@@ -126,7 +126,7 @@ export default function Confirmation ({ id, step2, sale, project, handlePrevious
       {project &&
         <div className="inline field"> 
           <Header as='h2'>{T.translate("invoices.form.project.header")}</Header>
-          <Table very='basic' collapsing celled>
+          <Table width="73%" very='basic' collapsing celled>
             <tbody>
               <tr>
                 <td>

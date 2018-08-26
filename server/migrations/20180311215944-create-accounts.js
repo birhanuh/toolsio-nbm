@@ -17,6 +17,14 @@ module.exports = {
         allowNull : false,
         type: Sequelize.STRING
       },
+      currency_code: {
+        type: Sequelize.STRING,
+        allowNull : false,
+        defaultValue : "USD", 
+      },
+      company_id: {
+        type: Sequelize.STRING,
+      },
       phone_number: {
         type: Sequelize.STRING
       },

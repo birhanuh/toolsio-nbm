@@ -27,9 +27,9 @@ handlers:
   static_files: dist/\1 
   upload: dist/(.*\.map)
 
-- url: /(.*\.(bmp|gif|ico|jpeg|jpg|png|svn|woff|woff2|eot|ttf)) 
+- url: /(.*\.(bmp|gif|ico|jpeg|jpg|png|svg|woff|woff2|eot|ttf)) 
   static_files: dist/\1 
-  upload: dist/(.*\.(bmp|gif|ico|jpeg|jpg|png|svn|woff|woff2|eot|ttf))
+  upload: dist/(.*\.(bmp|gif|ico|jpeg|jpg|png|svg|woff|woff2|eot|ttf))
 
 #- url: /
 #  static_dir: dist

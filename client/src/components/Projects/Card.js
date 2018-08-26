@@ -40,7 +40,7 @@ export default function Card({project}) {
           <tbody>
             <tr>
               <td>{project.user.firstName}</td>
-              <td>{moment(project.deadline).format('ll') }</td>
+              <td>{moment(project.deadline).format('ll')}</td>
               <td>{project.customer ? project.customer.name: <p className="blue">{T.translate("projects.page.no_customer")}</p>}</td>
               <td>
                 <Progress progress percent={project.progress} success size="small" className="mt-4" />

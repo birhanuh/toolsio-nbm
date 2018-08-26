@@ -19,7 +19,7 @@ const Page = ({ match }) => {
         <Menu vertical fluid>
           <ChannelsList  channelId={match.params.channelId} />
 
-          <Divider horizontal>Or</Divider>
+          <Divider horizontal className="mt-0 mb-0">Or</Divider>
 
           <UsersList receiverId={match.params.receiverId} />
         </Menu>

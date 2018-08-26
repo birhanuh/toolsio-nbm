@@ -9,6 +9,7 @@ import LandingPage from './LandingPage'
 import Signup from '../Signup/Page'
 import Invitation from '../Signup/Invitation'
 import Login from '../Login/Page'
+import Logout from './Logout'
 import Subdomain from '../Login/Subdomain'
 import ForgotPasswordRequest from '../Login/ForgotPasswordRequest'
 import PasswordReset from '../Login/PasswordReset'
@@ -103,6 +104,7 @@ class App extends Component {
               <Route exact path="/signup" component={Signup} />
               <Route exact path="/signup/invitation" component={Invitation} />
               <Route path="/subdomain" component={Subdomain} />    
+              <Route path="/logout" component={Logout} />    
 
               {/* Subdomain required Login pages */}
               <SubdomainRoute exact path="/login" component={Login} />

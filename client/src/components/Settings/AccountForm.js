@@ -32,6 +32,8 @@ class AccountForm extends Component {
       subdomain: this.props.data.getAccount ? this.props.data.getAccount.subdomain : '',
       logoUrl: this.props.data.getAccount ? this.props.data.getAccount.logoUrl : '',
       industry: this.props.data.getAccount ? this.props.data.getAccount.industry : '',
+      currencyCode: this.props.data.getAccount ? this.props.data.getAccount.currencyCode : 'USD',
+      companyId: this.props.data.getAccount ? (this.props.data.getAccount.companyId ? this.props.data.getAccount.companyId : '') : '',
       address: {
         street: this.props.data.getAccount ? (this.props.data.getAccount.street ? this.props.data.getAccount.street : '') : '',
         postalCode: this.props.data.getAccount ? (this.props.data.getAccount.postalCode ? this.props.data.getAccount.postalCode : '') : '',
@@ -56,6 +58,8 @@ class AccountForm extends Component {
         subdomain: nextProps.data.getAccount.subdomain,
         logoUrl: nextProps.data.getAccount.logoUrl ? nextProps.data.getAccount.logoUrl : '',
         industry: nextProps.data.getAccount.industry,
+        currencyCode: nextProps.data.getAccount.currencyCode,
+        companyId: nextProps.data.getAccount.companyId ? nextProps.data.getAccount.companyId : '',
         address: {
           street: nextProps.data.getAccount.street ? nextProps.data.getAccount.street : '',
           postalCode: nextProps.data.getAccount.postalCode ? nextProps.data.getAccount.postalCode : '',
@@ -141,10 +145,33 @@ class AccountForm extends Component {
     if (this.isValid()) { 
       this.setState({ isLoadingForm: true })
 
-     const { name, subdomain, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
+     const { subdomain, industry, currencyCode, companyId, contact: {phoneNumber, email} , logoUrl, address: { street, postalCode, region, country} } = this.state
       
       if (subdomain) {
-        this.props.updateAccountMutation({variables: { name, subdomain, phoneNumber, email, logoUrl, street, postalCode: parseInt(postalCode), region, country } })
+        this.props.updateAccountMutation({variables: { subdomain, industry, currencyCode, companyId, 
+          phoneNumber, email, logoUrl, street, postalCode: parseInt(postalCode), region, country },
+            update: (store, { data: { updateAccount } }) => {
+              const { success, account } = updateAccount
+
+              if (!success) {
+                return
+              }
+              
+              // Read the data from our cache for this query.
+              const data = store.readQuery({ query: GET_ACCOUNT_QUERY,
+                variables: {
+                  subdomain: this.props.subdomain
+                } 
+              })
+              // Update account object.
+              data.getAccount = account
+              // Write our data back to the cache.
+              store.writeQuery({ query: GET_ACCOUNT_QUERY,
+                variables: {
+                  subdomain: this.props.subdomain
+                }, data })
+            } 
+          })
           .then(res => {
             const { success, errors } = res.data.updateAccount     
                   
@@ -266,8 +293,8 @@ class AccountForm extends Component {
   toggleShow = () => this.setState(state => ({ active: !state.active }))
 
   render() {
-    const { subdomain, industry, logoUrl, contact, address, errors, active, file, isLoadingLogo, isLoadingForm } = this.state
-    
+    const { subdomain, industry, currencyCode, companyId, logoUrl, contact, address, errors, active, file, isLoadingLogo, isLoadingForm } = this.state
+
     return ( 
       <Item className="mb-5">    
         <Item.Image>
@@ -321,15 +348,68 @@ class AccountForm extends Component {
                 onChange={(e, {value}) => this.handleChange('industry', value)} 
                 error={!!errors.industry}
                 options={[
-                  { key: "human resource", value: "human resource", text: 'Human resource' },
+                  { key: "beauty salon", value: "beauty salon", text: 'Beauty salon' },
+                  { key: "construction", value: "construction", text: 'Construction' },                
+                  { key: "design", value: "design", text: 'Design' },
+                  { key: "education", value: "education", text: 'Education' },
+                  { key: "entertainment", value: "entertainment", text: 'Enterntainment' },
                   { key: "fashion", value: "fashion", text: 'Fashion' },
+                  { key: "health care", value: "health care", text: 'Health care' },
+                  { key: "housing", value: "housing", text: 'Housing' },
+                  { key: "hotel", value: "hotel", text: 'Hotel' },
+                  { key: "human resource", value: "human resource", text: 'Human resource' },
                   { key: "import/export", value: "import/export", text: 'Import/Export' },
-                  { key: "store", value: "store", text: 'Store' },
-                  { key: "technology", value: "technology", text: 'Technology' }
+                  { key: "sport", value: "sport", text: 'Sport' },
+                  { key: "stationary", value: "stationary", text: 'Stationary' },
+                  { key: "resturant", value: "resturant", text: 'Resturant' },
+                  { key: "store", value: "store", text: 'Store' },                
+                  { key: "supermarket", value: "supermarket", text: 'Supermarket' },
+                  { key: "energy", value: "energy", text: 'Technology' },
+                  { key: "travel", value: "travel", text: 'Travel' },              
+                  { key: "other", value: "other", text: 'Other' }
                 ]}
                 selection
               />
               <span className="red">{errors.industry}</span>
+            </Form.Field>
+
+            <Form.Field>
+              <label>{T.translate("settings.account.company_id")}</label>
+              <Input 
+                placeholder={T.translate("settings.account.company_id")}
+                name="companyId" 
+                value={companyId} 
+                onChange={(e, {value}) => this.handleChange('companyId', value)} 
+                />
+            </Form.Field>
+
+            <Form.Field error={!!errors.industry}>
+              <label>{T.translate("settings.account.currency_code")}</label>
+              <Select 
+                placeholder={T.translate("settings.account.select_currency_code")}
+                name="currencyCode"
+                value={currencyCode} 
+                onChange={(e, {value}) => this.handleChange('currencyCode', value)} 
+                error={!!errors.currencyCode}
+                options={[
+                  { key: "USD", flag: 'us', value: "USD", text: 'US Dollar' },
+                  { key: "EUR", flag: 'eu', value: "EUR", text: 'Euro' },
+                  { key: "GBP", flag: 'gb', value: "GBP", text: 'British Pound' },
+                  { key: "INR", flag: 'in', value: "INR", text: 'Indian Rupee' },
+                  { key: "AUD", flag: 'au', value: "AUD", text: 'Australian Dollar' },
+                  { key: "CAD", flag: 'ca', value: "CAD", text: 'Canadian Dollar' },
+                  { key: "CHF", flag: 'ch', value: "CHF", text: 'Swiss Franc' },
+                  { key: "SGD", flag: 'sg', value: "SGD", text: 'Singapore Dollar' },
+                  { key: "MYR", flag: 'my', value: "MYR", text: 'Malaysian Ringgit' },
+                  { key: "JPY", flag: 'jp', value: "JPY", text: 'Japanese Yen' },
+                  { key: "CNY", flag: 'cn', value: "CNY", text: 'Chinese Yuan Renminbi' },
+                  { key: "ETB", flag: 'et', value: "ETB", text: 'Ethiopia, Birr' },
+                  { key: "KES", flag: 'ke', value: "KES", text: 'Kenyan Shilling' },
+                  { key: "ZAR", flag: 'za', value: "ZAR", text: 'South African Rand' }
+                ]}
+                selection
+              />
+              <span className="red">{errors.currencyCode}</span>
             </Form.Field>
 
             <fieldset className="custom-fieldset">

@@ -6,6 +6,8 @@ export const GET_ACCOUNT_QUERY = gql`
       id
       subdomain
       industry
+      currencyCode
+      companyId
       email
       phoneNumber
       street
@@ -18,12 +20,22 @@ export const GET_ACCOUNT_QUERY = gql`
 `
 
 export const UPDATE_ACCOUNT_MUTATION = gql`
-  mutation updateAccount($subdomain: String!, $industry: String, $email: String, $phoneNumber: String, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
-    updateAccount(subdomain: $subdomain, industry: $industry, email: $email, phoneNumber: $phoneNumber, logoUrl: $logoUrl, street: $street, postalCode: $postalCode, region: $region, country: $country) {
+  mutation updateAccount($subdomain: String!, $industry: String, $currencyCode: String, $companyId: String, $email: String, $phoneNumber: String, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
+    updateAccount(subdomain: $subdomain, industry: $industry, currencyCode: $currencyCode, companyId: $companyId, email: $email, phoneNumber: $phoneNumber, logoUrl: $logoUrl, street: $street, postalCode: $postalCode, region: $region, country: $country) {
       success
       account {
         id
         subdomain
+        industry
+        currencyCode
+        companyId
+        email
+        phoneNumber
+        street
+        postalCode
+        region
+        country
+        logoUrl
       }
       errors {
         path

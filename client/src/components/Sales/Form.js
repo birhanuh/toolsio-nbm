@@ -156,7 +156,7 @@ class Form extends Component {
               } 
             })
             // Add our Sale from the mutation to the end.
-            data.getSales.push(sale);
+            data.getSales.push(sale)
             // Write our data back to the cache.
             store.writeQuery({ query: GET_SALES_QUERY,
               variables: {

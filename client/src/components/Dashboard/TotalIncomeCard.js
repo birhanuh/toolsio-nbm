@@ -4,6 +4,8 @@ import classnames from 'classnames'
 import { Query } from 'react-apollo'
 import { GET_TOTAL_INCOME_DATA } from '../../graphql/dashboard'
 
+import GetCurrencySymbol from '../../utils/currency'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -24,7 +26,7 @@ const TotalIncomeCard = () => (
             </Card.Header>
           </Card.Content>
           <Card.Content style={{display: 'table-cell', verticalAlign: 'middle', borderTop: 'none'}}>
-            <Header as='h1' className="green centered bold">{tasksItemTotalSum && tasksItemTotalSum}</Header>
+            <Header as='h1' className="green centered bold"><GetCurrencySymbol />{tasksItemTotalSum && tasksItemTotalSum}</Header>
             <Card.Description className="center aligned">{T.translate("dashboard.total_income.description")}</Card.Description>
           </Card.Content>
           <Card.Content style={{borderTop: 'none'}}>

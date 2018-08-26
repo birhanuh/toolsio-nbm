@@ -10,6 +10,8 @@ import { Grid, Segment, Button, Icon, Card, Modal, Message, Header, Divider } fr
 import { graphql, compose } from 'react-apollo'
 import { GET_CUSTOMERS_QUERY, GET_CUSTOMER_QUERY, DELETE_CUSTOMER_MUTATION } from '../../graphql/customers'
 
+import moment from 'moment'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -165,7 +167,7 @@ class Show extends Component {
             </Link>
           </Card.Header>
           <Card.Meta>
-            {project.deadline}
+            {moment(project.deadline).format('ll')}
           </Card.Meta>
         </Card.Content>
       </Card>
@@ -191,7 +193,7 @@ class Show extends Component {
             </Link>
           </Card.Header>
           <Card.Meta>
-            {sale.deadline}
+            {moment(sale.deadline).format('ll')}
           </Card.Meta>
         </Card.Content>
       </Card>
@@ -217,7 +219,7 @@ class Show extends Component {
             </Link>
           </Card.Header>
           <Card.Meta>
-            {invoice.deadline || invoice.paymentTerm}
+            {moment(invoice.deadline).format('ll') || invoice.paymentTerm}
           </Card.Meta>
         </Card.Content>
       </Card>

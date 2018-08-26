@@ -11,6 +11,8 @@ import { graphql, compose } from 'react-apollo'
 import { GET_SALE_QUERY } from '../../../graphql/sales'
 import { CREATE_ITEM_MUTATION, UPDATE_ITEM_MUTATION, DELETE_ITEM_MUTATION } from '../../../graphql/items'
 
+import GetCurrencySymbol from '../../../utils/currency'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -463,7 +465,7 @@ class Form extends Component {
             <tr>
               <td colSpan="3"></td>
               <td><strong>{T.translate("sales.items.form.total")}</strong></td>
-              <td><strong>{itemsTotal}</strong></td>
+              <td><strong><GetCurrencySymbol />{itemsTotal}</strong></td>
               <td></td>
             </tr>
           </tbody>

@@ -110,7 +110,6 @@ class Form extends Component {
          
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
-
     }  
   }
 
@@ -119,7 +118,7 @@ class Form extends Component {
    
     return (    
       <Segment>        
-        <FormElement size="small" loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+        <FormElement loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
              
             { !!errors.message && <Message negative><p>{errors.message}</p></Message> }
             

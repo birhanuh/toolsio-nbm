@@ -24,6 +24,7 @@ class Invitation extends Component {
       password: '',
       confirmPassword: '',
       token: null,
+      account: '',
       errors: {},
       isLoading: false
     }
@@ -33,9 +34,9 @@ class Invitation extends Component {
     const url = new URL(window.location.href)
     let token = url.searchParams.get("token")
   
-    const { email } = jwt.verify(token, process.env.JWTSECRET1)
-
-    this.setState({ email, token })
+    const { email, account } = jwt.verify(token, process.env.JWTSECRET1)
+ 
+    this.setState({ email, token, account })
   }
 
   handleChange = (name, value) => {
@@ -99,7 +100,7 @@ class Invitation extends Component {
   }
 
   render() {
-    const { firstName, email, lastName, password, confirmPassword, errors, isLoading } = this.state
+    const { firstName, email, lastName, password, confirmPassword, account, errors, isLoading } = this.state
 
     return (    
       <Container text>
@@ -109,10 +110,12 @@ class Invitation extends Component {
         </Header>       
        
         <Segment> 
-          <Form size="small" loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>           
-            <Message info>
-              <p>{T.translate("sign_up.complete_invitation_sign_up")}</p>
-            </Message>
+          <Message 
+            info
+            icon='info'
+            header={T.translate("sign_up.complete_invitation_sign_up", {account: <h3 className='capitalize d-inline-block'>{account}</h3>} )}
+          />
+          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>           
 
             { !!errors.message && <Message message><p>{errors.message}</p></Message> } 
             

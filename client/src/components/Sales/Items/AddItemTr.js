@@ -2,6 +2,8 @@ import React from 'react'
 // Semantic UI JS
 import { Input, Select, Form, Button, Icon } from 'semantic-ui-react'
 
+import GetCurrencySymbol from '../../../utils/currency'
+
 // Localization 
 import T from 'i18n-react'
 
@@ -71,7 +73,7 @@ export default function AddItemTr({item, handleNewItemChange, handleNewItemBlur,
       </td>
       <td className="add-item">
         <div className="p-2">
-          {item.total}
+          <GetCurrencySymbol />{item.total ? item.total : 0}
         </div>
       </td>
       <td className="add-item" width="125px">     

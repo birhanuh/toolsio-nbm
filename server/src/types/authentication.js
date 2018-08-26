@@ -30,6 +30,8 @@ export default `
 
     loginUser(email: String!, password: String!): LoginResponse!
 
+    logoutUser: String!
+
     isSubdomainExist(subdomain: String!): IsSubdomainExistResponse!
 
     forgotPasswordResetRequest(email: String!): ForgotPasswordResetRequestPasswordResetResponseVerifyUserEmail!

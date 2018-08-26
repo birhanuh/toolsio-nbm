@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import shortid from 'shortid'
 import { Validation } from '../../utils'
 // Semantic UI Form elements
 import { Container, Segment, Input, Button, Icon, Form as FormElement, Message } from 'semantic-ui-react'
@@ -62,7 +63,16 @@ class Form extends Component {
       this.setState({ isLoading: true })
       
       this.props.mutate({ 
-        variables: { email } })
+        variables: { email },
+        optimisticResponse: {
+            getInvitedUsers: {
+              "id": shortid.generate(),
+              "email": email,
+              "isInvitationAccepted": false,
+              "__typename": "InvitedUser"
+            }            
+          }
+        })
         .then(res => {  
 
           const { success, errors } = res.data.sendInvitation

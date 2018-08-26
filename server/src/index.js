@@ -110,10 +110,10 @@ app.use(
       //user: { id: 1 },
       SECRET: process.env.JWTSECRET1,
       SECRET2: process.env.JWTSECRET2,
-      userLoader: new DataLoader(userId => userBatcher(userId, models, req.headers.subdomain)),
-      customerLoader: new DataLoader(customerIds => customerBatcher(customerIds, models, req.headers.subdomain)),
-      projectLoader: new DataLoader(projectIds => projectBatcher(projectIds, models, req.headers.subdomain)),
-      saleLoader: new DataLoader(saleIds => saleBatcher(saleIds, models, req.headers.subdomain))
+      userLoader: new DataLoader(usersId => userBatcher(usersId, models, req.headers.subdomain)),
+      customerLoader: new DataLoader(customersId => customerBatcher(customersId, models, req.headers.subdomain)),
+      projectLoader: new DataLoader(projectsId => projectBatcher(projectsId, models, req.headers.subdomain)),
+      saleLoader: new DataLoader(salesId => saleBatcher(salesId, models, req.headers.subdomain))
     }
   }))
 )

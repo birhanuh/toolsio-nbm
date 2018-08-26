@@ -1,9 +1,6 @@
 import { formatErrors } from '../utils/formatErrors'
 import { loginUserWithToken } from '../utils/authentication'
 
-// Loadash
-import map from 'lodash/map'
-
 import jwt from 'jsonwebtoken'
 
 import nodemailer from 'nodemailer'
@@ -22,6 +19,11 @@ export default {
     loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
       loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
     
+    logoutUser: (parent, { args }, { models, subdomain }) => {
+      console.log(`User from ${subdomain} account has logged out`)
+      return `User from ${subdomain} account has logged out`
+    },
+
     registerUser: async (parent, args, { models }) => {
 
       const { firstName, lastName, email, password } = args

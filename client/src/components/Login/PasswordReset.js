@@ -109,7 +109,7 @@ class PasswordReset extends Component {
         </Header>    
 
         <Segment>
-          <Form size="small" loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
+          <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
 
             <Message info>
               <p>{T.translate("log_in.reset_password_description")}</p>
