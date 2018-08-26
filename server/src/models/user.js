@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt-nodejs'
-import Promise from 'bluebird'
 const SALT_WORK_FACTOR = 10
 
 export default (sequelize, DataTypes) => {

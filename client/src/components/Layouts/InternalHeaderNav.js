@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import decode from 'jwt-decode'
 // Semantic UI Form elements
@@ -194,6 +195,10 @@ class InternalHeaderNav extends Component {
         </Menu>
       </header>)
   }
+}
+
+InternalHeaderNav.contextTypes = {
+  router: PropTypes.object.isRequired
 }
 
 const Queries =  compose(
