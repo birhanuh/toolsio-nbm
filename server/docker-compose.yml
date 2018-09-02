@@ -38,9 +38,8 @@ services:
       # jwt
       JWTSECRET1: ${JWTSECRET1}
       JWTSECRET2: s${JWTSECRET2}
-      # mailer
-      GMAIL_USER: ${GMAIL_USER}
-      GMAIL_PASS: ${GMAIL_PASS}
+      # sparkpost
+      SPARKPOST_API_KEY: ${SPARKPOST_API_KEY}
       # cloudinary
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_SECRET_KEY}

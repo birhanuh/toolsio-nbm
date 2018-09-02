@@ -1,18 +1,16 @@
 import { formatErrors } from '../utils/formatErrors'
 import { loginUserWithToken } from '../utils/authentication'
+import sparkPostTransport from 'nodemailer-sparkpost-transport'
 
 import jwt from 'jsonwebtoken'
 
 import nodemailer from 'nodemailer'
 import Email from 'email-templates'
 
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-})
+const transporter = nodemailer.createTransport(sparkPostTransport({
+  'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
+  endpoint: "https://api.eu.sparkpost.com"
+}))
 
 export default {
   Mutation: {
@@ -94,7 +92,7 @@ export default {
               }
               
               const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/?token=${emailToken}`
-
+              
               const email = new Email({
                 message: {
                   from: 'no-replay@toolsio.com'
@@ -120,7 +118,31 @@ export default {
                   }
                 })
                 .then(res => console.log('Email confirmation success: ', res))
-                .catch(err => console.error('Email confirmation error: ', err))
+                .catch(err => console.error('Email confirmation error: ', err)) 
+
+                /**
+                client.transmissions.send({
+                  options: {
+                    sandbox: true
+                  },
+                  content: {
+                    //from: 'no-replay@toolsio.com',
+                    from: 'testing@sparkpostbox.com',
+                    subject: 'Confirm your Email (Toolsio)',
+                    html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+                  },
+                  recipients: [
+                    {address: response.user.dataValues.email}
+                  ]
+                })
+                .then(data => {
+                  console.log('Woohoo! You just sent your first mailing!');
+                  console.log(data);
+                })
+                .catch(err => {
+                  console.log('Whoops! Something went wrong');
+                  console.log(err);
+                }); */
             })
       
           return {
