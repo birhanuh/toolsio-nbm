@@ -12,6 +12,15 @@ const transporter = nodemailer.createTransport(sparkPostTransport({
   endpoint: "https://api.eu.sparkpost.com"
 }))
 
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.ethereal.email',
+//     port: 587,
+//     auth: {
+//         user: 'dd4ofkhwikyxnp7o@ethereal.email',
+//         pass: 'FYTjzVtJGqMPAEfdAg'
+//     }
+// });
+
 export default {
   Mutation: {
     loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
@@ -91,7 +100,7 @@ export default {
                 console.log('err token: ', err)
               }
               
-              const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/?token=${emailToken}`
+              const url = `${process.env.CLIENT_PROTOCOL}${response.account.subdomain}.${process.env.CLIENT_HOST}/login/confirmation/?token=${emailToken}`
               
               const email = new Email({
                 message: {
@@ -271,7 +280,7 @@ export default {
                   console.log('err token: ', err)
                 }
                 
-                const url = `http://${account.subdomain}.lvh.me:3000/login/password-reset/?token=${forgotPasswordResetRequestToken}`
+                const url = `${process.env.CLIENT_PROTOCOL}${account.subdomain}.${process.env.CLIENT_HOST}/login/password-reset/?token=${forgotPasswordResetRequestToken}`
 
                 const email = new Email({
                   message: {

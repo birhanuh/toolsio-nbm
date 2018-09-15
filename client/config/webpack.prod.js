@@ -14,9 +14,9 @@ module.exports = merge(common, {
       sourceMap: true
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
-      'process.env.CLIENT_HOST': JSON.stringify(env.CLIENT_HOST),
+      'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),      
       'process.env.CLIENT_PROTOCOL': JSON.stringify(env.CLIENT_PROTOCOL),
+      'process.env.CLIENT_HOST': JSON.stringify(env.CLIENT_HOST),
       'process.env.SERVER_HTTP_PROTOCOL': JSON.stringify(env.SERVER_HTTP_PROTOCOL),
       'process.env.SERVER_WS_PROTOCOL': JSON.stringify(env.SERVER_WS_PROTOCOL),
       'process.env.SERVER_HOST': JSON.stringify(env.SERVER_HOST),

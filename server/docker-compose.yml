@@ -32,6 +32,9 @@ services:
       REDIS_HOST: redis
       #SERVER_PORT: 8080
       #DB_HOST: db ## We would need this if we use env variables in Sequelize constructor instead of json
+      # client
+      CLIENT_PROTOCOL: ${CLIENT_PROTOCOL}     
+      CLIENT_HOST: ${CLIENT_HOST}
       # server
       SERVER_PORT: ${SERVER_PORT}     
       SERVER_URL: ${SERVER_URL} ## Server path (e.g. for uploads folder location)
