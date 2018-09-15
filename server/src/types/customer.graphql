@@ -1,0 +1,57 @@
+type Customer {
+  id: Int!
+  name: String!
+  vatNumber: Int! 
+  email: String
+  phoneNumber: String 
+  isContactIncludedInInvoice: Boolean!
+  street: String
+  postalCode: String
+  region: String 
+  country:String
+  projects: [Project!]
+  sales: [Sale!]
+  invoices: [Invoice!]
+  user: User!
+}
+
+type GetCustomersResponseRows {
+  id: Int!
+  name: String!
+  vatNumber: String!
+  email: String
+  phoneNumber: String
+}
+
+type GetCustomersResponse {
+  count: Int!
+  customers: [GetCustomersResponseRows!]!
+}
+
+type CreateUpdateCustomerResponse {
+  success: Boolean!
+  customer: Customer
+  errors: [Error!]
+}
+
+type DeleteCustomerResponse {
+  success: Boolean!
+  errors: [Error!]
+}
+
+type Query {
+  getCustomer(id: Int!): Customer
+  
+  getCustomers(offset: Int!, limit: Int!, order: String!, name: String): GetCustomersResponse!
+}
+
+type Mutation {
+  createCustomer(name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
+    street: String, postalCode: String, region: String, country: String): CreateUpdateCustomerResponse!
+  
+  updateCustomer(id: Int!, name: String, vatNumber: Int, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
+    street: String, postalCode: String, region: String, country: String): CreateUpdateCustomerResponse! 
+
+  deleteCustomer(id: Int!): DeleteCustomerResponse!   
+}
+
