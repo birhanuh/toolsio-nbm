@@ -83,6 +83,7 @@
     "connect-history-api-fallback": "1.5.0",
     "cross-spawn": "6.0.5",
     "css-loader": "0.28.11",
+    "cypress": "^3.1.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
@@ -120,6 +121,7 @@
     ],
     "postbuild": "cp ./public/favicon.ico ./config/dist && cp -r ./public/error_pages ./config/dist",
     "test": "jest './__test__'",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "cypress:open": "./node_modules/.bin/cypress open"
   }
 }

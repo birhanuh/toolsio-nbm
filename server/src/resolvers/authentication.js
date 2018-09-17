@@ -26,7 +26,10 @@ export default {
     loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
       loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
     
-    logoutUser: (parent, { args }, { models, subdomain }) => {
+    // loginUser: (parent, { email, password }, { req, models, subdomain }) => 
+    //   loginUserPassportJs(req, email, password, models, subdomain),
+
+    logoutUser: (parent, { subdomain }) => {
       console.log(`User from ${subdomain} account has logged out`)
       return `User from ${subdomain} account has logged out`
     },
