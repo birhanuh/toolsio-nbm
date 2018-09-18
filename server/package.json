@@ -10,7 +10,7 @@
     "serve": "NODE_ENV=production node dist/index.js",
     "build": "babel src -d dist",
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
-    "tstart": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate && NODE_ENV=test babel-node -- src/index.js",
+    "test:start": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate && NODE_ENV=test babel-node -- src/index.js",
     "db:reset": "./__test__/helpers/reset_db.sh",
     "migration:create": "./node_modules/.bin/sequelize migration:create --name",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",

@@ -1,163 +1,111 @@
-import 'raf/polyfill'
+describe('Customers', function() {
 
-import React from 'react'
-import { Provider } from 'react-redux'
-import { BrowserRouter } from 'react-router-dom'
-import { configure, shallow, mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import toJson from 'enzyme-to-json'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+  // creates a closure around 'account'
+  let account
 
-// import 'datatables.net-se'
-// jest.mock('datatables.net-se', () => ({ dataTable: jest.fn() }))
+  before(function () {
+    // redefine account
+    account = {
+      firstName: 'Testa',
+      lastName: 'Testa',
+      email: 'testa@toolsio.com',
+      password: 'ppppp',
+      industry: 'IT',
+      subdomain: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+    }
 
-// Configure Adapter
-configure({ adapter: new Adapter() })
+    cy.visit('/')
 
-// Components 
-import Form from '../../src/components/Customers/Form'
-import Page from '../../src/components/Customers/Page'
-import Show from '../../src/components/Customers/Show'
+    cy.contains('Sign up').click()
 
-// Factories
-import { Customer, Customers } from '../factories'
+    const { firstName, lastName, email, password, subdomain } = account
 
-// Setups
-const middlewares = [thunk] // add your middlewares like `redux-thunk`
-const mockStore = configureMockStore(middlewares)
+    cy.get('input[name=firstName]').type(firstName)
+    cy.get('input[name=lastName]').type(lastName)
+    cy.get('input[name=email]').type(email)
+    cy.get('input[name=password]').type(password)
+    cy.get('input[name=confirmPassword]').type(password)
+    cy.get('div[name=industry]').click()
+    cy.get('div[name=industry] .item:first-child').click()
+    cy.get('input[name=subdomain]').type(subdomain)
 
-let store, props, component, wrapper
+    // submit
+    cy.contains('Sign up').click()
+  })
 
-describe("components", function() { 
+  beforeEach(function () {
+    const { email, password, subdomain } = account
 
-  describe("<Form />", function() { 
+    // we should be redirected to /login
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
+
+    // login
+    cy.get('input[name=email]').type(email)
+    // {enter} causes the form to submit
+    cy.get('input[name=password]').type(`${password}{enter}`)
+ 
+    // we should be redirected to /dashboard
+    cy.url().should('include', '/dashboard')
+  })
+
+  it('Create customer', function() {
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
+
+    cy.contains('Add new Customer').click()
+
+    cy.get('input[name=name]').type('Customera')
+    cy.get('input[name=vatNumber]').type(12345)
+    cy.get('input[name=phoneNumber]').type('12345678910')
+    cy.get('input[name=street]').type('Street 1')
+    cy.get('input[name=postalCode]').type('1234')
+    cy.get('select[name=rcrs-country]').select('Algeria')
+    cy.get('select[name=rcrs-region]').select('Batna')
+
+    // submit
+    cy.contains('Save').click()
+
+    // we should be redirected to /customers
+    cy.url().should('include', '/customers')
+
+    // should contain Customera
+    cy.get('table td').should('contain', 'Customera')
+
+  })
+
+  it('Update customer', function() {
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
+
+    cy.get('.basic.button.green').click()
+
+    // we should be redirected to /customers/edit
+    cy.url().should('include', '/customers/edit')
+
+    cy.get('input[name=name]').type(' updated')
+
+    // submit
+    cy.contains('Save').click()
+
+    // we should be redirected to /customers
+    cy.url().should('include', '/customers')
+
+    // should contain Customera
+    cy.get('table td').should('contain', 'Customera updated')
+  })
+
+  it('Delete customer', function() {
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
+
+    cy.get('.basic.button.blue').click()
+
+    cy.contains('Delete').click()
+
+    // confirm delete
+    cy.get('.actions > .ui.negative.button').click()
     
-    beforeEach(() => {
-      props = {
-        customers: Customers,
-        saveCustomer: jest.fn()
-      }
+    // we should be redirected to /customers
+    cy.url().should('include', '/customers')
 
-      component = shallow(<Form {...props} />)
-    })
-
-    it('renders correctly', () => { 
-      
-      expect(component.find('button').hasClass('ui primary')).toBe(true)
-
-      // const formComponent = shallow(<Form />)
-      // const tree = toJson(formComponent)
-      // console.log(tree
-
-    })
+    // should contain Customera
+    cy.get('table td').not('contain', 'Customera updated')
   })
-   
-  describe("<Form />", function() {  
-
-    beforeEach(() => {
-      const storeStateMock = {
-        customers: {
-          Customer,
-          find: jest.fn()
-        }
-      }
-
-      store = mockStore(storeStateMock)
-
-      props = {
-        createCustomer: jest.fn(),
-        fetchCustomer: jest.fn(),
-        updateCustomer: jest.fn(),
-        match: {
-          params: {
-            id: 1
-          }
-        }
-      }
-
-      wrapper = mount(<BrowserRouter><Provider store={store}><Form {...props} /></Provider></BrowserRouter>)
-    })
-
-    it('renders connected component', function() { 
-      
-      expect(wrapper.find(Form).length).toEqual(1)
-    })
-
-    it('check props matchs', function() { 
-
-      expect(wrapper.find(Form).prop('createCustomer')).toEqual(props.createCustomer)
-      expect(wrapper.find(Form).prop('fetchCustomer')).toEqual(props.fetchCustomer)
-      expect(wrapper.find(Form).prop('updateCustomer')).toEqual(props.updateCustomer)
-    })
-
-  })
-
-  describe("<Page />", function() {  
-
-    beforeEach(() => {
-      const storeStateMock = {
-        customers: Customers
-      }
-
-      store = mockStore(storeStateMock)
-
-      props = {
-        fetchCustomers: jest.fn()
-      }
-
-      wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
-    })
-
-    it('renders connected component', function() { 
-      
-      expect(wrapper.find(Page).length).toEqual(1)
-    })
-
-    it('check props matchs', function() { 
-
-      expect(wrapper.find(Page).prop('fetchCustomers')).toEqual(props.fetchCustomers)
-    })
-
-  })
-
-  describe("<Show />", function() {  
-    
-    beforeEach(()=>{
-      const storeStateMock = {
-        customers: {
-          Customers,
-          find: jest.fn()
-        }
-      }
-
-      store = mockStore(storeStateMock)
-
-      props = {
-        fetchCustomer: jest.fn(),
-        deleteCustomer: jest.fn(),
-        addFlashMessage: jest.fn(),
-        match: {
-          params: {
-            id: 1
-          }
-        }
-      }
-
-      wrapper = mount(<BrowserRouter><Provider store={store}><Show {...props} /></Provider></BrowserRouter>)
-    })
-
-    it('renders connected component', function() { 
-      
-      expect(wrapper.find(Show).length).toEqual(1)
-    })
-
-    it('check props matchs', function() { 
-
-      expect(wrapper.find(Show).prop('fetchCustomers')).toEqual(props.fetchCustomers)
-      expect(wrapper.find(Show).prop('deleteCustomer')).toEqual(props.deleteCustomer)
-    })
-
-  })
-
 })

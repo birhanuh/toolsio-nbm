@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 import _ from 'lodash'
-import passport from 'passport'
+//import passport from 'passport'
 
-let LocalStrategy = require('passport-local').Strategy
+//let LocalStrategy = require('passport-local').Strategy
 
 export const createAuthTokens = async (subdomain, user, secret, secret2) => {
   const createAuthToken = jwt.sign(
