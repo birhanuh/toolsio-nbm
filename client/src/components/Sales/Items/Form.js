@@ -22,6 +22,7 @@ class Form extends Component {
    constructor(props) {
     super(props)
     this.state = {
+      itemToBeDeleated: {},
       newItem: {
         saleId: this.props.saleId,
         name: "",
@@ -33,8 +34,8 @@ class Form extends Component {
         isLoading: false
       },
       editItem: {
-        id: this.props.saleId,
-        saleId: null,
+        id: null,
+        saleId: this.props.saleId,
         name: "",
         unit: "",
         quantity: "",
@@ -43,8 +44,6 @@ class Form extends Component {
         errors: {},
         isLoading: false
       },      
-      itemToBeDeleated: {},
-      errors: {},
       openConfirmationModal: false 
     }
   }
@@ -197,6 +196,7 @@ class Form extends Component {
         errors
       })
     } else {
+    
       let updatedItem = Object.assign({}, this.state.editItem)
       updatedItem.id = item.id
       updatedItem.saleId = item.saleId
@@ -238,7 +238,7 @@ class Form extends Component {
 
   handleEdit(item, event) {
     event.preventDefault()
-
+   
     //Hide show tr and show edit tr
     $('#'+item.id+' td.show-item').hide()
     $('#'+item.id+' td.edit-item').show()
@@ -284,7 +284,7 @@ class Form extends Component {
     // Validation
     if (this.isValidEditItem()) { 
       const { id, saleId, name, unit, quantity, unitPrice, total } = this.state.editItem
-      
+   
       this.props.updateItemMutation({
         variables: { id, saleId, name, unit, quantity, unitPrice, total },
         update: (store, { data: { updateItem } }) => {
@@ -441,7 +441,7 @@ class Form extends Component {
 
     return [
       <FormElement size="small" key="form" loading={newItem.isLoading || editItem.isRequired}>
-        <Table basic="very" className="tasks">
+        <Table basic="very" className="items">
           <thead>
             <tr>
               <th>{T.translate("sales.items.form.name")}</th>

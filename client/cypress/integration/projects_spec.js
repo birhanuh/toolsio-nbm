@@ -1,192 +1,141 @@
-import 'raf/polyfill'
+describe('Customers', function() {
 
-import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
-import { configure, shallow, mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import toJson from 'enzyme-to-json'
-// Redux
-import { Provider } from 'react-redux'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-// Apollo
-import { MockedProvider } from 'react-apollo/test-utils'
-import { addTypenameToDocument } from 'apollo-client'
-import gql from 'graphql-tag'
+  // creates a closure around 'account'
+  let account
 
-import renderer from 'react-test-renderer'
+  before(function () {
+    // redefine account
+    account = {
+      firstName: 'Testa',
+      lastName: 'Testa',
+      email: 'testa@toolsio.com',
+      password: 'ppppp',
+      industry: 'IT',
+      subdomain: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+    }
 
-import { GET_PROJECTS_QUERY, GET_PROJECT_QUERY, CREATE_PROJECT_MUTATION, UPDATE_PROJECT_MUTATION } from '../../src/graphql/projects'
+    cy.visit('/')
 
-// Configure Adapter
-configure({ adapter: new Adapter() })
+    cy.contains('Sign up').click()
 
-// Components 
-import Form from '../../src/components/Projects/Form'
-import Page from '../../src/components/Projects/Page'
-import Show from '../../src/components/Projects/Show'
+    const { firstName, lastName, email, password, subdomain } = account
 
-// Setups
-const middlewares = [thunk] // add your middlewares like `redux-thunk`
-const mockStore = configureMockStore(middlewares)
+    cy.get('input[name=firstName]').type(firstName)
+    cy.get('input[name=lastName]').type(lastName)
+    cy.get('input[name=email]').type(email)
+    cy.get('input[name=password]').type(password)
+    cy.get('input[name=confirmPassword]').type(password)
+    cy.get('div[name=industry]').click()
+    cy.get('div[name=industry] .item:first-child').click()
+    cy.get('input[name=subdomain]').type(subdomain)
 
-let store, list
-let GET_PROJECTS_GQL, CREATE_PROJECT_GQL, GET_PROJECT_GQL
+    // submit
+    cy.contains('Sign up').click()
 
-describe("components", () => { 
-   
-  describe("<Form />", () => {  
+    // we should be redirected to /login
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
 
-    beforeEach(() => {
-      const storeStateMock = {}
+    // login
+    cy.get('input[name=email]').type(email)
+    // {enter} causes the form to submit
+    cy.get('input[name=password]').type(`${password}{enter}`)
+    
+    // we should be redirected to /dashboard
+    cy.url().should('include', '/dashboard')
 
-      store = mockStore(storeStateMock)
-    })
+    // create Customer
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
 
-    it('renders connected component', () => { 
-      
-      // const props = {
-      //   match: {
-      //     params: {
-      //       id: 1
-      //     }
-      //   },
-      //   data: {
-      //     getProject: {
-      //       id: 1,
-      //       name: "Project 1",
-      //       deadline: 1523439822435,
-      //       status: "new",
-      //       description: "Desciption 1..."
-      //     }
-      //   }
-      // }
+    cy.contains('Add new Customer').click()
 
-      const wrapper = mount(<BrowserRouter>
-        <Provider store={store}>
-          <MockedProvider mocks={[{
-            request: {
-              query: CREATE_PROJECT_MUTATION,
-              varibales: { name: "Project 1", deadline: 1523439822435, status: "new", description: "Desciption 1...", total: 0, customerId: 1 }
-            },
-            result: {
-              "data": {
-                "createProject": {
-                  "success": true,
-                  "project": {
-                    "id": 1,
-                    "name": "Project 1",
-                    "deadline": 1523439822435,
-                    "status": "new",
-                    "description": "Desciption 1..."
-                  },
-                  "errors": null
-                }
-              }
-            }
-          }]} > 
-            
-            <Form {...props} />
+    cy.get('input[name=name]').type('Customera')
+    cy.get('input[name=vatNumber]').type(12345)
+    cy.get('input[name=phoneNumber]').type('12345678910')
+    cy.get('input[name=street]').type('Street 1')
+    cy.get('input[name=postalCode]').type('1234')
+    cy.get('select[name=rcrs-country]').select('Algeria')
+    cy.get('select[name=rcrs-region]').select('Batna')
 
-          </MockedProvider>
-        </Provider>
-      </BrowserRouter>)
-      console.log('Form ', wrapper.find(Form))
-      expect(wrapper.find(Form).length).toEqual(1)
-    })
+    // submit
+    cy.contains('Save').click()
 
+    // we should be redirected to /customers
+    cy.url().should('include', '/customers')
+
+    // should contain Customera
+    cy.get('table td').should('contain', 'Customera')
   })
 
-  describe("<Page />", () => {  
+  beforeEach(function () {
+    const { email, password } = account
 
-    beforeEach(() => {
-      const storeStateMock = {}
+    // we should be redirected to /login
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
 
-      store = mockStore(storeStateMock)
-    })
+    // login
+    cy.get('input[name=email]').type(email)
+    // {enter} causes the form to submit
+    cy.get('input[name=password]').type(`${password}{enter}`)
+ 
+    // we should be redirected to /dashboard
+    cy.url().should('include', '/dashboard')
 
-    it('renders connected component', () => { 
-      
-      const projectsList =  {
-        getProjects: [
-          {
-            id: 1,
-            name: "Project 1",
-            deadline: 1523439822435,
-            status: "new",
-            progress: 0,
-            description: "",
-            customer: {
-              name: "Customera"
-            },
-            user: {
-              user: "testa"
-            }
-          }
-        ]
-      }
-
-      const wrapper = mount(<BrowserRouter>
-        <Provider store={store}>
-          <MockedProvider mocks={[{
-            request: {
-              query: GET_PROJECTS_QUERY
-            },
-            result: {
-              data: projectsList
-            }
-          }]} > 
-            
-            <Page />
-
-          </MockedProvider>
-        </Provider>
-      </BrowserRouter>)
-      
-      console.log('Page ', wrapper.find(Page).props())
-      //expect(wrapper.find(Page).prop('data').getProjects).toEqual(projectsList)
-      //expect(toJSON(wrapper)).toMatchSnapshot()
-
-    })
+    // go to projects
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/projects`)
   })
 
-  describe("<Show />", () => {      
+  it('Create project', function() {
+    cy.contains('Create new Project').click()
 
-    beforeEach(() => {
-      const storeStateMock = {}  
+    cy.get('input[name=name]').type('Project 1')
+    cy.get('.react-datepicker-wrapper').click()
+    cy.get('.react-datepicker__month .react-datepicker__week:last-child .react-datepicker__day:last-child').click()
+    cy.get('div[name=customerId]').click()
+    cy.get('.selected.item:first-child').click()
+    cy.get('textarea[name=description]').type('Project 1 description...')
 
-      store = mockStore(storeStateMock)
-    })
+    // submit
+    cy.contains('Save').click()
 
-    it('renders connected component', () => { 
-      
-      const project =  {
-        "getProject": {
-          "id": 1,
-          "name": "Project 1"
-        }
-      }
+    // we should be redirected to /projects
+    cy.url().should('include', '/projects')
 
-      const wrapper = mount(<BrowserRouter>
-        <Provider store={store}>
-          <MockedProvider mocks={[{
-            request: {
-              query: GET_PROJECT_GQL,
-              varibales: { params: {id: 1} }
-            },
-            result: {
-              data: project
-            }
-          }]} > 
-            
-            <Show match={{params: {id: 1}}} />
-
-          </MockedProvider>
-        </Provider>
-      </BrowserRouter>)
-
-      //expect(wrapper.find(Show).prop('data').getProject).not.toBe(null)
-    })
+    // should contain Project 1
+    cy.get('.content h3').should('contain', 'Project 1')
   })
 
+  it('Update project', function() {
+    cy.get('.content .ui.header.blue').click()
+
+    cy.contains('Edit').click()
+
+    // we should be redirected to /projects/edit
+    cy.url().should('include', '/projects/edit')
+
+    cy.get('input[name=name]').type(' updated')
+
+    // submit
+    cy.contains('Save').click()
+
+    // we should be redirected to /projects
+    cy.url().should('include', '/projects')
+
+    // should contain Project 1 updated
+    cy.get('.content h3').should('contain', 'Project 1 updated')
+  })
+
+  it('Delete project', function() {
+    cy.get('.content .ui.header.blue').click()
+
+    cy.contains('Delete').click()
+
+    // confirm delete
+    cy.get('.actions > .ui.negative.button').click()
+    
+    // we should be redirected to /projects
+    cy.url().should('include', '/projects')
+
+    // should contain Project 1
+    cy.get('table td').not('contain', 'Project 1 updated')
+  })
 })

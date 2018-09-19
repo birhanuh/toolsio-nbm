@@ -64,27 +64,10 @@ describe('Customers', function() {
 
     // should contain Customera
     cy.get('table td').should('contain', 'Customera')
-  })
 
-  beforeEach(function () {
-    const { email, password } = account
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
- 
-    // we should be redirected to /dashboard
-    cy.url().should('include', '/dashboard')
-
-    // go to sales
+    // Create Sale
     cy.visit(`http://${account.subdomain}.lvh.me:3000/sales`)
-  })
 
-  it('Create sale', function() {
     cy.contains('Create new Sale').click()
 
     cy.get('input[name=name]').type('Sale 1')
@@ -104,38 +87,59 @@ describe('Customers', function() {
     cy.get('.content h3').should('contain', 'Sale 1')
   })
 
-  it('Update sale', function() {
+  beforeEach(function () {
+    const { email, password } = account
+
+    // we should be redirected to /login
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
+
+    // login
+    cy.get('input[name=email]').type(email)
+    // {enter} causes the form to submit
+    cy.get('input[name=password]').type(`${password}{enter}`)
+ 
+    // we should be redirected to /dashboard
+    cy.url().should('include', '/dashboard')
+
+    // go to sales
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/sales`)
+
     cy.get('.content .ui.header.blue').click()
-
-    cy.contains('Edit').click()
-
-    // we should be redirected to /sales/edit
-    cy.url().should('include', '/sales/edit')
-
-    cy.get('input[name=name]').type(' updated')
-
-    // submit
-    cy.contains('Save').click()
-
-    // we should be redirected to /sales
-    cy.url().should('include', '/sales')
-
-    // should contain Sale 1 updated
-    cy.get('.content h3').should('contain', 'Sale 1 updated')
   })
 
-  it('Delete sale', function() {
-    cy.get('.content .ui.header.blue').click()
+  it('Create item', function() {
+    cy.get('input[name=name]').type('Item 1')
+    cy.get('div[name=unit]').click()
+    cy.get('.visible.menu > .item:first-child').click()
+    cy.get('input[name=quantity]').type('5')
+    cy.get('input[name=unitPrice]').type('20')
 
-    cy.contains('Delete').click()
+    // submit
+    cy.contains('Add Item').click()
+
+    // should contain Item 1
+    cy.get('table td.show-item:first-child').should('contain', 'Item 1')
+  })
+
+  it('Update item', function() {
+    cy.get('.ui.buttons.show-item > button:last-child').click()
+
+    cy.get('table.items tr:first-child input[name=name]:first-child').type(' updated')
+
+    // submit
+    cy.get('.ui.buttons.edit-item > button:last-child').click()
+
+    // should contain Item 1 updated
+    cy.get('table td.show-item:first-child').should('contain', 'Item 1 updated')
+  })
+
+  it('Delete item', function() {
+    cy.get('.ui.buttons.show-item:last-child > button:first-child').click()
 
     // confirm delete
     cy.get('.actions > .ui.negative.button').click()
-    
-    // we should be redirected to /sales
-    cy.url().should('include', '/sales')
 
-    // not contain Sale 1 updated 
-    cy.get('table td').not('contain', 'Sale 1 updated')
+    // should not contain Item 1 updated
+    cy.get('table td.add-item:first-child').not('contain', 'Item 1 updated')
   })
 })

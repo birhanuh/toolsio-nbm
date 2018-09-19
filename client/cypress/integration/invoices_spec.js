@@ -1,163 +1,165 @@
-import 'raf/polyfill'
+describe('Customers', function() {
 
-import React from 'react'
-import { Provider } from 'react-redux'
-import { BrowserRouter } from 'react-router-dom'
-import { configure, shallow, mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import toJson from 'enzyme-to-json'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+  // creates a closure around 'account'
+  let account
 
-// Configure Adapter
-configure({ adapter: new Adapter() })
+  before(function () {
+    // redefine account
+    account = {
+      firstName: 'Testa',
+      lastName: 'Testa',
+      email: 'testa@toolsio.com',
+      password: 'ppppp',
+      industry: 'IT',
+      subdomain: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+    }
 
-// Components 
-import Form from '../../src/components/Invoices/Form'
-import Page from '../../src/components/Invoices/Page'
-import Show from '../../src/components/Invoices/Show/Page'
+    cy.visit('/')
 
-// Factories
-import { Invoices, Projects, Sales, Account } from '../factories'
+    cy.contains('Sign up').click()
 
-// Setups
-const middlewares = [thunk] // add your middlewares like `redux-thunk`
-const mockStore = configureMockStore(middlewares)
+    const { firstName, lastName, email, password, subdomain } = account
 
-let store, props, component, wrapper
+    cy.get('input[name=firstName]').type(firstName)
+    cy.get('input[name=lastName]').type(lastName)
+    cy.get('input[name=email]').type(email)
+    cy.get('input[name=password]').type(password)
+    cy.get('input[name=confirmPassword]').type(password)
+    cy.get('div[name=industry]').click()
+    cy.get('div[name=industry] .item:first-child').click()
+    cy.get('input[name=subdomain]').type(subdomain)
 
-describe("components", function() { 
+    // submit
+    cy.contains('Sign up').click()
 
-  describe("<Form />", function() { 
+    // we should be redirected to /login
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
+
+    // login
+    cy.get('input[name=email]').type(email)
+    // {enter} causes the form to submit
+    cy.get('input[name=password]').type(`${password}{enter}`)
     
-    beforeEach(() => {
-      props = {
-        projects: Projects,
-        sales: Sales,
-        saveInvoice: jest.fn()
-      }
+    // we should be redirected to /dashboard
+    cy.url().should('include', '/dashboard')
 
-      component = shallow(<Form {...props}/>)
-    })
+    // create Customer
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
 
-    it('renders correctly', () => { 
-      
-      expect(component.find('form').hasClass('ui form')).toBe(true)
+    cy.contains('Add new Customer').click()
 
-    })
-  })
-   
-  describe("<Form />", function() {  
+    cy.get('input[name=name]').type('Customera')
+    cy.get('input[name=vatNumber]').type(12345)
+    cy.get('input[name=phoneNumber]').type('12345678910')
+    cy.get('input[name=street]').type('Street 1')
+    cy.get('input[name=postalCode]').type('1234')
+    cy.get('select[name=rcrs-country]').select('Algeria')
+    cy.get('select[name=rcrs-region]').select('Batna')
 
-    beforeEach(() => {
-      const storeStateMock = {
-        invoices: Invoices,
-        projects: Projects,
-        sales: Sales
-      }
+    // submit
+    cy.contains('Save').click()
 
-      store = mockStore(storeStateMock)
+    // we should be redirected to /customers
+    cy.url().should('include', '/customers')
 
-      props = {
-        createInvoice: jest.fn(),
-        fetchInvoice: jest.fn(),
-        updateInvoice: jest.fn(),
-        fetchProjects: jest.fn(),
-        fetchSales: jest.fn(),
-        match: {
-          params: {
-            id: 1
-          }
-        }
-      }
+    // should contain Customera
+    cy.get('table td').should('contain', 'Customera')
 
-      wrapper = mount(<BrowserRouter><Provider store={store}><Form {...props} /></Provider></BrowserRouter>)
-    })
+    // Create Project
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/projects`)
 
-    it('renders connected component', function() { 
-      
-      expect(wrapper.find(Form).length).toEqual(1)
-    })
+    cy.contains('Create new Project').click()
 
-    it('check props matchs', function() { 
+    cy.get('input[name=name]').type('Project 1')
+    cy.get('.react-datepicker-wrapper').click()
+    cy.get('.react-datepicker__month .react-datepicker__week:last-child .react-datepicker__day:last-child').click()
+    cy.get('div[name=customerId]').click()
+    cy.get('.selected.item:first-child').click()
+    cy.get('textarea[name=description]').type('Project 1 description...')
 
-      expect(wrapper.find(Form).prop('createInvoice')).toEqual(props.createInvoice)
-      expect(wrapper.find(Form).prop('fetchInvoice')).toEqual(props.fetchInvoice)
-      expect(wrapper.find(Form).prop('updateInvoice')).toEqual(props.updateInvoice)
-      expect(wrapper.find(Form).prop('fetchProjects')).toEqual(props.fetchProjects)
-      expect(wrapper.find(Form).prop('fetchSales')).toEqual(props.fetchSales)
-    })
+    // submit
+    cy.contains('Save').click()
 
+    // we should be redirected to /projects
+    cy.url().should('include', '/projects')
+
+    // should contain Project 1
+    cy.get('.content h3').should('contain', 'Project 1')
   })
 
-  describe("<Page />", function() {  
+  beforeEach(function () {
+    const { email, password } = account
 
-    beforeEach(() => {
-      const storeStateMock = {
-        invoices: Invoices
-      }
+    // we should be redirected to /login
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
 
-      store = mockStore(storeStateMock)
+    // login
+    cy.get('input[name=email]').type(email)
+    // {enter} causes the form to submit
+    cy.get('input[name=password]').type(`${password}{enter}`)
+ 
+    // we should be redirected to /dashboard
+    cy.url().should('include', '/dashboard')
 
-      props = {
-        fetchInvoices: jest.fn()
-      }
-
-      wrapper = mount(<BrowserRouter><Provider store={store}><Page {...props} /></Provider></BrowserRouter>)
-    })
-
-    it('renders connected component', function() { 
-      
-      expect(wrapper.find(Page).length).toEqual(1)
-    })
-
-    it('check props matchs', function() { 
-
-      expect(wrapper.find(Page).prop('fetchInvoices')).toEqual(props.fetchInvoices)
-    })
-
+    // go to projects
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/invoices`)
   })
 
-  describe("<Show />", function() {  
-    
-    beforeEach(() => {
-      const storeStateMock = {
-        invoices: {
-          Invoices,
-          find: jest.fn()
-        },
-        authentication: {
-          account: Account 
-        },
-      }
+  it('Create invoice', function() {
+    cy.contains('Create new Invoice').click()
 
-      store = mockStore(storeStateMock)
+    // Project or Sale
+    cy.get('div[name=projectId]').click()
+    cy.get('div[name=projectId] input').type('Project 1')
+    cy.get('.visible.menu > .item:first-child').click()
+    cy.contains('Next').click()
 
-      props = {
-        fetchInvoice: jest.fn(),
-        deleteInvoice: jest.fn(),
-        addFlashMessage: jest.fn(),
-        match: {
-          params: {
-            id: 1
-          }
-        }
-      }
+    // Invoice details 
+    cy.get('input[name=interestInArrears]').type('5')
+    cy.get('input[name=tax]').type('15')
+    cy.get('textarea[name=description]').type('Invoice for Project 1.')
+    cy.contains('Next').click()
 
-      wrapper = mount(<BrowserRouter><Provider store={store}><Show {...props} /></Provider></BrowserRouter>)
-    })
+    // should contain Project 1
+    cy.get('table:nth-child(2) tr:first-child td:nth-child(2)').should('contain', 'Project 1')
 
-    it('renders connected component', function() { 
-      
-      expect(wrapper.find(Show).length).toEqual(1)
-    })
+    cy.contains('Save').click()
 
-    it('check props matchs', function() { 
+    // we should be redirected to /invoices
+    cy.url().should('include', '/invoices')
 
-      expect(wrapper.find(Show).prop('fetchInvoice')).toEqual(props.fetchInvoice)
-      expect(wrapper.find(Show).prop('deleteInvoice')).toEqual(props.deleteInvoice)
-    })
-
+    // should contain Invoice for (Project 1)
+    cy.get('table tr:first-child td:first-child').should('contain', 'Project 1')
   })
 
+  it('Update invoice', function() {
+    cy.get('table tr:first-child td:last-child .ui.buttons > a:first-child').click()
+
+    cy.get('div[name=status]').click()
+    cy.get('.visible.menu > .item:nth-child(2)').click()
+
+    cy.contains('Next').click()
+    cy.contains('Save').click()
+
+    // we should be redirected to /invoices
+    cy.url().should('include', '/invoices')
+
+    // should contain Task 1 updated
+    cy.get('table tr:first-child td:nth-child(5) div').should('contain', 'pending')
+  })
+
+  it('Delete invoice', function() {
+    cy.get('table tr:first-child td:last-child .ui.buttons > a:last-child').click()
+
+    cy.contains('Delete').click()
+
+    // confirm delete
+    cy.get('.actions > .ui.negative.button').click()
+
+    // we should be redirected to /invoices
+    cy.url().should('include', '/invoices')
+
+    // should not contain Project
+    cy.get('table tr:first-child td:first-child').not('contain', 'Project 1')
+  })
 })

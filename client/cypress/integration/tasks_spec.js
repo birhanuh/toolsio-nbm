@@ -64,6 +64,27 @@ describe('Customers', function() {
 
     // should contain Customera
     cy.get('table td').should('contain', 'Customera')
+
+    // Create Project
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/projects`)
+
+    cy.contains('Create new Project').click()
+
+    cy.get('input[name=name]').type('Project 1')
+    cy.get('.react-datepicker-wrapper').click()
+    cy.get('.react-datepicker__month .react-datepicker__week:last-child .react-datepicker__day:last-child').click()
+    cy.get('div[name=customerId]').click()
+    cy.get('.selected.item:first-child').click()
+    cy.get('textarea[name=description]').type('Project 1 description...')
+
+    // submit
+    cy.contains('Save').click()
+
+    // we should be redirected to /projects
+    cy.url().should('include', '/projects')
+
+    // should contain Project 1
+    cy.get('.content h3').should('contain', 'Project 1')
   })
 
   beforeEach(function () {
@@ -80,62 +101,45 @@ describe('Customers', function() {
     // we should be redirected to /dashboard
     cy.url().should('include', '/dashboard')
 
-    // go to sales
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/sales`)
+    // go to projects
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/projects`)
+
+    cy.get('.content .ui.header.blue').click()
   })
 
-  it('Create sale', function() {
-    cy.contains('Create new Sale').click()
-
-    cy.get('input[name=name]').type('Sale 1')
-    cy.get('.react-datepicker-wrapper').click()
-    cy.get('.react-datepicker__month .react-datepicker__week:last-child .react-datepicker__day:last-child').click()
-    cy.get('div[name=customerId]').click()
-    cy.get('.selected.item:first-child').click()
-    cy.get('textarea[name=description]').type('Sale 1 description...')
+  it('Create task', function() {
+    cy.get('input[name=name]').type('Task 1')
+    cy.get('div[name=paymentType]').click()
+    cy.get('.visible.menu > .item:first-child').click()
+    cy.get('input[name=hours]').type('1.5')
+    cy.get('input[name=unitPrice]').type('20')
 
     // submit
-    cy.contains('Save').click()
+    cy.contains('Add Task').click()
 
-    // we should be redirected to /sales
-    cy.url().should('include', '/sales')
-
-    // should contain Sale 1
-    cy.get('.content h3').should('contain', 'Sale 1')
+    // should contain Task 1
+    cy.get('table td.show-task:first-child').should('contain', 'Task 1')
   })
 
-  it('Update sale', function() {
-    cy.get('.content .ui.header.blue').click()
+  it('Update task', function() {
+    cy.get('.ui.buttons.show-task > button:last-child').click()
 
-    cy.contains('Edit').click()
-
-    // we should be redirected to /sales/edit
-    cy.url().should('include', '/sales/edit')
-
-    cy.get('input[name=name]').type(' updated')
+    cy.get('table.tasks tr:first-child input[name=name]:first-child').type(' updated')
 
     // submit
-    cy.contains('Save').click()
+    cy.get('.ui.buttons.edit-task > button:last-child').click()
 
-    // we should be redirected to /sales
-    cy.url().should('include', '/sales')
-
-    // should contain Sale 1 updated
-    cy.get('.content h3').should('contain', 'Sale 1 updated')
+    // should contain Task 1 updated
+    cy.get('table td.show-task:first-child').should('contain', 'Task 1 updated')
   })
 
-  it('Delete sale', function() {
-    cy.get('.content .ui.header.blue').click()
-
-    cy.contains('Delete').click()
+  it('Delete task', function() {
+    cy.get('.ui.buttons.show-task:last-child > button:first-child').click()
 
     // confirm delete
     cy.get('.actions > .ui.negative.button').click()
-    
-    // we should be redirected to /sales
-    cy.url().should('include', '/sales')
 
-    // not contain Sale 1 updated 
-    cy.get('table td').not('contain', 'Sale 1 updated')
+    // should not contain Task 1 updated
+    cy.get('table td.add-task:first-child').not('contain', 'Task 1 updated')
   })
 })

@@ -34,7 +34,7 @@ describe('Customers', function() {
   })
 
   beforeEach(function () {
-    const { email, password, subdomain } = account
+    const { email, password } = account
 
     // we should be redirected to /login
     cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
