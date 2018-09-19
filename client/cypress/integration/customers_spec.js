@@ -46,11 +46,12 @@ describe('Customers', function() {
  
     // we should be redirected to /dashboard
     cy.url().should('include', '/dashboard')
+
+    // go to customers
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
   })
 
   it('Create customer', function() {
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
-
     cy.contains('Add new Customer').click()
 
     cy.get('input[name=name]').type('Customera')
@@ -69,12 +70,9 @@ describe('Customers', function() {
 
     // should contain Customera
     cy.get('table td').should('contain', 'Customera')
-
   })
 
   it('Update customer', function() {
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
-
     cy.get('.basic.button.green').click()
 
     // we should be redirected to /customers/edit
@@ -93,8 +91,6 @@ describe('Customers', function() {
   })
 
   it('Delete customer', function() {
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`)
-
     cy.get('.basic.button.blue').click()
 
     cy.contains('Delete').click()

@@ -254,15 +254,15 @@
     },
     "projects": {
       "header": "Projects",
-      "create_first_project": "Create you first Project"
+      "create_first_project": "Create your first Project"
     },
     "sales": {
       "header": "Sales",
-      "create_first_sale": "Create you first Sale"
+      "create_first_sale": "Create your first Sale"
     },
     "customers": {
       "header": "Customers",
-      "create_first_customer": "Create you first Customer",
+      "create_first_customer": "Create your first Customer",
       "customer_project_sale_relationship": "Customers relatioship to Projects and Sales"
     },
     "invoices": {

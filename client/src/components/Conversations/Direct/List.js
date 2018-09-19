@@ -83,17 +83,15 @@ class List extends Component {
     )
 
     return [
-      <div key="user-list">
-        <Segment vertical textAlign='center'>
-          <Button id="add-user" primary size='small' onClick={this.toggleAddUserModal.bind(this)}>
-            <Icon name="add circle" />
-            {T.translate("conversations.messages.add_user")}
-          </Button>  
-        </Segment>
+      <Segment key="user-list" vertical textAlign='center'>
+        <Button id="add-user" primary size='small' onClick={this.toggleAddUserModal.bind(this)}>
+          <Icon name="add circle" />
+          {T.translate("conversations.messages.add_user")}
+        </Button>  
+      </Segment>,
 
-        { userList }
+      userList,
 
-      </div>,
       <AddUserModal
         onClose={this.toggleAddUserModal.bind(this)}
         open={openAddUserModal}

@@ -257,9 +257,9 @@ class UserForm extends Component {
         <Item.Content>                
           <Header as='h1' className="mt-2 mb-3">{T.translate("settings.user.header")}</Header> 
 
-          <input type="hidden" value="prayer" />
-          <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)} autoComplete="off">
-         
+          <Form className='profile' loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)} autoComplete="off">
+            <input autoComplete="false" name="hidden" type="text" style={{display: 'none'}} />
+
             { !!errors.message && (typeof errors.message === "string") && <Message negative><p>{errors.message}</p></Message> } 
             
             <Form.Field>
@@ -310,8 +310,9 @@ class UserForm extends Component {
 
           <Divider />
 
-          <Form loading={isLoadingPasswordForm} onSubmit={this.handlePasswordChangeSubmit.bind(this)} autoComplete="off">
-         
+          <Form className='password' loading={isLoadingPasswordForm} onSubmit={this.handlePasswordChangeSubmit.bind(this)} autoComplete="off">
+            <input autoComplete="false" name="hidden" type="text" style={{display: 'none'}} />
+
             { !!errors.message && (typeof errors.message === "string") && <Message negative><p>{errors.message}</p></Message> } 
         
             <fieldset className="custom-fieldset">
