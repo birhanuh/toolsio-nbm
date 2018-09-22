@@ -37,7 +37,7 @@ export default {
       
       const email = new Email({
         message: {
-          from: 'no-replay@toolsio.com'
+          from: 'no-replay@email.toolsio.com'
         },
         // uncomment below to send emails in development/test env:
         send: true,

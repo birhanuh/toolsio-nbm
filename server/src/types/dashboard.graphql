@@ -65,6 +65,7 @@ type NameCountProjectsSales {
 
 type CustomersData {
   nameCountProjectsSales: [NameCountProjectsSales!]!
+  countCustomers: Int!
 }
 
 type InvoicesData {

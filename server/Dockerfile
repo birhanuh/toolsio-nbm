@@ -5,6 +5,7 @@ COPY ./package.json .
 COPY ./migrations ./migrations
 COPY ./emails ./emails
 COPY ./dist ./dist
+COPY ./src/types ./dist/types
 COPY ./config ./config
 COPY ./wait-for-it.sh .
 COPY ./.env .

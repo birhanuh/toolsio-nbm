@@ -16,7 +16,7 @@ export default {
 
       const emailTemplate = new Email({
         message: {
-          from: 'contact@toolsio.com', // Fix for sparkpost Unconfigured Sending Domain <gmail.com>
+          from: 'contact@email.toolsio.com', // Fix for sparkpost Unconfigured Sending Domain <gmail.com>
           to: 'support@gmail.com',
           subject: `Contact message from (${name})`,
           html: `<p>From: ${email}<p/><p>Message: ${messageBody}</p>`

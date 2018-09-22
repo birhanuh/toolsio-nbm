@@ -259,6 +259,12 @@ class Form extends Component {
                 return
               }
 
+              // Redirect to sales/new based on previous path
+              if (this.props.location.state && this.props.location.state.prevPath && this.props.location.state.prevPath === '/sales/new') {
+                this.context.router.history.push('/sales/new')
+                return
+              }
+
               this.context.router.history.push('/customers')
             } else {
               let errorsList = {}
