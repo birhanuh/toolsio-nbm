@@ -1,62 +1,35 @@
 language: node_js
 node_js:
-  - "10.2.1"
+- 10.2.1
 services:
-  - if [ "$TEST_DIR" = "server" ]; then redis-server; fi
-  - if [ "$TEST_DIR" = "server" ]; then docker; fi
+- if [ "$TEST_DIR" = "server" ]; then redis-server; fi
+- if [ "$TEST_DIR" = "server" ]; then docker; fi
 notifications:
   email:
-    on_success: change # only if status change from fail to success
-    on_failure: always # if there is a fail
+    on_success: change
+    on_failure: always
     recipients:
-      - birhanu.hailemariam@gmail.com
+    - birhanu.hailemariam@gmail.com
 cache:
   directories:
-    - client/node_modules
-    - server/node_modules
+  - node_modules
 env:
+  matrix:
   - TEST_DIR=client
   - TEST_DIR=server
-#before_script:
-#  - cd $TEST_DIR && npm install
-#script:
-#  - cd $TEST_DIR && npm install && npm test
-  #- npm run build
-cache:
-   directories:
-     - node_modules
+  global:
+    secure: RZE9N9fm4sz6o6eJlU3GApQMEOU5W4TcefkYSleMxfNu/GT68ZoRvrwsD8QbdsQLpV/BxiEmTHmekqS584ZROBCDQD3JHvcTilgtMzd/uKE2ameE7F5X+eohoQel0/PEluyQfUgRe3heMR82ve2syAvxk+UJupb9PKIrJcA8MpzwZ4ZWnQ3yeWOKXaUjsEqGZB16pCBUc7mrj0tzo8rsitutAorXjHpJFJ+7rWe7hDyDAtHepsQBD1/nqQ4NPJjtLlZJ7Tc25j0zaJzPVquJ3qKYHKNz6lEBgSCxJyvB4UVOkCnpzPve2QC9RNvDkgT7BptsH4/Bk1mFwQx5Sh5OSsxiWjXqyz8zrDOJkqCCXof33HTn3YeQDKTFQFO9g+Sn9HfWmArfpGbkv6Rw82Ppx/39KdWHsn/cjhCHywbOQlMKPvFNP80G2/H0xSxMSb0klSOgKnc3Rbz8E6tNAJlPtDX+LjkNJIQ2na4pkwDME5Pd0v/nc+kuzJQ8Twp8bxIAABHWhBIdBeFeFtoelN8arJ9I9g57TV5T9pfhEr34l6XfSuViwhjgVEhP3I5lEO+5yPmDLPUhDqCipcnl2hrP1ignWz2b3QR2Ha9JpFKb7v8mcwB6fVfu7mSASZIMtt/ZzXiieSATFuvTGtpyCbRWhamzXnWKPlgb1k5r74+bT3M=
 before_script:
-  - cd $TEST_DIR 
-  - npm install
-  - if [ "$TEST_DIR" = "server" ]; then npm run build; fi
-  - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
-  - if [ "$TEST_DIR" = "server" ]; then docker-compose build; fi
-  - if [ "$TEST_DIR" = "server" ]; then docker-compose up -d; fi
-  - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
+- cd $TEST_DIR
+- npm install
+- if [ "$TEST_DIR" = "server" ]; then openssl aes-256-cbc -k "$password" -in .env.enc -out .env -d; fi
+- if [ "$TEST_DIR" = "server" ]; then npm run build; fi
+- if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
+- if [ "$TEST_DIR" = "server" ]; then ls -al && cat .env && docker-compose build; fi
+- if [ "$TEST_DIR" = "server" ]; then docker-compose up -d; fi
+- if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
 script:
-#  - npm test
-  - if [ "$TEST_DIR" = "client" ]; then npm run cypress:open; fi
-  - if [ "$TEST_DIR" = "server" ]; then npm test; fi
+- if [ "$TEST_DIR" = "client" ]; then npm run cypress:open; fi
+- if [ "$TEST_DIR" = "server" ]; then npm test; fi
 after_script:
-  - if [ "$TEST_DIR" = "server" ]; then docker-compose kill; fi
-
-#jobs:
-#  include:
-#    - stage: test
-#      script: 
-#        - cd server && npm test -- --runInBand
-#    - stage: deploy
-#      deploy:
-#        provider: pages
-#        skip_cleanup: true
-#        github_token: $github_token
-#        local_dir: build
-#        on:
-#          branch: develop
-      
-
-
-
-
-
-
+- if [ "$TEST_DIR" = "server" ]; then docker-compose kill; fi
