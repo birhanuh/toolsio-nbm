@@ -34,7 +34,9 @@ before_script:
   - if [ "$TEST_DIR" = "server" ]; then docker-compose up -d; fi
   - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
 script:
-  - npm test
+#  - npm test
+  - if [ "$TEST_DIR" = "client" ]; then npm run cypress:open; fi
+  - if [ "$TEST_DIR" = "server" ]; then npm test; fi
 after_script:
   - if [ "$TEST_DIR" = "server" ]; then docker-compose kill; fi
 
