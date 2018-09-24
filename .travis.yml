@@ -27,8 +27,6 @@ before_script:
     -out env.js -d; fi
   - if [ "$TEST_DIR" = "server" ]; then openssl aes-256-cbc -k "$super_secret_password" -in .env.enc
     -out .env -d; fi
-  - if [ "$TEST_DIR" = "client" ]; then npm run build:test; fi
-  - if [ "$TEST_DIR" = "client" ]; then sleep 10; fi
   - if [ "$TEST_DIR" = "client" ]; then npm run start:test; fi
   - if [ "$TEST_DIR" = "server" ]; then npm run build; fi
   - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
