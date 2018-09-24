@@ -115,7 +115,7 @@
   "scripts": {
     "start": "webpack-dev-server --open --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
-    "start:test": "npm start &",
+    "test:server": "npm start &",
     "//": [
       "prebuild rm -rf ./dist",
       "postbuild mv ./config/dist ./ && cp ./public/favicon.ico ./dist && cp -r ./public/error_pages ./dist"
@@ -125,6 +125,6 @@
     "test:watch": "npm test -- --watch",
     "cypress:open": "./node_modules/.bin/cypress open",
     "cypress:run": "./node_modules/.bin/cypress run",
-    "kill:npm-start": "pkill -f npm start"
+    "kill:test:server": "pkill -f npm start"
   }
 }

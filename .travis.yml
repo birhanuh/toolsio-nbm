@@ -26,7 +26,7 @@ before_script:
     -out env.js -d; fi
   - if [ "$TEST_DIR" = "server" ]; then openssl aes-256-cbc -k "$super_secret_password" -in .env.enc
     -out .env -d; fi
-  - if [ "$TEST_DIR" = "client" ]; then npm run start:test; fi
+  - if [ "$TEST_DIR" = "client" ]; then npm run test:server; fi
   - if [ "$TEST_DIR" = "server" ]; then npm run build; fi
   - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
   - if [ "$TEST_DIR" = "server" ]; then docker-compose build; fi
@@ -37,5 +37,5 @@ script:
   - if [ "$TEST_DIR" = "client" ]; then npm run cypress:run; fi
   - if [ "$TEST_DIR" = "server" ]; then npm test; fi
 after_script:
-  - if [ "$TEST_DIR" = "client" ]; then npm run kill:npm-start; fi
+  - if [ "$TEST_DIR" = "client" ]; then npm run kill:test:server; fi
   - if [ "$TEST_DIR" = "server" ]; then docker-compose kill; fi

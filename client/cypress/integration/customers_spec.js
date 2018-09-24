@@ -1,5 +1,18 @@
 describe('Customers', function() {
+  cy.on('uncaught:exception', (err, runnable) => {
+    // returning false here prevents Cypress from
+    // failing the test
+    expect(err.name).to.eq("Uncaught ReferenceError")
+    expect(err.message).to.include("foo is not defined")
+    expect(err.message).to.include("This error originated from your application code, not from Cypress.")
+    expect(err.message).to.include("https://on.cypress.io/uncaught-exception-from-application")
+    expect(runnable).to.be.true
 
+    return false
+
+    //cy.visit("/fixtures/visit_error.html")
+  })
+  
   // creates a closure around 'account'
   let account
 
