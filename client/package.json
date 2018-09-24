@@ -125,6 +125,7 @@
     "test": "jest './__test__'",
     "test:watch": "npm test -- --watch",
     "cypress:open": "./node_modules/.bin/cypress open",
+    "cypress:run": "./node_modules/.bin/cypress run",
     "kill:http-server": "pkill -f http-server"
   }
 }
