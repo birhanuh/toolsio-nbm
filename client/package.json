@@ -115,6 +115,8 @@
   "scripts": {
     "start": "webpack-dev-server --open --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
+    "build:test": "webpack --config ./config/webpack.dev.js && mv config/dist/index.html config/dist/404.html",
+    "start:test": "http-server config/dist -a lvh.me -p 3000 . &",
     "//": [
       "prebuild rm -rf ./dist",
       "postbuild mv ./config/dist ./ && cp ./public/favicon.ico ./dist && cp -r ./public/error_pages ./dist"
@@ -122,6 +124,7 @@
     "postbuild": "cp ./public/favicon.ico ./config/dist && cp -r ./public/error_pages ./config/dist",
     "test": "jest './__test__'",
     "test:watch": "npm test -- --watch",
-    "cypress:open": "./node_modules/.bin/cypress open"
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "kill:http-server": "pkill -f http-server"
   }
 }
