@@ -125,6 +125,6 @@
     "test:watch": "npm test -- --watch",
     "cypress:open": "./node_modules/.bin/cypress open",
     "cypress:run": "./node_modules/.bin/cypress run",
-    "kill:http-server": "pkill -f http-server"
+    "kill:npm-start": "pkill -f npm start"
   }
 }
