@@ -1,0 +1,846 @@
+{  
+  "landing": {
+    "home": {
+      "header": "Home",
+      "welcome": "Welcome to",
+      "slogan": "Manage your Projects and Sales online more efficently! Create Invoices, track Projects' progress and Sales' status by intercating with your colleauges and clients seamlessly!",
+      "get_started": "Get started for free",
+      "learn_more": "Learn more"
+    },
+    "features": {
+      "header": "Features",
+      "invoice": {
+        "header": "Invoicing",
+        "text": "Create Invoces for the finished Projects and delivered Sales. Print PDF format of invoices and send to your clients. Optionally, import/export Invoices to/from exernal sources (i.e excel, CSV)."
+      },
+      "sale": {
+        "header": "Sale managment",
+        "text": "Create Sales by adding respective items individually. Create an Invocie for delivered Sales."
+      },
+      "project": {
+        "header": "Project managment",
+        "text": "Record hours and caclulate prices for each tasks of the  Project you've been working on. Invite collaboraters and genrate invoices for delivered Projects."
+      },
+      "analysis": {
+        "header": "Business analysis",
+        "text": "Analyzed reporting of your day-to-day business activites. Data metrics presented in coherent set of visualizations giving you an immresed prespective of your business performance (total income, average Projects/Sales per week, Customers Vs Projects/Sales aspect ratio, and so on...)."
+      }
+    },
+    "clients": {
+      "header": "Clients"
+    },
+    "pricing": {
+      "header": "Pricing",
+      "basic": {
+        "title": "Basic",
+        "description": "Basic plan includes: Visualization report of day to day, limited users/colleauges invitation, messaging and integrated calendar systems.",
+        "analytics": "Analytics",
+        "invitation": "Invitation",
+        "messaging": "Messaging",
+        "calendar": "Calendar",
+        "learn_more": "Learn more"
+      },
+      "standard": {
+        "title": "Standard",
+        "description": "Standard plan includes: Visualization report of day to day, limited users/colleauges invitation, messaging and integrated calendar systems.",
+        "analytics": "Analytics",
+        "invitation": "Invitation",
+        "messaging": "Messaging",
+        "calendar": "Calendar",
+        "learn_more": "Learn more"
+      },
+      "premium": {
+        "title": "Premium",
+        "description": "Premium plan includes: Visualization report of day to day, limited users/colleauges invitation, messaging and integrated calendar systems.",
+        "analytics": "Analytics",
+        "invitation": "Invitation",
+        "messaging": "Messaging",
+        "calendar": "Calendar",
+        "learn_more": "Learn more"
+      }
+    },
+    "testimonial": {
+      "header": "Testmonial"
+    },
+    "contacts": {
+      "header": "Contacts",
+      "description": "You can contact us freely by sending a message. For example, fo inquires related with how to upgrade your free tier and have access to more feature. For reporting softwares bugs. Or generally, how to use the serivces, and so on...",
+      "name": "Name",
+      "email": "Email",
+      "message_body": "Message",
+      "send": "Send",
+      "name_required": "Name is required",
+      "email_required": "Email is required",
+      "message_body_required": "Message is required",
+      "wrong_email_format": "Wrong email format",
+      "flash": {
+        "success_create_contact_message": "Thank you for your message. We will contact you back soon!",
+        "error_create_contact_message": "Something went wrong when sending your message. Try sending us again."
+      }
+    },
+    "footer": {
+      "toolsio": "Toolsio",
+      "copy_right": "Copyright © Toolsio, Ltd. 2018",
+      "address": "Pyyntitie 2 C 50, 02230, Espoo, Finland",
+      "terms_and_conditions": "Terms and Conditions",
+      "privacy_policy": "Privacy Policy"
+    }
+  },
+  "sign_up": {        
+    "header": "Create an Account",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "email": "Email (*)",
+    "password": "Password (*)",
+    "confirm_password": "Confirm password (*)",
+    "notice": "All (*) fields are mandatory. Enter correct information.",
+    "already_a_user": "Already a user?",
+    "log_in_here": "Sign in here",
+    "sign_up": "Sign up",   
+    "complete_invitation_sign_up": "Complete your signing to {account} account by filling this form",  
+    "account": {
+      "industry": "Industry (*)",
+      "select_industry": "-Select Industry-",
+      "subdomain": "Subdomain (*)",
+      "continue_button": "Continue",
+      "subdomain_required": "Subdomain is required",
+      "industry_required": "Industry is required",
+      "dont_have_an_account": "Don't have an account? Sign up for free now!"
+    },
+    "email_required": "Email is required",
+    "wrong_email_format": "Wrong Email format",
+    "password_required": "Password is required",
+    "password_confirmation_required": "Password confirmation is required",
+    "password_match_required": "Password doesn't match",
+    "flash": {
+      "success_create": "You have signed up successfully!"
+    }
+  },  
+  "log_in": {
+    "header": "Log-in to your account",
+    "email": "Email (*)",
+    "password": "Password (*)",
+    "confirm_password": "Confirm Password (*)",
+    "log_in": "Sign in",
+    "email_required": "Email is required",
+    "password_required": "Password is required",
+    "new_to_us": "New to us?",
+    "forgot_your_password": "Forgot your password",
+    "request_password_reset": "Request password reset",
+    "reset_password": "Reset password",
+    "reset_password_description": "Reset your password by entering your new password here.",
+    "send_request": "Send request",
+    "subdomain": {
+      "header": "Enter your subdomain",
+      "subdomain": "Your subdomain is most likely your company name",
+      "continue_button": "Continue",
+      "subdomain_required": "Subdomain is required",
+      "no__account": "There is no account with such subdomain! Go to Sign up page to sign for free!",
+      "on_your_account_page": "You are now on your account page, continue by login with your credentials!"
+    },
+    "flash": {
+      "log_in_success": "You have signed in successfully!",
+      "logout_success": "You are logged out from your account!",
+      "confirm_email_success": "Your email is confirmed!",
+      "password_reset_success": "Your password has been reseted successfully! You can now login with new password!",
+      "forgot_password_request_email_sent": "We have sent you an email how to proceed reseting your password. Check out your email!"
+    }
+  },
+  "internal_navigation": {
+    "toolsio": "Toolsio",
+    "see_all_messages": "See all messages",
+    "admin_options": "Admin options",
+    "settings": "Settings",
+    "calendar": "Calendar",
+    "inbox": "Inbox",
+    "tasks": "Tasks",
+    "unread_messages": "You have *{unread_messages_number}* new messages",
+    "notifications": "You have *{notifications_number}* notifications",
+    "all_notifications": "See all notifications",
+    "sign_out": "Sign out"
+  },
+  "settings": {
+    "header": "Account",
+    "description": "Account and User details.",
+    "delete_account": "Delete this accout",
+    "member_since": "Member since",
+    "days": "*{days}* days",
+    "account": {
+      "header": "Account",
+      "logoUrl": "Logo URL",
+      "subdomain": "Subdomain",
+      "industry": "Industry",
+      "currency_code": "Currency code",
+      "company_id": "Company Id",
+      "select_logo": "Select logo",
+      "select_industry": "-Select Industry-",
+      "contact": {
+        "header": "Contacts",
+        "phone_number": "Phone number",
+        "email": "Email"
+      },
+      "address": {
+        "header": "Address",
+        "street": "Street",
+        "postal_code": "Postal code",
+        "region": "Region",
+        "country": "Country",
+        "select_country": "-Select country-",
+        "select_region": "Select region"
+      },
+      "upload": "Upload",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "flash": {
+        "success_update": "Account information updated!",
+        "upload_first": "You need to upload and your company logo first!"
+      }
+    },
+    "user": {
+      "header": "User",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "confirm_password": "Confirm password",
+      "current_password": "Current password",
+      "new_password": "New password",
+      "confirm_new_password": "Confirm new password",
+      "password_change": "Password change",
+      "current_password_required": "Current password is required",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "select_avatar": "Select avatar",
+      "upload": "Upload",
+      "flash": {
+        "success_update": "Profile is updated!",
+        "success_password_update": "Password is updated!",
+        "upload_first": "You need to upload and your profile picture first!"
+      }
+    }
+  },
+  "users": {
+    "page": {
+      "header": "Users",
+      "description": "Invited users by sending an invitation to their emails"
+    },
+    "form": {
+      "email": "Email",
+      "invite_user": "Invite User",
+      "invite_user_label": "Send invitation for the user whom you want to join this accout",
+      "email_required": "Email required"
+    },
+    "list": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",    
+      "invitation_accepted": "Invitation ccepted",
+      "empty_users_header": "There are no invited Users",
+      "empty_users_message": "Enter email and click Send button above to send your first invitation to your colleagues/collaboraters."
+    },
+    "flash": {
+      "invitation_success": "Your invitation is sent to *{email}*"
+    }
+  },
+  "dashboard": {
+    "header": "Dashboard",
+    "description": "Summary of your business activties are shown infographically.",
+    "total_income": {
+      "header": "Total income",
+      "description": "Cumulative value of PAID invoices excluding taxes, (i.e Net income)."
+    },
+    "incomes": {
+      "header": "Incomes"
+    },
+    "projects": {
+      "header": "Projects",
+      "create_first_project": "Create your first Project"
+    },
+    "sales": {
+      "header": "Sales",
+      "create_first_sale": "Create your first Sale"
+    },
+    "customers": {
+      "header": "Customers",
+      "create_first_customer": "Create your first Customer",
+      "customer_project_sale_relationship": "Customers relatioship to Projects and Sales"
+    },
+    "invoices": {
+      "header": "Invoices",
+      "create_first_invoice": "Create your first Invoice",
+      "paid": "Paid",
+      "pending": "Pending",
+      "overdue": "Overdue",
+      "invoicing_performance": "Invoicing performance"
+    },  
+    "project_tasks": {
+      "header": "Project tasks",
+      "no_projects": "You have no Projects",
+      "no_new_projects": "You have no new Project",
+      "new_projects": "You have *{count}* new Projects.",
+      "no_delayed_projects": "You have no delayed Project",
+      "delayed_projects": "You have *{count}* delayed Projects."
+    },
+    "sale_tasks": {
+      "header": "Sale tasks",
+      "no_sales": "You have no Sales",
+      "no_new_sales": "You have no new Sales",
+      "new_sales": "You have *{count}* new Sales.",
+      "no_delayed_sales": "You have no delayed Sales",
+      "delayed_sales": "You have *{count}* delayed Sales."
+    },
+    "invoice_tasks": {
+      "header": "Invoice tasks",
+      "no_invoices": "You have no Invoices",
+      "no_pending_invoices": "You have no pending Invoices",
+      "pending_invoices": "You have *{count}* pending Invoices.",
+      "no_overdue_invoices": "You have no overdue Invoices",
+      "overdue_invoices": "You have *{count}* overdue Invoices."
+    },   
+    "last_month": "Last month",
+    "this_month": "This month", 
+    "average": "Avg", 
+    "no_tasks_users": "No tasks by other users",
+    "first_invoice": "Create your fisrt Invoice",
+    "first_project": "Create your fisrt Project",
+    "first_sale": "Add your fisrt Sale",
+    "first_customer": "Add your fisrt customer"
+  },
+  "projects": {
+    "page": {
+      "header": "Projects",
+      "empty_projects_header": "There are no Projects",
+      "empty_projects_message": "Click Create new Project button above to create your first Project.",
+      "create_new_project": "Create new Project",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "no_customer": "No Customer",
+      "progress": "Progress",
+      "deadline": "Deadline",
+      "invoiced": "Invoiced",
+      "description": "All created Projects are shown here.",
+      "load_more": "Load more",
+      "search": "Search by name..."
+    },
+    "form": {
+      "new_project": "New Project",
+      "edit_project": "Edit Project",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "name": "Name",
+      "deadline": "Deadline",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "description": "Description",
+      "progress": "Progress",
+      "select_status": "-Select Status-",
+      "select_customer": "-Select Customer-",
+      "select_user": "-Select User-",
+      "select_or_add_new_customer": "Select Customer if exists or add new",
+      "add_new_customer": "Add new Customer",
+      "name_required": "Name is required",
+      "deadline_required": "Deadline is required",
+      "customer_required": "Customer is required",
+      "flash": {
+        "success_create": "Project *{name}* is created!",
+        "success_update": "Project *{name}* is updated!"
+      },
+      "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
+    },
+    "show": {
+      "header": "Project",
+      "name": "name",
+      "customer": "Customer",
+      "no_customer": "No Customer",
+      "deadline": "Deadline",
+      "user": "User",
+      "status": "Status",
+      "archived": "Archived",
+      "description": "Description",
+      "progress": "Progress",
+      "invoice": "Invoice",
+      "tasks": "Tasks",
+      "total": "Total",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this Project?",
+      "flash": {
+        "success_delete": "Project *{name}* is deleted",
+        "error_delete": "Project couldn't be deleted, try again after refreshing the page"
+      }
+    },
+    "tasks": {
+      "header": "Tasks",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "form": {
+        "header": "Task",
+        "name": "Name",
+        "hours": "Hours",
+        "hours_placeholder": "1.5 or 1:30",
+        "payment_type": "Payment type",
+        "select_payment_type": "-Select Payment type-",
+        "unit_price": "Unit price",
+        "amount": "Amount",
+        "total": "Total",
+        "actions": "Actions",
+        "name_required": "Name is required",
+        "payment_type_required": "Payment type is required",
+        "hours_required": "Hours is required",
+        "unit_price_required": "Unit price is required",
+        "edit_task": "Edit Task",
+        "update_task": "Update task",
+        "add_task": "Add Task",
+        "confirmation_header": "Confirmation",
+        "confirmation_msg": "Are you sure to delete this Task?",
+        "flash": {
+          "success_add": "*{name}* is added!",
+          "success_update": "Task *{name}* is updated!",
+          "success_delete": "Task *{name}* is deleted!",
+          "error_delete": "Task *{name}* couldn't be deleted, try again after refreshing the page"
+        }
+      }
+    }
+  },
+  "sales": {
+    "page": {
+      "header": "Sales",
+      "empty_sales_header": "There are no Sales",
+      "empty_sales_message": "Click Create new Sale button above to create your first Sale.",
+      "create_new_sale": "Create new Sale",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "no_cutomer": "No Customer",
+      "deadline": "Deadline",
+      "invoiced": "Invoiced",
+      "description": "All created Sales are shown here.",
+      "load_more": "Load more",
+      "search": "Search by name..."
+    },
+    "form": {
+      "new_sale": "New Sale",
+      "edit_sale": "Edit Sale",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "notice_create": "Sale created!",
+      "name": "Name",
+      "deadline": "Deadline",
+      "status": "Status",
+      "user": "User",
+      "customer": "Customer",
+      "no_cutomer": "No Customer",
+      "description": "Description",
+      "select_status": "-Select Status-",
+      "select_customer": "-Select Customer-",
+      "add_new_customer": "Add new Customer",
+      "name_required": "Name is required",
+      "deadline_required": "Deadline is required",
+      "customer_required": "Customer is required",
+      "flash": {
+        "success_create": "Sale *{name}* is created!",
+        "success_update": "Sale *{name}* is updated!"
+      },
+      "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
+    },    
+    "show": {
+      "header": "Sale",
+      "name": "name",
+      "customer": "Customer",
+      "deadline": "Deadline",
+      "no_customer": "No Customer",
+      "date": "Date",
+      "user": "User",
+      "status": "Status",
+      "description": "Description",
+      "invoice": "Invoice",
+      "items": "Items",
+      "total": "Total",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this sale?",
+      "flash": {
+        "success_delete": "Sale *{name}* is deleted!",
+        "error_delete": "Sale couldn't be deleted, try again after refreshing the page"
+      }
+    },
+    "items": {
+      "header": "Items",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "form": {        
+        "name": "Name",
+        "quantity": "Quantity",
+        "unit": "Unit",
+        "select_unit": "-Select unit-",
+        "unit_price": "Unit price",
+        "total": "Total",
+        "actions": "Actions",
+        "name_required": "Name is required",
+        "unit_required": "Unit is required",
+        "quantity_required": "Quantity is required",
+        "unit_price_required": "Unit price is required",
+        "add_item": "Add Item",
+        "edit_item": "Edit Item", 
+        "update_item": "Update Item",       
+        "confirmation_header": "Confirmation",
+        "confirmation_msg": "Are you sure to delete this Item?",
+        "flash": {
+          "success_add": "*{name}* is added!",
+          "success_update": "Item *{name}* is updated!",
+          "success_delete": "Item *{name}* is deleted!",
+          "error_delete": "Item *{name}* couldn't be deleted, try again after refreshing the page"
+        }
+      }
+    }
+  },
+  "customers": {
+    "page": {
+      "header": "Customers",
+      "add_new_customer": "Add new Customer",
+      "empty_customers_header": "There are no Customers",
+      "empty_customers_message": "Click Add new Customer button above to create your first Customer.",
+      "description": "All added Customers are shown here.",
+      "name": "Name",
+      "contacts": "Contacts",
+      "vat_number": "Vat number",
+      "active_projects_sales": "Active Projects/Sales",
+      "unpaid_invoices": "Unpaid invoices",
+      "view": "View",
+      "search": "Search by name..."
+    },
+    "form": {
+      "new_customer": "New Customer",
+      "edit_customer": "Edit Customer",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "name": "Name",
+      "vat_number": "Vat number",
+      "contact": {
+        "header": "Contact",
+        "phone_number": "Phone number",
+        "email": "Email"
+      },
+      "include_contact_in_invoice": "Include contact in invoice",
+      "address": {
+        "header": "Address",
+        "street": "Street",
+        "postal_code": "Postal code",
+        "region": "Region",
+        "country": "Country",
+        "select_country": "-Select Country-",
+        "select_region": "-Select Region-"
+      },  
+      "name_required": "Name is required.",
+      "vat_number_required": "Vat number is required.",
+      "phone_number_or_email_required": "Either Phone number or email should be filled.",
+      "street_required": "Street is required.",
+      "postal_code_required": "Postal code is required.",
+      "region_required": "Region is required.",
+      "country_required": "Country is required.",
+      "flash": {
+        "success_create": "Customer *{name}* is created!",
+        "success_update": "Customer *{name}* is updated!"
+      }
+    },
+    "show": {
+      "name": "Name",
+      "vat_number": "Vat number",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "user": "User",
+      "contact": {
+        "header": "Contact",
+        "phone_number": "Phone number",
+        "email": "Email"
+      },
+      "include_contact_in_invoice": "Include contact in invoice",
+      "address": {
+        "header": "Address",
+        "street": "Street",
+        "postal_code": "Postal code",
+        "region": "Region",
+        "country": "Country"
+      },
+      "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this customer?",
+      "flash": {
+        "success_delete": "Customer *{name}* is deleted!",
+        "error_delete": "Customer couldn't be deleted, try again after refreshing the page"
+      }
+    }
+  },
+  "invoices": {
+    "page": {
+      "header": "Invoices",
+      "are_you_sure": "Are you sure?",
+      "create_new_invoice": "Create new Invoice",
+      "empty_invoices_header": "There are no Invoices",
+      "empty_invoices_message": "Click Create new Invoice button above to create your first Invoice.",
+      "description": "All created Invoices are shown here.",
+      "sale_project": "Sale/Project",
+      "deadline": "Deadline",
+      "customer": "Customer",
+      "total": "Total",
+      "status": "Status",
+      "view": "View",
+      "invoice_for": "Invoice for",
+      "search": "Search by reference number or customer name..."
+    },
+    "form": {
+      "new_invoice": "New Invoice",
+      "edit_invoice": "Edit Invoice",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "next": "Next",
+      "previous": "Previous",
+      "sales": "Sales",
+      "projects": "Projects",
+      "sale": {
+        "header": "Sale",
+        "name": "Name",
+        "status": "status",
+        "customer": "customer"
+      },
+      "project": {
+        "header": "Project",
+        "name": "Name",
+        "status": "status",
+        "customer": "customer"
+      },
+      "user": "User",
+      "confirmation": "Confirmation",
+      "invoice_details": "Invoice details",
+      "sale_or_project": "Sale or Project",
+      "select_customer": "-Select Customer-",
+      "select_user": "-Select User-",
+      "select_status": "-Select Status-",
+      "select_days": "-Select days-",
+      "select_sale": "-Select Sale-",
+      "select_project": "-Select Project-",
+      "deadline": "Deadline",
+      "status": "Status",
+      "total": "Total",
+      "tax": "Tax (in %)",
+      "payment_term": "Payment term (in Days)",
+      "interest_in_arrears": "Interest in arrears (in %)",
+      "reference_number": "Reference number",
+      "description": "Description",
+      "select_sale_or_project": "Select either Sale or Project, not both.",
+      "select_payment_term_or_deadline": "Select either a Payment term or Deadline, not both.",
+      "sale_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
+      "project_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
+      "sale_or_project_required": "Select either Sale or Project.",
+      "deadline_or_payment_required": "Select either Deadline or Payment term.",
+      "intereset_in_arrears_required": "Interset in arrears is required.",
+      "tax_required": "Tax is required.",
+      "flash": {
+        "success_create": "Invoice for *{name}* created!",
+        "success_update": "Invoice for *{name}* is updated!"
+      }
+    },
+    "show": {
+      "header": "Invoice",
+      "name": "Name",
+      "sale_project": "Sale/Project",
+      "invoice_for": "Invoice for",
+      "date_of_an_invoice": "Date of an invoice",
+      "from": "From",
+      "pdf_download": "PDF download",
+      "customer": {
+        "billed_to": "Billed to",
+        "name": "Name",
+        "vat_number": "Vat number",
+        "contact": {
+          "phone_number": "Phone number",
+          "email": "Email"
+        },
+        "address": {
+          "street": "Street",
+          "postal_code": "Postal code",
+          "region": "Region",
+          "country": "Country"
+        }
+      },
+      "account": {
+        "user": {
+          "first_name": "First name",
+          "email": "Email"
+        },        
+        "address": {
+          "street": "Street",
+          "postal_code": "Postal code",
+          "region": "Region",
+          "country": "Country"
+        } 
+      },
+      "sale_status": "Sale status",
+      "project_status": "Project status",
+      "user": "User",
+      "deadline": "Deadline",
+      "total": "Total",
+      "status": "Status",
+      "payment_term": "Payment term",
+      "interest_in_arrears": "Interest in arrears",
+      "reference_number": "Reference number",
+      "description": "Description",
+      "invoice_total": "Invoice total",
+      "subtotal": "Subtotal",
+      "tax": "tax",
+      "view": "View",
+      "edit_project": "Edit Project",
+      "edit_sale": "Edit Sale",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "sale": {
+        "header": "Sale",
+        "name": "Name",
+        "deadline": "Deadline",
+        "status": "Status",
+        "description": "Description",
+        "items": {
+          "header": "Items",
+          "name": "Name",
+          "unit": "Unit",
+          "quantity": "Quantity",
+          "unit_price": "Unit price",
+          "total": "Total"
+        }
+      },
+      "project": {
+        "header": "Project",
+        "name": "Name",
+        "deadline": "Deadline",
+        "status": "Status",
+        "description": "Description",
+        "tasks": {
+          "header": "Tasks",
+          "name": "Name",
+          "payment_type": "Payment type",
+          "hours": "Hours",
+          "unit_price": "Unit price",
+          "total": "Total"
+        }
+      },
+     "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this invoice?",      
+      "flash": {
+        "success_delete": "Invoice of *{name}* is deleted!",
+        "error_delete": "Invoice of *{name}* couldn't be deleted, try again after refreshing the page"
+      }
+    }
+  },
+  "invoice_imports": {
+    "page": {
+      "header": "Invoice import"
+    },
+    "flash": {
+      "no_file_selected": "No file selected",
+      "success_import": "Invoice is imported!"
+    }
+  },
+  "conversations": {
+    "page": {
+      "header": "Conversations",
+      "create_channel": "Create Channel",
+      "no_channel": "No Channels",
+      "empty_message": "Message is empty",
+      "description": "Internal conversation interface.", 
+      "landing_header": "Channel or Private messages?",
+      "landing_colleagues_description": "Comminucate with your colleagues by creating channels or adding users through as a private messaging.",
+      "landing_messages_description": "Write, read messages by directly writing in the message box.",
+      "landing_attachments_description": "Send Images, Videos, PDF, ... and other attachments simply by selecting from your computer."
+    },
+    "channel": {
+      "empty_trash": "Empty trash",
+      "remove": "Remove",
+      "archive": "Archive",
+      "restore": "Restore",
+      "members": "members",
+      "message": "Message"
+    },
+    "direct_messages": {
+      "search_select_user": "Search/Select User",
+      "load_more": "Load more"
+    },
+    "messages": {
+      "add_member": "Add member",
+      "add_user": "Add user",
+      "empty_message_header": "Message is empty",
+      "empty_channel_message_message": "Create your first message by sending a message to memebers of this channel.",
+      "empty_direct_message_message": "Create your first message by sending a message to selected memeber.",
+      "load_more": "Load more"
+    },
+    "form": {
+      "create_channel": "Create Channel",
+      "send": "Send",
+      "cancel": "Cancel",
+      "add": "Add",
+      "create": "Create",
+      "name": "Name",
+      "title": "Title",
+      "message": "Message",
+      "select_users": "-Select users-",
+      "user_required": "User is required.",
+      "channel_name_required": "Channel name is required",
+      "body_required": "Body is required.",
+      "flash": {
+        "success_compose": "Message is sent!",
+        "success_create_channel": "Channel *{name}* is created!",
+        "error_compose": "Message is not sent, try sending again"
+      }
+    },
+    "reply": {
+      "success": "Reply is sent"
+    },
+    "destroy": {
+      "success": "Conversation is moved to trash."
+    },
+    "restore": {
+      "success": "Conversation is restored"
+    },
+    "empty_trash": {
+      "success": "Your trash is cleaned!"
+    },
+    "mark_as_read": {
+      "success": "Conversation is marked as an read."
+    }
+  },
+  "events": {
+    "page": {
+      "header": "Events",
+      "description": "Organize and plan your events. Follow deadlines and appointements here."
+    },
+    "form": {
+      "new_event": "New Event",
+      "edit_event": "Edit Event",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "title": "Title (*)",
+      "description": "Description",
+      "url": "URL",
+      "title_required": "Title is required",
+      "flash": {
+        "success_create": "Event *{title}* is created!",
+        "success_update": "Event *{title}* is updated!"
+      },
+      "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
+    }
+  }
+}
+

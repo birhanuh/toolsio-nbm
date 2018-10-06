@@ -1,0 +1,37 @@
+external_page:
+  landing:       
+    welcome: Welcome to Toolsio!
+    welcome_sub_header: Do whatever you want when you want to.
+    get_started: Get_sarted
+
+  authentication: 
+    sign_up: Sign up
+    log_in: Log in
+
+internal_page:
+  dashboard:
+  
+  sales:
+
+  projects:
+
+  invoices:
+
+  customer:
+
+  email:
+
+
+greetings:
+  hello: Hi, {who}!
+  howdy:
+    formal: How do you do?
+    normal: How are you, {who}?
+    informal: "What's up?"
+  bye: Bye
+ 
+longTime:
+  0: Not a day no see
+  1: 1 day no see
+  '2..4': A few days no see
+  _: "[{context} days][Long time no see]"

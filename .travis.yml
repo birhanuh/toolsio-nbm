@@ -1,0 +1,41 @@
+language: node_js
+node_js:
+- 10.2.1
+services:
+  - if [ "$TEST_DIR" = "server" ]; then redis-server; fi
+  - if [ "$TEST_DIR" = "server" ]; then docker; fi
+notifications:
+  email:
+    on_success: change
+    on_failure: always
+    recipients:
+      - birhanu.hailemariam@gmail.com
+cache:
+  directories:
+    - node_modules
+env:
+  matrix:
+    - TEST_DIR=client
+    - TEST_DIR=server
+  global:
+  - secure: eko44dSvSf0XHq2nbNWYOtE2f7UU2eESDDDRoM4ZuxtRebRHnPDoOffuQB9N6+jurRHpd/gCZDq26K9atiNm4znkvisBQ1XEINJlLWfZTetdWt4SJttOVtS1fcTVlUirF6coy8P08EeHrW67WE90phHQWVldu87Gn7OavIfKYZd1dgLrHadSIsRW9YenhCt/w69QiOMeASZcNdTzUammg2lbf6WV45b0QCPPjQqMyoQW02xYp6BgsutijPrLjKiYqgJ0znfHdS+FqJ5gn2HUFmb/B+2iuaULFQ3ZJ4iAws6rfIxQGqZRzFifDxWV2pjD7M2pAjEX/VvJSAj87UX5u9vJh7eOmsERqoxqEoRYRrcTPZhGhk6ROnwjn9Oyxjz615HeuICb1krYguN8vB5pZPjNE/SchGpCJVJmd6Y+1MJbZWa7vYsrzAeerixM0xbt3+DIwGGaybpVXPDRQHZwO5+Yqs3X35ACsU9vB+RyXjLbPgwuNOpEZObX1qpNlDzpc1ezNr3rJT94kJ1zKPZ9llaETYLgYjdi7UP5GKqNKUWN+UVCxOaHWKWhwlkXb8x5qZetVKO36ne2ryPANEXQfke4ksAjXhEKCrXjwVJOH5c1LeU6pxL7cjf2rmbVAJdmAcqvth1K0thAW2N7BfQXLJVXtQnezxly/mbA5HAoJKw=
+before_script:
+  - cd $TEST_DIR
+  - npm install
+  - if [ "$TEST_DIR" = "client" ]; then openssl aes-256-cbc -k "$super_secret_password" -in env.js.enc
+    -out env.js -d; fi
+  - if [ "$TEST_DIR" = "server" ]; then openssl aes-256-cbc -k "$super_secret_password" -in .env.enc
+    -out .env -d; fi
+  - if [ "$TEST_DIR" = "client" ]; then npm run test:server; fi
+  - if [ "$TEST_DIR" = "server" ]; then npm run build; fi
+  - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
+  - if [ "$TEST_DIR" = "server" ]; then docker-compose build; fi
+  - if [ "$TEST_DIR" = "server" ]; then docker-compose up -d; fi
+  - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
+script:
+  - if [ "$TEST_DIR" = "client" ]; then sleep 10; fi
+  - if [ "$TEST_DIR" = "client" ]; then npm run cypress:run; fi
+  - if [ "$TEST_DIR" = "server" ]; then npm test; fi
+after_script:
+  - if [ "$TEST_DIR" = "client" ]; then npm run kill:test:server; fi
+  - if [ "$TEST_DIR" = "server" ]; then docker-compose kill; fi

@@ -1,3 +1,32 @@
-temp
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# Misc
+.DS_Store
+.env
+env.js
+
+# Dependencies
+node_modules
+package-lock.json
+
+# Post processed
+app.css
+
+# Development
 dist
-config.js
+uploads
+
+# Testing
+errorShots
+
+# DB
+logfile
+pgdata
+
+# Production
+
+
+
+
+
+

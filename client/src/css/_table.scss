@@ -1,0 +1,71 @@
+// Table
+.ui.compact.table thead th {
+  padding: .52857143em .78571429em;
+}
+
+.table > thead > tr > th {
+  border-bottom: 1px solid $light-turquoise;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: $xxx-light-grey;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: $white;
+}
+
+// Custom table for list
+.table-list-view {
+  thead > tr > th:first-child, tbody > tr td:first-child {
+    text-align: right;
+  }
+  thead > tr > th:first-child + th, tbody > tr td:first-child + td {
+    text-align: left;
+  }
+}
+
+// Projects & Sales
+.ui.table.projects thead th, .ui.table.sales thead th  {
+  padding: .32857143em .78571429em;
+}
+
+.ui.table.tasks thead th, .ui.table.items thead th  {
+  padding: .42857143em .78571429em;
+}
+
+table.tasks tr, table.items tr {
+  td.add-task, td.edit-task, td.add-item, td.edit-item {
+    vertical-align: top;
+  }
+  td:first-child + td + td + td + td + td + td.edit-task,
+  td:first-child + td + td + td + td + td + td.edit-item {
+    padding-left: 0;
+  }
+  td:first-child + td + td + td + td + td.show-task,
+  td:first-child + td + td + td + td + td.show-item {
+    padding-right: 0;
+  }
+}
+
+form .ui.table tr td.edit-task, form .ui.table tr td.edit-item {
+  display: none;
+  button {
+    width: 50%;
+  }
+}
+
+.ui.table.project td, .ui.table.sale td {
+  padding: .58571429em;
+}
+
+.ui.table.task td:last-child, .ui.table.item td:last-child {
+  padding-right: 10px !important;
+}
+
+
+@media (max-width: $screen-sm) {
+
+}
+
+

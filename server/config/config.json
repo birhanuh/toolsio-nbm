@@ -1,0 +1,42 @@
+{
+  "development": {
+    "username": "birhanu",
+    "password": null,
+    "database": "toolsio_development",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
+    "define": {
+      "underscored": true
+    }
+  },
+  "test": {
+    "database": "toolsio_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
+    "define": {
+      "underscored": true
+    }
+  },
+  "production": {
+    "username": "toolsio",
+    "password": "toolsio",
+    "database": "toolsio",
+    "host": "db",
+    "dialect": "postgres",
+    "operatorsAliases": "Sequelize.Op",
+    "dialectOptions": {
+      "prependSearchPath": true
+    },
+    "define": {
+      "underscored": true
+    }
+  }
+}

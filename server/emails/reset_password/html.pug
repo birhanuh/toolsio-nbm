@@ -1,0 +1,124 @@
+doctype html
+html
+  head
+    title Email Confirmation
+    link(rel="stylesheet" href='https://fonts.googleapis.com/css?family=Lato:400,600,400italic"')
+    style(type="text/css").
+      body {
+      background-color: #ecebe8;
+      color: #666666;
+      font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+      }
+      p {
+      font-size: 1.125em !important;
+      }
+      h1.header {
+      font-size: 3em;
+      padding: 0 0;
+      font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+      font-weight: 600;
+      line-height: 1;
+      text-transform: none;
+      }
+      a.button {
+      cursor: pointer;
+      display: inline-block;
+      min-height: 1em;
+      outline: 0;
+      border: none;
+      vertical-align: baseline;
+      background: #038b98 none;
+      color: rgba(255, 255, 255, 1);
+      font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+      margin: 0 .25em 0 0;
+      padding: .78571429em 1.5em .78571429em;
+      text-transform: none;
+      text-shadow: none;
+      font-weight: 600;
+      line-height: 1em;
+      font-style: normal;
+      text-align: center;
+      text-decoration: none;
+      border-radius: .28571429rem;
+      box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      transition: opacity .1s ease,background-color .1s ease,color .1s ease,box-shadow .1s ease,background .1s ease;
+      will-change: '';
+      -webkit-tap-highlight-color: transparent;
+      }
+      table.main-element {
+      margin: 0 auto;
+      padding: 50px 0;
+      }
+      thead.main-element {
+      background: #038b98;
+      color: #ffffff;
+      }
+      table.header-element > tbody tr td:first-child {
+      text-align: left;
+      width: 50%;
+      }
+      table.header-element > tbody tr td:first-child + td {
+      text-align: right;
+      width: 50%;
+      }
+      table.main-element > tbody.main-element {
+      background: #ffffff;
+      }
+      thead.main-element > tr > th, tbody.main-element > tr > td, tfoot.main-element > tr > td {
+      padding: 1em 2em;
+      }
+      tfoot.main-element {
+      background: #1b1c1d;
+      }
+      table.error tbody tr td {
+      border: 2px dashed #be0a0a;
+      }
+      table.error tbody tr td span {
+      color: #be0a0a;
+      }
+      table.error tbody tr td {
+      padding: 10px;
+      }
+      tfoot.main-element tr td {
+      color: #b6b6b6;
+      }
+      tfoot.main-element tr td small {
+      display: block;
+      margin-bottom: 5px;
+      }
+  body
+    table.main-element(width="80%")
+      thead.main-element
+        tr
+          th
+            table.header-element(width="100%")
+              tbody
+                tr
+                  td
+                    img(src="https://res.cloudinary.com/toolsio/image/upload/v1532971636/email/logo-inverted.png" alt="logo-inverted")
+                  td
+                    small Toolsio Ltd.
+      tbody.main-element
+        tr
+          td
+            h1.header Hi #{firstName}!
+            p You've requeset for a password reset to your account. Please click the button below to proceed reseting your password.
+            table
+              tbody
+                tr
+                  td
+                    a.button(href=`${passwordResetLink}`) Reset password
+                    table.error(style="margin-top: 40px")
+                      tbody
+                        tr
+                          td
+                            span If you haven't sent this password reset request, contact us immediately by our contact bellow. 
+      tfoot.main-element
+        tr
+          td
+            small Pyyntitie 2 C 50, 02230, Espoo, Finland
+            small Copyright © Toolsio, Ltd. 2018

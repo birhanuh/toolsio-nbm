@@ -1,0 +1,40 @@
+// Breadcrump
+.ui.breadcrumb .active.section {
+  font-weight: 400;
+}
+
+.ui.breadcrumb a {
+  color: $turquoise;
+}
+
+// Header breadcrumb
+.ui.fixed.menu.header-breadcrumb {
+  margin-top: 50px;
+  height: 50px;
+  overflow: hidden;
+  box-shadow: none;
+  z-index: 10;
+  h2 {
+    font-size: 0.875em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-top: 0;
+  }
+  h2 .sub.header {
+    font-size: 1em;
+    margin-top: 2px;
+    text-transform: initial;
+  }
+  .item {
+    padding: 5px 0;
+  }
+  .item:before {
+    background: none;
+  }
+  .ui.breadcrumb div {
+    display: inline;
+  }
+  .ui.breadcrumb .section {
+    text-transform: capitalize;
+  }
+}
