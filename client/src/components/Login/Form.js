@@ -138,6 +138,7 @@ class Form extends Component {
             <Input
                 placeholder={T.translate("log_in.email")}
                 value={email} 
+                name='email'
                 type='email'
                 onChange={(e, {value}) => this.handleChange('email', value)} 
                 error={!!errors.email}

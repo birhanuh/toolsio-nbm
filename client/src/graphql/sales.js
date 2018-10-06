@@ -39,6 +39,7 @@ export const GET_SALE_QUERY = gql`
         quantity
         unitPrice
         total
+        saleId
       }
       user {
         firstName

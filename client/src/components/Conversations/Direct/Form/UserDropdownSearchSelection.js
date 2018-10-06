@@ -34,6 +34,7 @@ const UserDropdownSearchSelection = ({ onClose, history, data: { getUsers } }) =
         selection 
         options={usersOptions}
         onChange={(e, { value }) => handleChange('user', value)}
+        name='user'
         /> }
     </Form.Field>
     )

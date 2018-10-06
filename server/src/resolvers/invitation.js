@@ -1,18 +1,17 @@
 import { formatErrors } from '../utils/formatErrors'
 import requiresAuth from '../middlewares/authentication'
+import sparkPostTransport from 'nodemailer-sparkpost-transport'
 
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
 import Email from 'email-templates'
 
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-})
+const transporter = nodemailer.createTransport(sparkPostTransport({
+  'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
+  endpoint: "https://api.eu.sparkpost.com"
+}))
+
 
 export default {
   Query: {
@@ -38,7 +37,7 @@ export default {
       
       const email = new Email({
         message: {
-          from: 'no-replay@toolsio.com'
+          from: 'no-replay@email.toolsio.com'
         },
         // uncomment below to send emails in development/test env:
         send: true,

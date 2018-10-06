@@ -1,13 +1,11 @@
 import nodemailer from 'nodemailer'
 import Email from 'email-templates'
+import sparkPostTransport from 'nodemailer-sparkpost-transport'
 
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-})
+const transporter = nodemailer.createTransport(sparkPostTransport({
+  'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
+  endpoint: "https://api.eu.sparkpost.com"
+}))
 
 export default {
 
@@ -18,10 +16,10 @@ export default {
 
       const emailTemplate = new Email({
         message: {
-          from: email,
-          to: 'support@toolsio.com',
+          from: 'contact@email.toolsio.com', // Fix for sparkpost Unconfigured Sending Domain <gmail.com>
+          to: 'support@gmail.com',
           subject: `Contact message from (${name})`,
-          html: messageBody
+          html: `<p>From: ${email}<p/><p>Message: ${messageBody}</p>`
         },
         // uncomment below to send emails in development/test env:
         send: true,

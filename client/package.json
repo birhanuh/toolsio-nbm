@@ -83,6 +83,7 @@
     "connect-history-api-fallback": "1.5.0",
     "cross-spawn": "6.0.5",
     "css-loader": "0.28.11",
+    "cypress": "^3.1.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
@@ -114,12 +115,16 @@
   "scripts": {
     "start": "webpack-dev-server --open --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
+    "test:server": "npm start &",
     "//": [
       "prebuild rm -rf ./dist",
       "postbuild mv ./config/dist ./ && cp ./public/favicon.ico ./dist && cp -r ./public/error_pages ./dist"
     ],
     "postbuild": "cp ./public/favicon.ico ./config/dist && cp -r ./public/error_pages ./config/dist",
     "test": "jest './__test__'",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "cypress:run": "./node_modules/.bin/cypress run",
+    "kill:test:server": "pkill -f npm start"
   }
 }

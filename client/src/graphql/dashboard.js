@@ -32,6 +32,7 @@ export const GET_CUSTOMERS_DATA = gql`
         name
         projectsSalesCount
       }
+      countCustomers
     }
   }
 `

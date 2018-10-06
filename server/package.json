@@ -9,8 +9,9 @@
   "scripts": {
     "serve": "NODE_ENV=production node dist/index.js",
     "build": "babel src -d dist",
+    "postbuild": "cp -r ./src/types ./dist",
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
-    "tstart": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate && NODE_ENV=test babel-node -- src/index.js",
+    "test:server": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate && NODE_ENV=test babel-node -- src/index.js",
     "db:reset": "./__test__/helpers/reset_db.sh",
     "migration:create": "./node_modules/.bin/sequelize migration:create --name",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
@@ -62,6 +63,7 @@
     "mongoose": "^5.0.12",
     "morgan": "^1.9.0",
     "nodemailer": "^4.6.4",
+    "nodemailer-sparkpost-transport": "^2.1.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.4.1",

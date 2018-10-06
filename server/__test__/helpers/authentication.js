@@ -33,7 +33,7 @@ export async function registerUser() {
       industry: accountFactoryLocal.industry
     }
   }) 
-
+  console.log('ers: ', response.data)
   const { data: { registerUser: { account: { subdomain }, success } } } = response.data
 
   if (success) {

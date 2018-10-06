@@ -127,30 +127,33 @@ export default {
     }),
 
     getCustomersData: requiresAuth.createResolver(async (parent, args, { models, subdomain }) => {
-      const countProjectPromise = models.sequelize.query('SELECT c.name, count(p) FROM projects p JOIN customers c ON p.customer_id = c.id GROUP BY c.name', {
+      const countProjectsPromise = models.sequelize.query('SELECT c.name, count(p) FROM projects p JOIN customers c ON p.customer_id = c.id GROUP BY c.name', {
         model: models.Project,
         raw: true, 
         searchPath: subdomain
       })
-      const countSalePromise = models.sequelize.query('SELECT c.name, count(s) FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.name', {
+      const countSalesPromise = models.sequelize.query('SELECT c.name, count(s) FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.name', {
         model: models.Sale,
         raw: true, 
         searchPath: subdomain
       })
 
-      const [countProject, countSale] = await Promise.all([countProjectPromise, countSalePromise]) 
-      // countProject [ { name: 'Customera', count: '4' }, { name: 'Customerb', count: '7' } ]
-      // countSale [ { name: 'Customerb', count: '2' }, { name: 'Customera', count: '6' } ]
-      let mergedCountProjectCountSale = [...countProject, ...countSale]
+      const countCustomersPromise = models.Customer.count({ searchPath: subdomain })
 
-      let groupByCustomersCountProjectSale = _(mergedCountProjectCountSale).groupBy('name').map((objs, key) => ({
+      const [countProjects, countSales, countCustomers] = await Promise.all([countProjectsPromise, countSalesPromise, countCustomersPromise]) 
+      // countProjects [ { name: 'Customera', count: '4' }, { name: 'Customerb', count: '7' } ]
+      // countSales [ { name: 'Customerb', count: '2' }, { name: 'Customera', count: '6' } ]
+      let mergedCountProjectsCountSales = [...countProjects, ...countSales]
+
+      let groupByCustomersCountProjectsSales = _(mergedCountProjectsCountSales).groupBy('name').map((objs, key) => ({
         'name': key,
         'projectsSalesCount': _.sum(objs.map(item => parseInt(item.count))) 
       })).value()
-      // groupByCustomersCountProjectSale [ { name: 'Customera', count: 10 }, { name: 'Customerb', count: 9 } ]
+      // groupByCustomersCountProjectsSales [ { name: 'Customera', count: 10 }, { name: 'Customerb', count: 9 } ]
 
       return {
-        nameCountProjectsSales: groupByCustomersCountProjectSale
+        nameCountProjectsSales: groupByCustomersCountProjectsSales,
+        countCustomers
       }
     }),
 

@@ -1,25 +1,35 @@
 import { formatErrors } from '../utils/formatErrors'
 import { loginUserWithToken } from '../utils/authentication'
+import sparkPostTransport from 'nodemailer-sparkpost-transport'
 
 import jwt from 'jsonwebtoken'
 
 import nodemailer from 'nodemailer'
 import Email from 'email-templates'
 
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-})
+const transporter = nodemailer.createTransport(sparkPostTransport({
+  'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
+  endpoint: "https://api.eu.sparkpost.com"
+}))
+
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.ethereal.email',
+//     port: 587,
+//     auth: {
+//         user: 'dd4ofkhwikyxnp7o@ethereal.email',
+//         pass: 'FYTjzVtJGqMPAEfdAg'
+//     }
+// });
 
 export default {
   Mutation: {
     loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
       loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
     
-    logoutUser: (parent, { args }, { models, subdomain }) => {
+    // loginUser: (parent, { email, password }, { req, models, subdomain }) => 
+    //   loginUserPassportJs(req, email, password, models, subdomain),
+
+    logoutUser: (parent, { subdomain }) => {
       console.log(`User from ${subdomain} account has logged out`)
       return `User from ${subdomain} account has logged out`
     },
@@ -93,11 +103,11 @@ export default {
                 console.log('err token: ', err)
               }
               
-              const url = `http://${response.account.subdomain}.lvh.me:3000/login/confirmation/?token=${emailToken}`
-
+              const url = `${process.env.CLIENT_PROTOCOL}${response.account.subdomain}.${process.env.CLIENT_HOST}/login/confirmation/?token=${emailToken}`
+              
               const email = new Email({
                 message: {
-                  from: 'no-replay@toolsio.com'
+                  from: 'no-replay@email.toolsio.com'
                 },
                 // uncomment below to send emails in development/test env:
                 send: true,
@@ -120,7 +130,31 @@ export default {
                   }
                 })
                 .then(res => console.log('Email confirmation success: ', res))
-                .catch(err => console.error('Email confirmation error: ', err))
+                .catch(err => console.error('Email confirmation error: ', err)) 
+
+                /**
+                client.transmissions.send({
+                  options: {
+                    sandbox: true
+                  },
+                  content: {
+                    //from: 'no-replay@toolsio.com',
+                    from: 'testing@sparkpostbox.com',
+                    subject: 'Confirm your Email (Toolsio)',
+                    html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+                  },
+                  recipients: [
+                    {address: response.user.dataValues.email}
+                  ]
+                })
+                .then(data => {
+                  console.log('Woohoo! You just sent your first mailing!');
+                  console.log(data);
+                })
+                .catch(err => {
+                  console.log('Whoops! Something went wrong');
+                  console.log(err);
+                }); */
             })
       
           return {
@@ -249,7 +283,7 @@ export default {
                   console.log('err token: ', err)
                 }
                 
-                const url = `http://${account.subdomain}.lvh.me:3000/login/password-reset/?token=${forgotPasswordResetRequestToken}`
+                const url = `${process.env.CLIENT_PROTOCOL}${account.subdomain}.${process.env.CLIENT_HOST}/login/password-reset/?token=${forgotPasswordResetRequestToken}`
 
                 const email = new Email({
                   message: {

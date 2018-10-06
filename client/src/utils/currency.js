@@ -18,7 +18,7 @@ const GetCurrencySymbol = () => (
       if (loading) return 'loading...';
       if (error) console.log('GetCurrencySymbol: ', `Error!: ${error}`)
 
-      const currencyCode = data.getAccount.currencyCode
+      const currencyCode = data.getAccount && data.getAccount.currencyCode
 
       return (
         <span>{currencySymbolsList[currencyCode]}</span>

@@ -32,15 +32,17 @@ services:
       REDIS_HOST: redis
       #SERVER_PORT: 8080
       #DB_HOST: db ## We would need this if we use env variables in Sequelize constructor instead of json
+      # client
+      CLIENT_PROTOCOL: ${CLIENT_PROTOCOL}     
+      CLIENT_HOST: ${CLIENT_HOST}
       # server
       SERVER_PORT: ${SERVER_PORT}     
       SERVER_URL: ${SERVER_URL} ## Server path (e.g. for uploads folder location)
       # jwt
       JWTSECRET1: ${JWTSECRET1}
       JWTSECRET2: s${JWTSECRET2}
-      # mailer
-      GMAIL_USER: ${GMAIL_USER}
-      GMAIL_PASS: ${GMAIL_PASS}
+      # sparkpost
+      SPARKPOST_API_KEY: ${SPARKPOST_API_KEY}
       # cloudinary
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_SECRET_KEY}

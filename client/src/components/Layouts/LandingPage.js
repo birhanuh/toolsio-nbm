@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Validation } from '../../utils'
-import { Link } from 'react-router-dom'
+//import { Link } from 'react-router-dom'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 // Semantic UI JS
 import { Grid, Container, Segment, Input, TextArea, Form, Header, Button } from 'semantic-ui-react'
@@ -270,7 +270,7 @@ class LandingPage extends Component {
                     <li>{T.translate("landing.pricing.basic.invitation")}</li>
                     <li>{T.translate("landing.pricing.basic.messaging")}</li>
                     <li>{T.translate("landing.pricing.basic.calendar")}</li>
-                    <li><Link to="" className="ui button">{T.translate("landing.pricing.basic.learn_more")}</Link></li>
+                    {/*<li><Link to="" className="ui button">{T.translate("landing.pricing.basic.learn_more")}</Link></li>*/}
                   </ul>
                 </Grid.Column>
                 <Grid.Column>
@@ -282,7 +282,7 @@ class LandingPage extends Component {
                     <li>{T.translate("landing.pricing.standard.invitation")}</li>
                     <li>{T.translate("landing.pricing.standard.messaging")}</li>
                     <li>{T.translate("landing.pricing.standard.calendar")}</li>
-                    <li><Link to="" className="ui button disabled">{T.translate("landing.pricing.standard.learn_more")}</Link></li>
+                    {/*<li><Link to="" className="ui button">{T.translate("landing.pricing.basic.learn_more")}</Link></li>*/}
                   </ul>
                 </Grid.Column>
                 <Grid.Column>
@@ -294,7 +294,7 @@ class LandingPage extends Component {
                     <li>{T.translate("landing.pricing.premium.invitation")}</li>
                     <li>{T.translate("landing.pricing.premium.messaging")}</li>
                     <li>{T.translate("landing.pricing.premium.calendar")}</li>
-                    <li><Link to="" className="ui button disabled">{T.translate("landing.pricing.premium.learn_more")}</Link></li>
+                    {/*<li><Link to="" className="ui button">{T.translate("landing.pricing.basic.learn_more")}</Link></li>*/}
                   </ul>
                 </Grid.Column>
               </Grid>  

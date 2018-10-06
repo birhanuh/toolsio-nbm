@@ -47,7 +47,7 @@ handlers:
 #   redirect_http_response_code: 301
 #   script: auto
 
-error_handlers:
+#error_handlers:
   #- file: dist/error_pages//default_error.html
 
   # - error_code: dist/error_pages/over_quota

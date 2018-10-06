@@ -19,6 +19,8 @@ import T from 'i18n-react'
 
 import moment from 'moment'
 
+import $ from 'jquery'
+
 // Country region selector 
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 
@@ -72,6 +74,11 @@ class AccountForm extends Component {
         }
       })
     }
+  }
+
+  componentDidUpdate = () => {
+    $('input[name=subdomain]').value = ''
+    console.log('sdfsd', $('input[name=subdomain]').value)
   }
 
   handleChange = (name, value) => {
@@ -294,7 +301,7 @@ class AccountForm extends Component {
 
   render() {
     const { subdomain, industry, currencyCode, companyId, logoUrl, contact, address, errors, active, file, isLoadingLogo, isLoadingForm } = this.state
-
+    if (subdomain === '') {console.log('foo')}
     return ( 
       <Item className="mb-5">    
         <Item.Image>
@@ -323,10 +330,11 @@ class AccountForm extends Component {
         <Item.Content>
           <Header as='h1' className="mt-2 mb-3">{T.translate("settings.account.header")}</Header>
           
-          <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)}>
-
+          <Form loading={isLoadingForm} onSubmit={this.handleSubmit.bind(this)} autoComplete="off">
+            {/*<input autoComplete="false" name="subdomain" type="text" style={{display: 'none'}} />*/}
             { !!errors.message && (typeof errors.message === "string") && <Message negative><p>{errors.message}</p></Message> }
 
+            {/*
             <Form.Field  error={!!errors.subdomain}>
               <label>{T.translate("settings.account.subdomain")}</label>
               <Input 
@@ -335,9 +343,10 @@ class AccountForm extends Component {
                 value={subdomain} 
                 onChange={(e, {value}) => this.handleChange('subdomain', value)} 
                 error={errors.subdomain}
+                autoComplete="off"
               />
               <span className="red">{errors.name}</span>
-            </Form.Field>
+            </Form.Field>*/}
 
             <Form.Field error={!!errors.industry}>
               <label>{T.translate("settings.account.industry")}</label>

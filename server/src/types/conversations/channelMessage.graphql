@@ -1,0 +1,34 @@
+scalar Upload
+
+type ChannelMessage {
+  id: Int!
+  body: String
+  isRead: Boolean!
+  channelId: Int!
+  userId: Int!
+  createdAt: Date!
+  user: User!
+  uploadPath: String
+  mimetype: String
+}
+
+type CreateChannelMessageResponse {
+  success: Boolean!
+  message: ChannelMessage
+  errors: [Error!]
+}
+
+type Query {
+  getChannelMessage(id: Int!): ChannelMessage
+
+  getChannelMessages(cursor: String, channelId: Int!): [ChannelMessage!]!
+}
+
+type Mutation {
+  createChannelMessage(body: String, file: Upload, channelId: Int! ): CreateChannelMessageResponse!
+}
+
+type Subscription {
+  getNewChannelMessage(channelId: Int!): ChannelMessage!
+}
+

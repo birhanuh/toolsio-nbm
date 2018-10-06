@@ -16,10 +16,10 @@ const Page = ({ match }) => {
   return (
     <Grid.Row>
       <Grid.Column width={4}>
-        <Menu vertical fluid>
-          <ChannelsList  channelId={match.params.channelId} />
+        <Menu vertical fluid className='conversations-sidebar'>
+          <ChannelsList channelId={match.params.channelId} />
 
-          <Divider horizontal className="mt-0 mb-0">Or</Divider>
+          <Divider horizontal className="pt-2 mb-0">Or</Divider>
 
           <UsersList receiverId={match.params.receiverId} />
         </Menu>

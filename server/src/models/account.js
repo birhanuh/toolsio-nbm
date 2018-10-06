@@ -113,7 +113,8 @@ export default (sequelize, DataTypes) => {
     // 1:1
     Account.belongsTo(models.User, {
       foreignKey: 'owner',
-      allowNull: false
+      allowNull: false,
+      constraints: false
     })
   }
 

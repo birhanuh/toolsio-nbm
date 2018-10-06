@@ -435,8 +435,7 @@ class Form extends Component {
     const { newTask, editTask,  openConfirmationModal } = this.state
 
     const { tasks, tasksTotal } = this.props
-    
-
+   
     const tasksList = (
       tasks.map(task => 
         <ShowEditTaskTr 

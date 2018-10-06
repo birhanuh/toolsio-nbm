@@ -94,7 +94,7 @@ const ProjectsCard = () => (
           {(countStatus && countStatus.length === 0 || countMonth && countMonth.length === 0) && 
             <div className="content-btn-outer-container">
               <div className="content-btn-inner-container">
-                <Link to="/invoices" className="ui primary outline button small">
+                <Link to="/projects" className="ui primary outline button small">
                   <Icon className="check circle outline" />{T.translate("dashboard.projects.create_first_project")}
                 </Link>
               </div>
