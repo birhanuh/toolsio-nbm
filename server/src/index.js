@@ -2,14 +2,12 @@
 import express from 'express'
 
 import path from 'path'
-import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import { makeExecutableSchema } from 'graphql-tools'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import cors from 'cors'
-import { apolloUploadExpress } from 'apollo-upload-server'
 import DataLoader from 'dataloader'
 
 // Authentication packages 
@@ -57,8 +55,6 @@ app.use(cors('*'))
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger('dev'))
 
-app.use(bodyParser.urlencoded({ extended: true }))
-
 app.use(cookieParser())
 
 // Subdomain
@@ -94,36 +90,26 @@ app.use(async (req, res, next) => {
   next()
 })
 
-const endpointURL = '/graphql'
-
-app.use(
-  endpointURL, 
-  bodyParser.json(),
-  apolloUploadExpress(), 
-  graphqlExpress(req => ({ 
+const apolloServer = new ApolloServer({ 
     schema,
-    context: {
-      models,
-      subdomain: req.headers.subdomain ? req.headers.subdomain : 'public',
-      //subdomain: 'testa',
-      user: req.user,
-      //user: { id: 1 },
-      SECRET: process.env.JWTSECRET1,
-      SECRET2: process.env.JWTSECRET2,
-      userLoader: new DataLoader(usersId => userBatcher(usersId, models, req.headers.subdomain)),
-      customerLoader: new DataLoader(customersId => customerBatcher(customersId, models, req.headers.subdomain)),
-      projectLoader: new DataLoader(projectsId => projectBatcher(projectsId, models, req.headers.subdomain)),
-      saleLoader: new DataLoader(salesId => saleBatcher(salesId, models, req.headers.subdomain))
+    context: async ({req}) => {
+      return {
+        models,
+        subdomain: req.headers.subdomain ? req.headers.subdomain : 'public',
+        //subdomain: 'testa',
+        user: req.user,
+        //user: { id: 1 },
+        SECRET: process.env.JWTSECRET1,
+        SECRET2: process.env.JWTSECRET2,
+        userLoader: new DataLoader(usersId => userBatcher(usersId, models, req.headers.subdomain)),
+        customerLoader: new DataLoader(customersId => customerBatcher(customersId, models, req.headers.subdomain)),
+        projectLoader: new DataLoader(projectsId => projectBatcher(projectsId, models, req.headers.subdomain)),
+        saleLoader: new DataLoader(salesId => saleBatcher(salesId, models, req.headers.subdomain))
+      }
     }
-  }))
-)
-
-app.use(
-  '/graphiql', 
-  graphiqlExpress({ endpointURL: endpointURL, 
-    subscriptionsEndpoint: 'ws://localhost:8080/subscriptions' 
   })
-)
+
+apolloServer.applyMiddleware({ app });
 
 app.use('/uploads', express.static('uploads'))
 
@@ -169,6 +155,7 @@ const server = createServer(app)
 // app.listen(app.get('port'), () => 
 //   console.log('Server started on port: ' + process.env.SERVER_PORT || 8080)
 // )
+
 server.listen(app.get('port'), () => {
   new SubscriptionServer({
     execute,
@@ -195,20 +182,6 @@ server.listen(app.get('port'), () => {
     console.log('Environment: ' + process.env.NODE_ENV || 'development')
     console.log('------------------------')
 })
-
-
-
-// // Connect to mognodb
-// if (env === 'development') {
-//   db.connect(process.env.DB_HOST+'accounts'+process.env.POSTGRES_DB)
-// } else if (env === 'test') {
-//   db.connect(process.env.DB_HOST+'accounts'+process.env.DB_TEST)
-// }
-
-// // If the Node process ends, close the Mongoose connection 
-// process.on('SIGINT', function() {  
-//   db.close() 
-// })
 
 
 
