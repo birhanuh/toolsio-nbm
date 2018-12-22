@@ -78,7 +78,6 @@ class AccountForm extends Component {
 
   componentDidUpdate = () => {
     $('input[name=subdomain]').value = ''
-    console.log('sdfsd', $('input[name=subdomain]').value)
   }
 
   handleChange = (name, value) => {
@@ -300,8 +299,8 @@ class AccountForm extends Component {
   toggleShow = () => this.setState(state => ({ active: !state.active }))
 
   render() {
-    const { subdomain, industry, currencyCode, companyId, logoUrl, contact, address, errors, active, file, isLoadingLogo, isLoadingForm } = this.state
-    if (subdomain === '') {console.log('foo')}
+    const { industry, currencyCode, companyId, logoUrl, contact, address, errors, active, file, isLoadingLogo, isLoadingForm } = this.state
+ 
     return ( 
       <Item className="mb-5">    
         <Item.Image>

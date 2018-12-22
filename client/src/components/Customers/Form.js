@@ -71,14 +71,14 @@ class Form extends Component {
 
       if (name === "email" || name === "phoneNumber") {
 
-         this.setState({
+        this.setState({
           contact: { ...this.state.contact, [name]: value },
           errors
         })
       } else if (name === "street" || name === "postalCode" || name === "region"
         || name === "country") {
 
-         this.setState({
+        this.setState({
           address: { ...this.state.address, [name]: value },
           errors
         })
@@ -92,13 +92,13 @@ class Form extends Component {
 
       if (name === "email" || name === "phoneNumber") {
 
-         this.setState({
+        this.setState({
           contact: { ...this.state.contact, [name]: value },
         })
       } else if (name === "street" || name === "postalCode" || name === "region"
         || name === "country") {
         
-         this.setState({
+        this.setState({
           address: { ...this.state.address, [name]: value }
         })
       } else {
@@ -221,6 +221,8 @@ class Form extends Component {
           update: (store, { data: { createCustomer } }) => {
             const { success, customer } = createCustomer
 
+            window.performance.mark('form_start')
+
             if (!success) {
               return
             }
@@ -246,7 +248,13 @@ class Form extends Component {
           }})
           .then(res => {
             const { success, errors } = res.data.createCustomer
-           
+            
+            window.performance.mark('form_end')
+            window.performance.measure('form_interaction', 'form_start', 'form_end')
+
+            const value = window.performance.getEntriesByName('form_interaction')[0].duration
+            console.log('form_interaction in ms: ', value)
+
             if (success) {
               this.props.addFlashMessage({
                 type: 'success',

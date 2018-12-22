@@ -24,7 +24,7 @@ export default function Table({ invoices, count, offset, limit }) {
 
   const invoicesList = (
     <tbody>
-      { invoices.map(invoice => <Tr invoice={invoice} key={invoice.id} />) }
+      { invoices.map(invoice => Tr({invoice: invoice}) )}
     </tbody>
   )
 

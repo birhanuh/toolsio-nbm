@@ -82,8 +82,8 @@ class Form extends Component {
   }
 
   handleSubmit = async (event) => {
-     event.preventDefault()
-
+    event.preventDefault()
+ 
     // Validation
     if (this.isValid()) { 
       this.setState({ isLoading: true })
@@ -118,8 +118,7 @@ class Form extends Component {
           // Write our data back to the cache.
           store.writeQuery({ query: GET_PROJECTS_QUERY, data })
         }})
-        .then(res => {          
-
+        .then(res => {    
           const { success, project, errors } = res.data.updateProject
 
           if (success) {
@@ -162,7 +161,7 @@ class Form extends Component {
           }})
           .then(res => {   
             const { success, project, errors } = res.data.createProject
-
+                
             if (success) {
               this.props.addFlashMessage({
                 type: 'success',
