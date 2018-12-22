@@ -35,7 +35,7 @@ class Form extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  UNSAFE_componentWillReceiveProps = (nextProps) => {
     if (nextProps.data.getProject) {
       this.setState({
         id: nextProps.data.getProject.id,

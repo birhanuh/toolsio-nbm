@@ -22,7 +22,7 @@ class Message extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  UNSAFE_componentWillReceiveProps = (nextProps) => {
     if (nextProps.channelId) {
       this.setState({
         channelId: nextProps.channelId

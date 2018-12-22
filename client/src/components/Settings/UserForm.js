@@ -43,7 +43,7 @@ class UserForm extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  UNSAFE_componentWillReceiveProps = (nextProps) => {
     if (nextProps.data.getUserByEmail) {
       this.setState({
         firstName: nextProps.data.getUserByEmail.firstName,

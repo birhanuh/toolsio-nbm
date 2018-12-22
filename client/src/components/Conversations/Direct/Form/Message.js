@@ -23,7 +23,7 @@ class Message extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  UNSAFE_componentWillReceiveProps = (nextProps) => {
     if (nextProps.receiverId) {
       this.setState({
         receiverId: nextProps.receiverId

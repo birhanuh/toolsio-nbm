@@ -54,7 +54,7 @@ class Show extends Component {
     } 
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  UNSAFE_componentWillReceiveProps = (nextProps) => {
     if (nextProps.data.getCustomer) {
       this.setState({
         id: nextProps.data.getCustomer.id,

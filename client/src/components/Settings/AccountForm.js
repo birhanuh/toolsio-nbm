@@ -54,7 +54,7 @@ class AccountForm extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  UNSAFE_componentWillReceiveProps = (nextProps) => {
     if (nextProps.data.getAccount) {
       this.setState({
         subdomain: nextProps.data.getAccount.subdomain,

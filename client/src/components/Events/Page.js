@@ -27,7 +27,7 @@ class Page extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {  
+  UNSAFE_componentWillReceiveProps = (nextProps) => {  
     if (nextProps) {
       this.setState({
         events: nextProps.data.getEvents
