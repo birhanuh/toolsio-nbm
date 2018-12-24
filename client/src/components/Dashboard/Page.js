@@ -19,41 +19,41 @@ const Page = () => {
       <Grid.Column width={16}>            
         <Grid columns={4}>
           <Grid.Column>
-            <TotalIncomeCard />
+            {TotalIncomeCard()}
           </Grid.Column>
           <Grid.Column>
-            <IncomesCard />
+            {IncomesCard()}
           </Grid.Column>
 
           <Grid.Column>
-            <ProjectsCard />
+            {ProjectsCard()}
           </Grid.Column>
 
           <Grid.Column>  
-            <SalesCard />
+            {SalesCard()}
           </Grid.Column>
         </Grid>
         
         <Grid columns={2}>
           <Grid.Column width={6}>
-            <CustomersCard />
+            {CustomersCard()}
           </Grid.Column>
           <Grid.Column width={10}>
-            <InvoicesCard /> 
+            {InvoicesCard()} 
           </Grid.Column>
         </Grid>
        
         <Grid columns={3}>
           <Grid.Column>
-            <ProjectTasks />
+            {ProjectTasks()}
           </Grid.Column>
            
           <Grid.Column>
-            <SaleTasks />
+            {SaleTasks()}
           </Grid.Column>
           
           <Grid.Column>
-            <InvoiceTasks />
+            {InvoiceTasks()}
           </Grid.Column>
         </Grid>
       </Grid.Column>

@@ -28,7 +28,7 @@ class Form extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {  
+  UNSAFE_componentWillReceiveProps = (nextProps) => {  
     if (nextProps) {
       this.setState({
         start: nextProps.start,

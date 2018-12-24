@@ -89,7 +89,7 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
           <RenderText uploadPath={uploadPath} />
           <div className="buttons">
             <Button basic size="small" icon='download' />
-            <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
+            <a href={uploadPath} target="_blank" rel="noopener noreferrer" className="ui icon basic small button"><i className="external icon"></i></a>
           </div>
         </div>)
     } else { // For all rest file types (E.g. text, pdf, doc...()
@@ -97,7 +97,7 @@ const MessageTypes = ({ message: {uploadPath, body, mimetype} }) => {
           <pre>{uploadPath}</pre>
           <div className="buttons">
             <Button basic size="small" icon='download' />
-            <a href={uploadPath} target="_blank" className="ui icon basic small button"><i className="external icon"></i></a>
+            <a href={uploadPath} target="_blank" rel="noopener noreferrer" className="ui icon basic small button"><i className="external icon"></i></a>
           </div>
         </div>) 
     }
@@ -137,7 +137,7 @@ class Messages extends Component {
       .catch(err => console.log('err: ', err))
   }
 
-  componentWillReceiveProps({ receiverId }) {    
+  UNSAFE_componentWillReceiveProps({ receiverId }) {    
     if (this.props.receiverId !== receiverId) {
       if (this.unsubscribe) {
         this.unsubscribe()

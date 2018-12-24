@@ -24,7 +24,7 @@ export default function Table({ customers, count, offset, limit }) {
 
   const customersList = (
     <tbody>
-      { customers.map(customer => <Tr customer={customer} key={customer.id} />) }
+      { customers.map(customer => Tr({ customer: customer }) )}
     </tbody>
   )
 

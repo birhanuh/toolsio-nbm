@@ -160,13 +160,14 @@ class App extends Component {
               <Container textAlign='center'>
                 <Grid divided inverted stackable>
                   <Grid.Row>
-                    <Grid.Column width={3}>
-                      <Header inverted as='h3'>Group 1</Header>
+                    <Grid.Column width={9}>
+                      <Header inverted as='h3'>Trello</Header>
                       <List link inverted>
-                        <List.Item as='a' to='#features'>{T.translate("landing.features.header")}</List.Item>
+                        <p>{T.translate("landing.footer.trello_description")}</p>
+                        <List.Item as='a' to='https://trello.com/b/Qw2mO2ht/toolsio' target='_blank'>{T.translate("landing.footer.trello_link", { link: 'https://trello.com/b/Qw2mO2ht/toolsio' })}</List.Item>
                       </List>
                     </Grid.Column>
-                    <Grid.Column width={3}>
+                    {/*<Grid.Column width={3}>
                       <Header inverted as='h3'>Group 2</Header>
                       <List link inverted>
                         <List.Item as='a' to='#features'>{T.translate("landing.features.header")}</List.Item>
@@ -177,7 +178,7 @@ class App extends Component {
                       <List link inverted>
                         <List.Item as='a' to='#features'>{T.translate("landing.features.header")}</List.Item>
                       </List>
-                    </Grid.Column>
+                    </Grid.Column>*/}
                     <Grid.Column width={7}>
                       <Header inverted as='h3'>{T.translate("landing.footer.toolsio")}</Header>
                       <p>{T.translate("landing.footer.address")}</p>

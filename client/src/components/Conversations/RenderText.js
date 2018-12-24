@@ -6,7 +6,7 @@ export default class RenderText extends Component {
     text: ''
   }
 
-  componentWillMount = async () => {
+  UNSAFE_componentWillMount = async () => {
     const response = await fetch(this.props.uploadPath)
     const text = await response.text()
     this.setState({ text })

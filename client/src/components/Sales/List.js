@@ -20,7 +20,7 @@ export default function List({ sales, loading }) {
 
   const salesList = (
    <CardElement.Group itemsPerRow={2} className={classnames("ui from projects", { loading: loading })}>
-      { sales.map(sale => <Card sale={sale} key={sale.id} />) }
+      { sales.map(sale => Card({sale: sale}) )}
     </CardElement.Group>
   )
 

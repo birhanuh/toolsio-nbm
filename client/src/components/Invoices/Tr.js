@@ -11,7 +11,7 @@ import T from 'i18n-react'
 export default function Tr({ invoice }) {
   
   return (
-    <tr>
+    <tr key={invoice.id}>
       <td>
         {invoice.project &&
           <Link to={`/invoices/show/${invoice.id}`} className={classnames("ui", {blue: invoice.status === 'new', orange: invoice.status === 'pending', red: invoice.status === 'overdue', green: invoice.status === 'paid' })}>

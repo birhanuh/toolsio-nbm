@@ -83,7 +83,9 @@
       "copy_right": "Copyright © Toolsio, Ltd. 2018",
       "address": "Pyyntitie 2 C 50, 02230, Espoo, Finland",
       "terms_and_conditions": "Terms and Conditions",
-      "privacy_policy": "Privacy Policy"
+      "privacy_policy": "Privacy Policy",
+      "trello_description": "Make us a card on our Trello dashboard about your custom requirements and lists of improvments.",
+      "trello_link": "Link to our Trello dashboard -> {link}"
     }
   },
   "sign_up": {        

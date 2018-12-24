@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-export default function Tr({customer}) {
+export default function Tr({ customer }) {
   
   return (
-    <tr>
+    <tr key={customer.id}>
       <td>{customer.name}</td>
       <td>{customer.vatNumber}</td>
       <td>{customer.phoneNumber}{customer.email}</td>
