@@ -1,11 +1,12 @@
-import { formatErrors } from '../utils/formatErrors'
-import { loginUserWithToken } from '../utils/authentication'
-import sparkPostTransport from 'nodemailer-sparkpost-transport'
-
+import bcrypt from 'bcrypt-nodejs'
+import Redis from "ioredis"
 import jwt from 'jsonwebtoken'
 
 import nodemailer from 'nodemailer'
 import Email from 'email-templates'
+
+import { formatErrors } from '../utils/formatErrors'
+import sparkPostTransport from 'nodemailer-sparkpost-transport'
 
 const transporter = nodemailer.createTransport(sparkPostTransport({
   'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
@@ -23,9 +24,58 @@ const transporter = nodemailer.createTransport(sparkPostTransport({
 
 export default {
   Mutation: {
-    loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
-      loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
+    // loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
+    //   loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
     
+    loginUser: async (parent, { email, password }, { models, subdomain, req }) => {
+      const user = await models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })
+ 
+      if (!user) {
+        // user not found
+        return {
+          success: false,
+          sessionID: null,     
+          errors: [{ 
+            path: 'email',
+            message: 'Incorrect email or password.'
+          }, { 
+            path: 'password',
+            message: 'Incorrect email or password.'
+          }]
+        } 
+      }
+
+      const valid = bcrypt.compareSync(password, user.password)
+
+      if (!valid) {
+        // email not valid
+        return {
+          success: false,
+          sessionID: null,     
+          errors: [{ 
+            path: 'email',
+            message: 'Incorrect email or password.'
+          }, { 
+            path: 'password',
+            message: 'Incorrect email or password.'
+          }]
+        } 
+      }
+      console.log('reqq: ', req.session)
+      // login sucessful
+      req.session.userId = user.id
+      if (req.sessionID) {
+        const redis = process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_URL) : new Redis()
+        await redis.lpush(`sess:${subdomain}${user.id}`, req.sessionID);
+      }
+
+      // user found
+      return {
+        success: true,    
+        sessionID: req.sessionID
+      } 
+    },
+
     // loginUser: (parent, { email, password }, { req, models, subdomain }) => 
     //   loginUserPassportJs(req, email, password, models, subdomain),
 

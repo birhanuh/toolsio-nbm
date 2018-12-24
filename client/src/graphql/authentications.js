@@ -34,8 +34,7 @@ export const LOGIN_USER_MUTATION = gql`
   mutation($email: String!, $password: String!) {
     loginUser(email: $email, password: $password) {
       success
-      authToken 
-      refreshAuthToken
+      sessionID
       errors {
         path
         message

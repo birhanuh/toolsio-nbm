@@ -12,6 +12,8 @@ import DataLoader from "dataloader";
 
 // Authentication packages
 import session from "express-session";
+import connectRedis from "connect-redis";
+import Redis from "ioredis";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 
@@ -22,6 +24,7 @@ import { SubscriptionServer } from "subscriptions-transport-ws";
 
 // Init app
 const app = express();
+const RedisStore = connectRedis(session)
 
 // env
 require("dotenv").config();
@@ -63,7 +66,7 @@ app.use(cors("*"));
 app.use(logger("dev"));
 
 app.use(cookieParser());
-
+/*
 // Add authToken exist checker middleware
 app.use(async (req, res, next) => {
   // Parse assign subdomain globally
@@ -102,14 +105,15 @@ app.use(async (req, res, next) => {
   }
   next();
 });
-
+*/
 const apolloServer = new ApolloServer({
   schema,
   context: async ({ req }) => {
     return {
       models,
-      subdomain: req.headers.subdomain ? req.headers.subdomain : "public",
-      //subdomain: 'testa',
+      req,
+      //subdomain: req.headers.subdomain ? req.headers.subdomain : "public",
+      subdomain: 'testa',
       user: req.user,
       //user: { id: 1 },
       SECRET: process.env.JWTSECRET1,
@@ -130,6 +134,24 @@ const apolloServer = new ApolloServer({
   }
 });
 
+app.use(
+  session({
+    store: new RedisStore({
+      client: process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_URL) : new Redis(),
+      prefix: "sess:"
+    }),
+    name: "qid",
+    secret: process.env.JWTSECRET1,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+    }
+  })
+)
+
 apolloServer.applyMiddleware({ app });
 
 app.use("/uploads", express.static("uploads"));
@@ -145,13 +167,10 @@ app.use(session({
     conString : process.env.DB_HOST + process.env.POSTGRES_DB
   })
 }))
-**/
+
 app.use(passport.initialize());
 app.use(passport.session());
-
-if (process.env.NODE_ENV === "development") {
-  app.locals.pretty = true;
-}
+**/
 
 // app.use(function(req, res, next) {
 //   res.locals.isAuthenticated = req.isAuthenticated()
@@ -167,6 +186,10 @@ app.use((req, res) => {
     }
   });
 });
+
+if (process.env.NODE_ENV === "development") {
+  app.locals.pretty = true;
+}
 
 // Set port
 app.set("port", process.env.SERVER_PORT || 8080);
@@ -184,7 +207,6 @@ httpServer.listen(app.get("port"), () => {
       subscribe,
       schema: schema,
       onConnect: async ({ subdomain, authToken, refreshAuthToken }) => {
-        console.log('szz: ', subdomain)
         if (authToken && refreshAuthToken) {
           try {
             const { user } = jwt.verify(authToken, process.env.JWTSECRET1);

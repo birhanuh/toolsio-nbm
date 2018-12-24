@@ -6,8 +6,7 @@ type RegisterResponse {
 
 type LoginResponse {
   success: Boolean!
-  authToken: String
-  refreshAuthToken: String
+  sessionID: String
   errors: [Error!]
 }
 
