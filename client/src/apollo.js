@@ -53,6 +53,7 @@ export const wsLink = new WebSocketLink({
     reconnect: true,
     lazy: true,
     connectionParams: {
+      subdomain: getSubdomain(), // Parse subdomain 
       authToken: console.log('Connection authToken', localStorage.getItem('authToken')) || localStorage.getItem('authToken'),
       refreshAuthToken: console.log('Connection refreshAuthToken', localStorage.getItem('refreshAuthToken')) || localStorage.getItem('refreshAuthToken')
     }

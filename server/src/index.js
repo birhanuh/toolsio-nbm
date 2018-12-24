@@ -64,14 +64,11 @@ app.use(logger("dev"));
 
 app.use(cookieParser());
 
-// Subdomain
-let subdomain;
-
 // Add authToken exist checker middleware
 app.use(async (req, res, next) => {
   // Parse assign subdomain globally
-  subdomain = req.headers.subdomain;
-  console.log("subdomain: ", subdomain);
+  let subdomain = req.headers.subdomain;
+  console.log("subdomain server: ", subdomain);
 
   // Parse authToken
   const authToken = req.headers["x-auth-token"];
@@ -186,7 +183,8 @@ httpServer.listen(app.get("port"), () => {
       execute,
       subscribe,
       schema: schema,
-      onConnect: async ({ authToken, refreshAuthToken }) => {
+      onConnect: async ({ subdomain, authToken, refreshAuthToken }) => {
+        console.log('szz: ', subdomain)
         if (authToken && refreshAuthToken) {
           try {
             const { user } = jwt.verify(authToken, process.env.JWTSECRET1);
