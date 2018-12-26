@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt-nodejs'
-import Redis from "ioredis"
+import Redis from 'ioredis'
 import jwt from 'jsonwebtoken'
 
 import nodemailer from 'nodemailer'
@@ -27,7 +27,7 @@ export default {
     // loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
     //   loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
     
-    loginUser: async (parent, { email, password }, { models, subdomain, req }) => {
+    loginUser: async (parent, { email, password }, { models, subdomain, session, req }) => {
       const user = await models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })
  
       if (!user) {
@@ -61,12 +61,15 @@ export default {
           }]
         } 
       }
-      console.log('reqq: ', req.session)
+
       // login sucessful
       req.session.userId = user.id
+      console.log('reqq: ', req.session)
+      console.log('reqqID: ', req.sessionID)
       if (req.sessionID) {
-        const redis = process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_URL) : new Redis()
-        await redis.lpush(`sess:${subdomain}${user.id}`, req.sessionID);
+        console.log('sess: ', `userSids:${subdomain}/${user.id}`)
+        const redis = process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST) : new Redis()
+        await redis.lpush(`userSids:${subdomain}/${user.id}`, req.sessionID);
       }
 
       // user found

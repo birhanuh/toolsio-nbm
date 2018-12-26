@@ -12,8 +12,8 @@ import DataLoader from "dataloader";
 
 // Authentication packages
 import session from "express-session";
-import connectRedis from "connect-redis";
-import Redis from "ioredis";
+import connectRedis from 'connect-redis';
+import Redis from 'ioredis';
 import passport from "passport";
 import jwt from "jsonwebtoken";
 
@@ -60,75 +60,45 @@ const schema = makeExecutableSchema({
 //app.set('views', [__dirname + '/app/views', __dirname + '/app/views/auth', __dirname + '/app/views/projects'])
 
 // Allow CORS
-app.use(cors("*"));
+//app.use(cors("*"));
+app.use(cors({
+  credentials: true,
+  origin: ["http://lvh.me:3000", /\.lvh.me:3000$/]
+}))
 
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger("dev"));
 
-app.use(cookieParser());
-/*
-// Add authToken exist checker middleware
-app.use(async (req, res, next) => {
-  // Parse assign subdomain globally
-  let subdomain = req.headers.subdomain;
-  console.log("subdomain server: ", subdomain);
-
-  // Parse authToken
-  const authToken = req.headers["x-auth-token"];
-
-  if (authToken && authToken !== "null") {
-    try {
-      const { user } = jwt.verify(authToken, process.env.JWTSECRET1);
-      req.user = user;
-    } catch (err) {
-      let refreshAuthToken = req.headers["x-refresh-auth-token"];
-      const newAuthTokens = await refreshAuthTokens(
-        authToken,
-        refreshAuthToken,
-        models,
-        subdomain,
-        process.env.JWTSECRET1,
-        process.env.JWTSECRET2
-      );
-
-      if (newAuthTokens.authToken && newAuthTokens.refreshAuthToken) {
-        res.set(
-          "Access-Control-Expose-Headers",
-          "x-auth-token",
-          "x-refresh-auth-token"
-        );
-        res.set("x-auth-token", newAuthTokens.authToken);
-        res.set("x-refresh-auth-token", newAuthTokens.refreshAuthToken);
-      }
-      req.user = newAuthTokens.user;
-    }
-  }
-  next();
-});
-*/
 const apolloServer = new ApolloServer({
   schema,
-  context: async ({ req }) => {
+  context: async ({ req, res }) => {
+    const subdomain = req.headers.subdomain ? req.headers.subdomain : "public"
+    //const subdomain = 'testa'
+    
+    const user = await models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })
+    
+    // Added this: To remove  The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'. 
+    res.header('Access-Control-Allow-Origin', req.headers.origin)
+
     return {
       models,
       req,
-      //subdomain: req.headers.subdomain ? req.headers.subdomain : "public",
-      subdomain: 'testa',
-      user: req.user,
+      subdomain,
+      user,
       //user: { id: 1 },
       SECRET: process.env.JWTSECRET1,
       SECRET2: process.env.JWTSECRET2,
       userLoader: new DataLoader(usersId =>
-        userBatcher(usersId, models, req.headers.subdomain)
+        userBatcher(usersId, models, subdomain)
       ),
       customerLoader: new DataLoader(customersId =>
-        customerBatcher(customersId, models, req.headers.subdomain)
+        customerBatcher(customersId, models, subdomain)
       ),
       projectLoader: new DataLoader(projectsId =>
-        projectBatcher(projectsId, models, req.headers.subdomain)
+        projectBatcher(projectsId, models, subdomain)
       ),
       saleLoader: new DataLoader(salesId =>
-        saleBatcher(salesId, models, req.headers.subdomain)
+        saleBatcher(salesId, models, subdomain)
       )
     };
   }
@@ -137,7 +107,7 @@ const apolloServer = new ApolloServer({
 app.use(
   session({
     store: new RedisStore({
-      client: process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_URL) : new Redis(),
+      client: process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST) : new Redis(),
       prefix: "sess:"
     }),
     name: "qid",
@@ -156,27 +126,6 @@ apolloServer.applyMiddleware({ app });
 
 app.use("/uploads", express.static("uploads"));
 
-/**
-app.use(session({
-  secret: config.jwtSecret,
-  resave: false,
-  saveUninitialized: false,
-  //cookie: {secure: true}
-  cookie: { maxAge: 2628000000 },
-  store: new (require('connect-pg-simple')(session))({
-    conString : process.env.DB_HOST + process.env.POSTGRES_DB
-  })
-}))
-
-app.use(passport.initialize());
-app.use(passport.session());
-**/
-
-// app.use(function(req, res, next) {
-//   res.locals.isAuthenticated = req.isAuthenticated()
-//   next()
-// })
-
 // Middleware function
 app.use((req, res) => {
   res.status(404).json({
@@ -194,12 +143,17 @@ if (process.env.NODE_ENV === "development") {
 // Set port
 app.set("port", process.env.SERVER_PORT || 8080);
 
-const httpServer = createServer(app);
+app.listen(app.get('port'), () => {
+  console.log(`🚀 Server ready at ${apolloServer.graphqlPath}`);
+  console.log(`🚀 Subscriptions ready at ${apolloServer.subscriptionsPath}`);
+});
+
+//const httpServer = createServer(app);
 
 // app.listen(app.get('port'), () =>
 //   console.log('Server started on port: ' + process.env.SERVER_PORT || 8080)
 // )
-
+/*
 httpServer.listen(app.get("port"), () => {
   new SubscriptionServer(
     {
@@ -234,4 +188,9 @@ httpServer.listen(app.get("port"), () => {
   console.log("Server started on port: " + process.env.SERVER_PORT || 8080);
   console.log("Environment: " + process.env.NODE_ENV || "development");
   console.log("------------------------");
+
+  if (process.env.NODE_ENV === "test") {
+    new Redis.flushall();
+  }
 });
+*/

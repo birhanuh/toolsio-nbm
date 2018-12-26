@@ -11,20 +11,20 @@ class Page extends Component {
 
   render() {
     /* eslint-disable no-unused-vars */
-    let currentUser
+    // let currentUser
     
-    try {
-      const authToken = localStorage.getItem('authToken')
-      const { user } = decode(authToken)
+    // try {
+    //   const authToken = localStorage.getItem('authToken')
+    //   const { user } = decode(authToken)
 
-      currentUser = user
+    //   currentUser = user
 
-    } catch(err) {
-      console.log('err: ', err)
-    }
+    // } catch(err) {
+    //   console.log('err: ', err)
+    // }
 
     const { data: { getInvitedUsers } } = this.props
-
+    console.log('getInvitedUsers: ', this.props)
     return (
       <Grid.Row columns={1}>
         <Container text>

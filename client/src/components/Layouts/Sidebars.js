@@ -21,16 +21,16 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
 
 export function InnerSidebar({ visibleInnerSidebar }) {
 
-  let currentUser
+  // let currentUser
 
-  try {
-    const authToken = localStorage.getItem('authToken')
-    const { account, user } = decode(authToken)
+  // try {
+  //   const authToken = localStorage.getItem('authToken')
+  //   const { account, user } = decode(authToken)
 
-    currentUser = { account, user } 
-  } catch(err) {
-    console.log('err: ', err)
-  }
+  //   currentUser = { account, user } 
+  // } catch(err) {
+  //   console.log('err: ', err)
+  // }
 
   return (
     <Sidebar as={Menu} animation='slide along' visible={visibleInnerSidebar} vertical inverted>
@@ -38,8 +38,8 @@ export function InnerSidebar({ visibleInnerSidebar }) {
         <Link to="/settings">
           <Image centered rounded size='tiny' className="mt-3" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
         </Link>
-        <Header as='h4' className="capitalize mt-3 mb-0" style={{color: 'inherit'}}>{currentUser.account.subdomain}</Header>
-        <p className="capitalize mb-2">{currentUser.user.firstName} {currentUser.user.isAdmin ? '(Admin)' : ''}</p>
+        {/*<Header as='h4' className="capitalize mt-3 mb-0" style={{color: 'inherit'}}>{currentUser.account.subdomain}</Header>
+        <p className="capitalize mb-2">{currentUser.user.firstName} {currentUser.user.isAdmin ? '(Admin)' : ''}</p>*/}
       </Segment>
       <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboard.header")} />
       <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.page.header")}/>

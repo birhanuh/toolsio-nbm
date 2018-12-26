@@ -19,7 +19,7 @@ export default {
   },
 
   Mutation: {
-    sendInvitation: requiresAuth.createResolver(async (parent, args, { user, models, subdomain }) => {
+    sendInvitation: requiresAuth.createResolver(async (parent, args, { models, subdomain, user }) => {
      
       let emailToken
 

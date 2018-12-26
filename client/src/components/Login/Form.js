@@ -99,11 +99,9 @@ class Form extends Component {
 
       this.props.mutate({variables: { email, password }})
         .then(res => {
-          const { success, authToken, refreshAuthToken, sessionID, errors } = res.data.loginUser
+          const { success, sessionID, errors } = res.data.loginUser
           console.log('sessionID: ', sessionID)
           if (success) {
-            localStorage.setItem('authToken', authToken)
-            localStorage.setItem('refreshAuthToken', refreshAuthToken)
             
             // Re-connect to wsLink
             wsLink.subscriptionClient.tryReconnect()

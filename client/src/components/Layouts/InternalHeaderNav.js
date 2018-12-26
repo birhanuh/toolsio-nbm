@@ -36,15 +36,15 @@ class InternalHeaderNav extends Component {
   }
 
   render() {    
-    let currentUser = null
+    // let currentUser = null
 
-    const authToken = localStorage.getItem('authToken')   
+    // const authToken = localStorage.getItem('authToken')   
 
-    if (authToken) {
-      const { user } = decode(authToken)
+    // if (authToken) {
+    //   const { user } = decode(authToken)
 
-      currentUser = user ? user : null
-    }   
+    //   currentUser = user ? user : null
+    // }   
 
     const { getUnreadDirectMessagesCount } = this.props.data
     let count = getUnreadDirectMessagesCount && getUnreadDirectMessagesCount.count 
@@ -166,7 +166,7 @@ class InternalHeaderNav extends Component {
               trigger={(
                 <span>
                   <Image avatar src={avatarPlaceholderSmall} alt="avatar-placeholder-small" /> 
-                    {currentUser && currentUser.firstName}
+                    {/*{currentUser && currentUser.firstName}*/}
                 </span>)} >
               <Dropdown.Menu>
                 <Dropdown.Item as="a" className="ui clearing segment">     
