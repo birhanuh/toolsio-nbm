@@ -7,6 +7,8 @@ type RegisterResponse {
 type LoginResponse {
   success: Boolean!
   sessionID: String
+  user: User
+  subdomain: String
   errors: [Error!]
 }
 
@@ -16,9 +18,20 @@ type IsSubdomainExistResponse {
   errors: [Error!]
 }
 
+type CurrentAccountResponse {
+  success: Boolean!
+  user: User
+  subdomain: String
+  errors: [Error!]
+}
+
 type ForgotPasswordResetRequestPasswordResetResponseVerifyUserEmail {
   success: Boolean!
   errors: [Error!]
+}
+
+type Query {
+  getCurrentAccount: CurrentAccountResponse!
 }
 
 type Mutation {

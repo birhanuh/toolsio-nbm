@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import decode from 'jwt-decode'
 // Semantic UI Form elements
 import { Image, Dropdown, Menu, Label, Icon } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
@@ -36,15 +35,7 @@ class InternalHeaderNav extends Component {
   }
 
   render() {    
-    let currentUser = this.props.currentUser
-    console.log("currentUser: ", currentUser)
-    // const authToken = localStorage.getItem('authToken')   
-
-    // if (authToken) {
-    //   const { user } = decode(authToken)
-
-    //   currentUser = user ? user : null
-    // }   
+    let currentUser = this.props.user
 
     const { getUnreadDirectMessagesCount } = this.props.data
     let count = getUnreadDirectMessagesCount && getUnreadDirectMessagesCount.count 
@@ -166,7 +157,7 @@ class InternalHeaderNav extends Component {
               trigger={(
                 <span>
                   <Image avatar src={avatarPlaceholderSmall} alt="avatar-placeholder-small" /> 
-                    {/*{currentUser && currentUser.firstName}*/}
+                    {currentUser && currentUser.firstName}
                 </span>)} >
               <Dropdown.Menu>
                 <Dropdown.Item as="a" className="ui clearing segment">     

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom'
-import decode from 'jwt-decode'
 // Semantic UI JS
 import { Segment, Container, Header, Image, Sidebar, Menu, Item } from 'semantic-ui-react'
 
@@ -19,18 +18,7 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
   )} />
 )
 
-export function InnerSidebar({ visibleInnerSidebar }) {
-
-  // let currentUser
-
-  // try {
-  //   const authToken = localStorage.getItem('authToken')
-  //   const { account, user } = decode(authToken)
-
-  //   currentUser = { account, user } 
-  // } catch(err) {
-  //   console.log('err: ', err)
-  // }
+export function InnerSidebar({ visibleInnerSidebar, account }) {
 
   return (
     <Sidebar as={Menu} animation='slide along' visible={visibleInnerSidebar} vertical inverted>
@@ -38,8 +26,8 @@ export function InnerSidebar({ visibleInnerSidebar }) {
         <Link to="/settings">
           <Image centered rounded size='tiny' className="mt-3" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
         </Link>
-        {/*<Header as='h4' className="capitalize mt-3 mb-0" style={{color: 'inherit'}}>{currentUser.account.subdomain}</Header>
-        <p className="capitalize mb-2">{currentUser.user.firstName} {currentUser.user.isAdmin ? '(Admin)' : ''}</p>*/}
+        <Header as='h4' className="capitalize mt-3 mb-0" style={{color: 'inherit'}}>{account.subdomain}</Header>
+        <p className="capitalize mb-2">{account.user.firstName} {account.user.isAdmin ? '(Admin)' : ''}</p>
       </Segment>
       <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboard.header")} />
       <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.page.header")}/>

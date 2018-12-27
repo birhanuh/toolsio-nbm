@@ -35,10 +35,33 @@ export const LOGIN_USER_MUTATION = gql`
     loginUser(email: $email, password: $password) {
       success
       sessionID
+      user {
+        id 
+        firstName
+        lastName
+        email
+        isAdmin
+      }
+      subdomain
       errors {
         path
         message
       }
+    }
+  }
+`
+
+export const GET_CURRENT_ACCOUNT_QUERY = gql`
+  { 
+    getCurrentAccount {
+      user {
+        id
+        firstName
+        lastName
+        email
+        isAdmin
+      }
+      subdomain
     }
   }
 `

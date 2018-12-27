@@ -31,8 +31,6 @@ type S3SignAvatarResponse {
 }
 
 type Query {
-  getCurrentUser: User!
-
   getUser(id: Int!): User!
 
   getUserByEmail(email: String!): User!

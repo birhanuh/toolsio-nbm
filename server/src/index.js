@@ -72,8 +72,8 @@ app.use(logger("dev"));
 const apolloServer = new ApolloServer({
   schema,
   context: async ({ req, res }) => {
-    const subdomain = req.headers.subdomain ? req.headers.subdomain : "public"
-    //const subdomain = 'testa'
+    //const subdomain = req.headers.subdomain ? req.headers.subdomain : "public"
+    const subdomain = 'testa'
     
     const user = await models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })
     

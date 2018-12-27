@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 // Semantic UI Form elements
 import { Segment, Input, Icon, Form as FormElement, Button, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
+import { setCurrentAccount } from '../../actions/authenticationAction'
 import { graphql, compose } from 'react-apollo'
 import { LOGIN_USER_MUTATION, VERIFY_USER_EMIAIL_MUTATION } from '../../graphql/authentications'
 
@@ -99,7 +100,7 @@ class Form extends Component {
 
       this.props.mutate({variables: { email, password }})
         .then(res => {
-          const { success, sessionID, errors } = res.data.loginUser
+          const { success, sessionID, user, subdomain, errors } = res.data.loginUser
           console.log('sessionID: ', sessionID)
           if (success) {
             
@@ -110,6 +111,9 @@ class Form extends Component {
               type: 'success',
               text: T.translate("log_in.flash.log_in_success")
             })
+
+            // Set currrent user to Redux
+            this.props.setCurrentAccount({ user, subdomain })
 
             // Redirect to dashboard
             this.context.router.history.push('/dashboard')
@@ -167,7 +171,8 @@ class Form extends Component {
 
 // Proptypes definition
 Form.propTypes = {
-  addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired,
+  setCurrentAccount: PropTypes.func.isRequired
 }
 
 Form.contextTypes = {
@@ -181,5 +186,5 @@ const Mutations =  compose(
   })
 )(Form)
 
-export default connect(null, { addFlashMessage }) (Mutations)
+export default connect(null, { addFlashMessage, setCurrentAccount }) (Mutations)
 

@@ -8,6 +8,8 @@ import Email from 'email-templates'
 import { formatErrors } from '../utils/formatErrors'
 import sparkPostTransport from 'nodemailer-sparkpost-transport'
 
+import requiresAuth from '../middlewares/authentication'
+
 const transporter = nodemailer.createTransport(sparkPostTransport({
   'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
   endpoint: "https://api.eu.sparkpost.com"
@@ -23,18 +25,29 @@ const transporter = nodemailer.createTransport(sparkPostTransport({
 // });
 
 export default {
+  Query: {
+    getCurrentAccount: requiresAuth.createResolver(async (parent, args, { models, req, subdomain }) => {
+      const user = await models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })
+
+      return {
+        success: true,
+        user,
+        subdomain
+      }
+    })
+  },
+
   Mutation: {
     // loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) => 
     //   loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
     
-    loginUser: async (parent, { email, password }, { models, subdomain, session, req }) => {
+    loginUser: async (parent, { email, password }, { models, subdomain, req }) => {
       const user = await models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })
  
       if (!user) {
         // user not found
         return {
-          success: false,
-          sessionID: null,     
+          success: false,     
           errors: [{ 
             path: 'email',
             message: 'Incorrect email or password.'
@@ -50,8 +63,7 @@ export default {
       if (!valid) {
         // email not valid
         return {
-          success: false,
-          sessionID: null,     
+          success: false,     
           errors: [{ 
             path: 'email',
             message: 'Incorrect email or password.'
@@ -66,16 +78,20 @@ export default {
       req.session.userId = user.id
       console.log('reqq: ', req.session)
       console.log('reqqID: ', req.sessionID)
+      console.log('user: ', user.dataValues)
       if (req.sessionID) {
         console.log('sess: ', `userSids:${subdomain}/${user.id}`)
         const redis = process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST) : new Redis()
-        await redis.lpush(`userSids:${subdomain}/${user.id}`, req.sessionID);
+        //await redis.lpush(`userSids:${subdomain}/${user.id}`, req.sessionID);
+        await redis.set(`userSids:${subdomain}/${user.id}`, req.sessionID);
       }
-
+      console.log('user: ', user)
       // user found
       return {
-        success: true,    
-        sessionID: req.sessionID
+        success: true,  
+        sessionID: req.sessionID,
+        subdomain,
+        user
       } 
     },
 
