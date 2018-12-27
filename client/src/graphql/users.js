@@ -1,5 +1,15 @@
 import gql from 'graphql-tag'
 
+export const GET_CURRENT_USER_QUERY = gql`
+  { 
+    getCurrentUser {
+      id
+      firstName
+      email
+    }
+  }
+`
+
 export const GET_USERS_QUERY = gql`
   {
     getUsers {

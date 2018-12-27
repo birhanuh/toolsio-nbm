@@ -26,6 +26,8 @@ cloudinary.config({
 
 export default {
   Query: {
+    getCurrentUser: requiresAuth.createResolver((parent, args, { models, req, subdomain }) => models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })),
+
     getUser: requiresAuth.createResolver((parent, { id }, { models, subdomain }) => models.User.findOne({ where: { id }, searchPath: subdomain }, { raw: true })),
 
     getUserByEmail: requiresAuth.createResolver((parent, { email }, { models, subdomain }) => models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })),

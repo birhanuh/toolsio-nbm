@@ -36,8 +36,8 @@ class InternalHeaderNav extends Component {
   }
 
   render() {    
-    // let currentUser = null
-
+    let currentUser = this.props.currentUser
+    console.log("currentUser: ", currentUser)
     // const authToken = localStorage.getItem('authToken')   
 
     // if (authToken) {
