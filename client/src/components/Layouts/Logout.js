@@ -25,7 +25,7 @@ class Logout extends React.Component {
     client.resetStore()
 
     // Set authentication to default 
-    this.props.setCurrentAccount(data.data.getCurrentAccount)
+    this.props.setCurrentAccount({})
 
     this.props.addFlashMessage({
       type: 'success',

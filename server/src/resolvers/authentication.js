@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport(sparkPostTransport({
 
 export default {
   Query: {
-    getCurrentAccount: requiresAuth.createResolver(async (parent, args, { models, req, subdomain }) => {
+    getCurrentAccount: async (parent, args, { models, req, subdomain }) => {
       const user = await models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })
 
       return {
@@ -34,7 +34,7 @@ export default {
         user,
         subdomain
       }
-    })
+    }
   },
 
   Mutation: {
@@ -76,16 +76,14 @@ export default {
 
       // login sucessful
       req.session.userId = user.id
-      console.log('reqq: ', req.session)
-      console.log('reqqID: ', req.sessionID)
-      console.log('user: ', user.dataValues)
+      console.log('req.session: ', req.session)
+      console.log('req.sessionID: ', req.sessionID)
       if (req.sessionID) {
-        console.log('sess: ', `userSids:${subdomain}/${user.id}`)
+        console.log('userSids: ', `userSids:${subdomain}-${user.id}`)
         const redis = process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST) : new Redis()
-        //await redis.lpush(`userSids:${subdomain}/${user.id}`, req.sessionID);
-        await redis.set(`userSids:${subdomain}/${user.id}`, req.sessionID);
+        await redis.lpush(`userSids:${subdomain}-${user.id}`, req.sessionID);
       }
-      console.log('user: ', user)
+     
       // user found
       return {
         success: true,  
@@ -98,9 +96,33 @@ export default {
     // loginUser: (parent, { email, password }, { req, models, subdomain }) => 
     //   loginUserPassportJs(req, email, password, models, subdomain),
 
-    logoutUser: (parent, { subdomain }) => {
-      console.log(`User from ${subdomain} account has logged out`)
-      return `User from ${subdomain} account has logged out`
+    logoutUser: async (parent, _, { req, subdomain }) => {
+      const redis = process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST) : new Redis()
+      console.log('req.session: ', req.session)
+      const { userId } = req.session
+      console.log('userId: ', userId)
+      if (userId) {
+        const sessionIds = await redis.lrange(`userSids:${subdomain}-${userId}`, 0, -1)
+        console.log('sessionIds: ', sessionIds)
+        const promises = []
+    
+        for (let i = 0; i < sessionIds.length; i += 1) {
+          promises.push(redis.del(`sess:${sessionIds[i]}`))
+        }
+
+        await Promise.all(promises);
+
+        req.session.destroy(err => {
+          if (err) {
+            console.log(err);
+          }
+        })
+        
+        console.log(`User ID: ${userId} from Account: ${subdomain} has logged out`)
+        return true
+      }
+
+      return false
     },
 
     registerUser: async (parent, args, { models }) => {
