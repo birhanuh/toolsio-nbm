@@ -19,7 +19,6 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
 )
 
 export function InnerSidebar({ visibleInnerSidebar, account }) {
-
   return (
     <Sidebar as={Menu} animation='slide along' visible={visibleInnerSidebar} vertical inverted>
       <Segment vertical textAlign='center' className="account">

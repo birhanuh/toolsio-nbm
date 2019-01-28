@@ -95,7 +95,7 @@ class App extends Component {
   render() {
     const { visibleOuterSidebar, visibleInnerSidebar } = this.state
     const { isAuthenticated, account } = this.props.authentication
-    console.log('ussdfsd', isAuthenticated)
+    console.log('isAuthenticated:', isAuthenticated)
     return [      
       <Sidebar.Pushable key="Sidebar">  
         { isAuthenticated && !isAuthPages() && <InnerSidebar account={account} key="InnerSidebar" visibleInnerSidebar={visibleInnerSidebar} /> }
@@ -234,7 +234,6 @@ App.propTypes = {
 
 // Takes our global state and return just flashMessages
 function mapStateToProps(state) {
-  console.log('dsfdsfsdf', state.authentication)
   return {
     authentication: state.authentication
   }
