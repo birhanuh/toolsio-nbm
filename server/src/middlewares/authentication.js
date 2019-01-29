@@ -27,11 +27,12 @@ export default createResolver((parent, args, context ) => {
   }
 })
 
-export const requiresChannelAccess = createResolver(async (parent, { channelId }, { models, subdomain, user } ) => {
+export const requiresChannelAccess = createResolver(async (parent, { channelId }, { models, subdomain, user} ) => {
+
   if (!user || !user.id) {
     throw new Error('Not authenticated')
   }
-
+  
   // Check if part of the member
   const member = await models.Member.findOne({ where: { channelId, userId: user.id }, searchPath: subdomain })
 

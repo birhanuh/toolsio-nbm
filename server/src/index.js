@@ -31,7 +31,6 @@ require("dotenv").config();
 
 // Models
 import models from "./models";
-import { refreshAuthTokens } from "./utils/authentication";
 
 // Batch functions
 import {
@@ -75,12 +74,17 @@ const apolloServer = new ApolloServer({
     // Added this: To remove  The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'. 
     res.header('Access-Control-Allow-Origin', req.headers.origin)
 
-    const user = req.session.userId && await models.User.findOne({ where: { id: req.session.userId }, searchPath: req.headers.subdomain }, { raw: true })
-    
+    const subdomain = req.headers.subdomain ? req.headers.subdomain : "public"
+
+    let user
+    if (req && req.session && req.session.userId) {
+      user = await models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true }) 
+    }
+
     return {
       models,
       req,
-      subdomain: req.headers.subdomain ? req.headers.subdomain : "public",
+      subdomain,
       //subdomain: 'testa',
       user,
       //user: { id: 1 },
@@ -102,6 +106,8 @@ const apolloServer = new ApolloServer({
   }
 });
 
+app.use("/uploads", express.static("uploads"));
+
 app.use(
   session({
     store: new RedisStore({
@@ -122,8 +128,6 @@ app.use(
 
 apolloServer.applyMiddleware({ app });
 
-app.use("/uploads", express.static("uploads"));
-
 // Middleware function
 app.use((req, res) => {
   res.status(404).json({
@@ -141,40 +145,33 @@ if (process.env.NODE_ENV === "development") {
 // Set port
 app.set("port", process.env.SERVER_PORT || 8080);
 
-app.listen(app.get('port'), () => {
-  console.log(`🚀 Server ready at ${apolloServer.graphqlPath}`);
-  console.log(`🚀 Subscriptions ready at ${apolloServer.subscriptionsPath}`);
-});
+const httpServer = createServer(app);
+// apolloServer.installSubscriptionHandlers(httpServer);
 
-//const httpServer = createServer(app);
+// httpServer.listen(app.get('port'), () => {
+//   console.log(`🚀 Server ready at http://localhost:${app.get('port')}${apolloServer.graphqlPath}`);
+//   console.log(`🚀 Subscriptions ready at ws://localhost:${app.get('port')}${apolloServer.subscriptionsPath}`);
+// });
 
-// app.listen(app.get('port'), () =>
-//   console.log('Server started on port: ' + process.env.SERVER_PORT || 8080)
-// )
-/*
+// Flash Redis on test env
+// if (process.env.NODE_ENV === "test") {
+//   new Redis.flushall();
+// }
+
+
 httpServer.listen(app.get("port"), () => {
   new SubscriptionServer(
     {
       execute,
       subscribe,
       schema: schema,
-      onConnect: async ({ subdomain, authToken, refreshAuthToken }) => {
-        if (authToken && refreshAuthToken) {
-          try {
-            const { user } = jwt.verify(authToken, process.env.JWTSECRET1);
-            return { models, subdomain, user };
-          } catch (err) {
-            const newAuthTokens = await refreshAuthTokens(
-              authToken,
-              refreshAuthToken,
-              models,
-              subdomain,
-              process.env.JWTSECRET1,
-              process.env.JWTSECRET2
-            );
-            return { models, subdomain, user: newAuthTokens.user };
-          }
+      onConnect: async ({subdomain, userId }) => {
+    
+        if(userId && subdomain) {
+          const user = await models.User.findOne({ where: { id: userId }, searchPath: subdomain }, { raw: true })
+          return { models, subdomain, user };
         }
+
         return { models };
       }
     },
@@ -183,12 +180,11 @@ httpServer.listen(app.get("port"), () => {
       path: "/subscriptions"
     }
   );
-  console.log("Server started on port: " + process.env.SERVER_PORT || 8080);
-  console.log("Environment: " + process.env.NODE_ENV || "development");
-  console.log("------------------------");
+  console.log(`🚀 Server ready at http://localhost:${app.get('port')}${apolloServer.graphqlPath}`)
+  console.log(`🚀 Subscriptions ready at ws://localhost:${app.get('port')}${'/subscriptions'}`)
 
   if (process.env.NODE_ENV === "test") {
     new Redis.flushall();
   }
 });
-*/
+

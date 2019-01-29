@@ -8,8 +8,6 @@ import Email from 'email-templates'
 import { formatErrors } from '../utils/formatErrors'
 import sparkPostTransport from 'nodemailer-sparkpost-transport'
 
-import requiresAuth from '../middlewares/authentication'
-
 const transporter = nodemailer.createTransport(sparkPostTransport({
   'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
   endpoint: "https://api.eu.sparkpost.com"
@@ -92,9 +90,6 @@ export default {
         user
       } 
     },
-
-    // loginUser: (parent, { email, password }, { req, models, subdomain }) => 
-    //   loginUserPassportJs(req, email, password, models, subdomain),
 
     logoutUser: async (parent, _, { req, subdomain }) => {
       const redis = process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST) : new Redis()
@@ -517,3 +512,158 @@ export default {
 
   }    
 }
+
+/*
+export const loginUserPassportJs = async (req, email, password, models, subdomain) => {
+  passport.authenticate('local'), function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    
+    console.log('reqz: ', req)
+    return {
+      success: true,    
+      authToken: 'adf',
+      refreshAuthToken: 'sdf'
+    } 
+  }
+}
+*/
+// Login User
+// router.post('/login', passport.authenticate('local'), function(req, res) {
+//   // If this function gets called, authentication was successful.
+//   // `req.user` contains the authenticated user.
+//   if (req.user.get('is_confirmed')) {
+//     res.json({ id: req.user.id, first_name: req.user.first_name, last_name: req.user.last_name, email: req.user.email, 
+//       admin: req.user.admin })
+    
+//   } else {
+//     res.status(500).json({ 
+//       errors: {
+//         confirmation: 'fail',
+//         message: 'Please confirm your email to login'
+//       }
+//     })
+//   }
+
+// })
+
+// router.post('/login', function(req, res, next) {
+//   passport.authenticate('local', function(err, user, info) {
+    
+//     if (err) { 
+//       return next(err); 
+//     }
+
+//     if (!user) { 
+//       res.status(500).json({ 
+//         errors: {
+//           confirmation: 'fail',
+//           message: {
+//             errors: {
+//               email: {
+//                 message: 'Incorrect email.'
+//               },
+//               password: {
+//                 message: 'Incorrect password.'
+//               }
+//             }
+//           }
+//         }
+//       })
+//       return
+//     }
+    
+//     if (user) {
+//       req.logIn(user, function(err) {
+//         if (err) { 
+//           return next(err) 
+//         }
+    
+//         if (user.get('is_confirmed')) {
+//           res.json({ id: user.get('id'), first_name: user.get('first_name'), last_name: user.get('last_name'), email: user.get('email'), 
+//             admin: user.get('admin'), account: user.get('account') })        
+//         } else {
+//           res.status(500).json({ 
+//             errors: {
+//               confirmation: 'fail',
+//               message: 'Please confirm your email to login'
+//             }
+//           })
+//         }
+//       })
+//       return
+//     }
+//   })(req, res, next)
+// })
+
+// router.post('/logout', function(req, res) {
+//   req.logout()
+//   req.session.destroy(function(err) {
+//     if (err) {
+//       res.status(500).json({ 
+//         errors: {
+//           confirmation: 'fail',
+//           message: err
+//         }
+//       })
+//       return
+//     }
+//     res.json({ success: true })
+//   })
+// })
+/**
+passport.serializeUser(function(user, done) {
+  done(null, user.id)
+})
+
+passport.deserializeUser(function(id, done) {
+  models.User.findById(id, { searchPath: subdomain })
+    .then(user => {
+      done(null, user)
+    })
+    .catch(err => {
+      done(err, null)
+    })
+})
+
+passport.use(new LocalStrategy({usernameField: 'email'},
+  async function(email, password, done) {
+    onsole.log('reqz: ', user)
+    const user = await models.User.findOne({ where: { email }, searchPath: subdomain }, { raw: true })
+
+    console.log('reqz: ', user)
+    if (!user) {
+      // user not found
+      return done(null, false)
+    }
+
+    const valid = bcrypt.compareSync(password, user.password)
+
+    if (!valid) {
+      // email not found
+      return done(null, false)
+    } else {
+      return done(null, user)
+    }
+
+    // models.User.findOne({ where: {email: email}, raw: true })
+    //   .then(user => {
+    //     if (user) {
+    //       models.User.comparePassword(password, user.get('password'), function(err, isMatch) {
+    //         if (err) { return done(err); }
+            
+    //         if(isMatch){
+    //           return done(null, user)
+    //         } else {
+    //           return done(null, false)
+    //         }
+    //       })
+    //     } else {
+    //       return done(null, false)
+    //     }
+    //   })
+    //   .catch(err => { throw err })
+  }
+))
+
+*/

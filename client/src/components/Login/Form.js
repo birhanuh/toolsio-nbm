@@ -101,6 +101,7 @@ class Form extends Component {
       this.props.mutate({variables: { email, password }})
         .then(res => {
           const { success, sessionID, user, subdomain, errors } = res.data.loginUser
+          document.cookie = `userId=${user.id}`;
           console.log('sessionID: ', sessionID)
           if (success) {
             
