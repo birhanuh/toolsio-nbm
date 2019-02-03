@@ -155,9 +155,5 @@ Subdomain.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 }
 
-Subdomain.contextTypes = {
-  router: PropTypes.object.isRequired
-}
-
 export default connect(null, { addFlashMessage }) (graphql(IS_SUBDOMAIN_EXIST_MUTATION)(Subdomain))
 

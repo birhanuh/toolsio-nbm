@@ -13,7 +13,7 @@ import { GET_PROJECT_QUERY, GET_PROJECTS_QUERY, CREATE_PROJECT_MUTATION, UPDATE_
 
 // Datepicker 
 import DatePicker from 'react-datepicker'
-import moment from 'moment'
+
 import 'react-datepicker/dist/react-datepicker.css'
 
 // Localization 
@@ -25,7 +25,7 @@ class Form extends Component {
     this.state = {
       id: this.props.data.getProject ? this.props.data.getProject.id : null,
       name: this.props.data.getProject ? this.props.data.getProject.name : '',
-      deadline: this.props.data.getProject ? moment(this.props.data.getProject.deadline) : moment(),
+      deadline: this.props.data.getProject ? new Date(this.props.data.getProject.deadline) : new Date(),
       customerId: this.props.data.getProject ? this.props.data.getProject.customer.id : '',
       status: this.props.data.getProject ? this.props.data.getProject.status : 'new',
       progress: this.props.data.getProject ? this.props.data.getProject.progress : 0,
@@ -40,7 +40,7 @@ class Form extends Component {
       this.setState({
         id: nextProps.data.getProject.id,
         name: nextProps.data.getProject.name,
-        deadline: moment(nextProps.data.getProject.deadline),
+        deadline: new Date(nextProps.data.getProject.deadline),
         customerId: nextProps.data.getProject.customer.id,
         status: nextProps.data.getProject.status,
         progress: nextProps.data.getProject.progress,
@@ -259,7 +259,7 @@ class Form extends Component {
               <FormElement.Field inline error={!!errors.deadline}>
                 <label>{T.translate("projects.form.deadline")}</label>
                 <DatePicker
-                  dateFormat="DD/MM/YYYY"
+                  dateFormat="dd/MM/yyyy"
                   selected={deadline}
                   onChange={this.handleChangeDate.bind(this)}
                 />

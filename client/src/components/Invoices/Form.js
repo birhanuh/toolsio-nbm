@@ -17,9 +17,6 @@ import Confirmation from './Steps/Confirmation'
 // Localization 
 import T from 'i18n-react'
 
-// Moment
-import moment from 'moment'
-
 class Form extends Component {
   constructor(props) {
     super(props)
@@ -32,7 +29,7 @@ class Form extends Component {
         salesWithoutInvoice: []
       },
       step2: {
-        deadline: this.props.data.getInvoice ? moment(this.props.data.getInvoice.deadline) : moment(),
+        deadline: this.props.data.getInvoice ? new Date(this.props.data.getInvoice.deadline) : new Date(),
         paymentTerm: this.props.data.getInvoice ? this.props.data.getInvoice.paymentTerm : '',
         interestInArrears: this.props.data.getInvoice ? this.props.data.getInvoice.interestInArrears : '',
         status: this.props.data.getInvoice ? this.props.data.getInvoice.status : 'new',
@@ -54,7 +51,7 @@ class Form extends Component {
           project: nextProps.data.getInvoice.project
         },
         step2: {
-          deadline: nextProps.data.getInvoice.deadline ? moment(nextProps.data.getInvoice.deadline) : null,
+          deadline: nextProps.data.getInvoice.deadline ? new Date(nextProps.data.getInvoice.deadline) : null,
           paymentTerm: nextProps.data.getInvoice.paymentTerm,
           interestInArrears: nextProps.data.getInvoice.interestInArrears,
           status: nextProps.data.getInvoice.status,
@@ -195,7 +192,7 @@ class Form extends Component {
       if (id) {
         this.props.updateInvoiceMutation({ 
         variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
-          status, description, tax, projectId: project && parseInt(project.id), 
+          status, description, tax: parseFloat(tax), projectId: project && parseInt(project.id), 
           saleId: sale && parseInt(sale.id), customerId: customer.id },
         update: (store, { data: { updateInvoice } }) => {
           const { success, invoice } = updateInvoice
@@ -251,7 +248,7 @@ class Form extends Component {
       } else { 
         this.props.createInvoiceMutation({ 
           variables: { id, deadline, paymentTerm: parseInt(paymentTerm), interestInArrears: parseInt(interestInArrears), 
-            status, description, tax, projectId: project && parseInt(project.id), 
+            status, description, tax: parseFloat(tax), projectId: project && parseInt(project.id), 
             saleId: sale && parseInt(sale.id), customerId: parseInt(project ? project.customer_id : sale.customer_id) },
           update: (store, { data: { createInvoice } }) => {
             const { success, invoice } = createInvoice

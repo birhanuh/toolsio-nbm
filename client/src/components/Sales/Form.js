@@ -12,7 +12,7 @@ import { GET_CUSTOMERS_QUERY } from '../../graphql/customers'
 import { GET_SALE_QUERY, GET_SALES_QUERY, CREATE_SALE_MUTATION, UPDATE_SALE_MUTATION } from '../../graphql/sales'
 
 import DatePicker from 'react-datepicker'
-import moment from 'moment'
+
 import 'react-datepicker/dist/react-datepicker.css'
 
 // Localization 
@@ -24,7 +24,7 @@ class Form extends Component {
     this.state = {
       id: this.props.data.getSale ? this.props.data.getSale.id : null,
       name: this.props.data.getSale ? this.props.data.getSale.name : '',
-      deadline: this.props.data.getSale ? moment(this.props.data.getSale.deadline) : moment(),
+      deadline: this.props.data.getSale ? new Date(this.props.data.getSale.deadline) : new Date(),
       customerId: this.props.data.getSale ? this.props.data.getSale.customer.id : '',
       status: this.props.data.getSale ? this.props.data.getSale.status : 'new',
       description: this.props.data.getSale ? (!this.props.data.getSale.description ? '' : this.props.data.getSale.description) : '',
@@ -38,7 +38,7 @@ class Form extends Component {
       this.setState({
         id: nextProps.data.getSale.id,
         name: nextProps.data.getSale.name,
-        deadline: moment(nextProps.data.getSale.deadline),
+        deadline: new Date(nextProps.data.getSale.deadline),
         customerId: nextProps.data.getSale.customer.id,
         status: nextProps.data.getSale.status,
         description: !nextProps.data.getSale.description ? '' : nextProps.data.getSale.description
@@ -242,7 +242,7 @@ class Form extends Component {
               <FormElement.Field inline error={!!errors.deadline}>
                 <label>{T.translate("sales.form.deadline")}</label>
                 <DatePicker
-                  dateFormat="DD/MM/YYYY"
+                  dateFormat="dd/MM/yyyy"
                   selected={deadline}
                   onChange={this.handleChangeDate.bind(this)}
                 />

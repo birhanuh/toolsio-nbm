@@ -35,7 +35,7 @@ class InternalHeaderNav extends Component {
   }
 
   render() {    
-    let currentUser = this.props.user
+    let { currentAccount } = this.props
 
     const { getUnreadDirectMessagesCount } = this.props.data
     let count = getUnreadDirectMessagesCount && getUnreadDirectMessagesCount.count 
@@ -157,7 +157,7 @@ class InternalHeaderNav extends Component {
               trigger={(
                 <span>
                   <Image avatar src={avatarPlaceholderSmall} alt="avatar-placeholder-small" /> 
-                    {currentUser && currentUser.firstName}
+                    {currentAccount && currentAccount.firstName}
                 </span>)} >
               <Dropdown.Menu>
                 <Dropdown.Item as="a" className="ui clearing segment">     

@@ -152,7 +152,7 @@ class Form extends Component {
       
       if (id) {
         this.props.updateCustomerMutation({variables: { id, name, vatNumber: parseInt(vatNumber), phoneNumber, 
-          email, isContactIncludedInInvoice, street, postalCode: parseInt(postalCode), region, country },
+          email, isContactIncludedInInvoice, street, postalCode, region, country },
           update: (store, { data: { updateCustomer } }) => {
             const { success, customer } = updateCustomer
 
@@ -217,7 +217,7 @@ class Form extends Component {
       } else {
 
         this.props.createCustomerMutation({variables: { name, vatNumber: parseInt(vatNumber), phoneNumber, email, isContactIncludedInInvoice, 
-          street, postalCode: parseInt(postalCode), region, country },
+          street, postalCode, region, country },
           update: (store, { data: { createCustomer } }) => {
             const { success, customer } = createCustomer
 
@@ -403,8 +403,7 @@ class Form extends Component {
                   <CountryDropdown
                     defaultOptionLabel={T.translate("customers.form.address.select_country")}
                     value={address.country}
-                    onChange={(val) => this.selectCountry(val)} 
-                    error={!!errors.country} />
+                    onChange={(val) => this.selectCountry(val)} />
                   
                   <span className="red">{errors.country}</span>  
                 </div> 

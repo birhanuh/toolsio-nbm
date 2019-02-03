@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import decode from 'jwt-decode'
-import { getSubdomain } from '../../utils'
+import { getSubdomain, getCookie } from '../../utils'
 // Semantic UI Form elements
 import { Grid, Segment, Item, Divider } from 'semantic-ui-react'
 import AccountForm from './AccountForm'
@@ -11,19 +10,9 @@ class Page extends Component {
   render() {
     
     // Parse subdomain 
-    let subdomain =  getSubdomain()
-
-    let currentUser
-    
-    try {
-      const authToken = localStorage.getItem('authToken')
-      const { account, user } = decode(authToken)
-
-      currentUser = { account, user } 
-
-    } catch(err) {
-      console.log('err: ', err)
-    }
+    const subdomain =  getSubdomain()
+    // Parse current account
+    const currentAccount = getCookie('currentAccount') && JSON.parse(getCookie('currentAccount'))
     
     return (
       <Grid.Row>
@@ -38,7 +27,7 @@ class Page extends Component {
           
           <Segment className="user">
             <Item.Group>
-              { currentUser.user.email && <UserForm email={currentUser.user.email} /> }
+              { currentAccount.email && <UserForm email={currentAccount.email} /> }
             </Item.Group>
           </Segment>
         </Grid.Column>

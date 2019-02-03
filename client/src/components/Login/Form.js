@@ -4,11 +4,10 @@ import { connect } from 'react-redux'
 // Semantic UI Form elements
 import { Segment, Input, Icon, Form as FormElement, Button, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { setCurrentAccount } from '../../actions/authenticationAction'
 import { graphql, compose } from 'react-apollo'
 import { LOGIN_USER_MUTATION, VERIFY_USER_EMIAIL_MUTATION } from '../../graphql/authentications'
 
-import { Validation } from '../../utils'
+import { Validation, isAuthenticated } from '../../utils'
 
 import { wsLink } from '../../apollo'
 
@@ -43,11 +42,8 @@ class Form extends Component {
               text: T.translate("log_in.flash.confirm_email_success")
             })
 
-            let authToken = localStorage.getItem('authToken', authToken)
-            let refreshAuthToken = localStorage.getItem('refreshAuthToken', refreshAuthToken)
-
             // Redirect to dashboard
-            if (authToken && refreshAuthToken) {
+            if (isAuthenticated) {
               this.context.router.history.push('/dashboard')  
             }
           } else {
@@ -101,7 +97,12 @@ class Form extends Component {
       this.props.mutate({variables: { email, password }})
         .then(res => {
           const { success, sessionID, user, subdomain, errors } = res.data.loginUser
-          document.cookie = `userId=${user.id}`;
+
+          let date = new Date()
+          date.setTime(date.getTime() + 1000 * 60 * 60 * 24 * 7) // 7 days
+
+          document.cookie = 'currentAccount='+ JSON.stringify({accout: subdomain, id: user.id, firstName: user.firstName, lastName: user.lastName, email: user.email}) +';expires=' + date.toUTCString();
+          
           console.log('sessionID: ', sessionID)
           if (success) {
             
@@ -112,9 +113,6 @@ class Form extends Component {
               type: 'success',
               text: T.translate("log_in.flash.log_in_success")
             })
-
-            // Set currrent user to Redux
-            this.props.setCurrentAccount({ user, subdomain })
 
             // Redirect to dashboard
             this.context.router.history.push('/dashboard')
@@ -172,8 +170,7 @@ class Form extends Component {
 
 // Proptypes definition
 Form.propTypes = {
-  addFlashMessage: PropTypes.func.isRequired,
-  setCurrentAccount: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
 Form.contextTypes = {
@@ -187,5 +184,5 @@ const Mutations =  compose(
   })
 )(Form)
 
-export default connect(null, { addFlashMessage, setCurrentAccount }) (Mutations)
+export default connect(null, { addFlashMessage }) (Mutations)
 

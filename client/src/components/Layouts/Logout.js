@@ -3,9 +3,11 @@ import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addFlashMessage } from '../../actions/flashMessageActions'
-import { setCurrentAccount } from '../../actions/authenticationAction'
 import { withApollo } from 'react-apollo'
 import { gql } from 'apollo-boost'
+
+// Authorization utils
+import { deleteCookie } from '../../utils'
 
 // Localization 
 import T from 'i18n-react'
@@ -24,8 +26,8 @@ class Logout extends React.Component {
     })
     client.resetStore()
 
-    // Set authentication to default 
-    this.props.setCurrentAccount({})
+    // Delete cookie current account
+    deleteCookie('currentAccount')
 
     this.props.addFlashMessage({
       type: 'success',
@@ -39,8 +41,7 @@ class Logout extends React.Component {
 }
 
 Logout.propTypes = {
-  addFlashMessage: PropTypes.func.isRequired,
-  setCurrentAccount: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired
 }
 
-export default connect(null, { addFlashMessage, setCurrentAccount } ) (withApollo(Logout))
+export default connect(null, { addFlashMessage } ) (withApollo(Logout))

@@ -1,7 +1,5 @@
 import React, { Component } from 'react' 
 import { Route, Switch } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
 // Semantic UI React
 import { Segment, Grid, Container, Sidebar, Header, List, Divider } from 'semantic-ui-react'
@@ -16,7 +14,7 @@ import Subdomain from '../Login/Subdomain'
 import ForgotPasswordRequest from '../Login/ForgotPasswordRequest'
 import PasswordReset from '../Login/PasswordReset'
 // Utils 
-import { isAuthPages, SubdomainRoute, PrivateRoute } from '../../utils/'
+import { isAuthPages, isAuthenticated, SubdomainRoute, PrivateRoute } from '../../utils/'
 import Settings from '../Settings/Page'
 import ProjectsPage from '../Projects/Page'
 import ProjectsForm from '../Projects/Form'
@@ -38,10 +36,10 @@ import InternalHeaderNav from './InternalHeaderNav'
 import LandingPageHeaderNav from './LandingPageHeaderNav'
 import Breadcrumb from './Breadcrumb'
 import { OuterSidebarScrollableHeader, InnerSidebar } from './Sidebars'
-import { withApollo } from 'react-apollo'
-import { GET_CURRENT_ACCOUNT_QUERY } from '../../graphql/authentications'
 import FlashMessage from '../../flash/FlashMessage'
-import { setCurrentAccount } from '../../actions/authenticationAction'
+
+// Authorization utils
+import { getCookie } from '../../utils'
 
 // Semantic CSS
 import 'semantic-ui-css/semantic.min.css'
@@ -60,17 +58,6 @@ class App extends Component {
   state = { 
     visibleInnerSidebar: false,
     visibleOuterSidebar: false
-  }
-
-  componentDidMount = () => {
-    this.props.client.query({
-      query: GET_CURRENT_ACCOUNT_QUERY
-    }).then((data) => {
-      // Set currrent user to Redux
-      this.props.setCurrentAccount(data.data.getCurrentAccount)
-    }).catch((err) => {
-      console.log('catch: ', err)
-    })
   }
 
   toggleInnerSidebarVisibility = () => 
@@ -94,29 +81,28 @@ class App extends Component {
 
   render() {
     const { visibleOuterSidebar, visibleInnerSidebar } = this.state
-    const { isAuthenticated, account } = this.props.authentication
-    console.log('isAuthenticated:', isAuthenticated)
+
     return [      
       <Sidebar.Pushable key="Sidebar">  
-        { isAuthenticated && !isAuthPages() && <InnerSidebar account={account} key="InnerSidebar" visibleInnerSidebar={visibleInnerSidebar} /> }
+        { isAuthenticated() && !isAuthPages() && <InnerSidebar currentAccount={JSON.parse(getCookie('currentAccount'))} key="InnerSidebar" visibleInnerSidebar={visibleInnerSidebar} /> }
         <Sidebar.Pusher onClick={this.hideSidebarVisibility}>
           
           {/* Display either internal or external header nav */}
-          { (isAuthenticated && !isAuthPages()) && <InternalHeaderNav user={account.user} toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} /> }
+          { (isAuthenticated() && !isAuthPages()) && <InternalHeaderNav currentAccount={JSON.parse(getCookie('currentAccount'))} toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} /> }
 
           {/* Display either internal or external header nav */}
-          { (!isAuthenticated && !isAuthPages()) && <LandingPageHeaderNav toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
+          { (!isAuthenticated() && !isAuthPages()) && <LandingPageHeaderNav toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
 
-          <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
+          <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated() && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
             {/* Display breadcrumb */}
-            { isAuthenticated && !isAuthPages() && <Breadcrumb key="breadcrumb" /> }
+            { isAuthenticated() && !isAuthPages() && <Breadcrumb key="breadcrumb" /> }
 
             {/* Falsh messages */}  
             {!isAuthPages() && <FlashMessage /> }    
             
             <Switch>
               {/* Render Laning-page or Dashboard */}
-              <Route exact path="/" render={props => isAuthenticated.user ? <Dashboard {...props} /> : <LandingPage {...props} />} />        
+              <Route exact path="/" render={props => isAuthenticated() ? <Dashboard {...props} /> : <LandingPage {...props} />} />        
              
               {/* Publick Signup pages */}
               <Route exact path="/signup" component={Signup} />
@@ -227,17 +213,5 @@ class App extends Component {
   }
 }
 
-// Proptypes definition
-App.propTypes = {
-  setCurrentAccount: PropTypes.func.isRequired
-}
-
-// Takes our global state and return just flashMessages
-function mapStateToProps(state) {
-  return {
-    authentication: state.authentication
-  }
-}
-
-export default connect(mapStateToProps, { setCurrentAccount }) (withApollo(App))
+export default App
 

@@ -32,7 +32,7 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
         <Form.Field inline error={!!errors.deadline}>
           <label>{T.translate("invoices.form.deadline")}</label>
           <DatePicker
-            dateFormat="DD/MM/YYYY"
+            dateFormat="dd/MM/yyyy"
             selected={step2.deadline}
             onChange={handleChangeDate}
           />
@@ -61,11 +61,14 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
       <Form.Field inline  error={!!errors.interestInArrears}>
         <label>{T.translate("invoices.form.interest_in_arrears")}</label>
         <Input 
-          placeholder="0%"
+          placeholder="0"
+          label={{ basic: true, content: '%' }}
+          labelPosition='right'
           name="interestInArrears" 
-          value={step2.interestInArrears && step2.interestInArrears.toString()} 
+          value={step2.interestInArrears && step2.interestInArrears} 
           onChange={(e, {value}) => handleChange('interestInArrears', value)} 
           error={!!errors.interestInArrears}
+          style={{ width: '67% !important' }}
         />
         <span className="red">{errors.interestInArrears}</span>
       </Form.Field>
@@ -73,11 +76,14 @@ export default function Details({ id, step1, step2, handleChangeDate, handleChan
       <Form.Field inline error={!!errors.tax}>
         <label>{T.translate("invoices.form.tax")}</label>
         <Input 
-          placeholder="0%"
+          placeholder="0"
+          label={{ basic: true, content: '%' }}
+          labelPosition='right'
           name="tax" 
-          value={step2.tax && step2.tax.toString()} 
+          value={step2.tax && step2.tax} 
           onChange={(e, {value}) => handleChange('tax', value)} 
           error={!!errors.tax}
+          style={{ width: '67% !important' }}
         />
         <span className="red">{errors.tax}</span>
       </Form.Field>

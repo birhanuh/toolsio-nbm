@@ -18,15 +18,15 @@ const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
   )} />
 )
 
-export function InnerSidebar({ visibleInnerSidebar, account }) {
+export function InnerSidebar({ visibleInnerSidebar, currentAccount }) {
   return (
     <Sidebar as={Menu} animation='slide along' visible={visibleInnerSidebar} vertical inverted>
       <Segment vertical textAlign='center' className="account">
         <Link to="/settings">
           <Image centered rounded size='tiny' className="mt-3" src={logoPlaceholderMedium} alt="logo-placeholder-medium" />
         </Link>
-        <Header as='h4' className="capitalize mt-3 mb-0" style={{color: 'inherit'}}>{account.subdomain}</Header>
-        <p className="capitalize mb-2">{account.user.firstName} {account.user.isAdmin ? '(Admin)' : ''}</p>
+        <Header as='h4' className="capitalize mt-3 mb-0" style={{color: 'inherit'}}>{currentAccount.subdomain}</Header>
+        <p className="capitalize mb-2">{currentAccount.firstName} {currentAccount.isAdmin ? '(Admin)' : ''}</p>
       </Segment>
       <ActiveLink activeOnlyWhenExact to="/dashboard" icon="dashboard icon" label={T.translate("dashboard.header")} />
       <ActiveLink activeOnlyWhenExact to="/customers" icon="users icon" label={T.translate("customers.page.header")}/>

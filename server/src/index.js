@@ -74,10 +74,11 @@ const apolloServer = new ApolloServer({
     // Added this: To remove  The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'. 
     res.header('Access-Control-Allow-Origin', req.headers.origin)
 
-    const subdomain = req.headers.subdomain ? req.headers.subdomain : "public"
+    // Subdomain 
+    const subdomain = req.headers.subdomain
 
     let user
-    if (req && req.session && req.session.userId) {
+    if (subdomain && req.session && req.session.userId) {
       user = await models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true }) 
     }
 

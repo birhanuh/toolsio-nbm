@@ -16,16 +16,16 @@ const httpLink = createUploadLink({
   credentials: 'include'
 })
 
-console.log('Cookie: ', getCookie('userId'))
+console.log('Cookie: ',getCookie('currentAccount') && JSON.parse(getCookie('currentAccount')))
 // Create a WebSocket link:
-const wsLink = new WebSocketLink({
+export const wsLink = new WebSocketLink({
   uri: `${process.env.SERVER_WS_PROTOCOL}${process.env.SERVER_HOST}/subscriptions`,
   options: {
     reconnect: true,
     lazy: true,
     connectionParams: {
       subdomain: getSubdomain(),
-      userId: getCookie('userId')
+      userId:getCookie('currentAccount') && JSON.parse(getCookie('currentAccount')).id
     }
   }
 })
