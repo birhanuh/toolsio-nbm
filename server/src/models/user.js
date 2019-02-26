@@ -6,7 +6,6 @@ export default (sequelize, DataTypes) => {
     firstName: {
       type: DataTypes.STRING,
       field: 'first_name',
-      allowNull: false,
       validate: {     
         not: ["[0-9]",'i']            // will only allow numbers
       } 
@@ -14,7 +13,6 @@ export default (sequelize, DataTypes) => {
     lastName: {
       type: DataTypes.STRING,
       field: 'last_name',
-      allowNull: false,
       validate: {     
         not: ["[0-9]",'i']            // will only allow numbers
       } 

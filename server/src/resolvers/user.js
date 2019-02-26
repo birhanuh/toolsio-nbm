@@ -68,8 +68,8 @@ export default {
       // Do both asynchronously
       const asyncFunc = async () => {
         var user = await models.User.findOne({ where: { email: args.email }, searchPath: subdomain }, { raw: true })
-  
-        if(args.avatarUrl !== user.avatarUrl) {
+       
+        if(user.avatarUrl && (args.avatarUrl !== user.avatarUrl)) {
           cloudinary.v2.uploader.destroy(user.dataValues.avatarUrl, function(error, result){
             if (error) {
               console.log('cloudinary remove file error:', error)

@@ -14,7 +14,7 @@ import Subdomain from '../Login/Subdomain'
 import ForgotPasswordRequest from '../Login/ForgotPasswordRequest'
 import PasswordReset from '../Login/PasswordReset'
 // Utils 
-import { isAuthPages, isAuthenticated, SubdomainRoute, PrivateRoute } from '../../utils/'
+import { isAuthPages, isAuthenticated, SubdomainRoute, AuthRoute, PrivateRoute, DashboardOrLandingPageRoute } from '../../utils'
 import Settings from '../Settings/Page'
 import ProjectsPage from '../Projects/Page'
 import ProjectsForm from '../Projects/Form'
@@ -102,19 +102,19 @@ class App extends Component {
             
             <Switch>
               {/* Render Laning-page or Dashboard */}
-              <Route exact path="/" render={props => isAuthenticated() ? <Dashboard {...props} /> : <LandingPage {...props} />} />        
+              <DashboardOrLandingPageRoute exact path="/" dashboardComponent={Dashboard} landingPageComponent={LandingPage} />        
              
-              {/* Publick Signup pages */}
-              <Route exact path="/signup" component={Signup} />
-              <Route exact path="/signup/invitation" component={Invitation} />
-              <Route path="/subdomain" component={Subdomain} />    
+              {/* Public Signup pages */}
+              <AuthRoute exact path="/signup" component={Signup} />
+              <AuthRoute exact path="/signup/invitation" component={Invitation} />
+              <AuthRoute path="/subdomain" component={Subdomain} />    
               <Route path="/logout" component={Logout} />    
 
               {/* Subdomain required Login pages */}
               <SubdomainRoute exact path="/login" component={Login} />
-              <SubdomainRoute exact path="/login/confirmation/" component={Login} />
-              <SubdomainRoute exact path="/login/forgot-password-request/" component={ForgotPasswordRequest} />
-              <SubdomainRoute exact path="/login/password-reset/" component={PasswordReset} /> 
+              <AuthRoute exact path="/login/confirmation/" component={Login} />
+              <AuthRoute exact path="/login/forgot-password-request/" component={ForgotPasswordRequest} />
+              <AuthRoute exact path="/login/password-reset/" component={PasswordReset} /> 
               
               {/* Authenticated internal pages */}      
               <PrivateRoute path="/dashboard" component={Dashboard} />
@@ -145,7 +145,7 @@ class App extends Component {
           </section>
 
           {/* Internal page footer */}
-          { (isAuthenticated && !isAuthPages()) && 
+          { (isAuthenticated() && !isAuthPages()) && 
             <Segment inverted vertical className="footer internal-footer">
                 <Grid inverted stackable>
                   <Grid.Row>
@@ -159,7 +159,7 @@ class App extends Component {
            }    
 
           {/* Landing page footer */}
-          { (!isAuthenticated && !isAuthPages()) && 
+          { (!isAuthenticated() && !isAuthPages()) && 
             <Segment inverted vertical style={{ padding: '5em 0em' }} className="footer">
               <Container textAlign='center'>
                 <Grid divided inverted stackable>

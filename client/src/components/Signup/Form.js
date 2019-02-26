@@ -101,7 +101,7 @@ class Form extends Component {
             })
             
             // Redirect to login
-            window.location = `${process.env.CLIENT_PROTOCOL}${account.subdomain}.${process.env.CLIENT_HOST}/login`
+            window.location.href = `${process.env.CLIENT_PROTOCOL}${account.subdomain}.${process.env.CLIENT_HOST}/login`
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)

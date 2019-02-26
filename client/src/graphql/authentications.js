@@ -54,6 +54,7 @@ export const LOGIN_USER_MUTATION = gql`
 export const GET_CURRENT_ACCOUNT_QUERY = gql`
   { 
     getCurrentAccount {
+      success
       user {
         id
         firstName

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Segment, Input, Icon, Form as FormElement, Button, Message } from 'semantic-ui-react'
 import { addFlashMessage } from '../../actions/flashMessageActions'
 import { graphql, compose } from 'react-apollo'
-import { LOGIN_USER_MUTATION, VERIFY_USER_EMIAIL_MUTATION } from '../../graphql/authentications'
+import { LOGIN_USER_MUTATION, VERIFY_USER_EMIAIL_MUTATION, GET_CURRENT_ACCOUNT_QUERY } from '../../graphql/authentications'
 
 import { Validation, isAuthenticated } from '../../utils'
 
@@ -31,7 +31,7 @@ class Form extends Component {
     let token = url.searchParams.get("token")
 
     if (token) {
-      this.props.confirmUserEmailMutation({variables: { token }})
+      this.props.verifyUserEmailMutation({variables: { token }})
         .then(res => {
           
           const { success, errors } = res.data.confirmUserEmail
@@ -43,7 +43,7 @@ class Form extends Component {
             })
 
             // Redirect to dashboard
-            if (isAuthenticated) {
+            if (isAuthenticated()) {
               this.context.router.history.push('/dashboard')  
             }
           } else {
@@ -52,9 +52,23 @@ class Form extends Component {
             this.setState({ errors: errorsList, isLoading: false })
           }
         })
+    }      
+    
+  }
+  
+  UNSAFE_componentWillUpdate(nextProps){
+    if(nextProps.getCurrentAccount.getCurrentAccount){
+      
+      const { success } = nextProps.getCurrentAccount.getCurrentAccount
+
+      // Redirect to dashboard
+      if (success) {
+        this.context.router.history.push('/dashboard')  
+      }
     }
   }
 
+  
   handleChange = (name, value) => {
     if (this.state.errors[name]) {
       // Clone errors form state to local variable
@@ -100,22 +114,26 @@ class Form extends Component {
 
           let date = new Date()
           date.setTime(date.getTime() + 1000 * 60 * 60 * 24 * 7) // 7 days
-
-          document.cookie = 'currentAccount='+ JSON.stringify({accout: subdomain, id: user.id, firstName: user.firstName, lastName: user.lastName, email: user.email}) +';expires=' + date.toUTCString();
           
-          console.log('sessionID: ', sessionID)
           if (success) {
-            
+            console.log('sessionID: ', sessionID)
             // Re-connect to wsLink
             wsLink.subscriptionClient.tryReconnect()
             
-            this.props.addFlashMessage({
-              type: 'success',
-              text: T.translate("log_in.flash.log_in_success")
-            })
+            // this.props.addFlashMessage({
+            //   type: 'success',
+            //   text: T.translate("log_in.flash.log_in_success")
+            // })
+
+            // Set cookie of current account
+            document.cookie = 'currentAccount='+ JSON.stringify({subdomain, id: user.id, firstName: user.firstName, 
+              lastName: user.lastName, email: user.email, isAdmin: user.isAdmin}) +';expires=' + date.toUTCString();
 
             // Redirect to dashboard
-            this.context.router.history.push('/dashboard')
+            // this.context.router.history.push('/dashboard')
+            // Workaround for sending the new session 
+            window.location.href = `${process.env.CLIENT_PROTOCOL}${subdomain}.${process.env.CLIENT_HOST}/dashboard`
+
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -123,6 +141,7 @@ class Form extends Component {
           }
         })
         .catch(err => this.setState({ errors: err, isLoading: false }))
+        
     }
   }
 
@@ -177,12 +196,15 @@ Form.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const Mutations =  compose(
+const QueryMutations =  compose(
+  graphql(GET_CURRENT_ACCOUNT_QUERY, {
+    name: 'getCurrentAccount'
+  }),
   graphql(LOGIN_USER_MUTATION),
   graphql(VERIFY_USER_EMIAIL_MUTATION, {
-    name: 'confirmUserEmailMutation'
+    name: 'verifyUserEmailMutation'
   })
 )(Form)
 
-export default connect(null, { addFlashMessage }) (Mutations)
+export default connect(null, { addFlashMessage }) (QueryMutations)
 

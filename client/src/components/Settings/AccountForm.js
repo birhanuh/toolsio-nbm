@@ -780,7 +780,7 @@ class AccountForm extends Component {
               </Link>
               <Button primary disabled={isLoadingForm}>
                 <Icon name="check circle outline" />
-                &nbsp;{T.translate("settings.account.edit")}
+                &nbsp;{T.translate("settings.account.update")}
               </Button>
             </div>
           </Form>

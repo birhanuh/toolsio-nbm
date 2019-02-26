@@ -3,21 +3,22 @@ import { Route, Redirect } from 'react-router-dom'
 import { Query } from 'react-apollo'
 import { GET_CURRENT_ACCOUNT_QUERY } from '../graphql/authentications'
 
+import { getSubdomain } from '.'
+
 // Authenticated routes
-export const PrivateRoute = ({ component: Component, ...rest }) => (
+export const AuthRoute = ({ component: Component, ...rest }) => (
   <Query query={GET_CURRENT_ACCOUNT_QUERY}>
     {({ loading, error, data }) => {
 
       if (loading) return null;
       if (error) return `Error!: ${error}`;
       
-      const { success, subdomain, user } = data.getCurrentAccount
-      console.log('PrivateRoute: ', success, subdomain, user)
+      const { success } = data.getCurrentAccount
+      console.log("AuthRoute: ", getSubdomain(), success)
       return (<Route {...rest} render={props => (    
-        success ? (<Component {...props} from={props.location} currentAccount={{subdomain, user}} />) : 
-          (<Redirect to='/login' />))  
+        (success && getSubdomain()) ? (<Redirect to={{ pathname: '/dashboard' }}/>) : 
+          (<Component {...props} />))  
         }/>)  
     }}
   </Query>
 )
-

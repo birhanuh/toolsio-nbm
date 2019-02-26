@@ -1,17 +1,17 @@
 import { formatErrors } from '../utils/formatErrors'
 import requiresAuth from '../middlewares/authentication'
-import sparkPostTransport from 'nodemailer-sparkpost-transport'
+import sendgridTransport from 'nodemailer-sendgrid-transport'
 
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
 import Email from 'email-templates'
 
-const transporter = nodemailer.createTransport(sparkPostTransport({
-  'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
-  endpoint: "https://api.eu.sparkpost.com"
+const transporter = nodemailer.createTransport(sendgridTransport({
+  auth: {
+    api_key: process.env.SENDGRID_API_KEY
+  }
 }))
-
 
 export default {
   Query: {
@@ -65,7 +65,8 @@ export default {
           console.log('User invitation success: ', res)
 
           models.Invitation.create({email: args.email, userId: user.id}, { searchPath: subdomain })
-            .then(() => console.log('Invitation create success'))
+          .then(res => console.log('Invitation create success: ', { message: res.message, from: res.originalMessage.from, 
+            to: res.originalMessage.to, subject: res.originalMessage.subject, text: res.originalMessage.text } ))
             .catch(err => {
               console.log('Invitation create err: ', err)
               return {

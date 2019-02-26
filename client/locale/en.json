@@ -192,6 +192,7 @@
       },
       "upload": "Upload",
       "edit": "Edit",
+      "update": "Update",
       "cancel": "Cancel",
       "flash": {
         "success_update": "Account information updated!",
@@ -203,6 +204,7 @@
       "first_name": "First name",
       "last_name": "Last name",
       "email": "Email",
+      "email_info": "Email is a key field for updating other data fields. If you would like to change this field itself, contact our support.",
       "password": "Password",
       "confirm_password": "Confirm password",
       "current_password": "Current password",
@@ -211,6 +213,7 @@
       "password_change": "Password change",
       "current_password_required": "Current password is required",
       "edit": "Edit",
+      "update": "Update",
       "cancel": "Cancel",
       "select_avatar": "Select avatar",
       "upload": "Upload",

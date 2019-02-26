@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/birhanuh/toolsio-node#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "apollo-server-express": "^2.3.1",
     "aws-sdk": "^2.382.0",
     "babel-runtime": "^6.26.0",
@@ -62,6 +63,7 @@
     "mkdirp": "^0.5.1",
     "morgan": "^1.9.1",
     "nodemailer": "^4.7.0",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemailer-sparkpost-transport": "^2.2.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",

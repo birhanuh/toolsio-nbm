@@ -6,12 +6,15 @@ import nodemailer from 'nodemailer'
 import Email from 'email-templates'
 
 import { formatErrors } from '../utils/formatErrors'
-import sparkPostTransport from 'nodemailer-sparkpost-transport'
+import sendgridTransport from 'nodemailer-sendgrid-transport'
 
-const transporter = nodemailer.createTransport(sparkPostTransport({
-  'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
-  endpoint: "https://api.eu.sparkpost.com"
+const transporter = nodemailer.createTransport(sendgridTransport({
+  auth: {
+    api_key: process.env.SENDGRID_API_KEY
+  }
 }))
+// const sgMail = require('@sendgrid/mail');
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // const transporter = nodemailer.createTransport({
 //     host: 'smtp.ethereal.email',
@@ -24,15 +27,28 @@ const transporter = nodemailer.createTransport(sparkPostTransport({
 
 export default {
   Query: {
-    getCurrentAccount: async (parent, args, { models, req, subdomain }) => {
-      const user = await models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })
-
-      return {
-        success: true,
-        user,
-        subdomain
-      }
-    }
+    getCurrentAccount: async (parent, args, { models, req, subdomain }) => 
+      models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })
+        .then(user => {  
+          if (user) {
+            return {
+              success: true,
+              user,
+              subdomain
+            }
+          } else {
+            return {
+              success: false
+            }
+        }
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          return {
+            success: false,
+            errors: formatErrors(err, models)
+          }
+        })
   },
 
   Mutation: {
@@ -202,7 +218,7 @@ export default {
                 // }
                 transport: transporter
               })
-
+              
               email
                 .send({
                   template: 'email_confirmation',
@@ -215,32 +231,20 @@ export default {
                     confirmationLink: url,
                   }
                 })
-                .then(res => console.log('Email confirmation success: ', res))
+                .then(res => console.log('Email confirmation success: ', { message: res.message, from: res.originalMessage.from, 
+                  to: res.originalMessage.to, subject: res.originalMessage.subject, text: res.originalMessage.text } ))
                 .catch(err => console.error('Email confirmation error: ', err)) 
-
-                /**
-                client.transmissions.send({
-                  options: {
-                    sandbox: true
-                  },
-                  content: {
-                    //from: 'no-replay@toolsio.com',
-                    from: 'testing@sparkpostbox.com',
-                    subject: 'Confirm your Email (Toolsio)',
-                    html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
-                  },
-                  recipients: [
-                    {address: response.user.dataValues.email}
-                  ]
-                })
-                .then(data => {
-                  console.log('Woohoo! You just sent your first mailing!');
-                  console.log(data);
-                })
-                .catch(err => {
-                  console.log('Whoops! Something went wrong');
-                  console.log(err);
-                }); */
+                
+                /*
+                const msg = {
+                  to: 'birhanuh@gmail.com',
+                  from: 'test@example.com',
+                  subject: 'Sending with SendGrid is Fun',
+                  text: 'and easy to do anywhere, even with Node.js',
+                  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                };
+                sgMail.send(msg);
+                */
             })
       
           return {

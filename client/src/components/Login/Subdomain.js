@@ -43,7 +43,7 @@ class Subdomain extends Component {
             })
 
             // Redirect to login page with subdoamin set 
-            window.location = process.env.CLIENT_PROTOCOL+subdomain+'.'+process.env.CLIENT_HOST+'/login'
+            window.location.href = process.env.CLIENT_PROTOCOL+subdomain+'.'+process.env.CLIENT_HOST+'/login'
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)
@@ -93,7 +93,7 @@ class Subdomain extends Component {
             })
 
             // Redirect to login page with subdoamin set 
-             window.location = ''+process.env.CLIENT_PROTOCOL+subdomain+'.'+process.env.CLIENT_HOST+'/login'
+             window.location.href = ''+process.env.CLIENT_PROTOCOL+subdomain+'.'+process.env.CLIENT_HOST+'/login'
           } else {
             let errorsList = {}
             errors.map(error => errorsList[error.path] = error.message)

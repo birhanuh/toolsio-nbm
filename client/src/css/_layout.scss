@@ -16,7 +16,6 @@ body {
   color: $body-color;
   // font-family: 'Open Sans', sans-serif;
   // font-size: 16px;
-  moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased; 
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
@@ -1127,4 +1126,24 @@ header .ui.fixed.top.menu .item>a {
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: $screen-lg) {
 
+}
+
+.circle-container {
+  @include on-circle($item-count: 8, $circle-size: 30em, $item-size: 3em); 
+  margin: 5em auto 0;
+  border: solid 5px tomato;
+  
+  img { 
+    display: block; 
+    max-width: 100%; 
+    border-radius: 50%;
+    filter: grayscale(100%);
+    border: solid 5px tomato;
+    transition: .15s;
+    
+    &:hover,
+    &:active {
+      filter: grayscale(0);
+    }
+  }
 }
