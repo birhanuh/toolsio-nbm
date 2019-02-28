@@ -55,9 +55,20 @@ class Subdomain extends Component {
   }
   
   handleChange(name, value) {
-    this.setState({
-      [name]: value
-    })
+    if (this.state.errors[name]) {
+      // Clone errors form state to local variable
+      let errors = Object.assign({}, this.state.errors)
+      delete errors[name]
+
+      this.setState({
+        [name]: value,
+        errors
+      })
+    } else {
+      this.setState({
+        [name]: value
+      })
+    }
   }
 
   isValid() {

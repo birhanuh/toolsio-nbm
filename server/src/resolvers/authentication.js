@@ -27,28 +27,38 @@ const transporter = nodemailer.createTransport(sendgridTransport({
 
 export default {
   Query: {
-    getCurrentAccount: async (parent, args, { models, req, subdomain }) => 
-      models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })
-        .then(user => {  
-          if (user) {
-            return {
-              success: true,
-              user,
-              subdomain
+    getCurrentAccount: async (parent, args, { models, req, subdomain }) => {
+      const account = await models.Account.findOne({ where: { subdomain } }, { raw: true })
+      
+      if(account) {
+        return models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true })
+          .then(user => {  
+            if (user) {
+              return {
+                success: true,
+                user,
+                subdomain
+              }
+            } else {
+              return {
+                success: false
+              }
             }
-          } else {
+          })
+          .catch(err => {
+            console.log('err: ', err)
             return {
-              success: false
+              success: false,
+              errors: formatErrors(err, models)
             }
-        }
-        })
-        .catch(err => {
-          console.log('err: ', err)
+          })
+        } else {
           return {
             success: false,
-            errors: formatErrors(err, models)
+            errors: `Schema ${subdomain} doesn't exist.`
           }
-        })
+        }
+      }
   },
 
   Mutation: {
@@ -209,7 +219,7 @@ export default {
               
               const email = new Email({
                 message: {
-                  from: 'no-replay@email.toolsio.com'
+                  from: 'no-replay@toolsio.com'
                 },
                 // uncomment below to send emails in development/test env:
                 send: true,

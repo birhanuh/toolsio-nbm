@@ -674,10 +674,6 @@ header .ui.fixed.top.menu .item>a {
   display: flex !important;
 }
 
-.ui.dimmer img {
-  @include transform-rotate(180deg);
-}
-
 // Custome fieldset and legend
 .custom-fieldset {
   border: 1px solid $light-grey !important;

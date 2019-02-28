@@ -155,13 +155,13 @@ class Messages extends Component {
       }
       this.unsubscribe = this.subscribe(channelId)
     }
-  }﻿
+  }
 
   componentWillUnmount() {   
     if (this.unsubscribe) {
       this.unsubscribe()
     }
-  }﻿
+  }
 
   subscribe = (channelId) => 
     this.props.data.subscribeToMore({
