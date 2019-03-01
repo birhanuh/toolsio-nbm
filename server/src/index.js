@@ -2,7 +2,6 @@
 import express from "express";
 
 import path from "path";
-import cookieParser from "cookie-parser";
 import logger from "morgan";
 import { ApolloServer } from "apollo-server-express";
 import { makeExecutableSchema } from "graphql-tools";
@@ -14,8 +13,6 @@ import DataLoader from "dataloader";
 import session from "express-session";
 import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
-import passport from "passport";
-import jwt from "jsonwebtoken";
 
 // Subscription packages
 import { createServer } from "http";
@@ -156,7 +153,7 @@ const httpServer = createServer(app);
 
 // Flash Redis on test env
 // if (process.env.NODE_ENV === "test") {
-//   new Redis.flushall();
+//   new Redis().flushall();
 // }
 
 
@@ -185,7 +182,7 @@ httpServer.listen(app.get("port"), () => {
   console.log(`🚀 Subscriptions ready at ws://localhost:${app.get('port')}${'/subscriptions'}`)
 
   if (process.env.NODE_ENV === "test") {
-    new Redis.flushall();
+    new Redis().flushall();
   }
 });
 

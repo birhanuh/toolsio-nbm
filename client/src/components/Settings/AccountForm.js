@@ -241,7 +241,7 @@ class AccountForm extends Component {
               email,
               logoUrl,
               street,
-              postalCode: parseInt(postalCode),
+              postalCode: postalCode,
               region,
               country
             },

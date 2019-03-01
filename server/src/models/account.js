@@ -57,11 +57,11 @@ export default (sequelize, DataTypes) => {
     },
     postalCode: {
       type: DataTypes.STRING,
-      allowNull : true,
+      allowNull: true,
       validate: {     
-        is: /^[0-9\-()]+$/         // will only allow letters, spaces
+        is: /^[0-9\-()]+$/,         // will only allow numbers, dashes
       },
-      field: 'postal_code' 
+      field: 'postal_code'
     },
     region: {
       type: DataTypes.STRING,

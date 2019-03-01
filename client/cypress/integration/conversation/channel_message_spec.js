@@ -31,18 +31,6 @@ describe('Customers', function() {
 
     // submit
     cy.contains('Sign up').click()
-  })
-
-  beforeEach(function () {
-    const { email, password } = account
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
  
     // we should be redirected to /dashboard
     cy.url().should('include', '/dashboard')
@@ -62,7 +50,7 @@ describe('Customers', function() {
     // we should be redirected to /conversations
     cy.url().should('include', '/conversations/channel')
 
-    // should contain Customera
+    // should contain Channel 1
     cy.get('.messages h3').should('contain', 'Channel 1')
   })
 
@@ -78,7 +66,7 @@ describe('Customers', function() {
     // we should be redirected to /conversations
     cy.url().should('include', '/conversations')
 
-    // should contain Customera
-    cy.get('.ui.comments .text').should('contain', 'Test message...')
+    // should contain Comments
+    cy.get('.ui.comments .comment').should('contain', 'Test message...')
   })
 })

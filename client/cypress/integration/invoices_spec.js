@@ -31,14 +31,6 @@ describe('Customers', function() {
 
     // submit
     cy.contains('Sign up').click()
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
     
     // we should be redirected to /dashboard
     cy.url().should('include', '/dashboard')
@@ -85,21 +77,6 @@ describe('Customers', function() {
 
     // should contain Project 1
     cy.get('.content h3').should('contain', 'Project 1')
-  })
-
-  beforeEach(function () {
-    const { email, password } = account
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
- 
-    // we should be redirected to /dashboard
-    cy.url().should('include', '/dashboard')
 
     // go to projects
     cy.visit(`http://${account.subdomain}.lvh.me:3000/invoices`)
@@ -117,7 +94,7 @@ describe('Customers', function() {
     // Invoice details 
     cy.get('input[name=interestInArrears]').type('5')
     cy.get('input[name=tax]').type('15')
-    cy.get('textarea[name=description]').type('Invoice for Project 1.')
+    cy.get('textarea[name=description]').type('Invoice for Project 1')
     cy.contains('Next').click()
 
     // should contain Project 1
@@ -128,8 +105,8 @@ describe('Customers', function() {
     // we should be redirected to /invoices
     cy.url().should('include', '/invoices')
 
-    // should contain Invoice for (Project 1)
-    cy.get('table tr:first-child td:first-child').should('contain', 'Project 1')
+    // should contain Invoice for (Invoice for (Project 1))
+    cy.get('table tr:first-child td:first-child').should('contain', 'Invoice for (Project 1)')
   })
 
   it('Update invoice', function() {
@@ -160,6 +137,6 @@ describe('Customers', function() {
     cy.url().should('include', '/invoices')
 
     // should not contain Project
-    cy.get('table tr:first-child td:first-child').not('contain', 'Project 1')
+    cy.get('table tr:first-child td:first-child').not('contain', 'Invoice for (Project 1)')
   })
 })

@@ -1,4 +1,4 @@
-describe('Customers', function() {
+describe('Settings', function() {
 
   // creates a closure around 'account'
   let account
@@ -31,19 +31,7 @@ describe('Customers', function() {
 
     // submit
     cy.contains('Sign up').click()
-  })
 
-  beforeEach(function () {
-    const { email, password } = account
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
- 
     // we should be redirected to /dashboard
     cy.url().should('include', '/dashboard')
 
@@ -58,7 +46,7 @@ describe('Customers', function() {
     cy.get('select[name=rcrs-region]').select('Batna')
 
     // submit
-    cy.get('.account').contains('Edit').click()
+    cy.get('.account').contains('Update').click()
 
     // we should be redirected to /settings
     cy.url().should('include', '/settings')
@@ -71,7 +59,7 @@ describe('Customers', function() {
     cy.get('input[name=firstName]').type(' updated')
 
     // submit
-    cy.get('form.profile').contains('Edit').click()
+    cy.get('form.profile').contains('Update').click()
 
     // we should be redirected to /settings
     cy.url().should('include', '/settings')
@@ -86,7 +74,7 @@ describe('Customers', function() {
     cy.get('input[name=confirmNewPassword]').type('updated')
 
     // submit
-    cy.get('form.password').contains('Edit').click()
+    cy.get('form.password').contains('Update').click()
 
     // we should be redirected to /settings
     cy.url().should('include', '/settings')

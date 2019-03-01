@@ -126,7 +126,7 @@ class Form extends Component {
       const { projectId, name, paymentType, hours, unitPrice, total } = this.state.newTask
 
       this.props.createTaskMutation({ 
-        variables: { projectId, name, paymentType, hours, unitPrice, total },
+        variables: { projectId, name, paymentType, hours, unitPrice: parseInt(unitPrice), total },
         update: (store, { data: { createTask } }) => {
           const { success, task } = createTask
 
@@ -297,7 +297,7 @@ class Form extends Component {
       const { id, projectId, name, paymentType, hours, unitPrice, total } = this.state.editTask
       
       this.props.updateTaskMutation({ 
-        variables: { id, projectId, name, paymentType, hours, unitPrice, total },
+        variables: { id, projectId, name, paymentType, hours, unitPrice: parseInt(unitPrice), total },
         update: (store, { data: { updateTask } }) => {
           const { success, task } = updateTask
 

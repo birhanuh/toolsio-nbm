@@ -14,7 +14,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
       const { success, subdomain, user } = data.getCurrentAccount
       console.log('PrivateRoute: ', success, subdomain, user)
       return (<Route {...rest} render={props => (    
-        success ? (<Component {...props} from={props.location} currentAccount={{subdomain, user}} />) : 
+        success ? (<Component {...props} location={props.location} currentAccount={{subdomain, user}} />) : 
           (<Redirect to='/login' />))  
         }/>)  
     }}

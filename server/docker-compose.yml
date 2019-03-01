@@ -21,10 +21,9 @@ services:
       POSTGRES_DB: toolsio
     restart: always
   web:
-    image: toolsio-server
-    #image: birham/toolsio-server:latest ## To use the image that's in docker cloud
+    image: birham/toolsio-server:latest ## To use the image that's in docker hub
     #ports:
-    #  - "8080:8080" ## We don' need to open up our port to the word, ngix handles it
+    #  - "8080:8080" ## We don' need to open up our port to the world, ngix handles it
     networks:
       - webnet 
     environment: 
@@ -41,7 +40,7 @@ services:
       # jwt
       JWTSECRET1: ${JWTSECRET1}
       JWTSECRET2: s${JWTSECRET2}
-      # sparkpost
+      # sendgrid
       SENDGRID_API_KEY: ${SENDGRID_API_KEY}
       # cloudinary
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
@@ -65,8 +64,7 @@ services:
     #   driver: gcplogs
   migration:
     build: .
-    image: toolsio-server
-    #image: birham/toolsio-server:latest
+    image: birham/toolsio-server:latest
     networks:
       - webnet 
     environment: 

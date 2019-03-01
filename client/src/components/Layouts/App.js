@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import classnames from 'classnames'
 // Semantic UI React
 import { Segment, Grid, Container, Sidebar, Header, List, Divider } from 'semantic-ui-react'
@@ -14,7 +14,7 @@ import Subdomain from '../Login/Subdomain'
 import ForgotPasswordRequest from '../Login/ForgotPasswordRequest'
 import PasswordReset from '../Login/PasswordReset'
 // Utils 
-import { isAuthPages, isAuthenticated, SubdomainRoute, AuthRoute, PrivateRoute, DashboardOrLandingPageRoute } from '../../utils'
+import { isAuthPages, SubdomainRoute, AuthRoute, PrivateRoute, DashboardOrLandingPageRoute } from '../../utils'
 import Settings from '../Settings/Page'
 import ProjectsPage from '../Projects/Page'
 import ProjectsForm from '../Projects/Form'
@@ -38,8 +38,8 @@ import Breadcrumb from './Breadcrumb'
 import { OuterSidebarScrollableHeader, InnerSidebar } from './Sidebars'
 import FlashMessage from '../../flash/FlashMessage'
 
-// Authorization utils
-import { getCookie } from '../../utils'
+import { GET_CURRENT_ACCOUNT_QUERY } from '../../graphql/authentications'
+import { withApollo } from 'react-apollo'
 
 // Semantic CSS
 import 'semantic-ui-css/semantic.min.css'
@@ -57,7 +57,29 @@ class App extends Component {
   
   state = { 
     visibleInnerSidebar: false,
-    visibleOuterSidebar: false
+    visibleOuterSidebar: false,
+    currentAccount: {
+      success: false,
+      subdomain: '',
+      user: null
+    },
+    location: null
+  }
+
+  componentDidMount = async () => {
+    const { client } = this.props
+    const clientQuery = await client.query({
+      query: GET_CURRENT_ACCOUNT_QUERY
+    })
+
+    this.setState({ currentAccount: clientQuery.data.getCurrentAccount })
+  }
+
+  // Detect location change for FlashMessage component 
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      this.setState({ location: this.props.location })
+    }
   }
 
   toggleInnerSidebarVisibility = () => 
@@ -80,25 +102,25 @@ class App extends Component {
   }
 
   render() {
-    const { visibleOuterSidebar, visibleInnerSidebar } = this.state
+    const { visibleOuterSidebar, visibleInnerSidebar, currentAccount, location } = this.state
 
     return [      
       <Sidebar.Pushable key="Sidebar">  
-        { isAuthenticated() && !isAuthPages() && <InnerSidebar currentAccount={JSON.parse(getCookie('currentAccount'))} key="InnerSidebar" visibleInnerSidebar={visibleInnerSidebar} /> }
+        { currentAccount.success && !isAuthPages() && <InnerSidebar currentAccount={currentAccount} key="InnerSidebar" visibleInnerSidebar={visibleInnerSidebar} /> }
         <Sidebar.Pusher onClick={this.hideSidebarVisibility}>
           
           {/* Display either internal or external header nav */}
-          { (isAuthenticated() && !isAuthPages()) && <InternalHeaderNav currentAccount={JSON.parse(getCookie('currentAccount'))} toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} /> }
+          { (currentAccount.success && !isAuthPages()) && <InternalHeaderNav currentAccount={currentAccount} toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility} /> }
 
           {/* Display either internal or external header nav */}
-          { (!isAuthenticated() && !isAuthPages()) && <LandingPageHeaderNav toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
+          { (!currentAccount.success && !isAuthPages()) && <LandingPageHeaderNav toggleOuterSidebarVisibility={this.toggleOuterSidebarVisibility} /> }
 
-          <section className={classnames({"ui stackable grid basic segment internal-page": (isAuthenticated() && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
+          <section className={classnames({"ui stackable grid basic segment internal-page": (currentAccount.success && !isAuthPages()), "ui stackable grid auth-pages": isAuthPages()})}>
             {/* Display breadcrumb */}
-            { isAuthenticated() && !isAuthPages() && <Breadcrumb key="breadcrumb" /> }
+            { currentAccount.success && !isAuthPages() && <Breadcrumb key="breadcrumb" /> }
 
             {/* Falsh messages */}  
-            {!isAuthPages() && <FlashMessage /> }    
+            {!isAuthPages() && <FlashMessage location={location} /> }    
             
             <Switch>
               {/* Render Laning-page or Dashboard */}
@@ -145,7 +167,7 @@ class App extends Component {
           </section>
 
           {/* Internal page footer */}
-          { (isAuthenticated() && !isAuthPages()) && 
+          { (currentAccount.success && !isAuthPages()) && 
             <Segment inverted vertical className="footer internal-footer">
                 <Grid inverted stackable>
                   <Grid.Row>
@@ -159,7 +181,7 @@ class App extends Component {
            }    
 
           {/* Landing page footer */}
-          { (!isAuthenticated() && !isAuthPages()) && 
+          { (!currentAccount.success && !isAuthPages()) && 
             <Segment inverted vertical style={{ padding: '5em 0em' }} className="footer">
               <Container textAlign='center'>
                 <Grid divided inverted stackable>
@@ -213,5 +235,5 @@ class App extends Component {
   }
 }
 
-export default App
+export default withApollo(withRouter(App))
 

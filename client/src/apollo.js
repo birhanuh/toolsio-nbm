@@ -25,7 +25,7 @@ export const wsLink = new WebSocketLink({
     lazy: true,
     connectionParams: {
       subdomain: getSubdomain(),
-      userId:getCookie('currentAccount') && JSON.parse(getCookie('currentAccount')).id
+      userId: getCookie('currentAccount') && JSON.parse(getCookie('currentAccount')).id
     }
   }
 })

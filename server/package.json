@@ -35,7 +35,6 @@
   },
   "homepage": "https://github.com/birhanuh/toolsio-node#readme",
   "dependencies": {
-    "@sendgrid/mail": "^6.3.1",
     "apollo-server-express": "^2.3.1",
     "aws-sdk": "^2.382.0",
     "babel-runtime": "^6.26.0",
@@ -43,7 +42,6 @@
     "cloudinary": "^1.13.2",
     "connect-pg-simple": "^5.0.0",
     "connect-redis": "^3.4.0",
-    "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
@@ -65,7 +63,6 @@
     "nodemailer": "^4.7.0",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemailer-sparkpost-transport": "^2.2.0",
-    "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.7.1",
     "pug": "^2.0.3",
@@ -80,7 +77,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.1.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
@@ -89,7 +86,7 @@
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-nodemon": "^2.4.2",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "nodemon": "^1.18.9",
     "phantomjs": "^2.1.7"
   }

@@ -4,6 +4,8 @@
 .DS_Store
 .env
 env.js
+client/cypress/screenshots/
+client/cypress/videos/
 
 # Dependencies
 node_modules

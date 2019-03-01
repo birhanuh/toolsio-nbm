@@ -31,14 +31,6 @@ describe('Customers', function() {
 
     // submit
     cy.contains('Sign up').click()
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
     
     // we should be redirected to /dashboard
     cy.url().should('include', '/dashboard')
@@ -64,21 +56,6 @@ describe('Customers', function() {
 
     // should contain Customera
     cy.get('table td').should('contain', 'Customera')
-  })
-
-  beforeEach(function () {
-    const { email, password } = account
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
- 
-    // we should be redirected to /dashboard
-    cy.url().should('include', '/dashboard')
 
     // go to projects
     cy.visit(`http://${account.subdomain}.lvh.me:3000/projects`)
@@ -136,6 +113,6 @@ describe('Customers', function() {
     cy.url().should('include', '/projects')
 
     // should contain Project 1
-    cy.get('table td').not('contain', 'Project 1 updated')
+    cy.get('section').not('contain', 'Project 1 updated')
   })
 })

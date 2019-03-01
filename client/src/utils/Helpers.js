@@ -66,13 +66,3 @@ export const deleteCookie = (cname) => {
   window.document.cookie = cname+"="+"; "+expires;//Set the cookie with name and the expiration date
 }
 
-export const isAuthenticated = () => {
-  const currentAccount = getCookie('currentAccount') && JSON.parse(getCookie('currentAccount'))
-  
-  if (currentAccount) {
-      return true
-  } else {
-    return false 
-  }
-
-}

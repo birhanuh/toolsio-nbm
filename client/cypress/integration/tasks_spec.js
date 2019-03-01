@@ -31,14 +31,6 @@ describe('Customers', function() {
 
     // submit
     cy.contains('Sign up').click()
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
     
     // we should be redirected to /dashboard
     cy.url().should('include', '/dashboard')
@@ -85,24 +77,6 @@ describe('Customers', function() {
 
     // should contain Project 1
     cy.get('.content h3').should('contain', 'Project 1')
-  })
-
-  beforeEach(function () {
-    const { email, password } = account
-
-    // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
-
-    // login
-    cy.get('input[name=email]').type(email)
-    // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
- 
-    // we should be redirected to /dashboard
-    cy.url().should('include', '/dashboard')
-
-    // go to projects
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/projects`)
 
     cy.get('.content .ui.header.blue').click()
   })

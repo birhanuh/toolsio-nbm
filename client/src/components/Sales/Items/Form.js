@@ -118,10 +118,10 @@ class Form extends Component {
 
     // Validation
     if (this.isValidNewItem()) { 
-      const { saleId, name, unit, quantity, unitPrice, total } = this.state.newItem
+      const { saleId, name, unit, quantity: quantity, unitPrice, total } = this.state.newItem
 
       this.props.createItemMutation({
-        variables: { saleId, name, unit, quantity, unitPrice, total },
+        variables: { saleId, name, unit, quantity: parseInt(quantity), unitPrice: parseFloat(unitPrice), total },
         update: (store, { data: { createItem } }) => {
           const { success, item } = createItem
 
@@ -286,7 +286,7 @@ class Form extends Component {
       const { id, saleId, name, unit, quantity, unitPrice, total } = this.state.editItem
    
       this.props.updateItemMutation({
-        variables: { id, saleId, name, unit, quantity, unitPrice, total },
+        variables: { id, saleId, name, unit, quantity: parseInt(quantity), unitPrice: parseFloat(unitPrice), total },
         update: (store, { data: { updateItem } }) => {
           const { success, item } = updateItem
 
