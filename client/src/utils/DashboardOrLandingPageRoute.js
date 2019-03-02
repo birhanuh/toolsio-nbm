@@ -1,10 +1,10 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import { Query } from 'react-apollo'
 import { GET_CURRENT_ACCOUNT_QUERY } from '../graphql/authentications'
 
 // Dashboard or Landing page routes
-export const DashboardOrLandingPageRoute = ({ dashboardComponent: DashboardComponent, landingPageComponent: LandingPageComponent, ...rest } ) => (
+export const DashboardOrLandingPageRoute = ({ component: Component, ...rest } ) => (
   <Query query={GET_CURRENT_ACCOUNT_QUERY}>
     {({ loading, error, data }) => {
 
@@ -14,7 +14,7 @@ export const DashboardOrLandingPageRoute = ({ dashboardComponent: DashboardCompo
       const { success } = data.getCurrentAccount
       console.log('DashboardOrLandingPageRoute: ', success)
       return (<Route {...rest} render={props => (    
-      success ? <DashboardComponent {...props} /> : <LandingPageComponent {...props} /> ) } />)  
+      success ? <Redirect to={{ pathname: "/dashboard" }} />: <Component {...props} /> ) } />)  
     }}
   </Query>
 )

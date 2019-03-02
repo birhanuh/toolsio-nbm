@@ -1,8 +1,22 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const REGISTER_USER_MUTATION = gql`
-  mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
-    registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
+  mutation registerUser(
+    $firstName: String
+    $lastName: String
+    $email: String!
+    $password: String!
+    $subdomain: String!
+    $industry: String!
+  ) {
+    registerUser(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      password: $password
+      subdomain: $subdomain
+      industry: $industry
+    ) {
       success
       account {
         subdomain
@@ -13,11 +27,23 @@ export const REGISTER_USER_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const REGISTER_INVITED_USER_MUTATION = gql`
-  mutation($firstName: String, $lastName: String, $email: String!, $password: String!, $token: String!) {
-    registerInvitedUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, token: $token) {
+  mutation(
+    $firstName: String
+    $lastName: String
+    $email: String!
+    $password: String!
+    $token: String!
+  ) {
+    registerInvitedUser(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      password: $password
+      token: $token
+    ) {
       success
       account {
         subdomain
@@ -28,7 +54,7 @@ export const REGISTER_INVITED_USER_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const LOGIN_USER_MUTATION = gql`
   mutation($email: String!, $password: String!) {
@@ -36,7 +62,7 @@ export const LOGIN_USER_MUTATION = gql`
       success
       sessionID
       user {
-        id 
+        id
         firstName
         lastName
         email
@@ -49,10 +75,10 @@ export const LOGIN_USER_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const GET_CURRENT_ACCOUNT_QUERY = gql`
-  { 
+  {
     getCurrentAccount {
       success
       user {
@@ -65,7 +91,7 @@ export const GET_CURRENT_ACCOUNT_QUERY = gql`
       subdomain
     }
   }
-`
+`;
 
 export const IS_SUBDOMAIN_EXIST_MUTATION = gql`
   mutation($subdomain: String!) {
@@ -78,7 +104,7 @@ export const IS_SUBDOMAIN_EXIST_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const FORGOT_PASSWORD_REQUEST_MUTATION = gql`
   mutation($email: String!) {
@@ -90,7 +116,7 @@ export const FORGOT_PASSWORD_REQUEST_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const PASSWORD_RESET_MUTATION = gql`
   mutation($password: String!, $token: String!) {
@@ -102,7 +128,7 @@ export const PASSWORD_RESET_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const VERIFY_USER_EMIAIL_MUTATION = gql`
   mutation($token: String!) {
@@ -114,4 +140,4 @@ export const VERIFY_USER_EMIAIL_MUTATION = gql`
       }
     }
   }
-`
+`;

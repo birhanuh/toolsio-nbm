@@ -201,7 +201,9 @@ class UserForm extends Component {
     const { firstName, lastName, email, avatarUrl } = this.state;
 
     this.props
-      .updateUserMutation({ variables: { firstName, lastName, email, avatarUrl } })
+      .updateUserMutation({
+        variables: { firstName, lastName, email, avatarUrl }
+      })
       .then(res => {
         const { success, errors } = res.data.updateUser;
 
@@ -279,7 +281,7 @@ class UserForm extends Component {
       isLoadingForm,
       isLoadingPasswordForm
     } = this.state;
-    
+
     return (
       <Item className="mt-5">
         <Item.Image>
@@ -396,7 +398,13 @@ class UserForm extends Component {
             </Form.Field>
 
             <Form.Field error={!!errors.email}>
-              <label>{T.translate("settings.user.email")} (<i className="text-dark-medium-grey ">{T.translate("settings.user.email_info")}</i>)</label>
+              <label>
+                {T.translate("settings.user.email")} (
+                <i className="text-dark-medium-grey ">
+                  {T.translate("settings.user.email_info")}
+                </i>
+                )
+              </label>
               <Input
                 placeholder={T.translate("settings.user.email")}
                 value={email}

@@ -1,9 +1,9 @@
 type User {
   id: Int!
   firstName: String
-  lastName: String 
+  lastName: String
   email: String!
-  password: String! 
+  password: String!
   avatarUrl: String
   isConfirmed: Boolean!
   isAdmin: Boolean!
@@ -39,11 +39,18 @@ type Query {
 }
 
 type Mutation {
-  updateUser(firstName: String, lastName: String, email: String!, password: String, 
-    avatarUrl: String): UpdateResponse!
+  updateUser(
+    firstName: String
+    lastName: String
+    email: String!
+    password: String
+    avatarUrl: String
+  ): UpdateResponse!
 
-  updateUserPassword(currentPassword: String, newPassword: String): UpdateResponse!
+  updateUserPassword(
+    currentPassword: String
+    newPassword: String
+  ): UpdateResponse!
 
   s3SignAvatar(fileName: String!, fileType: String!): S3SignAvatarResponse!
 }
-

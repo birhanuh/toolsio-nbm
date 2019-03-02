@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const GET_EVENTS_QUERY = gql`
   query getEvents {
@@ -7,15 +7,27 @@ export const GET_EVENTS_QUERY = gql`
       title
       description
       title
-      start    
+      start
       end
     }
   }
-`
+`;
 
 export const CREATE_EVENT_MUTATION = gql`
-  mutation createEvent($title: String!, $description: String, $url: String, $start: Date!, $end: Date) {
-    createEvent(title: $title, description: $description, url: $url, start: $start, end: $end) {
+  mutation createEvent(
+    $title: String!
+    $description: String
+    $url: String
+    $start: Date!
+    $end: Date
+  ) {
+    createEvent(
+      title: $title
+      description: $description
+      url: $url
+      start: $start
+      end: $end
+    ) {
       success
       event {
         id
@@ -31,10 +43,24 @@ export const CREATE_EVENT_MUTATION = gql`
       }
     }
   }
-`
+`;
 export const UPDATE_EVENT_MUTATION = gql`
-  mutation updateEvent($id: Int!, $title: String, $description: String!, $url: String, $start: Date, $end: Date) {
-    updateEvent(id: $id, title: $title, description: $description, url: $url, start: $start, end: $end) {
+  mutation updateEvent(
+    $id: Int!
+    $title: String
+    $description: String!
+    $url: String
+    $start: Date
+    $end: Date
+  ) {
+    updateEvent(
+      id: $id
+      title: $title
+      description: $description
+      url: $url
+      start: $start
+      end: $end
+    ) {
       success
       event {
         id
@@ -50,7 +76,7 @@ export const UPDATE_EVENT_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const DELETE_EVENT_MUTATION = gql`
   mutation deleteEvent($id: Int!) {
@@ -62,4 +88,4 @@ export const DELETE_EVENT_MUTATION = gql`
       }
     }
   }
-`
+`;

@@ -1,8 +1,22 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const CREATE_ITEM_MUTATION = gql`
-  mutation createItem($name: String!, $unit: String!, $quantity: Int!, $unitPrice: Float!, $total: Float!, $saleId: Int!) {
-    createItem(name: $name, unit: $unit, quantity: $quantity, unitPrice: $unitPrice, total: $total, saleId: $saleId) {
+  mutation createItem(
+    $name: String!
+    $unit: String!
+    $quantity: Int!
+    $unitPrice: Float!
+    $total: Float!
+    $saleId: Int!
+  ) {
+    createItem(
+      name: $name
+      unit: $unit
+      quantity: $quantity
+      unitPrice: $unitPrice
+      total: $total
+      saleId: $saleId
+    ) {
       success
       item {
         id
@@ -19,10 +33,26 @@ export const CREATE_ITEM_MUTATION = gql`
       }
     }
   }
-`
+`;
 export const UPDATE_ITEM_MUTATION = gql`
-  mutation updateItem($id: Int!, $name: String!, $unit: String!, $quantity: Int!, $unitPrice: Float!, $total: Float!, $saleId: Int!) {
-    updateItem(id: $id, name: $name, unit: $unit, quantity: $quantity, unitPrice: $unitPrice, total: $total, saleId: $saleId) {
+  mutation updateItem(
+    $id: Int!
+    $name: String!
+    $unit: String!
+    $quantity: Int!
+    $unitPrice: Float!
+    $total: Float!
+    $saleId: Int!
+  ) {
+    updateItem(
+      id: $id
+      name: $name
+      unit: $unit
+      quantity: $quantity
+      unitPrice: $unitPrice
+      total: $total
+      saleId: $saleId
+    ) {
       success
       item {
         id
@@ -39,7 +69,7 @@ export const UPDATE_ITEM_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const DELETE_ITEM_MUTATION = gql`
   mutation deleteItem($id: Int!) {
@@ -51,4 +81,4 @@ export const DELETE_ITEM_MUTATION = gql`
       }
     }
   }
-`
+`;

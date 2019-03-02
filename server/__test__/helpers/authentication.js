@@ -1,17 +1,15 @@
-  // Schema
-import axios from 'axios'
+// Schema
+import axios from "axios";
 
-// Load factories 
-import userFactory from '../factories/user'
-import accountFactory from '../factories/account'
-import customerFactory from '../factories/customer'
+// Load factories
+import userFactory from "../factories/user";
+import accountFactory from "../factories/account";
 
 export async function registerUser() {
+  let userFactoryLocal = await userFactory();
+  let accountFactoryLocal = await accountFactory();
 
-  let userFactoryLocal = await userFactory()
-  let accountFactoryLocal = await accountFactory()
-
-  const response = await axios.post('http://localhost:8080/graphql', {
+  const response = await axios.post("http://localhost:8080/graphql", {
     query: `mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
       registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
         success
@@ -32,26 +30,33 @@ export async function registerUser() {
       subdomain: accountFactoryLocal.subdomain,
       industry: accountFactoryLocal.industry
     }
-  }) 
-  console.log('ers: ', response.data)
-  const { data: { registerUser: { account: { subdomain }, success } } } = response.data
+  });
+  console.log("ers: ", response.data);
+  const {
+    data: {
+      registerUser: {
+        account: { subdomain },
+        success
+      }
+    }
+  } = response.data;
 
   if (success) {
     return {
-        success,
-        subdomain,
-        email: userFactoryLocal.email,
-        password: userFactoryLocal.password
-      } 
+      success,
+      subdomain,
+      email: userFactoryLocal.email,
+      password: userFactoryLocal.password
+    };
   } else {
-    return null
+    return null;
   }
 }
 
-
 export async function loginUser(email, password, subdomain) {
-
-    const response = await axios.post('http://localhost:8080/graphql', {
+  const response = await axios.post(
+    "http://localhost:8080/graphql",
+    {
       query: `mutation($email: String!, $password: String!) {
         loginUser(email: $email, password: $password) {
           success
@@ -70,18 +75,23 @@ export async function loginUser(email, password, subdomain) {
     },
     {
       headers: {
-        'subdomain': subdomain
+        subdomain: subdomain
       }
-    })  
+    }
+  );
 
-    const { data: { loginUser: { success, authToken, refreshAuthToken } } } = response.data    
- 
-  if (success) {  
+  const {
+    data: {
+      loginUser: { success, authToken, refreshAuthToken }
+    }
+  } = response.data;
+
+  if (success) {
     return {
       authToken,
       refreshAuthToken
-    }
+    };
   } else {
-    return null
+    return null;
   }
 }

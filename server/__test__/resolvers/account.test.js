@@ -1,67 +1,72 @@
 // Schema
-import axios from 'axios'
+import axios from "axios";
 
-import { resetDb } from '../helpers/macros'
-import { registerUser, loginUser } from '../helpers/authentication'
+import { resetDb } from "../helpers/macros";
+import { registerUser, loginUser } from "../helpers/authentication";
 
 // Tokens
-let tokens 
-let subdomainLocal
+let tokens;
+let subdomainLocal;
 
-// Load factories 
-import accountFactory from '../factories/account'
+// Load factories
+import accountFactory from "../factories/account";
 
-describe("Account", () => { 
-
+describe("Account", () => {
   beforeAll(async () => {
-    await resetDb()
-    let response = await registerUser()
-    const { success, email, password, subdomain } = response
+    await resetDb();
+    let response = await registerUser();
+    const { success, email, password, subdomain } = response;
     // Assign subdomain
-    subdomainLocal
+    subdomainLocal;
 
     if (success) {
-      subdomainLocal = subdomain
-      tokens = await loginUser(email, password, subdomain)
+      subdomainLocal = subdomain;
+      tokens = await loginUser(email, password, subdomain);
     }
-  })
+  });
 
-  afterAll(async () => { 
-    await resetDb()       
-  })
+  afterAll(async () => {
+    await resetDb();
+  });
 
-  it('finds Account', async () => { 
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `query getAccount($subdomain: String!) {
+  it("finds Account", async () => {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: `query getAccount($subdomain: String!) {
         getAccount(subdomain: $subdomain) {
           id
           subdomain
         }
       }`,
-      variables: {
-        subdomain: subdomainLocal
+        variables: {
+          subdomain: subdomainLocal
+        }
+      },
+      {
+        headers: {
+          "x-auth-token": tokens.authToken,
+          "x-refresh-auth-token": tokens.refreshAuthToken,
+          subdomain: subdomainLocal
+        }
       }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-        'subdomain': subdomainLocal
-      }
-    }) 
+    );
 
-    const { data: { getAccount } } = response.data
+    const {
+      data: { getAccount }
+    } = response.data;
 
-    expect(getAccount).not.toBe(null)
+    expect(getAccount).not.toBe(null);
+  });
 
-  })
-
-  it('updates Account', async () => { 
-    let accountFactoryLocal = await accountFactory()
+  it("updates Account", async () => {
+    let accountFactoryLocal = await accountFactory();
 
     // Update name
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation updateAccount($subdomain: String!, $industry: String, $email: String, $phoneNumber: String, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: `mutation updateAccount($subdomain: String!, $industry: String, $email: String, $phoneNumber: String, $logoUrl: String, $street: String, $postalCode: String, $region: String, $country: String) {
         updateAccount(subdomain: $subdomain, industry: $industry, email: $email, phoneNumber: $phoneNumber, logoUrl: $logoUrl, street: $street, postalCode: $postalCode, region: $region, country: $country) {
           success
           account {
@@ -75,44 +80,48 @@ describe("Account", () => {
           }
         }
       }`,
-      variables: {
-        subdomain: subdomainLocal,
-        industry: accountFactoryLocal.industry,
-        email: accountFactoryLocal.email,
-        phoneNumber: accountFactoryLocal.phoneNumber,
-        logoUrl: accountFactoryLocal.logoUrl,
-        street: accountFactoryLocal.street,
-        postalCode: accountFactoryLocal.postalCode,
-        region: accountFactoryLocal.region,
-        country: accountFactoryLocal.country
+        variables: {
+          subdomain: subdomainLocal,
+          industry: accountFactoryLocal.industry,
+          email: accountFactoryLocal.email,
+          phoneNumber: accountFactoryLocal.phoneNumber,
+          logoUrl: accountFactoryLocal.logoUrl,
+          street: accountFactoryLocal.street,
+          postalCode: accountFactoryLocal.postalCode,
+          region: accountFactoryLocal.region,
+          country: accountFactoryLocal.country
+        }
+      },
+      {
+        headers: {
+          "x-auth-token": tokens.authToken,
+          "x-refresh-auth-token": tokens.refreshAuthToken,
+          subdomain: subdomainLocal
+        }
       }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-        'subdomain': subdomainLocal
-      }
-    }) 
+    );
 
-    const { data: { updateAccount } } = response.data
-    let updateAccountUpdated = updateAccount
-    delete updateAccountUpdated['id'] // Delete id because it increments corresponding to test suites
+    const {
+      data: { updateAccount }
+    } = response.data;
+    let updateAccountUpdated = updateAccount;
+    delete updateAccountUpdated["id"]; // Delete id because it increments corresponding to test suites
 
     expect(updateAccountUpdated).toMatchObject({
-        "success": true,
-        "account": {
-          "subdomain": subdomainLocal,
-          "industry": accountFactoryLocal.industry
-        }, 
-        "errors": null
-    })
-   
-  })
+      success: true,
+      account: {
+        subdomain: subdomainLocal,
+        industry: accountFactoryLocal.industry
+      },
+      errors: null
+    });
+  });
 
-  it('deletes Account', async () => { 
-    const response = await axios.post('http://localhost:8080/graphql', {
-     query: `mutation deleteAccount($subdomain: String!) {
+  it("deletes Account", async () => {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: `mutation deleteAccount($subdomain: String!) {
         deleteAccount(subdomain: $subdomain) {
           success
           errors {
@@ -121,23 +130,25 @@ describe("Account", () => {
           }
         }
       }`,
-      variables: {
-        subdomain: subdomainLocal,
+        variables: {
+          subdomain: subdomainLocal
+        }
+      },
+      {
+        headers: {
+          "x-auth-token": tokens.authToken,
+          "x-refresh-auth-token": tokens.refreshAuthToken,
+          subdomain: subdomainLocal
+        }
       }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-        'subdomain': subdomainLocal
+    );
+
+    const {
+      data: {
+        deleteAccount: { success }
       }
-    }) 
+    } = response.data;
 
-    const { data: { deleteAccount: { success } } } = response.data
-    
-    expect(success).toBe(true)
-
-  })
-
-})
-
+    expect(success).toBe(true);
+  });
+});

@@ -8,7 +8,7 @@ class FlashMessage extends Component {
   
     // Detect location change for FlashMessage component 
     componentDidUpdate(prevProps) {
-      console.log('MM: ', this.props)
+   
       if (this.props.location !== prevProps.location) {
         this.props.deleteFlashMessage(this.props.message.id)
       }

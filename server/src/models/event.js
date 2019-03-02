@@ -1,7 +1,7 @@
 export default (sequelize, DataTypes) => {
-  const Event = sequelize.define('events', {
+  const Event = sequelize.define("events", {
     title: {
-      allowNull : false,
+      allowNull: false,
       type: DataTypes.STRING
     },
     description: {
@@ -17,19 +17,18 @@ export default (sequelize, DataTypes) => {
     end: {
       type: DataTypes.DATE
     }
-  })
+  });
 
-  Event.associate = (models) => {
+  Event.associate = models => {
     // 1:M
     Event.belongsTo(models.User, {
       foreignKey: {
-        name: 'userId',
-        field: 'user_id',
+        name: "userId",
+        field: "user_id",
         allowNull: false
       },
-      onDelete: 'cascade'
-    })
-  }
-  return Event
-}
-
+      onDelete: "cascade"
+    });
+  };
+  return Event;
+};

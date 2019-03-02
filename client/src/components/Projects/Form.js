@@ -93,7 +93,7 @@ class Form extends Component {
         this.props.updateProjectMutation({ 
         variables: { id, name, deadline, status, progress, description, customerId: parseInt(customerId) },
         update: (store, { data: { updateProject } }) => {
-          let { success, project } = updateProject
+          const { success, project } = updateProject
 
           if (!success) {
             return

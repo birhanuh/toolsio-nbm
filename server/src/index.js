@@ -11,8 +11,8 @@ import DataLoader from "dataloader";
 
 // Authentication packages
 import session from "express-session";
-import connectRedis from 'connect-redis';
-import Redis from 'ioredis';
+import connectRedis from "connect-redis";
+import Redis from "ioredis";
 
 // Subscription packages
 import { createServer } from "http";
@@ -21,7 +21,7 @@ import { SubscriptionServer } from "subscriptions-transport-ws";
 
 // Init app
 const app = express();
-const RedisStore = connectRedis(session)
+const RedisStore = connectRedis(session);
 
 // env
 require("dotenv").config();
@@ -57,10 +57,12 @@ const schema = makeExecutableSchema({
 
 // Allow CORS
 //app.use(cors("*"));
-app.use(cors({
-  credentials: true,
-  origin: ["http://lvh.me:3000", /\.lvh.me:3000$/]
-}))
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://lvh.me:3000", /\.lvh.me:3000$/]
+  })
+);
 
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger("dev"));
@@ -68,24 +70,27 @@ app.use(logger("dev"));
 const apolloServer = new ApolloServer({
   schema,
   context: async ({ req, res }) => {
-    // Added this: To remove  The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'. 
-    res.header('Access-Control-Allow-Origin', req.headers.origin)
+    // Added this: To remove  The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
 
-    // Subdomain 
-    const subdomain = req.headers.subdomain
+    // Subdomain
+    const subdomain = req.headers.subdomain;
+    // const subdomain = 'testa';
 
-    let user
+    let user;
     if (subdomain && req.session && req.session.userId) {
-      user = await models.User.findOne({ where: { id: req.session.userId }, searchPath: subdomain }, { raw: true }) 
+      user = await models.User.findOne(
+        { where: { id: req.session.userId }, searchPath: subdomain },
+        { raw: true }
+      );
     }
 
     return {
       models,
       req,
       subdomain,
-      //subdomain: 'testa',
       user,
-      //user: { id: 1 },
+      //user: { id: 1, email: 'testa@toolsio.com' },
       SECRET: process.env.JWTSECRET1,
       SECRET2: process.env.JWTSECRET2,
       userLoader: new DataLoader(usersId =>
@@ -109,7 +114,10 @@ app.use("/uploads", express.static("uploads"));
 app.use(
   session({
     store: new RedisStore({
-      client: process.env.NODE_ENV === 'production' ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST) : new Redis(),
+      client:
+        process.env.NODE_ENV === "production"
+          ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
+          : new Redis(),
       prefix: "sess:"
     }),
     name: "qid",
@@ -122,7 +130,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     }
   })
-)
+);
 
 apolloServer.applyMiddleware({ app });
 
@@ -144,18 +152,18 @@ if (process.env.NODE_ENV === "development") {
 app.set("port", process.env.SERVER_PORT || 8080);
 
 const httpServer = createServer(app);
-// apolloServer.installSubscriptionHandlers(httpServer);
+/*
+apolloServer.installSubscriptionHandlers(httpServer);
 
-// httpServer.listen(app.get('port'), () => {
-//   console.log(`🚀 Server ready at http://localhost:${app.get('port')}${apolloServer.graphqlPath}`);
-//   console.log(`🚀 Subscriptions ready at ws://localhost:${app.get('port')}${apolloServer.subscriptionsPath}`);
-// });
+httpServer.listen(app.get('port'), () => {
+  console.log(`🚀 Server ready at http://localhost:${app.get('port')}${apolloServer.graphqlPath}`);
+  console.log(`🚀 Subscriptions ready at ws://localhost:${app.get('port')}${apolloServer.subscriptionsPath}`);
+});*/
 
 // Flash Redis on test env
-// if (process.env.NODE_ENV === "test") {
-//   new Redis().flushall();
-// }
-
+if (process.env.NODE_ENV === "test") {
+  new Redis().flushall();
+}
 
 httpServer.listen(app.get("port"), () => {
   new SubscriptionServer(
@@ -163,10 +171,12 @@ httpServer.listen(app.get("port"), () => {
       execute,
       subscribe,
       schema: schema,
-      onConnect: async ({subdomain, userId }) => {
-    
-        if(userId && subdomain) {
-          const user = await models.User.findOne({ where: { id: userId }, searchPath: subdomain }, { raw: true })
+      onConnect: async ({ subdomain, userId }) => {
+        if (userId && subdomain) {
+          const user = await models.User.findOne(
+            { where: { id: userId }, searchPath: subdomain },
+            { raw: true }
+          );
           return { models, subdomain, user };
         }
 
@@ -175,14 +185,19 @@ httpServer.listen(app.get("port"), () => {
     },
     {
       server: httpServer,
-      path: "/subscriptions"
+      path: "/graphql"
     }
   );
-  console.log(`🚀 Server ready at http://localhost:${app.get('port')}${apolloServer.graphqlPath}`)
-  console.log(`🚀 Subscriptions ready at ws://localhost:${app.get('port')}${'/subscriptions'}`)
+  console.log(
+    `🚀 Server ready at http://localhost:${app.get("port")}${
+      apolloServer.graphqlPath
+    }`
+  );
+  console.log(
+    `🚀 Subscriptions ready at ws://localhost:${app.get("port")}${"/graphql"}`
+  );
 
   if (process.env.NODE_ENV === "test") {
     new Redis().flushall();
   }
 });
-

@@ -1,17 +1,18 @@
-  // Schema
-import axios from 'axios'
+// Schema
+import axios from "axios";
 
-// Load factories 
-import customerFactory from '../factories/customer'
-import projectFactory from '../factories/project'
-import saleFactory from '../factories/sale'
+// Load factories
+import customerFactory from "../factories/customer";
+import projectFactory from "../factories/project";
+import saleFactory from "../factories/sale";
 
 export async function createCustomer(authToken, refreshAuthToken, subdomain) {
+  let customerFactoryLocal = await customerFactory();
 
-  let customerFactoryLocal = await customerFactory()
-
-  const response = await axios.post('http://localhost:8080/graphql', {
-    query: `mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
+  const response = await axios.post(
+    "http://localhost:8080/graphql",
+    {
+      query: `mutation createCustomer($name: String!, $vatNumber: Int!, $email: String!, $phoneNumber: String!, $isContactIncludedInInvoice: Boolean!, $street: String, $postalCode: String, $region: String, $country: String) {
       createCustomer(name: $name, vatNumber: $vatNumber, email: $email, phoneNumber: $phoneNumber, isContactIncludedInInvoice: $isContactIncludedInInvoice, street: $street, 
         postalCode: $postalCode, region: $region, country: $country) {
         success
@@ -25,37 +26,49 @@ export async function createCustomer(authToken, refreshAuthToken, subdomain) {
         }
       }
     }`,
-    variables: {
-      name: customerFactoryLocal.name,
-      vatNumber: customerFactoryLocal.vatNumber,
-      email: customerFactoryLocal.email,
-      phoneNumber: customerFactoryLocal.phoneNumber,
-      isContactIncludedInInvoice: customerFactoryLocal.isContactIncludedInInvoice,
-      street: customerFactoryLocal.street,
-      postalCode: customerFactoryLocal.postalCode,
-      region: customerFactoryLocal.region,
-      country: customerFactoryLocal.country
+      variables: {
+        name: customerFactoryLocal.name,
+        vatNumber: customerFactoryLocal.vatNumber,
+        email: customerFactoryLocal.email,
+        phoneNumber: customerFactoryLocal.phoneNumber,
+        isContactIncludedInInvoice:
+          customerFactoryLocal.isContactIncludedInInvoice,
+        street: customerFactoryLocal.street,
+        postalCode: customerFactoryLocal.postalCode,
+        region: customerFactoryLocal.region,
+        country: customerFactoryLocal.country
+      }
+    },
+    {
+      headers: {
+        "x-auth-token": authToken,
+        "x-refresh-auth-token": refreshAuthToken,
+        subdomain: subdomain
+      }
     }
-  }, 
-  {
-    headers: {
-      'x-auth-token': authToken,
-      'x-refresh-auth-token': refreshAuthToken,
-      'subdomain': subdomain
+  );
+
+  const {
+    data: {
+      createCustomer: { customer }
     }
-  }) 
+  } = response.data;
 
-  const { data: { createCustomer: { customer } } } = response.data
-
-  return customer
+  return customer;
 }
 
-export async function createProject(authToken, refreshAuthToken, customerId, subdomain) {
+export async function createProject(
+  authToken,
+  refreshAuthToken,
+  customerId,
+  subdomain
+) {
+  let projectFactoryLocal = await projectFactory();
 
-  let projectFactoryLocal = await projectFactory()
-
-  const response = await axios.post('http://localhost:8080/graphql', {
-    query: `mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $customerId: Int!) {
+  const response = await axios.post(
+    "http://localhost:8080/graphql",
+    {
+      query: `mutation createProject($name: String!, $deadline: Date!, $status: String!, $progress: Int, $description: String, $customerId: Int!) {
       createProject(name: $name, deadline: $deadline, status: $status, progress: $progress, description: $description, customerId: $customerId) {
         success
         project {
@@ -68,34 +81,44 @@ export async function createProject(authToken, refreshAuthToken, customerId, sub
         }
       }
     }`,
-    variables: {
-      name: projectFactoryLocal.name,
-      deadline: projectFactoryLocal.deadline,
-      status: projectFactoryLocal.status,
-      description: projectFactoryLocal.description,
-      customerId: customerId
+      variables: {
+        name: projectFactoryLocal.name,
+        deadline: projectFactoryLocal.deadline,
+        status: projectFactoryLocal.status,
+        description: projectFactoryLocal.description,
+        customerId: customerId
+      }
+    },
+    {
+      headers: {
+        "x-auth-token": authToken,
+        "x-refresh-auth-token": refreshAuthToken,
+        subdomain: subdomain
+      }
     }
-  }, 
-  {
-    headers: {
-      'x-auth-token': authToken,
-      'x-refresh-auth-token': refreshAuthToken,
-      'subdomain': subdomain
+  );
+
+  const {
+    data: {
+      createProject: { project }
     }
-  })
+  } = response.data;
 
-  const { data: { createProject: { project } } }  = response.data
-
-  return project
+  return project;
 }
 
+export async function createSale(
+  authToken,
+  refreshAuthToken,
+  customerId,
+  subdomain
+) {
+  let saleFactoryLocal = await saleFactory();
 
-export async function createSale(authToken, refreshAuthToken, customerId, subdomain) {
-
-  let saleFactoryLocal = await saleFactory()
-
-  const response = await axios.post('http://localhost:8080/graphql', {
-    query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
+  const response = await axios.post(
+    "http://localhost:8080/graphql",
+    {
+      query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
       createSale(name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
         success
         sale {
@@ -108,23 +131,28 @@ export async function createSale(authToken, refreshAuthToken, customerId, subdom
         }
       }
     }`,
-    variables: {
-      name: saleFactoryLocal.name,
-      deadline: saleFactoryLocal.deadline,
-      status: saleFactoryLocal.status,
-      description: saleFactoryLocal.description,
-      customerId: customerId
+      variables: {
+        name: saleFactoryLocal.name,
+        deadline: saleFactoryLocal.deadline,
+        status: saleFactoryLocal.status,
+        description: saleFactoryLocal.description,
+        customerId: customerId
+      }
+    },
+    {
+      headers: {
+        "x-auth-token": authToken,
+        "x-refresh-auth-token": refreshAuthToken,
+        subdomain: subdomain
+      }
     }
-  }, 
-  {
-    headers: {
-      'x-auth-token': authToken,
-      'x-refresh-auth-token': refreshAuthToken,
-      'subdomain': subdomain
+  );
+
+  const {
+    data: {
+      createSale: { sale }
     }
-  })
+  } = response.data;
 
-  const { data: { createSale: { sale } } }  = response.data
-
-  return sale
+  return sale;
 }

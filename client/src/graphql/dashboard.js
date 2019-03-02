@@ -1,4 +1,4 @@
-import gql from "graphql-tag"
+import gql from "graphql-tag";
 
 export const GET_TOTAL_INCOME_DATA = gql`
   {
@@ -7,7 +7,7 @@ export const GET_TOTAL_INCOME_DATA = gql`
       itemsTotalSum
     }
   }
-`
+`;
 
 export const GET_INCOMES_DATA = gql`
   {
@@ -23,7 +23,7 @@ export const GET_INCOMES_DATA = gql`
       countInvoices
     }
   }
-`
+`;
 
 export const GET_CUSTOMERS_DATA = gql`
   {
@@ -35,7 +35,7 @@ export const GET_CUSTOMERS_DATA = gql`
       countCustomers
     }
   }
-`
+`;
 
 export const GET_PROJECTS_DATA = gql`
   {
@@ -50,8 +50,7 @@ export const GET_PROJECTS_DATA = gql`
       }
     }
   }
-`
-
+`;
 
 export const GET_SALES_DATA = gql`
   {
@@ -66,7 +65,7 @@ export const GET_SALES_DATA = gql`
       }
     }
   }
-`
+`;
 
 export const GET_INVOICES_DATA = gql`
   {
@@ -82,7 +81,7 @@ export const GET_INVOICES_DATA = gql`
       }
     }
   }
-`
+`;
 
 export const GET_PROJECT_TASKS_DATA = gql`
   {
@@ -93,12 +92,12 @@ export const GET_PROJECT_TASKS_DATA = gql`
       }
       idNameStatus {
         id
-        name 
+        name
         status
       }
     }
   }
-`
+`;
 
 export const GET_SALE_TASKS_DATA = gql`
   {
@@ -109,12 +108,12 @@ export const GET_SALE_TASKS_DATA = gql`
       }
       idNameStatus {
         id
-        name 
+        name
         status
       }
     }
   }
-`
+`;
 
 export const GET_INVOICE_TASKS_DATA = gql`
   {
@@ -135,4 +134,4 @@ export const GET_INVOICE_TASKS_DATA = gql`
       }
     }
   }
-`
+`;
