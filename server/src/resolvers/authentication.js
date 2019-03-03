@@ -146,7 +146,7 @@ export default {
           : new Redis();
       console.log("req.session: ", req.session);
       const { userId } = req.session;
-      console.log("userId: ", userId);
+
       if (userId) {
         const sessionIds = await redis.lrange(
           `userSids:${subdomain}-${userId}`,

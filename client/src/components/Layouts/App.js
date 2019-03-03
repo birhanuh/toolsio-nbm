@@ -26,6 +26,7 @@ import {
   isAuthPages,
   isAuthenticated,
   SubdomainRoute,
+  LoginRoute,
   AuthRoute,
   PrivateRoute,
   DashboardOrLandingPageRoute
@@ -155,11 +156,11 @@ class App extends Component {
                 path="/signup/invitation"
                 component={Invitation}
               />
-              <AuthRoute path="/subdomain" component={Subdomain} />
+              <SubdomainRoute path="/subdomain" component={Subdomain} />
               <Route path="/logout" component={Logout} />
 
               {/* Subdomain required Login pages */}
-              <SubdomainRoute exact path="/login" component={Login} />
+              <LoginRoute exact path="/login" component={Login} />
               <AuthRoute exact path="/login/confirmation/" component={Login} />
               <AuthRoute
                 exact
