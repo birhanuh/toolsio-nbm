@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-import { isAuthenticated } from "./";
+import { isAuthenticated } from ".";
 
 // Dashboard or Landing page routes
-export const SubdomainRoute = ({
+export const LandingSubdomainSignupPageRoute = ({
   component: Component,
   ...rest
 }) => (

@@ -25,11 +25,10 @@ import PasswordReset from "../Login/PasswordReset";
 import {
   isAuthPages,
   isAuthenticated,
-  SubdomainRoute,
   LoginRoute,
   AuthRoute,
   PrivateRoute,
-  DashboardOrLandingPageRoute
+  LandingSubdomainSignupPageRoute
 } from "../../utils";
 import Settings from "../Settings/Page";
 import ProjectsPage from "../Projects/Page";
@@ -143,20 +142,20 @@ class App extends Component {
 
             <Switch>
               {/* Render Laning-page or Dashboard */}
-              <DashboardOrLandingPageRoute
+              <LandingSubdomainSignupPageRoute
                 exact
                 path="/"
                 component={LandingPage}
               />
 
               {/* Public Signup pages */}
-              <AuthRoute exact path="/signup" component={Signup} />
+              <LandingSubdomainSignupPageRoute exact path="/signup" component={Signup} />
               <AuthRoute
                 exact
                 path="/signup/invitation"
                 component={Invitation}
               />
-              <SubdomainRoute path="/subdomain" component={Subdomain} />
+              <LandingSubdomainSignupPageRoute path="/subdomain" component={Subdomain} />
               <Route path="/logout" component={Logout} />
 
               {/* Subdomain required Login pages */}

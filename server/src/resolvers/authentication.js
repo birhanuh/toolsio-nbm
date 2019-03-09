@@ -289,7 +289,7 @@ export default {
           );
 
           // Create emailToken
-          process.env.NODE_ENV !== "test" &&
+          process.env.NODE_ENV !== "production" &&
             jwt.sign(
               {
                 id: response.user.dataValues.id,
