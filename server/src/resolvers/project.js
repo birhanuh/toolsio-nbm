@@ -1,3 +1,4 @@
+import Sequelize from "sequelize";
 import requiresAuth from "../middlewares/authentication";
 import { formatErrors } from "../utils/formatErrors";
 
@@ -14,7 +15,7 @@ export default {
           {
             where: {
               name: {
-                [models.sequelize.Op.iLike]: "%" + name + "%"
+                [Sequelize.Op.iLike]: "%" + name + "%"
               }
             },
             offset,

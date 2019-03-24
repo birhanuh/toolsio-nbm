@@ -34,30 +34,37 @@ export default {
       );
 
       if (account) {
-        return models.User.findOne(
-          { where: { id: req.session.userId }, searchPath: subdomain },
-          { raw: true }
-        )
-          .then(user => {
-            if (user) {
+        if (req.session.userId) {
+          return models.User.findOne(
+            { where: { id: req.session.userId }, searchPath: subdomain },
+            { raw: true }
+          )
+            .then(user => {
+              if (user) {
+                return {
+                  success: true,
+                  user,
+                  subdomain
+                };
+              } else {
+                return {
+                  success: false
+                };
+              }
+            })
+            .catch(err => {
+              console.log("err: ", err);
               return {
-                success: true,
-                user,
-                subdomain
+                success: false,
+                errors: formatErrors(err, models)
               };
-            } else {
-              return {
-                success: false
-              };
-            }
-          })
-          .catch(err => {
-            console.log("err: ", err);
-            return {
-              success: false,
-              errors: formatErrors(err, models)
-            };
-          });
+            });
+        } else {
+          return {
+            success: false,
+            errors: `User id not found.`
+          };
+        }
       } else {
         return {
           success: false,
@@ -139,7 +146,7 @@ export default {
       };
     },
 
-    logoutUser: async (parent, _, { req, subdomain }) => {
+    logoutUser: async (parent, _, { req, res, subdomain }) => {
       const redis =
         process.env.NODE_ENV === "production"
           ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
@@ -171,6 +178,10 @@ export default {
         console.log(
           `User ID: ${userId} from Account: ${subdomain} has logged out`
         );
+
+        // Clear cookie
+        res.clearCookie("qid");
+
         return true;
       }
 
@@ -288,8 +299,8 @@ export default {
             }
           );
 
-          // Create emailToken
-          process.env.NODE_ENV !== "production" &&
+          // Create emailToken if not on test env
+          process.env.NODE_ENV !== "test" &&
             jwt.sign(
               {
                 id: response.user.dataValues.id,

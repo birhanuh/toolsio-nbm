@@ -1,3 +1,4 @@
+import Sequelize from "sequelize";
 import { withFilter } from "graphql-subscriptions";
 
 import requiresAuth, {
@@ -42,14 +43,14 @@ export default {
       (parent, { receiverId, cursor }, { models, subdomain, user }) => {
         const options = {
           where: {
-            [models.sequelize.Op.or]: [
+            [Sequelize.Op.or]: [
               {
-                [models.sequelize.Op.and]: [
+                [Sequelize.Op.and]: [
                   { receiverId: receiverId, senderId: user.id }
                 ]
               },
               {
-                [models.sequelize.Op.and]: [
+                [Sequelize.Op.and]: [
                   { senderId: receiverId, receiverId: user.id }
                 ]
               }
@@ -62,7 +63,7 @@ export default {
 
         if (cursor) {
           options.where.created_at = {
-            [models.sequelize.Op.lt]: cursor
+            [Sequelize.Op.lt]: cursor
           };
         }
 
@@ -117,7 +118,7 @@ export default {
           {
             where: {
               receiverId: user.id,
-              senderId: { [models.sequelize.Op.ne]: user.id },
+              senderId: { [Sequelize.Op.ne]: user.id },
               isRead: false
             },
             searchPath: subdomain

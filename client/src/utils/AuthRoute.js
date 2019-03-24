@@ -7,7 +7,7 @@ import { getSubdomain } from ".";
 
 // Authenticated routes
 export const AuthRoute = ({ component: Component, ...rest }) => (
-  <Query query={GET_CURRENT_ACCOUNT_QUERY}>
+  <Query query={GET_CURRENT_ACCOUNT_QUERY} fetchPolicy="network-only">
     {({ loading, error, data }) => {
       if (loading) return null;
       if (error) return `Error!: ${error}`;

@@ -1,3 +1,5 @@
+import Sequelize from "sequelize";
+
 export function ensureAuthenticated(req, res, next) {
   console.log(
     `req.session.passport.user: ${JSON.stringify(req.session.passport)}`
@@ -57,7 +59,7 @@ export const requiresDirectMessageAccess = createResolver(
 
     const users = await models.User.findAll({
       where: {
-        [models.sequelize.Op.or]: [{ id: receiverId }, { id: user.id }]
+        [Sequelize.Op.or]: [{ id: receiverId }, { id: user.id }]
       },
       searchPath: subdomain
     });

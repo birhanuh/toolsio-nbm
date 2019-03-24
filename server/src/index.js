@@ -60,18 +60,36 @@ const schema = makeExecutableSchema({
 app.use(
   cors({
     credentials: true,
-    origin: ["http://lvh.me:3000", /\.lvh.me:3000$/]
+    origin:
+      process.env.NODE_ENV === "test"
+        ? "*"
+        : [
+            process.env.CLIENT_PROTOCOL + process.env.CLIENT_HOST,
+            /\.lvh.me:3000$/
+          ]
   })
 );
 
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger("dev"));
-
+console.log("M: ", /\.lvh.me:3000$/, `/\\.${process.env.CLIENT_HOST}$/`);
 const apolloServer = new ApolloServer({
   schema,
   context: async ({ req, res }) => {
     // Added this: To remove  The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    if (req.headers.subdomain) {
+      res.header(
+        "Access-Control-Allow-Origin",
+        `${process.env.CLIENT_PROTOCOL}${req.headers.subdomain}.${
+          process.env.CLIENT_HOST
+        }`
+      );
+    } else {
+      res.header(
+        "Access-Control-Allow-Origin",
+        `${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}`
+      );
+    }
 
     // Subdomain
     const subdomain = req.headers.subdomain;
@@ -88,6 +106,7 @@ const apolloServer = new ApolloServer({
     return {
       models,
       req,
+      res,
       subdomain,
       user,
       //user: { id: 1, email: 'testa@toolsio.com' },
@@ -125,7 +144,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
+      httpOnly: false,
       //secure: process.env.NODE_ENV === "production",
       secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days

@@ -1,3 +1,4 @@
+import Sequelize from "sequelize";
 import requiresAuth from "../middlewares/authentication";
 import { formatErrors } from "../utils/formatErrors";
 
@@ -25,7 +26,7 @@ export default {
         if (/^\d/.test(search)) {
           options.where = {
             referenceNumber: {
-              [models.sequelize.Op.iLike]: "%" + search + "%"
+              [Sequelize.Op.iLike]: "%" + search + "%"
             }
           };
         } else if (/[a-zA-Z]/.test(search)) {
@@ -34,7 +35,7 @@ export default {
               model: models.Customer,
               where: {
                 name: {
-                  [models.sequelize.Op.iLike]: "%" + search + "%"
+                  [Sequelize.Op.iLike]: "%" + search + "%"
                 }
               }
             }

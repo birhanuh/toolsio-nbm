@@ -149,13 +149,20 @@ class App extends Component {
               />
 
               {/* Public Signup pages */}
-              <LandingSubdomainSignupPageRoute exact path="/signup" component={Signup} />
+              <LandingSubdomainSignupPageRoute
+                exact
+                path="/signup"
+                component={Signup}
+              />
               <AuthRoute
                 exact
                 path="/signup/invitation"
                 component={Invitation}
               />
-              <LandingSubdomainSignupPageRoute path="/subdomain" component={Subdomain} />
+              <LandingSubdomainSignupPageRoute
+                path="/subdomain"
+                component={Subdomain}
+              />
               <Route path="/logout" component={Logout} />
 
               {/* Subdomain required Login pages */}

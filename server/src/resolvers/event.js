@@ -1,3 +1,5 @@
+import Sequelize from "sequelize";
+
 import requiresAuth from "../middlewares/authentication";
 import { formatErrors } from "../utils/formatErrors";
 
@@ -13,7 +15,7 @@ export default {
         models.Project.findAll({
           where: {
             deadline: {
-              [models.sequelize.Op.gt]: new Date()
+              [Sequelize.Op.gt]: new Date()
             }
           },
           searchPath: subdomain
@@ -37,7 +39,7 @@ export default {
         models.Sale.findAll({
           where: {
             deadline: {
-              [models.sequelize.Op.gt]: new Date()
+              [Sequelize.Op.gt]: new Date()
             }
           },
           searchPath: subdomain

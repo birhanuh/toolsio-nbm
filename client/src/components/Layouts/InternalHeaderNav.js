@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 // Semantic UI Form elements
 import { Image, Dropdown, Menu, Label, Icon } from "semantic-ui-react";
@@ -242,14 +241,12 @@ class InternalHeaderNav extends Component {
               <Dropdown.Menu>
                 <Dropdown.Item disabled>{unreadMessagesCount}</Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item
-                  onClick={() => {
-                    this.context.router.history.push("/conversations");
-                  }}
-                >
-                  <strong className="turquoise">
-                    {T.translate("internal_navigation.see_all_messages")}
-                  </strong>
+                <Dropdown.Item>
+                  <Link to="/conversations" className="d-block">
+                    <strong className="turquoise">
+                      {T.translate("internal_navigation.see_all_messages")}
+                    </strong>
+                  </Link>
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -300,10 +297,6 @@ class InternalHeaderNav extends Component {
     );
   }
 }
-
-InternalHeaderNav.contextTypes = {
-  router: PropTypes.object.isRequired
-};
 
 const Queries = compose(
   graphql(GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY),

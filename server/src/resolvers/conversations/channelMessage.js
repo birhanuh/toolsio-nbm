@@ -1,3 +1,4 @@
+import Sequelize from "sequelize";
 import { withFilter } from "graphql-subscriptions";
 
 import requiresAuth, {
@@ -42,7 +43,7 @@ export default {
 
         if (cursor) {
           options.where.created_at = {
-            [models.sequelize.Op.lt]: cursor
+            [Sequelize.Op.lt]: cursor
           };
         }
 
