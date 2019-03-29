@@ -5,12 +5,12 @@ import { formatErrors } from "../utils/formatErrors";
 export default {
   Query: {
     getProject: requiresAuth.createResolver(
-      (parent, { id }, { models, subdomain }) =>
+      (_, { id }, { models, subdomain }) =>
         models.Project.findOne({ where: { id }, searchPath: subdomain })
     ),
 
     getProjects: requiresAuth.createResolver(
-      (parent, { offset, limit, order, name }, { models, subdomain }) =>
+      (_, { offset, limit, order, name }, { models, subdomain }) =>
         models.Project.findAll(
           {
             where: {
@@ -28,7 +28,7 @@ export default {
     ),
 
     getProjectsWithoutInvoice: requiresAuth.createResolver(
-      (parent, { name }, { models, subdomain }) =>
+      (_, { name }, { models, subdomain }) =>
         models.sequelize.query(
           "SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id, c.id AS customer_id, c.name AS customer_name FROM projects p LEFT JOIN invoices i ON p.id=i.project_id JOIN customers c ON p.customer_id = c.id WHERE i.project_id IS NULL AND p.name ILIKE :projectName",
           {
@@ -41,7 +41,7 @@ export default {
     ),
 
     getProjectsWithInvoice: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, {}, { models, subdomain }) =>
         models.sequelize.query(
           "SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p INNER JOIN invoices i ON p.id = i.project_id",
           {
@@ -55,7 +55,7 @@ export default {
 
   Mutation: {
     createProject: requiresAuth.createResolver(
-      (parent, args, { models, subdomain, user }) =>
+      (_, args, { models, subdomain, user }) =>
         models.Project.create(
           { ...args, userId: user.id },
           { searchPath: subdomain }
@@ -70,13 +70,13 @@ export default {
             console.log("err: ", err);
             return {
               success: false,
-              errors: formatErrors(err, models)
+              errors: formatErrors(err)
             };
           })
     ),
 
     updateProject: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, args, { models, subdomain }) =>
         models.Project.update(args, {
           where: { id: args.id },
           returning: true,
@@ -93,13 +93,13 @@ export default {
             console.log("err: ", err);
             return {
               success: false,
-              errors: formatErrors(err, models)
+              errors: formatErrors(err)
             };
           })
     ),
 
     deleteProject: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, args, { models, subdomain }) =>
         models.Project.destroy({
           where: { id: args.id },
           force: true,
@@ -114,7 +114,7 @@ export default {
             console.log("err: ", err);
             return {
               success: false,
-              errors: formatErrors(err, models)
+              errors: formatErrors(err)
             };
           })
     )

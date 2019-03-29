@@ -60,13 +60,10 @@ const schema = makeExecutableSchema({
 app.use(
   cors({
     credentials: true,
-    origin:
-      process.env.NODE_ENV === "test"
-        ? "*"
-        : [
-            process.env.CLIENT_PROTOCOL + process.env.CLIENT_HOST,
-            /\.lvh.me:3000$/
-          ]
+    origin: [
+      process.env.CLIENT_PROTOCOL + process.env.CLIENT_HOST,
+      /\.lvh.me:3000$/
+    ]
   })
 );
 
@@ -144,7 +141,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: false,
+      httpOnly: true,
       //secure: process.env.NODE_ENV === "production",
       secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
@@ -216,8 +213,4 @@ httpServer.listen(app.get("port"), () => {
   console.log(
     `🚀 Subscriptions ready at ws://localhost:${app.get("port")}${"/graphql"}`
   );
-
-  if (process.env.NODE_ENV === "test") {
-    new Redis().flushall();
-  }
 });

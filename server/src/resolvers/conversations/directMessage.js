@@ -160,7 +160,7 @@ export default {
             console.log("err: ", err);
             return {
               success: false,
-              errors: formatErrors(err, models)
+              errors: formatErrors(err)
             };
           })
     )
@@ -210,7 +210,7 @@ export default {
           console.log("err: ", err);
           return {
             success: false,
-            errors: formatErrors(err, models)
+            errors: formatErrors(err)
           };
         }
       }
@@ -234,7 +234,7 @@ export default {
             console.log("err: ", err);
             return {
               success: false,
-              errors: formatErrors(err, models)
+              errors: formatErrors(err)
             };
           })
     )

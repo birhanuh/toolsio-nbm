@@ -282,7 +282,7 @@ class Form extends Component {
                 })
               });
 
-              this.context.router.history.push("/customers");
+              this.props.history.push("/customers");
             } else {
               let errorsList = {};
               errors.map(error => {
@@ -386,7 +386,7 @@ class Form extends Component {
                 this.props.location.state.prevPath &&
                 this.props.location.state.prevPath === "/projects/new"
               ) {
-                this.context.router.history.push("/projects/new");
+                this.props.history.push("/projects/new");
                 return;
               }
 
@@ -396,11 +396,11 @@ class Form extends Component {
                 this.props.location.state.prevPath &&
                 this.props.location.state.prevPath === "/sales/new"
               ) {
-                this.context.router.history.push("/sales/new");
+                this.props.history.push("/sales/new");
                 return;
               }
 
-              this.context.router.history.push("/customers");
+              this.props.history.push("/customers");
             } else {
               let errorsList = {};
               errors.map(error => {
@@ -558,7 +558,10 @@ class Form extends Component {
                 <legend className="custom-legend">
                   {T.translate("customers.show.address.header")}
                 </legend>
-                <FormElement.Field inline error={!!errors.street}>
+                <FormElement.Field
+                  inline
+                  error={!!errors.address && !!errors.address.street}
+                >
                   <label>{T.translate("customers.form.address.street")}</label>
                   <Input
                     placeholder={T.translate("customers.form.address.street")}
@@ -568,9 +571,14 @@ class Form extends Component {
                       this.handleChange("street", value)
                     }
                   />
-                  <span className="red">{errors.street}</span>
+                  <span className="red">
+                    {errors.address && errors.address.street}
+                  </span>
                 </FormElement.Field>
-                <FormElement.Field inline error={!!errors.postalCode}>
+                <FormElement.Field
+                  inline
+                  error={!!errors.address && !!errors.address.postalCode}
+                >
                   <label>
                     {T.translate("customers.form.address.postal_code")}
                   </label>
@@ -584,7 +592,9 @@ class Form extends Component {
                       this.handleChange("postalCode", value)
                     }
                   />
-                  <span className="red">{errors.postalCode}</span>
+                  <span className="red">
+                    {errors.address && errors.address.postalCode}
+                  </span>
                 </FormElement.Field>
                 <div
                   className={classnames("inline field", {
@@ -642,10 +652,6 @@ class Form extends Component {
 
 Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
-};
-
-Form.contextTypes = {
-  router: PropTypes.object.isRequired
 };
 
 const MutationsQueries = compose(

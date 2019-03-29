@@ -31,7 +31,7 @@ export async function registerUser() {
       industry: accountFactoryLocal.industry
     }
   });
-  console.log("ers: ", response.data);
+
   const {
     data: {
       registerUser: {
@@ -60,8 +60,6 @@ export async function loginUser(email, password, subdomain) {
       query: `mutation($email: String!, $password: String!) {
         loginUser(email: $email, password: $password) {
           success
-          authToken 
-          refreshAuthToken
           errors {
             path
             message
@@ -82,15 +80,12 @@ export async function loginUser(email, password, subdomain) {
 
   const {
     data: {
-      loginUser: { success, authToken, refreshAuthToken }
+      loginUser: { success }
     }
   } = response.data;
 
   if (success) {
-    return {
-      authToken,
-      refreshAuthToken
-    };
+    return { subdomain };
   } else {
     return null;
   }

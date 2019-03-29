@@ -53,7 +53,7 @@ class Form extends Component {
 
           // Redirect to dashboard
           if (isAuthenticated()) {
-            this.context.router.history.push("/dashboard");
+            this.props.history.push("/dashboard");
           }
         } else {
           let errorsList = {};
@@ -70,7 +70,7 @@ class Form extends Component {
 
       // Redirect to dashboard
       if (success) {
-        this.context.router.history.push("/dashboard");
+        this.props.history.push("/dashboard");
       }
     }
   }
@@ -156,7 +156,7 @@ class Form extends Component {
               date.toUTCString();
 
             // Redirect to dashboard
-            // this.context.router.history.push('/dashboard')
+            // this.props.history.push('/dashboard')
             // Workaround for sending the new session
             window.location.href = `${
               process.env.CLIENT_PROTOCOL
@@ -225,10 +225,6 @@ class Form extends Component {
 // Proptypes definition
 Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
-};
-
-Form.contextTypes = {
-  router: PropTypes.object.isRequired
 };
 
 const QueryMutations = compose(

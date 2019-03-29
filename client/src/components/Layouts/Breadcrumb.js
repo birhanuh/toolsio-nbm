@@ -1,6 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 // Semantic UI Form elements
 import {
   Menu,
@@ -11,8 +10,8 @@ import {
 // Localization
 import T from "i18n-react";
 
-export default function Breadcrumb(props, context) {
-  const currentPage = context.router.history.location.pathname;
+const Breadcrumb = props => {
+  const currentPage = props.history.location.pathname;
   let currentPageTitle;
   let currentPageDescription;
 
@@ -58,7 +57,7 @@ export default function Breadcrumb(props, context) {
       currentPageDescription = "No page description";
   }
 
-  let tokens = context.router.history.location.pathname.split("/");
+  let tokens = props.history.location.pathname.split("/");
 
   var hasNumber = /\d/;
   let filterdTokens = tokens.filter(val => val !== "" && !hasNumber.test(val));
@@ -93,8 +92,6 @@ export default function Breadcrumb(props, context) {
       </Menu.Menu>
     </Menu>
   );
-}
-
-Breadcrumb.contextTypes = {
-  router: PropTypes.object.isRequired
 };
+
+export default withRouter(Breadcrumb);

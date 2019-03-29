@@ -1,10 +1,7 @@
-describe("Customers", function() {
-  // creates a closure around 'account'
-  let account;
-
+describe("Tasks", function() {
   before(function() {
-    // redefine account
-    account = {
+    // creates a closure around 'account'
+    const account = {
       firstName: "Testa",
       lastName: "Testa",
       email: "testa@toolsio.com",
@@ -34,8 +31,16 @@ describe("Customers", function() {
     // submit
     cy.contains("Sign up").click();
 
+    // we should be redirected to /login
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
+
+    // login
+    cy.get("input[name=email]").type(email);
+    // {enter} causes the form to submit
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
     // we should be redirected to /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
 
     // create Customer
     cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`);
@@ -99,6 +104,10 @@ describe("Customers", function() {
     cy.get("table td.show-task:first-child").should("contain", "Task 1");
   });
 
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
+  });
+
   it("Update task", function() {
     cy.get(".ui.buttons.show-task > button:last-child").click();
 
@@ -124,5 +133,12 @@ describe("Customers", function() {
 
     // should not contain Task 1 updated
     cy.get("table td.add-task:first-child").not("contain", "Task 1 updated");
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
   });
 });

@@ -17,12 +17,9 @@ describe("Customers", function() {
     //cy.visit("/fixtures/visit_error.html")
   });
 
-  // creates a closure around 'account'
-  let account;
-
   before(function() {
-    // redefine account
-    account = {
+    // creates a closure around 'account'
+    const account = {
       firstName: "Testa",
       lastName: "Testa",
       email: "testa@toolsio.com",
@@ -52,11 +49,25 @@ describe("Customers", function() {
     // submit
     cy.contains("Sign up").click();
 
+    // we should be redirected to /login
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
+
+    // login
+    cy.get("input[name=email]").type(email);
+    // {enter} causes the form to submit
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
+    Cypress.Cookies.preserveOnce("currentAccount");
+
     // we should be redirected to /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
 
     // go to customers
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`);
+    cy.visit(`http://${subdomain}.lvh.me:3000/customers`);
+  });
+
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
   });
 
   it("Create customer", function() {
@@ -111,5 +122,12 @@ describe("Customers", function() {
 
     // should contain Customera
     cy.get("table td").not("contain", "Customera updated");
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
   });
 });

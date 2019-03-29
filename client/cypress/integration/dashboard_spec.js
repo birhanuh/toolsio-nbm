@@ -1,9 +1,9 @@
-describe("Customers", function() {
-  // creates a closure around 'account'
-  let account;
+// creates a closure around 'account'
+let account;
 
+describe("Customers", function() {
   before(function() {
-    // redefine account
+    // Delclare 'account'
     account = {
       firstName: "Testa",
       lastName: "Testa",
@@ -34,8 +34,22 @@ describe("Customers", function() {
     // submit
     cy.contains("Sign up").click();
 
+    // we should be redirected to /login
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
+
+    // login
+    cy.get("input[name=email]").type(email);
+    // {enter} causes the form to submit
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
+    Cypress.Cookies.preserveOnce("currentAccount");
+
     // we should be redirected to /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
+  });
+
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
   });
 
   it("Check anchors existance", function() {
@@ -79,5 +93,12 @@ describe("Customers", function() {
     cy.visit(`http://${account.subdomain}.lvh.me:3000/dashboard`);
     cy.get(".ui.two.grid .column:first-child a").click();
     cy.url().should("include", "/customers");
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
   });
 });

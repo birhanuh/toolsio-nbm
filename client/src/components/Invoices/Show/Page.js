@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import classnames from "classnames";
 import moment from "moment";
 import html2canvas from "html2canvas";
@@ -160,7 +160,7 @@ class Page extends Component {
             })
           });
 
-          this.context.router.history.push("/invoices");
+          this.props.history.push("/invoices");
         } else {
           let errorsList = {};
           errors.map(error => (errorsList[error.path] = error.message));
@@ -508,10 +508,6 @@ Page.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 };
 
-Page.contextTypes = {
-  router: PropTypes.object.isRequired
-};
-
 const MutationQuery = compose(
   graphql(DELETE_INVOICE_MUTATION, {
     name: "deleteInvoiceMutation"
@@ -536,4 +532,4 @@ const MutationQuery = compose(
 export default connect(
   null,
   { addFlashMessage }
-)(MutationQuery);
+)(withRouter(MutationQuery));

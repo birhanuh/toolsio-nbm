@@ -162,10 +162,6 @@ ForgotPasswordRequest.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 };
 
-ForgotPasswordRequest.contextTypes = {
-  router: PropTypes.object.isRequired
-};
-
 export default connect(
   null,
   { addFlashMessage }

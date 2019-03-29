@@ -1,5 +1,6 @@
 // Schema
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 import { resetDb } from "../helpers/macros";
 
@@ -11,7 +12,6 @@ import { registerUser, loginUser } from "../helpers/authentication";
 import { createCustomer } from "../helpers/related_objects";
 
 // Tokens
-let tokens;
 let subdomainLocal;
 
 describe("Sale", () => {
@@ -19,11 +19,12 @@ describe("Sale", () => {
     await resetDb();
     let response = await registerUser();
     const { success, email, password, subdomain } = response;
-    // Assign subdomain
-    subdomainLocal = subdomain;
-
+    console.log("EEE: ", subdomain);
     if (success) {
-      tokens = await loginUser(email, password, subdomain);
+      const login = await loginUser(email, password, subdomain);
+
+      // Assign subdomain
+      subdomainLocal = login.subdomain;
     }
   });
 
@@ -59,13 +60,12 @@ describe("Sale", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
     );
 
+    console.log("PPPP: ", response.data);
     const {
       data: {
         createSale: { success }
@@ -78,11 +78,7 @@ describe("Sale", () => {
   it("createSale", async () => {
     let saleFactoryLocal = await saleFactory();
     // Create customer
-    let customer = await createCustomer(
-      tokens.authToken,
-      tokens.refreshAuthToken,
-      subdomainLocal
-    );
+    let customer = await createCustomer(subdomainLocal);
 
     const response = await axios.post(
       "http://localhost:8080/graphql",
@@ -110,8 +106,6 @@ describe("Sale", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -151,8 +145,6 @@ describe("Sale", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -187,8 +179,6 @@ describe("Sale", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }

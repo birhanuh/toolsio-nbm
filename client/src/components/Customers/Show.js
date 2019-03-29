@@ -177,7 +177,7 @@ class Show extends Component {
             })
           });
 
-          this.context.router.history.push("/customers");
+          this.props.history.push("/customers");
         } else {
           let errorsList = {};
           errors.map(error => (errorsList[error.path] = error.message));
@@ -474,10 +474,6 @@ class Show extends Component {
 
 Show.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
-};
-
-Show.contextTypes = {
-  router: PropTypes.object.isRequired
 };
 
 const MutationQuery = compose(

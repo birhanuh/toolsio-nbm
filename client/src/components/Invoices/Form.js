@@ -307,7 +307,7 @@ class Form extends Component {
                 })
               });
 
-              this.context.router.history.push("/invoices");
+              this.props.history.push("/invoices");
             } else {
               let errorsList = {};
               errors.map(error => (errorsList[error.path] = error.message));
@@ -376,7 +376,7 @@ class Form extends Component {
                 })
               });
 
-              this.context.router.history.push("/invoices");
+              this.props.history.push("/invoices");
             } else {
               let errorsList = {};
               errors.map(error => (errorsList[error.path] = error.message));
@@ -510,10 +510,6 @@ class Form extends Component {
 // Proptypes definition
 Form.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
-};
-
-Form.contextTypes = {
-  router: PropTypes.object.isRequired
 };
 
 const MutationsQuery = compose(

@@ -100,9 +100,7 @@ class Channel extends Component {
             });
             this.setState({ isLoading: false });
             this.props.toggleCreateChannelModal();
-            this.context.router.history.push(
-              `/conversations/channel/${channel.id}`
-            );
+            this.props.history.push(`/conversations/channel/${channel.id}`);
           } else {
             let errorsList = {};
             errors.map(error => (errorsList[error.path] = error.message));
@@ -156,10 +154,6 @@ class Channel extends Component {
 Channel.propTypes = {
   addFlashMessage: PropTypes.func.isRequired,
   toggleCreateChannelModal: PropTypes.func.isRequired
-};
-
-Channel.contextTypes = {
-  router: PropTypes.object.isRequired
 };
 
 const MutationsAndQuery = compose(

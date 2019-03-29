@@ -1,10 +1,7 @@
 describe("Settings", function() {
-  // creates a closure around 'account'
-  let account;
-
   before(function() {
-    // redefine account
-    account = {
+    // creates a closure around 'account'
+    const account = {
       firstName: "Testa",
       lastName: "Testa",
       email: "testa@toolsio.com",
@@ -34,13 +31,28 @@ describe("Settings", function() {
     // submit
     cy.contains("Sign up").click();
 
+    // we should be redirected to /login
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
+
+    // login
+    cy.get("input[name=email]").type(email);
+    // {enter} causes the form to submit
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
+    Cypress.Cookies.preserveOnce("currentAccount");
+
     // we should be redirected to /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
 
     // go to settings
     cy.visit(`http://${account.subdomain}.lvh.me:3000/settings`);
   });
 
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
+  });
+
+  // creates a closure around 'account'
   it("Update Account settings", function() {
     cy.get("input[name=street]").type("Street 1");
     cy.get("input[name=postalCode]").type("1234");
@@ -105,5 +117,12 @@ describe("Settings", function() {
       "contain",
       "Your account is now deleted. Sorry to not see you again!"
     );
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
   });
 });

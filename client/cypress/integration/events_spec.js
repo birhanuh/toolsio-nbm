@@ -1,4 +1,4 @@
-describe("Customers", function() {
+describe("Events", function() {
   // creates a closure around 'account'
   let account;
 
@@ -34,16 +34,28 @@ describe("Customers", function() {
     // submit
     cy.contains("Sign up").click();
 
+    // we should be redirected to /login
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
+
+    // login
+    cy.get("input[name=email]").type(email);
+    // {enter} causes the form to submit
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
     // we should be redirected to /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
 
     // go to events
     cy.visit(`http://${account.subdomain}.lvh.me:3000/events`);
   });
 
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
+  });
+
   it("Create event", function() {
     cy.get(
-      ".fc-widget-content .fc-row:nth-child(5) .fc-bg table tr .fc-widget-content.fc-future:nth-child(2)"
+      ".fc-widget-content .fc-row:nth-child(5) .fc-bg table tr .fc-widget-content.fc-today"
     ).click();
 
     cy.get(".ui.form input[name=title]").type("Event 1");
@@ -97,5 +109,12 @@ describe("Customers", function() {
       "contain",
       "Your account is now deleted. Sorry to not see you again!"
     );
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
   });
 });

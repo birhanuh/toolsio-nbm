@@ -56,7 +56,7 @@ export default {
               console.log("err: ", err);
               return {
                 success: false,
-                errors: formatErrors(err, models)
+                errors: formatErrors(err)
               };
             });
         } else {
@@ -382,7 +382,7 @@ export default {
 
         return {
           success: false,
-          errors: formatErrors(err, models)
+          errors: formatErrors(err)
         };
       }
     },
@@ -412,7 +412,7 @@ export default {
           console.log("err: ", err);
           return {
             success: false,
-            errors: formatErrors(err, models)
+            errors: formatErrors(err)
           };
         }),
 
@@ -453,7 +453,7 @@ export default {
                 console.log("Invitation create err: ", err);
                 return {
                   success: false,
-                  errors: formatErrors(err, models)
+                  errors: formatErrors(err)
                 };
               });
 
@@ -465,7 +465,7 @@ export default {
             console.log("err: ", err);
             return {
               success: false,
-              errors: formatErrors(err, models)
+              errors: formatErrors(err)
             };
           }
         } else {
@@ -483,7 +483,7 @@ export default {
         console.log("err: ", err);
         return {
           success: false,
-          errors: formatErrors(err, models)
+          errors: formatErrors(err)
         };
       }
     },
@@ -589,7 +589,7 @@ export default {
 
         return {
           success: false,
-          errors: formatErrors(err, models)
+          errors: formatErrors(err)
         };
       }
     },
@@ -632,7 +632,7 @@ export default {
               console.log("err: ", err);
               return {
                 success: false,
-                errors: formatErrors(err, models)
+                errors: formatErrors(err)
               };
             });
         }
@@ -641,7 +641,7 @@ export default {
 
         return {
           success: false,
-          errors: formatErrors(err, models)
+          errors: formatErrors(err)
         };
       }
     },
@@ -684,7 +684,7 @@ export default {
               console.log("err: ", err);
               return {
                 success: false,
-                errors: formatErrors(err, models)
+                errors: formatErrors(err)
               };
             });
         }
@@ -692,7 +692,7 @@ export default {
         console.log("err: ", err);
         return {
           success: false,
-          errors: formatErrors(err, models)
+          errors: formatErrors(err)
         };
       }
     }

@@ -6,7 +6,7 @@ import customerFactory from "../factories/customer";
 import projectFactory from "../factories/project";
 import saleFactory from "../factories/sale";
 
-export async function createCustomer(authToken, refreshAuthToken, subdomain) {
+export async function createCustomer(ubdomain) {
   let customerFactoryLocal = await customerFactory();
 
   const response = await axios.post(
@@ -41,8 +41,6 @@ export async function createCustomer(authToken, refreshAuthToken, subdomain) {
     },
     {
       headers: {
-        "x-auth-token": authToken,
-        "x-refresh-auth-token": refreshAuthToken,
         subdomain: subdomain
       }
     }
@@ -57,12 +55,7 @@ export async function createCustomer(authToken, refreshAuthToken, subdomain) {
   return customer;
 }
 
-export async function createProject(
-  authToken,
-  refreshAuthToken,
-  customerId,
-  subdomain
-) {
+export async function createProject(customerId, subdomain) {
   let projectFactoryLocal = await projectFactory();
 
   const response = await axios.post(
@@ -91,8 +84,6 @@ export async function createProject(
     },
     {
       headers: {
-        "x-auth-token": authToken,
-        "x-refresh-auth-token": refreshAuthToken,
         subdomain: subdomain
       }
     }
@@ -107,12 +98,7 @@ export async function createProject(
   return project;
 }
 
-export async function createSale(
-  authToken,
-  refreshAuthToken,
-  customerId,
-  subdomain
-) {
+export async function createSale(customerId, subdomain) {
   let saleFactoryLocal = await saleFactory();
 
   const response = await axios.post(
@@ -141,8 +127,6 @@ export async function createSale(
     },
     {
       headers: {
-        "x-auth-token": authToken,
-        "x-refresh-auth-token": refreshAuthToken,
         subdomain: subdomain
       }
     }

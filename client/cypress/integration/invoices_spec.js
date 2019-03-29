@@ -1,10 +1,7 @@
-describe("Customers", function() {
-  // creates a closure around 'account'
-  let account;
-
+describe("Invoices", function() {
   before(function() {
-    // redefine account
-    account = {
+    // creates a closure around 'account'
+    const account = {
       firstName: "Testa",
       lastName: "Testa",
       email: "testa@toolsio.com",
@@ -34,8 +31,18 @@ describe("Customers", function() {
     // submit
     cy.contains("Sign up").click();
 
+    // we should be redirected to /login
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
+
+    // login
+    cy.get("input[name=email]").type(email);
+    // {enter} causes the form to submit
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
+    Cypress.Cookies.preserveOnce("currentAccount");
+
     // we should be redirected to /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
 
     // create Customer
     cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`);
@@ -86,6 +93,10 @@ describe("Customers", function() {
     cy.visit(`http://${account.subdomain}.lvh.me:3000/invoices`);
   });
 
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
+  });
+
   it("Create invoice", function() {
     cy.contains("Create new Invoice").click();
 
@@ -112,10 +123,10 @@ describe("Customers", function() {
     // we should be redirected to /invoices
     cy.url().should("include", "/invoices");
 
-    // should contain Invoice for (Invoice for (Project 1))
+    // should contain Invoice for (Project 1)
     cy.get("table tr:first-child td:first-child").should(
       "contain",
-      "Invoice for (Project 1)"
+      "Project 1"
     );
   });
 
@@ -154,9 +165,13 @@ describe("Customers", function() {
     cy.url().should("include", "/invoices");
 
     // should not contain Project
-    cy.get("table tr:first-child td:first-child").not(
-      "contain",
-      "Invoice for (Project 1)"
-    );
+    cy.get("table tr:first-child td:first-child").not("contain", "Project 1");
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
   });
 });

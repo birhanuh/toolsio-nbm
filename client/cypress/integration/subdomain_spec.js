@@ -1,4 +1,4 @@
-describe("Customers", function() {
+describe("Subdomain", function() {
   // creates a closure around 'account'
   let account;
 

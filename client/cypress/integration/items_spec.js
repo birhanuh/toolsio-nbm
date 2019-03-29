@@ -1,10 +1,7 @@
-describe("Customers", function() {
-  // creates a closure around 'account'
-  let account;
-
+describe("Items", function() {
   before(function() {
-    // redefine account
-    account = {
+    // creates a closure around 'account'
+    const account = {
       firstName: "Testa",
       lastName: "Testa",
       email: "testa@toolsio.com",
@@ -34,8 +31,18 @@ describe("Customers", function() {
     // submit
     cy.contains("Sign up").click();
 
+    // we should be redirected to /login
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
+
+    // login
+    cy.get("input[name=email]").type(email);
+    // {enter} causes the form to submit
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
+    Cypress.Cookies.preserveOnce("currentAccount");
+
     // we should be redirected to /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
 
     // create Customer
     cy.visit(`http://${account.subdomain}.lvh.me:3000/customers`);
@@ -85,6 +92,10 @@ describe("Customers", function() {
     cy.get(".content .ui.header.blue").click();
   });
 
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
+  });
+
   it("Create item", function() {
     cy.get("input[name=name]").type("Item 1");
     cy.get("div[name=unit]").click();
@@ -124,5 +135,12 @@ describe("Customers", function() {
 
     // should not contain Item 1 updated
     cy.get("table td.add-item:first-child").not("contain", "Item 1 updated");
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
   });
 });

@@ -1,4 +1,4 @@
-describe("Customers", function() {
+describe("Channel message", function() {
   // creates a closure around 'account'
   let account;
 
@@ -34,11 +34,25 @@ describe("Customers", function() {
     // submit
     cy.contains("Sign up").click();
 
+    // we should be redirected to /login
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
+
+    // login
+    cy.get("input[name=email]").type(email);
+    // {enter} causes the form to submit
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
+    Cypress.Cookies.preserveOnce("currentAccount");
+
     // we should be redirected to /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
 
     // go to conversations
     cy.visit(`http://${account.subdomain}.lvh.me:3000/conversations`);
+  });
+
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
   });
 
   it("Create Channel", function() {
@@ -52,10 +66,10 @@ describe("Customers", function() {
       .click();
 
     // we should be redirected to /conversations
-    cy.url().should("include", "/conversations/channel");
+    cy.url().should("include", "/conversations");
 
     // should contain Channel 1
-    cy.get(".messages h3").should("contain", "Channel 1");
+    cy.get(".item div").should("contain", "Channel 1");
   });
 
   it("Write message", function() {
@@ -72,5 +86,12 @@ describe("Customers", function() {
 
     // should contain Comments
     cy.get(".ui.comments .comment").should("contain", "Test message...");
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
   });
 });

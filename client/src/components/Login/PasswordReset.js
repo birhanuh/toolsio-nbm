@@ -97,7 +97,7 @@ class PasswordReset extends Component {
             });
 
             // Redirect to dashboard
-            this.context.router.history.push("/login");
+            this.props.history.push("/login");
           } else {
             let errorsList = {};
             errors.map(error => (errorsList[error.path] = error.message));
@@ -188,10 +188,6 @@ class PasswordReset extends Component {
 // Proptypes definition
 PasswordReset.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
-};
-
-PasswordReset.contextTypes = {
-  router: PropTypes.object.isRequired
 };
 
 export default connect(
