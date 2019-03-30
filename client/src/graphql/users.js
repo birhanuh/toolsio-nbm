@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const GET_USERS_QUERY = gql`
   {
@@ -10,7 +10,7 @@ export const GET_USERS_QUERY = gql`
       avatarUrl
     }
   }
-`
+`;
 
 export const SEND_INVITATION_MUTATION = gql`
   mutation sendInvitation($email: String!) {
@@ -22,27 +22,27 @@ export const SEND_INVITATION_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const GET_USER_QUERY = gql`
-  query getUser($id: Int!) { 
+  query getUser($id: Int!) {
     getUser(id: $id) {
       id
       firstName
       email
     }
   }
-`
+`;
 
 export const GET_INVITED_USERS_QUERY = gql`
-   {
+  {
     getInvitedUsers {
       id
       email
       isInvitationAccepted
     }
   }
-`
+`;
 
 export const GET_USER_BY_EMAIL_QUERY = gql`
   query getUserByEmail($email: String!) {
@@ -55,11 +55,21 @@ export const GET_USER_BY_EMAIL_QUERY = gql`
       isAdmin
     }
   }
-`
+`;
 
 export const UPDATE_USER_MUTATION = gql`
-  mutation updateUser($firstName: String, $lastName: String, $email: String!, $avatarUrl: String) {
-    updateUser(firstName: $firstName, lastName: $lastName, email: $email, avatarUrl: $avatarUrl) {
+  mutation updateUser(
+    $firstName: String
+    $lastName: String
+    $email: String!
+    $avatarUrl: String
+  ) {
+    updateUser(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      avatarUrl: $avatarUrl
+    ) {
       success
       user {
         id
@@ -71,11 +81,14 @@ export const UPDATE_USER_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const UPDATE_USER_PASSWORD_MUTATION = gql`
   mutation($currentPassword: String!, $newPassword: String!) {
-    updateUserPassword(currentPassword: $currentPassword, newPassword: $newPassword) {
+    updateUserPassword(
+      currentPassword: $currentPassword
+      newPassword: $newPassword
+    ) {
       success
       errors {
         path
@@ -83,7 +96,7 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const S3_SIGN_AVATAR_MUTATION = gql`
   mutation s3SignAvatar($fileName: String!, $fileType: String!) {
@@ -96,4 +109,4 @@ export const S3_SIGN_AVATAR_MUTATION = gql`
       }
     }
   }
-`
+`;

@@ -1,7 +1,7 @@
 type ContactMessage {
   name: String!
   email: String!
-  messageBody: String! 
+  messageBody: String!
 }
 
 type CreateContactResponse {
@@ -10,7 +10,9 @@ type CreateContactResponse {
 }
 
 type Mutation {
-  createContactMessage(name: String, email: String!, messageBody: String!): CreateContactResponse!
+  createContactMessage(
+    name: String
+    email: String!
+    messageBody: String!
+  ): CreateContactResponse!
 }
-
-

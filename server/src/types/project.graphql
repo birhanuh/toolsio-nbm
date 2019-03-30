@@ -64,20 +64,40 @@ type DeleteProjectResponse {
 
 type Query {
   getProject(id: Int!): Project
-  
-  getProjects(offset: Int!, limit: Int!, order: String!, name: String): [GetProjectsResponse!]!
 
-  getProjectsWithoutInvoice(name: String!): [GetProjectsWithoutInvoiceResponse!]!
+  getProjects(
+    offset: Int!
+    limit: Int!
+    order: String!
+    name: String
+  ): [GetProjectsResponse!]!
+
+  getProjectsWithoutInvoice(
+    name: String!
+  ): [GetProjectsWithoutInvoiceResponse!]!
 
   getProjectsWithInvoice: [GetProjectsWithInvoiceResponse!]!
 }
 
 type Mutation {
-  createProject(name: String!, deadline: Date!, status: String, progress: Int, description: String, customerId: Int!): CreateUpdateProjectResponse!
-  
-  updateProject(id: Int!, name: String, deadline: Date, status: String, progress: Int, description: String, 
-    ,customerId: Int): CreateUpdateProjectResponse!
-  
+  createProject(
+    name: String!
+    deadline: Date!
+    status: String
+    progress: Int
+    description: String
+    customerId: Int!
+  ): CreateUpdateProjectResponse!
+
+  updateProject(
+    id: Int!
+    name: String
+    deadline: Date
+    status: String
+    progress: Int
+    description: String
+    customerId: Int
+  ): CreateUpdateProjectResponse!
+
   deleteProject(id: Int!): DeleteProjectResponse!
 }
-

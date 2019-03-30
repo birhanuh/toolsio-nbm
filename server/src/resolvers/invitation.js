@@ -1,92 +1,125 @@
-import { formatErrors } from '../utils/formatErrors'
-import requiresAuth from '../middlewares/authentication'
-import sparkPostTransport from 'nodemailer-sparkpost-transport'
+import { formatErrors } from "../utils/formatErrors";
+import requiresAuth from "../middlewares/authentication";
+import sendgridTransport from "nodemailer-sendgrid-transport";
 
-import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
+import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
-import Email from 'email-templates'
+import Email from "email-templates";
 
-const transporter = nodemailer.createTransport(sparkPostTransport({
-  'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
-  endpoint: "https://api.eu.sparkpost.com"
-}))
-
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key: process.env.SENDGRID_API_KEY
+    }
+  })
+);
 
 export default {
   Query: {
-    getInvitedUsers: requiresAuth.createResolver((parent, args, { models, subdomain }) => models.Invitation.findAll({ searchPath: subdomain }))
+    getInvitedUsers: requiresAuth.createResolver(
+      (parent, args, { models, subdomain }) =>
+        models.Invitation.findAll({ searchPath: subdomain })
+    )
   },
 
   Mutation: {
-    sendInvitation: requiresAuth.createResolver(async (parent, args, { user, models, subdomain }) => {
-     
-      let emailToken
+    sendInvitation: requiresAuth.createResolver(
+      async (parent, args, { models, subdomain, user }) => {
+        let emailToken;
 
-      try {
-        // Create emailToken
-        emailToken = jwt.sign({
-          email: args.email,
-          account: subdomain
-        }, process.env.JWTSECRET1, { expiresIn: '60d' })
-      } catch(err) {
-        console.log('err', err)
-      }
+        try {
+          // Create emailToken
+          emailToken = jwt.sign(
+            {
+              email: args.email,
+              account: subdomain
+            },
+            process.env.JWTSECRET1,
+            { expiresIn: "60d" }
+          );
+        } catch (err) {
+          console.log("err", err);
+        }
 
-      const url = `http://${subdomain}.lvh.me:3000/signup/invitation/?token=${emailToken}`
-      
-      const email = new Email({
-        message: {
-          from: 'no-replay@email.toolsio.com'
-        },
-        // uncomment below to send emails in development/test env:
-        send: true,
-        // transport: {
-        //   jsonTransport: true
-        // }
-        transport: transporter
-      })
+        const url = `http://${subdomain}.lvh.me:3000/signup/invitation/?token=${emailToken}`;
 
-      return email
-        .send({
-          template: 'user_invitation',
+        const email = new Email({
           message: {
-            to: args.email,
-            subject: 'Complete your Registration (Toolsio)'
+            from: "no-replay@toolsio.com"
           },
-          locals: {
-            account: subdomain,
-            email: args.email,
-            inviter: user.firstName,
-            invitationLink: url,
-          }
-        })
-        .then(res => {
-          console.log('User invitation success: ', res)
+          // uncomment below to send emails in development/test env:
+          send: true,
+          // transport: {
+          //   jsonTransport: true
+          // }
+          transport: transporter
+        });
 
-          models.Invitation.create({email: args.email, userId: user.id}, { searchPath: subdomain })
-            .then(() => console.log('Invitation create success'))
-            .catch(err => {
-              console.log('Invitation create err: ', err)
-              return {
-                success: false,
-                errors: formatErrors(err, models)
+        if (args.email === user.dataValues.email) {
+          return {
+            success: false,
+            errors: [
+              {
+                path: "email",
+                message: "Email must be diffirent than the inviter."
               }
-            })
+            ]
+          };
+        } else {
+          const invitation = await models.Invitation.create(
+            { email: args.email, userId: user.id },
+            { searchPath: subdomain }
+          )
+            .then(res => res)
+            .catch(err => err);
 
-          // Retrun success true to client on success
-          return {
-            success: true
+          
+          if (invitation.errors) {
+            console.log("Invitation create err: ", invitation.errors);
+            return {
+              success: false,
+              errors: formatErrors(invitation, models)
+            };
+          } else {
+            return email
+              .send({
+                template: "user_invitation",
+                message: {
+                  to: args.email,
+                  subject: "Complete your Registration (Toolsio)"
+                },
+                locals: {
+                  account: subdomain,
+                  email: args.email,
+                  inviter: user.firstName,
+                  invitationLink: url
+                }
+              })
+              .then(res => {
+                console.log("User invitation success: ", {
+                  message: res.message,
+                  from: res.originalMessage.from,
+                  to: res.originalMessage.to,
+                  subject: res.originalMessage.subject,
+                  text: res.originalMessage.text
+                });
+
+                // Retrun success true to client on success
+                return {
+                  success: true
+                };
+              })
+              .catch(err => {
+                console.log("User invitation success: ", err);
+                return {
+                  success: false,
+                  errors: err
+                };
+              });
           }
-        })
-        .catch(err => {
-          console.log('User invitation success: ', err)
-          return {
-            success: false, 
-            errors: err
-          }
-        })          
-    })
-    
-  }    
-}
+        }
+      }
+    )
+  }
+};

@@ -198,10 +198,12 @@ class UserForm extends Component {
       avatarUrl: public_id
     });
 
-    const { email, avatarUrl } = this.state;
+    const { firstName, lastName, email, avatarUrl } = this.state;
 
     this.props
-      .updateUserMutation({ variables: { email, avatarUrl } })
+      .updateUserMutation({
+        variables: { firstName, lastName, email, avatarUrl }
+      })
       .then(res => {
         const { success, errors } = res.data.updateUser;
 
@@ -396,7 +398,13 @@ class UserForm extends Component {
             </Form.Field>
 
             <Form.Field error={!!errors.email}>
-              <label>{T.translate("settings.user.email")}</label>
+              <label>
+                {T.translate("settings.user.email")} (
+                <i className="text-dark-medium-grey ">
+                  {T.translate("settings.user.email_info")}
+                </i>
+                )
+              </label>
               <Input
                 placeholder={T.translate("settings.user.email")}
                 value={email}
@@ -404,6 +412,7 @@ class UserForm extends Component {
                 onChange={(e, { value }) => this.handleChange("email", value)}
                 error={!!errors.email}
                 autoComplete="off"
+                disabled
               />
               <span className="red">{errors.email}</span>
             </Form.Field>
@@ -415,7 +424,7 @@ class UserForm extends Component {
               </Link>
               <button disabled={isLoadingForm} className="ui primary button">
                 <i className="check circle outline icon" aria-hidden="true" />
-                &nbsp;{T.translate("settings.user.edit")}
+                &nbsp;{T.translate("settings.user.update")}
               </button>
             </div>
           </Form>
@@ -505,7 +514,7 @@ class UserForm extends Component {
               </Link>
               <Button disabled={isLoadingForm} primary>
                 <Icon name="check circle outline" />
-                &nbsp;{T.translate("settings.user.edit")}
+                &nbsp;{T.translate("settings.user.update")}
               </Button>
             </div>
           </Form>

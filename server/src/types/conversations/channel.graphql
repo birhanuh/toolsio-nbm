@@ -20,18 +20,18 @@ type CreateChannelResponse {
 
 type AddMemberResponse {
   success: Boolean!
-  members: [Int!] 
+  members: [Int!]
   errors: [Error!]
 }
 
 type Query {
   getChannel(id: Int!): Channel!
-  
+
   getChannelsUsersCount: [GetChannelsUsersCountResponse!]!
 }
 
 type Mutation {
   createChannel(name: String!, isPublic: Boolean): CreateChannelResponse!
-  
+
   addMember(members: [Int!], channelId: Int!): AddMemberResponse!
 }

@@ -1,41 +1,44 @@
 // Schema
-import axios from 'axios'
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
-import { resetDb } from '../helpers/macros'
+import { resetDb } from "../helpers/macros";
 
-// Load factories 
-import saleFactory from '../factories/sale'
+// Load factories
+import saleFactory from "../factories/sale";
 
 // Authentication
-import { registerUser, loginUser } from '../helpers/authentication'
-import { createCustomer } from '../helpers/related_objects'
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
+import { createCustomer } from "../helpers/related_objects";
 
-// Tokens
-let tokens 
-let subdomainLocal
+// Subdomain assinged
+let subdomainLocal;
 
-describe("Sale",  () => { 
-
+describe("Sale", () => {
   beforeAll(async () => {
-    await resetDb()
-    let response = await registerUser()
-    const { success, email, password, subdomain } = response
-    // Assign subdomain
-    subdomainLocal = subdomain
+    await resetDb();
+    let response = await registerUser();
+    const { success, email, password, subdomain } = response;
 
     if (success) {
-      tokens = await loginUser(email, password, subdomain)
+      // Assign subdomain
+      subdomainLocal = subdomain;
+
+      await loginUser(email, password, subdomain);
     }
-  })
+  });
 
-  afterAll(async () => { 
-    await resetDb()       
-  })
+  afterAll(async () => {
+    await resetDb();
 
-  it('should fail with validation errors for each required field', async () => {
+    await logoutUser();
+  });
 
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
+  it("should fail with validation errors for each required field", async () => {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
         createSale(name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
           success
           sale {
@@ -48,36 +51,41 @@ describe("Sale",  () => {
           }
         }
       }`,
-      variables: {
-        name: "",
-        deadline: "",
-        status: "",
-        progress: 0,
-        description: "",
-        customerId: 1
+        variables: {
+          name: "",
+          deadline: "",
+          status: "",
+          progress: 0,
+          description: "",
+          customerId: 1
+        }
+      },
+      {
+        headers: {
+          subdomain: subdomainLocal
+        }
       }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-        'subdomain': subdomainLocal
+    );
+
+    console.log("PPPP: ", response.data);
+    const {
+      data: {
+        createSale: { success }
       }
-    })
+    } = response.data;
 
-    const { data: { createSale: { success } } } = response.data
-     
-    expect(success).toBe(false)
-  })
+    expect(success).toBe(false);
+  });
 
-  it('createSale', async () => {   
+  it("createSale", async () => {
+    let saleFactoryLocal = await saleFactory();
+    // Create customer
+    let customer = await createCustomer(subdomainLocal);
 
-    let saleFactoryLocal = await saleFactory()
-    // Create customer 
-    let customer = await createCustomer(tokens.authToken, tokens.refreshAuthToken, subdomainLocal)
-
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: `mutation createSale($name: String!, $deadline: Date!, $status: String!, $description: String, $customerId: Int!) {
         createSale(name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
           success
           sale {
@@ -90,33 +98,36 @@ describe("Sale",  () => {
           }
         }
       }`,
-      variables: {
-        name: saleFactoryLocal.name,
-        deadline: saleFactoryLocal.deadline,
-        status: saleFactoryLocal.status,
-        description: saleFactoryLocal.description,
-        customerId: customer.id
+        variables: {
+          name: saleFactoryLocal.name,
+          deadline: saleFactoryLocal.deadline,
+          status: saleFactoryLocal.status,
+          description: saleFactoryLocal.description,
+          customerId: customer.id
+        }
+      },
+      {
+        headers: {
+          subdomain: subdomainLocal
+        }
       }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-        'subdomain': subdomainLocal
+    );
+
+    const {
+      data: {
+        createSale: { success, sale }
       }
-    })
+    } = response.data;
 
-    const { data: { createSale: { success, sale } } }  = response.data
-    
-    expect(success).toBe(true)
-    expect(sale).not.toBe(null)
+    expect(success).toBe(true);
+    expect(sale).not.toBe(null);
+  });
 
-  })
-
-  it('updateSale', async () => { 
-    
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation updateSale($id: Int!, $name: String, $deadline: Date, $status: String, $description: String, $customerId: Int) {
+  it("updateSale", async () => {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: `mutation updateSale($id: Int!, $name: String, $deadline: Date, $status: String, $description: String, $customerId: Int) {
         updateSale(id: $id, name: $name, deadline: $deadline, status: $status, description: $description, customerId: $customerId) {
           success
           sale {
@@ -129,28 +140,33 @@ describe("Sale",  () => {
           }
         }
       }`,
-      variables: {
-        id: 1,
-        name: "Sale name updated"
+        variables: {
+          id: 1,
+          name: "Sale name updated"
+        }
+      },
+      {
+        headers: {
+          subdomain: subdomainLocal
+        }
       }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-        'subdomain': subdomainLocal
+    );
+
+    const {
+      data: {
+        updateSale: { success, sale }
       }
-    })
+    } = response.data;
 
-    const { data: { updateSale: { success, sale } } } = response.data
+    expect(success).toBe(true);
+    expect(sale.name).toEqual("Sale name updated");
+  });
 
-    expect(success).toBe(true)
-    expect(sale.name).toEqual("Sale name updated")
-  })
-
-  it('deleteSale', async () => { 
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: ` mutation deleteSale($id: Int!) {
+  it("deleteSale", async () => {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: ` mutation deleteSale($id: Int!) {
         deleteSale(id: $id) {
           success
           errors {
@@ -159,22 +175,23 @@ describe("Sale",  () => {
           }
         } 
       }`,
-      variables: {
-        id: 1
+        variables: {
+          id: 1
+        }
+      },
+      {
+        headers: {
+          subdomain: subdomainLocal
+        }
       }
-    }, 
-    {
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-refresh-auth-token': tokens.refreshAuthToken,
-        'subdomain': subdomainLocal
+    );
+
+    const {
+      data: {
+        deleteSale: { success }
       }
-    }) 
+    } = response.data;
 
-    const { data: { deleteSale: { success } } } = response.data
-   
-    expect(success).toBe(true)
-  })
-
-})
-
+    expect(success).toBe(true);
+  });
+});

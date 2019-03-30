@@ -6,6 +6,14 @@ import { deleteFlashMessage } from '../actions/flashMessageActions'
 
 class FlashMessage extends Component {
   
+    // Detect location change for FlashMessage component 
+    componentDidUpdate(prevProps) {
+   
+      if (this.props.location !== prevProps.location) {
+        this.props.deleteFlashMessage(this.props.message.id)
+      }
+    }
+
   onClick() {
     this.props.deleteFlashMessage(this.props.message.id)
   }

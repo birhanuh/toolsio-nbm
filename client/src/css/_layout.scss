@@ -16,7 +16,6 @@ body {
   color: $body-color;
   // font-family: 'Open Sans', sans-serif;
   // font-size: 16px;
-  moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased; 
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
@@ -552,14 +551,17 @@ header .ui.fixed.top.menu .item>a {
 }
 
 .ui.card.dashboard > .content-btn-outer-container {
-  @extend .vertical-center-align-container;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0;
   background: #ffffff;
   opacity: 0.85;
   z-index: 1;
   .content-btn-inner-container {
-    @extend .vertical-center-align-element;
     text-align: center;
     z-index: 2;
   }
@@ -673,10 +675,6 @@ header .ui.fixed.top.menu .item>a {
 
 .dimmed.dimmable > .ui.animating.dimmer, .dimmed.dimmable > .ui.visible.dimmer, .ui.active.dimmer {
   display: flex !important;
-}
-
-.ui.dimmer img {
-  @include transform-rotate(180deg);
 }
 
 // Custome fieldset and legend
@@ -1127,4 +1125,24 @@ header .ui.fixed.top.menu .item>a {
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: $screen-lg) {
 
+}
+
+.circle-container {
+  @include on-circle($item-count: 8, $circle-size: 30em, $item-size: 3em); 
+  margin: 5em auto 0;
+  border: solid 5px tomato;
+  
+  img { 
+    display: block; 
+    max-width: 100%; 
+    border-radius: 50%;
+    filter: grayscale(100%);
+    border: solid 5px tomato;
+    transition: .15s;
+    
+    &:hover,
+    &:active {
+      filter: grayscale(0);
+    }
+  }
 }

@@ -1,16 +1,23 @@
 import Validation from './Validation'
-import { isAuthenticated, setInvitationToken, getSubdomain, setSubdomain, isAuthPages } from './Authorization'
-import { PrivateRoute, SubdomainRoute} from './customizedRoutes'
+import { setInvitationToken, getSubdomain, setSubdomain, isAuthPages, isAuthenticated, getCookie, deleteCookie } from './Helpers'
+import { PrivateRoute } from './PrivateRoute'
+import { LoginRoute } from './LoginRoute'
+import { LandingSubdomainSignupPageRoute } from './LandingSubdomainSignupPageRoute'
+import { AuthRoute } from './AuthRoute'
 import Pagination from './Pagination'
 
 export {
   Validation,
-  isAuthenticated, 
   setInvitationToken, 
   getSubdomain, 
   setSubdomain,
   PrivateRoute,
-  SubdomainRoute,
+  LoginRoute,
+  LandingSubdomainSignupPageRoute,
+  AuthRoute,
   isAuthPages,
+  isAuthenticated,
+  getCookie,
+  deleteCookie,
   Pagination
 }

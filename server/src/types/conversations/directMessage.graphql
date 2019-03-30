@@ -12,7 +12,7 @@ type DirectMessage {
 
 type CreateDirectMessageResponse {
   success: Boolean!
-  message: DirectMessage 
+  message: DirectMessage
   errors: [Error!]
 }
 
@@ -48,22 +48,26 @@ type MarkDirectMessageAsReadResponse {
 
 type Query {
   getDirectMessage(id: Int!): DirectMessage
-  
+
   getDirectMessages(cursor: String, receiverId: Int!): [DirectMessage!]!
-  
+
   getDirectMessageUsers: [DirectMessageUser!]!
 
   getInboxDirectMessages: [DirectMessage!]!
 
   getSentDirectMessages: [DirectMessage!]!
-  
+
   getUnreadDirectMessagesCount: UnreadDirectMessagesCount!
 
   getUnreadDirectMessagesCountSender: UnreadDirectMessagesCountResponse!
 }
 
 type Mutation {
-  createDirectMessage(body: String, file: Upload, receiverId: Int!): CreateDirectMessageResponse!
+  createDirectMessage(
+    body: String
+    file: Upload
+    receiverId: Int!
+  ): CreateDirectMessageResponse!
 
   markDirectMessagesAsRead(senderId: Int): MarkDirectMessageAsReadResponse!
 }
