@@ -72,8 +72,8 @@ describe("Authenticate User", () => {
         query: `mutation($email: String!, $password: String!) {
         loginUser(email: $email, password: $password) {
           success
-          authToken 
-          refreshAuthToken
+          sessionID
+          subdomain
           errors {
             path
             message
@@ -94,11 +94,11 @@ describe("Authenticate User", () => {
 
     const {
       data: {
-        loginUser: { success, authToken }
+        loginUser: { success, sessionID }
       }
     } = response.data;
 
     expect(success).toBe(true);
-    expect(authToken).not.toBeNull();
+    expect(sessionID).not.toBeNull();
   });
 });

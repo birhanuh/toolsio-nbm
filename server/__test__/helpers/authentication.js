@@ -60,6 +60,7 @@ export async function loginUser(email, password, subdomain) {
       query: `mutation($email: String!, $password: String!) {
         loginUser(email: $email, password: $password) {
           success
+          sessionID
           errors {
             path
             message
@@ -80,12 +81,38 @@ export async function loginUser(email, password, subdomain) {
 
   const {
     data: {
-      loginUser: { success }
+      loginUser: { success, sessionID }
     }
   } = response.data;
 
   if (success) {
-    return { subdomain };
+    return { subdomain, sessionID };
+  } else {
+    return null;
+  }
+}
+
+export async function logoutUser() {
+  const response = await axios.post(
+    "http://localhost:8080/graphql",
+    {
+      query: `mutation {
+        logoutUser
+      }`
+    },
+    {
+      headers: {
+        subdomain: subdomain
+      }
+    }
+  );
+
+  const {
+    data: { logoutUser }
+  } = response.data;
+
+  if (logoutUser) {
+    return true;
   } else {
     return null;
   }

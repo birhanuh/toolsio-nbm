@@ -7,11 +7,10 @@ import { resetDb } from "../helpers/macros";
 import taskFactory from "../factories/task";
 
 // Authentication
-import { registerUser, loginUser } from "../helpers/authentication";
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
 import { createCustomer, createProject } from "../helpers/related_objects";
 
-// Tokens
-let tokens;
+// Subdomain assinged
 let subdomainLocal;
 
 describe("Task", () => {
@@ -19,16 +18,19 @@ describe("Task", () => {
     await resetDb();
     let response = await registerUser();
     const { success, email, password, subdomain } = response;
-    // Assign subdomain
-    subdomainLocal = subdomain;
 
     if (success) {
+      // Assign subdomain
+      subdomainLocal = subdomain;
+
       tokens = await loginUser(email, password, subdomain);
     }
   });
 
   afterAll(async () => {
     await resetDb();
+
+    await logoutUser();
   });
 
   it("should fail with validation errors for each required field", async () => {
@@ -55,8 +57,6 @@ describe("Task", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -74,18 +74,9 @@ describe("Task", () => {
   it("createTask", async () => {
     let taskFactoryLocal = await taskFactory();
     // Create customer
-    let customer = await createCustomer(
-      tokens.authToken,
-      tokens.refreshAuthToken,
-      subdomainLocal
-    );
+    let customer = await createCustomer(subdomainLocal);
     // Create project
-    let project = await createProject(
-      tokens.authToken,
-      tokens.refreshAuthToken,
-      customer.id,
-      subdomainLocal
-    );
+    let project = await createProject(customer.id, subdomainLocal);
 
     const response = await axios.post(
       "http://localhost:8080/graphql",
@@ -114,8 +105,6 @@ describe("Task", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -155,8 +144,6 @@ describe("Task", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -191,8 +178,6 @@ describe("Task", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }

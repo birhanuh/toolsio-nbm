@@ -69,7 +69,9 @@ app.use(
 
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger("dev"));
+
 console.log("M: ", /\.lvh.me:3000$/, `/\\.${process.env.CLIENT_HOST}$/`);
+
 const apolloServer = new ApolloServer({
   schema,
   context: async ({ req, res }) => {

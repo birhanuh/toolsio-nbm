@@ -7,11 +7,10 @@ import { resetDb } from "../helpers/macros";
 import itemFactory from "../factories/item";
 
 // Authentication
-import { registerUser, loginUser } from "../helpers/authentication";
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
 import { createCustomer, createSale } from "../helpers/related_objects";
 
-// Tokens
-let tokens;
+// Subdomain assinged
 let subdomainLocal;
 
 describe("Item", () => {
@@ -19,16 +18,19 @@ describe("Item", () => {
     await resetDb();
     let response = await registerUser();
     const { success, email, password, subdomain } = response;
-    // Assign subdomain
-    subdomainLocal = subdomain;
 
     if (success) {
+      // Assign subdomain
+      subdomainLocal = subdomain;
+
       tokens = await loginUser(email, password, subdomain);
     }
   });
 
   afterAll(async () => {
     await resetDb();
+
+    await logoutUser();
   });
 
   it("should fail with validation errors for each required field", async () => {
@@ -55,8 +57,6 @@ describe("Item", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -74,18 +74,9 @@ describe("Item", () => {
   it("createItem", async () => {
     let itemFactoryLocal = await itemFactory();
     // Create customer
-    let customer = await createCustomer(
-      tokens.authToken,
-      tokens.refreshAuthToken,
-      subdomainLocal
-    );
+    let customer = await createCustomer(subdomainLocal);
     // Create sale
-    let sale = await createSale(
-      tokens.authToken,
-      tokens.refreshAuthToken,
-      customer.id,
-      subdomainLocal
-    );
+    let sale = await createSale(customer.id, subdomainLocal);
 
     const response = await axios.post(
       "http://localhost:8080/graphql",
@@ -114,8 +105,6 @@ describe("Item", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -155,8 +144,6 @@ describe("Item", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -191,8 +178,6 @@ describe("Item", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }

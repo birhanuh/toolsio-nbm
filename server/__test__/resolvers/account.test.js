@@ -2,10 +2,9 @@
 import axios from "axios";
 
 import { resetDb } from "../helpers/macros";
-import { registerUser, loginUser } from "../helpers/authentication";
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
 
-// Tokens
-let tokens;
+// Subdomain assinged
 let subdomainLocal;
 
 // Load factories
@@ -16,17 +15,19 @@ describe("Account", () => {
     await resetDb();
     let response = await registerUser();
     const { success, email, password, subdomain } = response;
-    // Assign subdomain
-    subdomainLocal;
 
     if (success) {
+      // Assign subdomain
       subdomainLocal = subdomain;
-      tokens = await loginUser(email, password, subdomain);
+
+      await loginUser(email, password, subdomain);
     }
   });
 
   afterAll(async () => {
     await resetDb();
+
+    await logoutUser();
   });
 
   it("finds Account", async () => {
@@ -45,8 +46,6 @@ describe("Account", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -94,8 +93,6 @@ describe("Account", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -136,8 +133,6 @@ describe("Account", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }

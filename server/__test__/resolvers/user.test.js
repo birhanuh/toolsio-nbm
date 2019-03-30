@@ -2,9 +2,9 @@
 import axios from "axios";
 
 //import { truncate } from '../helpers/macros'
-import { registerUser, loginUser } from "../helpers/authentication";
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
 
-let tokens;
+// Subdomain assinged
 let subdomainLocal;
 
 describe("User", () => {
@@ -12,16 +12,21 @@ describe("User", () => {
     //await truncate()
     let response = await registerUser();
     const { success, email, password, subdomain } = response;
-    // Assign subdomain
-    subdomainLocal = subdomain;
 
     if (success) {
+      // Assign subdomain
+      subdomainLocal = subdomain;
+
       tokens = await loginUser(email, password, subdomain);
     }
   });
 
   afterAll(async () => {
     //await truncate()
+
+    await resetDb();
+
+    await logoutUser();
   });
 
   test("getUsers", async () => {
@@ -39,8 +44,6 @@ describe("User", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-auth-refresh-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }

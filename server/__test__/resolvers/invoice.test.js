@@ -7,11 +7,10 @@ import { resetDb } from "../helpers/macros";
 import invoiceFactory from "../factories/invoice";
 
 // Authentication
-import { registerUser, loginUser } from "../helpers/authentication";
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
 import { createCustomer, createProject } from "../helpers/related_objects";
 
-// Tokens
-let tokens;
+// Subdomain assinged
 let subdomainLocal;
 
 describe("Invoice", () => {
@@ -19,16 +18,19 @@ describe("Invoice", () => {
     await resetDb();
     let response = await registerUser();
     const { success, email, password, subdomain } = response;
-    // Assign subdomain
-    subdomainLocal = subdomain;
 
     if (success) {
-      tokens = await loginUser(email, password, subdomain);
+      // Assign subdomain
+      subdomainLocal = subdomain;
+
+      await loginUser(email, password, subdomain);
     }
   });
 
   afterAll(async () => {
-    //await resetDb()
+    await resetDb();
+
+    await logoutUser();
   });
 
   it("should fail with validation errors for each required field", async () => {
@@ -64,8 +66,6 @@ describe("Invoice", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -83,19 +83,10 @@ describe("Invoice", () => {
   it("createInvoice", async () => {
     let invoiceFactoryLocal = await invoiceFactory();
     // Create customer
-    let customer = await createCustomer(
-      tokens.authToken,
-      tokens.refreshAuthToken,
-      subdomainLocal
-    );
+    let customer = await createCustomer(subdomainLocal);
     // Create project
     console.log("customerId", customer);
-    let project = await createProject(
-      tokens.authToken,
-      tokens.refreshAuthToken,
-      customer.id,
-      subdomainLocal
-    );
+    let project = await createProject(customer.id, subdomainLocal);
 
     const response = await axios.post(
       "http://localhost:8080/graphql",
@@ -129,8 +120,6 @@ describe("Invoice", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -172,8 +161,6 @@ describe("Invoice", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -208,8 +195,6 @@ describe("Invoice", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }

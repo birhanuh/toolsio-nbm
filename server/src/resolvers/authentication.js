@@ -151,7 +151,7 @@ export default {
         process.env.NODE_ENV === "production"
           ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
           : new Redis();
-      console.log("req.session: ", req.session);
+
       const { userId } = req.session;
 
       if (userId) {

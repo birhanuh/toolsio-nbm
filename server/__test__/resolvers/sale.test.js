@@ -8,10 +8,10 @@ import { resetDb } from "../helpers/macros";
 import saleFactory from "../factories/sale";
 
 // Authentication
-import { registerUser, loginUser } from "../helpers/authentication";
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
 import { createCustomer } from "../helpers/related_objects";
 
-// Tokens
+// Subdomain assinged
 let subdomainLocal;
 
 describe("Sale", () => {
@@ -19,17 +19,19 @@ describe("Sale", () => {
     await resetDb();
     let response = await registerUser();
     const { success, email, password, subdomain } = response;
-    console.log("EEE: ", subdomain);
-    if (success) {
-      const login = await loginUser(email, password, subdomain);
 
+    if (success) {
       // Assign subdomain
-      subdomainLocal = login.subdomain;
+      subdomainLocal = subdomain;
+
+      await loginUser(email, password, subdomain);
     }
   });
 
   afterAll(async () => {
     await resetDb();
+
+    await logoutUser();
   });
 
   it("should fail with validation errors for each required field", async () => {

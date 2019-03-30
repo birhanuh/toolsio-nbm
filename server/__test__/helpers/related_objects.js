@@ -6,7 +6,7 @@ import customerFactory from "../factories/customer";
 import projectFactory from "../factories/project";
 import saleFactory from "../factories/sale";
 
-export async function createCustomer(ubdomain) {
+export async function createCustomer(subdomain) {
   let customerFactoryLocal = await customerFactory();
 
   const response = await axios.post(

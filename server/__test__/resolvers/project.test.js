@@ -7,11 +7,10 @@ import { resetDb } from "../helpers/macros";
 import projectFactory from "../factories/project";
 
 // Authentication
-import { registerUser, loginUser } from "../helpers/authentication";
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
 import { createCustomer } from "../helpers/related_objects";
 
-// Tokens
-let tokens;
+// Subdomain assinged
 let subdomainLocal;
 
 describe("Project", () => {
@@ -19,16 +18,19 @@ describe("Project", () => {
     await resetDb();
     let response = await registerUser();
     const { success, email, password, subdomain } = response;
-    // Assign subdomain
-    subdomainLocal = subdomain;
 
     if (success) {
-      tokens = await loginUser(email, password, subdomain);
+      // Assign subdomain
+      subdomainLocal = subdomain;
+
+      await loginUser(email, password, subdomain);
     }
   });
 
   afterAll(async () => {
     await resetDb();
+
+    await logoutUser();
   });
 
   it("should fail with validation errors for each required field", async () => {
@@ -59,8 +61,6 @@ describe("Project", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -110,8 +110,6 @@ describe("Project", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -151,8 +149,6 @@ describe("Project", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
@@ -187,8 +183,6 @@ describe("Project", () => {
       },
       {
         headers: {
-          "x-auth-token": tokens.authToken,
-          "x-refresh-auth-token": tokens.refreshAuthToken,
           subdomain: subdomainLocal
         }
       }
