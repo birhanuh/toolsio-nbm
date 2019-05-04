@@ -70,7 +70,7 @@ class Form extends Component {
 
       // Redirect to dashboard
       if (success) {
-        this.props.history.push("/dashboard");
+        nextProps.history.push("/dashboard");
       }
     }
   }

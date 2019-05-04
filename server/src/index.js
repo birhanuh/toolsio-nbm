@@ -89,7 +89,7 @@ const apolloServer = new ApolloServer({
         `${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}`
       );
     }
-
+    console.log("JJJ: ", req.session);
     // Subdomain
     const subdomain = req.headers.subdomain;
     // const subdomain = 'testa';
@@ -143,7 +143,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === "test" ? false : true,
       //secure: process.env.NODE_ENV === "production",
       secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
@@ -181,7 +181,7 @@ httpServer.listen(app.get('port'), () => {
 
 // Flash Redis on test env
 if (process.env.NODE_ENV === "test") {
-  new Redis().flushall();
+  //new Redis().flushall();
 }
 
 httpServer.listen(app.get("port"), () => {

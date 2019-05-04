@@ -5,7 +5,7 @@ import requiresAuth, {
   requiresDirectMessageAccess
 } from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
-import { processUpload } from "../../utils/uploadFile";
+import { processUpload, sendUploadToGCS } from "../../utils/uploadFile";
 
 import pubsub from "../../utils/pubsub";
 
@@ -173,7 +173,9 @@ export default {
           const messageData = args;
 
           if (file) {
-            const uploadFile = await processUpload(file);
+            //const uploadFile = await processUpload(file);
+            const uploadFile = sendUploadToGCS(file, "direct-messages");
+
             messageData.uploadPath = uploadFile.path;
             messageData.mimetype = uploadFile.mimetype;
           }
@@ -242,7 +244,8 @@ export default {
 
   DirectMessage: {
     uploadPath: parent =>
-      parent.uploadPath && `${process.env.SERVER_URL}${parent.uploadPath}`,
+      // parent.uploadPath && process.env.SERVER_URL + parent.uploadPath, // Used if proceddUpload function is used
+      parent.uploadPath && parent.uploadPath,
 
     user: ({ user, senderId }, args, { userLoader }) => {
       if (user) {

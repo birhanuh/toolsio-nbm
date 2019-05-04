@@ -5,7 +5,7 @@ import requiresAuth, {
   requiresChannelAccess
 } from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
-import { processUpload } from "../../utils/uploadFile";
+import { processUpload, sendUploadToGCS } from "../../utils/uploadFile";
 
 import pubsub from "../../utils/pubsub";
 
@@ -59,7 +59,9 @@ export default {
           const messageData = args;
 
           if (file) {
-            const uploadFile = await processUpload(file);
+            //const uploadFile = await processUpload(file);
+            const uploadFile = await sendUploadToGCS(file, "channel-messages");
+            console.log("FFFF: ", uploadFile);
             messageData.uploadPath = uploadFile.path;
             messageData.mimetype = uploadFile.mimetype;
           }
@@ -104,7 +106,8 @@ export default {
 
   ChannelMessage: {
     uploadPath: parent =>
-      parent.uploadPath && process.env.SERVER_URL + parent.uploadPath,
+      // parent.uploadPath && process.env.SERVER_URL + parent.uploadPath, // Used if proceddUpload function is used
+      parent.uploadPath && parent.uploadPath,
 
     user: ({ user, userId }, args, { userLoader }) => {
       if (user) {

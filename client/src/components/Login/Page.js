@@ -23,7 +23,7 @@ class Page extends Component {
 
         <FlashMessage />
 
-        <Form />
+        <Form {...this.props} />
 
         <Segment>
           <span>

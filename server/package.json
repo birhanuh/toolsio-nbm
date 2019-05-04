@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/birhanuh/toolsio-node#readme",
   "dependencies": {
+    "@google-cloud/storage": "^2.4.3",
     "acorn": "^6.1.1",
     "apollo-server-express": "^2.4.8",
     "aws-sdk": "^2.431.0",
