@@ -7,6 +7,7 @@ COPY ./emails ./emails
 COPY ./dist ./dist
 COPY ./config ./config
 COPY ./wait-for-it.sh .
+COPY ./toolsio-com-dd8a403a5115.json .
 
 RUN npm install --production
 ENV NODE_ENV production

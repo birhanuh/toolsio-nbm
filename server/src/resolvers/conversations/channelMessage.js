@@ -5,7 +5,7 @@ import requiresAuth, {
   requiresChannelAccess
 } from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
-import { processUpload, sendUploadToGCS } from "../../utils/uploadFile";
+import { processUpload, sendUploadToGCP } from "../../utils/uploadFile";
 
 import pubsub from "../../utils/pubsub";
 
@@ -60,7 +60,7 @@ export default {
 
           if (file) {
             //const uploadFile = await processUpload(file);
-            const uploadFile = await sendUploadToGCS(file, "channel-messages");
+            const uploadFile = await sendUploadToGCP(file, "channel-messages");
             console.log("FFFF: ", uploadFile);
             messageData.uploadPath = uploadFile.path;
             messageData.mimetype = uploadFile.mimetype;

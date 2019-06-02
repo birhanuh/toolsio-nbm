@@ -14,7 +14,10 @@ import {
 } from "semantic-ui-react";
 import { addFlashMessage } from "../../actions/flashMessageActions";
 import { graphql } from "react-apollo";
-import { SEND_INVITATION_MUTATION, GET_INVITED_USERS_QUERY } from "../../graphql/users";
+import {
+  SEND_INVITATION_MUTATION,
+  GET_INVITED_USERS_QUERY
+} from "../../graphql/users";
 
 // Localization
 import T from "i18n-react";
@@ -75,24 +78,24 @@ class Form extends Component {
             const { success } = sendInvitation;
 
             if (!success) {
-              return
+              return;
             }
-            
-            const data = store.readQuery({ query: GET_INVITED_USERS_QUERY})
+
+            const data = store.readQuery({ query: GET_INVITED_USERS_QUERY });
 
             const invitedUser = {
               id: -1,
               email: email,
               isInvitationAccepted: false,
               __typename: "InvitedUser"
-            }
+            };
 
-            let updatedInvitedUsers = [...data.getInvitedUsers, invitedUser]
+            let updatedInvitedUsers = [...data.getInvitedUsers, invitedUser];
 
-            data.getInvitedUsers = updatedInvitedUsers
+            data.getInvitedUsers = updatedInvitedUsers;
 
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_INVITED_USERS_QUERY, data })  
+            store.writeQuery({ query: GET_INVITED_USERS_QUERY, data });
           }
         })
         .then(res => {
@@ -122,6 +125,10 @@ class Form extends Component {
   render() {
     const { email, errors, isLoading } = this.state;
 
+    const {
+      user: { isAdmin }
+    } = this.props.currentAccount;
+
     return (
       <Container text>
         <Segment>
@@ -148,11 +155,20 @@ class Form extends Component {
                   value={email}
                   onChange={(e, { value }) => this.handleChange("email", value)}
                   fluid
+                  disabled={!isAdmin}
                 />
                 <span className="red">{errors.email}</span>
               </FormElement.Field>
 
-              <Button primary disabled={isLoading}>
+              {!isAdmin && (
+                <Message info size="small">
+                  <Message.Content>
+                    {T.translate("users.form.not_have_a_right_to_invite_user")}
+                  </Message.Content>
+                </Message>
+              )}
+
+              <Button primary disabled={isLoading || !isAdmin}>
                 <Icon name="check circle outline" />
                 &nbsp;{T.translate("users.form.invite_user")}
               </Button>

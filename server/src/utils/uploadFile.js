@@ -33,7 +33,7 @@ export const processUpload = async upload => {
   return { path, mimetype };
 };
 
-export const sendUploadToGCS = async (upload, destination) => {
+export const sendUploadToGCP = async (upload, destination) => {
   if (!upload) {
     return;
   }
@@ -42,8 +42,8 @@ export const sendUploadToGCS = async (upload, destination) => {
 
   const bucketName = process.env.GCP_BUCKET_NAME;
   const bucket = storage.bucket(bucketName);
-  const gcsFileName = `${Date.now()}-${filename}`;
-  const file = bucket.file(destination + "/" + gcsFileName);
+  const gcpFileName = `${Date.now()}-${filename}`;
+  const file = bucket.file(destination + "/" + gcpFileName);
 
   const writeStream = file.createWriteStream({
     metadata: {
@@ -51,7 +51,7 @@ export const sendUploadToGCS = async (upload, destination) => {
     }
   });
 
-  const uploadPath = `https://storage.googleapis.com/${bucketName}/${destination}/${gcsFileName}`;
+  const uploadPath = `https://storage.googleapis.com/${bucketName}/${destination}/${gcpFileName}`;
 
   const promisifiedStream = new Promise((resolve, reject) =>
     stream
@@ -69,7 +69,7 @@ export const sendUploadToGCS = async (upload, destination) => {
 };
 
 /**
-export const sendUploadToGCS = async (upload, destination) => {
+export const sendUploadToGCp = async (upload, destination) => {
   if (!upload) {
     return;
   }
@@ -78,8 +78,8 @@ export const sendUploadToGCS = async (upload, destination) => {
 
   const bucketName = process.env.GCP_BUCKET_NAME;
   const bucket = storage.bucket(bucketName);
-  const gcsFileName = `${Date.now()}-${filename}`;
-  const file = bucket.file(gcsFileName);
+  const gcpFileName = `${Date.now()}-${filename}`;
+  const file = bucket.file(gcpFileName);
 
   const writeStream = file.createWriteStream({
     metadata: {
@@ -93,16 +93,16 @@ export const sendUploadToGCS = async (upload, destination) => {
   });
 
   writeStream.on("finish", () => {
-    upload.cloudStorageObject = gcsFileName;
+    upload.cloudStorageObject = gcpFileName;
     return file.makePublic().then(() => {
-      upload.gcsUrl = `https://storage.googleapis.com/${bucketName}/${destination}/${gcsFileName}`;
+      upload.gcpUrl = `https://storage.googleapis.com/${bucketName}/${destination}/${gcpFileName}`;
     });
   });
 
   writeStream.end(upload.buffer);
 
   return {
-    path: `https://storage.googleapis.com/${bucketName}/${destination}/${gcsFileName}`,
+    path: `https://storage.googleapis.com/${bucketName}/${destination}/${gcpFileName}`,
     mimetype
   };
 }; */

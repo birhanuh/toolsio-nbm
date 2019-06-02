@@ -42,7 +42,9 @@ export default {
           console.log("err", err);
         }
 
-        const url = `http://${subdomain}.lvh.me:3000/signup/invitation/?token=${emailToken}`;
+        const url = `${process.env.CLIENT_PROTOCOL}${subdomain}.${
+          process.env.CLIENT_HOST
+        }/signup/invitation/?token=${emailToken}`;
 
         const email = new Email({
           message: {
@@ -74,7 +76,6 @@ export default {
             .then(res => res)
             .catch(err => err);
 
-          
           if (invitation.errors) {
             console.log("Invitation create err: ", invitation.errors);
             return {
