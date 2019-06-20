@@ -33,7 +33,6 @@ before_script:
   - if [ "$TEST_DIR" = "server" ]; then sleep 3; fi
 script:
   - if [ "$TEST_DIR" = "client" ]; then sleep 10; fi
-  - if [ "$TEST_DIR" = "client" ]; then nc -z localhost 8080; fi
   - if [ "$TEST_DIR" = "client" ]; then npm run cypress:run; fi
   - if [ "$TEST_DIR" = "server" ]; then npm test; fi
 after_script:
