@@ -6,5 +6,4 @@
 !./src/types ./dist/types
 !./config ./config
 !./wait-for-it.sh
-!./toolsio-com-dd8a403a5115.json
 !./.env
