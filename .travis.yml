@@ -18,13 +18,12 @@ before_script:
   - cd client && openssl aes-256-cbc -K $encrypted_dbdfbec4d753_key -iv $encrypted_dbdfbec4d753_iv -in env.js.enc -out env.js -d
   - cd ../server && openssl aes-256-cbc -K $encrypted_539b270f44b8_key -iv $encrypted_539b270f44b8_iv -in .env.enc -out .env -d
   - cd ../server && openssl aes-256-cbc -K $encrypted_539b270f44b8_key -iv $encrypted_539b270f44b8_iv -in toolsio-com-dd8a403a5115.json.enc -out -d
-  - cd ../client && npm install && npm run test:server
-  - cd ../server && npm install && npm run test:server
+  - cd ../client && npm install && npm run test:server:background
+  - cd ../server && npm install && npm run test:server:background
   - sleep 5
   - echo "Both CLIENT and SERVER servers should be up and running."
 script:
   - cd ../client && npm run cypress:run
 after_script:
-  - cd ../client && npm run forever:stop src/index.js
-  - cd ../server && npm run kill:test:server
-  - cd ../server && docker-compose kill
+  - cd ../client && npm run stop:test:server:background
+  - cd ../server && npm run stop:test:server:background
