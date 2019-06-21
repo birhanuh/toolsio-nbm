@@ -1,9 +1,8 @@
 language: node_js
 node_js:
-  - 10.2.1
+  - 11.6.0
 services:
   - redis-server
-  - docker
 notifications:
   email:
     on_success: change
@@ -20,11 +19,9 @@ before_script:
   - cd ../server && openssl aes-256-cbc -K $encrypted_539b270f44b8_key -iv $encrypted_539b270f44b8_iv -in .env.enc -out .env -d
   - cd ../server && openssl aes-256-cbc -K $encrypted_539b270f44b8_key -iv $encrypted_539b270f44b8_iv -in toolsio-com-dd8a403a5115.json.enc -out -d
   - cd ../client && npm install && npm run test:server
-  - cd ../server && npm install && npm run build
-  - sleep 3
-  - cd ../server && docker-compose build
-  - cd ../server && docker-compose up -d
-  - sleep 3
+  - cd ../server && npm install && npm run test:server
+  - sleep 5
+  - echo "Both CLIENT and SERVER servers should be up and running."
 script:
   - cd ../client && npm run cypress:run
 after_script:

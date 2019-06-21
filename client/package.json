@@ -116,9 +116,6 @@
     "test:watch": "npm test -- --watch",
     "cypress:open": "./node_modules/.bin/cypress open",
     "cypress:run": "./node_modules/.bin/cypress run",
-    "kill:test:server": "pkill -f npm start",
-    "forever:list": "./node_modules/.bin/forever list",
-    "forever:start": "./node_modules/.bin/forever start",
-    "forever:stop": "./node_modules/.bin/forever stop"
+    "kill:test:server": "pkill -f npm start"
   }
 }
