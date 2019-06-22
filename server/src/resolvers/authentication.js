@@ -300,63 +300,60 @@ export default {
           );
 
           // Create emailToken if not on test env
-          process.env.NODE_ENV !== "test" &&
-            jwt.sign(
-              {
-                id: response.user.dataValues.id,
-                email: response.user.dataValues.email
-              },
-              process.env.JWTSECRET1,
-              { expiresIn: "60d" },
-              (err, emailToken) => {
-                if (err) {
-                  console.log("err token: ", err);
-                }
+          jwt.sign(
+            {
+              id: response.user.dataValues.id,
+              email: response.user.dataValues.email
+            },
+            process.env.JWTSECRET1,
+            { expiresIn: "60d" },
+            (err, emailToken) => {
+              if (err) {
+                console.log("err token: ", err);
+              }
 
-                const url = `${process.env.CLIENT_PROTOCOL}${
-                  response.account.subdomain
-                }.${
-                  process.env.CLIENT_HOST
-                }/login/confirmation/?token=${emailToken}`;
+              const url = `${process.env.CLIENT_PROTOCOL}${
+                response.account.subdomain
+              }.${
+                process.env.CLIENT_HOST
+              }/login/confirmation/?token=${emailToken}`;
 
-                const email = new Email({
+              const email = new Email({
+                message: {
+                  from: "no-replay@toolsio.com"
+                },
+                // uncomment below to send emails in development/test env:
+                //send: true,
+                // transport: {
+                //   jsonTransport: true
+                // }
+                transport: transporter
+              });
+
+              email
+                .send({
+                  template: "email_confirmation",
                   message: {
-                    from: "no-replay@toolsio.com"
+                    to: response.user.dataValues.email,
+                    subject: "Confirm your Email (Toolsio)"
                   },
-                  // uncomment below to send emails in development/test env:
-                  send: true,
-                  // transport: {
-                  //   jsonTransport: true
-                  // }
-                  transport: transporter
-                });
-
-                email
-                  .send({
-                    template: "email_confirmation",
-                    message: {
-                      to: response.user.dataValues.email,
-                      subject: "Confirm your Email (Toolsio)"
-                    },
-                    locals: {
-                      firstName: response.user.dataValues.firstName,
-                      confirmationLink: url
-                    }
+                  locals: {
+                    firstName: response.user.dataValues.firstName,
+                    confirmationLink: url
+                  }
+                })
+                .then(res =>
+                  console.log("Email confirmation success: ", {
+                    message: res.message,
+                    from: res.originalMessage.from,
+                    to: res.originalMessage.to,
+                    subject: res.originalMessage.subject,
+                    text: res.originalMessage.text
                   })
-                  .then(res =>
-                    console.log("Email confirmation success: ", {
-                      message: res.message,
-                      from: res.originalMessage.from,
-                      to: res.originalMessage.to,
-                      subject: res.originalMessage.subject,
-                      text: res.originalMessage.text
-                    })
-                  )
-                  .catch(err =>
-                    console.error("Email confirmation error: ", err)
-                  );
+                )
+                .catch(err => console.error("Email confirmation error: ", err));
 
-                /*
+              /*
                 const msg = {
                   to: 'birhanuh@gmail.com',
                   from: 'test@example.com',
@@ -366,8 +363,8 @@ export default {
                 };
                 sgMail.send(msg);
                 */
-              }
-            );
+            }
+          );
 
           return {
             success: true,

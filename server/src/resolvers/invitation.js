@@ -51,7 +51,7 @@ export default {
             from: "no-replay@toolsio.com"
           },
           // uncomment below to send emails in development/test env:
-          send: true,
+          //send: true,
           // transport: {
           //   jsonTransport: true
           // }
