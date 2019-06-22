@@ -89,7 +89,7 @@ const apolloServer = new ApolloServer({
         `${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}`
       );
     }
-    console.log("JJJ: ", req.session);
+
     // Subdomain
     const subdomain = req.headers.subdomain;
     // const subdomain = 'testa';

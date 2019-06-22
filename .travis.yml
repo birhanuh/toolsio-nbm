@@ -20,7 +20,7 @@ before_script:
   - cd ../server && openssl aes-256-cbc -K $encrypted_539b270f44b8_key -iv $encrypted_539b270f44b8_iv -in .env.enc -out .env -d
   - cd ../server && openssl aes-256-cbc -K $encrypted_539b270f44b8_key -iv $encrypted_539b270f44b8_iv -in toolsio-com-dd8a403a5115.json.enc -out -d
   - cd ../client && npm install && npm run test:server:background
-  - cd ../server && npm install && npm run build
+  - cd ../server && npm install && npm run build:test
   - sleep 3
   - cd ../server && docker-compose build
   - cd ../server && docker-compose up -d
