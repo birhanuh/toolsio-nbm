@@ -9,7 +9,6 @@
   "scripts": {
     "serve": "NODE_ENV=production node dist/index.js",
     "build": "babel src -d dist",
-    "build:test": "NODE_ENV=test babel src -d dist && cp -r ./src/types ./dist",
     "postbuild": "cp -r ./src/types ./dist",
     "start": "NODE_ENV=development nodemon --exec babel-node -- src/index.js",
     "test:server": "NODE_ENV=test npm run db:reset && NODE_ENV=test npm run db:migrate && NODE_ENV=test babel-node -- src/index.js",
