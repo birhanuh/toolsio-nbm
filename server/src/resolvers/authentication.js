@@ -131,7 +131,8 @@ export default {
       if (req.sessionID) {
         console.log("userSids: ", `userSids:${subdomain}-${user.id}`);
         const redis =
-          process.env.NODE_ENV === "production"
+          process.env.NODE_ENV === "production" ||
+          process.env.NODE_ENV === "test_ci"
             ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
             : new Redis();
         await redis.lpush(`userSids:${subdomain}-${user.id}`, req.sessionID);
@@ -148,7 +149,8 @@ export default {
 
     logoutUser: async (parent, _, { req, res, subdomain }) => {
       const redis =
-        process.env.NODE_ENV === "production"
+        process.env.NODE_ENV === "production" ||
+        process.env.NODE_ENV === "test_ci"
           ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
           : new Redis();
 
@@ -300,60 +302,64 @@ export default {
           );
 
           // Create emailToken if not on test env
-          jwt.sign(
-            {
-              id: response.user.dataValues.id,
-              email: response.user.dataValues.email
-            },
-            process.env.JWTSECRET1,
-            { expiresIn: "60d" },
-            (err, emailToken) => {
-              if (err) {
-                console.log("err token: ", err);
-              }
-
-              const url = `${process.env.CLIENT_PROTOCOL}${
-                response.account.subdomain
-              }.${
-                process.env.CLIENT_HOST
-              }/login/confirmation/?token=${emailToken}`;
-
-              const email = new Email({
-                message: {
-                  from: "no-replay@toolsio.com"
+          process.env.NODE_ENV !== "test" ||
+            (process.env.NODE_ENV !== "test_ci" &&
+              jwt.sign(
+                {
+                  id: response.user.dataValues.id,
+                  email: response.user.dataValues.email
                 },
-                // uncomment below to send emails in development/test env:
-                //send: true,
-                // transport: {
-                //   jsonTransport: true
-                // }
-                transport: transporter
-              });
-
-              email
-                .send({
-                  template: "email_confirmation",
-                  message: {
-                    to: response.user.dataValues.email,
-                    subject: "Confirm your Email (Toolsio)"
-                  },
-                  locals: {
-                    firstName: response.user.dataValues.firstName,
-                    confirmationLink: url
+                process.env.JWTSECRET1,
+                { expiresIn: "60d" },
+                (err, emailToken) => {
+                  if (err) {
+                    console.log("err token: ", err);
                   }
-                })
-                .then(res =>
-                  console.log("Email confirmation success: ", {
-                    message: res.message,
-                    from: res.originalMessage.from,
-                    to: res.originalMessage.to,
-                    subject: res.originalMessage.subject,
-                    text: res.originalMessage.text
-                  })
-                )
-                .catch(err => console.error("Email confirmation error: ", err));
 
-              /*
+                  const url = `${process.env.CLIENT_PROTOCOL}${
+                    response.account.subdomain
+                  }.${
+                    process.env.CLIENT_HOST
+                  }/login/confirmation/?token=${emailToken}`;
+
+                  const email = new Email({
+                    message: {
+                      from: "no-replay@toolsio.com"
+                    },
+                    // uncomment below to send emails in development/test env:
+                    //send: true,
+                    // transport: {
+                    //   jsonTransport: true
+                    // }
+                    transport: transporter
+                  });
+
+                  email
+                    .send({
+                      template: "email_confirmation",
+                      message: {
+                        to: response.user.dataValues.email,
+                        subject: "Confirm your Email (Toolsio)"
+                      },
+                      locals: {
+                        firstName: response.user.dataValues.firstName,
+                        confirmationLink: url
+                      }
+                    })
+                    .then(res =>
+                      console.log("Email confirmation success: ", {
+                        message: res.message,
+                        from: res.originalMessage.from,
+                        to: res.originalMessage.to,
+                        subject: res.originalMessage.subject,
+                        text: res.originalMessage.text
+                      })
+                    )
+                    .catch(err =>
+                      console.error("Email confirmation error: ", err)
+                    );
+
+                  /*
                 const msg = {
                   to: 'birhanuh@gmail.com',
                   from: 'test@example.com',
@@ -363,8 +369,8 @@ export default {
                 };
                 sgMail.send(msg);
                 */
-            }
-          );
+                }
+              ));
 
           return {
             success: true,
@@ -514,57 +520,59 @@ export default {
 
           if (user) {
             // Create forgotPasswordResetRequestToken
-            jwt.sign(
-              {
-                id: user.dataValues.id,
-                email: user.dataValues.email,
-                subdomain: account.dataValues.subdomain
-              },
-              process.env.JWTSECRET1,
-              { expiresIn: "60d" },
-              (err, forgotPasswordResetRequestToken) => {
-                if (err) {
-                  console.log("err token: ", err);
-                }
-
-                const url = `${process.env.CLIENT_PROTOCOL}${
-                  account.subdomain
-                }.${
-                  process.env.CLIENT_HOST
-                }/login/password-reset/?token=${forgotPasswordResetRequestToken}`;
-
-                const email = new Email({
-                  message: {
-                    from: "no-replay@toolsio.com"
+            process.env.NODE_ENV !== "test" ||
+              (process.env.NODE_ENV !== "test_ci" &&
+                jwt.sign(
+                  {
+                    id: user.dataValues.id,
+                    email: user.dataValues.email,
+                    subdomain: account.dataValues.subdomain
                   },
-                  // uncomment below to send emails in development/test env:
-                  send: true,
-                  // transport: {
-                  //   jsonTransport: true
-                  // }
-                  transport: transporter
-                });
-
-                email
-                  .send({
-                    template: "reset_password",
-                    message: {
-                      to: user.dataValues.email,
-                      subject: "Password reset (Toolsio)"
-                    },
-                    locals: {
-                      firstName: user.dataValues.firstName,
-                      passwordResetLink: url
+                  process.env.JWTSECRET1,
+                  { expiresIn: "60d" },
+                  (err, forgotPasswordResetRequestToken) => {
+                    if (err) {
+                      console.log("err token: ", err);
                     }
-                  })
-                  .then(res =>
-                    console.log("Password confirmation success: ", res)
-                  )
-                  .catch(err =>
-                    console.error("Password confirmation error: ", err)
-                  );
-              }
-            );
+
+                    const url = `${process.env.CLIENT_PROTOCOL}${
+                      account.subdomain
+                    }.${
+                      process.env.CLIENT_HOST
+                    }/login/password-reset/?token=${forgotPasswordResetRequestToken}`;
+
+                    const email = new Email({
+                      message: {
+                        from: "no-replay@toolsio.com"
+                      },
+                      // uncomment below to send emails in development/test env:
+                      send: true,
+                      // transport: {
+                      //   jsonTransport: true
+                      // }
+                      transport: transporter
+                    });
+
+                    email
+                      .send({
+                        template: "reset_password",
+                        message: {
+                          to: user.dataValues.email,
+                          subject: "Password reset (Toolsio)"
+                        },
+                        locals: {
+                          firstName: user.dataValues.firstName,
+                          passwordResetLink: url
+                        }
+                      })
+                      .then(res =>
+                        console.log("Password confirmation success: ", res)
+                      )
+                      .catch(err =>
+                        console.error("Password confirmation error: ", err)
+                      );
+                  }
+                ));
 
             return {
               success: true

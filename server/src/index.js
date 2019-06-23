@@ -133,7 +133,8 @@ app.use(
   session({
     store: new RedisStore({
       client:
-        process.env.NODE_ENV === "production"
+        process.env.NODE_ENV === "production" ||
+        process.env.NODE_ENV === "test_ci"
           ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
           : new Redis(),
       prefix: "sess:"
@@ -144,7 +145,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: process.env.NODE_ENV === "test" ? false : true,
-      //secure: process.env.NODE_ENV === "production",
+      //secure: process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test_ci",
       secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     }

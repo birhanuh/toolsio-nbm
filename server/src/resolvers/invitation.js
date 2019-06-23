@@ -76,7 +76,11 @@ export default {
             .then(res => res)
             .catch(err => err);
 
-          if (invitation.errors) {
+          if (
+            invitation.errors &&
+            (process.env.NODE_ENV !== "test" ||
+              process.env.NODE_ENV !== "test_ci")
+          ) {
             console.log("Invitation create err: ", invitation.errors);
             return {
               success: false,
