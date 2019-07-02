@@ -416,6 +416,10 @@ header .ui.fixed.top.menu {
     display: flex;
     flex-direction: column-reverse;
   }
+  .ui.comments .comment:first-child {
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+  }
   .ui.fluid.input .field {
     max-width: 100%;
     flex: 1 0 auto;

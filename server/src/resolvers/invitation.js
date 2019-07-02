@@ -18,14 +18,14 @@ const transporter = nodemailer.createTransport(
 export default {
   Query: {
     getInvitedUsers: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, __, { models, subdomain }) =>
         models.Invitation.findAll({ searchPath: subdomain })
     )
   },
 
   Mutation: {
     sendInvitation: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain, user }) => {
+      async (_, args, { models, subdomain, user }) => {
         let emailToken;
 
         try {

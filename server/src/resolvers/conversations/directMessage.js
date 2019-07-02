@@ -8,8 +8,7 @@ import { formatErrors } from "../../utils/formatErrors";
 import { processUpload, sendUploadToGCP } from "../../utils/uploadFile";
 
 import pubsub from "../../utils/pubsub";
-
-const NEW_DIRECT_MESSAGE = "NEW_DIRECT_MESSAGE";
+import { NEW_DIRECT_MESSAGE } from "../../utils/constants";
 
 export default {
   Subscription: {
@@ -32,7 +31,7 @@ export default {
 
   Query: {
     getDirectMessage: requiresAuth.createResolver(
-      (parent, { id }, { models, subdomain }) =>
+      (_, { id }, { models, subdomain }) =>
         models.DirectMessage.findOne(
           { where: { id }, searchPath: subdomain },
           { raw: true }
@@ -40,7 +39,7 @@ export default {
     ),
 
     getDirectMessages: requiresAuth.createResolver(
-      (parent, { receiverId, cursor }, { models, subdomain, user }) => {
+      (_, { receiverId, cursor }, { models, subdomain, user }) => {
         const options = {
           where: {
             [Sequelize.Op.or]: [
@@ -72,7 +71,7 @@ export default {
     ),
 
     getDirectMessageUsers: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, args, { models, subdomain }) =>
         models.sequelize.query(
           "select distinct on (u.id) u.id, u.first_name, u.email from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id)",
           {
@@ -84,7 +83,7 @@ export default {
     ),
 
     getSentDirectMessages: requiresAuth.createResolver(
-      (parent, args, { models, subdomain, user }) =>
+      (_, __, { models, subdomain, user }) =>
         models.DirectMessage.findAll(
           {
             where: { senderId: user.id },
@@ -96,7 +95,7 @@ export default {
     ),
 
     getInboxDirectMessages: requiresAuth.createResolver(
-      (parent, args, { models, subdomain, user }) =>
+      (_, __, { models, subdomain, user }) =>
         models.DirectMessage.findAll(
           {
             include: [
@@ -113,7 +112,7 @@ export default {
     ),
 
     getUnreadDirectMessagesCount: requiresAuth.createResolver(
-      (parent, args, { models, subdomain, user }) =>
+      (_, __, { models, subdomain, user }) =>
         models.DirectMessage.count(
           {
             where: {
@@ -136,7 +135,7 @@ export default {
     ),
 
     getUnreadDirectMessagesCountSender: requiresAuth.createResolver(
-      (parent, args, { models, subdomain, user }) =>
+      (_, __, { models, subdomain, user }) =>
         models.sequelize
           .query(
             "SELECT count(*), sender_id FROM direct_messages WHERE receiver_id = " +
@@ -168,7 +167,7 @@ export default {
 
   Mutation: {
     createDirectMessage: requiresAuth.createResolver(
-      async (parent, { file, ...args }, { models, subdomain, user }) => {
+      async (_, { file, ...args }, { models, subdomain, user }) => {
         try {
           const messageData = args;
 
@@ -219,7 +218,7 @@ export default {
     ),
 
     markDirectMessagesAsRead: requiresAuth.createResolver(
-      (parent, args, { models, subdomain, user }) =>
+      (_, args, { models, subdomain, user }) =>
         models.DirectMessage.update(
           { isRead: true },
           {

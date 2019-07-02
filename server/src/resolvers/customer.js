@@ -5,7 +5,7 @@ import { formatErrors } from "../utils/formatErrors";
 export default {
   Query: {
     getCustomer: requiresAuth.createResolver(
-      (parent, { id }, { models, subdomain }) =>
+      (_, { id }, { models, subdomain }) =>
         models.Customer.findOne(
           { where: { id }, searchPath: subdomain },
           { raw: true }
@@ -13,7 +13,7 @@ export default {
     ),
 
     getCustomers: requiresAuth.createResolver(
-      (parent, { offset, limit, order, name }, { models, subdomain }) =>
+      (_, { offset, limit, order, name }, { models, subdomain }) =>
         models.Customer.findAndCountAll(
           {
             where: {
@@ -46,7 +46,7 @@ export default {
 
   Mutation: {
     createCustomer: requiresAuth.createResolver(
-      (parent, args, { models, subdomain, user }) =>
+      (_, args, { models, subdomain, user }) =>
         models.Customer.create(
           { ...args, userId: user.id },
           { searchPath: subdomain }
@@ -67,7 +67,7 @@ export default {
     ),
 
     updateCustomer: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, args, { models, subdomain }) =>
         models.Customer.update(args, {
           where: { id: args.id },
           returning: true,
@@ -90,7 +90,7 @@ export default {
     ),
 
     deleteCustomer: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, args, { models, subdomain }) =>
         models.Customer.destroy({
           where: { id: args.id },
           force: true,
@@ -112,16 +112,16 @@ export default {
   },
 
   Customer: {
-    projects: ({ id }, args, { models, subdomain }) =>
+    projects: ({ id }, __, { models, subdomain }) =>
       models.Project.findAll({
         where: { customerId: id },
         searchPath: subdomain
       }),
 
-    sales: ({ id }, args, { models, subdomain }) =>
+    sales: ({ id }, __, { models, subdomain }) =>
       models.Sale.findAll({ where: { customerId: id }, searchPath: subdomain }),
 
-    invoices: ({ id }, args, { models, subdomain }) =>
+    invoices: ({ id }, __, { models, subdomain }) =>
       models.Invoice.findAll({
         where: { customerId: id },
         searchPath: subdomain

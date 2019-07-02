@@ -1,9 +1,9 @@
 *
 !./package.json
+!./package-lock.json
 !./migrations ./migrations
 !./emails ./emails
 !./dist ./dist
 !./src/types ./dist/types
 !./config ./config
 !./wait-for-it.sh
-!./.env

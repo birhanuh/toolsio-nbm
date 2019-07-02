@@ -80,7 +80,6 @@ services:
       - db
     depends_on:
       - db
-    restart: always
     command: ["./wait-for-it.sh", "db:5432", "--", "npm", "run", "db:migrate"]
   nginx-proxy:
     image: jwilder/nginx-proxy

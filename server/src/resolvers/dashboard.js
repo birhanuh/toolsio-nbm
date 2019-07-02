@@ -5,7 +5,7 @@ import _ from "lodash";
 export default {
   Query: {
     getTotalIncomeData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (_, __, { models, subdomain }) => {
         const paidTasksSumPromise = models.sequelize.query(
           "SELECT SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid'",
           {
@@ -37,7 +37,7 @@ export default {
     ),
 
     getIncomesData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (parent, __, { models, subdomain }) => {
         const paidTasksSumDayPromise = models.sequelize.query(
           "SELECT to_char(invoice.updated_at, 'DD/MM/YYYY') AS day, SUM(ts.total) FROM tasks ts JOIN invoices invoice ON ts.project_id = invoice.project_id WHERE invoice.status='paid' GROUP BY 1",
           {
@@ -126,7 +126,7 @@ export default {
     ),
 
     getProjectsData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (_, __, { models, subdomain }) => {
         // const data = await models.Project.findAll({
         //   group: ['status'],
         //   attributes: ['status', [models.sequelize.fn('COUNT', 'status'), 'count']],
@@ -163,7 +163,7 @@ export default {
     ),
 
     getSalesData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (_, __, { models, subdomain }) => {
         const countStatusPromise = models.sequelize.query(
           "SELECT count(*), status FROM sales GROUP BY status",
           {
@@ -195,7 +195,7 @@ export default {
     ),
 
     getCustomersData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (parent, __, { models, subdomain }) => {
         const countProjectsPromise = models.sequelize.query(
           "SELECT c.name, count(p) FROM projects p JOIN customers c ON p.customer_id = c.id GROUP BY c.name",
           {
@@ -245,7 +245,7 @@ export default {
     ),
 
     getInvoicesData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (_, __, { models, subdomain }) => {
         const countStatusPromise = models.sequelize.query(
           "SELECT to_char(created_at, 'Mon/YYYY') AS month, count(*) FROM invoices GROUP BY 1 LIMIT 2",
           {
@@ -277,7 +277,7 @@ export default {
     ),
 
     getProjectTasksData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (_, __, { models, subdomain }) => {
         const countStatusPromise = await models.sequelize.query(
           "SELECT count(*), status FROM projects WHERE status='new' OR status='delayed' GROUP BY status",
           {
@@ -309,7 +309,7 @@ export default {
     ),
 
     getSaleTasksData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (_, __, { models, subdomain }) => {
         const countStatusPromise = await models.sequelize.query(
           "SELECT count(*), status FROM sales WHERE status='new' OR status='delayed' GROUP BY status",
           {
@@ -341,7 +341,7 @@ export default {
     ),
 
     getInvoiceTasksData: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain }) => {
+      async (_, __, { models, subdomain }) => {
         const countStatusPromise = await models.sequelize.query(
           "SELECT count(*), status FROM invoices WHERE status='pending' OR status='overdue' GROUP BY status",
           {

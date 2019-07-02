@@ -5,7 +5,7 @@ import { formatErrors } from "../utils/formatErrors";
 export default {
   Query: {
     getInvoice: requiresAuth.createResolver(
-      (parent, { id }, { models, subdomain }) =>
+      (_, { id }, { models, subdomain }) =>
         models.Invoice.findOne(
           { where: { id }, searchPath: subdomain },
           { raw: true }
@@ -13,7 +13,7 @@ export default {
     ),
 
     getInvoices: requiresAuth.createResolver(
-      (parent, { offset, limit, order, search }, { models, subdomain }) => {
+      (_, { offset, limit, order, search }, { models, subdomain }) => {
         const options = {
           include: [],
           where: {},
@@ -62,7 +62,7 @@ export default {
 
   Mutation: {
     createInvoice: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain, user }) => {
+      async (_, args, { models, subdomain, user }) => {
         try {
           let date = new Date(args.deadline);
           let dataFormated =
@@ -115,7 +115,7 @@ export default {
     ),
 
     updateInvoice: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, args, { models, subdomain }) =>
         models.Invoice.update(args, {
           where: { id: args.id },
           returning: true,
@@ -138,7 +138,7 @@ export default {
     ),
 
     deleteInvoice: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, args, { models, subdomain }) =>
         models.Invoice.destroy({
           where: { id: args.id },
           force: true,
@@ -160,16 +160,15 @@ export default {
   },
 
   GetInvoicesResponseRows: {
-    customer: ({ customerId }, args, { customerLoader }) =>
+    customer: ({ customerId }, __, { customerLoader }) =>
       customerLoader.load(customerId),
 
-    project: ({ projectId }, args, { projectLoader }) =>
+    project: ({ projectId }, __, { projectLoader }) =>
       projectId && projectLoader.load(projectId),
 
-    sale: ({ saleId }, args, { saleLoader }) =>
-      saleId && saleLoader.load(saleId),
+    sale: ({ saleId }, __, { saleLoader }) => saleId && saleLoader.load(saleId),
 
-    total: async ({ projectId, saleId }, args, { models, subdomain }) => {
+    total: async ({ projectId, saleId }, __, { models, subdomain }) => {
       if (projectId) {
         const totalSum = await models.Task.sum("total", {
           where: { projectId },
@@ -190,25 +189,25 @@ export default {
   },
 
   Invoice: {
-    customer: ({ customerId }, args, { models, subdomain }) =>
+    customer: ({ customerId }, __, { models, subdomain }) =>
       models.Customer.findOne({
         where: { id: customerId },
         searchPath: subdomain
       }),
 
-    project: ({ projectId }, args, { models, subdomain }) =>
+    project: ({ projectId }, __, { models, subdomain }) =>
       models.Project.findOne({
         where: { id: projectId },
         searchPath: subdomain
       }),
 
-    sale: ({ saleId }, args, { models, subdomain }) =>
+    sale: ({ saleId }, __, { models, subdomain }) =>
       models.Sale.findOne({ where: { id: saleId }, searchPath: subdomain }),
 
-    user: ({ userId }, args, { models, subdomain }) =>
+    user: ({ userId }, __, { models, subdomain }) =>
       models.User.findOne({ where: { id: userId }, searchPath: subdomain }),
 
-    total: async ({ projectId, saleId }, args, { models, subdomain }) => {
+    total: async ({ projectId, saleId }, __, { models, subdomain }) => {
       if (projectId) {
         const totalSum = await models.Task.sum("total", {
           where: { projectId },

@@ -268,7 +268,7 @@ class InternalHeaderNav extends Component {
             >
               <Dropdown.Menu>
                 <Dropdown.Item as="a" className="ui clearing segment">
-                  <div className="left floated">
+                  <div className="left floated turquoise">
                     <Icon name="tasks" />
                     {T.translate("internal_navigation.tasks")}
                   </div>

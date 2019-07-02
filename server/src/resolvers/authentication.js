@@ -27,7 +27,7 @@ const transporter = nodemailer.createTransport(
 
 export default {
   Query: {
-    getCurrentAccount: async (parent, args, { models, req, subdomain }) => {
+    getCurrentAccount: async (_, __, { models, req, subdomain }) => {
       const account = await models.Account.findOne(
         { where: { subdomain } },
         { raw: true }
@@ -78,11 +78,7 @@ export default {
     // loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) =>
     //   loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
 
-    loginUser: async (
-      parent,
-      { email, password },
-      { models, subdomain, req }
-    ) => {
+    loginUser: async (_, { email, password }, { models, subdomain, req }) => {
       const user = await models.User.findOne(
         { where: { email }, searchPath: subdomain },
         { raw: true }
@@ -147,7 +143,7 @@ export default {
       };
     },
 
-    logoutUser: async (parent, _, { req, res, subdomain }) => {
+    logoutUser: async (_, __, { req, res, subdomain }) => {
       const redis =
         process.env.NODE_ENV === "production" ||
         process.env.NODE_ENV === "test_ci"
@@ -190,7 +186,7 @@ export default {
       return false;
     },
 
-    registerUser: async (parent, args, { models }) => {
+    registerUser: async (_, args, { models }) => {
       const { firstName, lastName, email, password } = args;
       const { subdomain, industry } = args;
 
@@ -390,7 +386,7 @@ export default {
       }
     },
 
-    isSubdomainExist: (parent, { subdomain }, { models }) =>
+    isSubdomainExist: (_, { subdomain }, { models }) =>
       models.Account.findOne({ where: { subdomain } }, { raw: true })
         .then(account => {
           if (account) {
@@ -420,7 +416,7 @@ export default {
         }),
 
     registerInvitedUser: async (
-      parent,
+      _,
       { firstName, lastName, email, password, token },
       { models }
     ) => {
@@ -491,11 +487,7 @@ export default {
       }
     },
 
-    forgotPasswordResetRequest: async (
-      parent,
-      { email },
-      { models, subdomain }
-    ) => {
+    forgotPasswordResetRequest: async (_, { email }, { models, subdomain }) => {
       try {
         const account = await models.Account.findOne(
           { where: { subdomain } },
@@ -599,7 +591,7 @@ export default {
       }
     },
 
-    passwordReset: async (parent, { password, token }, { models }) => {
+    passwordReset: async (_, { password, token }, { models }) => {
       try {
         const { email, subdomain } = jwt.verify(token, process.env.JWTSECRET1);
 
@@ -651,7 +643,7 @@ export default {
       }
     },
 
-    confirmUserEmail: async (parent, { token }, { models, subdomain }) => {
+    confirmUserEmail: async (_, { token }, { models, subdomain }) => {
       try {
         const { email } = jwt.verify(token, process.env.JWTSECRET1);
 

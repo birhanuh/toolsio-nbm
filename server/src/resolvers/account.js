@@ -22,18 +22,17 @@ cloudinary.config({
 
 export default {
   Query: {
-    getAccount: requiresAuth.createResolver(
-      (parent, { subdomain }, { models }) =>
-        models.Account.findOne({ where: { subdomain } }, { raw: true })
+    getAccount: requiresAuth.createResolver((_, { subdomain }, { models }) =>
+      models.Account.findOne({ where: { subdomain } }, { raw: true })
     ),
 
-    getAccounts: requiresAuth.createResolver((parent, args, { models }) =>
+    getAccounts: requiresAuth.createResolver((_, args, { models }) =>
       models.Account.findAll()
     )
   },
 
   Mutation: {
-    updateAccount: requiresAuth.createResolver((parent, args, { models }) => {
+    updateAccount: requiresAuth.createResolver((_, args, { models }) => {
       // Do both asynchronously
       const asyncFunc = async () => {
         var account = await models.Account.findOne(
@@ -92,7 +91,7 @@ export default {
         });
     }),
 
-    deleteAccount: requiresAuth.createResolver((parent, args, { models }) =>
+    deleteAccount: requiresAuth.createResolver((_, args, { models }) =>
       models.Account.destroy({
         where: { subdomain: args.subdomain },
         force: true
@@ -111,7 +110,7 @@ export default {
         })
     ),
 
-    s3SignLogo: requiresAuth.createResolver(async (parent, args) => {
+    s3SignLogo: requiresAuth.createResolver(async (_, args) => {
       const s3Params = {
         Bucket: process.env.S3_BUCKET,
         Key: args.fileName,

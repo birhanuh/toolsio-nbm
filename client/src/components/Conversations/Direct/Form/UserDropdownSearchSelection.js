@@ -28,7 +28,11 @@ const UserDropdownSearchSelection = ({
       text: user.firstName,
       image: {
         avatar: true,
-        src: user.avatarUrl ? user.avatarUrl : avatarPlaceholderSmall,
+        src: user.avatarUrl
+          ? `http://res.cloudinary.com/toolsio/image/upload/c_thumb,h_175,w_175/v1/${
+              user.avatarUrl
+            }`
+          : avatarPlaceholderSmall,
         alt: "avatar"
       }
     }));

@@ -5,13 +5,12 @@ import { formatErrors } from "../utils/formatErrors";
 
 export default {
   Query: {
-    getEvents: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
-        models.Event.findAll({ searchPath: subdomain })
+    getEvents: requiresAuth.createResolver((_, __, { models, subdomain }) =>
+      models.Event.findAll({ searchPath: subdomain })
     ),
 
     getProjectEvents: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, __, { models, subdomain }) =>
         models.Project.findAll({
           where: {
             deadline: {
@@ -34,22 +33,21 @@ export default {
           })
     ),
 
-    getSaleEvents: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
-        models.Sale.findAll({
-          where: {
-            deadline: {
-              [Sequelize.Op.gt]: new Date()
-            }
-          },
-          searchPath: subdomain
-        })
+    getSaleEvents: requiresAuth.createResolver((_, __, { models, subdomain }) =>
+      models.Sale.findAll({
+        where: {
+          deadline: {
+            [Sequelize.Op.gt]: new Date()
+          }
+        },
+        searchPath: subdomain
+      })
     )
   },
 
   Mutation: {
     createEvent: requiresAuth.createResolver(
-      (parent, args, { models, user, subdomain }) =>
+      (_, args, { models, user, subdomain }) =>
         models.Event.create(
           { ...args, userId: user.id },
           { searchPath: subdomain }
@@ -69,48 +67,46 @@ export default {
           })
     ),
 
-    updateEvent: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
-        models.Event.update(args, {
-          where: { id: args.id },
-          returning: true,
-          plain: true,
-          searchPath: subdomain
+    updateEvent: requiresAuth.createResolver((_, args, { models, subdomain }) =>
+      models.Event.update(args, {
+        where: { id: args.id },
+        returning: true,
+        plain: true,
+        searchPath: subdomain
+      })
+        .then(result => {
+          return {
+            success: true,
+            event: result[1].dataValues
+          };
         })
-          .then(result => {
-            return {
-              success: true,
-              event: result[1].dataValues
-            };
-          })
-          .catch(err => {
-            console.log("err: ", err);
-            return {
-              success: false,
-              errors: formatErrors(err)
-            };
-          })
+        .catch(err => {
+          console.log("err: ", err);
+          return {
+            success: false,
+            errors: formatErrors(err)
+          };
+        })
     ),
 
-    deleteEvent: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
-        models.Event.destroy({
-          where: { id: args.id },
-          force: true,
-          searchPath: subdomain
+    deleteEvent: requiresAuth.createResolver((_, args, { models, subdomain }) =>
+      models.Event.destroy({
+        where: { id: args.id },
+        force: true,
+        searchPath: subdomain
+      })
+        .then(res => {
+          return {
+            success: res === 1
+          };
         })
-          .then(res => {
-            return {
-              success: res === 1
-            };
-          })
-          .catch(err => {
-            console.log("err: ", err);
-            return {
-              success: false,
-              errors: formatErrors(err)
-            };
-          })
+        .catch(err => {
+          console.log("err: ", err);
+          return {
+            success: false,
+            errors: formatErrors(err)
+          };
+        })
     )
   }
 };

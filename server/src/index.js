@@ -92,7 +92,7 @@ const apolloServer = new ApolloServer({
 
     // Subdomain
     const subdomain = req.headers.subdomain;
-    // const subdomain = 'testa';
+    //const subdomain = "testa";
 
     let user;
     if (subdomain && req.session && req.session.userId) {
@@ -181,9 +181,9 @@ httpServer.listen(app.get('port'), () => {
 });*/
 
 // Flash Redis on test env
-if (process.env.NODE_ENV === "test") {
-  //new Redis().flushall();
-}
+// if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "test_ci") {
+//   new Redis().flushall();
+// }
 
 httpServer.listen(app.get("port"), () => {
   new SubscriptionServer(

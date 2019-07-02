@@ -32,7 +32,7 @@ export default createResolver((parent, args, context) => {
 });
 
 export const requiresChannelAccess = createResolver(
-  async (parent, { channelId }, { models, subdomain, user }) => {
+  async (_, { channelId }, { models, subdomain, user }) => {
     if (!user || !user.id) {
       throw new Error("Not authenticated");
     }
@@ -52,7 +52,7 @@ export const requiresChannelAccess = createResolver(
 );
 
 export const requiresDirectMessageAccess = createResolver(
-  async (parent, { receiverId }, { models, subdomain, user }) => {
+  async (_, { receiverId }, { models, subdomain, user }) => {
     if (!user || !user.id) {
       throw new Error("Not authenticated");
     }
