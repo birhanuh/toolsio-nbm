@@ -51,8 +51,8 @@ export default function Sale({ sale, status, tax }) {
                     (sale.status === "in progress" && "orange") ||
                     ((sale.status === "finished" ||
                       sale.status === "delivered") &&
-                      sale.status === "delayed" &&
-                      "red")
+                      "green") ||
+                    (sale.status === "delayed" && "red")
                   }
                 >
                   {sale.status}

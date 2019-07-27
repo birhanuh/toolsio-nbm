@@ -9,6 +9,7 @@ export default function Tr({ customer }) {
       <td>{customer.vatNumber}</td>
       <td>
         {customer.phoneNumber}
+        <br />
         {customer.email}
       </td>
       <td>{}</td>

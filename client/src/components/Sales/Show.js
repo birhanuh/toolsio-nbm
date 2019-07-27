@@ -86,11 +86,18 @@ class Show extends Component {
   };
 
   handleStatusChange = value => {
-    const { id } = this.state;
+    const { id, name, deadline, description, customer } = this.state;
 
     this.props
       .updateSaleMutation({
-        variables: { id, status: value }
+        variables: {
+          id,
+          name,
+          deadline,
+          description,
+          customerId: customer.id,
+          status: value
+        }
       })
       .then(res => {
         const { success, sale, errors } = res.data.updateSale;
