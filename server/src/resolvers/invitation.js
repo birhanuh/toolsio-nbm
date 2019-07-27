@@ -18,14 +18,14 @@ const transporter = nodemailer.createTransport(
 export default {
   Query: {
     getInvitedUsers: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, __, { models, subdomain }) =>
         models.Invitation.findAll({ searchPath: subdomain })
     )
   },
 
   Mutation: {
     sendInvitation: requiresAuth.createResolver(
-      async (parent, args, { models, subdomain, user }) => {
+      async (_, args, { models, subdomain, user }) => {
         let emailToken;
 
         try {
@@ -42,14 +42,16 @@ export default {
           console.log("err", err);
         }
 
-        const url = `http://${subdomain}.lvh.me:3000/signup/invitation/?token=${emailToken}`;
+        const url = `${process.env.CLIENT_PROTOCOL}${subdomain}.${
+          process.env.CLIENT_HOST
+        }/signup/invitation/?token=${emailToken}`;
 
         const email = new Email({
           message: {
             from: "no-replay@toolsio.com"
           },
           // uncomment below to send emails in development/test env:
-          send: true,
+          //send: true,
           // transport: {
           //   jsonTransport: true
           // }
@@ -74,8 +76,11 @@ export default {
             .then(res => res)
             .catch(err => err);
 
-          
-          if (invitation.errors) {
+          if (
+            invitation.errors &&
+            (process.env.NODE_ENV !== "test" ||
+              process.env.NODE_ENV !== "test_ci")
+          ) {
             console.log("Invitation create err: ", invitation.errors);
             return {
               success: false,

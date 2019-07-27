@@ -9,13 +9,14 @@ import Form from "./Form";
 class Page extends Component {
   render() {
     const {
-      data: { getInvitedUsers }
+      data: { getInvitedUsers },
+      currentAccount
     } = this.props;
 
     return (
       <Grid.Row columns={1}>
         <Container text>
-          <Form />
+          <Form currentAccount={currentAccount} />
 
           {getInvitedUsers && <List users={getInvitedUsers} />}
         </Container>

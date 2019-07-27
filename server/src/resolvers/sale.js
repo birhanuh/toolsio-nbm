@@ -4,16 +4,15 @@ import { formatErrors } from "../utils/formatErrors";
 
 export default {
   Query: {
-    getSale: requiresAuth.createResolver(
-      (parent, { id }, { models, subdomain }) =>
-        models.Sale.findOne(
-          { where: { id }, searchPath: subdomain },
-          { raw: true }
-        )
+    getSale: requiresAuth.createResolver((_, { id }, { models, subdomain }) =>
+      models.Sale.findOne(
+        { where: { id }, searchPath: subdomain },
+        { raw: true }
+      )
     ),
 
     getSales: requiresAuth.createResolver(
-      (parent, { offset, limit, order, name }, { models, subdomain }) =>
+      (_, { offset, limit, order, name }, { models, subdomain }) =>
         models.Sale.findAll(
           {
             where: {
@@ -31,7 +30,7 @@ export default {
     ),
 
     getSalesWithoutInvoice: requiresAuth.createResolver(
-      (parent, { name }, { models, subdomain }) =>
+      (_, { name }, { models, subdomain }) =>
         models.sequelize.query(
           "SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id, c.id AS customer_id, c.name AS customer_name FROM sales s LEFT JOIN invoices i ON s.id = i.sale_id JOIN customers c ON s.customer_id=c.id WHERE i.sale_id IS NULL AND s.name ILIKE :saleName",
           {
@@ -44,7 +43,7 @@ export default {
     ),
 
     getSalesWithInvoice: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
+      (_, __, { models, subdomain }) =>
         models.sequelize.query(
           "SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id FROM sales s INNER JOIN invoices i ON s.id = i.sale_id",
           {
@@ -58,7 +57,7 @@ export default {
 
   Mutation: {
     createSale: requiresAuth.createResolver(
-      (parent, args, { models, user, subdomain }) =>
+      (_, args, { models, user, subdomain }) =>
         models.Sale.schema(subdomain)
           .create({ ...args, userId: user.id }, { searchPath: subdomain })
           .then(sale => {
@@ -76,70 +75,68 @@ export default {
           })
     ),
 
-    updateSale: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
-        models.Sale.schema(subdomain)
-          .update(args, {
-            where: { id: args.id },
-            returning: true,
-            plain: true,
-            searchPath: subdomain
-          })
-          .then(result => {
-            return {
-              success: true,
-              sale: result[1].dataValues
-            };
-          })
-          .catch(err => {
-            console.log("err: ", err);
-            return {
-              success: false,
-              errors: formatErrors(err)
-            };
-          })
+    updateSale: requiresAuth.createResolver((_, args, { models, subdomain }) =>
+      models.Sale.schema(subdomain)
+        .update(args, {
+          where: { id: args.id },
+          returning: true,
+          plain: true,
+          searchPath: subdomain
+        })
+        .then(result => {
+          return {
+            success: true,
+            sale: result[1].dataValues
+          };
+        })
+        .catch(err => {
+          console.log("err: ", err);
+          return {
+            success: false,
+            errors: formatErrors(err)
+          };
+        })
     ),
 
-    deleteSale: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
-        models.Sale.schema(subdomain)
-          .destroy({
-            where: { id: args.id },
-            force: true,
-            searchPath: subdomain
-          })
-          .then(res => {
-            return {
-              success: res === 1
-            };
-          })
-          .catch(err => {
-            console.log("err: ", err);
-            return {
-              success: false,
-              errors: formatErrors(err)
-            };
-          })
+    deleteSale: requiresAuth.createResolver((_, args, { models, subdomain }) =>
+      models.Sale.schema(subdomain)
+        .destroy({
+          where: { id: args.id },
+          force: true,
+          searchPath: subdomain
+        })
+        .then(res => {
+          return {
+            success: res === 1
+          };
+        })
+        .catch(err => {
+          console.log("err: ", err);
+          return {
+            success: false,
+            errors: formatErrors(err)
+          };
+        })
     )
   },
 
   Sale: {
-    items: ({ id }, args, { models, subdomain }) =>
+    items: ({ id }, __, { models, subdomain }) =>
       models.Item.findAll({ where: { saleId: id }, searchPath: subdomain }),
 
-    customer: ({ customerId }, args, { models, subdomain }) =>
+    customer: ({ customerId }, __, { models, subdomain }) =>
       models.Customer.findOne(
         { where: { id: customerId }, searchPath: subdomain },
         { raw: true }
       ),
 
-    user: ({ userId }, args, { models, subdomain }) =>
+    user: ({ userId }, __, { models, subdomain }) =>
       models.User.findOne(
         { where: { id: userId }, searchPath: subdomain },
         { raw: true }
       ),
 
-    total: async ({ id }, args, { models, subdomain }) => {
+    total: async ({ id }, __, { models, subdomain }) => {
       const totalSum = await models.Item.sum("total", {
         where: { saleId: id },
         searchPath: subdomain
@@ -150,14 +147,14 @@ export default {
   },
 
   GetSalesResponse: {
-    customer: ({ customerId }, args, { customerLoader }) =>
+    customer: ({ customerId }, __, { customerLoader }) =>
       customerLoader.load(customerId),
 
-    user: ({ userId }, args, { userLoader }) => userLoader.load(userId)
+    user: ({ userId }, __, { userLoader }) => userLoader.load(userId)
   },
 
   GetSalesWithoutInvoiceResponse: {
-    total: async ({ id }, args, { models, subdomain }) => {
+    total: async ({ id }, __, { models, subdomain }) => {
       const totalSum = await models.Item.sum("total", {
         where: { saleId: id },
         searchPath: subdomain
@@ -168,13 +165,13 @@ export default {
   },
 
   GetSalesWithInvoiceResponse: {
-    customer: ({ customer_id }, args, { models, subdomain }) =>
+    customer: ({ customer_id }, __, { models, subdomain }) =>
       models.Customer.findOne(
         { where: { id: customer_id }, searchPath: subdomain },
         { raw: true }
       ),
 
-    total: async ({ id }, args, { models, subdomain }) => {
+    total: async ({ id }, __, { models, subdomain }) => {
       const totalSum = await models.Item.sum("total", {
         where: { saleId: id },
         searchPath: subdomain

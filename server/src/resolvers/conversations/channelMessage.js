@@ -5,11 +5,10 @@ import requiresAuth, {
   requiresChannelAccess
 } from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
-import { processUpload } from "../../utils/uploadFile";
+import { processUpload, sendUploadToGCP } from "../../utils/uploadFile";
 
 import pubsub from "../../utils/pubsub";
-
-const NEW_CHANNEL_MESSAGE = "NEW_CHANNEL_MESSAGE";
+import { NEW_CHANNEL_MESSAGE } from "../../utils/constants";
 
 export default {
   Subscription: {
@@ -25,7 +24,7 @@ export default {
 
   Query: {
     getChannelMessage: requiresAuth.createResolver(
-      (parent, { id }, { models, subdomain }) =>
+      (_, { id }, { models, subdomain }) =>
         models.ChannelMessage.findOne(
           { where: { id }, searchPath: subdomain },
           { raw: true }
@@ -33,7 +32,7 @@ export default {
     ),
 
     getChannelMessages: requiresAuth.createResolver(
-      (parent, { channelId, cursor }, { models, subdomain }) => {
+      (_, { channelId, cursor }, { models, subdomain }) => {
         const options = {
           where: { channelId: channelId },
           order: [["created_at", "DESC"]],
@@ -54,12 +53,14 @@ export default {
 
   Mutation: {
     createChannelMessage: requiresAuth.createResolver(
-      async (parent, { file, ...args }, { models, subdomain, user }) => {
+      async (_, { file, ...args }, { models, subdomain, user }) => {
         try {
           const messageData = args;
 
           if (file) {
-            const uploadFile = await processUpload(file);
+            //const uploadFile = await processUpload(file);
+            const uploadFile = await sendUploadToGCP(file, "channel-messages");
+            console.log("FFFF: ", uploadFile);
             messageData.uploadPath = uploadFile.path;
             messageData.mimetype = uploadFile.mimetype;
           }
@@ -104,7 +105,8 @@ export default {
 
   ChannelMessage: {
     uploadPath: parent =>
-      parent.uploadPath && process.env.SERVER_URL + parent.uploadPath,
+      // parent.uploadPath && process.env.SERVER_URL + parent.uploadPath, // Used if proceddUpload function is used
+      parent.uploadPath && parent.uploadPath,
 
     user: ({ user, userId }, args, { userLoader }) => {
       if (user) {

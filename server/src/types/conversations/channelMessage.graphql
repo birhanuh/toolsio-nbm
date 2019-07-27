@@ -1,5 +1,3 @@
-scalar Upload
-
 type ChannelMessage {
   id: Int!
   body: String

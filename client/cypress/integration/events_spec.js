@@ -55,8 +55,10 @@ describe("Events", function() {
 
   it("Create event", function() {
     cy.get(
-      ".fc-widget-content .fc-row:nth-child(5) .fc-bg table tr .fc-widget-content.fc-today"
-    ).click();
+      ".fc-widget-content .fc-row:nth-child(5) .fc-bg table tr .fc-widget-content.fc-future"
+    )
+      .first()
+      .click();
 
     cy.get(".ui.form input[name=title]").type("Event 1");
     cy.get(".ui.form input[name=url]").type("http://example.com");

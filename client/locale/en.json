@@ -1,4 +1,4 @@
-{  
+{
   "landing": {
     "home": {
       "header": "Home",
@@ -88,7 +88,7 @@
       "trello_link": "Link to our Trello dashboard -> {link}"
     }
   },
-  "sign_up": {        
+  "sign_up": {
     "header": "Create an Account",
     "first_name": "First name",
     "last_name": "Last name",
@@ -98,8 +98,8 @@
     "notice": "All (*) fields are mandatory. Enter correct information.",
     "already_a_user": "Already a user?",
     "log_in_here": "Sign in here",
-    "sign_up": "Sign up",   
-    "complete_invitation_sign_up": "Complete your signing to {account} account by filling this form",  
+    "sign_up": "Sign up",
+    "complete_invitation_sign_up": "Complete your signing to {account} account by filling this form",
     "account": {
       "industry": "Industry (*)",
       "select_industry": "-Select Industry-",
@@ -117,7 +117,7 @@
     "flash": {
       "success_create": "You have signed up successfully!"
     }
-  },  
+  },
   "log_in": {
     "header": "Log-in to your account",
     "email": "Email (*)",
@@ -233,12 +233,13 @@
       "email": "Email",
       "invite_user": "Invite User",
       "invite_user_label": "Send invitation for the user whom you want to join this accout",
-      "email_required": "Email required"
+      "email_required": "Email required",
+      "not_have_a_right_to_invite_user": "You don't have the right to inivate a user. Message/Contact admin of this account to make the invitation on your behalf."
     },
     "list": {
       "first_name": "First name",
       "last_name": "Last name",
-      "email": "Email",    
+      "email": "Email",
       "invitation_accepted": "Invitation ccepted",
       "empty_users_header": "There are no invited Users",
       "empty_users_message": "Enter email and click Send button above to send your first invitation to your colleagues/collaboraters."
@@ -277,7 +278,7 @@
       "pending": "Pending",
       "overdue": "Overdue",
       "invoicing_performance": "Invoicing performance"
-    },  
+    },
     "project_tasks": {
       "header": "Project tasks",
       "no_projects": "You have no Projects",
@@ -301,10 +302,10 @@
       "pending_invoices": "You have *{count}* pending Invoices.",
       "no_overdue_invoices": "You have no overdue Invoices",
       "overdue_invoices": "You have *{count}* overdue Invoices."
-    },   
+    },
     "last_month": "Last month",
-    "this_month": "This month", 
-    "average": "Avg", 
+    "this_month": "This month",
+    "average": "Avg",
     "no_tasks_users": "No tasks by other users",
     "first_invoice": "Create your fisrt Invoice",
     "first_project": "Create your fisrt Project",
@@ -453,7 +454,7 @@
         "success_update": "Sale *{name}* is updated!"
       },
       "empty_customers_message": "There are no Customers. Click Add new Customer button bellow to add your first Customer."
-    },    
+    },
     "show": {
       "header": "Sale",
       "name": "name",
@@ -481,7 +482,7 @@
       "header": "Items",
       "delete": "Delete",
       "cancel": "Cancel",
-      "form": {        
+      "form": {
         "name": "Name",
         "quantity": "Quantity",
         "unit": "Unit",
@@ -494,8 +495,8 @@
         "quantity_required": "Quantity is required",
         "unit_price_required": "Unit price is required",
         "add_item": "Add Item",
-        "edit_item": "Edit Item", 
-        "update_item": "Update Item",       
+        "edit_item": "Edit Item",
+        "update_item": "Update Item",
         "confirmation_header": "Confirmation",
         "confirmation_msg": "Are you sure to delete this Item?",
         "flash": {
@@ -545,7 +546,7 @@
         "country": "Country",
         "select_country": "-Select Country-",
         "select_region": "-Select Region-"
-      },  
+      },
       "name_required": "Name is required.",
       "vat_number_required": "Vat number is required.",
       "phone_number_or_email_required": "Either Phone number or email should be filled.",
@@ -684,13 +685,13 @@
         "user": {
           "first_name": "First name",
           "email": "Email"
-        },        
+        },
         "address": {
           "street": "Street",
           "postal_code": "Postal code",
           "region": "Region",
           "country": "Country"
-        } 
+        }
       },
       "sale_status": "Sale status",
       "project_status": "Project status",
@@ -741,8 +742,8 @@
           "total": "Total"
         }
       },
-     "confirmation_header": "Confirmation",
-      "confirmation_msg": "Are you sure to delete this invoice?",      
+      "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this invoice?",
       "flash": {
         "success_delete": "Invoice of *{name}* is deleted!",
         "error_delete": "Invoice of *{name}* couldn't be deleted, try again after refreshing the page"
@@ -764,7 +765,7 @@
       "create_channel": "Create Channel",
       "no_channel": "No Channels",
       "empty_message": "Message is empty",
-      "description": "Internal conversation interface.", 
+      "description": "Internal conversation interface.",
       "landing_header": "Channel or Private messages?",
       "landing_colleagues_description": "Comminucate with your colleagues by creating channels or adding users through as a private messaging.",
       "landing_messages_description": "Write, read messages by directly writing in the message box.",
@@ -848,4 +849,3 @@
     }
   }
 }
-

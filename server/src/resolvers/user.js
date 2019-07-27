@@ -25,30 +25,28 @@ cloudinary.config({
 
 export default {
   Query: {
-    getUser: requiresAuth.createResolver(
-      (parent, { id }, { models, subdomain }) =>
-        models.User.findOne(
-          { where: { id }, searchPath: subdomain },
-          { raw: true }
-        )
+    getUser: requiresAuth.createResolver((_, { id }, { models, subdomain }) =>
+      models.User.findOne(
+        { where: { id }, searchPath: subdomain },
+        { raw: true }
+      )
     ),
 
     getUserByEmail: requiresAuth.createResolver(
-      (parent, { email }, { models, subdomain }) =>
+      (_, { email }, { models, subdomain }) =>
         models.User.findOne(
           { where: { email }, searchPath: subdomain },
           { raw: true }
         )
     ),
 
-    getUsers: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) =>
-        models.User.findAll({ searchPath: subdomain })
+    getUsers: requiresAuth.createResolver((_, __, { models, subdomain }) =>
+      models.User.findAll({ searchPath: subdomain })
     )
   },
 
   Mutation: {
-    s3SignAvatar: requiresAuth.createResolver(async (parent, args) => {
+    s3SignAvatar: requiresAuth.createResolver(async (_, args) => {
       const s3Params = {
         Bucket: process.env.S3_BUCKET,
         Key: args.fileName,
@@ -85,7 +83,7 @@ export default {
     }),
 
     updateUser: requiresAuth.createResolver(
-      (parent, args, { models, subdomain }) => {
+      (_, args, { models, subdomain }) => {
         // Do both asynchronously
         const asyncFunc = async () => {
           var user = await models.User.findOne(
@@ -131,7 +129,7 @@ export default {
     ),
 
     updateUserPassword: requiresAuth.createResolver(
-      async (parent, args, { models, user, subdomain }) => {
+      async (_, args, { models, user, subdomain }) => {
         // Do both asynchronously
         var userFound = await models.User.findOne(
           { where: { email: user.email }, searchPath: subdomain },

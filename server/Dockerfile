@@ -2,6 +2,7 @@ FROM node
 WORKDIR /app
 
 COPY ./package.json .
+COPY ./package-lock.json .
 COPY ./migrations ./migrations
 COPY ./emails ./emails
 COPY ./dist ./dist

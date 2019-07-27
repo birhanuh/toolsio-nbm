@@ -36,6 +36,8 @@
   },
   "homepage": "https://github.com/birhanuh/toolsio-node#readme",
   "dependencies": {
+    "@babel/runtime": "^7.4.4",
+    "@google-cloud/storage": "^2.4.3",
     "acorn": "^6.1.1",
     "apollo-server-express": "^2.4.8",
     "aws-sdk": "^2.431.0",
@@ -68,10 +70,9 @@
     "passport-local": "^1.0.0",
     "pg": "^7.9.0",
     "pug": "^2.0.3",
-    "sequelize": "^4.42.0",
-    "sequelize-cli": "^5.4.0",
+    "sequelize": "^4.44.0",
+    "sequelize-cli": "^5.5.0",
     "shortid": "^2.2.14",
-    "socket.io": "^2.2.0",
     "subscriptions-transport-ws": "^0.9.16"
   },
   "devDependencies": {
@@ -81,8 +82,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
     "@babel/plugin-transform-runtime": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
-    "@babel/runtime": "^7.4.2",
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.5.0",

@@ -70,7 +70,11 @@ app.use(
 // BodyParser and Cookie parser Middleware(Setup code)
 app.use(logger("dev"));
 
-console.log("M: ", /\.lvh.me:3000$/, `/\\.${process.env.CLIENT_HOST}$/`);
+console.log(
+  "Client host: ",
+  /\.lvh.me:3000$/,
+  `/\\.${process.env.CLIENT_HOST}$/`
+);
 
 const apolloServer = new ApolloServer({
   schema,
@@ -92,7 +96,7 @@ const apolloServer = new ApolloServer({
 
     // Subdomain
     const subdomain = req.headers.subdomain;
-    // const subdomain = 'testa';
+    //const subdomain = "testa";
 
     let user;
     if (subdomain && req.session && req.session.userId) {
@@ -133,7 +137,8 @@ app.use(
   session({
     store: new RedisStore({
       client:
-        process.env.NODE_ENV === "production"
+        process.env.NODE_ENV === "production" ||
+        process.env.NODE_ENV === "test_ci"
           ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
           : new Redis(),
       prefix: "sess:"
@@ -143,8 +148,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
-      //secure: process.env.NODE_ENV === "production",
+      httpOnly: process.env.NODE_ENV === "test" ? false : true,
+      //secure: process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test_ci",
       secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     }
@@ -180,9 +185,9 @@ httpServer.listen(app.get('port'), () => {
 });*/
 
 // Flash Redis on test env
-if (process.env.NODE_ENV === "test") {
-  new Redis().flushall();
-}
+// if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "test_ci") {
+//   new Redis().flushall();
+// }
 
 httpServer.listen(app.get("port"), () => {
   new SubscriptionServer(

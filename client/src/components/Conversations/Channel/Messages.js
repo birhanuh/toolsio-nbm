@@ -127,9 +127,7 @@ const MessageTypes = ({ message: { uploadPath, body, mimetype } }) => {
       return (
         <div className="ui small message img">
           <ShowInModal
-            trigger={
-              <img src={uploadPath} alt={`${uploadPath}-avatar-url-small`} />
-            }
+            trigger={<img src={uploadPath} alt={uploadPath} />}
             src={uploadPath}
             mimetype={mimetype}
           />

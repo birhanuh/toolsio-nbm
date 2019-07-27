@@ -61,9 +61,9 @@ describe("Customer", () => {
         headers: {
           origin: "http://localhost:8080",
           subdomain: subdomainLocal
-        }
-      },
-      { withCredentials: true }
+        },
+        withCredentials: true
+      }
     );
     console.log("REZ: ", response.data);
     const {

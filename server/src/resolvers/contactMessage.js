@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport(
 
 export default {
   Mutation: {
-    createContactMessage: async (parent, args) => {
+    createContactMessage: async (_, args) => {
       const { name, email, messageBody } = args;
 
       const emailTemplate = new Email({

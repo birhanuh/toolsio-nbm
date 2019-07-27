@@ -27,7 +27,7 @@ const transporter = nodemailer.createTransport(
 
 export default {
   Query: {
-    getCurrentAccount: async (parent, args, { models, req, subdomain }) => {
+    getCurrentAccount: async (_, __, { models, req, subdomain }) => {
       const account = await models.Account.findOne(
         { where: { subdomain } },
         { raw: true }
@@ -78,11 +78,7 @@ export default {
     // loginUser: (parent, { email, password }, { models, subdomain, SECRET, SECRET2 }) =>
     //   loginUserWithToken(email, password, models, subdomain, SECRET, SECRET2),
 
-    loginUser: async (
-      parent,
-      { email, password },
-      { models, subdomain, req }
-    ) => {
+    loginUser: async (_, { email, password }, { models, subdomain, req }) => {
       const user = await models.User.findOne(
         { where: { email }, searchPath: subdomain },
         { raw: true }
@@ -131,7 +127,8 @@ export default {
       if (req.sessionID) {
         console.log("userSids: ", `userSids:${subdomain}-${user.id}`);
         const redis =
-          process.env.NODE_ENV === "production"
+          process.env.NODE_ENV === "production" ||
+          process.env.NODE_ENV === "test_ci"
             ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
             : new Redis();
         await redis.lpush(`userSids:${subdomain}-${user.id}`, req.sessionID);
@@ -146,9 +143,10 @@ export default {
       };
     },
 
-    logoutUser: async (parent, _, { req, res, subdomain }) => {
+    logoutUser: async (_, __, { req, res, subdomain }) => {
       const redis =
-        process.env.NODE_ENV === "production"
+        process.env.NODE_ENV === "production" ||
+        process.env.NODE_ENV === "test_ci"
           ? new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST)
           : new Redis();
 
@@ -188,7 +186,7 @@ export default {
       return false;
     },
 
-    registerUser: async (parent, args, { models }) => {
+    registerUser: async (_, args, { models }) => {
       const { firstName, lastName, email, password } = args;
       const { subdomain, industry } = args;
 
@@ -300,63 +298,64 @@ export default {
           );
 
           // Create emailToken if not on test env
-          process.env.NODE_ENV !== "test" &&
-            jwt.sign(
-              {
-                id: response.user.dataValues.id,
-                email: response.user.dataValues.email
-              },
-              process.env.JWTSECRET1,
-              { expiresIn: "60d" },
-              (err, emailToken) => {
-                if (err) {
-                  console.log("err token: ", err);
-                }
+          process.env.NODE_ENV !== "test" ||
+            (process.env.NODE_ENV !== "test_ci" &&
+              jwt.sign(
+                {
+                  id: response.user.dataValues.id,
+                  email: response.user.dataValues.email
+                },
+                process.env.JWTSECRET1,
+                { expiresIn: "60d" },
+                (err, emailToken) => {
+                  if (err) {
+                    console.log("err token: ", err);
+                  }
 
-                const url = `${process.env.CLIENT_PROTOCOL}${
-                  response.account.subdomain
-                }.${
-                  process.env.CLIENT_HOST
-                }/login/confirmation/?token=${emailToken}`;
+                  const url = `${process.env.CLIENT_PROTOCOL}${
+                    response.account.subdomain
+                  }.${
+                    process.env.CLIENT_HOST
+                  }/login/confirmation/?token=${emailToken}`;
 
-                const email = new Email({
-                  message: {
-                    from: "no-replay@toolsio.com"
-                  },
-                  // uncomment below to send emails in development/test env:
-                  send: true,
-                  // transport: {
-                  //   jsonTransport: true
-                  // }
-                  transport: transporter
-                });
-
-                email
-                  .send({
-                    template: "email_confirmation",
+                  const email = new Email({
                     message: {
-                      to: response.user.dataValues.email,
-                      subject: "Confirm your Email (Toolsio)"
+                      from: "no-replay@toolsio.com"
                     },
-                    locals: {
-                      firstName: response.user.dataValues.firstName,
-                      confirmationLink: url
-                    }
-                  })
-                  .then(res =>
-                    console.log("Email confirmation success: ", {
-                      message: res.message,
-                      from: res.originalMessage.from,
-                      to: res.originalMessage.to,
-                      subject: res.originalMessage.subject,
-                      text: res.originalMessage.text
-                    })
-                  )
-                  .catch(err =>
-                    console.error("Email confirmation error: ", err)
-                  );
+                    // uncomment below to send emails in development/test env:
+                    //send: true,
+                    // transport: {
+                    //   jsonTransport: true
+                    // }
+                    transport: transporter
+                  });
 
-                /*
+                  email
+                    .send({
+                      template: "email_confirmation",
+                      message: {
+                        to: response.user.dataValues.email,
+                        subject: "Confirm your Email (Toolsio)"
+                      },
+                      locals: {
+                        firstName: response.user.dataValues.firstName,
+                        confirmationLink: url
+                      }
+                    })
+                    .then(res =>
+                      console.log("Email confirmation success: ", {
+                        message: res.message,
+                        from: res.originalMessage.from,
+                        to: res.originalMessage.to,
+                        subject: res.originalMessage.subject,
+                        text: res.originalMessage.text
+                      })
+                    )
+                    .catch(err =>
+                      console.error("Email confirmation error: ", err)
+                    );
+
+                  /*
                 const msg = {
                   to: 'birhanuh@gmail.com',
                   from: 'test@example.com',
@@ -366,8 +365,8 @@ export default {
                 };
                 sgMail.send(msg);
                 */
-              }
-            );
+                }
+              ));
 
           return {
             success: true,
@@ -387,7 +386,7 @@ export default {
       }
     },
 
-    isSubdomainExist: (parent, { subdomain }, { models }) =>
+    isSubdomainExist: (_, { subdomain }, { models }) =>
       models.Account.findOne({ where: { subdomain } }, { raw: true })
         .then(account => {
           if (account) {
@@ -417,7 +416,7 @@ export default {
         }),
 
     registerInvitedUser: async (
-      parent,
+      _,
       { firstName, lastName, email, password, token },
       { models }
     ) => {
@@ -488,11 +487,7 @@ export default {
       }
     },
 
-    forgotPasswordResetRequest: async (
-      parent,
-      { email },
-      { models, subdomain }
-    ) => {
+    forgotPasswordResetRequest: async (_, { email }, { models, subdomain }) => {
       try {
         const account = await models.Account.findOne(
           { where: { subdomain } },
@@ -517,57 +512,59 @@ export default {
 
           if (user) {
             // Create forgotPasswordResetRequestToken
-            jwt.sign(
-              {
-                id: user.dataValues.id,
-                email: user.dataValues.email,
-                subdomain: account.dataValues.subdomain
-              },
-              process.env.JWTSECRET1,
-              { expiresIn: "60d" },
-              (err, forgotPasswordResetRequestToken) => {
-                if (err) {
-                  console.log("err token: ", err);
-                }
-
-                const url = `${process.env.CLIENT_PROTOCOL}${
-                  account.subdomain
-                }.${
-                  process.env.CLIENT_HOST
-                }/login/password-reset/?token=${forgotPasswordResetRequestToken}`;
-
-                const email = new Email({
-                  message: {
-                    from: "no-replay@toolsio.com"
+            process.env.NODE_ENV !== "test" ||
+              (process.env.NODE_ENV !== "test_ci" &&
+                jwt.sign(
+                  {
+                    id: user.dataValues.id,
+                    email: user.dataValues.email,
+                    subdomain: account.dataValues.subdomain
                   },
-                  // uncomment below to send emails in development/test env:
-                  send: true,
-                  // transport: {
-                  //   jsonTransport: true
-                  // }
-                  transport: transporter
-                });
-
-                email
-                  .send({
-                    template: "reset_password",
-                    message: {
-                      to: user.dataValues.email,
-                      subject: "Password reset (Toolsio)"
-                    },
-                    locals: {
-                      firstName: user.dataValues.firstName,
-                      passwordResetLink: url
+                  process.env.JWTSECRET1,
+                  { expiresIn: "60d" },
+                  (err, forgotPasswordResetRequestToken) => {
+                    if (err) {
+                      console.log("err token: ", err);
                     }
-                  })
-                  .then(res =>
-                    console.log("Password confirmation success: ", res)
-                  )
-                  .catch(err =>
-                    console.error("Password confirmation error: ", err)
-                  );
-              }
-            );
+
+                    const url = `${process.env.CLIENT_PROTOCOL}${
+                      account.subdomain
+                    }.${
+                      process.env.CLIENT_HOST
+                    }/login/password-reset/?token=${forgotPasswordResetRequestToken}`;
+
+                    const email = new Email({
+                      message: {
+                        from: "no-replay@toolsio.com"
+                      },
+                      // uncomment below to send emails in development/test env:
+                      send: true,
+                      // transport: {
+                      //   jsonTransport: true
+                      // }
+                      transport: transporter
+                    });
+
+                    email
+                      .send({
+                        template: "reset_password",
+                        message: {
+                          to: user.dataValues.email,
+                          subject: "Password reset (Toolsio)"
+                        },
+                        locals: {
+                          firstName: user.dataValues.firstName,
+                          passwordResetLink: url
+                        }
+                      })
+                      .then(res =>
+                        console.log("Password confirmation success: ", res)
+                      )
+                      .catch(err =>
+                        console.error("Password confirmation error: ", err)
+                      );
+                  }
+                ));
 
             return {
               success: true
@@ -594,7 +591,7 @@ export default {
       }
     },
 
-    passwordReset: async (parent, { password, token }, { models }) => {
+    passwordReset: async (_, { password, token }, { models }) => {
       try {
         const { email, subdomain } = jwt.verify(token, process.env.JWTSECRET1);
 
@@ -646,7 +643,7 @@ export default {
       }
     },
 
-    confirmUserEmail: async (parent, { token }, { models, subdomain }) => {
+    confirmUserEmail: async (_, { token }, { models, subdomain }) => {
       try {
         const { email } = jwt.verify(token, process.env.JWTSECRET1);
 

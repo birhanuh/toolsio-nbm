@@ -41,7 +41,7 @@ export default {
     ),
 
     getProjectsWithInvoice: requiresAuth.createResolver(
-      (_, {}, { models, subdomain }) =>
+      (_, __, { models, subdomain }) =>
         models.sequelize.query(
           "SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id FROM projects p INNER JOIN invoices i ON p.id = i.project_id",
           {
@@ -121,22 +121,22 @@ export default {
   },
 
   Project: {
-    tasks: ({ id }, args, { models, subdomain }) =>
+    tasks: ({ id }, __, { models, subdomain }) =>
       models.Task.findAll({ where: { projectId: id }, searchPath: subdomain }),
 
-    customer: ({ customerId }, args, { models, subdomain }) =>
+    customer: ({ customerId }, __, { models, subdomain }) =>
       models.Customer.findOne(
         { where: { id: customerId }, searchPath: subdomain },
         { raw: true }
       ),
 
-    user: ({ userId }, args, { models, subdomain }) =>
+    user: ({ userId }, __, { models, subdomain }) =>
       models.User.findOne(
         { where: { id: userId }, searchPath: subdomain },
         { raw: true }
       ),
 
-    total: async ({ id }, args, { models, subdomain }) => {
+    total: async ({ id }, __, { models, subdomain }) => {
       const totalSum = await models.Task.sum("total", {
         where: { projectId: id },
         searchPath: subdomain
@@ -147,14 +147,14 @@ export default {
   },
 
   GetProjectsResponse: {
-    customer: ({ customerId }, args, { customerLoader }) =>
+    customer: ({ customerId }, __, { customerLoader }) =>
       customerLoader.load(customerId),
 
-    user: ({ userId }, args, { userLoader }) => userLoader.load(userId)
+    user: ({ userId }, __, { userLoader }) => userLoader.load(userId)
   },
 
   GetProjectsWithoutInvoiceResponse: {
-    total: async ({ id }, args, { models, subdomain }) => {
+    total: async ({ id }, __, { models, subdomain }) => {
       const totalSum = await models.Task.sum("total", {
         where: { projectId: id },
         searchPath: subdomain
@@ -165,13 +165,13 @@ export default {
   },
 
   GetProjectsWithInvoiceResponse: {
-    customer: ({ customer_id }, args, { models, subdomain }) =>
+    customer: ({ customer_id }, __, { models, subdomain }) =>
       models.Customer.findOne(
         { where: { id: customer_id }, searchPath: subdomain },
         { raw: true }
       ),
 
-    total: async ({ id }, args, { models, subdomain }) => {
+    total: async ({ id }, __, { models, subdomain }) => {
       const totalSum = await models.Task.sum("total", {
         where: { projectId: id },
         searchPath: subdomain
