@@ -49,10 +49,10 @@ export default function Project({ project, status, tax }) {
                   color={
                     (project.status === "new" && "blue") ||
                     (project.status === "in progress" && "orange") ||
-                    ((project.status === "finished" ||
-                      project.status === "delivered") &&
-                      project.status === "delayed" &&
-                      "red")
+                    ((sale.status === "finished" ||
+                      sale.status === "delivered") &&
+                      "green") ||
+                    (sale.status === "delayed" && "red")
                   }
                 >
                   {project.status}

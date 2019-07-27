@@ -96,11 +96,19 @@ class Show extends Component {
   };
 
   handleStatusChange = value => {
-    const { id } = this.state;
+    const { id, name, deadline, description, progress, customer } = this.state;
 
     this.props
       .updateProjectMutation({
-        variables: { id, status: value }
+        variables: {
+          id,
+          name,
+          deadline,
+          description,
+          progress,
+          customerId: customer.id,
+          status: value
+        }
       })
       .then(res => {
         const { success, project, errors } = res.data.updateProject;
@@ -125,7 +133,15 @@ class Show extends Component {
   handleIncreaseProgress = event => {
     event.preventDefault();
 
-    const { id, progress } = this.state;
+    const {
+      id,
+      name,
+      deadline,
+      status,
+      description,
+      customer,
+      progress
+    } = this.state;
 
     if (progress <= 90) {
       // Update Project
@@ -137,7 +153,15 @@ class Show extends Component {
 
       this.props
         .updateProjectMutation({
-          variables: { id, progress: progressUpdated }
+          variables: {
+            id,
+            name,
+            deadline,
+            status,
+            description,
+            customerId: customer.id,
+            progress: progressUpdated
+          }
         })
         .then(res => {
           const { success, project, errors } = res.data.updateProject;
@@ -163,7 +187,15 @@ class Show extends Component {
   handleDecreaseProgress = event => {
     event.preventDefault();
 
-    const { id, progress } = this.state;
+    const {
+      id,
+      name,
+      deadline,
+      status,
+      description,
+      customer,
+      progress
+    } = this.state;
 
     if (progress >= 10) {
       // Update Project
@@ -175,7 +207,15 @@ class Show extends Component {
 
       this.props
         .updateProjectMutation({
-          variables: { id, progress: progressUpdated }
+          variables: {
+            id,
+            name,
+            deadline,
+            status,
+            description,
+            customerId: customer.id,
+            progress: progressUpdated
+          }
         })
         .then(res => {
           const { success, project, errors } = res.data.updateProject;
