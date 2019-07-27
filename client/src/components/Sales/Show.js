@@ -202,7 +202,7 @@ class Show extends Component {
               className={classnames({
                 blue: status === "new",
                 orange: status === "in progress",
-                green: status === "ready",
+                green: status === "finished",
                 turquoise: status === "delivered",
                 red: status === "delayed"
               })}

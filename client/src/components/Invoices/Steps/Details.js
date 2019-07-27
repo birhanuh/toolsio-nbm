@@ -168,7 +168,7 @@ export default function Details({
             onChange={(e, { value }) => handleChange("status", value)}
             error={!!errors.staus}
             options={[
-              { key: "default", value: "new", disabled: true, text: "NEW" },
+              { key: "default", value: "new", text: "NEW" },
               { key: "pending", value: "pending", text: "PENDING" },
               { key: "paid", value: "paid", text: "PAID" },
               { key: "overdue", value: "overdue", text: "OVERDUE" }

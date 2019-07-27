@@ -114,14 +114,15 @@ class Page extends Component {
     this.props
       .deleteInvoiceMutation({
         variables: { id },
-        update: (proxy, { data: { deleteInvoice } }) => {
+        update: (store, { data: { deleteInvoice } }) => {
           const { success } = deleteInvoice;
 
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_INVOICES_QUERY,
             variables: {
               order: "DESC",
@@ -137,7 +138,7 @@ class Page extends Component {
           data.getInvoices.invoices = updatedInvoices;
 
           // Write our data back to the cache.
-          proxy.writeQuery({
+          store.writeQuery({
             query: GET_INVOICES_QUERY,
             variables: {
               order: "DESC",
@@ -525,6 +526,18 @@ const MutationQuery = compose(
       variables: {
         subdomain: getSubdomain()
       }
+    })
+  }),
+  graphql(GET_INVOICES_QUERY, {
+    name: "getInvoicesQuery",
+    options: () => ({
+      variables: {
+        order: "DESC",
+        offset: 0,
+        limit: 10,
+        name: ""
+      },
+      fetchPolicy: "cache-network-only"
     })
   })
 )(Page);

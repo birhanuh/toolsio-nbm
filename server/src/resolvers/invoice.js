@@ -77,22 +77,28 @@ export default {
             async transaction => {
               const invoice = await models.Invoice.create(
                 { ...args, referenceNumber, userId: user.id },
-                { searchPath: subdomain, transaction }
+                { searchPath: subdomain },
+                { transaction }
               );
 
               if (args.projectId) {
                 models.Project.update(
-                  { isInvoiced: true },
-                  { where: { id: args.projectId } },
-                  { searchPath: subdomain, transaction }
+                  {
+                    isInvoiced: true
+                  },
+                  { where: { id: args.projectId }, searchPath: subdomain },
+                  { transaction }
                 );
               }
 
               if (args.saleId) {
                 models.Sale.update(
                   { isInvoiced: true },
-                  { where: { id: args.saleId } },
-                  { searchPath: subdomain, transaction }
+                  {
+                    where: { id: args.saleId },
+                    searchPath: subdomain
+                  },
+                  { transaction }
                 );
               }
 

@@ -109,6 +109,7 @@ export const GET_INVOICE_FORM_QUERY = gql`
       referenceNumber
       status
       tax
+      description
       createdAt
       project {
         id
