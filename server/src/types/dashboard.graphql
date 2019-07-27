@@ -55,7 +55,7 @@ type IncomesData {
 
 type ProjectsSalesData {
   countStatus: [CountStatus!]!
-  countMonth: [CountMonth]! 
+  countMonth: [CountMonth]!
 }
 
 type NameCountProjectsSales {
@@ -70,7 +70,7 @@ type CustomersData {
 
 type InvoicesData {
   countMonth: [CountMonth]!
-  countStatusMonth: [CountStatusMonth]! 
+  countStatusMonth: [CountStatusMonth]!
 }
 
 type ProjectTasksData {
@@ -91,22 +91,20 @@ type InvoiceTasksData {
 
 type Query {
   getTotalIncomeData: TotalIncomeData!
-  
+
   getIncomesData: IncomesData!
-  
+
   getCustomersData: CustomersData!
-  
+
   getProjectsData: ProjectsSalesData!
-  
+
   getSalesData: ProjectsSalesData!
-  
+
   getInvoicesData: InvoicesData!
-  
+
   getProjectTasksData: ProjectTasksData!
-  
+
   getSaleTasksData: SaleTasksData!
-  
+
   getInvoiceTasksData: InvoiceTasksData!
 }
-
-

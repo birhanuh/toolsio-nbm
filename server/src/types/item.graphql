@@ -10,7 +10,7 @@ type Item {
 
 type CreateUpdateItemResponse {
   success: Boolean!
-  item: Item 
+  item: Item
   errors: [Error!]
 }
 
@@ -21,17 +21,29 @@ type DeleteItemResponse {
 
 type Query {
   getItem(id: Int!): Item!
-  
+
   getItems: [Item!]!
 }
 
 type Mutation {
-  createItem(name: String!, unit: String!, quantity: Int!, unitPrice: Float!, total: Float!, 
-    saleId: Int!): CreateUpdateItemResponse!
+  createItem(
+    name: String!
+    unit: String!
+    quantity: Int!
+    unitPrice: Float!
+    total: Float!
+    saleId: Int!
+  ): CreateUpdateItemResponse!
 
-  updateItem(id: Int!, name: String, unit: String, quantity: Int, unitPrice: Float, total: Float, 
-    saleId: Int): CreateUpdateItemResponse!
+  updateItem(
+    id: Int!
+    name: String
+    unit: String
+    quantity: Int
+    unitPrice: Float
+    total: Float
+    saleId: Int
+  ): CreateUpdateItemResponse!
 
   deleteItem(id: Int!): DeleteItemResponse!
 }
-

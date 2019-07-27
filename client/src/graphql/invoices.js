@@ -1,8 +1,18 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const GET_INVOICES_QUERY = gql`
-  query getInvoices($offset: Int!, $limit: Int!, $order: String!, $search: String) {
-    getInvoices(offset: $offset, limit: $limit, order: $order, search: $search) {
+  query getInvoices(
+    $offset: Int!
+    $limit: Int!
+    $order: String!
+    $search: String
+  ) {
+    getInvoices(
+      offset: $offset
+      limit: $limit
+      order: $order
+      search: $search
+    ) {
       count
       invoices {
         id
@@ -26,7 +36,7 @@ export const GET_INVOICES_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const GET_INVOICE_QUERY = gql`
   query getInvoice($id: Int!) {
@@ -87,7 +97,7 @@ export const GET_INVOICE_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const GET_INVOICE_FORM_QUERY = gql`
   query getInvoice($id: Int!) {
@@ -99,6 +109,7 @@ export const GET_INVOICE_FORM_QUERY = gql`
       referenceNumber
       status
       tax
+      description
       createdAt
       project {
         id
@@ -121,13 +132,31 @@ export const GET_INVOICE_FORM_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const CREATE_INVOICE_MUTATION = gql`
-  mutation createInvoice($deadline: Date, $paymentTerm: Int, $interestInArrears: Int!, $status: String, 
-    $description: String, $tax: Float!, $projectId: Int, $saleId: Int, $customerId: Int!) {
-    createInvoice(deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
-      description: $description, tax: $tax, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
+  mutation createInvoice(
+    $deadline: Date
+    $paymentTerm: Int
+    $interestInArrears: Int!
+    $status: String
+    $description: String
+    $tax: Float!
+    $projectId: Int
+    $saleId: Int
+    $customerId: Int!
+  ) {
+    createInvoice(
+      deadline: $deadline
+      paymentTerm: $paymentTerm
+      interestInArrears: $interestInArrears
+      status: $status
+      description: $description
+      tax: $tax
+      projectId: $projectId
+      saleId: $saleId
+      customerId: $customerId
+    ) {
       success
       invoice {
         id
@@ -158,13 +187,33 @@ export const CREATE_INVOICE_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const UPDATE_INVOICE_MUTATION = gql`
-  mutation updateInvoice($id: Int!, $deadline: Date, $paymentTerm: Int, $interestInArrears: Int, $status: String, 
-    $description: String, $tax: Float, $projectId: Int, $saleId: Int, $customerId: Int) {
-    updateInvoice(id: $id, deadline: $deadline, paymentTerm: $paymentTerm, interestInArrears: $interestInArrears, status: $status,
-      description: $description, tax: $tax, projectId: $projectId, saleId: $saleId, customerId: $customerId) {
+  mutation updateInvoice(
+    $id: Int!
+    $deadline: Date
+    $paymentTerm: Int
+    $interestInArrears: Int
+    $status: String
+    $description: String
+    $tax: Float
+    $projectId: Int
+    $saleId: Int
+    $customerId: Int
+  ) {
+    updateInvoice(
+      id: $id
+      deadline: $deadline
+      paymentTerm: $paymentTerm
+      interestInArrears: $interestInArrears
+      status: $status
+      description: $description
+      tax: $tax
+      projectId: $projectId
+      saleId: $saleId
+      customerId: $customerId
+    ) {
       success
       invoice {
         id
@@ -195,7 +244,7 @@ export const UPDATE_INVOICE_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const DELETE_INVOICE_MUTATION = gql`
   mutation deleteInvoice($id: Int!) {
@@ -207,13 +256,13 @@ export const DELETE_INVOICE_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const GET_PROJECTS_WITHOUT_INVOICE_QUERY = gql`
   query getProjectsWithoutInvoice($name: String!) {
     getProjectsWithoutInvoice(name: $name) {
       id
-      name 
+      name
       deadline
       status
       progress
@@ -223,13 +272,13 @@ export const GET_PROJECTS_WITHOUT_INVOICE_QUERY = gql`
       customer_name
     }
   }
-`
+`;
 
 export const GET_SALES_WITHOUT_INVOICE_QUERY = gql`
   query getSalesWithoutInvoice($name: String!) {
     getSalesWithoutInvoice(name: $name) {
       id
-      name 
+      name
       deadline
       status
       description
@@ -238,7 +287,7 @@ export const GET_SALES_WITHOUT_INVOICE_QUERY = gql`
       customer_name
     }
   }
-`
+`;
 
 export const GET_ACCOUNT_QUERY = gql`
   query getAccount($subdomain: String!) {
@@ -255,5 +304,4 @@ export const GET_ACCOUNT_QUERY = gql`
       logoUrl
     }
   }
-`
-
+`;

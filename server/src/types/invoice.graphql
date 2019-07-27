@@ -28,7 +28,7 @@ type GetInvoicesResponseRows {
   saleId: Int
   project: Project
   sale: Sale
-  customer: Customer! 
+  customer: Customer!
 }
 
 type GetInvoicesResponse {
@@ -49,18 +49,40 @@ type DeleteInvoiceResponse {
 
 type Query {
   getInvoice(id: Int!): Invoice
-  
-  getInvoices(offset: Int!, limit: Int!, order: String!, search: String): GetInvoicesResponse!
+
+  getInvoices(
+    offset: Int!
+    limit: Int!
+    order: String!
+    search: String
+  ): GetInvoicesResponse!
 }
 
 type Mutation {
-  createInvoice(deadline: Date, paymentTerm: Int, interestInArrears: Int!, status: String, 
-    , description: String, tax: Float!, projectId: Int, saleId: Int, 
-    customerId: Int!): CreateUpdateInvoiceResponse!
-  
-  updateInvoice(id: Int!, deadline: Date, paymentTerm: Int, interestInArrears: Int, status: String, 
-    , description: String, tax: Float, projectId: Int, saleId: Int, 
-    customerId: Int): CreateUpdateInvoiceResponse!  
+  createInvoice(
+    deadline: Date
+    paymentTerm: Int
+    interestInArrears: Int!
+    status: String
+    description: String
+    tax: Float!
+    projectId: Int
+    saleId: Int
+    customerId: Int!
+  ): CreateUpdateInvoiceResponse!
+
+  updateInvoice(
+    id: Int!
+    deadline: Date
+    paymentTerm: Int
+    interestInArrears: Int
+    status: String
+    description: String
+    tax: Float
+    projectId: Int
+    saleId: Int
+    customerId: Int
+  ): CreateUpdateInvoiceResponse!
 
   deleteInvoice(id: Int!): DeleteInvoiceResponse!
 }

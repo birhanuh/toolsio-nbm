@@ -4,6 +4,8 @@
 .DS_Store
 .env
 env.js
+client/cypress/screenshots/
+client/cypress/videos/
 
 # Dependencies
 node_modules
@@ -24,7 +26,7 @@ logfile
 pgdata
 
 # Production
-
+toolsio-com-dd8a403a5115.json
 
 
 

@@ -1,84 +1,97 @@
-describe('Customers', function() {
-
+describe("Channel message", function() {
   // creates a closure around 'account'
-  let account
+  let account;
 
-  before(function () {
+  before(function() {
     // redefine account
     account = {
-      firstName: 'Testa',
-      lastName: 'Testa',
-      email: 'testa@toolsio.com',
-      password: 'ppppp',
-      industry: 'IT',
-      subdomain: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
-    }
+      firstName: "Testa",
+      lastName: "Testa",
+      email: "testa@toolsio.com",
+      password: "ppppp",
+      industry: "IT",
+      subdomain: Math.random()
+        .toString(36)
+        .replace(/[^a-z]+/g, "")
+        .substr(0, 5)
+    };
 
-    cy.visit('/')
+    cy.visit("/");
 
-    cy.contains('Sign up').click()
+    cy.contains("Sign up").click();
 
-    const { firstName, lastName, email, password, subdomain } = account
+    const { firstName, lastName, email, password, subdomain } = account;
 
-    cy.get('input[name=firstName]').type(firstName)
-    cy.get('input[name=lastName]').type(lastName)
-    cy.get('input[name=email]').type(email)
-    cy.get('input[name=password]').type(password)
-    cy.get('input[name=confirmPassword]').type(password)
-    cy.get('div[name=industry]').click()
-    cy.get('div[name=industry] .item:first-child').click()
-    cy.get('input[name=subdomain]').type(subdomain)
+    cy.get("input[name=firstName]").type(firstName);
+    cy.get("input[name=lastName]").type(lastName);
+    cy.get("input[name=email]").type(email);
+    cy.get("input[name=password]").type(password);
+    cy.get("input[name=confirmPassword]").type(password);
+    cy.get("div[name=industry]").click();
+    cy.get("div[name=industry] .item:first-child").click();
+    cy.get("input[name=subdomain]").type(subdomain);
 
     // submit
-    cy.contains('Sign up').click()
-  })
-
-  beforeEach(function () {
-    const { email, password } = account
+    cy.contains("Sign up").click();
 
     // we should be redirected to /login
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/login`)
+    cy.visit(`http://${subdomain}.lvh.me:3000/login`);
 
     // login
-    cy.get('input[name=email]').type(email)
+    cy.get("input[name=email]").type(email);
     // {enter} causes the form to submit
-    cy.get('input[name=password]').type(`${password}{enter}`)
- 
+    cy.get("input[name=password]").type(`${password}{enter}`);
+
+    Cypress.Cookies.preserveOnce("currentAccount");
+
     // we should be redirected to /dashboard
-    cy.url().should('include', '/dashboard')
+    cy.url().should("include", `http://${subdomain}.lvh.me:3000/dashboard`);
 
     // go to conversations
-    cy.visit(`http://${account.subdomain}.lvh.me:3000/conversations`)
-  })
+    cy.visit(`http://${account.subdomain}.lvh.me:3000/conversations`);
+  });
 
-  it('Create Channel', function() {
-    cy.contains('Create Channel').click()
+  beforeEach(function() {
+    Cypress.Cookies.preserveOnce("currentAccount");
+  });
 
-    cy.get('.ui.form input[name=name]').type('Channel 1')
+  it("Create Channel", function() {
+    cy.contains("Create Channel").click();
+
+    cy.get(".ui.form input[name=name]").type("Channel 1");
 
     // submit
-    cy.get('.ui.modal .content').contains('Create').click()
+    cy.get(".ui.modal .content")
+      .contains("Create")
+      .click();
 
     // we should be redirected to /conversations
-    cy.url().should('include', '/conversations/channel')
+    cy.url().should("include", "/conversations");
 
-    // should contain Customera
-    cy.get('.messages h3').should('contain', 'Channel 1')
-  })
+    // should contain Channel 1
+    cy.get(".item div").should("contain", "Channel 1");
+  });
 
-  it('Write message', function() {
-    cy.get('.conversations-sidebar a.item').click()
+  it("Write message", function() {
+    cy.get(".conversations-sidebar a.item").click();
 
-     // we should be redirected to /conversations
-    cy.url().should('include', '/conversations/channel')
+    // we should be redirected to /conversations
+    cy.url().should("include", "/conversations/channel");
 
     // write message and submit
-    cy.get('.ui.form textarea[name=body]').type('Test message...{enter}')
+    cy.get(".ui.form textarea[name=body]").type("Test message...{enter}");
 
     // we should be redirected to /conversations
-    cy.url().should('include', '/conversations')
+    cy.url().should("include", "/conversations");
 
-    // should contain Customera
-    cy.get('.ui.comments .text').should('contain', 'Test message...')
-  })
-})
+    // should contain Comments
+    cy.get(".ui.comments .comment").should("contain", "Test message...");
+  });
+
+  after(function() {
+    cy.visit("/logout");
+
+    // we should be redirected to /login
+    cy.url().should("include", "/");
+  });
+});

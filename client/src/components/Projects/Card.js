@@ -13,7 +13,7 @@ import moment from 'moment'
 export default function Card({project}) {
   
   return (
-    <div className="card">
+    <div key={project.id} className="card">
       <div className="content">
         <div className={classnames("ui uppercase tiny right ribbon label", {blue: project.status === 'new', orange: project.status === 'in progress', green: project.status === 'finished', turquoise: project.status === 'delivered', red: project.status === 'delayed'})}> 
           {project.status}

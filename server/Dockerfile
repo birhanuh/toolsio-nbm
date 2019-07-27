@@ -2,12 +2,12 @@ FROM node
 WORKDIR /app
 
 COPY ./package.json .
+COPY ./package-lock.json .
 COPY ./migrations ./migrations
 COPY ./emails ./emails
 COPY ./dist ./dist
 COPY ./config ./config
 COPY ./wait-for-it.sh .
-COPY ./.env .
 
 RUN npm install --production
 ENV NODE_ENV production

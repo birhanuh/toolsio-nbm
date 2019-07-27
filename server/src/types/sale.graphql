@@ -2,8 +2,8 @@ type Sale {
   id: Int!
   name: String!
   deadline: Date!
-  status:  String!
-  description:  String
+  status: String!
+  description: String
   tax: Float!
   items: [Item!]
   isInvoiced: Boolean!
@@ -58,8 +58,13 @@ type DeleteSaleResponse {
 
 type Query {
   getSale(id: Int!): Sale
-  
-  getSales(offset: Int!, limit: Int!, order: String!, name: String): [GetSalesResponse!]!
+
+  getSales(
+    offset: Int!
+    limit: Int!
+    order: String!
+    name: String
+  ): [GetSalesResponse!]!
 
   getSalesWithoutInvoice(name: String!): [GetSalesWithoutInvoiceResponse!]!
 
@@ -67,11 +72,22 @@ type Query {
 }
 
 type Mutation {
-  createSale(name: String!, deadline: Date!, status: String, description: String,
-    customerId: Int!): CreateUpdateSaleResponse!
-  
-  updateSale(id: Int!, name: String, deadline: Date, status: String, description: String, 
-    ,customerId: Int): CreateUpdateSaleResponse!
+  createSale(
+    name: String!
+    deadline: Date!
+    status: String
+    description: String
+    customerId: Int!
+  ): CreateUpdateSaleResponse!
+
+  updateSale(
+    id: Int!
+    name: String
+    deadline: Date
+    status: String
+    description: String
+    customerId: Int
+  ): CreateUpdateSaleResponse!
 
   deleteSale(id: Int!): DeleteSaleResponse!
 }

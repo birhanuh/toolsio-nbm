@@ -1,5 +1,3 @@
-scalar Upload
-
 type ChannelMessage {
   id: Int!
   body: String
@@ -25,10 +23,13 @@ type Query {
 }
 
 type Mutation {
-  createChannelMessage(body: String, file: Upload, channelId: Int! ): CreateChannelMessageResponse!
+  createChannelMessage(
+    body: String
+    file: Upload
+    channelId: Int!
+  ): CreateChannelMessageResponse!
 }
 
 type Subscription {
   getNewChannelMessage(channelId: Int!): ChannelMessage!
 }
-

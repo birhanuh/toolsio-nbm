@@ -1,0 +1,98 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: toolsio-server-ser
+spec:
+  selector:
+    app: toolsio-server
+  ports:
+    - protocol: "TCP"
+      # Port accessible inside cluster
+      port: 8080
+      # Port to forward to inside the pod
+      targetPort: 8080
+      # Port accessible outside cluster
+      nodePort: 30000
+  type: LoadBalancer
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: toolsio-server-depl
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: toolsio-server
+    spec:
+      containers:
+        - name: toolsio-server-ctr
+          image: birham/toolsio-server:latest
+          #image: tutum/hello-world
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NODE_ENV
+              value: ${NODE_ENV}
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: ${REDIS_PORT}
+            # client
+            - name: CLIENT_PROTOCOL
+              value: ${CLIENT_PROTOCOL}
+            - name: CLIENT_HOST
+              value: ${CLIENT_HOST}
+            # server
+            - name: SERVER_PORT
+              value: ${SERVER_PORT}
+            - name: SERVER_URL
+              value: ${SERVER_URL}
+              # jwt
+            - name: JWTSECRET1
+              value: ${JWTSECRET1}
+            - name: JWTSECRET2
+              value: ${JWTSECRET2}
+            # sendgrid
+            - name: SENDGRID_API_KEY
+              value: ${SENDGRID_API_KEY}
+            # cloudinary
+            - name: CLOUDINARY_CLOUD_NAME
+              value: ${CLOUDINARY_CLOUD_NAME}
+            - name: CLOUDINARY_API_KEY
+              value: ${CLOUDINARY_API_KEY}
+            - name: CLOUDINARY_API_SECRET_KEY
+              value: ${CLOUDINARY_API_SECRET_KEY}
+            - name: CLOUDINARY_PRESET_DIRECT_MESSAGES
+              value: ${CLOUDINARY_PRESET_DIRECT_MESSAGES}
+            - name: CLOUDINARY_PRESET_CHANNEL_MESSAGES
+              value: ${CLOUDINARY_PRESET_CHANNEL_MESSAGES}
+            # google platform
+            - name: GCP_PROJECT_ID
+              value: ${GCP_PROJECT_ID}
+            - name: GCP_BUCKET_NAME
+              value: ${GCP_BUCKET_NAME}
+            - name: GCP_API_KEY
+              value: ${GCP_API_KEY}
+            - name: CLOUDINARY_PRESET_DIRECT_MESSAGES
+              value: ${CLOUDINARY_PRESET_DIRECT_MESSAGES}
+            # google platform
+            - name: GCP_KEYFILE
+              value: ${GCP_KEYFILE}
+            # letsencrypt
+            - name: LETSENCRYPT_EMAIL
+              value: ${LETSENCRYPT_EMAIL}
+            - name: GCP_BUCKET_NAME
+              value: ${GCP_BUCKET_NAME}
+            - name: LETSENCRYPT_HOST
+              value: api.toolsio.com
+            - name: VIRTUAL_HOST
+              value: api.toolsio.com
+
+          # Just spin & wait forever # Work around for CrashLoopBackOff error
+          #command: ["/bin/bash", "-c", "--"]
+          #args: ["while true; do sleep 30; done;"]
+      imagePullSecrets:
+        - name: regcred

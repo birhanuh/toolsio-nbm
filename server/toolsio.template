@@ -21,8 +21,6 @@ server {
     #root app/public
 
     # certs sent to the client in SERVER HELLO are concatenated in ssl_certificate
-    #ssl_certificate /etc/letsencrypt/live/toolsio.com/fullchain.pem;
-    #ssl_certificate_key /etc/letsencrypt/live/toolsio.com/privkey.pem;
     ssl_certificate /etc/nginx/certs/api.toolsio.com.crt;
     ssl_certificate_key /etc/nginx/certs/api.toolsio.com.key;
     ssl_session_timeout 1d;
@@ -54,16 +52,14 @@ server {
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-    location /subscriptions {
-      proxy_pass http://web:8080/subscriptions;
+    location /graphql {
+      proxy_pass http://web:8080; ## Locally dns would be http://localhost:8080
+
+      # These declarations are for WebSockets
       proxy_http_version 1.1;
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection $connection_upgrade;
       proxy_buffering off;
-    }
-
-    location /graphql {
-      proxy_pass http://web:8080; ## Locally dns would be http://localhost:8080
     }
 
     location /uploads {

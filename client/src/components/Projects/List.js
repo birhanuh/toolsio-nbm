@@ -20,7 +20,7 @@ export default function List({ projects, loading }) {
 
   const projectsList = (
     <CardElement.Group itemsPerRow={2} className={classnames("ui from projects", { loading: loading })}>
-      { projects.map(project => <Card project={project} key={project.id} />) }
+      { projects.map(project => Card({project: project}) ) }
     </CardElement.Group>
   )
 

@@ -1,34 +1,39 @@
 // Schema
-import axios from 'axios'
+import axios from "axios";
 
 //import { truncate } from '../helpers/macros'
-import { registerUser, loginUser } from '../helpers/authentication'
+import { registerUser, loginUser, logoutUser } from "../helpers/authentication";
 
-let tokens 
-let subdomainLocal
+// Subdomain assinged
+let subdomainLocal;
 
-describe("User", () => { 
-
+describe("User", () => {
   beforeAll(async () => {
     //await truncate()
-    let response = await registerUser()
-    const { success, email, password, subdomain } = response
-    // Assign subdomain
-    subdomainLocal = subdomain
+    let response = await registerUser();
+    const { success, email, password, subdomain } = response;
 
     if (success) {
-      tokens = await loginUser(email, password, subdomain)
+      // Assign subdomain
+      subdomainLocal = subdomain;
+
+      tokens = await loginUser(email, password, subdomain);
     }
-  })
+  });
 
-  afterAll(async () => {  
-    //await truncate()   
-  })
+  afterAll(async () => {
+    //await truncate()
 
-  test('getUsers', async () => {
+    await resetDb();
 
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `query {
+    await logoutUser();
+  });
+
+  test("getUsers", async () => {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: `query {
         getUsers {
           id
           firstName
@@ -36,19 +41,18 @@ describe("User", () => {
           email
         }
       }`
-    },{
-      headers: {
-        'x-auth-token': tokens.authToken,
-        'x-auth-refresh-token': tokens.refreshAuthToken,
-        'subdomain': subdomainLocal
+      },
+      {
+        headers: {
+          subdomain: subdomainLocal
+        }
       }
-    }) 
-   
-    const { data: { getUsers } } = response.data
-  
-    expect(getUsers).not.toHaveLength(0)
-  })
+    );
 
- 
+    const {
+      data: { getUsers }
+    } = response.data;
 
-})
+    expect(getUsers).not.toHaveLength(0);
+  });
+});

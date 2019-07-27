@@ -1,23 +1,24 @@
-import nodemailer from 'nodemailer'
-import Email from 'email-templates'
-import sparkPostTransport from 'nodemailer-sparkpost-transport'
+import nodemailer from "nodemailer";
+import Email from "email-templates";
+import sendgridTransport from "nodemailer-sendgrid-transport";
 
-const transporter = nodemailer.createTransport(sparkPostTransport({
-  'sparkPostApiKey': process.env.SPARKPOST_API_KEY,
-  endpoint: "https://api.eu.sparkpost.com"
-}))
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key: process.env.SENDGRID_API_KEY
+    }
+  })
+);
 
 export default {
-
-  Mutation: {    
-    
-    createContactMessage: async (parent, args) => {
-      const { name, email, messageBody } = args      
+  Mutation: {
+    createContactMessage: async (_, args) => {
+      const { name, email, messageBody } = args;
 
       const emailTemplate = new Email({
         message: {
-          from: 'contact@email.toolsio.com', // Fix for sparkpost Unconfigured Sending Domain <gmail.com>
-          to: 'support@gmail.com',
+          from: "contact@toolsio.com",
+          to: "support@gmail.com",
           subject: `Contact message from (${name})`,
           html: `<p>From: ${email}<p/><p>Message: ${messageBody}</p>`
         },
@@ -27,23 +28,30 @@ export default {
         //   jsonTransport: true
         // }
         transport: transporter
-      })
+      });
 
       return emailTemplate
         .send()
         .then(res => {
-            return{
-              success: true
-            }
-          })
+          console.log("Contact email success: ", {
+            message: res.message,
+            from: res.originalMessage.from,
+            to: res.originalMessage.to,
+            subject: res.originalMessage.subject,
+            text: res.originalMessage.text
+          });
+
+          return {
+            success: true
+          };
+        })
         .catch(err => {
-            console.error('Email confirmation error: ', err)
-            return {
-              success: false,
-              error: err
-            }
-          })
+          console.error("Contact email error: ", err);
+          return {
+            success: false,
+            error: err
+          };
+        });
     }
-        
-  }    
-}
+  }
+};

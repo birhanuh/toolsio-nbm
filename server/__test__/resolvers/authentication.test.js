@@ -1,31 +1,29 @@
 // Schema
-import axios from 'axios'
+import axios from "axios";
 
-import { resetDb } from '../helpers/macros'
+import { resetDb } from "../helpers/macros";
 
-// Load factories 
-import userFactory from '../factories/user'
-import accountFactory from '../factories/account'
+// Load factories
+import userFactory from "../factories/user";
+import accountFactory from "../factories/account";
 
-describe("Authenticate User", () => { 
+describe("Authenticate User", () => {
+  let userFactoryLocal;
+  let accountFactoryLocal;
 
-  let userFactoryLocal
-  let accountFactoryLocal
+  beforeAll(async () => {
+    await resetDb();
 
-  beforeAll( async () => {      
-    await resetDb()   
+    userFactoryLocal = await userFactory();
+    accountFactoryLocal = await accountFactory();
+  });
 
-    userFactoryLocal = await userFactory()
-    accountFactoryLocal = await accountFactory()
-  })
-  
-  afterAll(async () => {  
-    await resetDb()   
-  })
+  afterAll(async () => {
+    await resetDb();
+  });
 
-  test('createUser', async () => {
-
-    const response = await axios.post('http://localhost:8080/graphql', {
+  test("createUser", async () => {
+    const response = await axios.post("http://localhost:8080/graphql", {
       query: `mutation registerUser($firstName: String, $lastName: String, $email: String!, $password: String!, $subdomain: String!, $industry: String!) {
         registerUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, subdomain: $subdomain, industry: $industry) {
           success
@@ -46,10 +44,14 @@ describe("Authenticate User", () => {
         subdomain: accountFactoryLocal.subdomain,
         industry: accountFactoryLocal.industry
       }
-    }) 
-    const { data } = response
-    const { data: { registerUser: { account } } } = response.data
- 
+    });
+    const { data } = response;
+    const {
+      data: {
+        registerUser: { account }
+      }
+    } = response.data;
+
     expect(data).toMatchObject({
       data: {
         registerUser: {
@@ -60,38 +62,43 @@ describe("Authenticate User", () => {
           errors: null
         }
       }
-    })
-  })
+    });
+  });
 
-  test('loginUser', async () => {
-
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query: `mutation($email: String!, $password: String!) {
+  test("loginUser", async () => {
+    const response = await axios.post(
+      "http://localhost:8080/graphql",
+      {
+        query: `mutation($email: String!, $password: String!) {
         loginUser(email: $email, password: $password) {
           success
-          authToken 
-          refreshAuthToken
+          sessionID
+          subdomain
           errors {
             path
             message
           }
         }
       }`,
-      variables: {
-        email: userFactoryLocal.email,
-        password: userFactoryLocal.password
+        variables: {
+          email: userFactoryLocal.email,
+          password: userFactoryLocal.password
+        }
+      },
+      {
+        headers: {
+          subdomain: accountFactoryLocal.subdomain
+        }
       }
-    },
-     {
-      headers: {
-        'subdomain': accountFactoryLocal.subdomain
+    );
+
+    const {
+      data: {
+        loginUser: { success, sessionID }
       }
-    }) 
+    } = response.data;
 
-    const { data: { loginUser: {success, authToken } } } = response.data
-
-    expect(success).toBe(true)
-    expect(authToken).not.toBeNull() 
-
-  })
-})
+    expect(success).toBe(true);
+    expect(sessionID).not.toBeNull();
+  });
+});

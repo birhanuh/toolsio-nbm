@@ -1,128 +1,131 @@
-version: '3.2'
+version: "3"
 services:
-  redis: 
+  redis:
     image: redis
-    networks: 
+    networks:
       - webnet
     restart: always
     # logging:
     #   driver: gcplogs
-  db: 
+  db:
     image: postgres
-    volumes: 
+    volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
       - "3030:5432"
-    networks: 
+    networks:
       - webnet
-    environment: 
+    environment:
       POSTGRES_USER: toolsio
       POSTGRES_PASSWORD: toolsio
       POSTGRES_DB: toolsio
     restart: always
   web:
-    image: toolsio-server
-    #image: birham/toolsio-server:latest ## To use the image that's in docker cloud
+    image: birham/toolsio-server:latest ## To use the image that's in docker hub
     #ports:
-    #  - "8080:8080" ## We don' need to open up our port to the word, ngix handles it
+    #  - "8080:8080" ## We don' need to open up our port to the world, ngix handles it
     networks:
-      - webnet 
-    environment: 
+      - webnet
+    environment:
       NODE_ENV: ${NODE_ENV}
       REDIS_HOST: redis
+      REDIS_PORT: ${REDIS_PORT}
       #SERVER_PORT: 8080
       #DB_HOST: db ## We would need this if we use env variables in Sequelize constructor instead of json
       # client
-      CLIENT_PROTOCOL: ${CLIENT_PROTOCOL}     
+      CLIENT_PROTOCOL: ${CLIENT_PROTOCOL}
       CLIENT_HOST: ${CLIENT_HOST}
       # server
-      SERVER_PORT: ${SERVER_PORT}     
+      SERVER_PORT: ${SERVER_PORT}
       SERVER_URL: ${SERVER_URL} ## Server path (e.g. for uploads folder location)
       # jwt
       JWTSECRET1: ${JWTSECRET1}
       JWTSECRET2: s${JWTSECRET2}
-      # sparkpost
-      SPARKPOST_API_KEY: ${SPARKPOST_API_KEY}
+      # sendgrid
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
       # cloudinary
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_SECRET_KEY}
       CLOUDINARY_API_SECRET_KEY: ${CLOUDINARY_API_SECRET_KEY}
       CLOUDINARY_PRESET_DIRECT_MESSAGES: ${CLOUDINARY_PRESET_CHANNEL_MESSAGES}
       CLOUDINARY_PRESET_CHANNEL_MESSAGES: ${CLOUDINARY_PRESET_CHANNEL_MESSAGES}
-      # letsencrypt      
+      # google platform
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      GCP_BUCKET_NAME: ${GCP_BUCKET_NAME}
+      GCP_API_KEY: ${GCP_API_KEY}
+      GCP_KEYFILE: ${GCP_KEYFILE}
+      # letsencrypt
       LETSENCRYPT_EMAIL: ${GMAIL_USER}
       LETSENCRYPT_HOST: api.toolsio.com
-      VIRTUAL_HOST: api.toolsio.com 
+      VIRTUAL_HOST: api.toolsio.com
     volumes:
-      #- .:/app    
+      #- .:/app
       - ./uploads:/app/uploads
     depends_on:
       - db
       - redis
+      - migration
     #command: "node dist/index.js"
     command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/index.js"]
     # logging:
     #   driver: gcplogs
   migration:
     build: .
-    image: toolsio-server
-    #image: birham/toolsio-server:latest
+    image: birham/toolsio-server:latest
     networks:
-      - webnet 
-    environment: 
+      - webnet
+    environment:
       NODE_ENV: ${NODE_ENV}
     links:
       - db
     depends_on:
       - db
-      - web
-    restart: always
     command: ["./wait-for-it.sh", "db:5432", "--", "npm", "run", "db:migrate"]
-  nginx-proxy: 
+  nginx-proxy:
     image: jwilder/nginx-proxy
     networks:
-      - webnet 
+      - webnet
     volumes:
       #- ./toolsio.template:/etc/nginx/conf.d/toolsio.template ## TOBE commented out in development env
       - ./toolsio.development.template:/etc/nginx/conf.d/toolsio.template ## TOBE commented out in production env
       - ./uploads:/uploads
       # - ./index.html:/etc/nginx/html/index.html ## TOBE commented out in development env
-      # - ./certs:/etc/nginx/certs:ro ## TOBE commented out in development env 
-      - nginx-vhost-volume:/etc/nginx/vhost.d 
-      - nginx-share-volume:/usr/share/nginx/html 
+      # - ./certs:/etc/nginx/certs:ro ## TOBE commented out in development env
+      - nginx-vhost-volume:/etc/nginx/vhost.d
+      - nginx-share-volume:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
     labels:
-      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true 
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true
     ports:
       - "8080:80"
-      - "4444:443" 
+      - "4444:443"
       #- "80:80" ## HTTP on vertual machine
       #- "443:443" ## HTTPS on vertual machine
     environment:
       NGINX_HOST: api.toolsio.com
       NGINX_PORT: 80
-    depends_on: 
+    depends_on:
       - web
     restart: always
-    #command: /bin/bash -c "envsubst '${http_upgrade} ${connection_upgrade}' < /etc/nginx/conf.d/toolsio.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'" ## For plain nginx image  
-    command: /bin/bash -c "envsubst '${http_upgrade} ${connection_upgrade}' < /etc/nginx/conf.d/toolsio.template > /etc/nginx/conf.d/default.conf && nginx" 
+    #command: /bin/bash -c "envsubst '${http_upgrade} ${connection_upgrade}' < /etc/nginx/conf.d/toolsio.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'" ## For nginx image
+    command: /bin/bash -c "envsubst '${http_upgrade} ${connection_upgrade}' < /etc/nginx/conf.d/toolsio.template > /etc/nginx/conf.d/default.conf && nginx" ## For plain jwilder/nginx-proxy image
     #command: [nginx-debug, '-g', 'daemon off;'] # Run nginx in debug mode
     #command: nginx ## Run plain nginx (e.g for letsencrypt)
     # logging:
     #   driver: gcplogs
-  #nginx-letsencrypt: 
+  #nginx-letsencrypt:
   #  image: jrcs/letsencrypt-nginx-proxy-companion
   #  networks:
-  #    - webnet 
+  #    - webnet
   #  volumes:
-  #    - ./certs:/etc/nginx/certs:rw 
+  #    - ./certs:/etc/nginx/certs:rw
   #    - /var/run/docker.sock:/var/run/docker.sock:ro
-  #    - nginx-vhost-volume:/etc/nginx/vhost.d 
-  #    - nginx-share-volume:/usr/share/nginx/html 
-  #  environment: 
+  #    - nginx-vhost-volume:/etc/nginx/vhost.d
+  #    - nginx-share-volume:/usr/share/nginx/html
+  #  environment:
   #    NGINX_PROXY_CONTAINER: nginx-proxy
   #    NGINX_DOCKER_GEN_CONTAINER: nginx-proxy
-  #  depends_on: 
+  #  depends_on:
   #    - nginx-proxy
 
 volumes:
@@ -130,7 +133,4 @@ volumes:
   nginx-share-volume:
 
 networks:
-  webnet: 
-
-
-    
+  webnet:

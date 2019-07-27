@@ -1,14 +1,14 @@
 type Customer {
   id: Int!
   name: String!
-  vatNumber: Int! 
+  vatNumber: Int!
   email: String
-  phoneNumber: String 
+  phoneNumber: String
   isContactIncludedInInvoice: Boolean!
   street: String
   postalCode: String
-  region: String 
-  country:String
+  region: String
+  country: String
   projects: [Project!]
   sales: [Sale!]
   invoices: [Invoice!]
@@ -41,17 +41,40 @@ type DeleteCustomerResponse {
 
 type Query {
   getCustomer(id: Int!): Customer
-  
-  getCustomers(offset: Int!, limit: Int!, order: String!, name: String): GetCustomersResponse!
+
+  getCustomers(
+    offset: Int!
+    limit: Int!
+    order: String!
+    name: String
+  ): GetCustomersResponse!
 }
 
 type Mutation {
-  createCustomer(name: String!, vatNumber: Int!, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
-    street: String, postalCode: String, region: String, country: String): CreateUpdateCustomerResponse!
-  
-  updateCustomer(id: Int!, name: String, vatNumber: Int, email: String, phoneNumber: String, isContactIncludedInInvoice: Boolean, 
-    street: String, postalCode: String, region: String, country: String): CreateUpdateCustomerResponse! 
+  createCustomer(
+    name: String!
+    vatNumber: Int!
+    email: String
+    phoneNumber: String
+    isContactIncludedInInvoice: Boolean
+    street: String
+    postalCode: String
+    region: String
+    country: String
+  ): CreateUpdateCustomerResponse!
 
-  deleteCustomer(id: Int!): DeleteCustomerResponse!   
+  updateCustomer(
+    id: Int!
+    name: String
+    vatNumber: Int
+    email: String
+    phoneNumber: String
+    isContactIncludedInInvoice: Boolean
+    street: String
+    postalCode: String
+    region: String
+    country: String
+  ): CreateUpdateCustomerResponse!
+
+  deleteCustomer(id: Int!): DeleteCustomerResponse!
 }
-

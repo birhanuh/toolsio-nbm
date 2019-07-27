@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY = gql`
   {
@@ -6,7 +6,7 @@ export const GET_UNREAD_DIRECT_MESSAGES_COUNT_QUERY = gql`
       count
     }
   }
-`
+`;
 
 export const GET_PROJECT_TASKS_DATA_QUERY = gql`
   {
@@ -17,7 +17,7 @@ export const GET_PROJECT_TASKS_DATA_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const GET_SALE_TASKS_DATA_QUERY = gql`
   {
@@ -28,7 +28,7 @@ export const GET_SALE_TASKS_DATA_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const GET_INVOICE_TASKS_DATA_QUERY = gql`
   {
@@ -39,4 +39,4 @@ export const GET_INVOICE_TASKS_DATA_QUERY = gql`
       }
     }
   }
-`
+`;
