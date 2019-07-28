@@ -54,7 +54,8 @@ const AddChannelModal = ({ open, onClose, toggleCreateChannelModal }) => (
 
 class List extends Component {
   state = {
-    openCreateChannelModal: false
+    openCreateChannelModal: false,
+    openConfirmationModal: false
   };
 
   componentDidMount() {
@@ -74,8 +75,84 @@ class List extends Component {
     }));
   };
 
+  toggleConfirmationModal = () => {
+    this.setState(state => ({
+      openConfirmationModal: !state.openConfirmationModal
+    }));
+  };
+
+  handleDelete(id, event) {
+    event.preventDefault();
+
+    console.log("Delete pressed");
+
+    // this.props
+    //   .deleteCustomerMutation({
+    //     variables: { id },
+    //     update: (proxy, { data: { deleteCustomer } }) => {
+    //       const { success } = deleteCustomer;
+
+    //       if (!success) {
+    //         return;
+    //       }
+    //       // Read the data from our cache for this query.
+    //       const data = proxy.readQuery({
+    //         query: GET_CUSTOMERS_QUERY,
+    //         variables: {
+    //           order: "DESC",
+    //           offset: 0,
+    //           limit: 10,
+    //           name: ""
+    //         }
+    //       });
+    //       // Filter out deleted customer from store.
+    //       let updatedCustomers = data.getCustomers.customers.filter(
+    //         customer => customer.id !== id
+    //       );
+    //       data.getCustomers.customers = updatedCustomers;
+
+    //       // Write our data back to the cache.
+    //       proxy.writeQuery({
+    //         query: GET_CUSTOMERS_QUERY,
+    //         variables: {
+    //           order: "DESC",
+    //           offset: 0,
+    //           limit: 10,
+    //           name: ""
+    //         },
+    //         data
+    //       });
+    //     }
+    //   })
+    //   .then(res => {
+    //     const { success, errors } = res.data.deleteCustomer;
+
+    //     if (success) {
+    //       this.props.addFlashMessage({
+    //         type: "success",
+    //         text: T.translate("customers.show.flash.success_delete", {
+    //           name: name
+    //         })
+    //       });
+
+    //       this.props.history.push("/customers");
+    //     } else {
+    //       let errorsList = {};
+    //       errors.map(error => (errorsList[error.path] = error.message));
+
+    //       this.setState({ errors: errorsList, isLoading: false });
+    //     }
+    //   })
+    //   .catch(() => {
+    //     this.props.addFlashMessage({
+    //       type: "error",
+    //       text: T.translate("customers.show.flash.error_delete", { name: name })
+    //     });
+    //   });
+  }
+
   render() {
-    const { openCreateChannelModal } = this.state;
+    const { openCreateChannelModal, openConfirmationModal } = this.state;
     const {
       data: { getChannelsUsersCount },
       channelId
@@ -84,7 +161,7 @@ class List extends Component {
     const channelList =
       getChannelsUsersCount &&
       getChannelsUsersCount.map(channel => (
-        <div key={channel.id} className="channel-label-elpsis-container">
+        <div key={channel.id} className="name-label-elpsis-container">
           <Link
             to={`/conversations/channel/${channel.id}`}
             className={classnames("item", {
@@ -104,7 +181,11 @@ class List extends Component {
           </Link>
           <Dropdown floating icon="ellipsis vertical" className="icon">
             <Dropdown.Menu>
-              <Dropdown.Item>
+              <Dropdown.Item
+                className="delete-channel"
+                onClick={this.toggleConfirmationModal.bind(this)}
+              >
+                <Icon name="trash alternate" />
                 {T.translate("conversations.channel.delete_channel")}
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -131,7 +212,34 @@ class List extends Component {
         open={openCreateChannelModal}
         toggleCreateChannelModal={this.toggleCreateChannelModal}
         key="add-channel-modal"
-      />
+      />,
+
+      <Modal
+        key="modal"
+        size="small"
+        className="customer"
+        open={openConfirmationModal}
+      >
+        <Modal.Header>
+          {T.translate("conversations.channel.confirmation_header")}
+        </Modal.Header>
+        <Modal.Content>
+          <p className="red">
+            {T.translate("conversations.channel.confirmation_msg")}
+          </p>
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="ui button" onClick={this.toggleConfirmationModal}>
+            {T.translate("conversations.channel.cancel")}
+          </button>
+          <button
+            className="ui negative button"
+            onClick={this.handleDelete.bind(this, channelId)}
+          >
+            {T.translate("conversations.channel.delete")}
+          </button>
+        </Modal.Actions>
+      </Modal>
     ];
   }
 }

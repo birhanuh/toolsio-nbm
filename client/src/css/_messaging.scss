@@ -1,4 +1,4 @@
-.channel-label-elpsis-container {
+.name-label-elpsis-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -7,5 +7,12 @@
   }
   .ui.dropdown {
     padding: 5px;
+  }
+  div.item.delete-channel,
+  div.item.delete-direct-message {
+    color: $red !important;
+    i {
+      color: $red;
+    }
   }
 }

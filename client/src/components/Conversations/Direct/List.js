@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 // Semantic React UI
-import { Segment, Label, Button, Icon, Modal } from "semantic-ui-react";
+import {
+  Segment,
+  Label,
+  Button,
+  Icon,
+  Modal,
+  Dropdown
+} from "semantic-ui-react";
 import { graphql, compose } from "react-apollo";
 import {
   GET_DIRECT_MESSAGE_USERS_QUERY,
@@ -46,7 +53,8 @@ const AddUserModal = ({ open, onClose }) => (
 
 class List extends Component {
   state = {
-    openAddUserModal: false
+    openAddUserModal: false,
+    openConfirmationModal: false
   };
 
   componentDidMount() {
@@ -64,8 +72,84 @@ class List extends Component {
     this.setState(state => ({ openAddUserModal: !state.openAddUserModal }));
   };
 
+  toggleConfirmationModal = () => {
+    this.setState(state => ({
+      openConfirmationModal: !state.openConfirmationModal
+    }));
+  };
+
+  handleDelete(id, event) {
+    event.preventDefault();
+
+    console.log("Delete pressed");
+
+    // this.props
+    //   .deleteCustomerMutation({
+    //     variables: { id },
+    //     update: (proxy, { data: { deleteCustomer } }) => {
+    //       const { success } = deleteCustomer;
+
+    //       if (!success) {
+    //         return;
+    //       }
+    //       // Read the data from our cache for this query.
+    //       const data = proxy.readQuery({
+    //         query: GET_CUSTOMERS_QUERY,
+    //         variables: {
+    //           order: "DESC",
+    //           offset: 0,
+    //           limit: 10,
+    //           name: ""
+    //         }
+    //       });
+    //       // Filter out deleted customer from store.
+    //       let updatedCustomers = data.getCustomers.customers.filter(
+    //         customer => customer.id !== id
+    //       );
+    //       data.getCustomers.customers = updatedCustomers;
+
+    //       // Write our data back to the cache.
+    //       proxy.writeQuery({
+    //         query: GET_CUSTOMERS_QUERY,
+    //         variables: {
+    //           order: "DESC",
+    //           offset: 0,
+    //           limit: 10,
+    //           name: ""
+    //         },
+    //         data
+    //       });
+    //     }
+    //   })
+    //   .then(res => {
+    //     const { success, errors } = res.data.deleteCustomer;
+
+    //     if (success) {
+    //       this.props.addFlashMessage({
+    //         type: "success",
+    //         text: T.translate("customers.show.flash.success_delete", {
+    //           name: name
+    //         })
+    //       });
+
+    //       this.props.history.push("/customers");
+    //     } else {
+    //       let errorsList = {};
+    //       errors.map(error => (errorsList[error.path] = error.message));
+
+    //       this.setState({ errors: errorsList, isLoading: false });
+    //     }
+    //   })
+    //   .catch(() => {
+    //     this.props.addFlashMessage({
+    //       type: "error",
+    //       text: T.translate("customers.show.flash.error_delete", { name: name })
+    //     });
+    //   });
+  }
+
   render() {
-    const { openAddUserModal } = this.state;
+    const { openAddUserModal, openConfirmationModal } = this.state;
 
     const {
       data: { getUnreadDirectMessagesCountSender },
@@ -82,22 +166,37 @@ class List extends Component {
     const userList =
       getDirectMessageUsers &&
       getDirectMessageUsers.map(user => (
-        <Link
-          key={user.id}
-          to={`/conversations/receiver/${user.id}`}
-          className={classnames("item", {
-            active: receiverId && parseInt(receiverId) === user.id
-          })}
-        >
-          {unreadLabel(user) && unreadLabel(user).count !== 0 && (
-            <Label className="red">{unreadLabel(user).count}</Label>
-          )}
+        <div key={user.id} className="name-label-elpsis-container">
+          <Link
+            to={`/conversations/receiver/${user.id}`}
+            className={classnames("item", {
+              active: receiverId && parseInt(receiverId) === user.id
+            })}
+          >
+            {unreadLabel(user) && unreadLabel(user).count !== 0 && (
+              <Label className="red">{unreadLabel(user).count}</Label>
+            )}
 
-          <div>
-            <i className="user icon" />&nbsp;
-            {user.first_name}
-          </div>
-        </Link>
+            <div>
+              <i className="user icon" />
+              &nbsp;
+              {user.first_name}
+            </div>
+          </Link>
+          <Dropdown floating icon="ellipsis vertical" className="icon">
+            <Dropdown.Menu>
+              <Dropdown.Item
+                className="delete-direct-message"
+                onClick={this.toggleConfirmationModal.bind(this)}
+              >
+                <Icon name="trash alternate" />
+                {T.translate(
+                  "conversations.direct_messages.delete_direct_message"
+                )}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
       ));
 
     return [
@@ -119,7 +218,34 @@ class List extends Component {
         onClose={this.toggleAddUserModal.bind(this)}
         open={openAddUserModal}
         key="add-user-modal"
-      />
+      />,
+
+      <Modal
+        key="modal"
+        size="small"
+        className="customer"
+        open={openConfirmationModal}
+      >
+        <Modal.Header>
+          {T.translate("conversations.direct_messages.confirmation_header")}
+        </Modal.Header>
+        <Modal.Content>
+          <p className="red">
+            {T.translate("conversations.direct_messages.confirmation_msg")}
+          </p>
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="ui button" onClick={this.toggleConfirmationModal}>
+            {T.translate("conversations.direct_messages.cancel")}
+          </button>
+          <button
+            className="ui negative button"
+            onClick={this.handleDelete.bind(this, receiverId)}
+          >
+            {T.translate("conversations.direct_messages.delete")}
+          </button>
+        </Modal.Actions>
+      </Modal>
     ];
   }
 }

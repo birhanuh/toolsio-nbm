@@ -777,11 +777,21 @@
       "archive": "Archive",
       "restore": "Restore",
       "members": "members",
-      "message": "Message"
+      "message": "Message",
+      "delete_channel": "Delete channel",
+      "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this conversation? (ALL MESSAGES AND FILE IN THIS CONVESAIONS WILL BE GONE!)",
+      "cancel": "Cancel",
+      "delete": "Delete"
     },
     "direct_messages": {
       "search_select_user": "Search/Select User",
-      "load_more": "Load more"
+      "load_more": "Load more",
+      "delete_direct_message": "Delete direct-message",
+      "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this direct-message? (ALL MESSAGES AND FILE IN THIS DIRECT-MESSAGE WILL BE GONE!)",
+      "cancel": "Cancel",
+      "delete": "Delete"
     },
     "messages": {
       "add_member": "Add member",
