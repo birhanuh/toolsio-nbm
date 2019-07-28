@@ -29,6 +29,12 @@ class Message extends Component {
     }
   };
 
+  componentWillUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value

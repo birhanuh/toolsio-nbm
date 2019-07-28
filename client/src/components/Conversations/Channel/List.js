@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 // Semantic UI Form elements
-import { Segment, Button, Icon, Label, Modal } from "semantic-ui-react";
+import {
+  Segment,
+  Button,
+  Icon,
+  Label,
+  Modal,
+  Dropdown
+} from "semantic-ui-react";
 import { graphql } from "react-apollo";
 import { GET_CHANNELS_USERS_COUNT_QUERY } from "../../../graphql/conversations/channels";
 
@@ -77,23 +84,32 @@ class List extends Component {
     const channelList =
       getChannelsUsersCount &&
       getChannelsUsersCount.map(channel => (
-        <Link
-          key={channel.id}
-          to={`/conversations/channel/${channel.id}`}
-          className={classnames("item", {
-            active: channelId && parseInt(channelId) === channel.id
-          })}
-        >
-          <Label className="blue">
-            {T.translate("conversations.channel.members")}
-            <div className="detail">{channel.usersCount}</div>
-          </Label>
+        <div key={channel.id} className="channel-label-elpsis-container">
+          <Link
+            to={`/conversations/channel/${channel.id}`}
+            className={classnames("item", {
+              active: channelId && parseInt(channelId) === channel.id
+            })}
+          >
+            <Label className="blue">
+              {T.translate("conversations.channel.members")}
+              <div className="detail">{channel.usersCount}</div>
+            </Label>
 
-          <div>
-            <i className="bullhorn icon" />&nbsp;
-            {channel.name}
-          </div>
-        </Link>
+            <div>
+              <i className="bullhorn icon" />
+              &nbsp;
+              {channel.name}
+            </div>
+          </Link>
+          <Dropdown floating icon="ellipsis vertical" className="icon">
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                {T.translate("conversations.channel.delete_channel")}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
       ));
 
     return [
