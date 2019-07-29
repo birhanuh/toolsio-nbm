@@ -8,9 +8,12 @@
   .ui.dropdown {
     padding: 5px;
   }
-  div.item.delete-channel,
-  div.item.delete-direct-message {
+  .menu.transition.visible > .item.delete-channel,
+  .menu.transition.visible > .item.delete-direct-message {
     color: $red !important;
+    &:hover {
+      color: $red !important;
+    }
     i {
       color: $red;
     }

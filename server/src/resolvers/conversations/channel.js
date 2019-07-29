@@ -94,7 +94,7 @@ export default {
     ),
 
     deleteChannel: requiresAuth.createResolver(
-      async (_, { channelId }, { models, subdomain, user }) => {
+      async (_, { channelId }, { models, subdomain }) => {
         const messages = await models.ChannelMessage.findAll(
           {
             where: { channelId: channelId },
@@ -115,7 +115,9 @@ export default {
               }
             });
 
-            Promise.all(promises);
+            Promise.all(promises)
+              .then()
+              .catch(err => console.log("err gcp: ", err));
 
             return {
               success: res === 1
