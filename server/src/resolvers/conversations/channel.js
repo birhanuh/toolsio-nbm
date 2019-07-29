@@ -115,9 +115,7 @@ export default {
               }
             });
 
-            Promise.all(promises)
-              .then()
-              .catch(err => console.log("err gcp: ", err));
+            Promise.all(promises);
 
             return {
               success: res === 1

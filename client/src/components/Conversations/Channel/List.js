@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import classnames from "classnames";
+import { addFlashMessage } from "../../../actions/flashMessageActions";
 // Semantic UI Form elements
 import {
   Segment,
@@ -10,8 +13,11 @@ import {
   Modal,
   Dropdown
 } from "semantic-ui-react";
-import { graphql } from "react-apollo";
-import { GET_CHANNELS_USERS_COUNT_QUERY } from "../../../graphql/conversations/channels";
+import { graphql, compose } from "react-apollo";
+import {
+  GET_CHANNELS_USERS_COUNT_QUERY,
+  DELETE_CHANNEL_MUTATION
+} from "../../../graphql/conversations/channels";
 
 // Localization
 import T from "i18n-react";
@@ -84,71 +90,57 @@ class List extends Component {
   handleDelete(id, event) {
     event.preventDefault();
 
-    console.log("Delete pressed");
+    this.props
+      .deleteChannelMutation({
+        variables: { channelId: parseInt(id) },
+        update: (proxy, { data: { deleteChannel } }) => {
+          const { success } = deleteChannel;
 
-    // this.props
-    //   .deleteCustomerMutation({
-    //     variables: { id },
-    //     update: (proxy, { data: { deleteCustomer } }) => {
-    //       const { success } = deleteCustomer;
+          if (!success) {
+            return;
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({
+            query: GET_CHANNELS_USERS_COUNT_QUERY
+          });
+          // Filter out deleted channel from store.
+          let updatedGetChannelsUsersCount = data.getChannelsUsersCount.filter(
+            channel => channel.id !== parseInt(id)
+          );
+          data.getChannelsUsersCount = updatedGetChannelsUsersCount;
 
-    //       if (!success) {
-    //         return;
-    //       }
-    //       // Read the data from our cache for this query.
-    //       const data = proxy.readQuery({
-    //         query: GET_CUSTOMERS_QUERY,
-    //         variables: {
-    //           order: "DESC",
-    //           offset: 0,
-    //           limit: 10,
-    //           name: ""
-    //         }
-    //       });
-    //       // Filter out deleted customer from store.
-    //       let updatedCustomers = data.getCustomers.customers.filter(
-    //         customer => customer.id !== id
-    //       );
-    //       data.getCustomers.customers = updatedCustomers;
+          // Write our data back to the cache.
+          proxy.writeQuery({
+            query: GET_CHANNELS_USERS_COUNT_QUERY,
+            data
+          });
+        }
+      })
+      .then(res => {
+        const { success, errors } = res.data.deleteChannel;
 
-    //       // Write our data back to the cache.
-    //       proxy.writeQuery({
-    //         query: GET_CUSTOMERS_QUERY,
-    //         variables: {
-    //           order: "DESC",
-    //           offset: 0,
-    //           limit: 10,
-    //           name: ""
-    //         },
-    //         data
-    //       });
-    //     }
-    //   })
-    //   .then(res => {
-    //     const { success, errors } = res.data.deleteCustomer;
+        if (success) {
+          this.props.addFlashMessage({
+            type: "success",
+            text: T.translate("conversations.channel.flash.success_delete")
+          });
 
-    //     if (success) {
-    //       this.props.addFlashMessage({
-    //         type: "success",
-    //         text: T.translate("customers.show.flash.success_delete", {
-    //           name: name
-    //         })
-    //       });
+          this.setState({ openConfirmationModal: false });
 
-    //       this.props.history.push("/customers");
-    //     } else {
-    //       let errorsList = {};
-    //       errors.map(error => (errorsList[error.path] = error.message));
+          this.props.history.push("/conversations");
+        } else {
+          let errorsList = {};
+          errors.map(error => (errorsList[error.path] = error.message));
 
-    //       this.setState({ errors: errorsList, isLoading: false });
-    //     }
-    //   })
-    //   .catch(() => {
-    //     this.props.addFlashMessage({
-    //       type: "error",
-    //       text: T.translate("customers.show.flash.error_delete", { name: name })
-    //     });
-    //   });
+          this.setState({ errors: errorsList, isLoading: false });
+        }
+      })
+      .catch(() => {
+        this.props.addFlashMessage({
+          type: "error",
+          text: T.translate("conversations.channel.flash.error_delete")
+        });
+      });
   }
 
   render() {
@@ -244,4 +236,18 @@ class List extends Component {
   }
 }
 
-export default graphql(GET_CHANNELS_USERS_COUNT_QUERY)(List);
+List.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+};
+
+const MutationQuery = compose(
+  graphql(GET_CHANNELS_USERS_COUNT_QUERY),
+  graphql(DELETE_CHANNEL_MUTATION, {
+    name: "deleteChannelMutation"
+  })
+)(List);
+
+export default connect(
+  null,
+  { addFlashMessage }
+)(withRouter(MutationQuery));

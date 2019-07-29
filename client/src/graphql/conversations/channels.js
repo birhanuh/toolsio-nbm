@@ -1,8 +1,8 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const ADD_MEMBER_MUTATION = gql`
   mutation addMember($members: [Int!], $channelId: Int!) {
-    addMember(members: $members, channelId: $channelId ) {
+    addMember(members: $members, channelId: $channelId) {
       success
       members
       errors {
@@ -11,7 +11,7 @@ export const ADD_MEMBER_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const GET_CHANNEL_USERS_QUERY = gql`
   query getChannel($id: Int!) {
@@ -28,14 +28,14 @@ export const GET_CHANNEL_USERS_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const CREATE_CHANNEL_MUTATION = gql`
   mutation createChannel($name: String!, $isPublic: Boolean) {
     createChannel(name: $name, isPublic: $isPublic) {
       success
       channel {
-        id 
+        id
         name
       }
       errors {
@@ -44,14 +44,26 @@ export const CREATE_CHANNEL_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 export const GET_CHANNELS_USERS_COUNT_QUERY = gql`
   {
     getChannelsUsersCount {
       id
       name
-      usersCount 
+      usersCount
     }
   }
-`
+`;
+
+export const DELETE_CHANNEL_MUTATION = gql`
+  mutation deleteChannel($channelId: Int!) {
+    deleteChannel(channelId: $channelId) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;

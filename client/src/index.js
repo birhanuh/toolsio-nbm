@@ -13,7 +13,7 @@ import { ApolloProvider } from "react-apollo";
 // Localization
 import T from "i18n-react";
 
-import App from "./components/Layouts/App";
+import App from "./components/App";
 import client from "./apollo";
 
 // A state for the entire project created by Redux

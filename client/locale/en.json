@@ -377,7 +377,7 @@
       "confirmation_msg": "Are you sure to delete this Project?",
       "flash": {
         "success_delete": "Project *{name}* is deleted",
-        "error_delete": "Project couldn't be deleted, try again after refreshing the page"
+        "error_delete": "Project couldn't be deleted, try deleting again after refreshing the page"
       }
     },
     "tasks": {
@@ -408,7 +408,7 @@
           "success_add": "*{name}* is added!",
           "success_update": "Task *{name}* is updated!",
           "success_delete": "Task *{name}* is deleted!",
-          "error_delete": "Task *{name}* couldn't be deleted, try again after refreshing the page"
+          "error_delete": "Task *{name}* couldn't be deleted, try deleting again after refreshing the page"
         }
       }
     }
@@ -475,7 +475,7 @@
       "confirmation_msg": "Are you sure to delete this sale?",
       "flash": {
         "success_delete": "Sale *{name}* is deleted!",
-        "error_delete": "Sale couldn't be deleted, try again after refreshing the page"
+        "error_delete": "Sale couldn't be deleted, try deleting again after refreshing the page"
       }
     },
     "items": {
@@ -503,7 +503,7 @@
           "success_add": "*{name}* is added!",
           "success_update": "Item *{name}* is updated!",
           "success_delete": "Item *{name}* is deleted!",
-          "error_delete": "Item *{name}* couldn't be deleted, try again after refreshing the page"
+          "error_delete": "Item *{name}* couldn't be deleted, try deleting again after refreshing the page"
         }
       }
     }
@@ -583,7 +583,7 @@
       "confirmation_msg": "Are you sure to delete this customer?",
       "flash": {
         "success_delete": "Customer *{name}* is deleted!",
-        "error_delete": "Customer couldn't be deleted, try again after refreshing the page"
+        "error_delete": "Customer couldn't be deleted, try deleting again after refreshing the page"
       }
     }
   },
@@ -746,7 +746,7 @@
       "confirmation_msg": "Are you sure to delete this invoice?",
       "flash": {
         "success_delete": "Invoice of *{name}* is deleted!",
-        "error_delete": "Invoice of *{name}* couldn't be deleted, try again after refreshing the page"
+        "error_delete": "Invoice of *{name}* couldn't be deleted, try deleting again after refreshing the page"
       }
     }
   },
@@ -782,7 +782,11 @@
       "confirmation_header": "Confirmation",
       "confirmation_msg": "Are you sure to delete this conversation? (ALL MESSAGES AND FILE IN THIS CONVESAIONS WILL BE GONE!)",
       "cancel": "Cancel",
-      "delete": "Delete"
+      "delete": "Delete",
+      "flash": {
+        "success_delete": "Channel is deleted!",
+        "error_delete": "Channel couldn't be deleted, try deleting again after refreshing the page"
+      }
     },
     "direct_messages": {
       "search_select_user": "Search/Select User",
@@ -791,7 +795,11 @@
       "confirmation_header": "Confirmation",
       "confirmation_msg": "Are you sure to delete this direct-message? (ALL MESSAGES AND FILE IN THIS DIRECT-MESSAGE WILL BE GONE!)",
       "cancel": "Cancel",
-      "delete": "Delete"
+      "delete": "Delete",
+      "flash": {
+        "success_delete": "Direct message is deleted!",
+        "error_delete": "Direct message couldn't be deleted, try deleting again after refreshing the page"
+      }
     },
     "messages": {
       "add_member": "Add member",

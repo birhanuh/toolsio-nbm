@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import classnames from "classnames";
+import { addFlashMessage } from "../../../actions/flashMessageActions";
 // Semantic React UI
 import {
   Segment,
@@ -13,7 +16,8 @@ import {
 import { graphql, compose } from "react-apollo";
 import {
   GET_DIRECT_MESSAGE_USERS_QUERY,
-  GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY
+  GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY,
+  DELETE_DIRECT_MESSAGES_MUTATION
 } from "../../../graphql/conversations/directMessages";
 
 // Localization
@@ -81,71 +85,59 @@ class List extends Component {
   handleDelete(id, event) {
     event.preventDefault();
 
-    console.log("Delete pressed");
+    this.props
+      .deleteDirectMessagesMutation({
+        variables: { receiverId: parseInt(id) },
+        update: (proxy, { data: { deleteDirectMessages } }) => {
+          const { success } = deleteDirectMessages;
 
-    // this.props
-    //   .deleteCustomerMutation({
-    //     variables: { id },
-    //     update: (proxy, { data: { deleteCustomer } }) => {
-    //       const { success } = deleteCustomer;
+          if (!success) {
+            return;
+          }
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({
+            query: GET_DIRECT_MESSAGE_USERS_QUERY
+          });
+          // Filter out deleted user from store.
+          let updatedGetDirectMessageUsers = data.getDirectMessageUsers.filter(
+            user => user.id !== parseInt(id)
+          );
+          data.getDirectMessageUsers = updatedGetDirectMessageUsers;
 
-    //       if (!success) {
-    //         return;
-    //       }
-    //       // Read the data from our cache for this query.
-    //       const data = proxy.readQuery({
-    //         query: GET_CUSTOMERS_QUERY,
-    //         variables: {
-    //           order: "DESC",
-    //           offset: 0,
-    //           limit: 10,
-    //           name: ""
-    //         }
-    //       });
-    //       // Filter out deleted customer from store.
-    //       let updatedCustomers = data.getCustomers.customers.filter(
-    //         customer => customer.id !== id
-    //       );
-    //       data.getCustomers.customers = updatedCustomers;
+          // Write our data back to the cache.
+          proxy.writeQuery({
+            query: GET_DIRECT_MESSAGE_USERS_QUERY,
+            data
+          });
+        }
+      })
+      .then(res => {
+        const { success, errors } = res.data.deleteDirectMessages;
 
-    //       // Write our data back to the cache.
-    //       proxy.writeQuery({
-    //         query: GET_CUSTOMERS_QUERY,
-    //         variables: {
-    //           order: "DESC",
-    //           offset: 0,
-    //           limit: 10,
-    //           name: ""
-    //         },
-    //         data
-    //       });
-    //     }
-    //   })
-    //   .then(res => {
-    //     const { success, errors } = res.data.deleteCustomer;
+        if (success) {
+          this.props.addFlashMessage({
+            type: "success",
+            text: T.translate(
+              "conversations.direct_message.flash.success_delete"
+            )
+          });
 
-    //     if (success) {
-    //       this.props.addFlashMessage({
-    //         type: "success",
-    //         text: T.translate("customers.show.flash.success_delete", {
-    //           name: name
-    //         })
-    //       });
+          this.setState({ openConfirmationModal: false });
 
-    //       this.props.history.push("/customers");
-    //     } else {
-    //       let errorsList = {};
-    //       errors.map(error => (errorsList[error.path] = error.message));
+          this.props.history.push("/conversations");
+        } else {
+          let errorsList = {};
+          errors.map(error => (errorsList[error.path] = error.message));
 
-    //       this.setState({ errors: errorsList, isLoading: false });
-    //     }
-    //   })
-    //   .catch(() => {
-    //     this.props.addFlashMessage({
-    //       type: "error",
-    //       text: T.translate("customers.show.flash.error_delete", { name: name })
-    //     });
-    //   });
+          this.setState({ errors: errorsList, isLoading: false });
+        }
+      })
+      .catch(() => {
+        this.props.addFlashMessage({
+          type: "error",
+          text: T.translate("conversations.direct_message.flash.error_delete")
+        });
+      });
   }
 
   render() {
@@ -250,11 +242,21 @@ class List extends Component {
   }
 }
 
-const Queries = compose(
+List.propTypes = {
+  addFlashMessage: PropTypes.func.isRequired
+};
+
+const MutationQueries = compose(
   graphql(GET_DIRECT_MESSAGE_USERS_QUERY, {
     name: "getDirectMessageUsersQuery"
   }),
-  graphql(GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY)
+  graphql(GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY),
+  graphql(DELETE_DIRECT_MESSAGES_MUTATION, {
+    name: "deleteDirectMessagesMutation"
+  })
 )(List);
 
-export default Queries;
+export default connect(
+  null,
+  { addFlashMessage }
+)(withRouter(MutationQueries));
