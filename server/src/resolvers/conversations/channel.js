@@ -1,5 +1,6 @@
 import requiresAuth from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
+import { deleteUploadFromGCP } from "../../utils/uploadFile";
 
 export default {
   Query: {
@@ -89,6 +90,44 @@ export default {
             errors: formatErrors(err)
           };
         }
+      }
+    ),
+
+    deleteChannel: requiresAuth.createResolver(
+      async (_, { channelId }, { models, subdomain, user }) => {
+        const messages = await models.ChannelMessage.findAll(
+          {
+            where: { channelId: channelId },
+            searchPath: subdomain
+          },
+          { raw: true }
+        );
+
+        return models.Channel.destroy({
+          where: { id: channelId },
+          force: true,
+          searchPath: subdomain
+        })
+          .then(res => {
+            const promises = messages.map(message => {
+              if (message.uploadPath) {
+                return deleteUploadFromGCP(message.uploadPath);
+              }
+            });
+
+            Promise.all(promises);
+
+            return {
+              success: res === 1
+            };
+          })
+          .catch(err => {
+            console.log("err: ", err);
+            return {
+              success: false,
+              errors: formatErrors(err)
+            };
+          });
       }
     )
   },

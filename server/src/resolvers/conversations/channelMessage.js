@@ -60,7 +60,7 @@ export default {
           if (file) {
             //const uploadFile = await processUpload(file);
             const uploadFile = await sendUploadToGCP(file, "channel-messages");
-            console.log("FFFF: ", uploadFile);
+            console.log("uploadFile: ", uploadFile);
             messageData.uploadPath = uploadFile.path;
             messageData.mimetype = uploadFile.mimetype;
           }
