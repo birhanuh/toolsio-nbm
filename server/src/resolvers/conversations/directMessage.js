@@ -259,7 +259,8 @@ export default {
                   { senderId: receiverId, receiverId: user.id }
                 ]
               }
-            ]
+            ],
+            uploadPath: { [Sequelize.Op.ne]: null }
           },
           searchPath: subdomain
         };
@@ -269,12 +270,10 @@ export default {
         });
 
         return models.DirectMessage.destroy(options)
-          .then(res => {
-            const promises = messages.map(message => {
-              if (message.uploadPath) {
-                return deleteUploadFromGCP(message.uploadPath);
-              }
-            });
+          .then(() => {
+            const promises = messages.map(message =>
+              deleteUploadFromGCP(message.uploadPath)
+            );
 
             Promise.all(promises);
 

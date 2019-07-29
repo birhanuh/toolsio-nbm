@@ -1,3 +1,4 @@
+import Sequelize from "sequelize";
 import requiresAuth from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
 import { deleteUploadFromGCP } from "../../utils/uploadFile";
@@ -97,7 +98,10 @@ export default {
       async (_, { channelId }, { models, subdomain }) => {
         const messages = await models.ChannelMessage.findAll(
           {
-            where: { channelId: channelId },
+            where: {
+              channelId: channelId,
+              uploadPath: { [Sequelize.Op.ne]: null }
+            },
             searchPath: subdomain
           },
           { raw: true }
@@ -109,11 +113,9 @@ export default {
           searchPath: subdomain
         })
           .then(res => {
-            const promises = messages.map(message => {
-              if (message.uploadPath) {
-                return deleteUploadFromGCP(message.uploadPath);
-              }
-            });
+            const promises = messages.map(message =>
+              deleteUploadFromGCP(message.uploadPath)
+            );
 
             Promise.all(promises);
 
