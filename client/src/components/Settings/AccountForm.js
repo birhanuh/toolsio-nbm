@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-require("babel-polyfill");
 import { connect } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
