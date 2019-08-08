@@ -68,6 +68,26 @@ export const sendUploadToGCP = async (upload, destination) => {
   };
 };
 
+export const deleteUploadFromGCP = filePath => {
+  const bucketName = process.env.GCP_BUCKET_NAME;
+  const filename = filePath.slice(
+    filePath.indexOf("toolsio-com.appspot.com") + 24,
+    filePath.length
+  );
+
+  // Deletes the file from the bucket
+  storage
+    .bucket(bucketName)
+    .file(filename)
+    .delete()
+    .then(() => {
+      console.log(`gs://${bucketName}/${filename} deleted.`);
+    })
+    .catch(err => {
+      console.error("ERROR:", err);
+    });
+};
+
 /**
 export const sendUploadToGCp = async (upload, destination) => {
   if (!upload) {

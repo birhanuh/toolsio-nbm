@@ -12,15 +12,15 @@ import {
   Divider
 } from "semantic-ui-react";
 
-import Dashboard from "../Dashboard/Page";
-import LandingPage from "./LandingPage";
-import Signup from "../Signup/Page";
-import Invitation from "../Signup/Invitation";
-import Login from "../Login/Page";
-import Logout from "./Logout";
-import Subdomain from "../Login/Subdomain";
-import ForgotPasswordRequest from "../Login/ForgotPasswordRequest";
-import PasswordReset from "../Login/PasswordReset";
+import Dashboard from "./Dashboard/Page";
+import LandingPage from "./Layouts/LandingPage";
+import Signup from "./Signup/Page";
+import Invitation from "./Signup/Invitation";
+import Login from "./Login/Page";
+import Logout from "./Logout/Logout";
+import Subdomain from "./Login/Subdomain";
+import ForgotPasswordRequest from "./Login/ForgotPasswordRequest";
+import PasswordReset from "./Login/PasswordReset";
 // Utils
 import {
   isAuthPages,
@@ -29,44 +29,44 @@ import {
   AuthRoute,
   PrivateRoute,
   LandingSubdomainSignupPageRoute
-} from "../../utils";
-import Settings from "../Settings/Page";
-import ProjectsPage from "../Projects/Page";
-import ProjectsForm from "../Projects/Form";
-import ProjectsShow from "../Projects/Show";
-import SalesPage from "../Sales/Page";
-import SalesForm from "../Sales/Form";
-import SalesShow from "../Sales/Show";
-import CustomersPage from "../Customers/Page";
-import CustomersForm from "../Customers/Form";
-import CustomersShow from "../Customers/Show";
-import InvoicesPage from "../Invoices/Page";
-import InvoicesForm from "../Invoices/Form";
-import InvoicesShow from "../Invoices/Show/Page";
-import ConversationsPage from "../Conversations/Page";
-import UsersPage from "../Users/Page";
-import EventsPage from "../Events/Page";
+} from "../utils";
+import Settings from "./Settings/Page";
+import ProjectsPage from "./Projects/Page";
+import ProjectsForm from "./Projects/Form";
+import ProjectsShow from "./Projects/Show";
+import SalesPage from "./Sales/Page";
+import SalesForm from "./Sales/Form";
+import SalesShow from "./Sales/Show";
+import CustomersPage from "./Customers/Page";
+import CustomersForm from "./Customers/Form";
+import CustomersShow from "./Customers/Show";
+import InvoicesPage from "./Invoices/Page";
+import InvoicesForm from "./Invoices/Form";
+import InvoicesShow from "./Invoices/Show/Page";
+import ConversationsPage from "./Conversations/Page";
+import UsersPage from "./Users/Page";
+import EventsPage from "./Events/Page";
 
-import InternalHeaderNav from "./InternalHeaderNav";
-import LandingPageHeaderNav from "./LandingPageHeaderNav";
-import Breadcrumb from "./Breadcrumb";
-import { OuterSidebarScrollableHeader, InnerSidebar } from "./Sidebars";
-import FlashMessage from "../../flash/FlashMessage";
+import InternalHeaderNav from "./Layouts/InternalHeaderNav";
+import LandingPageHeaderNav from "./Layouts/LandingPageHeaderNav";
+import Breadcrumb from "./Layouts/Breadcrumb";
+import { OuterSidebarScrollableHeader, InnerSidebar } from "./Layouts/Sidebars";
+import FlashMessage from "../flash/FlashMessage";
 
 // Authorization utils
-import { getCookie } from "../../utils";
+import { getCookie } from "../utils";
 
 // Semantic CSS
 import "semantic-ui-css/semantic.min.css";
 
 // CSS entry
-import "../../css/app.scss";
+import "../css/app.scss";
 
 // Localization
 import T from "i18n-react";
 
 // Logo
-import logo from "../../images/logo-square.png";
+import logo from "../images/logo-square.png";
 
 class App extends Component {
   state = {

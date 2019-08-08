@@ -5,7 +5,7 @@ import requiresAuth, {
   requiresDirectMessageAccess
 } from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
-import { processUpload, sendUploadToGCP } from "../../utils/uploadFile";
+import { sendUploadToGCP, deleteUploadFromGCP } from "../../utils/uploadFile";
 
 import pubsub from "../../utils/pubsub";
 import { NEW_DIRECT_MESSAGE } from "../../utils/constants";
@@ -173,7 +173,7 @@ export default {
 
           if (file) {
             //const uploadFile = await processUpload(file);
-            const uploadFile = sendUploadToGCP(file, "direct-messages");
+            const uploadFile = await sendUploadToGCP(file, "direct-messages");
 
             messageData.uploadPath = uploadFile.path;
             messageData.mimetype = uploadFile.mimetype;
@@ -238,6 +238,53 @@ export default {
               errors: formatErrors(err)
             };
           })
+    ),
+
+    deleteDirectMessages: requiresAuth.createResolver(
+      async (_, { receiverId }, { models, subdomain, user }) => {
+        const options = {
+          where: {
+            [Sequelize.Op.or]: [
+              {
+                [Sequelize.Op.and]: [
+                  { receiverId: receiverId, senderId: user.id }
+                ]
+              },
+              {
+                [Sequelize.Op.and]: [
+                  { senderId: receiverId, receiverId: user.id }
+                ]
+              }
+            ],
+            uploadPath: { [Sequelize.Op.ne]: null }
+          },
+          searchPath: subdomain
+        };
+
+        const messages = await models.DirectMessage.findAll(options, {
+          raw: true
+        });
+
+        return models.DirectMessage.destroy(options)
+          .then(() => {
+            const promises = messages.map(message =>
+              deleteUploadFromGCP(message.uploadPath)
+            );
+
+            Promise.all(promises);
+
+            return {
+              success: true
+            };
+          })
+          .catch(err => {
+            console.log("err: ", err);
+            return {
+              success: false,
+              errors: formatErrors(err)
+            };
+          });
+      }
     )
   },
 

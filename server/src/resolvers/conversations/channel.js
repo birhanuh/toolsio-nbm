@@ -1,5 +1,7 @@
+import Sequelize from "sequelize";
 import requiresAuth from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
+import { deleteUploadFromGCP } from "../../utils/uploadFile";
 
 export default {
   Query: {
@@ -89,6 +91,45 @@ export default {
             errors: formatErrors(err)
           };
         }
+      }
+    ),
+
+    deleteChannel: requiresAuth.createResolver(
+      async (_, { channelId }, { models, subdomain }) => {
+        const messages = await models.ChannelMessage.findAll(
+          {
+            where: {
+              channelId: channelId,
+              uploadPath: { [Sequelize.Op.ne]: null }
+            },
+            searchPath: subdomain
+          },
+          { raw: true }
+        );
+
+        return models.Channel.destroy({
+          where: { id: channelId },
+          force: true,
+          searchPath: subdomain
+        })
+          .then(res => {
+            const promises = messages.map(message =>
+              deleteUploadFromGCP(message.uploadPath)
+            );
+
+            Promise.all(promises);
+
+            return {
+              success: res === 1
+            };
+          })
+          .catch(err => {
+            console.log("err: ", err);
+            return {
+              success: false,
+              errors: formatErrors(err)
+            };
+          });
       }
     )
   },
