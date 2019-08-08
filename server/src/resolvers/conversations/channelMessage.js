@@ -5,7 +5,7 @@ import requiresAuth, {
   requiresChannelAccess
 } from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
-import { processUpload, sendUploadToGCP } from "../../utils/uploadFile";
+import { sendUploadToGCP } from "../../utils/uploadFile";
 
 import pubsub from "../../utils/pubsub";
 import { NEW_CHANNEL_MESSAGE } from "../../utils/constants";

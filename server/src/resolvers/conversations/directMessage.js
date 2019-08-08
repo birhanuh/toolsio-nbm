@@ -5,11 +5,7 @@ import requiresAuth, {
   requiresDirectMessageAccess
 } from "../../middlewares/authentication";
 import { formatErrors } from "../../utils/formatErrors";
-import {
-  processUpload,
-  sendUploadToGCP,
-  deleteUploadFromGCP
-} from "../../utils/uploadFile";
+import { sendUploadToGCP, deleteUploadFromGCP } from "../../utils/uploadFile";
 
 import pubsub from "../../utils/pubsub";
 import { NEW_DIRECT_MESSAGE } from "../../utils/constants";
