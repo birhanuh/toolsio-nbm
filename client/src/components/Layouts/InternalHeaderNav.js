@@ -73,12 +73,13 @@ class InternalHeaderNav extends Component {
             <Dropdown.Item
               as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard()
+              onClick={this.idRouteDashboard() && this.clickHandler}
+              to={{
+                pathname: this.idRouteDashboard()
                   ? "#projectTask"
-                  : "/dashboard/#projectTask"
-              }
+                  : "/dashboard",
+                hash: !this.idRouteDashboard() && "#projectTask"
+              }}
             >
               <Label color="red">{item.count} DELAYED</Label>
               Projects
@@ -92,12 +93,13 @@ class InternalHeaderNav extends Component {
             <Dropdown.Item
               as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard()
+              onClick={this.idRouteDashboard() && this.clickHandler}
+              to={{
+                pathname: this.idRouteDashboard()
                   ? "#projectTask"
-                  : "/dashboard/#projectTask"
-              }
+                  : "/dashboard",
+                hash: !this.idRouteDashboard() && "#projectTask"
+              }}
             >
               <Label color="blue">{item.count} NEW</Label>
               Projects
@@ -116,10 +118,11 @@ class InternalHeaderNav extends Component {
             <Dropdown.Item
               as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard() ? "#saleTask" : "/dashboard/#saleTask"
-              }
+              onClick={this.idRouteDashboard() && this.clickHandler}
+              to={{
+                pathname: this.idRouteDashboard() ? "#saleTask" : "/dashboard",
+                hash: !this.idRouteDashboard() && "#saleTask"
+              }}
             >
               <Label color="red">{item.count} DELAYED</Label>
               Sales
@@ -133,10 +136,11 @@ class InternalHeaderNav extends Component {
             <Dropdown.Item
               as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard() ? "#saleTask" : "/dashboard/#saleTask"
-              }
+              onClick={this.idRouteDashboard() && this.clickHandler}
+              to={{
+                pathname: this.idRouteDashboard() ? "#saleTask" : "/dashboard",
+                hash: !this.idRouteDashboard() && "#saleTask"
+              }}
             >
               <Label color="blue">{item.count} NEW</Label>
               Sales
@@ -155,12 +159,13 @@ class InternalHeaderNav extends Component {
             <Dropdown.Item
               as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard()
+              onClick={this.idRouteDashboard() && this.clickHandler}
+              to={{
+                pathname: this.idRouteDashboard()
                   ? "#invoiceTask"
-                  : "/dashboard/#invoiceTask"
-              }
+                  : "/dashboard",
+                hash: !this.idRouteDashboard() && "#invoiceTask"
+              }}
             >
               <Label color="red">{item.count} DELAYED</Label>
               Invoices
@@ -174,12 +179,13 @@ class InternalHeaderNav extends Component {
             <Dropdown.Item
               as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard()
+              onClick={this.idRouteDashboard() && this.clickHandler}
+              to={{
+                pathname: this.idRouteDashboard()
                   ? "#invoiceTask"
-                  : "/dashboard/#invoiceTask"
-              }
+                  : "/dashboard",
+                hash: !this.idRouteDashboard() && "#invoiceTask"
+              }}
             >
               <Label color="orange">{item.count} PENDING</Label>
               Invoices
