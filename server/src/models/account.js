@@ -8,7 +8,11 @@ export default (sequelize, DataTypes) => {
         unique: true,
         validate: {
           is: ["^[a-z]+$", "i"], // will only allow letters
-          notIn: [["www", "http", "https", "api"]] // don't allow www, http, https substrings
+          notIn: {
+            args: [["www", "http", "https", "api", "toolsio"]], // don't allow these substrings
+            msg:
+              "This subdomain is among the reserved substrings of the system. Pick another one."
+          }
         }
       },
       industry: {
