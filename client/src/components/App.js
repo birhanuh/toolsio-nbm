@@ -113,6 +113,7 @@ class App extends Component {
           {/* Display either internal or external header nav */}
           {isAuthenticated() && !isAuthPages() && (
             <InternalHeaderNav
+              history={this.props.history}
               currentAccount={JSON.parse(getCookie("currentAccount"))}
               toggleInnerSidebarVisibility={this.toggleInnerSidebarVisibility}
             />
@@ -129,7 +130,7 @@ class App extends Component {
             className={classnames({
               "ui stackable grid basic segment internal-page":
                 isAuthenticated() && !isAuthPages(),
-              "ui stackable grid auth-pages": isAuthPages()
+              "auth-pages": isAuthPages()
             })}
           >
             {/* Display breadcrumb */}

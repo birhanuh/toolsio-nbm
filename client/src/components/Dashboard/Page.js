@@ -17,7 +17,7 @@ const Page = () => {
   return (
     <Grid.Row>
       <Grid.Column width={16}>
-        <Grid columns={4}>
+        <Grid stackable columns={4}>
           <Grid.Column>{TotalIncomeCard()}</Grid.Column>
           <Grid.Column>{IncomesCard()}</Grid.Column>
 
@@ -26,12 +26,12 @@ const Page = () => {
           <Grid.Column>{SalesCard()}</Grid.Column>
         </Grid>
 
-        <Grid columns={2}>
+        <Grid stackable columns={2}>
           <Grid.Column width={6}>{CustomersCard()}</Grid.Column>
           <Grid.Column width={10}>{InvoicesCard()}</Grid.Column>
         </Grid>
 
-        <Grid columns={3}>
+        <Grid stackable columns={3}>
           <Grid.Column>{ProjectTasks()}</Grid.Column>
 
           <Grid.Column>{SaleTasks()}</Grid.Column>
