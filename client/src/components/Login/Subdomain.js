@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -23,7 +23,7 @@ import T from "i18n-react";
 
 import logo from "../../images/logo-square.png";
 
-class Subdomain extends Component {
+class Subdomain extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

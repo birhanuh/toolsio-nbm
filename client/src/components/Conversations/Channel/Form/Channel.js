@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -16,7 +16,7 @@ import {
 // Localization
 import T from "i18n-react";
 
-class Channel extends Component {
+class Channel extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

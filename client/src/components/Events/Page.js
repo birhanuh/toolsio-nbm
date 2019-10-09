@@ -1,5 +1,5 @@
 // import React...
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 // Semantic React UI
 import { Grid, Segment } from "semantic-ui-react";
 import { graphql, compose } from "react-apollo";
@@ -13,7 +13,7 @@ import "fullcalendar/dist/fullcalendar.min.css";
 
 import From from "./Form";
 
-class Page extends Component {
+class Page extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

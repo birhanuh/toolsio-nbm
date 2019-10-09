@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 
 // Semantic UI React
@@ -13,7 +13,7 @@ $.animate = require("jquery.easing");
 $.fn.transition = require("semantic-ui-transition");
 $.fn.visibility = require("semantic-ui-visibility");
 
-class LandingPageHeaderNav extends Component {
+class LandingPageHeaderNav extends PureComponent {
   componentDidMount = () => {
     // fix menu when passed
     $("#home .ui.text.container").visibility({

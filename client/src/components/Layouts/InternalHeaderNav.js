@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 // Semantic UI Form elements
 import { Image, Dropdown, Menu, Label, Icon } from "semantic-ui-react";
@@ -21,7 +21,7 @@ import avatarPlaceholderSmall from "../../images/avatar-placeholder-small.png";
 import $ from "jquery";
 $.animate = require("jquery.easing");
 
-class InternalHeaderNav extends Component {
+class InternalHeaderNav extends PureComponent {
   clickHandler = (v, e) => {
     if (window.location.pathname.indexOf("/dashboard") === 0) {
       e.preventDefault();

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 // Semantic UI JS
 import { Grid, Select, Input, Icon, Segment } from "semantic-ui-react";
@@ -10,7 +10,7 @@ import Table from "./Table";
 // Localization
 import T from "i18n-react";
 
-class Page extends Component {
+class Page extends PureComponent {
   state = {
     name: "",
     limit: this.props.match.params.limit

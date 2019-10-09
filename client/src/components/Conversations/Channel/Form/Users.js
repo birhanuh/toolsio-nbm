@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Validation } from "../../../../utils";
 // Semantic UI Form elements
@@ -13,7 +13,7 @@ import {
 // Localization
 import T from "i18n-react";
 
-class Users extends Component {
+class Users extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

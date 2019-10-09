@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import Dropzone from "react-dropzone";
 // Semantic UI Form elements
 import { Form, Icon } from "semantic-ui-react";
@@ -10,7 +10,7 @@ import T from "i18n-react";
 
 const ENTER_KEY = 13;
 
-class Message extends Component {
+class Message extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

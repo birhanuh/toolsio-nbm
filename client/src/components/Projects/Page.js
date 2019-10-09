@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 // Semantic React UI
 import { Grid, Segment, Input, Button, Icon } from "semantic-ui-react";
@@ -9,7 +9,7 @@ import { GET_PROJECTS_QUERY } from "../../graphql/projects";
 // Localization
 import T from "i18n-react";
 
-class Page extends Component {
+class Page extends PureComponent {
   state = { name: "" };
 
   handleChange = (name, value) => {

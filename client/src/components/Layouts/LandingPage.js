@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Validation } from "../../utils";
 //import { Link } from 'react-router-dom'
@@ -24,7 +24,7 @@ import T from "i18n-react";
 import $ from "jquery";
 $.animate = require("jquery.easing");
 
-class LandingPage extends Component {
+class LandingPage extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

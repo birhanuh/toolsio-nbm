@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -32,7 +32,7 @@ import TasksForm from "./Tasks/Form";
 // Localization
 import T from "i18n-react";
 
-class Show extends Component {
+class Show extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

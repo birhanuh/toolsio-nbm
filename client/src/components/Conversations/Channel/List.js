@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -58,7 +58,7 @@ const AddChannelModal = ({ open, onClose, toggleCreateChannelModal }) => (
   </Modal>
 );
 
-class List extends Component {
+class List extends PureComponent {
   state = {
     openCreateChannelModal: false,
     openConfirmationModal: false

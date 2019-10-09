@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
@@ -29,7 +29,7 @@ import moment from "moment";
 // Localization
 import T from "i18n-react";
 
-class Show extends Component {
+class Show extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

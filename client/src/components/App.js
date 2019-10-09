@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import classnames from "classnames";
 // Semantic UI React
@@ -68,7 +68,7 @@ import T from "i18n-react";
 // Logo
 import logo from "../images/logo-square.png";
 
-class App extends Component {
+class App extends PureComponent {
   state = {
     visibleInnerSidebar: false,
     visibleOuterSidebar: false

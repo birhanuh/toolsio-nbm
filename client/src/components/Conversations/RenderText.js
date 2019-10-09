@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
-export default class RenderText extends Component {
+export default class RenderText extends PureComponent {
   state = {
     text: ""
   };

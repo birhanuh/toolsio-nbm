@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -42,7 +42,7 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 // Images
 import logoPlaceholderMedium from "../../images/logo-placeholder.svg";
 
-class AccountForm extends Component {
+class AccountForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
