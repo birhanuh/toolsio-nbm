@@ -358,7 +358,11 @@ class Form extends PureComponent {
             }
           })
           .then(res => {
-            const { success, errors } = res.data.createCustomer;
+            const {
+              success,
+              errors,
+              customer: { id }
+            } = res.data.createCustomer;
 
             window.performance.mark("form_end");
             window.performance.measure(
@@ -386,7 +390,14 @@ class Form extends PureComponent {
                 this.props.location.state.prevPath &&
                 this.props.location.state.prevPath === "/projects/new"
               ) {
-                this.props.history.push("/projects/new");
+                const name = this.props.location.state.name;
+                const deadline = this.props.location.state.deadline;
+                const description = this.props.location.state.description;
+
+                this.props.history.push({
+                  pathname: "/projects/new",
+                  state: { name, deadline, description, id }
+                });
                 return;
               }
 
@@ -396,7 +407,14 @@ class Form extends PureComponent {
                 this.props.location.state.prevPath &&
                 this.props.location.state.prevPath === "/sales/new"
               ) {
-                this.props.history.push("/sales/new");
+                const name = this.props.location.state.name;
+                const deadline = this.props.location.state.deadline;
+                const description = this.props.location.state.description;
+
+                this.props.history.push({
+                  pathname: "/sales/new",
+                  state: { name, deadline, description, id }
+                });
                 return;
               }
 

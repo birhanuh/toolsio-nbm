@@ -30,7 +30,7 @@ export default {
     getProjectsWithoutInvoice: requiresAuth.createResolver(
       (_, { name }, { models, subdomain }) =>
         models.sequelize.query(
-          "SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id, c.id AS customer_id, c.name AS customer_name FROM projects p LEFT JOIN invoices i ON p.id=i.project_id JOIN customers c ON p.customer_id = c.id WHERE i.project_id IS NULL AND p.name ILIKE :projectName",
+          "SELECT p.id, p.name, p.deadline, p.status, p.progress, p.description, p.customer_id, p.user_id, c.id AS customer_id, c.name AS customer_name FROM projects p LEFT JOIN invoices i ON p.id=i.project_id JOIN customers c ON p.customer_id = c.id WHERE i.project_id IS NULL AND p.status='finished' AND p.name ILIKE :projectName",
           {
             replacements: { projectName: "%" + name + "%" },
             model: models.Project,

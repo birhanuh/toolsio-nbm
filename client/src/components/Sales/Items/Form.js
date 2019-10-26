@@ -160,6 +160,8 @@ class Form extends PureComponent {
             });
             // Add our Task from the mutation to the end.
             data.getSale.items.push(item);
+            console.log("STORE ITEM CREATE: ", data.getSale.items);
+            console.log("STORE ITEM CREATE PROP: ", this.props);
             // Write our data back to the cache.
             store.writeQuery({ query: GET_SALE_QUERY, data });
           }
@@ -425,7 +427,7 @@ class Form extends PureComponent {
     this.props
       .deleteItemMutation({
         variables: { id },
-        update: (proxy, { data: { deleteItem } }) => {
+        update: (store, { data: { deleteItem } }) => {
           const { success } = deleteItem;
 
           if (!success) {
@@ -433,17 +435,20 @@ class Form extends PureComponent {
           }
 
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_SALE_QUERY,
             variables: {
               id: saleId
             }
           });
-          // Add our Item from the mutation to the end.
+          // Delete item from items.
           let updatedItems = data.getSale.items.filter(item => item.id !== id);
+
           data.getSale.items = updatedItems;
+          console.log("STORE ITEM UPDATE: ", data.getSale.items);
+          console.log("STORE ITEM UPDATE PROP: ", this.props);
           // Write our data back to the cache.
-          proxy.writeQuery({ query: GET_SALE_QUERY, data });
+          store.writeQuery({ query: GET_SALE_QUERY, data });
         }
       })
       .then(res => {
@@ -487,8 +492,13 @@ class Form extends PureComponent {
   render() {
     const { newItem, editItem, openConfirmationModal } = this.state;
 
-    let { items, itemsTotal } = this.props;
+    let { items } = this.props;
 
+    let itemsTotal = items
+      .map(a => a.total)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
+    console.log("STORE ITEM: ", items);
     const itemsList = items.map(item => (
       <ShowEditItemTr
         key={item.id}

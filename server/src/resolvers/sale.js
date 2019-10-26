@@ -32,7 +32,7 @@ export default {
     getSalesWithoutInvoice: requiresAuth.createResolver(
       (_, { name }, { models, subdomain }) =>
         models.sequelize.query(
-          "SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id, c.id AS customer_id, c.name AS customer_name FROM sales s LEFT JOIN invoices i ON s.id = i.sale_id JOIN customers c ON s.customer_id=c.id WHERE i.sale_id IS NULL AND s.name ILIKE :saleName",
+          "SELECT s.id, s.name, s.deadline, s.status, s.description, s.customer_id, s.user_id, c.id AS customer_id, c.name AS customer_name FROM sales s LEFT JOIN invoices i ON s.id = i.sale_id JOIN customers c ON s.customer_id=c.id WHERE i.sale_id IS NULL AND s.status='finished' AND s.name ILIKE :saleName",
           {
             replacements: { saleName: "%" + name + "%" },
             model: models.Sale,

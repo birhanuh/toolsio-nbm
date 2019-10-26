@@ -42,12 +42,20 @@ class Form extends PureComponent {
     super(props);
     this.state = {
       id: this.props.data.getProject ? this.props.data.getProject.id : null,
-      name: this.props.data.getProject ? this.props.data.getProject.name : "",
-      deadline: this.props.data.getProject
-        ? new Date(this.props.data.getProject.deadline)
+      name: this.props.data.getSale
+        ? this.props.data.getSale.name
+        : this.props.location.state && this.props.location.state.name
+        ? this.props.location.state.name
+        : "",
+      deadline: this.props.data.getSale
+        ? new Date(this.props.data.getSale.deadline)
+        : this.props.location.state && this.props.location.state.deadline
+        ? this.props.location.state.deadline
         : new Date(),
-      customerId: this.props.data.getProject
-        ? this.props.data.getProject.customer.id
+      customerId: this.props.data.getSale
+        ? this.props.data.getSale.customer.id
+        : this.props.location.state && this.props.location.state.id
+        ? this.props.location.state.id
         : "",
       status: this.props.data.getProject
         ? this.props.data.getProject.status
@@ -55,14 +63,19 @@ class Form extends PureComponent {
       progress: this.props.data.getProject
         ? this.props.data.getProject.progress
         : 0,
-      description: this.props.data.getProject
-        ? !this.props.data.getProject.description
-          ? ""
-          : this.props.data.getProject.description
+      description: this.props.data.getSale
+        ? this.props.data.getSale.description
+        : this.props.location.state && this.props.location.state.description
+        ? this.props.location.state.description
         : "",
       errors: {},
-      isLoading: false
+      isLoading: false,
+      customersOptions: []
     };
+  }
+
+  UNSAFE_componentWillMount() {
+    this.setCustomerOptions(this.props.getCustomersQuery.getCustomers);
   }
 
   UNSAFE_componentWillReceiveProps = nextProps => {
@@ -79,7 +92,23 @@ class Form extends PureComponent {
           : nextProps.data.getProject.description
       });
     }
+
+    if (nextProps.getCustomersQuery) {
+      this.setCustomerOptions(this.props.getCustomersQuery.getCustomers);
+    }
   };
+
+  setCustomerOptions(getCustomers) {
+    this.setState({
+      customersOptions:
+        getCustomers &&
+        getCustomers.customers.map(customer => ({
+          key: customer.id,
+          value: customer.id,
+          text: customer.name
+        }))
+    });
+  }
 
   handleChange = (name, value) => {
     //this.state.project['name'] = event.target.value // WRONG! Never mutate a state in React
@@ -296,18 +325,9 @@ class Form extends PureComponent {
       progress,
       description,
       errors,
-      isLoading
+      isLoading,
+      customersOptions
     } = this.state;
-
-    const { getCustomers } = this.props.getCustomersQuery;
-
-    const customersOptions =
-      getCustomers &&
-      getCustomers.customers.map(customer => ({
-        key: customer.id,
-        value: customer.id,
-        text: customer.name
-      }));
 
     return (
       <Grid.Row columns={1}>
@@ -386,7 +406,12 @@ class Form extends PureComponent {
                       className="ui primary outline tiny button"
                       to={{
                         pathname: "/customers/new",
-                        state: { prevPath: location.pathname }
+                        state: {
+                          prevPath: location.pathname,
+                          name,
+                          deadline,
+                          description
+                        }
                       }}
                     >
                       <Icon name="add circle" />

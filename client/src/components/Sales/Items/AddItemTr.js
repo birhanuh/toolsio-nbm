@@ -91,8 +91,8 @@ export default function AddItemTr({
           className="turquoise"
           onClick={handleCreate}
         >
-          <Icon name="add circle" />
-          &nbsp;{T.translate("sales.items.form.add_item")}
+          <Icon name="check circle" />
+          {T.translate("sales.items.form.add_item")}
         </Button>
       </td>
     </tr>

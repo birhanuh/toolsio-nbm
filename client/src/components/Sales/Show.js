@@ -189,9 +189,6 @@ class Show extends PureComponent {
       openConfirmationModal
     } = this.state;
 
-    let itemsTotal = 0;
-    items.map(item => (itemsTotal += item.total));
-
     return [
       <Grid.Row columns={1} key="segment">
         <Grid.Column width={14}>
@@ -313,9 +310,7 @@ class Show extends PureComponent {
               {T.translate("sales.items.header")}
             </Header>
             <Segment attached="bottom" className="p-3">
-              {items && id && (
-                <ItemsForm saleId={id} itemsTotal={itemsTotal} items={items} />
-              )}
+              {items && id && <ItemsForm saleId={id} items={items} />}
             </Segment>
 
             <div className="pt-3">

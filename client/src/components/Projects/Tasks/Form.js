@@ -500,7 +500,12 @@ class Form extends PureComponent {
   render() {
     const { newTask, editTask, openConfirmationModal } = this.state;
 
-    const { tasks, tasksTotal } = this.props;
+    const { tasks } = this.props;
+
+    let tasksTotal = tasks
+      .map(a => a.total)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
 
     const tasksList = tasks.map(task => (
       <ShowEditTaskTr

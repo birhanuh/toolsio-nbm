@@ -90,8 +90,8 @@ export default function AddTaskTr({
           className="turquoise"
           onClick={handleCreate}
         >
-          <Icon name="add circle" />
-          &nbsp;{T.translate("projects.tasks.form.add_task")}
+          <Icon name="check circle" />
+          {T.translate("projects.tasks.form.add_task")}
         </Button>
       </td>
     </tr>
