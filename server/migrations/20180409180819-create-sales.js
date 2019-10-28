@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('sales', {
+    return queryInterface.createTable("sales", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,15 +9,15 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        allowNull : false,
+        allowNull: false,
         type: Sequelize.STRING
       },
       deadline: {
-        allowNull : false,
+        allowNull: false,
         type: Sequelize.DATE
       },
       status: {
-        allowNull : false,
+        allowNull: false,
         defaultValue: "new",
         type: Sequelize.STRING
       },
@@ -25,27 +25,27 @@ module.exports = {
         type: Sequelize.TEXT
       },
       tax: {
-        allowNull : true,
+        allowNull: true,
         defaultValue: 0,
         type: Sequelize.DECIMAL
       },
       is_invoiced: {
         defaultValue: false,
-        allowNull : false,
+        allowNull: false,
         type: Sequelize.BOOLEAN
       },
       customer_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'customers',
-          key: 'id'
-        },
+          model: "customers",
+          key: "id"
+        }
       },
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
-          key: 'id'
+          model: "users",
+          key: "id"
         }
       },
       created_at: {
@@ -58,7 +58,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface) => {
-    return queryInterface.dropTable('sales');
+  down: queryInterface => {
+    return queryInterface.dropTable("sales");
   }
 };

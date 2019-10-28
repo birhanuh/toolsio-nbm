@@ -15,10 +15,10 @@ export default (sequelize, DataTypes) => {
       }
     },
     quantity: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: false,
       validate: {
-        isInt: true // checks for int
+        isDecimal: true // checks for int
       }
     },
     unitPrice: {

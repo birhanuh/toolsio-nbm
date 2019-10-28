@@ -86,7 +86,7 @@ class Form extends PureComponent {
     }
 
     if (nextProps.getCustomersQuery) {
-      this.setCustomerOptions(this.props.getCustomersQuery.getCustomers);
+      this.setCustomerOptions(nextProps.getCustomersQuery.getCustomers);
     }
   };
 
@@ -175,6 +175,7 @@ class Form extends PureComponent {
                   name: ""
                 }
               });
+
               // Add our comment from the mutation to the end.
 
               let updatedSales = data.getSales.map(item => {
@@ -236,17 +237,13 @@ class Form extends PureComponent {
                   name: ""
                 }
               });
+
               // Add our Sale from the mutation to the end.
               data.getSales.push(sale);
+
               // Write our data back to the cache.
               store.writeQuery({
                 query: GET_SALES_QUERY,
-                variables: {
-                  order: "DESC",
-                  offset: 0,
-                  limit: 10,
-                  name: ""
-                },
                 data
               });
             }

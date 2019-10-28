@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('invoices', {
+    return queryInterface.createTable("invoices", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,52 +15,52 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       interest_in_arrears: {
-        allowNull : false,
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       status: {
-        allowNull : false,
+        allowNull: false,
         defaultValue: "new",
         type: Sequelize.STRING
       },
       reference_number: {
-        allowNull : false,
+        allowNull: false,
         type: Sequelize.STRING
       },
       description: {
         type: Sequelize.TEXT
       },
       tax: {
-        allowNull : false,          
+        allowNull: false,
         defaultValue: 0,
         type: Sequelize.DECIMAL
       },
       customer_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'customers',
-          key: 'id'
-        },
+          model: "customers",
+          key: "id"
+        }
       },
       project_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'projects',
-          key: 'id'
-        },
+          model: "projects",
+          key: "id"
+        }
       },
       sale_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'sales',
-          key: 'id'
-        },
+          model: "sales",
+          key: "id"
+        }
       },
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
-          key: 'id'
+          model: "users",
+          key: "id"
         }
       },
       created_at: {
@@ -73,7 +73,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface) => {
-    return queryInterface.dropTable('invoices');
+  down: queryInterface => {
+    return queryInterface.dropTable("invoices");
   }
 };

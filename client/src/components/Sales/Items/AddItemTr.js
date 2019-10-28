@@ -16,7 +16,7 @@ export default function AddItemTr({
   return (
     <tr>
       <td className="add-item">
-        <Form.Field inline error={item.errors && item.errors.name}>
+        <Form.Field inline error={!!item.errors.name}>
           <Input
             placeholder={T.translate("sales.items.form.name")}
             name="name"
@@ -29,7 +29,7 @@ export default function AddItemTr({
         </Form.Field>
       </td>
       <td className="add-item">
-        <Form.Field inline error={item.errors && item.errors.unit}>
+        <Form.Field inline>
           <Select
             placeholder={T.translate("sales.items.form.select_unit")}
             name="unit"
@@ -49,7 +49,7 @@ export default function AddItemTr({
         </Form.Field>
       </td>
       <td className="add-item">
-        <Form.Field inline error={item.errors && item.errors.quantity}>
+        <Form.Field inline>
           <Input
             placeholder="0"
             name="quantity"
@@ -63,7 +63,7 @@ export default function AddItemTr({
         </Form.Field>
       </td>
       <td className="add-item">
-        <Form.Field inline error={item.errors && item.errors.unitPrice}>
+        <Form.Field inline>
           <Input
             placeholder="0.00"
             name="unitPrice"

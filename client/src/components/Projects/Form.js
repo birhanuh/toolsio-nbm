@@ -94,7 +94,7 @@ class Form extends PureComponent {
     }
 
     if (nextProps.getCustomersQuery) {
-      this.setCustomerOptions(this.props.getCustomersQuery.getCustomers);
+      this.setCustomerOptions(nextProps.getCustomersQuery.getCustomers);
     }
   };
 
@@ -185,6 +185,7 @@ class Form extends PureComponent {
                   limit: 10
                 }
               });
+
               // Add our Project from the mutation to the end.
               let updatedProjects = data.getProjects.map(item => {
                 if (item.id === project.id) {
@@ -193,6 +194,7 @@ class Form extends PureComponent {
                 return item;
               });
               data.getProjects = updatedProjects;
+
               // Write our data back to the cache.
               store.writeQuery({ query: GET_PROJECTS_QUERY, data });
             }
@@ -244,8 +246,10 @@ class Form extends PureComponent {
                   limit: 10
                 }
               });
+
               // Add our Project from the mutation to the end.
               data.getProjects.push(project);
+
               // Write our data back to the cache.
               store.writeQuery({ query: GET_PROJECTS_QUERY, data });
             }

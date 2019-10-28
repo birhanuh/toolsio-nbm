@@ -68,7 +68,7 @@ class Users extends PureComponent {
       this.props
         .addMemberMutation({
           variables: { members, channelId },
-          update: (proxy, { data: { addMember } }) => {
+          update: (store, { data: { addMember } }) => {
             const { success, members } = addMember;
 
             if (!success) {
@@ -76,7 +76,7 @@ class Users extends PureComponent {
             }
 
             // Read the data from our cache for this query.
-            const data = proxy.readQuery({
+            const data = store.readQuery({
               query: GET_CHANNELS_USERS_COUNT_QUERY
             });
             let updatedGetChannelsUsersCount = data.getChannelsUsersCount.map(
@@ -95,7 +95,7 @@ class Users extends PureComponent {
             data.getChannelsUsersCount = updatedGetChannelsUsersCount;
 
             // Read the dataChannelUsers from our cache for this query.
-            //const dataChannelUsers = proxy.readQuery({ query: GET_CHANNEL_USERS_QUERY })
+            //const dataChannelUsers = store.readQuery({ query: GET_CHANNEL_USERS_QUERY })
             //console.log('updatedDataChannelUsers: ', dataChannelUsers)
             // let updatedDataChannelUsers = dataChannelUsers.getChannel.usersNotInChannel.map(user => {
             //   members.map(item => {
@@ -107,7 +107,7 @@ class Users extends PureComponent {
             // dataChannelUsers.getChannel.usersNotInChannel = updatedDataChannelUsers
 
             // Write our data back to the cache.
-            proxy.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data });
+            store.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data });
             //proxy.writeQuery({ query: GET_CHANNEL_USERS_QUERY, dataChannelUsers })
           }
         })

@@ -48,8 +48,28 @@ class Form extends PureComponent {
         errors: {},
         isLoading: false
       },
-      openConfirmationModal: false
+      openConfirmationModal: false,
+      tasksTotal: 0
     };
+  }
+
+  UNSAFE_componentWillMount() {
+    this.setTasksTotal(this.props.tasks);
+  }
+
+  UNSAFE_componentWillReceiveProps = nextProps => {
+    if (nextProps.tasks) {
+      this.setTasksTotal(nextProps.tasks);
+    }
+  };
+
+  setTasksTotal(tasks) {
+    this.setState({
+      tasksTotal: tasks
+        .map(a => a.total)
+        .reduce((a, b) => a + b, 0)
+        .toFixed(2)
+    });
   }
 
   handleNewTaskChange = (name, value) => {
@@ -86,17 +106,21 @@ class Form extends PureComponent {
           let tokens = hours.split(":");
           let totalTime = parseInt(tokens[0]) + parseFloat(tokens[1] / 60);
 
-          updatedTask["total"] = parseInt(unitPrice) * totalTime.toFixed(2);
+          updatedTask["total"] = parseFloat(
+            (parseFloat(unitPrice) * totalTime).toFixed(2)
+          );
         } else if (hours.indexOf(".") > -1) {
-          updatedTask["total"] =
-            parseInt(unitPrice) * parseFloat(hours).toFixed(2);
+          updatedTask["total"] = parseFloat(
+            (parseFloat(unitPrice) * parseFloat(hours)).toFixed(2)
+          );
         } else {
-          updatedTask["total"] = parseInt(unitPrice) * parseInt(hours);
+          updatedTask["total"] =
+            parseFloat(unitPrice).toFixed(2) * parseInt(hours);
         }
       }
 
       if (unitPrice !== "" && hours === "") {
-        updatedTask["total"] = parseInt(unitPrice);
+        updatedTask["total"] = parseFloat(unitPrice);
       }
 
       if (unitPrice === "" && hours === "") {
@@ -146,7 +170,7 @@ class Form extends PureComponent {
             name,
             paymentType,
             hours,
-            unitPrice: parseInt(unitPrice),
+            unitPrice: parseFloat(unitPrice),
             total
           },
           update: (store, { data: { createTask } }) => {
@@ -249,17 +273,20 @@ class Form extends PureComponent {
           let tokens = hours.split(":");
           let totalTime = parseInt(tokens[0]) + parseFloat(tokens[1] / 60);
 
-          updatedTask["total"] = parseInt(unitPrice) * totalTime.toFixed(2);
+          updatedTask["total"] = parseFloat(
+            (parseFloat(unitPrice) * totalTime).toFixed(2)
+          );
         } else if (hours.indexOf(".") > -1) {
-          updatedTask["total"] =
-            parseInt(unitPrice) * parseFloat(hours).toFixed(2);
+          updatedTask["total"] = parseFloat(
+            (parseFloat(unitPrice) * parseFloat(hours)).toFixed(2)
+          );
         } else {
-          updatedTask["total"] = parseInt(unitPrice) * parseInt(hours);
+          updatedTask["total"] = parseFloat(unitPrice) * parseInt(hours);
         }
       }
 
       if (unitPrice !== "" && hours === "") {
-        updatedTask["total"] = parseInt(unitPrice);
+        updatedTask["total"] = parseFloat(unitPrice);
       }
 
       if (unitPrice === "" && hours === "") {
@@ -339,7 +366,7 @@ class Form extends PureComponent {
             name,
             paymentType,
             hours,
-            unitPrice: parseInt(unitPrice),
+            unitPrice: parseFloat(unitPrice),
             total
           },
           update: (store, { data: { updateTask } }) => {
@@ -436,7 +463,7 @@ class Form extends PureComponent {
     this.props
       .deleteTaskMutation({
         variables: { id },
-        update: (proxy, { data: { deleteTask } }) => {
+        update: (store, { data: { deleteTask } }) => {
           const { success } = deleteTask;
 
           if (!success) {
@@ -444,19 +471,26 @@ class Form extends PureComponent {
           }
 
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_PROJECT_QUERY,
             variables: {
               id: projectId
             }
           });
-          // Add our Task from the mutation to the end.
-          let updatedTasks = data.getProject.tasks.filter(
-            task => task.id !== id
+
+          // Delete task to be deleted from tasks.
+          let taskToBeDeleated = data.getProject.tasks.filter(
+            task => task.id === id
           );
-          data.getProject.tasks = updatedTasks;
+
+          let indexOfTaskToBeDeleted = data.getProject.tasks.indexOf(
+            taskToBeDeleated[0]
+          );
+
+          data.getProject.tasks.splice(indexOfTaskToBeDeleted, 1);
+
           // Write our data back to the cache.
-          proxy.writeQuery({ query: GET_PROJECT_QUERY, data });
+          store.writeQuery({ query: GET_PROJECT_QUERY, data });
         }
       })
       .then(res => {
@@ -498,16 +532,11 @@ class Form extends PureComponent {
   }
 
   render() {
-    const { newTask, editTask, openConfirmationModal } = this.state;
+    const { newTask, editTask, openConfirmationModal, tasksTotal } = this.state;
 
     const { tasks } = this.props;
 
-    let tasksTotal = tasks
-      .map(a => a.total)
-      .reduce((a, b) => a + b, 0)
-      .toFixed(2);
-
-    const tasksList = tasks.map(task => (
+    const tasksList = this.props.tasks.map(task => (
       <ShowEditTaskTr
         key={task.id}
         task={task}

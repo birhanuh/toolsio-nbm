@@ -88,16 +88,18 @@ class List extends PureComponent {
     this.props
       .deleteDirectMessagesMutation({
         variables: { receiverId: parseInt(id) },
-        update: (proxy, { data: { deleteDirectMessages } }) => {
+        update: (store, { data: { deleteDirectMessages } }) => {
           const { success } = deleteDirectMessages;
 
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_DIRECT_MESSAGE_USERS_QUERY
           });
+
           // Filter out deleted user from store.
           let updatedGetDirectMessageUsers = data.getDirectMessageUsers.filter(
             user => user.id !== parseInt(id)
@@ -105,7 +107,7 @@ class List extends PureComponent {
           data.getDirectMessageUsers = updatedGetDirectMessageUsers;
 
           // Write our data back to the cache.
-          proxy.writeQuery({
+          store.writeQuery({
             query: GET_DIRECT_MESSAGE_USERS_QUERY,
             data
           });

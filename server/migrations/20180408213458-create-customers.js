@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('customers', {
+    return queryInterface.createTable("customers", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,11 +9,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        allowNull : false,
+        allowNull: false,
         type: Sequelize.STRING
       },
       vat_number: {
-        allowNull : false,
+        allowNull: false,
         type: Sequelize.DECIMAL
       },
       phone_number: {
@@ -23,7 +23,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       is_contact_included_in_invoice: {
-        allowNull : false,
+        allowNull: false,
         type: Sequelize.BOOLEAN
       },
       street: {
@@ -41,8 +41,8 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
-          key: 'id'
+          model: "users",
+          key: "id"
         }
       },
       created_at: {
@@ -55,7 +55,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface) => {
-    return queryInterface.dropTable('customers');
+  down: queryInterface => {
+    return queryInterface.dropTable("customers");
   }
 };

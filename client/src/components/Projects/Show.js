@@ -252,6 +252,7 @@ class Show extends PureComponent {
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
           const data = store.readQuery({
             query: GET_PROJECTS_QUERY,
@@ -261,6 +262,7 @@ class Show extends PureComponent {
               limit: 10
             }
           });
+
           // Add our comment from the mutation to the end.
 
           let updatedProjects = data.getProjects.filter(

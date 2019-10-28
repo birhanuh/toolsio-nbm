@@ -131,6 +131,7 @@ class Page extends PureComponent {
               name: ""
             }
           });
+
           // Filter out deleted invoice from store.
           let updatedInvoices = data.getInvoices.invoices.filter(
             invoice => invoice.id !== id
@@ -227,6 +228,7 @@ class Page extends PureComponent {
           pdf.addImage(pageData, "JPEG", x, position + y, imgWidth, imgHeight);
           restHeight -= pageHeight;
           y -= 841.89;
+
           // Avoid adding blank pages
           if (restHeight > 0) {
             pdf.addPage();

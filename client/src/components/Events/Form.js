@@ -154,6 +154,7 @@ class Form extends PureComponent {
 
               // Add our comment from the mutation to the end.
               data.getEvents.push(event);
+
               // Write our data back to the cache.
               store.writeQuery({ query: GET_EVENTS_QUERY, data });
             }
@@ -252,7 +253,8 @@ class Form extends PureComponent {
             className="ui primary button"
             onClick={this.handleSubmit.bind(this)}
           >
-            <i className="check circle outline icon" aria-hidden="true" />&nbsp;
+            <i className="check circle outline icon" aria-hidden="true" />
+            &nbsp;
             {T.translate("events.form.save")}
           </button>
         </Modal.Actions>

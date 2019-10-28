@@ -342,17 +342,13 @@ class Form extends PureComponent {
                   name: ""
                 }
               });
+
               // Add our Customer from the mutation to the end.
               data.getCustomers.customers.push(customer);
+
               // Write our data back to the cache.
               store.writeQuery({
                 query: GET_CUSTOMERS_QUERY,
-                variables: {
-                  order: "DESC",
-                  offset: 0,
-                  limit: 10,
-                  name: ""
-                },
                 data
               });
             }

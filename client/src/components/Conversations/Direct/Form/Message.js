@@ -144,6 +144,7 @@ class Message extends PureComponent {
               email: this.props.data.getUser.email
             });
           }
+
           // Write our data back to the cache.
           store.writeQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY, data });
         }

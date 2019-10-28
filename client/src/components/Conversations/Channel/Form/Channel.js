@@ -71,21 +71,21 @@ class Channel extends PureComponent {
       this.props
         .createChannelMutation({
           variables: { name, isPublic },
-          update: (proxy, { data: { createChannel } }) => {
+          update: (store, { data: { createChannel } }) => {
             const { success, channel } = createChannel;
 
             if (!success) {
               return;
             }
             // Read the data from our cache for this query.
-            const data = proxy.readQuery({
+            const data = store.readQuery({
               query: GET_CHANNELS_USERS_COUNT_QUERY
             });
             // Add our comment from the mutation to the end.
             channel.usersCount = 1;
             data.getChannelsUsersCount.push(channel);
             // Write our data back to the cache.
-            proxy.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data });
+            store.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data });
           }
         })
         .then(res => {

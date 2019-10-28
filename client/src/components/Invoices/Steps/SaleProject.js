@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 // Semantic UI Form elements
-import { Dropdown, Form, Header, Icon, Button } from "semantic-ui-react";
+import {
+  Dropdown,
+  Form,
+  Header,
+  Icon,
+  Button,
+  Message
+} from "semantic-ui-react";
 
 // Localization
 import T from "i18n-react";
@@ -34,6 +41,11 @@ export default function SaleProject({
         )}
       </div>
 
+      <Message info size="small">
+        <Message.Content>
+          {T.translate("invoices.form.sale_or_project_info")}
+        </Message.Content>
+      </Message>
       <fieldset className="custom-fieldset">
         <legend className="custom-legend">
           {T.translate("invoices.form.select_sale_or_project")}

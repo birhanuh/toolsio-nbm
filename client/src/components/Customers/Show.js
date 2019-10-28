@@ -131,14 +131,15 @@ class Show extends PureComponent {
     this.props
       .deleteCustomerMutation({
         variables: { id },
-        update: (proxy, { data: { deleteCustomer } }) => {
+        update: (store, { data: { deleteCustomer } }) => {
           const { success } = deleteCustomer;
 
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_CUSTOMERS_QUERY,
             variables: {
               order: "DESC",
@@ -147,6 +148,7 @@ class Show extends PureComponent {
               name: ""
             }
           });
+
           // Filter out deleted customer from store.
           let updatedCustomers = data.getCustomers.customers.filter(
             customer => customer.id !== id
@@ -154,7 +156,7 @@ class Show extends PureComponent {
           data.getCustomers.customers = updatedCustomers;
 
           // Write our data back to the cache.
-          proxy.writeQuery({
+          store.writeQuery({
             query: GET_CUSTOMERS_QUERY,
             variables: {
               order: "DESC",

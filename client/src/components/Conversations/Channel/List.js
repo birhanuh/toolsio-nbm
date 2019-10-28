@@ -93,16 +93,18 @@ class List extends PureComponent {
     this.props
       .deleteChannelMutation({
         variables: { channelId: parseInt(id) },
-        update: (proxy, { data: { deleteChannel } }) => {
+        update: (store, { data: { deleteChannel } }) => {
           const { success } = deleteChannel;
 
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_CHANNELS_USERS_COUNT_QUERY
           });
+
           // Filter out deleted channel from store.
           let updatedGetChannelsUsersCount = data.getChannelsUsersCount.filter(
             channel => channel.id !== parseInt(id)
@@ -110,7 +112,7 @@ class List extends PureComponent {
           data.getChannelsUsersCount = updatedGetChannelsUsersCount;
 
           // Write our data back to the cache.
-          proxy.writeQuery({
+          store.writeQuery({
             query: GET_CHANNELS_USERS_COUNT_QUERY,
             data
           });

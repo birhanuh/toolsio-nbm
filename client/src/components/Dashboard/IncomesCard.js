@@ -32,8 +32,6 @@ const IncomesCard = () => (
           return x < y ? -1 : x > y ? 1 : 0;
         });
 
-      console.log("MONTH: ", monthSumSorted);
-
       let dayPick =
         daySum && daySum.map(item => pick(item, ["day"]).day.substring(0, 5));
       let sumPick = daySum && daySum.map(item => pick(item, ["sum"]).sum);
@@ -106,33 +104,25 @@ const IncomesCard = () => (
             )}
             <Segment vertical floated="left" className="p-0">
               <Card.Meta>
-                {monthSumSorted && monthSumSorted[0]
+                {monthSumSorted && monthSumSorted[0] && monthSumSorted[0].month
                   ? monthSumSorted[0].month
-                    ? monthSumSorted[0].month
-                    : "-"
                   : "-"}
               </Card.Meta>
               <Card.Header>
-                {monthSumSorted && monthSumSorted[0]
+                {monthSumSorted && monthSumSorted[0] && monthSumSorted[0].sum
                   ? monthSumSorted[0].sum
-                    ? monthSumSorted[0].sum
-                    : "-"
                   : "-"}
               </Card.Header>
             </Segment>
             <Segment vertical floated="right" className="p-0">
               <Card.Meta>
-                {monthSumSorted && monthSumSorted[1]
+                {monthSumSorted && monthSumSorted[1] && monthSumSorted[1].month
                   ? monthSumSorted[1].month
-                    ? monthSumSorted[1].month
-                    : "-"
                   : "-"}
               </Card.Meta>
               <Card.Header>
-                {monthSumSorted && monthSumSorted[1]
+                {monthSumSorted && monthSumSorted[1] && monthSumSorted[1].sum
                   ? monthSumSorted[1].sum
-                    ? monthSumSorted[1].sum
-                    : "-"
                   : "-"}
                 {monthSumSorted &&
                   monthSumSorted[0] &&

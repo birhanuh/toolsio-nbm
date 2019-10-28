@@ -258,8 +258,10 @@ class AccountForm extends PureComponent {
                   subdomain: this.props.subdomain
                 }
               });
+
               // Update account object.
               data.getAccount = account;
+
               // Write our data back to the cache.
               store.writeQuery({
                 query: GET_ACCOUNT_QUERY,

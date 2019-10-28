@@ -4,7 +4,7 @@ export const CREATE_ITEM_MUTATION = gql`
   mutation createItem(
     $name: String!
     $unit: String!
-    $quantity: Int!
+    $quantity: Float!
     $unitPrice: Float!
     $total: Float!
     $saleId: Int!
@@ -39,7 +39,7 @@ export const UPDATE_ITEM_MUTATION = gql`
     $id: Int!
     $name: String!
     $unit: String!
-    $quantity: Int!
+    $quantity: Float!
     $unitPrice: Float!
     $total: Float!
     $saleId: Int!

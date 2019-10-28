@@ -127,14 +127,15 @@ class Show extends PureComponent {
     this.props
       .deleteSaleMutation({
         variables: { id },
-        update: (proxy, { data: { deleteSale } }) => {
+        update: (store, { data: { deleteSale } }) => {
           const { success } = deleteSale;
 
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_SALES_QUERY,
             variables: {
               order: "DESC",
@@ -142,13 +143,13 @@ class Show extends PureComponent {
               limit: 10
             }
           });
-          // Add our comment from the mutation to the end.
 
+          // Remove Sale.
           let updatedData = data.getSales.filter(sale => sale.id !== id);
           data.getSales = updatedData;
 
           // Write our data back to the cache.
-          proxy.writeQuery({ query: GET_SALES_QUERY, data });
+          store.writeQuery({ query: GET_SALES_QUERY, data });
         }
       })
       .then(res => {
