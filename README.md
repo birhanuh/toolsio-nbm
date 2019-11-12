@@ -1,4 +1,4 @@
-# An invoicsing and time-tracking Saas applicaion
+# An invoicing and time-tracking Saas applicaion
 
 ## Features
 
