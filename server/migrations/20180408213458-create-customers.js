@@ -14,7 +14,7 @@ module.exports = {
       },
       vat_number: {
         allowNull: false,
-        type: Sequelize.DECIMAL
+        type: Sequelize.STRING
       },
       phone_number: {
         type: Sequelize.STRING

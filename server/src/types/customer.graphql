@@ -1,7 +1,7 @@
 type Customer {
   id: Int!
   name: String!
-  vatNumber: Int!
+  vatNumber: String!
   email: String
   phoneNumber: String
   isContactIncludedInInvoice: Boolean!
@@ -53,7 +53,7 @@ type Query {
 type Mutation {
   createCustomer(
     name: String!
-    vatNumber: Int!
+    vatNumber: String!
     email: String
     phoneNumber: String
     isContactIncludedInInvoice: Boolean
@@ -66,7 +66,7 @@ type Mutation {
   updateCustomer(
     id: Int!
     name: String
-    vatNumber: Int
+    vatNumber: String
     email: String
     phoneNumber: String
     isContactIncludedInInvoice: Boolean

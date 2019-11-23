@@ -222,7 +222,7 @@ class Form extends PureComponent {
             variables: {
               id,
               name,
-              vatNumber: parseInt(vatNumber),
+              vatNumber,
               phoneNumber,
               email,
               isContactIncludedInInvoice,
@@ -314,7 +314,7 @@ class Form extends PureComponent {
           .createCustomerMutation({
             variables: {
               name,
-              vatNumber: parseInt(vatNumber),
+              vatNumber,
               phoneNumber,
               email,
               isContactIncludedInInvoice,

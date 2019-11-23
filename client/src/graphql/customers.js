@@ -64,7 +64,7 @@ export const GET_CUSTOMER_QUERY = gql`
 export const CREATE_CUSTOMER_MUTATION = gql`
   mutation createCustomer(
     $name: String!
-    $vatNumber: Int!
+    $vatNumber: String!
     $email: String!
     $phoneNumber: String!
     $isContactIncludedInInvoice: Boolean!
@@ -104,7 +104,7 @@ export const UPDATE_CUSTOMER_MUTATION = gql`
   mutation updateCustomer(
     $id: Int!
     $name: String
-    $vatNumber: Int
+    $vatNumber: String
     $email: String
     $phoneNumber: String
     $isContactIncludedInInvoice: Boolean
