@@ -48,20 +48,21 @@ class Form extends PureComponent {
         errors: {},
         isLoading: false
       },
-      openConfirmationModal: false,
-      tasksTotal: 0
+      openConfirmationModal: false
+      // tasksTotal: 0
     };
   }
 
+  /**
   UNSAFE_componentWillMount() {
     this.setTasksTotal(this.props.tasks);
   }
 
-  UNSAFE_componentWillReceiveProps = nextProps => {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.tasks) {
       this.setTasksTotal(nextProps.tasks);
     }
-  };
+  }
 
   setTasksTotal(tasks) {
     this.setState({
@@ -70,7 +71,7 @@ class Form extends PureComponent {
         .reduce((a, b) => a + b, 0)
         .toFixed(2)
     });
-  }
+  } */
 
   handleNewTaskChange = (name, value) => {
     if (this.state.newTask.errors[name]) {
@@ -390,7 +391,9 @@ class Form extends PureComponent {
               }
               return item;
             });
+
             data.getProject.tasks = updatedTasks;
+
             // Write our data back to the cache.
             store.writeQuery({ query: GET_PROJECT_QUERY, data });
           }
@@ -532,11 +535,16 @@ class Form extends PureComponent {
   }
 
   render() {
-    const { newTask, editTask, openConfirmationModal, tasksTotal } = this.state;
+    const { newTask, editTask, openConfirmationModal } = this.state;
 
     const { tasks } = this.props;
 
-    const tasksList = this.props.tasks.map(task => (
+    const tasksTotal = tasks
+      .map(a => a.total)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
+
+    const tasksList = tasks.map(task => (
       <ShowEditTaskTr
         key={task.id}
         task={task}
@@ -643,7 +651,4 @@ const Mutations = compose(
   })
 )(Form);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(Mutations);
+export default connect(null, { addFlashMessage })(Mutations);

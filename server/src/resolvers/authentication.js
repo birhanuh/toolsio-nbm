@@ -68,7 +68,7 @@ export default {
       } else {
         return {
           success: false,
-          errors: `Schema ${subdomain} doesn't exist.`
+          errors: `Schema ${subdomain.replace("_", "-")} doesn't exist.`
         };
       }
     }
@@ -335,6 +335,7 @@ export default {
                     },
                     locals: {
                       firstName: response.user.dataValues.firstName,
+                      account: response.account.subdomain.replace("_", "-"),
                       confirmationLink: url
                     }
                   })
@@ -383,7 +384,10 @@ export default {
     },
 
     isSubdomainExist: (_, { subdomain }, { models }) =>
-      models.Account.findOne({ where: { subdomain } }, { raw: true })
+      models.Account.findOne(
+        { where: { subdomain: subdomain.replace("-", "_") } },
+        { raw: true }
+      )
         .then(account => {
           if (account) {
             return {
@@ -424,7 +428,28 @@ export default {
           { raw: true }
         );
 
+        const user = await models.User.findOne(
+          { where: { email }, searchPath: account },
+          { raw: true }
+        );
+
         if (accountLocal) {
+          if (user) {
+            return {
+              success: false,
+              errors: [
+                {
+                  path: "subdomain",
+                  message: `You have already register to this account *${account.replace(
+                    "_",
+                    "-"
+                  )}*. Login with your credentials by going to login page`
+                }
+              ]
+            };
+          }
+
+          console.log("KKKKK: ", user);
           try {
             models.User.create(
               { firstName, lastName, email, password, isConfirmed: true },
@@ -469,7 +494,10 @@ export default {
             errors: [
               {
                 path: "subdomain",
-                message: `Account *${account}* to which you are invited doesn't exist. You can create it as your own new account by going to sign up page`
+                message: `Account *${account.replace(
+                  "_",
+                  "-"
+                )}* to which you are invited doesn't exist. You can create it as your own new account by going to sign up page`
               }
             ]
           };
@@ -496,7 +524,7 @@ export default {
             errors: [
               {
                 path: "subdomain",
-                message: `Account ${subdomain} doesn't exist`
+                message: `Account ${subdomain.replace("_", "-")} doesn't exist`
               }
             ]
           };
@@ -523,7 +551,11 @@ export default {
                     console.log("err token: ", err);
                   }
 
-                  const url = `${process.env.CLIENT_PROTOCOL}${account.subdomain}.${process.env.CLIENT_HOST}/login/password-reset/?token=${forgotPasswordResetRequestToken}`;
+                  const url = `${
+                    process.env.CLIENT_PROTOCOL
+                  }${account.subdomainreplace("_", "-")}.${
+                    process.env.CLIENT_HOST
+                  }/login/password-reset/?token=${forgotPasswordResetRequestToken}`;
 
                   const email = new Email({
                     message: {
@@ -546,6 +578,7 @@ export default {
                       },
                       locals: {
                         firstName: user.dataValues.firstName,
+                        account: response.account.subdomain.replace("_", "-"),
                         passwordResetLink: url
                       }
                     })
@@ -567,7 +600,10 @@ export default {
               errors: [
                 {
                   path: "subdomain",
-                  message: `You don't have credentials on (${subdomain}) account`
+                  message: `You don't have credentials on (${subdomain.replace(
+                    "_",
+                    "-"
+                  )}) account`
                 }
               ]
             };
@@ -598,7 +634,7 @@ export default {
             errors: [
               {
                 path: "subdomain",
-                message: `Account ${subdomain} doesn't exist`
+                message: `Account ${subdomain.replace("_", "-")} doesn't exist`
               }
             ]
           };

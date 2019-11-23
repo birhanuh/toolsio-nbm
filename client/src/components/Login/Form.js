@@ -160,7 +160,9 @@ class Form extends PureComponent {
             // Workaround for sending the new session
             window.location.href = `${
               process.env.CLIENT_PROTOCOL
-            }${subdomain}.${process.env.CLIENT_HOST}/dashboard`;
+            }${subdomain.replace("_", "-")}.${
+              process.env.CLIENT_HOST
+            }/dashboard`;
           } else {
             let errorsList = {};
             errors.map(error => (errorsList[error.path] = error.message));
@@ -237,7 +239,4 @@ const QueryMutations = compose(
   })
 )(Form);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(QueryMutations);
+export default connect(null, { addFlashMessage })(QueryMutations);

@@ -277,11 +277,25 @@ class App extends PureComponent {
             <Segment inverted vertical className="footer internal-footer">
               <Grid inverted stackable>
                 <Grid.Row>
-                  <Grid.Column width={10}>
+                  <Grid.Column width={4}>
                     <Header inverted as="h4" className="mb-0">
                       {T.translate("landing.footer.toolsio")}
                     </Header>
                     <small>{T.translate("landing.footer.copy_right")}</small>
+                  </Grid.Column>
+                  <Grid.Column width={12}>
+                    <List inverted className="mt-3">
+                      <a
+                        href="https://trello.com/b/Qw2mO2ht/toolsio"
+                        className="item"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {T.translate("landing.footer.trello_link", {
+                          link: "https://trello.com/b/Qw2mO2ht/toolsio"
+                        })}
+                      </a>
+                    </List>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
@@ -303,19 +317,20 @@ class App extends PureComponent {
                       <Header inverted as="h3">
                         Trello
                       </Header>
-                      <List link inverted>
+                      <List inverted>
                         <p>
                           {T.translate("landing.footer.trello_description")}
                         </p>
-                        <List.Item
-                          as="a"
-                          to="https://trello.com/b/Qw2mO2ht/toolsio"
+                        <a
+                          href="https://trello.com/b/Qw2mO2ht/toolsio"
+                          className="item"
+                          rel="noopener noreferrer"
                           target="_blank"
                         >
                           {T.translate("landing.footer.trello_link", {
                             link: "https://trello.com/b/Qw2mO2ht/toolsio"
                           })}
-                        </List.Item>
+                        </a>
                       </List>
                     </Grid.Column>
                     {/*<Grid.Column width={3}>

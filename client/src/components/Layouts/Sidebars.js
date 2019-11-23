@@ -55,7 +55,7 @@ export function InnerSidebar({ visibleInnerSidebar, currentAccount }) {
           className="capitalize mt-3 mb-0"
           style={{ color: "inherit" }}
         >
-          {currentAccount.subdomain}
+          {currentAccount.subdomain.replace("_", "-")}
         </Header>
         <p className="capitalize mb-2">
           {currentAccount.firstName} {currentAccount.isAdmin ? "(Admin)" : ""}

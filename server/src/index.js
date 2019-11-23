@@ -93,7 +93,7 @@ const apolloServer = new ApolloServer({
     }
 
     // Subdomain
-    const subdomain = req.headers.subdomain;
+    const subdomain = req.headers.subdomain.replace("-", "_");
     //const subdomain = "testa";
 
     let user;

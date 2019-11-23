@@ -53,7 +53,7 @@ class Subdomain extends PureComponent {
             // Redirect to login page with subdoamin set
             window.location.href =
               process.env.CLIENT_PROTOCOL +
-              subdomain +
+              subdomain.replace("_", "-") +
               "." +
               process.env.CLIENT_HOST +
               "/login";
@@ -112,7 +112,6 @@ class Subdomain extends PureComponent {
           const { success, subdomain, errors } = res.data.isSubdomainExist;
 
           if (success) {
-            console.log("sdfsdfs ", subdomain);
             this.props.addFlashMessage({
               type: "success",
               text: T.translate("log_in.subdomain.on_your_account_page")
@@ -122,7 +121,7 @@ class Subdomain extends PureComponent {
             window.location.href =
               "" +
               process.env.CLIENT_PROTOCOL +
-              subdomain +
+              subdomain.replace("_", "-") +
               "." +
               process.env.CLIENT_HOST +
               "/login";
@@ -207,7 +206,6 @@ Subdomain.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(graphql(IS_SUBDOMAIN_EXIST_MUTATION)(Subdomain));
+export default connect(null, { addFlashMessage })(
+  graphql(IS_SUBDOMAIN_EXIST_MUTATION)(Subdomain)
+);

@@ -522,7 +522,10 @@ class Form extends PureComponent {
                 <legend className="custom-legend">
                   {T.translate("customers.show.contact.header")}
                 </legend>
-                <FormElement.Field inline error={!!errors.phoneNumber}>
+                <FormElement.Field
+                  inline
+                  error={!!errors.contact && !!errors.contact.phoneNumber}
+                >
                   <label>
                     {T.translate("customers.form.contact.phone_number")}
                   </label>
@@ -536,9 +539,14 @@ class Form extends PureComponent {
                       this.handleChange("phoneNumber", value)
                     }
                   />
-                  <span className="red">{errors.phoneNumber}</span>
+                  <span className="red">
+                    {errors.contact && errors.contact.phoneNumber}
+                  </span>
                 </FormElement.Field>
-                <FormElement.Field inline error={!!errors.email}>
+                <FormElement.Field
+                  inline
+                  error={!!errors.contact && !!errors.contact.email}
+                >
                   <label>{T.translate("customers.form.contact.email")}</label>
                   <Input
                     placeholder={T.translate("customers.form.contact.email")}
@@ -548,7 +556,9 @@ class Form extends PureComponent {
                       this.handleChange("email", value)
                     }
                   />
-                  <span className="red">{errors.email}</span>
+                  <span className="red">
+                    {errors.contact && errors.contact.email}
+                  </span>
                 </FormElement.Field>
               </fieldset>
               <FormElement.Field inline>
@@ -631,7 +641,7 @@ class Form extends PureComponent {
                     error: errors.region
                   })}
                 >
-                  <label>{T.translate("customers.show.address.region")}</label>
+                  <label>{T.translate("customers.form.address.region")}</label>
                   <RegionDropdown
                     defaultOptionLabel={T.translate(
                       "customers.form.address.select_region"
@@ -695,7 +705,4 @@ const MutationsQueries = compose(
   })
 )(Form);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(MutationsQueries);
+export default connect(null, { addFlashMessage })(MutationsQueries);

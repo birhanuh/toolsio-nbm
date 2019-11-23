@@ -312,6 +312,9 @@ header .ui.fixed.top.menu {
   .inverted.divided.grid > div {
     padding-top: 30px;
   }
+  .list a:hover {
+    color: $turquoise;
+  }
 }
 
 .ui.footer.segment.internal-footer {

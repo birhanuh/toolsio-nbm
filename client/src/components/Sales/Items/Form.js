@@ -48,11 +48,12 @@ class Form extends PureComponent {
         errors: {},
         isLoading: false
       },
-      openConfirmationModal: false,
-      itemsTotal: 0
+      openConfirmationModal: false
+      // itemsTotal: 0
     };
   }
 
+  /**
   UNSAFE_componentWillMount() {
     this.setItemsTotal(this.props.items);
   }
@@ -70,7 +71,7 @@ class Form extends PureComponent {
         .reduce((a, b) => a + b, 0)
         .toFixed(2)
     });
-  }
+  } */
 
   handleNewItemChange = (name, value) => {
     if (this.state.newItem.errors[name]) {
@@ -522,11 +523,15 @@ class Form extends PureComponent {
       newItem,
       editItem,
       openConfirmationModal,
-      itemToBeDeleated,
-      itemsTotal
+      itemToBeDeleated
     } = this.state;
 
     const { items } = this.props;
+
+    const itemsTotal = items
+      .map(a => a.total)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
 
     const itemsList = items.map(item => (
       <ShowEditItemTr
@@ -635,7 +640,4 @@ const Mutations = compose(
   })
 )(Form);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(Mutations);
+export default connect(null, { addFlashMessage })(Mutations);

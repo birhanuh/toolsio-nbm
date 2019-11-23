@@ -543,7 +543,4 @@ const MutationQuery = compose(
   })
 )(Show);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(MutationQuery);
+export default connect(null, { addFlashMessage })(MutationQuery);

@@ -114,7 +114,7 @@ class Form extends PureComponent {
             lastName,
             email,
             password,
-            subdomain,
+            subdomain: subdomain.replace("-", "_"),
             industry
           }
         })
@@ -128,9 +128,11 @@ class Form extends PureComponent {
             });
 
             // Redirect to login
-            window.location.href = `${process.env.CLIENT_PROTOCOL}${
-              account.subdomain
-            }.${process.env.CLIENT_HOST}/login`;
+            window.location.href = `${
+              process.env.CLIENT_PROTOCOL
+            }${account.subdomain.replace("_", "-")}.${
+              process.env.CLIENT_HOST
+            }/login`;
           } else {
             let errorsList = {};
             errors.map(error => (errorsList[error.path] = error.message));
@@ -314,7 +316,6 @@ Form.propTypes = {
   // isUserExist: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(graphql(REGISTER_USER_MUTATION)(Form));
+export default connect(null, { addFlashMessage })(
+  graphql(REGISTER_USER_MUTATION)(Form)
+);

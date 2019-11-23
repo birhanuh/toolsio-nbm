@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
         validate: {
-          is: ["^[a-z]+$", "i"], // will only allow letters
+          is: ["^[a-z]|_+$", "i"], // will only allow letters
           notIn: {
             args: [["www", "http", "https", "api", "toolsio"]], // don't allow these substrings
             msg:
