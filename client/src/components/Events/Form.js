@@ -1,5 +1,5 @@
 // import React...
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addFlashMessage } from "../../actions/flashMessageActions";
@@ -23,7 +23,7 @@ import {
 // Localization
 import T from "i18n-react";
 
-class Form extends Component {
+class Form extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -154,6 +154,7 @@ class Form extends Component {
 
               // Add our comment from the mutation to the end.
               data.getEvents.push(event);
+
               // Write our data back to the cache.
               store.writeQuery({ query: GET_EVENTS_QUERY, data });
             }
@@ -252,7 +253,8 @@ class Form extends Component {
             className="ui primary button"
             onClick={this.handleSubmit.bind(this)}
           >
-            <i className="check circle outline icon" aria-hidden="true" />&nbsp;
+            <i className="check circle outline icon" aria-hidden="true" />
+            &nbsp;
             {T.translate("events.form.save")}
           </button>
         </Modal.Actions>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Validation } from "../../../../utils";
 // Semantic UI Form elements
@@ -13,7 +13,7 @@ import {
 // Localization
 import T from "i18n-react";
 
-class Users extends Component {
+class Users extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,7 +68,7 @@ class Users extends Component {
       this.props
         .addMemberMutation({
           variables: { members, channelId },
-          update: (proxy, { data: { addMember } }) => {
+          update: (store, { data: { addMember } }) => {
             const { success, members } = addMember;
 
             if (!success) {
@@ -76,7 +76,7 @@ class Users extends Component {
             }
 
             // Read the data from our cache for this query.
-            const data = proxy.readQuery({
+            const data = store.readQuery({
               query: GET_CHANNELS_USERS_COUNT_QUERY
             });
             let updatedGetChannelsUsersCount = data.getChannelsUsersCount.map(
@@ -95,7 +95,7 @@ class Users extends Component {
             data.getChannelsUsersCount = updatedGetChannelsUsersCount;
 
             // Read the dataChannelUsers from our cache for this query.
-            //const dataChannelUsers = proxy.readQuery({ query: GET_CHANNEL_USERS_QUERY })
+            //const dataChannelUsers = store.readQuery({ query: GET_CHANNEL_USERS_QUERY })
             //console.log('updatedDataChannelUsers: ', dataChannelUsers)
             // let updatedDataChannelUsers = dataChannelUsers.getChannel.usersNotInChannel.map(user => {
             //   members.map(item => {
@@ -107,7 +107,7 @@ class Users extends Component {
             // dataChannelUsers.getChannel.usersNotInChannel = updatedDataChannelUsers
 
             // Write our data back to the cache.
-            proxy.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data });
+            store.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data });
             //proxy.writeQuery({ query: GET_CHANNEL_USERS_QUERY, dataChannelUsers })
           }
         })

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Validation } from "../../utils";
@@ -18,7 +18,7 @@ import { REGISTER_USER_MUTATION } from "../../graphql/authentications";
 // Localization
 import T from "i18n-react";
 
-class Form extends Component {
+class Form extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -114,7 +114,7 @@ class Form extends Component {
             lastName,
             email,
             password,
-            subdomain,
+            subdomain: subdomain.replace("-", "_"),
             industry
           }
         })
@@ -128,9 +128,11 @@ class Form extends Component {
             });
 
             // Redirect to login
-            window.location.href = `${process.env.CLIENT_PROTOCOL}${
-              account.subdomain
-            }.${process.env.CLIENT_HOST}/login`;
+            window.location.href = `${
+              process.env.CLIENT_PROTOCOL
+            }${account.subdomain.replace("_", "-")}.${
+              process.env.CLIENT_HOST
+            }/login`;
           } else {
             let errorsList = {};
             errors.map(error => (errorsList[error.path] = error.message));
@@ -314,7 +316,6 @@ Form.propTypes = {
   // isUserExist: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(graphql(REGISTER_USER_MUTATION)(Form));
+export default connect(null, { addFlashMessage })(
+  graphql(REGISTER_USER_MUTATION)(Form)
+);

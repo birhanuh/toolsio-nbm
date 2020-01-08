@@ -42,9 +42,10 @@ export default {
           console.log("err", err);
         }
 
-        const url = `${process.env.CLIENT_PROTOCOL}${subdomain}.${
-          process.env.CLIENT_HOST
-        }/signup/invitation/?token=${emailToken}`;
+        const url = `${process.env.CLIENT_PROTOCOL}${subdomain.replace(
+          "_",
+          "-"
+        )}.${process.env.CLIENT_HOST}/signup/invitation/?token=${emailToken}`;
 
         const email = new Email({
           message: {
@@ -95,7 +96,7 @@ export default {
                   subject: "Complete your Registration (Toolsio)"
                 },
                 locals: {
-                  account: subdomain,
+                  account: subdomain.replace("_", "-"),
                   email: args.email,
                   inviter: user.firstName,
                   invitationLink: url
@@ -106,8 +107,8 @@ export default {
                   message: res.message,
                   from: res.originalMessage.from,
                   to: res.originalMessage.to,
-                  subject: res.originalMessage.subject,
-                  text: res.originalMessage.text
+                  subject: res.originalMessage.subject
+                  //text: res.originalMessage.text
                 });
 
                 // Retrun success true to client on success

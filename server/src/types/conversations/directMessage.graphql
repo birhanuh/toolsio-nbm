@@ -46,6 +46,11 @@ type MarkDirectMessageAsReadResponse {
   errors: [Error!]
 }
 
+type DeleteDirectMessages {
+  success: Boolean!
+  errors: [Error!]
+}
+
 type Query {
   getDirectMessage(id: Int!): DirectMessage
 
@@ -70,6 +75,8 @@ type Mutation {
   ): CreateDirectMessageResponse!
 
   markDirectMessagesAsRead(senderId: Int): MarkDirectMessageAsReadResponse!
+
+  deleteDirectMessages(receiverId: Int!): DeleteDirectMessages!
 }
 
 type Subscription {

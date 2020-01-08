@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 // Semantic UI Form elements
@@ -25,7 +25,7 @@ import { wsLink } from "../../apollo";
 // Localization
 import T from "i18n-react";
 
-class Form extends Component {
+class Form extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -120,22 +120,16 @@ class Form extends Component {
       this.props
         .mutate({ variables: { email, password } })
         .then(res => {
-          const {
-            success,
-            sessionID,
-            user,
-            subdomain,
-            errors
-          } = res.data.loginUser;
+          const { success, user, subdomain, errors } = res.data.loginUser;
 
           let date = new Date();
           date.setTime(date.getTime() + 1000 * 60 * 60 * 24 * 7); // 7 days
 
           if (success) {
-            console.log("sessionID: ", sessionID);
             // Re-connect to wsLink
             wsLink.subscriptionClient.tryReconnect();
 
+            // Won't take effect cos, page is reloaded
             // this.props.addFlashMessage({
             //   type: 'success',
             //   text: T.translate("log_in.flash.log_in_success")
@@ -160,7 +154,9 @@ class Form extends Component {
             // Workaround for sending the new session
             window.location.href = `${
               process.env.CLIENT_PROTOCOL
-            }${subdomain}.${process.env.CLIENT_HOST}/dashboard`;
+            }${subdomain.replace("_", "-")}.${
+              process.env.CLIENT_HOST
+            }/dashboard`;
           } else {
             let errorsList = {};
             errors.map(error => (errorsList[error.path] = error.message));
@@ -237,7 +233,4 @@ const QueryMutations = compose(
   })
 )(Form);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(QueryMutations);
+export default connect(null, { addFlashMessage })(QueryMutations);

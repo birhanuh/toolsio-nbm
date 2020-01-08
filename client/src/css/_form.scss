@@ -393,4 +393,8 @@ select.date {
     margin-left: 27% !important;
     width: 73%;
   }
+  .ui.form .add-task .inline.field.error > span,
+  .ui.form .add-item .inline.field.error > span {
+    margin-left: 0% !important;
+  }
 }

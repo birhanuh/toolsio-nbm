@@ -4,17 +4,17 @@ html {
 }
 
 // @font-face {
-//   font-family: 'Open Sans', sans-serif;
-//   src: font-url('fonts/OpenSans-Bold.ttf') format('truetype'),
-//     font-url('fonts/OpenSans-Italic.ttf') format('truetype'),
-//     font-url('fonts/OpenSans-Light.ttf') format('truetype'),
-//     font-url('fonts/OpenSans-Regular.ttf') format('truetype');
+//   font-family: "Open Sans", sans-serif;
+//   src: font-url("../fonts/OpenSans-Bold.ttf") format("truetype"),
+//     font-url("../fonts/OpenSans-Italic.ttf") format("truetype"),
+//     font-url("../fonts/OpenSans-Light.ttf") format("truetype"),
+//     font-url("../fonts/OpenSans-Regular.ttf") format("truetype");
 // }
 
 body {
   background-color: $body-background-color;
   color: $body-color;
-  // font-family: 'Open Sans', sans-serif;
+  // font-family: "Open Sans", sans-serif;
   // font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
@@ -311,6 +311,9 @@ header .ui.fixed.top.menu {
 
   .inverted.divided.grid > div {
     padding-top: 30px;
+  }
+  .list a:hover {
+    color: $turquoise;
   }
 }
 
@@ -1169,6 +1172,12 @@ header .ui.fixed.top.menu .item > a {
   }
   #app .ui.fixed.menu.transition.visible {
     display: none !important;
+  }
+  header .ui.fixed.top.menu .logo.item {
+    width: 110px;
+    img {
+      width: 6em !important;
+    }
   }
 }
 

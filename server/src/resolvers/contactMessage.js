@@ -37,8 +37,8 @@ export default {
             message: res.message,
             from: res.originalMessage.from,
             to: res.originalMessage.to,
-            subject: res.originalMessage.subject,
-            text: res.originalMessage.text
+            subject: res.originalMessage.subject
+            //text: res.originalMessage.text
           });
 
           return {

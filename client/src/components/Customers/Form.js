@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -34,7 +34,7 @@ import T from "i18n-react";
 // Country region selector
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 
-class Form extends Component {
+class Form extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -222,7 +222,7 @@ class Form extends Component {
             variables: {
               id,
               name,
-              vatNumber: parseInt(vatNumber),
+              vatNumber,
               phoneNumber,
               email,
               isContactIncludedInInvoice,
@@ -314,7 +314,7 @@ class Form extends Component {
           .createCustomerMutation({
             variables: {
               name,
-              vatNumber: parseInt(vatNumber),
+              vatNumber,
               phoneNumber,
               email,
               isContactIncludedInInvoice,
@@ -342,23 +342,23 @@ class Form extends Component {
                   name: ""
                 }
               });
+
               // Add our Customer from the mutation to the end.
               data.getCustomers.customers.push(customer);
+
               // Write our data back to the cache.
               store.writeQuery({
                 query: GET_CUSTOMERS_QUERY,
-                variables: {
-                  order: "DESC",
-                  offset: 0,
-                  limit: 10,
-                  name: ""
-                },
                 data
               });
             }
           })
           .then(res => {
-            const { success, errors } = res.data.createCustomer;
+            const {
+              success,
+              errors,
+              customer: { id }
+            } = res.data.createCustomer;
 
             window.performance.mark("form_end");
             window.performance.measure(
@@ -386,7 +386,14 @@ class Form extends Component {
                 this.props.location.state.prevPath &&
                 this.props.location.state.prevPath === "/projects/new"
               ) {
-                this.props.history.push("/projects/new");
+                const name = this.props.location.state.name;
+                const deadline = this.props.location.state.deadline;
+                const description = this.props.location.state.description;
+
+                this.props.history.push({
+                  pathname: "/projects/new",
+                  state: { name, deadline, description, id }
+                });
                 return;
               }
 
@@ -396,7 +403,14 @@ class Form extends Component {
                 this.props.location.state.prevPath &&
                 this.props.location.state.prevPath === "/sales/new"
               ) {
-                this.props.history.push("/sales/new");
+                const name = this.props.location.state.name;
+                const deadline = this.props.location.state.deadline;
+                const description = this.props.location.state.description;
+
+                this.props.history.push({
+                  pathname: "/sales/new",
+                  state: { name, deadline, description, id }
+                });
                 return;
               }
 
@@ -508,7 +522,10 @@ class Form extends Component {
                 <legend className="custom-legend">
                   {T.translate("customers.show.contact.header")}
                 </legend>
-                <FormElement.Field inline error={!!errors.phoneNumber}>
+                <FormElement.Field
+                  inline
+                  error={!!errors.contact && !!errors.contact.phoneNumber}
+                >
                   <label>
                     {T.translate("customers.form.contact.phone_number")}
                   </label>
@@ -522,9 +539,14 @@ class Form extends Component {
                       this.handleChange("phoneNumber", value)
                     }
                   />
-                  <span className="red">{errors.phoneNumber}</span>
+                  <span className="red">
+                    {errors.contact && errors.contact.phoneNumber}
+                  </span>
                 </FormElement.Field>
-                <FormElement.Field inline error={!!errors.email}>
+                <FormElement.Field
+                  inline
+                  error={!!errors.contact && !!errors.contact.email}
+                >
                   <label>{T.translate("customers.form.contact.email")}</label>
                   <Input
                     placeholder={T.translate("customers.form.contact.email")}
@@ -534,7 +556,9 @@ class Form extends Component {
                       this.handleChange("email", value)
                     }
                   />
-                  <span className="red">{errors.email}</span>
+                  <span className="red">
+                    {errors.contact && errors.contact.email}
+                  </span>
                 </FormElement.Field>
               </fieldset>
               <FormElement.Field inline>
@@ -617,7 +641,7 @@ class Form extends Component {
                     error: errors.region
                   })}
                 >
-                  <label>{T.translate("customers.show.address.region")}</label>
+                  <label>{T.translate("customers.form.address.region")}</label>
                   <RegionDropdown
                     defaultOptionLabel={T.translate(
                       "customers.form.address.select_region"
@@ -681,7 +705,4 @@ const MutationsQueries = compose(
   })
 )(Form);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(MutationsQueries);
+export default connect(null, { addFlashMessage })(MutationsQueries);

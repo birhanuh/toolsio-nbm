@@ -104,36 +104,29 @@ const IncomesCard = () => (
             )}
             <Segment vertical floated="left" className="p-0">
               <Card.Meta>
-                {monthSumSorted && monthSumSorted[0]
+                {monthSumSorted && monthSumSorted[0] && monthSumSorted[0].month
                   ? monthSumSorted[0].month
-                    ? monthSumSorted[0].month
-                    : "-"
                   : "-"}
               </Card.Meta>
               <Card.Header>
-                {monthSumSorted && monthSumSorted[0]
+                {monthSumSorted && monthSumSorted[0] && monthSumSorted[0].sum
                   ? monthSumSorted[0].sum
-                    ? monthSumSorted[0].sum
-                    : "-"
                   : "-"}
               </Card.Header>
             </Segment>
             <Segment vertical floated="right" className="p-0">
               <Card.Meta>
-                {monthSumSorted && monthSumSorted.length !== 0
+                {monthSumSorted && monthSumSorted[1] && monthSumSorted[1].month
                   ? monthSumSorted[1].month
-                    ? monthSumSorted[1].month
-                    : "-"
                   : "-"}
               </Card.Meta>
               <Card.Header>
-                {monthSumSorted && monthSumSorted.length !== 0
+                {monthSumSorted && monthSumSorted[1] && monthSumSorted[1].sum
                   ? monthSumSorted[1].sum
-                    ? monthSumSorted[1].sum
-                    : "-"
                   : "-"}
                 {monthSumSorted &&
                   monthSumSorted[0] &&
+                  monthSumSorted[1] &&
                   (monthSumSorted[0].sum > monthSumSorted[1].sum ? (
                     <Icon name="long arrow down" className="red" />
                   ) : (

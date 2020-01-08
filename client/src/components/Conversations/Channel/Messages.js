@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Comment } from "semantic-ui-react";
 import MessageForm from "./Form/Message";
 import UsersForm from "./Form/Users";
@@ -201,7 +201,7 @@ const MessageTypes = ({ message: { uploadPath, body, mimetype } }) => {
   return body;
 };
 
-class Messages extends Component {
+class Messages extends PureComponent {
   state = {
     openAddUsersToChannelModal: false,
     hasMoreItems: true

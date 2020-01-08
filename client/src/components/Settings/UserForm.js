@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-require("babel-polyfill");
 import { connect } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -38,7 +37,7 @@ import moment from "moment";
 // Avatar placeholder
 import avatarPlaceholderLarge from "../../images/avatar-placeholder-large.png";
 
-class UserForm extends Component {
+class UserForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

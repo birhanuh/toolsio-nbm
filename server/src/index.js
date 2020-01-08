@@ -62,7 +62,7 @@ app.use(
     credentials: true,
     origin: [
       process.env.CLIENT_PROTOCOL + process.env.CLIENT_HOST,
-      /\.lvh.me:3000$/
+      new RegExp("\\." + process.env.CLIENT_HOST + "$") // /\.lvh.me:3000$/
     ]
   })
 );
@@ -72,7 +72,7 @@ app.use(logger("dev"));
 
 console.log(
   "Client host: ",
-  /\.lvh.me:3000$/,
+  `/\\.${process.env.CLIENT_PROTOCOL}$/`,
   `/\\.${process.env.CLIENT_HOST}$/`
 );
 
@@ -83,9 +83,7 @@ const apolloServer = new ApolloServer({
     if (req.headers.subdomain) {
       res.header(
         "Access-Control-Allow-Origin",
-        `${process.env.CLIENT_PROTOCOL}${req.headers.subdomain}.${
-          process.env.CLIENT_HOST
-        }`
+        `${process.env.CLIENT_PROTOCOL}${req.headers.subdomain}.${process.env.CLIENT_HOST}`
       );
     } else {
       res.header(
@@ -95,7 +93,7 @@ const apolloServer = new ApolloServer({
     }
 
     // Subdomain
-    const subdomain = req.headers.subdomain;
+    const subdomain = req.headers.subdomain.replace("-", "_");
     //const subdomain = "testa";
 
     let user;

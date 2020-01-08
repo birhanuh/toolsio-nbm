@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { Validation } from "../../../../utils";
@@ -15,7 +16,7 @@ import {
 // Localization
 import T from "i18n-react";
 
-class Channel extends Component {
+class Channel extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,21 +71,21 @@ class Channel extends Component {
       this.props
         .createChannelMutation({
           variables: { name, isPublic },
-          update: (proxy, { data: { createChannel } }) => {
+          update: (store, { data: { createChannel } }) => {
             const { success, channel } = createChannel;
 
             if (!success) {
               return;
             }
             // Read the data from our cache for this query.
-            const data = proxy.readQuery({
+            const data = store.readQuery({
               query: GET_CHANNELS_USERS_COUNT_QUERY
             });
             // Add our comment from the mutation to the end.
             channel.usersCount = 1;
             data.getChannelsUsersCount.push(channel);
             // Write our data back to the cache.
-            proxy.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data });
+            store.writeQuery({ query: GET_CHANNELS_USERS_COUNT_QUERY, data });
           }
         })
         .then(res => {
@@ -166,4 +167,4 @@ const MutationsAndQuery = compose(
 export default connect(
   null,
   { addFlashMessage }
-)(MutationsAndQuery);
+)(withRouter(MutationsAndQuery));

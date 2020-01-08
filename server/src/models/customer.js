@@ -11,11 +11,15 @@ export default (sequelize, DataTypes) => {
         }
       },
       vatNumber: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.STRING,
         unique: true,
         allowNull: false,
         validate: {
-          isDecimal: true // checks for any numbers
+          notEmpty: true,
+          is: {
+            args: /^[a-zA-Z0-9.]+$/, // checks for letters, numbers, dots
+            msg: "Vat nummber must only contain letters, numbers and dots."
+          }
         },
         field: "vat_number"
       },

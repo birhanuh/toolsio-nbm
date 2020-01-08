@@ -297,24 +297,32 @@ export default {
       errors["vatNumber"] = T.translate("customers.form.vat_number_required");
     }
     if (!data.contact.phoneNumber && !data.contact.email) {
-      errors["phoneNumber"] = T.translate(
-        "customers.form.phone_number_or_email_required"
-      );
-      errors["email"] = T.translate(
-        "customers.form.phone_number_or_email_required"
-      );
+      errors["contact"] = {
+        phoneNumber: T.translate(
+          "customers.form.phone_number_or_email_required"
+        ),
+        email: T.translate("customers.form.phone_number_or_email_required")
+      };
     }
     if (!data.address.street) {
-      errors["street"] = T.translate("customers.form.street_required");
+      errors["address"] = {
+        street: T.translate("customers.form.street_required")
+      };
     }
     if (!data.address.postalCode) {
-      errors["postalCode"] = T.translate("customers.form.postal_code_required");
+      errors["address"] = {
+        postalCode: T.translate("customers.form.postal_code_required")
+      };
     }
     if (!data.address.region) {
-      errors["region"] = T.translate("customers.form.region_required");
+      errors["address"] = {
+        region: T.translate("customers.form.region_required")
+      };
     }
     if (!data.address.country) {
-      errors["country"] = T.translate("customers.form.country_required");
+      errors["address"] = {
+        country: T.translate("customers.form.country_required")
+      };
     }
 
     return {
@@ -331,7 +339,8 @@ export default {
         (!data.step1.sale && !data.step1.project) ||
         (data.step1.sale &&
           data.step1.sale.id &&
-          (data.step1.project && data.step1.project.id))
+          data.step1.project &&
+          data.step1.project.id)
       ) {
         errors["saleId"] = T.translate(
           "invoices.form.sale_or_project_required"

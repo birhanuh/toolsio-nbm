@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -23,7 +23,7 @@ import T from "i18n-react";
 
 import logo from "../../images/logo-square.png";
 
-class Subdomain extends Component {
+class Subdomain extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,15 +45,16 @@ class Subdomain extends Component {
           const { success, errors, subdomain } = res.data.isSubdomainExist;
 
           if (success) {
-            this.props.addFlashMessage({
-              type: "success",
-              text: T.translate("log_in.subdomain.on_your_account_page")
-            });
+            // Won't take effect cos, page is reloaded
+            // this.props.addFlashMessage({
+            //   type: "success",
+            //   text: T.translate("log_in.subdomain.on_your_account_page")
+            // });
 
             // Redirect to login page with subdoamin set
             window.location.href =
               process.env.CLIENT_PROTOCOL +
-              subdomain +
+              subdomain.replace("_", "-") +
               "." +
               process.env.CLIENT_HOST +
               "/login";
@@ -112,7 +113,6 @@ class Subdomain extends Component {
           const { success, subdomain, errors } = res.data.isSubdomainExist;
 
           if (success) {
-            console.log("sdfsdfs ", subdomain);
             this.props.addFlashMessage({
               type: "success",
               text: T.translate("log_in.subdomain.on_your_account_page")
@@ -122,7 +122,7 @@ class Subdomain extends Component {
             window.location.href =
               "" +
               process.env.CLIENT_PROTOCOL +
-              subdomain +
+              subdomain.replace("_", "-") +
               "." +
               process.env.CLIENT_HOST +
               "/login";
@@ -207,7 +207,6 @@ Subdomain.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(graphql(IS_SUBDOMAIN_EXIST_MUTATION)(Subdomain));
+export default connect(null, { addFlashMessage })(
+  graphql(IS_SUBDOMAIN_EXIST_MUTATION)(Subdomain)
+);

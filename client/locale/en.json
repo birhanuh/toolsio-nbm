@@ -134,7 +134,7 @@
     "send_request": "Send request",
     "subdomain": {
       "header": "Enter your subdomain",
-      "subdomain": "Your subdomain is most likely your company name",
+      "subdomain": "Your subdomain is most likely your company name (*)",
       "continue_button": "Continue",
       "subdomain_required": "Subdomain is required",
       "no__account": "There is no account with such subdomain! Go to Sign up page to sign for free!",
@@ -230,7 +230,7 @@
       "description": "Invited users by sending an invitation to their emails"
     },
     "form": {
-      "email": "Email",
+      "email": "Email (*)",
       "invite_user": "Invite User",
       "invite_user_label": "Send invitation for the user whom you want to join this accout",
       "email_required": "Email required",
@@ -335,16 +335,15 @@
       "save": "Save",
       "delete": "Delete",
       "cancel": "Cancel",
-      "name": "Name",
-      "deadline": "Deadline",
+      "name": "Name (*)",
+      "deadline": "Deadline (*)",
       "status": "Status",
       "user": "User",
-      "customer": "Customer",
+      "customer": "Customer (*)",
       "description": "Description",
       "progress": "Progress",
       "select_status": "-Select Status-",
       "select_customer": "-Select Customer-",
-      "select_user": "-Select User-",
       "select_or_add_new_customer": "Select Customer if exists or add new",
       "add_new_customer": "Add new Customer",
       "name_required": "Name is required",
@@ -377,7 +376,7 @@
       "confirmation_msg": "Are you sure to delete this Project?",
       "flash": {
         "success_delete": "Project *{name}* is deleted",
-        "error_delete": "Project couldn't be deleted, try again after refreshing the page"
+        "error_delete": "Project couldn't be deleted, try deleting again after refreshing the page"
       }
     },
     "tasks": {
@@ -401,14 +400,14 @@
         "unit_price_required": "Unit price is required",
         "edit_task": "Edit Task",
         "update_task": "Update task",
-        "add_task": "Add Task",
+        "add_task": "Save Task",
         "confirmation_header": "Confirmation",
         "confirmation_msg": "Are you sure to delete this Task?",
         "flash": {
           "success_add": "*{name}* is added!",
           "success_update": "Task *{name}* is updated!",
           "success_delete": "Task *{name}* is deleted!",
-          "error_delete": "Task *{name}* couldn't be deleted, try again after refreshing the page"
+          "error_delete": "Task *{name}* couldn't be deleted, try deleting again after refreshing the page"
         }
       }
     }
@@ -436,11 +435,11 @@
       "delete": "Delete",
       "cancel": "Cancel",
       "notice_create": "Sale created!",
-      "name": "Name",
-      "deadline": "Deadline",
+      "name": "Name (*)",
+      "deadline": "Deadline (*)",
       "status": "Status",
       "user": "User",
-      "customer": "Customer",
+      "customer": "Customer (*)",
       "no_cutomer": "No Customer",
       "description": "Description",
       "select_status": "-Select Status-",
@@ -475,7 +474,7 @@
       "confirmation_msg": "Are you sure to delete this sale?",
       "flash": {
         "success_delete": "Sale *{name}* is deleted!",
-        "error_delete": "Sale couldn't be deleted, try again after refreshing the page"
+        "error_delete": "Sale couldn't be deleted, try deleting again after refreshing the page"
       }
     },
     "items": {
@@ -494,7 +493,7 @@
         "unit_required": "Unit is required",
         "quantity_required": "Quantity is required",
         "unit_price_required": "Unit price is required",
-        "add_item": "Add Item",
+        "add_item": "Save Item",
         "edit_item": "Edit Item",
         "update_item": "Update Item",
         "confirmation_header": "Confirmation",
@@ -503,7 +502,7 @@
           "success_add": "*{name}* is added!",
           "success_update": "Item *{name}* is updated!",
           "success_delete": "Item *{name}* is deleted!",
-          "error_delete": "Item *{name}* couldn't be deleted, try again after refreshing the page"
+          "error_delete": "Item *{name}* couldn't be deleted, try deleting again after refreshing the page"
         }
       }
     }
@@ -530,8 +529,8 @@
       "delete": "Delete",
       "cancel": "Cancel",
       "edit": "Edit",
-      "name": "Name",
-      "vat_number": "Vat number",
+      "name": "Name (*)",
+      "vat_number": "Vat number (*)",
       "contact": {
         "header": "Contact",
         "phone_number": "Phone number",
@@ -539,11 +538,11 @@
       },
       "include_contact_in_invoice": "Include contact in invoice",
       "address": {
-        "header": "Address",
-        "street": "Street",
-        "postal_code": "Postal code",
-        "region": "Region",
-        "country": "Country",
+        "header": "Address (*)",
+        "street": "Street (*)",
+        "postal_code": "Postal code (*)",
+        "region": "Region (*)",
+        "country": "Country (*)",
         "select_country": "-Select Country-",
         "select_region": "-Select Region-"
       },
@@ -583,7 +582,7 @@
       "confirmation_msg": "Are you sure to delete this customer?",
       "flash": {
         "success_delete": "Customer *{name}* is deleted!",
-        "error_delete": "Customer couldn't be deleted, try again after refreshing the page"
+        "error_delete": "Customer couldn't be deleted, try deleting again after refreshing the page"
       }
     }
   },
@@ -635,17 +634,18 @@
       "select_user": "-Select User-",
       "select_status": "-Select Status-",
       "select_days": "-Select days-",
-      "select_sale": "-Select Sale-",
-      "select_project": "-Select Project-",
+      "select_sale": "-Write the name of your Sale to select-",
+      "select_project": "-Write the name of your Project to select-",
       "deadline": "Deadline",
       "status": "Status",
       "total": "Total",
-      "tax": "Tax (in %)",
+      "tax": "Tax in % (*)",
       "payment_term": "Payment term (in Days)",
-      "interest_in_arrears": "Interest in arrears (in %)",
+      "interest_in_arrears": "Interest in arrears in % (*)",
       "reference_number": "Reference number",
       "description": "Description",
-      "select_sale_or_project": "Select either Sale or Project, not both.",
+      "sale_or_project_info": "Select Sales or Projects only that are on FINISHED state and are NOT Invoiced.",
+      "select_sale_or_project": "Select either Sale or Project (NOT BOTH)",
       "select_payment_term_or_deadline": "Select either a Payment term or Deadline, not both.",
       "sale_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
       "project_selected": "This Sale is selected for this invoice. If you wnat to slect another Sale or Project delete this invoice and create an new invoice for the desired Sale or Project.",
@@ -746,7 +746,7 @@
       "confirmation_msg": "Are you sure to delete this invoice?",
       "flash": {
         "success_delete": "Invoice of *{name}* is deleted!",
-        "error_delete": "Invoice of *{name}* couldn't be deleted, try again after refreshing the page"
+        "error_delete": "Invoice of *{name}* couldn't be deleted, try deleting again after refreshing the page"
       }
     }
   },
@@ -777,11 +777,29 @@
       "archive": "Archive",
       "restore": "Restore",
       "members": "members",
-      "message": "Message"
+      "message": "Message",
+      "delete_channel": "Delete channel",
+      "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this conversation? (ALL MESSAGES AND FILE IN THIS CONVESAIONS WILL BE GONE!)",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "flash": {
+        "success_delete": "Channel is deleted!",
+        "error_delete": "Channel couldn't be deleted, try deleting again after refreshing the page"
+      }
     },
     "direct_messages": {
       "search_select_user": "Search/Select User",
-      "load_more": "Load more"
+      "load_more": "Load more",
+      "delete_direct_message": "Delete direct-message",
+      "confirmation_header": "Confirmation",
+      "confirmation_msg": "Are you sure to delete this direct-message? (ALL MESSAGES AND FILE IN THIS DIRECT-MESSAGE WILL BE GONE!)",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "flash": {
+        "success_delete": "Direct message is deleted!",
+        "error_delete": "Direct message couldn't be deleted, try deleting again after refreshing the page"
+      }
     },
     "messages": {
       "add_member": "Add member",

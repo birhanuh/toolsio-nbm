@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Validation } from "../../../utils";
@@ -22,7 +22,7 @@ import T from "i18n-react";
 
 import $ from "jquery";
 
-class Form extends Component {
+class Form extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,6 +51,26 @@ class Form extends Component {
       openConfirmationModal: false
     };
   }
+
+  /**
+  UNSAFE_componentWillMount() {
+    this.setItemsTotal(this.props.items);
+  }
+
+  UNSAFE_componentWillReceiveProps = nextProps => {
+    if (nextProps.items) {
+      this.setItemsTotal(nextProps.items);
+    }
+  };
+
+  setItemsTotal(items) {
+    this.setState({
+      itemsTotal: items
+        .map(a => a.total)
+        .reduce((a, b) => a + b, 0)
+        .toFixed(2)
+    });
+  } */
 
   handleNewItemChange = (name, value) => {
     if (this.state.newItem.errors[name]) {
@@ -82,16 +102,13 @@ class Form extends Component {
       const { quantity, unitPrice } = this.state.newItem;
 
       if (unitPrice !== "" && quantity !== "") {
-        if (quantity.indexOf(".") > -1) {
-          updatedItem["total"] =
-            parseInt(unitPrice) * parseFloat(quantity).toFixed(2);
-        } else {
-          updatedItem["total"] = parseInt(unitPrice) * parseInt(quantity);
-        }
+        updatedItem["total"] = parseFloat(
+          (parseFloat(quantity) * parseFloat(unitPrice)).toFixed(2)
+        );
       }
 
       if (unitPrice !== "" && quantity === "") {
-        updatedItem["total"] = parseInt(unitPrice);
+        updatedItem["total"] = parseFloat(unitPrice);
       }
 
       if (unitPrice === "" && quantity === "") {
@@ -140,7 +157,7 @@ class Form extends Component {
             saleId,
             name,
             unit,
-            quantity: parseInt(quantity),
+            quantity: parseFloat(quantity),
             unitPrice: parseFloat(unitPrice),
             total
           },
@@ -158,8 +175,10 @@ class Form extends Component {
                 id: saleId
               }
             });
+
             // Add our Task from the mutation to the end.
             data.getSale.items.push(item);
+
             // Write our data back to the cache.
             store.writeQuery({ query: GET_SALE_QUERY, data });
           }
@@ -240,16 +259,13 @@ class Form extends Component {
       const { quantity, unitPrice } = this.state.editItem;
 
       if (unitPrice !== "" && quantity !== "") {
-        if (quantity.indexOf(".") > -1) {
-          updatedItem["total"] =
-            parseInt(unitPrice) * parseFloat(quantity).toFixed(2);
-        } else {
-          updatedItem["total"] = parseInt(unitPrice) * parseInt(quantity);
-        }
+        updatedItem["total"] = parseFloat(
+          (parseFloat(quantity) * parseFloat(unitPrice)).toFixed(2)
+        );
       }
 
       if (unitPrice !== "" && quantity === "") {
-        updatedItem["total"] = parseInt(unitPrice);
+        updatedItem["total"] = parseFloat(unitPrice);
       }
 
       if (unitPrice === "" && quantity === "") {
@@ -328,7 +344,7 @@ class Form extends Component {
             saleId,
             name,
             unit,
-            quantity: parseInt(quantity),
+            quantity: parseFloat(quantity),
             unitPrice: parseFloat(unitPrice),
             total
           },
@@ -346,6 +362,7 @@ class Form extends Component {
                 id: saleId
               }
             });
+
             // Add our Item from the mutation to the end.
             let updatedItems = data.getSale.items.map(item2 => {
               if (item2.id === item.id) {
@@ -354,8 +371,15 @@ class Form extends Component {
               return item2;
             });
             data.getSale.items = updatedItems;
+
             // Write our data back to the cache.
-            store.writeQuery({ query: GET_SALE_QUERY, data });
+            store.writeQuery({
+              query: GET_SALE_QUERY,
+              variables: {
+                id: saleId
+              },
+              data
+            });
           }
         })
         .then(res => {
@@ -425,7 +449,7 @@ class Form extends Component {
     this.props
       .deleteItemMutation({
         variables: { id },
-        update: (proxy, { data: { deleteItem } }) => {
+        update: (store, { data: { deleteItem } }) => {
           const { success } = deleteItem;
 
           if (!success) {
@@ -433,17 +457,26 @@ class Form extends Component {
           }
 
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_SALE_QUERY,
             variables: {
               id: saleId
             }
           });
-          // Add our Item from the mutation to the end.
-          let updatedItems = data.getSale.items.filter(item => item.id !== id);
-          data.getSale.items = updatedItems;
+
+          // Delete item to be deleted from items.
+          let itemToBeDeleated = data.getSale.items.filter(
+            item => item.id === id
+          );
+
+          let indexOfItemToBeDeleted = data.getSale.items.indexOf(
+            itemToBeDeleated[0]
+          );
+
+          data.getSale.items.splice(indexOfItemToBeDeleted, 1);
+
           // Write our data back to the cache.
-          proxy.writeQuery({ query: GET_SALE_QUERY, data });
+          store.writeQuery({ query: GET_SALE_QUERY, data });
         }
       })
       .then(res => {
@@ -485,9 +518,19 @@ class Form extends Component {
   }
 
   render() {
-    const { newItem, editItem, openConfirmationModal } = this.state;
+    const {
+      newItem,
+      editItem,
+      openConfirmationModal,
+      itemToBeDeleated
+    } = this.state;
 
-    let { items, itemsTotal } = this.props;
+    const { items } = this.props;
+
+    const itemsTotal = items
+      .map(a => a.total)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
 
     const itemsList = items.map(item => (
       <ShowEditItemTr
@@ -568,7 +611,7 @@ class Form extends Component {
           </button>
           <button
             className="ui negative button"
-            onClick={this.handleDelete.bind(this, this.state.itemToBeDeleated)}
+            onClick={this.handleDelete.bind(this, itemToBeDeleated)}
           >
             {T.translate("sales.items.delete")}
           </button>
@@ -596,7 +639,4 @@ const Mutations = compose(
   })
 )(Form);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(Mutations);
+export default connect(null, { addFlashMessage })(Mutations);

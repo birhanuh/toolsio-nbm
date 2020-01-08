@@ -2,7 +2,7 @@ type Item {
   id: Int!
   name: String!
   unit: String!
-  quantity: Int!
+  quantity: Float!
   unitPrice: Float!
   total: Float!
   saleId: Int!
@@ -29,7 +29,7 @@ type Mutation {
   createItem(
     name: String!
     unit: String!
-    quantity: Int!
+    quantity: Float!
     unitPrice: Float!
     total: Float!
     saleId: Int!
@@ -39,7 +39,7 @@ type Mutation {
     id: Int!
     name: String
     unit: String
-    quantity: Int
+    quantity: Float
     unitPrice: Float
     total: Float
     saleId: Int

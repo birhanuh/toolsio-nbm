@@ -68,7 +68,7 @@ export default {
       } else {
         return {
           success: false,
-          errors: `Schema ${subdomain} doesn't exist.`
+          errors: `Schema ${subdomain.replace("_", "-")} doesn't exist.`
         };
       }
     }
@@ -298,64 +298,61 @@ export default {
           );
 
           // Create emailToken if not on test env
-          process.env.NODE_ENV !== "test" ||
-            (process.env.NODE_ENV !== "test_ci" &&
-              jwt.sign(
-                {
-                  id: response.user.dataValues.id,
-                  email: response.user.dataValues.email
-                },
-                process.env.JWTSECRET1,
-                { expiresIn: "60d" },
-                (err, emailToken) => {
-                  if (err) {
-                    console.log("err token: ", err);
-                  }
+          (process.env.NODE_ENV !== "test" ||
+            process.env.NODE_ENV !== "test_ci") &&
+            jwt.sign(
+              {
+                id: response.user.dataValues.id,
+                email: response.user.dataValues.email
+              },
+              process.env.JWTSECRET1,
+              { expiresIn: "60d" },
+              (err, emailToken) => {
+                if (err) {
+                  console.log("err token: ", err);
+                }
 
-                  const url = `${process.env.CLIENT_PROTOCOL}${
-                    response.account.subdomain
-                  }.${
-                    process.env.CLIENT_HOST
-                  }/login/confirmation/?token=${emailToken}`;
+                const url = `${process.env.CLIENT_PROTOCOL}${response.account.subdomain}.${process.env.CLIENT_HOST}/login/confirmation/?token=${emailToken}`;
 
-                  const email = new Email({
+                const email = new Email({
+                  message: {
+                    from: "no-replay@toolsio.com"
+                  },
+                  // uncomment below to send emails in development/test env:
+                  //send: true,
+                  // transport: {
+                  //   jsonTransport: true
+                  // }
+                  transport: transporter
+                });
+
+                email
+                  .send({
+                    template: "email_confirmation",
                     message: {
-                      from: "no-replay@toolsio.com"
+                      to: response.user.dataValues.email,
+                      subject: "Confirm your Email (Toolsio)"
                     },
-                    // uncomment below to send emails in development/test env:
-                    //send: true,
-                    // transport: {
-                    //   jsonTransport: true
-                    // }
-                    transport: transporter
-                  });
-
-                  email
-                    .send({
-                      template: "email_confirmation",
-                      message: {
-                        to: response.user.dataValues.email,
-                        subject: "Confirm your Email (Toolsio)"
-                      },
-                      locals: {
-                        firstName: response.user.dataValues.firstName,
-                        confirmationLink: url
-                      }
+                    locals: {
+                      firstName: response.user.dataValues.firstName,
+                      account: response.account.subdomain.replace("_", "-"),
+                      confirmationLink: url
+                    }
+                  })
+                  .then(res =>
+                    console.log("Email confirmation success: ", {
+                      message: res.message,
+                      from: res.originalMessage.from,
+                      to: res.originalMessage.to,
+                      subject: res.originalMessage.subject
+                      //text: res.originalMessage.text
                     })
-                    .then(res =>
-                      console.log("Email confirmation success: ", {
-                        message: res.message,
-                        from: res.originalMessage.from,
-                        to: res.originalMessage.to,
-                        subject: res.originalMessage.subject,
-                        text: res.originalMessage.text
-                      })
-                    )
-                    .catch(err =>
-                      console.error("Email confirmation error: ", err)
-                    );
+                  )
+                  .catch(err =>
+                    console.error("Email confirmation error: ", err)
+                  );
 
-                  /*
+                /*
                 const msg = {
                   to: 'birhanuh@gmail.com',
                   from: 'test@example.com',
@@ -365,8 +362,8 @@ export default {
                 };
                 sgMail.send(msg);
                 */
-                }
-              ));
+              }
+            );
 
           return {
             success: true,
@@ -387,7 +384,10 @@ export default {
     },
 
     isSubdomainExist: (_, { subdomain }, { models }) =>
-      models.Account.findOne({ where: { subdomain } }, { raw: true })
+      models.Account.findOne(
+        { where: { subdomain: subdomain.replace("-", "_") } },
+        { raw: true }
+      )
         .then(account => {
           if (account) {
             return {
@@ -428,7 +428,28 @@ export default {
           { raw: true }
         );
 
+        const user = await models.User.findOne(
+          { where: { email }, searchPath: account },
+          { raw: true }
+        );
+
         if (accountLocal) {
+          if (user) {
+            return {
+              success: false,
+              errors: [
+                {
+                  path: "subdomain",
+                  message: `You have already register to this account *${account.replace(
+                    "_",
+                    "-"
+                  )}*. Login with your credentials by going to login page`
+                }
+              ]
+            };
+          }
+
+          console.log("KKKKK: ", user);
           try {
             models.User.create(
               { firstName, lastName, email, password, isConfirmed: true },
@@ -473,7 +494,10 @@ export default {
             errors: [
               {
                 path: "subdomain",
-                message: `Account *${account}* to which you are invited doesn't exist. You can create it as your own new account by going to sign up page`
+                message: `Account *${account.replace(
+                  "_",
+                  "-"
+                )}* to which you are invited doesn't exist. You can create it as your own new account by going to sign up page`
               }
             ]
           };
@@ -500,7 +524,7 @@ export default {
             errors: [
               {
                 path: "subdomain",
-                message: `Account ${subdomain} doesn't exist`
+                message: `Account ${subdomain.replace("_", "-")} doesn't exist`
               }
             ]
           };
@@ -512,59 +536,60 @@ export default {
 
           if (user) {
             // Create forgotPasswordResetRequestToken
-            process.env.NODE_ENV !== "test" ||
-              (process.env.NODE_ENV !== "test_ci" &&
-                jwt.sign(
-                  {
-                    id: user.dataValues.id,
-                    email: user.dataValues.email,
-                    subdomain: account.dataValues.subdomain
-                  },
-                  process.env.JWTSECRET1,
-                  { expiresIn: "60d" },
-                  (err, forgotPasswordResetRequestToken) => {
-                    if (err) {
-                      console.log("err token: ", err);
-                    }
-
-                    const url = `${process.env.CLIENT_PROTOCOL}${
-                      account.subdomain
-                    }.${
-                      process.env.CLIENT_HOST
-                    }/login/password-reset/?token=${forgotPasswordResetRequestToken}`;
-
-                    const email = new Email({
-                      message: {
-                        from: "no-replay@toolsio.com"
-                      },
-                      // uncomment below to send emails in development/test env:
-                      send: true,
-                      // transport: {
-                      //   jsonTransport: true
-                      // }
-                      transport: transporter
-                    });
-
-                    email
-                      .send({
-                        template: "reset_password",
-                        message: {
-                          to: user.dataValues.email,
-                          subject: "Password reset (Toolsio)"
-                        },
-                        locals: {
-                          firstName: user.dataValues.firstName,
-                          passwordResetLink: url
-                        }
-                      })
-                      .then(res =>
-                        console.log("Password confirmation success: ", res)
-                      )
-                      .catch(err =>
-                        console.error("Password confirmation error: ", err)
-                      );
+            (process.env.NODE_ENV !== "test" ||
+              process.env.NODE_ENV !== "test_ci") &&
+              jwt.sign(
+                {
+                  id: user.dataValues.id,
+                  email: user.dataValues.email,
+                  subdomain: account.dataValues.subdomain
+                },
+                process.env.JWTSECRET1,
+                { expiresIn: "60d" },
+                (err, forgotPasswordResetRequestToken) => {
+                  if (err) {
+                    console.log("err token: ", err);
                   }
-                ));
+
+                  const url = `${
+                    process.env.CLIENT_PROTOCOL
+                  }${account.subdomainreplace("_", "-")}.${
+                    process.env.CLIENT_HOST
+                  }/login/password-reset/?token=${forgotPasswordResetRequestToken}`;
+
+                  const email = new Email({
+                    message: {
+                      from: "no-replay@toolsio.com"
+                    },
+                    // uncomment below to send emails in development/test env:
+                    send: true,
+                    // transport: {
+                    //   jsonTransport: true
+                    // }
+                    transport: transporter
+                  });
+
+                  email
+                    .send({
+                      template: "reset_password",
+                      message: {
+                        to: user.dataValues.email,
+                        subject: "Password reset (Toolsio)"
+                      },
+                      locals: {
+                        firstName: user.dataValues.firstName,
+                        account: response.account.subdomain.replace("_", "-"),
+                        passwordResetLink: url
+                      }
+                    })
+                    .then(res =>
+                      console.log("Password confirmation success: ", res)
+                    )
+                    .catch(err =>
+                      console.error("Password confirmation error: ", err)
+                    );
+                }
+              );
 
             return {
               success: true
@@ -575,7 +600,10 @@ export default {
               errors: [
                 {
                   path: "subdomain",
-                  message: `You don't have credentials on (${subdomain}) account`
+                  message: `You don't have credentials on (${subdomain.replace(
+                    "_",
+                    "-"
+                  )}) account`
                 }
               ]
             };
@@ -606,7 +634,7 @@ export default {
             errors: [
               {
                 path: "subdomain",
-                message: `Account ${subdomain} doesn't exist`
+                message: `Account ${subdomain.replace("_", "-")} doesn't exist`
               }
             ]
           };

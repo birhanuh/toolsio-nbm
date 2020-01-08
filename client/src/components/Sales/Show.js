@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
@@ -30,7 +30,7 @@ import ItemsForm from "./Items/Form";
 // Localization
 import T from "i18n-react";
 
-class Show extends Component {
+class Show extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -127,14 +127,15 @@ class Show extends Component {
     this.props
       .deleteSaleMutation({
         variables: { id },
-        update: (proxy, { data: { deleteSale } }) => {
+        update: (store, { data: { deleteSale } }) => {
           const { success } = deleteSale;
 
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_SALES_QUERY,
             variables: {
               order: "DESC",
@@ -142,13 +143,13 @@ class Show extends Component {
               limit: 10
             }
           });
-          // Add our comment from the mutation to the end.
 
+          // Remove Sale.
           let updatedData = data.getSales.filter(sale => sale.id !== id);
           data.getSales = updatedData;
 
           // Write our data back to the cache.
-          proxy.writeQuery({ query: GET_SALES_QUERY, data });
+          store.writeQuery({ query: GET_SALES_QUERY, data });
         }
       })
       .then(res => {
@@ -188,9 +189,6 @@ class Show extends Component {
       user,
       openConfirmationModal
     } = this.state;
-
-    let itemsTotal = 0;
-    items.map(item => (itemsTotal += item.total));
 
     return [
       <Grid.Row columns={1} key="segment">
@@ -313,9 +311,7 @@ class Show extends Component {
               {T.translate("sales.items.header")}
             </Header>
             <Segment attached="bottom" className="p-3">
-              {items && id && (
-                <ItemsForm saleId={id} itemsTotal={itemsTotal} items={items} />
-              )}
+              {items && id && <ItemsForm saleId={id} items={items} />}
             </Segment>
 
             <div className="pt-3">
@@ -386,7 +382,4 @@ const MutationQuery = compose(
   })
 )(Show);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(MutationQuery);
+export default connect(null, { addFlashMessage })(MutationQuery);

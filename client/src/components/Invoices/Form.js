@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import map from "lodash/map";
@@ -24,7 +24,7 @@ import Confirmation from "./Steps/Confirmation";
 // Localization
 import T from "i18n-react";
 
-class Form extends Component {
+class Form extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -275,6 +275,7 @@ class Form extends Component {
                   search: ""
                 }
               });
+
               // Add our Invoice from the mutation to the end.
               let updatedInvoices = data.getInvoices.invoices.map(item => {
                 if (item.id === invoice.id) {
@@ -283,6 +284,7 @@ class Form extends Component {
                 return item;
               });
               data.getInvoices.invoices = updatedInvoices;
+
               // Write our data back to the cache.
               store.writeQuery({
                 query: GET_INVOICES_QUERY,
@@ -350,8 +352,10 @@ class Form extends Component {
                   search: ""
                 }
               });
+
               // Add our Invoice from the mutation to the end.
               data.getInvoices.invoices.push(invoice);
+
               // Write our data back to the cache.
               store.writeQuery({
                 query: GET_INVOICES_QUERY,

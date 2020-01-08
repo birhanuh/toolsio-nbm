@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -25,7 +25,7 @@ import logo from "../../images/logo-square.png";
 // Localization
 import T from "i18n-react";
 
-class ForgotPasswordRequest extends Component {
+class ForgotPasswordRequest extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

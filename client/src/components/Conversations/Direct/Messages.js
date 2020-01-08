@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 // Semantic UI Form elements
 import {
   Segment,
@@ -167,7 +167,7 @@ const MessageTypes = ({ message: { uploadPath, body, mimetype } }) => {
   return body;
 };
 
-class Messages extends Component {
+class Messages extends PureComponent {
   state = {
     hasMoreItems: true
   };

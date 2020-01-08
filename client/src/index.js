@@ -13,7 +13,7 @@ import { ApolloProvider } from "react-apollo";
 // Localization
 import T from "i18n-react";
 
-import App from "./components/Layouts/App";
+import App from "./components/App";
 import client from "./apollo";
 
 // A state for the entire project created by Redux
@@ -47,7 +47,19 @@ if (language.length > 2) {
   language = language.split("-")[0];
 }
 
-T.setTexts(require("../locale/" + language + ".json"));
+let translationFile;
+
+try {
+  // path to translation file
+  translationFile = require(`../locale/${language}.json`);
+} catch (e) {
+  console.log(
+    "No translation file found for browser setting, reset to default english translation."
+  );
+  translationFile = require("../locale/en.json");
+}
+
+T.setTexts(translationFile);
 
 render(
   <Provider store={store}>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 // Semantic UI Form elements
 import { Image, Dropdown, Menu, Label, Icon } from "semantic-ui-react";
@@ -21,25 +21,36 @@ import avatarPlaceholderSmall from "../../images/avatar-placeholder-small.png";
 import $ from "jquery";
 $.animate = require("jquery.easing");
 
-class InternalHeaderNav extends Component {
-  clickHandler = e => {
-    if (this.idRouteDashboard()) {
+class InternalHeaderNav extends PureComponent {
+  clickHandler = (v, e) => {
+    if (window.location.pathname.indexOf("/dashboard") === 0) {
       e.preventDefault();
+      $("html, body")
+        .stop()
+        .animate(
+          {
+            scrollTop: $(v).offset().top - 50
+          },
+          1500,
+          "easeInOutExpo"
+        );
+    } else {
+      console.log("CLICKED: ", this.props);
+      this.props.history.push("/dashboard");
+
+      setTimeout(function() {
+        $("html, body")
+          .stop()
+          .animate(
+            {
+              scrollTop: $(v).offset().top - 50
+            },
+            1500,
+            "easeInOutExpo"
+          );
+      }, 500);
     }
-
-    var $anchor = $(e.target);
-    $("html, body")
-      .stop()
-      .animate(
-        {
-          scrollTop: $($anchor.attr("href")).offset().top - 50
-        },
-        1500,
-        "easeInOutExpo"
-      );
   };
-
-  idRouteDashboard = () => window.location.pathname.indexOf("/dashboard") === 0;
 
   render() {
     let { currentAccount } = this.props;
@@ -71,14 +82,8 @@ class InternalHeaderNav extends Component {
 
           return (
             <Dropdown.Item
-              as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard()
-                  ? "#projectTask"
-                  : "/dashboard/#projectTask"
-              }
+              onClick={this.clickHandler.bind(this, "#projectTask")}
             >
               <Label color="red">{item.count} DELAYED</Label>
               Projects
@@ -90,14 +95,8 @@ class InternalHeaderNav extends Component {
 
           return (
             <Dropdown.Item
-              as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard()
-                  ? "#projectTask"
-                  : "/dashboard/#projectTask"
-              }
+              onClick={this.clickHandler.bind(this, "#projectTask")}
             >
               <Label color="blue">{item.count} NEW</Label>
               Projects
@@ -114,12 +113,8 @@ class InternalHeaderNav extends Component {
 
           return (
             <Dropdown.Item
-              as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard() ? "#saleTask" : "/dashboard/#saleTask"
-              }
+              onClick={this.clickHandler.bind(this, "#saleTask")}
             >
               <Label color="red">{item.count} DELAYED</Label>
               Sales
@@ -131,12 +126,8 @@ class InternalHeaderNav extends Component {
 
           return (
             <Dropdown.Item
-              as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard() ? "#saleTask" : "/dashboard/#saleTask"
-              }
+              onClick={this.clickHandler.bind(this, "#saleTask")}
             >
               <Label color="blue">{item.count} NEW</Label>
               Sales
@@ -153,14 +144,8 @@ class InternalHeaderNav extends Component {
 
           return (
             <Dropdown.Item
-              as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard()
-                  ? "#invoiceTask"
-                  : "/dashboard/#invoiceTask"
-              }
+              onClick={this.clickHandler.bind(this, "#invoiceTask")}
             >
               <Label color="red">{item.count} DELAYED</Label>
               Invoices
@@ -172,14 +157,8 @@ class InternalHeaderNav extends Component {
 
           return (
             <Dropdown.Item
-              as={Link}
               key={item.status}
-              onClick={this.clickHandler}
-              to={
-                this.idRouteDashboard()
-                  ? "#invoiceTask"
-                  : "/dashboard/#invoiceTask"
-              }
+              onClick={this.clickHandler.bind(this, "#invoiceTask")}
             >
               <Label color="orange">{item.count} PENDING</Label>
               Invoices

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 import Form from "./Form";
 // Semantic React UI
@@ -10,7 +10,7 @@ import T from "i18n-react";
 
 import logo from "../../images/logo-square.png";
 
-class Page extends Component {
+class Page extends PureComponent {
   render() {
     return (
       <Container text>

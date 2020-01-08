@@ -55,7 +55,7 @@ export function InnerSidebar({ visibleInnerSidebar, currentAccount }) {
           className="capitalize mt-3 mb-0"
           style={{ color: "inherit" }}
         >
-          {currentAccount.subdomain}
+          {currentAccount.subdomain.replace("_", "-")}
         </Header>
         <p className="capitalize mb-2">
           {currentAccount.firstName} {currentAccount.isAdmin ? "(Admin)" : ""}
@@ -119,36 +119,24 @@ export function OuterSidebarScrollableHeader({ visibleOuterSidebar }) {
       inverted
       className="nav-link"
     >
-      <ActiveLink
-        activeOnlyWhenExact
-        to="#home"
-        label={T.translate("landing.home.header")}
-      />
-      <ActiveLink
-        activeOnlyWhenExact
-        to="#features"
-        label={T.translate("landing.features.header")}
-      />
-      <ActiveLink
-        activeOnlyWhenExact
-        to="#clients"
-        label={T.translate("landing.clients.header")}
-      />
-      <ActiveLink
-        activeOnlyWhenExact
-        to="#testimonial"
-        label={T.translate("landing.testimonial.header")}
-      />
-      <ActiveLink
-        activeOnlyWhenExact
-        to="#pricing"
-        label={T.translate("landing.pricing.header")}
-      />
-      <ActiveLink
-        activeOnlyWhenExact
-        to="#contacts"
-        label={T.translate("landing.contacts.header")}
-      />
+      <a className="item" href="#home">
+        {T.translate("landing.home.header")}
+      </a>
+      <a className="item" href="#features">
+        {T.translate("landing.features.header")}
+      </a>
+      <a className="item" href="#clients">
+        {T.translate("landing.clients.header")}
+      </a>
+      <a className="item" href="#testimonial">
+        {T.translate("landing.testimonial.header")}
+      </a>
+      <a className="item" href="#pricing">
+        {T.translate("landing.pricing.header")}
+      </a>
+      <a className="item" to="#contacts">
+        {T.translate("landing.contacts.header")}
+      </a>
     </Sidebar>,
     <Menu
       key="scroll-header-nav"
@@ -159,36 +147,24 @@ export function OuterSidebarScrollableHeader({ visibleOuterSidebar }) {
     >
       <Container>
         <Menu.Menu position="left" className="nav-link">
-          <ActiveLink
-            activeOnlyWhenExact
-            to="#home"
-            label={T.translate("landing.home.header")}
-          />
-          <ActiveLink
-            activeOnlyWhenExact
-            to="#features"
-            label={T.translate("landing.features.header")}
-          />
-          <ActiveLink
-            activeOnlyWhenExact
-            to="#clients"
-            label={T.translate("landing.clients.header")}
-          />
-          <ActiveLink
-            activeOnlyWhenExact
-            to="#testimonial"
-            label={T.translate("landing.testimonial.header")}
-          />
-          <ActiveLink
-            activeOnlyWhenExact
-            to="#pricing"
-            label={T.translate("landing.pricing.header")}
-          />
-          <ActiveLink
-            activeOnlyWhenExact
-            to="#contacts"
-            label={T.translate("landing.contacts.header")}
-          />
+          <Link className="item" to={{ pathname: "#home" }}>
+            {T.translate("landing.home.header")}
+          </Link>
+          <Link className="item" to={{ pathname: "#features" }}>
+            {T.translate("landing.features.header")}
+          </Link>
+          <Link className="item" to={{ pathname: "#clients" }}>
+            {T.translate("landing.clients.header")}
+          </Link>
+          <Link className="item" to={{ pathname: "#testimonial" }}>
+            {T.translate("landing.testimonial.header")}
+          </Link>
+          <Link className="item" to={{ pathname: "#pricing" }}>
+            {T.translate("landing.pricing.header")}
+          </Link>
+          <Link className="item" to={{ pathname: "#contacts" }}>
+            {T.translate("landing.contacts.header")}
+          </Link>
         </Menu.Menu>
 
         <Menu.Menu position="right">
@@ -199,9 +175,7 @@ export function OuterSidebarScrollableHeader({ visibleOuterSidebar }) {
           </Item>
           <Item>
             <a
-              href={`${process.env.CLIENT_PROTOCOL}${
-                process.env.CLIENT_HOST
-              }/signup`}
+              href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}/signup`}
               className="ui primary outline button"
             >
               {T.translate("sign_up.sign_up")}

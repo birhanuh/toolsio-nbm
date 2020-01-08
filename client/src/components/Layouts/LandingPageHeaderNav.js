@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
+import React, { PureComponent } from "react";
+import { Link } from "react-router-dom";
 
 // Semantic UI React
 import { Segment, Container, Menu, Header, Icon } from "semantic-ui-react";
@@ -13,20 +13,7 @@ $.animate = require("jquery.easing");
 $.fn.transition = require("semantic-ui-transition");
 $.fn.visibility = require("semantic-ui-visibility");
 
-const ActiveLink = ({ label, to, icon, activeOnlyWhenExact }) => (
-  <Route
-    path={to}
-    exact={activeOnlyWhenExact}
-    children={({ match }) => (
-      <Link className={match ? "active item" : "item"} to={to}>
-        <i className={icon} />
-        <span>{label}</span>
-      </Link>
-    )}
-  />
-);
-
-class LandingPageHeaderNav extends Component {
+class LandingPageHeaderNav extends PureComponent {
   componentDidMount = () => {
     // fix menu when passed
     $("#home .ui.text.container").visibility({
@@ -88,36 +75,24 @@ class LandingPageHeaderNav extends Component {
             </Menu.Item>
 
             <Menu.Item position="left" className="nav-link">
-              <ActiveLink
-                activeOnlyWhenExact
-                to="#home"
-                label={T.translate("landing.home.header")}
-              />
-              <ActiveLink
-                activeOnlyWhenExact
-                to="#features"
-                label={T.translate("landing.features.header")}
-              />
-              <ActiveLink
-                activeOnlyWhenExact
-                to="#clients"
-                label={T.translate("landing.clients.header")}
-              />
-              <ActiveLink
-                activeOnlyWhenExact
-                to="#testimonial"
-                label={T.translate("landing.testimonial.header")}
-              />
-              <ActiveLink
-                activeOnlyWhenExact
-                to="#pricing"
-                label={T.translate("landing.pricing.header")}
-              />
-              <ActiveLink
-                activeOnlyWhenExact
-                to="#contacts"
-                label={T.translate("landing.contacts.header")}
-              />
+              <Link className="item" to={{ pathname: "#home" }}>
+                {T.translate("landing.home.header")}
+              </Link>
+              <Link className="item" to={{ pathname: "#features" }}>
+                {T.translate("landing.features.header")}
+              </Link>
+              <Link className="item" to={{ pathname: "#clients" }}>
+                {T.translate("landing.clients.header")}
+              </Link>
+              <Link className="item" to={{ pathname: "#testimonial" }}>
+                {T.translate("landing.testimonial.header")}
+              </Link>
+              <Link className="item" to={{ pathname: "#pricing" }}>
+                {T.translate("landing.pricing.header")}
+              </Link>
+              <Link className="item" to={{ pathname: "#contacts" }}>
+                {T.translate("landing.contacts.header")}
+              </Link>
             </Menu.Item>
 
             <Menu.Item position="right" style={{ alignSelf: "inherit" }}>
@@ -125,9 +100,7 @@ class LandingPageHeaderNav extends Component {
                 {T.translate("log_in.log_in")}
               </Link>
               <a
-                href={`${process.env.CLIENT_PROTOCOL}${
-                  process.env.CLIENT_HOST
-                }/signup`}
+                href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}/signup`}
                 className="ui inverted button"
                 style={{ marginLeft: "0.5em" }}
               >
@@ -154,9 +127,7 @@ class LandingPageHeaderNav extends Component {
           </Header>
           <h3>{T.translate("landing.home.slogan")}</h3>
           <a
-            href={`${process.env.CLIENT_PROTOCOL}${
-              process.env.CLIENT_HOST
-            }/signup`}
+            href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}/signup`}
             className="ui huge primary button"
           >
             {T.translate("landing.home.get_started")}

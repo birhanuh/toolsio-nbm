@@ -24,6 +24,11 @@ type AddMemberResponse {
   errors: [Error!]
 }
 
+type DeleteChannelResponse {
+  success: Boolean!
+  errors: [Error!]
+}
+
 type Query {
   getChannel(id: Int!): Channel!
 
@@ -34,4 +39,6 @@ type Mutation {
   createChannel(name: String!, isPublic: Boolean): CreateChannelResponse!
 
   addMember(members: [Int!], channelId: Int!): AddMemberResponse!
+
+  deleteChannel(channelId: Int!): DeleteChannelResponse!
 }

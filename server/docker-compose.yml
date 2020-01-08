@@ -2,6 +2,7 @@ version: "3"
 services:
   redis:
     image: redis
+    container_name: redis
     networks:
       - webnet
     restart: always
@@ -9,6 +10,7 @@ services:
     #   driver: gcplogs
   db:
     image: postgres
+    container_name: postgres
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
@@ -22,6 +24,7 @@ services:
     restart: always
   web:
     image: birham/toolsio-server:latest ## To use the image that's in docker hub
+    container_name: web
     #ports:
     #  - "8080:8080" ## We don' need to open up our port to the world, ngix handles it
     networks:
@@ -72,6 +75,7 @@ services:
   migration:
     build: .
     image: birham/toolsio-server:latest
+    container_name: migration
     networks:
       - webnet
     environment:
@@ -83,19 +87,19 @@ services:
     command: ["./wait-for-it.sh", "db:5432", "--", "npm", "run", "db:migrate"]
   nginx-proxy:
     image: jwilder/nginx-proxy
+    container_name: nginx-proxy
     networks:
       - webnet
     volumes:
       #- ./toolsio.template:/etc/nginx/conf.d/toolsio.template ## TOBE commented out in development env
       - ./toolsio.development.template:/etc/nginx/conf.d/toolsio.template ## TOBE commented out in production env
       - ./uploads:/uploads
-      # - ./index.html:/etc/nginx/html/index.html ## TOBE commented out in development env
-      # - ./certs:/etc/nginx/certs:ro ## TOBE commented out in development env
-      - nginx-vhost-volume:/etc/nginx/vhost.d
-      - nginx-share-volume:/usr/share/nginx/html
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - dhparam:/etc/nginx/dhparam
+      - certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
-    labels:
-      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true
     ports:
       - "8080:80"
       - "4444:443"
@@ -113,24 +117,28 @@ services:
     #command: nginx ## Run plain nginx (e.g for letsencrypt)
     # logging:
     #   driver: gcplogs
-  #nginx-letsencrypt:
-  #  image: jrcs/letsencrypt-nginx-proxy-companion
-  #  networks:
-  #    - webnet
-  #  volumes:
-  #    - ./certs:/etc/nginx/certs:rw
-  #    - /var/run/docker.sock:/var/run/docker.sock:ro
-  #    - nginx-vhost-volume:/etc/nginx/vhost.d
-  #    - nginx-share-volume:/usr/share/nginx/html
-  #  environment:
-  #    NGINX_PROXY_CONTAINER: nginx-proxy
-  #    NGINX_DOCKER_GEN_CONTAINER: nginx-proxy
-  #  depends_on:
-  #    - nginx-proxy
+#  nginx-letsencrypt:
+#    image: jrcs/letsencrypt-nginx-proxy-companion
+#    container_name: nginx-proxy-letsencrypt
+#    networks:
+#      - webnet
+#    volumes:
+#      - vhost:/etc/nginx/vhost.d
+#      - html:/usr/share/nginx/html
+#      - certs:/etc/nginx/certs:rw
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    environment:
+#      NGINX_PROXY_CONTAINER: nginx-proxy
+#      NGINX_DOCKER_GEN_CONTAINER: nginx-proxy
+#    depends_on:
+#      - nginx-proxy
 
 volumes:
-  nginx-vhost-volume:
-  nginx-share-volume:
+  conf:
+  vhost:
+  html:
+  dhparam:
+  certs:
 
 networks:
   webnet:

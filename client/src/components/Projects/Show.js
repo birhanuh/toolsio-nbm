@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -32,7 +32,7 @@ import TasksForm from "./Tasks/Form";
 // Localization
 import T from "i18n-react";
 
-class Show extends Component {
+class Show extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -252,6 +252,7 @@ class Show extends Component {
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
           const data = store.readQuery({
             query: GET_PROJECTS_QUERY,
@@ -261,6 +262,7 @@ class Show extends Component {
               limit: 10
             }
           });
+
           // Add our comment from the mutation to the end.
 
           let updatedProjects = data.getProjects.filter(
@@ -314,9 +316,6 @@ class Show extends Component {
       user,
       openConfirmationModal
     } = this.state;
-
-    let tasksTotal = 0;
-    tasks.map(task => (tasksTotal += task.total));
 
     return [
       <Grid.Row columns={1} key="segment">
@@ -474,13 +473,7 @@ class Show extends Component {
               {T.translate("projects.tasks.header")}
             </Header>
             <Segment attached="bottom" className="p-3">
-              {tasks && id && (
-                <TasksForm
-                  projectId={id}
-                  tasksTotal={tasksTotal}
-                  tasks={tasks}
-                />
-              )}
+              {tasks && id && <TasksForm projectId={id} tasks={tasks} />}
             </Segment>
 
             <div className="pt-3">
@@ -550,7 +543,4 @@ const MutationQuery = compose(
   })
 )(Show);
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(MutationQuery);
+export default connect(null, { addFlashMessage })(MutationQuery);

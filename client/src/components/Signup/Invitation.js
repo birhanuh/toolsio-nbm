@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Validation } from "../../utils";
@@ -22,7 +22,7 @@ import T from "i18n-react";
 
 import logo from "../../images/logo-square.png";
 
-class Invitation extends Component {
+class Invitation extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -99,9 +99,11 @@ class Invitation extends Component {
             });
 
             // Redirect to login
-            window.location.href = `${process.env.CLIENT_PROTOCOL}${
-              account.subdomain
-            }.${process.env.CLIENT_HOST}/login`;
+            window.location.href = `${
+              process.env.CLIENT_PROTOCOL
+            }${account.subdomain.replace("_", "-")}.${
+              process.env.CLIENT_HOST
+            }/login`;
           } else {
             let errorsList = {};
             errors.map(error => (errorsList[error.path] = error.message));
@@ -132,11 +134,20 @@ class Invitation extends Component {
         </Header>
 
         <Segment>
+          {!!errors.subdomain && (
+            <Message negative>
+              <p>{errors.subdomain}</p>
+            </Message>
+          )}
           <Message
             info
             icon="info"
             header={T.translate("sign_up.complete_invitation_sign_up", {
-              account: <h3 className="capitalize d-inline-block">{account}</h3>
+              account: (
+                <h3 className="capitalize d-inline-block">
+                  {account.replace("_", "-")}
+                </h3>
+              )
             })}
           />
           <Form loading={isLoading} onSubmit={this.handleSubmit.bind(this)}>
@@ -241,7 +252,6 @@ Invitation.propTypes = {
   addFlashMessage: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  { addFlashMessage }
-)(graphql(REGISTER_INVITED_USER_MUTATION)(Invitation));
+export default connect(null, { addFlashMessage })(
+  graphql(REGISTER_INVITED_USER_MUTATION)(Invitation)
+);

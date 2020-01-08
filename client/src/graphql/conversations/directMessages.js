@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY = gql`
   {
@@ -14,7 +14,7 @@ export const GET_UNREAD_DIRECT_MESSAGES_COUNT_SENDER_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const GET_DIRECT_MESSAGE_USERS_QUERY = gql`
   {
@@ -24,7 +24,7 @@ export const GET_DIRECT_MESSAGE_USERS_QUERY = gql`
       email
     }
   }
-`
+`;
 
 export const GET_USER_QUERY = gql`
   query getUser($id: Int!) {
@@ -34,7 +34,7 @@ export const GET_USER_QUERY = gql`
       email
     }
   }
-`
+`;
 
 export const GET_DIRECT_MESSAGES_QUERY = gql`
   query getDirectMessages($cursor: String, $receiverId: Int!) {
@@ -52,31 +52,43 @@ export const GET_DIRECT_MESSAGES_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const CREATE_DIRECT_MESSAGE_MUTATION = gql`
-  mutation ($body: String, $file: Upload, $receiverId: Int!) {
+  mutation($body: String, $file: Upload, $receiverId: Int!) {
     createDirectMessage(body: $body, file: $file, receiverId: $receiverId) {
       success
       message {
         id
-      } 
+      }
       errors {
         path
         message
       }
     }
   }
-`
+`;
 
 export const MARK_DIRECT_MESSAGES_AS_READ_MUTATION = gql`
-  mutation ($senderId: Int!) {
+  mutation($senderId: Int!) {
     markDirectMessagesAsRead(senderId: $senderId) {
-      success 
+      success
       errors {
         path
         message
       }
     }
   }
-`
+`;
+
+export const DELETE_DIRECT_MESSAGES_MUTATION = gql`
+  mutation deleteDirectMessages($receiverId: Int!) {
+    deleteDirectMessages(receiverId: $receiverId) {
+      success
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;

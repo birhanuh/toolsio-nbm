@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, Redirect, withRouter } from "react-router-dom";
@@ -25,7 +25,7 @@ import T from "i18n-react";
 import Sale from "./Sale";
 import Project from "./Project";
 
-class Page extends Component {
+class Page extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -131,6 +131,7 @@ class Page extends Component {
               name: ""
             }
           });
+
           // Filter out deleted invoice from store.
           let updatedInvoices = data.getInvoices.invoices.filter(
             invoice => invoice.id !== id
@@ -227,6 +228,7 @@ class Page extends Component {
           pdf.addImage(pageData, "JPEG", x, position + y, imgWidth, imgHeight);
           restHeight -= pageHeight;
           y -= 841.89;
+
           // Avoid adding blank pages
           if (restHeight > 0) {
             pdf.addPage();

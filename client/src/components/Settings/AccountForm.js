@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-require("babel-polyfill");
 import { connect } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -43,7 +42,7 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 // Images
 import logoPlaceholderMedium from "../../images/logo-placeholder.svg";
 
-class AccountForm extends Component {
+class AccountForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -259,8 +258,10 @@ class AccountForm extends Component {
                   subdomain: this.props.subdomain
                 }
               });
+
               // Update account object.
               data.getAccount = account;
+
               // Write our data back to the cache.
               store.writeQuery({
                 query: GET_ACCOUNT_QUERY,

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Validation } from "../../utils";
 //import { Link } from 'react-router-dom'
@@ -24,7 +24,7 @@ import T from "i18n-react";
 import $ from "jquery";
 $.animate = require("jquery.easing");
 
-class LandingPage extends Component {
+class LandingPage extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,36 +97,45 @@ class LandingPage extends Component {
       return false;
     });
 
-    // Custome carousel
-    let slideIndex = 0;
     // Run showSlides only on root path
     if (window.location.pathname.indexOf("/") === 0) {
-      showSlides();
-    }
+      this.showSlides();
 
-    function showSlides() {
-      let i;
-      let slides = $(".slide-item");
-      let dots = $(".dot");
-
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-
-      slideIndex++;
-      if (slideIndex > slides.length) {
-        slideIndex = 1;
-      }
-
-      for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-      }
-
-      slides[slideIndex - 1].style.display = "block";
-      dots[slideIndex - 1].className += " active";
-      setTimeout(showSlides, 5000); // Change image every 5 seconds
+      // Change image every 5 seconds. Assigne function to varaible so it will be cleared on component unmount
+      this.interval = setInterval(this.showSlides, 5000);
     }
   };
+
+  // Custome carousel
+  slideIndex = 0;
+  interval;
+
+  showSlides = () => {
+    let i;
+    let slides = $(".slide-item");
+    let dots = $(".dot");
+
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+
+    this.slideIndex++;
+    if (this.slideIndex > slides.length) {
+      this.slideIndex = 1;
+    }
+
+    for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+    }
+
+    slides[this.slideIndex - 1].style.display = "block";
+    dots[this.slideIndex - 1].className += " active";
+  };
+
+  componentWillUnmount() {
+    // Clear interval when component swithced
+    clearInterval(this.interval);
+  }
 
   handleSubmit = async event => {
     event.preventDefault();
@@ -404,9 +413,7 @@ class LandingPage extends Component {
             <Grid columns={2} centered>
               <div className="column centered row">
                 <a
-                  href={`${process.env.CLIENT_PROTOCOL}${
-                    process.env.CLIENT_HOST
-                  }/signup`}
+                  href={`${process.env.CLIENT_PROTOCOL}${process.env.CLIENT_HOST}/signup`}
                   className="ui huge primary button"
                 >
                   {T.translate("landing.home.get_started")}

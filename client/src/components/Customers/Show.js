@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
@@ -29,7 +29,7 @@ import moment from "moment";
 // Localization
 import T from "i18n-react";
 
-class Show extends Component {
+class Show extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -131,14 +131,15 @@ class Show extends Component {
     this.props
       .deleteCustomerMutation({
         variables: { id },
-        update: (proxy, { data: { deleteCustomer } }) => {
+        update: (store, { data: { deleteCustomer } }) => {
           const { success } = deleteCustomer;
 
           if (!success) {
             return;
           }
+
           // Read the data from our cache for this query.
-          const data = proxy.readQuery({
+          const data = store.readQuery({
             query: GET_CUSTOMERS_QUERY,
             variables: {
               order: "DESC",
@@ -147,6 +148,7 @@ class Show extends Component {
               name: ""
             }
           });
+
           // Filter out deleted customer from store.
           let updatedCustomers = data.getCustomers.customers.filter(
             customer => customer.id !== id
@@ -154,7 +156,7 @@ class Show extends Component {
           data.getCustomers.customers = updatedCustomers;
 
           // Write our data back to the cache.
-          proxy.writeQuery({
+          store.writeQuery({
             query: GET_CUSTOMERS_QUERY,
             variables: {
               order: "DESC",

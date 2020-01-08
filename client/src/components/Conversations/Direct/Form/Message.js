@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import Dropzone from "react-dropzone";
 // Semantic UI Form elements
 import { Form, Message as MessageElement, Icon } from "semantic-ui-react";
@@ -14,7 +14,7 @@ import T from "i18n-react";
 
 const ENTER_KEY = 13;
 
-class Message extends Component {
+class Message extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -144,6 +144,7 @@ class Message extends Component {
               email: this.props.data.getUser.email
             });
           }
+
           // Write our data back to the cache.
           store.writeQuery({ query: GET_DIRECT_MESSAGE_USERS_QUERY, data });
         }

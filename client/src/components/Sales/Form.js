@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -35,27 +35,40 @@ import "react-datepicker/dist/react-datepicker.css";
 // Localization
 import T from "i18n-react";
 
-class Form extends Component {
+class Form extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.data.getSale ? this.props.data.getSale.id : null,
-      name: this.props.data.getSale ? this.props.data.getSale.name : "",
+      name: this.props.data.getSale
+        ? this.props.data.getSale.name
+        : this.props.location.state && this.props.location.state.name
+        ? this.props.location.state.name
+        : "",
       deadline: this.props.data.getSale
         ? new Date(this.props.data.getSale.deadline)
+        : this.props.location.state && this.props.location.state.deadline
+        ? this.props.location.state.deadline
         : new Date(),
       customerId: this.props.data.getSale
         ? this.props.data.getSale.customer.id
+        : this.props.location.state && this.props.location.state.id
+        ? this.props.location.state.id
         : "",
       status: this.props.data.getSale ? this.props.data.getSale.status : "new",
       description: this.props.data.getSale
-        ? !this.props.data.getSale.description
-          ? ""
-          : this.props.data.getSale.description
+        ? this.props.data.getSale.description
+        : this.props.location.state && this.props.location.state.description
+        ? this.props.location.state.description
         : "",
       errors: {},
-      isLoading: false
+      isLoading: false,
+      customersOptions: []
     };
+  }
+
+  UNSAFE_componentWillMount() {
+    this.setCustomerOptions(this.props.getCustomersQuery.getCustomers);
   }
 
   UNSAFE_componentWillReceiveProps = nextProps => {
@@ -71,7 +84,23 @@ class Form extends Component {
           : nextProps.data.getSale.description
       });
     }
+
+    if (nextProps.getCustomersQuery) {
+      this.setCustomerOptions(nextProps.getCustomersQuery.getCustomers);
+    }
   };
+
+  setCustomerOptions(getCustomers) {
+    this.setState({
+      customersOptions:
+        getCustomers &&
+        getCustomers.customers.map(customer => ({
+          key: customer.id,
+          value: customer.id,
+          text: customer.name
+        }))
+    });
+  }
 
   handleChange = (name, value) => {
     if (this.state.errors[name]) {
@@ -146,6 +175,7 @@ class Form extends Component {
                   name: ""
                 }
               });
+
               // Add our comment from the mutation to the end.
 
               let updatedSales = data.getSales.map(item => {
@@ -207,17 +237,13 @@ class Form extends Component {
                   name: ""
                 }
               });
+
               // Add our Sale from the mutation to the end.
               data.getSales.push(sale);
+
               // Write our data back to the cache.
               store.writeQuery({
                 query: GET_SALES_QUERY,
-                variables: {
-                  order: "DESC",
-                  offset: 0,
-                  limit: 10,
-                  name: ""
-                },
                 data
               });
             }
@@ -272,18 +298,9 @@ class Form extends Component {
       status,
       description,
       errors,
-      isLoading
+      isLoading,
+      customersOptions
     } = this.state;
-
-    const { getCustomers } = this.props.getCustomersQuery;
-
-    const customersOptions =
-      getCustomers &&
-      getCustomers.customers.map(customer => ({
-        key: customer.id,
-        value: customer.id,
-        text: customer.name
-      }));
 
     return (
       <Grid.Row columns={1}>
@@ -356,7 +373,12 @@ class Form extends Component {
                       className="ui primary outline tiny button"
                       to={{
                         pathname: "/customers/new",
-                        state: { prevPath: location.pathname }
+                        state: {
+                          prevPath: location.pathname,
+                          name,
+                          deadline,
+                          description
+                        }
                       }}
                     >
                       <Icon name="add circle" />

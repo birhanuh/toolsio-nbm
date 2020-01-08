@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { deleteFlashMessage } from "../actions/flashMessageActions";
 
-class FlashMessage extends Component {
+class FlashMessage extends PureComponent {
   // Detect location change for FlashMessage component
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {
@@ -55,7 +55,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { deleteFlashMessage }
-)(FlashMessage);
+export default connect(mapStateToProps, { deleteFlashMessage })(FlashMessage);
