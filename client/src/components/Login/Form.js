@@ -120,22 +120,16 @@ class Form extends PureComponent {
       this.props
         .mutate({ variables: { email, password } })
         .then(res => {
-          const {
-            success,
-            sessionID,
-            user,
-            subdomain,
-            errors
-          } = res.data.loginUser;
+          const { success, user, subdomain, errors } = res.data.loginUser;
 
           let date = new Date();
           date.setTime(date.getTime() + 1000 * 60 * 60 * 24 * 7); // 7 days
 
           if (success) {
-            console.log("sessionID: ", sessionID);
             // Re-connect to wsLink
             wsLink.subscriptionClient.tryReconnect();
 
+            // Won't take effect cos, page is reloaded
             // this.props.addFlashMessage({
             //   type: 'success',
             //   text: T.translate("log_in.flash.log_in_success")

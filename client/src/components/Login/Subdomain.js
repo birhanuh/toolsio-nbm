@@ -45,10 +45,11 @@ class Subdomain extends PureComponent {
           const { success, errors, subdomain } = res.data.isSubdomainExist;
 
           if (success) {
-            this.props.addFlashMessage({
-              type: "success",
-              text: T.translate("log_in.subdomain.on_your_account_page")
-            });
+            // Won't take effect cos, page is reloaded
+            // this.props.addFlashMessage({
+            //   type: "success",
+            //   text: T.translate("log_in.subdomain.on_your_account_page")
+            // });
 
             // Redirect to login page with subdoamin set
             window.location.href =

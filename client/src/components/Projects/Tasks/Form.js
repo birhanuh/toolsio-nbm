@@ -49,7 +49,6 @@ class Form extends PureComponent {
         isLoading: false
       },
       openConfirmationModal: false
-      // tasksTotal: 0
     };
   }
 

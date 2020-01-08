@@ -55,7 +55,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { deleteFlashMessage }
-)(FlashMessage);
+export default connect(mapStateToProps, { deleteFlashMessage })(FlashMessage);
